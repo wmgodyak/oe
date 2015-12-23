@@ -11,97 +11,42 @@ defined('CPATH') or die();
 
 class Route
 {
-    /**
-     * The URI pattern the route responds to.
-     *
-     * @var string
-     */
-    private static $uri;
-
     private static $rules = array();
-    
-    /**
-     * @var array
-     */
-    private static $placeholder = array
-        (
-            '/:module'     =>'/([a-zA-Z]+)',
-            '/:controller' => '/([a-zA-Z]+)',
-            '/:action'     =>'/([a-zA-Z]+)',
-            ':params'      =>'(.*)',
-            '/:namespace'  =>'([a-zA-Z]+)',
-            '/:int'        =>'/([0-9]+)',
-            '~|'           => '(?:',
-            '|~'           => '/)?'
-        );
-
-    private static function add($pattern, $rule)
-    {
-        if (strpos($pattern, '(') !== FALSE) {
-            $pattern = strtr($pattern, self::$placeholder);
-        }
-        self::$rules[] = array($pattern,$rule);
-    }
 
     /**
-     * Додає роутер
-     * @param string $regex
-     * @param string $namespace
-     * @param string $params
-     * @return $this
-     */
-    private static function setRules($regex, $namespace , $params ='')
-    {
-        self::$rules[] = array(
-            'params'     => $params,
-            'regex'      => $regex,
-            'namespace'  => $namespace
-        );
-    }
-
-    private static function getRules(){
-        return self::$rules;
-    }
-
-    /**
-     * @return array
+     * @throws \Exception
      */
     private static function getRoutes()
     {
-        return Config::instance()->get('routes');
+        $r = Config::instance()->get('routes');
+        if(empty($r)) throw new \Exception('No routes.');
+
+        foreach ($r as $k => $v) {
+            $regex     = $v[0];
+            $namespace = $v[1];
+            $params    = isset($v[2]) ? $v[2] : null;
+            self::$rules[] = array(
+                'regex'      => $regex,
+                'params'     => $params,
+                'namespace'  => $namespace
+            );
+        }
     }
 
     public static function run()
     {
-        $namespace = ''; $controller = ''; $action = ''; $params = array();
+        $namespace = ''; $controller = ''; $action = 'index'; $params = array();
 
-        $uri = self::protect($_SERVER['QUERY_STRING']);
+        $uri = self::protect($_SERVER['REQUEST_URI']);
 
-        $request = Request::instance();
+        self::getRoutes();
 
-        if(strpos($uri, '?')){
-            $a = explode('?', $uri);
-            $uri=$a[0];
-            foreach ($_GET as $k=>$v) {
-               $request->param($k,$v);
-            }
-        }
-
-        $routes = self::getRoutes();
-
-        foreach ($routes as $route) {
-            if(preg_match("@^" . $route['regex'] . "$@u",$uri,$matches)){
-//                echo '<pre>FOUND:'; print_r($route);
-//                echo 'Matches: '; print_r($matches);
-
+        foreach (self::$rules as $route) {
+            if(preg_match("@^" . $route['regex'] . "$@u", $uri, $matches)){
                 if(empty($route['params'])) {
                     // вирізаю з неймспейсу :controller :action
                     if(strpos($route['namespace'], ':controller') !== false) {
                         $s = explode(':', $route['namespace']);
-//                        echo '<b>NS String:</b> ';
-
-//                        print_r($s);
-
                         $namespace = $s[0];
 
                         if(isset($s[1]) && $s[1] == 'controller') {
@@ -113,11 +58,8 @@ class Route
                         }
 
                         if(isset($matches[3]) && !empty($matches[3])) {
-//                            echo '----------';
                             $params = explode('/', trim($matches[3],'/'));
                         }
-
-//                        var_dump($params);
 
                     } else {
                         // задано виклик конкретного контрола
@@ -126,77 +68,49 @@ class Route
                     }
 
                 } else {
-
-//                    echo '---<br>Чітко задана назва і послідовнсть параметрів: ';
                     // чітко задана послідовність параметрів і назви
                     $namespace = $route['namespace'];
 
-                    $request = Request::instance();
                     $s = explode('/', $route['params']);
-//                    echo 'Params: '; print_r($s);
-
                     foreach ($s as $k=>$param) {
-//                        echo $k, ':', $param,'<br>';
                         $k++;
                         if(!isset($matches[$k])) continue;
-                        $request->param($param, $matches[$k]);
-
+                        $params[$param] = $matches[$k];
                     }
                 }
-
-//                echo '<br><b>Storage</b>: ';
-//                print_r($storage);
 
                 break;
             }
         }
-        echo "NS: $namespace. C: $controller. A: $action.";
-        // save data to request storage
-//        $request->setStorage($storage);
 
-//        $this->route();
-    }
+        $controller = ucfirst($controller);
+//        echo "<br>NS: $namespace. C: $controller. A: $action. P:"; print_r($params);
 
-    private final function route()
-    {
-        try{
-            if(empty($this->storage)) return;
-            $namespace = $this->namespace;
-            $controller = ucfirst($this->controller);
-            $action = $this->action == '' ? 'index' : $this->action;
-            $action = rtrim($action,'/');
-            $params = $this->params;
+        $action = rtrim($action,'/');
 
-//            echo '<pre>'; print_r($this->storage); echo '<br>';
+        $c  = $namespace . $controller;
+        $path = str_replace("\\", "/", $c);
 
-            $c  = $namespace . $controller;
-            $path= str_replace("\\", "/", $c);
-
-            if(!file_exists(DOCROOT . $path . '.php')) {
-                die('file not exist:' . DOCROOT . $path . '.php');
-            }
-
-            $controller = new $c;
-
-            if(!is_callable(array($controller,$action))){
-                die('File not is_callable: ' . DOCROOT . $path . '.php');
-            }
-
-//            $action = (is_callable(array($controller,$action))) ? $action : 'index';
-
-            if(!empty($params)){
-               $res = call_user_func_array(array($controller,$action),$params);
-            } else{
-               $res = call_user_func(array($controller,$action));
-            }
-
-            // save data to request storage
-            $request = Request::instance();
-            if($res) $request->body = $res;
-
-        } catch (Exceptions $e){
-            echo $e->showError();
+        if(!file_exists(DOCROOT . $path . '.php')) {
+            die('Controller not found:' . DOCROOT . $path . '.php');
         }
+
+        $controller = new $c;
+
+        if(!is_callable(array($controller, $action))){
+            die('Action '. $action .'is not callable: ' . DOCROOT . $path . '.php');
+        }
+
+        if(!empty($params)){
+            $res = call_user_func_array(array($controller,$action),$params);
+        } else{
+            $res = call_user_func(array($controller,$action));
+        }
+
+        // save data to request storage
+        $request = Request::instance();
+        if($res) $request->body = $res;
+        // save data to request storage
 
     }
 

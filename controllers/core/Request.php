@@ -12,30 +12,30 @@ defined('CPATH') or die();
 
 class Request {
 
-    private $storage=array(); // local storage
+    private $storage = array();
     private static $instance;
 
-    const METHOD_HEAD = 'HEAD';
-    const METHOD_GET = 'GET';
-    const METHOD_POST = 'POST';
-    const METHOD_PUT = 'PUT';
-    const METHOD_PATCH = 'PATCH';
-    const METHOD_DELETE = 'DELETE';
-    const METHOD_OPTIONS = 'OPTIONS';
+    const METHOD_HEAD     = 'HEAD';
+    const METHOD_GET      = 'GET';
+    const METHOD_POST     = 'POST';
+    const METHOD_PUT      = 'PUT';
+    const METHOD_PATCH    = 'PATCH';
+    const METHOD_DELETE   = 'DELETE';
+    const METHOD_OPTIONS  = 'OPTIONS';
     const METHOD_OVERRIDE = '_METHOD';
 
-    /**
-     * сюди записуєм всі дані для шаблонів: title, keywords, content
-     * @var array
-     */
-    private $content = array();
-    /**
-     * містить в собі GET паратмери, які ключі яких мають назви
-     * @var array
-     */
     private $param = array();
 
     public $mode;
+
+    private function __construct()
+    {
+        foreach ($_REQUEST as $k=>$v) {
+            $this->param[$k] = $v;
+        }
+    }
+
+    private function __clone(){}
 
     public static function instance()
     {
@@ -71,7 +71,12 @@ class Request {
         return $val;
     }
 
-    public function set($key, $val)
+    /**
+     * @param $key
+     * @param $val
+     * @return $this
+     */
+    public function setParam($key, $val)
     {
         $this->param[$key] = $val;
 
@@ -91,13 +96,13 @@ class Request {
         elseif(empty($name))
             $val = file_get_contents('php://input');
 
-        if($type == 'str')
+        if($type == 's')
             return strval(preg_replace('/[^\p{L}\p{Nd}\d\s_\-\.\%\s]/ui', '', $val));
 
-        if($type == 'int')
+        if($type == 'i')
             return intval($val);
 
-        if($type == 'bool')
+        if($type == 'b')
             return !empty($val);
 
         return $val;
@@ -215,35 +220,6 @@ class Request {
         if(isset($this->storage[$key])){
             return $this->storage[$key];
         }
-        return false;
+        return null;
     }
-
-    /**
-     * Заповнюю дані про сторінку з БД
-     * @param $data
-     */
-    public function setContentData($data)
-    {
-        $this->content = $data;
-    }
-
-    /**
-     * вертає / записує дані про сторінку
-     * @param $key
-     * @param $value
-     * @return string
-     */
-    public function content($key = null, $value = null )
-    {
-        if($value) {
-            $this->content[$key] = $value;
-        }
-
-        if($key) {
-            return isset($this->content[$key]) ? $this->content[$key] : '';
-        } else {
-            return $this->content;
-        }
-    }
-
 }

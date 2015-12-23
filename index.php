@@ -29,4 +29,4 @@
 //    // вивід на екран
 //    \controllers\core\Output::render($time_start);
 
-die('END');
+die('<br>END');

@@ -37,13 +37,11 @@ class Config
             closedir($handle);
         }
 
-        echo '<pre>';print_r(self::$data);die('<< CONFIG');
+//        echo '<pre>';print_r(self::$data);die('<< CONFIG');
 
         if(!isset(self::$data['db'])){
             header('Location: /install'); die();   
         }
-
-
     }
 
     /**
@@ -59,7 +57,7 @@ class Config
 
     /**
      * @param null $key
-     * @return string
+     * @return array
      */
     public function get($key=null){
 
