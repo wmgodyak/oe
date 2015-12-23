@@ -102,18 +102,22 @@ class Route
         }
 
         if(!empty($params)){
-            $res = call_user_func_array(array($controller,$action),$params);
+            $res = call_user_func_array(array($controller, $action), $params);
         } else{
-            $res = call_user_func(array($controller,$action));
+            $res = call_user_func(array($controller, $action));
         }
 
         // save data to request storage
         $request = Request::instance();
         if($res) $request->body = $res;
-        // save data to request storage
 
+        // save data to request storage
     }
 
+    /**
+     * @param $uri
+     * @return mixed
+     */
     private static function protect($uri)
     {
         $tags = array (
@@ -132,14 +136,14 @@ class Route
 
         if (@ ini_get('register_globals')) {
             foreach ($_REQUEST as $key => $value) {
-                $$key = null; // This is NOT paranoid because
-                unset ($$key); // unset may not work.
+                $$key = null;
+                unset ($$key);
             }
         }
 
         $uri = preg_replace($tags, "", $uri);
 
-        unset($tags,$key,$value);
+        unset($tags, $key, $value);
 
         return $uri;
     }
