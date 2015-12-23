@@ -84,9 +84,17 @@ class Route
         }
 
         $controller = ucfirst($controller);
-//        echo "<br>NS: $namespace. C: $controller. A: $action. P:"; print_r($params);
 
         $action = rtrim($action,'/');
+
+//        echo "<br>NS: $namespace. C: $controller. A: $action. P:"; print_r($params);
+
+        Request::instance()
+            ->setParam('controller', $controller)
+            ->setParam('action', $action)
+            ->setParam('args', $params);
+
+
 
         $c  = $namespace . $controller;
         $path = str_replace("\\", "/", $c);
@@ -101,11 +109,17 @@ class Route
             die('Action '. $action .'is not callable: ' . DOCROOT . $path . '.php');
         }
 
+        Event::fire($c, 'before'.ucfirst($action), $params);
+
         if(!empty($params)){
             $res = call_user_func_array(array($controller, $action), $params);
         } else{
             $res = call_user_func(array($controller, $action));
         }
+
+        Event::fire($c, 'after' . ucfirst($action), $params);
+
+        Event::flush($c, $action, $params);
 
         Response::instance()->body($res)->render();
     }

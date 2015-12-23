@@ -5,7 +5,9 @@
  * Date: 19.04.13 11:49
  */
 
-namespace controllers\core;
+namespace models\core;
+
+use controllers\core\Config;
 
 if ( !defined('CPATH') )die();
 
@@ -15,18 +17,13 @@ if ( !defined('CPATH') )die();
  * the same connection for all models and prevent to open multiple connections at once)
  */
 
-/**
- * Class DB
- * @package controllers\core
- */
 class DB extends \PDO {
 
     private static $instance;
     private static $error;
+    private static $errorCode;
     private static $errorMessage;
     private static $count;
-    private static $use_cache = 0;
-    private static $cache_dir;
 
     private $db_prefix;
     private $db_type;
@@ -37,14 +34,8 @@ class DB extends \PDO {
     /**
      * Construct this Database object, extending the PDO object
      * By the way, the PDO object is built into PHP by default
-     * @param $host
-     * @param $user
-     * @param $password
-     * @param $db
-     * @param $type
-     * @param $charset
      */
-    public function __construct($host, $user, $password, $db, $type, $charset)
+    public function __construct()
     {
         /**
          * set the (optional) options of the PDO connection. in this case, we set the fetch mode to
@@ -52,12 +43,12 @@ class DB extends \PDO {
          * For example, fetch mode FETCH_ASSOC would return results like this: $result["user_name] !
          * @see http://www.php.net/manual/en/pdostatement.fetch.php
          */
-
-        $this->db_name = $db;
+        $conf = Config::instance()->get('db');
+        $this->db_name = $conf['db'];
 
         $options = array(
             \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
-            \PDO::ATTR_ERRMODE => \PDO::ERRMODE_WARNING // ERRMODE_EXCEPTION
+            \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION // ERRMODE_EXCEPTION
         );
 
         /**
@@ -70,12 +61,12 @@ class DB extends \PDO {
          */
         try{
             parent::__construct(
-                $type . ':host=' . $host . ';dbname=' . $db . ';charset=' . $charset,
-                $user, $password,
+                $conf['type'] . ':host=' . $conf['host'] . ';dbname=' . $conf['db'] . ';charset=' . $conf['charset'],
+                $conf['user'], $conf['pass'],
                 $options
             );
             $this->exec("SET NAMES utf8");
-        }catch (\Exception $e){
+        } catch (\Exception $e){
 
             header('HTTP/1.1 503 Service Temporarily Unavailable');
             header('Status: 503 Service Temporarily Unavailable');
@@ -100,29 +91,12 @@ class DB extends \PDO {
         }
     }
 
-    /**
-     * @param $host
-     * @param $user
-     * @param $password
-     * @param $db
-     * @param $type
-     * @param $charset
-     * @return DB
-     */
-    public function switchDB($host, $user, $password, $db, $type='mysql', $charset='utf8')
-    {
-        self::$instance = new DB($host, $user, $password, $db, $type, $charset);
-        return self::$instance;
-    }
 
     public static function instance()
     {
 
         if(!self::$instance instanceof self){
-            /* $conf['type'] . ':host=' . $conf['host'] . ';dbname=' . $conf['db'] . ';charset=' . $conf['charset'],
-                $conf['user'], $conf['pass'],*/
-            $conf = Config::instance()->get('db');
-            self::$instance = new DB($conf['host'], $conf['user'], $conf['pass'], $conf['db'], $conf['type'], $conf['charset'] );
+            self::$instance = new DB();
         }
 
         return self::$instance;
@@ -134,12 +108,7 @@ class DB extends \PDO {
 
         try {
             
-            $this->sql= $sql;
-
-            if(self::$use_cache && $this->isCached($sql)){
-
-                return $this;
-            }
+            $this->sql = $sql;
 
             $this->result = $this->prepare($sql);
             $this->result->execute();
@@ -147,7 +116,8 @@ class DB extends \PDO {
             ++self::$count;
 
         } catch(\PDOException $e){
-            $this->error($e->getMessage().' => '.$sql);
+            self::$errorMessage = "<pre>$sql" . $e->getMessage() .'</pre>';
+            self::$errorCode = $e->getCode();
         }
         
         return $this;
@@ -160,46 +130,30 @@ class DB extends \PDO {
      */
     public function row($key='*')
     {
-        
-        if(self::$use_cache){
-            $res =  $this->readCache($this->sql);
-            if(!empty($res)){
-                return $key=='*' ? $res : $res[$key];
-            }            
-        }
-        
         $res = $this->result->fetch(DB::FETCH_ASSOC);
-        if(self::$use_cache){
-            $this->writeCache($this->sql,$res);
-        }
         return $key=='*' ? $res : $res[$key];
     }
-    
+
+    /**
+     * @return mixed
+     */
     public function all()
     {
-
-        if(self::$use_cache){
-            $res =  $this->readCache($this->sql);
-            if(!empty($res)){
-                return $res;
-            }
-        }
-        
-        $res = $this->result->fetchAll(DB::FETCH_ASSOC);
-        
-        if(self::$use_cache){
-            $this->writeCache($this->sql,$res);
-        }
-        return $res;
+        return $this->result->fetchAll(DB::FETCH_ASSOC);
     }
 
-
-    public function insert($table, $data, $debug = false, $ignore = false)
+    /**
+     * @param $table
+     * @param $data
+     * @param bool $debug
+     * @return bool|string
+     */
+    public function insert($table, $data, $debug = false)
     {
         $fieldNames = implode('`, `', array_keys($data));
         $fieldValues = ':'.implode(', :', array_keys($data));
-        $ignore = $ignore ? 'ignore' : '';
-        $sql = 'INSERT ' . $ignore . ' INTO `'.$this->db_prefix.$table.'` (`'.$fieldNames.'`) VALUES ('.$fieldValues.')';
+
+        $sql = 'INSERT INTO `'.$this->db_prefix.$table.'` (`'.$fieldNames.'`) VALUES ('.$fieldValues.')';
         $sth = $this->prepare($sql);
 
         foreach($data as $key => $value){
@@ -215,18 +169,20 @@ class DB extends \PDO {
             $sth->execute();
             $result = $this->lastInsertId();
         } catch(\PDOException $e){
-            $this->error($e->getMessage().' => '.$this->interpolateQuery($sql, $data));
+            self::$errorMessage = $e->getMessage() . $this->interpolateQuery($sql, $data);
+            self::$errorCode = $e->getCode();
             $result = false;
         }
         ++self::$count;
         return $result;
     }
+
     /**
-     * Performs update query
-     * @param string $table name of table to update
-     * @param string $data an associative array
-     * @param string $where the WHERE clause of query
-     * @param boolean
+     * @param $table
+     * @param array $data
+     * @param int $where
+     * @param bool $debug
+     * @return bool
      */
     public function update($table, array $data, $where = 1, $debug = false)
     {
@@ -254,7 +210,8 @@ class DB extends \PDO {
             $sth->execute();
             $result = true;
         }catch(\PDOException $e){
-            $this->error($e->getMessage().' => '.$this->interpolateQuery($sql, $data));
+            self::$errorMessage = $e->getMessage() . $this->interpolateQuery($sql, $data);
+            self::$errorCode = $e->getCode();
             $result = false;
         }
         ++self::$count;
@@ -283,7 +240,8 @@ class DB extends \PDO {
             $sth->execute();
             $result = true;
         }catch(\PDOException $e){
-            $this->error($e->getMessage().' => '.$this->interpolateQuery($sql));
+            self::$errorMessage = $e->getMessage() . $this->interpolateQuery($sql);
+            self::$errorCode = $e->getCode();
             $result = false;
         }
         ++self::$count;
@@ -302,7 +260,8 @@ class DB extends \PDO {
         try{
             $result = $this->exec($sql);
         }catch(\PDOException $e){
-            $this->error( $e->getMessage().' => '.$sql);
+            self::$errorMessage = $e->getMessage() . $this->interpolateQuery($sql);
+            self::$errorCode = $e->getCode();
             $result = false;
         }
         ++self::$count;
@@ -345,7 +304,8 @@ class DB extends \PDO {
             $sth = $this->query($sql);
             $result = $sth->fetchAll();
         }catch(\PDOException $e){
-            $this->error( $e->getMessage());
+            self::$errorMessage = $e->getMessage() . $this->interpolateQuery($sql);
+            self::$errorCode = $e->getCode();
             $result = false;
         }
         return $result;
@@ -376,9 +336,9 @@ class DB extends \PDO {
         try{
             $sth = $this->query($sql);
             $result = $sth->fetchAll();
-            $countText = count($result);
-        }catch(\PDOException $e){
-            $this->error($e->getMessage());
+        } catch(\PDOException $e){
+            self::$errorMessage = $e->getMessage() . $this->interpolateQuery($sql);
+            self::$errorCode = $e->getCode();
             $result = false;
         }
         ++self::$count;
@@ -400,7 +360,7 @@ class DB extends \PDO {
      * Get error status
      * @return boolean
      */
-    public static function getError()
+    public function getErrorCode()
     {
         return self::$error;
     }
@@ -409,19 +369,14 @@ class DB extends \PDO {
      * Get error message
      * @return string
      */
-    public static function getErrorMessage()
+    public function getErrorMessage()
     {
         return self::$errorMessage;
     }
 
-    /**
-     * Writes error log
-     * @param string $errorMessage
-     */
-    private function error($errorMessage)
+    public function hasError()
     {
-        self::$error = true;
-        self::$errorMessage = $errorMessage;
+        return self::$errorCode != '';
     }
 
     /**
@@ -527,43 +482,6 @@ class DB extends \PDO {
         return preg_replace($keys, $params, $sql, 1, $count);
     }
 
-    public function useCache($s)
-    {
-        self::$use_cache = $s;
-    }
-
-    private function isCached($q)
-    {
-        return file_exists(self::$cache_dir . md5($q));
-    }
-
-    private function readCache($q)
-    {
-        $file = self::$cache_dir . md5($q);
-        if(!file_exists($file)) return array();
-        $d = file_get_contents($file);
-
-        return unserialize($d);
-    }
-
-    private function writeCache($q,$d)
-    {
-        $file = self::$cache_dir . md5($q);
-        return file_put_contents($file, serialize($d));
-    }
-
-    public function clearCache()
-    {
-        if ($handle = opendir(self::$cache_dir)) {
-            while (false !== ($file = readdir($handle))) {
-                if ($file != "." && $file != "..") {
-                    unlink(self::$cache_dir . $file);
-                }
-            }
-            closedir($handle);
-        }
-    }
-
     function enumValues( $table, $field ){
         $enum = array();
         $type = $this->select( "SHOW COLUMNS FROM {$table} WHERE Field = '{$field}'")->row();
@@ -599,15 +517,5 @@ class DB extends \PDO {
         } catch (\Exception $e){
             return $e->getMessage(); //return exception
         }
-    }
-
-    public function queryCount()
-    {
-        return self::$count;
-    }
-
-    public function close()
-    {
-        self::$instance = null;
     }
 }

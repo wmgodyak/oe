@@ -84,4 +84,9 @@ abstract class Controller {
     {
         self::dump($var, $use_var_dump); die;
     }
+
+    public function redirect($uri)
+    {
+        header('Location: ' . $uri);die;
+    }
 } 
