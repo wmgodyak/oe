@@ -107,11 +107,7 @@ class Route
             $res = call_user_func(array($controller, $action));
         }
 
-        // save data to request storage
-        $request = Request::instance();
-        if($res) $request->body = $res;
-
-        // save data to request storage
+        Response::instance()->body($res)->render();
     }
 
     /**
