@@ -18,7 +18,7 @@ class Settings {
 
     public function __construct()
     {
-        self::$ms = new \models\Settings();
+        self::$ms = new \models\core\Settings();
     }
 
     /**
@@ -27,7 +27,7 @@ class Settings {
     public static function instance(){
         if(self::$_instance == null){
             self::$_instance = new Settings();
-            self::load();
+            self::refresh();
         }
 
         return self::$_instance;
@@ -36,8 +36,8 @@ class Settings {
     /**
      *
      */
-    private static function load(){
-        $r= self::$ms->load();
+    private static function refresh(){
+        $r= self::$ms->get();
         foreach($r as $row){
             self::$_data[$row['name']] = $row['value'];
         }
@@ -63,29 +63,21 @@ class Settings {
     {
         return $key ? self::$_data[$key] : self::$_data;
     }
-    /**
-     * @param null $key
-     * @return mixed
-     */
-    public function del($key)
-    {
-        return self::$ms->delete($key);
-    }
 
     /**
-     * @param $key
-     * @param $val
-     * @return mixed
+     * @param $n
+     * @param $v
+     * @param $t
+     * @param $d
+     * @return int
      */
-    public function __set($key,$val)
+    public function add($n, $v, $t, $d='')
     {
-
-        if(isset(self::$_data[$key])){
-            self::$_data[$key] = $val;
+        if(self::$ms->create($n, $v, $t, $d)){
+            $this->refresh();
+            return 1;
         }
-
-        return self::$_instance;
+        return 0;
     }
-
 
 } 

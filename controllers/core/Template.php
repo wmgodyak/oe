@@ -7,9 +7,7 @@
 
 namespace controllers\core;
 
-use controllers\App;
-
-defined("SYSPATH") or die();
+defined("CPATH") or die();
 
 require_once DOCROOT. "vendor/smarty/Smarty.class.php";
 
@@ -17,12 +15,13 @@ require_once DOCROOT. "vendor/smarty/Smarty.class.php";
  * Class Template
  * @package controllers\core
  */
-class Template{
+class Template
+{
     private static $instance;
     private $settings;
     private $smarty;
 
-    public function __construct()
+    public function __construct($theme_path)
     {
         // load config
         $config = Config::instance()->get('smarty');
@@ -37,41 +36,40 @@ class Template{
         $this->smarty->error_reporting = E_ALL & ~E_NOTICE;
 
         // get theme
-        $theme = $this->settings['themes_path'] .
-            $this->settings['app_theme_current'] . '/' .
-            $this->settings['app_views_path'] .'/';
+        $theme = $theme_path . '/' . $this->settings['app_views_path'] .'/';
 
-        $this->smarty->setCompileDir(DOCROOT . '/tmp/compiled/' . $this->settings['app_theme_current']);
+        $this->smarty->setCompileDir(DOCROOT . '/tmp/' . $theme_path);
         $this->smarty->setTemplateDir(DOCROOT . $theme);
 
         if(!is_dir($this->smarty->getCompileDir()))
             mkdir($this->smarty->getCompileDir(), 0777, true);
 
-        $this->smarty->setCacheDir('cache');
+        $this->smarty->setCacheDir(DOCROOT . '/tmp/cache/');
 
         // custom vars
-        $template_path = DOCROOT. $this->settings['themes_path'] . $this->settings['app_theme_current'] . '/';
+        $template_path = DOCROOT. $theme_path . '/';
         if(is_dir($template_path)) {
-            $template_url = APPURL . $this->settings['themes_path'] . $this->settings['app_theme_current'] . '/';
+            $template_url = APPURL . $theme_path . '/';
             $this->smarty->assign('template_url', $template_url);
             $this->smarty->assign('base_url', APPURL);
             $this->smarty->assign('token',    TOKEN);
         } else {
             echo self::fatalErrorTemplateContent(array(
                 'description' => 'No topic is set by default. Please go to content management system and activate the current theme. Or check the current theme folder in the system',
-                'code' => 'Not found theme - '.$template_path
+                'code' => 'Not found theme - '. $template_path
             ));
             die();
         }
     }
 
     /**
+     * @param $theme_path
      * @return Template
      */
-    public static function instance()
+    public static function instance($theme_path)
     {
         if(self::$instance == null){
-            self::$instance = new self;
+            self::$instance = new self($theme_path);
         }
 
         return self::$instance;
