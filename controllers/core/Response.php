@@ -47,12 +47,9 @@ class Response
      */
     public function render()
     {
-        $body = '';
         switch($this->ct){
-            case 'text/html':
-                $body = $this->body;
-                break;
             case 'text/plain':
+                header('Content-Type: text/plain');
                 $body = $this->body;
                 break;
 
@@ -63,10 +60,7 @@ class Response
 
             default:
                 header('Content-Type: text/html');
-                if(!empty($this->body)){
-                    Template::instance()->assign('body', $this->body);
-                    $body = Template::instance()->fetch('index');
-                }
+                $body = $this->body;
                 break;
         }
 

@@ -22,6 +22,7 @@
     // load startup file
     include_once "config/bootstrap.php";
 
-
     // Routing
     \controllers\core\Route::run();
+
+    \controllers\core\Response::instance()->render();

@@ -65,7 +65,7 @@ class Admin extends Engine {
     public function login()
     {
         if($this->request->isPost()){
-            return $this->loginProcess();
+//            return $this->loginProcess();
         }
 
         // витягнути список доступних мовних версій
@@ -73,15 +73,7 @@ class Admin extends Engine {
 
         $this->template->assign('langs', $langs);
 
-        $this->response->body($this->template->fetch('admin/login'))->render();
-
-        return $this->load->view('index',array(
-//            'title'          =>$request->title,
-//            'description'    =>$request->description,
-//            'body'           =>$this->load->view('auth/login'),
-//            'nav'            =>null,
-//            'body_class'     =>'login-page'
-        ));
+        $this->response->body($this->template->fetch('admin/login'));
     }
 
     private function loginProcess()

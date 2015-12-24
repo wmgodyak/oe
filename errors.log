@@ -99,3 +99,43 @@ Stack trace:
 #4 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_template.php(197): Smarty_Internal_Template->__get('compiler')
 #5 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_templatebase.php(155): Smarty_Internal_Template->compileTemplateSource()
 #6 /var/www/engine.loc/controllers/core/Template.php(109): Smarty_Internal_TemplateBase->fetch('admin/login in /var/www/engine.loc/bootstrap.php on line 31
+[24-Dec-2015 13:43:33 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:43:33 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:44:48 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:44:49 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:47:56 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:47:56 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:48:31 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:48:31 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:48:32 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:48:32 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:48:32 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:48:32 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:48:32 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:48:32 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:49:01 Europe/Kiev] PHP Warning:  ob_start(): output handler 'ob_gzhandler' cannot be used twice in /var/www/engine.loc/config/bootstrap.php on line 17
+[24-Dec-2015 13:49:01 Europe/Kiev] PHP Notice:  ob_start(): failed to create buffer in /var/www/engine.loc/config/bootstrap.php on line 17
+[24-Dec-2015 13:49:01 Europe/Kiev] PHP Warning:  ob_start(): output handler 'ob_gzhandler' cannot be used twice in /var/www/engine.loc/config/bootstrap.php on line 17
+[24-Dec-2015 13:49:01 Europe/Kiev] PHP Notice:  ob_start(): failed to create buffer in /var/www/engine.loc/config/bootstrap.php on line 17
+[24-Dec-2015 13:50:55 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:50:55 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:51:08 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:51:08 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:51:55 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:51:55 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:51:56 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:51:56 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:51:56 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:51:56 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:51:56 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:51:56 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:51:56 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:51:56 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:52:03 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:52:03 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:52:03 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:52:03 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:52:03 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:52:03 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:52:31 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 13:52:31 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19

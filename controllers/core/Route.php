@@ -121,7 +121,9 @@ class Route
 
         Event::flush($c, $action, $params);
 
-        Response::instance()->body($res)->render();
+        if($res){
+            Response::instance()->body($res);
+        }
     }
 
     /**
