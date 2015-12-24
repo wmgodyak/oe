@@ -1,0 +1,60 @@
+.login{
+  width: 420px;
+  margin: auto;
+  .f-link{
+    padding: 15px 0;
+    a{
+      font-family: $light-goth;
+      text-decoration: none;
+      color: $color-2;
+      font-size: 18px;
+      border-bottom: 1px solid #4fc1e9;
+    }
+  }
+  .input-group{
+    padding: 15px 0;
+    position: relative;
+    &.transformed{
+      label{
+        -webkit-transform: translateX(-144px);
+        -moz-transform: translateX(-144px);
+        -o-transform: translateX(-144px);
+        transform: translateX(-144px);
+      }
+    }
+  }
+  button{
+    margin: 18px 0 0 0;
+  }
+  label{
+    will-change: transform;
+    position: absolute;
+    left: 24px;
+    color: #a2b3c0;
+    font-size: 22px;
+    font-family: $light-goth;
+    line-height: 60px;
+    transition: all 0.35s ease;
+  }
+  input{
+    padding: 0 24px;
+    width: 100%;
+    height: 60px;
+    border: 2px solid #fff;
+    background: transparent;
+    border-radius: 3px;
+    transition: all 0.35s ease;
+    box-shadow: 0 0 0 1px transparent inset;
+    color: #a2b3c0;
+    font-size: 22px;
+    font-family: $light-goth;
+    -moz-user-select: none;
+    user-select: none;
+    &:hover,
+    &:focus{
+      color: #fff;
+      border: 2px solid #4fc1e9;
+      box-shadow: 0 0 0 1px #4fc1e9 inset;
+    }
+  }
+}

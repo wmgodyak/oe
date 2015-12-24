@@ -1,0 +1,12 @@
+@mixin clear(){
+  &:after{
+    display: table;
+    content: '';
+    clear: both;
+  }
+}
+@mixin text($font-size, $line-height){
+  font-family: $light;
+  font-size: $font-size;
+  line-height: $line-height;
+}

@@ -1,0 +1,103 @@
+.toggle-btn{
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  box-shadow: -1px 0 4px 0 #dee6e9;
+  top: 22px;
+  right: 0;
+  text-align: center;
+  line-height: 20px;
+  font-size: 12px;
+  color: #88a1a8;
+  cursor: pointer;
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
+  -o-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+
+.show-value{
+  position: absolute;
+  right: 0;
+  top: 19px;
+  cursor: pointer;
+  color: #636384;
+  font-size: 29px;
+  margin: 12px 12px 12px 0;
+  transition: color 0.35s ease;
+  .fa-eye-slash{
+    display: none;
+  }
+  &.visible{
+    .fa-eye-slash{
+      display: inline-block;
+    }
+    .fa-eye{
+      display: none;
+    }
+  }
+  &:hover{
+    color: #fff;
+  }
+}
+
+.btn{
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  vertical-align: middle;
+  white-space: nowrap;
+  outline: none;
+  -moz-user-select: none;
+  user-select: none;
+  border-radius: 3px;
+  font-family: $bold;
+  transition: all 0.35s ease;
+  &.btn-lg{
+    height: 60px;
+    line-height: 58px;
+    padding: 0 40px;
+    font-size: 20px;
+  }
+  &.btn-md{
+    height: 44px;
+    line-height: 42px;
+    padding: 0 20px;
+    font-size: 16px;
+  }
+  &.btn-info{
+    color: #fff;
+    background: $btn-info;
+    &:hover{
+      background: darken($btn-info, 20%);
+    }
+    &:disabled{
+      cursor: not-allowed;
+      background: lighten($btn-info, 20%);
+    }
+  }
+  &.btn-default{
+    color: $color-3;
+    background: $btn-default;
+    border: 2px solid #D9DFE9;
+    &:hover{
+      background: #D9DFE9;
+    }
+    &:disabled{
+      cursor: not-allowed;
+      background: lighten($btn-default, 20%);
+    }
+  }
+  &.btn-success{
+    color: #fff;
+    background: $btn-success;
+    &:hover{
+      background: darken($btn-success, 20%);
+    }
+    &:disabled{
+      cursor: not-allowed;
+      background: lighten($btn-success, 20%);
+    }
+  }
+}

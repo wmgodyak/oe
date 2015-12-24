@@ -1,0 +1,101 @@
+[23-Dec-2015 13:34:58 Europe/Kiev] PHP Fatal error:  Cannot redeclare controllers\engine\Admin::index() in /var/www/engine.loc/controllers/engine/Admin.php on line 225
+[23-Dec-2015 15:18:19 Europe/Kiev] PHP Catchable fatal error:  Object of class controllers\engine\Dashboard could not be converted to string in /var/www/engine.loc/controllers/core/Route.php on line 104
+[23-Dec-2015 15:30:58 Europe/Kiev] PHP Strict Standards:  call_user_func() expects parameter 1 to be a valid callback, non-static method controllers\engine\Admin::beforeLogin() should not be called statically in /var/www/engine.loc/controllers/core/Event.php on line 60
+[23-Dec-2015 15:31:23 Europe/Kiev] PHP Strict Standards:  call_user_func() expects parameter 1 to be a valid callback, non-static method controllers\engine\Admin::beforeLogin() should not be called statically in /var/www/engine.loc/controllers/core/Event.php on line 60
+[23-Dec-2015 15:31:23 Europe/Kiev] PHP Warning:  Missing argument 1 for controllers\engine\Admin::beforeLogin() in /var/www/engine.loc/controllers/engine/Admin.php on line 82
+[23-Dec-2015 15:31:37 Europe/Kiev] PHP Strict Standards:  call_user_func() expects parameter 1 to be a valid callback, non-static method controllers\engine\Admin::beforeLogin() should not be called statically in /var/www/engine.loc/controllers/core/Event.php on line 60
+[23-Dec-2015 15:31:37 Europe/Kiev] PHP Warning:  Missing argument 1 for controllers\engine\Admin::beforeLogin() in /var/www/engine.loc/controllers/engine/Admin.php on line 82
+[23-Dec-2015 15:31:37 Europe/Kiev] PHP Warning:  Missing argument 2 for controllers\engine\Admin::beforeLogin() in /var/www/engine.loc/controllers/engine/Admin.php on line 82
+[23-Dec-2015 15:31:48 Europe/Kiev] PHP Strict Standards:  call_user_func() expects parameter 1 to be a valid callback, non-static method controllers\engine\Admin::beforeLogin() should not be called statically in /var/www/engine.loc/controllers/core/Event.php on line 60
+[23-Dec-2015 16:07:12 Europe/Kiev] PHP Warning:  array_search() expects parameter 2 to be array, null given in /var/www/engine.loc/controllers/core/Event.php on line 69
+[23-Dec-2015 16:15:32 Europe/Kiev] PHP Warning:  array_search() expects parameter 2 to be array, null given in /var/www/engine.loc/controllers/core/Event.php on line 70
+[23-Dec-2015 16:34:35 Europe/Kiev] PHP Warning:  explode() expects parameter 2 to be string, array given in /var/www/engine.loc/controllers/core/Event.php on line 84
+[23-Dec-2015 16:34:35 Europe/Kiev] PHP Fatal error:  Class name must be a valid object or a string in /var/www/engine.loc/controllers/core/Event.php on line 58
+[23-Dec-2015 16:45:15 Europe/Kiev] PHP Notice:  Undefined variable: request in /var/www/engine.loc/controllers/engine/Admin.php on line 71
+[23-Dec-2015 16:45:15 Europe/Kiev] PHP Notice:  Trying to get property of non-object in /var/www/engine.loc/controllers/engine/Admin.php on line 71
+[23-Dec-2015 16:45:15 Europe/Kiev] PHP Notice:  Undefined variable: request in /var/www/engine.loc/controllers/engine/Admin.php on line 72
+[23-Dec-2015 16:45:15 Europe/Kiev] PHP Notice:  Trying to get property of non-object in /var/www/engine.loc/controllers/engine/Admin.php on line 72
+[23-Dec-2015 17:17:40 Europe/Kiev] PHP Warning:  opendir(/themes/engine/languages/): failed to open dir: Немає такого файла або каталогу in /var/www/engine.loc/controllers/engine/Localization.php on line 20
+[23-Dec-2015 17:18:13 Europe/Kiev] PHP Warning:  parse_ini_file(/var/www/engine.loc//themes/engine/languages/.core.ini): failed to open stream: Немає такого файла або каталогу in /var/www/engine.loc/controllers/engine/Localization.php on line 24
+[23-Dec-2015 17:18:13 Europe/Kiev] PHP Warning:  parse_ini_file(/var/www/engine.loc//themes/engine/languages/..core.ini): failed to open stream: Немає такого файла або каталогу in /var/www/engine.loc/controllers/engine/Localization.php on line 24
+[23-Dec-2015 17:18:13 Europe/Kiev] PHP Warning:  parse_ini_file(/var/www/engine.loc//themes/engine/languages/ukcore.ini): failed to open stream: Немає такого файла або каталогу in /var/www/engine.loc/controllers/engine/Localization.php on line 24
+[23-Dec-2015 17:18:42 Europe/Kiev] PHP Warning:  parse_ini_file(/var/www/engine.loc//themes/engine/languages/ukcore.ini): failed to open stream: Немає такого файла або каталогу in /var/www/engine.loc/controllers/engine/Localization.php on line 25
+[23-Dec-2015 17:47:07 Europe/Kiev] PHP Warning:  mkdir(): Відмовлено у доступі in /var/www/engine.loc/controllers/core/Template.php on line 45
+[23-Dec-2015 17:54:50 Europe/Kiev] PHP Warning:  require(Smarty/Internal/TemplateCompilerBase.php): failed to open stream: Немає такого файла або каталогу in /var/www/engine.loc/bootstrap.php on line 33
+[23-Dec-2015 17:54:50 Europe/Kiev] PHP Fatal error:  require(): Failed opening required 'Smarty/Internal/TemplateCompilerBase.php' (include_path='.:/usr/share/php:/usr/share/pear') in /var/www/engine.loc/bootstrap.php on line 33
+[23-Dec-2015 17:55:11 Europe/Kiev] PHP Fatal error:  Uncaught controllers\core\Exceptions: [0]: Try to load className: <b>Smarty_Internal_TemplateCompilerBase</b> on line 32. Error, file: Smarty/Internal/TemplateCompilerBase.php not found
+
+  thrown in /var/www/engine.loc/bootstrap.php on line 30
+[23-Dec-2015 17:55:20 Europe/Kiev] PHP Fatal error:  Uncaught exception 'Exception' with message 'Try to load className: <b>Smarty_Internal_TemplateCompilerBase</b> on line 32. Error, file: Smarty/Internal/TemplateCompilerBase.php not found' in /var/www/engine.loc/bootstrap.php:30
+Stack trace:
+#0 [internal function]: autoLoad('Smarty_Internal...')
+#1 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_smartytemplatecompiler.php(23): spl_autoload_call('Smarty_Internal...')
+#2 /var/www/engine.loc/vendor/smarty/Smarty.class.php(1384): require_once('/var/www/engine...')
+#3 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_template.php(713): Smarty->loadPlugin('Smarty_Internal...')
+#4 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_template.php(197): Smarty_Internal_Template->__get('compiler')
+#5 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_templatebase.php(155): Smarty_Internal_Template->compileTemplateSource()
+#6 /var/www/engine.loc/controllers/core/Template.php(108): Smarty_Internal_TemplateBase->fetch('admin/login in /var/www/engine.loc/bootstrap.php on line 30
+[23-Dec-2015 17:55:27 Europe/Kiev] PHP Fatal error:  Uncaught exception 'Exception' with message 'Try to load className: <b>Smarty_Internal_TemplateCompilerBase</b> on line 32. Error, file: Smarty/Internal/TemplateCompilerBase.php not found' in /var/www/engine.loc/bootstrap.php:31
+Stack trace:
+#0 [internal function]: autoLoad('Smarty_Internal...')
+#1 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_smartytemplatecompiler.php(23): spl_autoload_call('Smarty_Internal...')
+#2 /var/www/engine.loc/vendor/smarty/Smarty.class.php(1384): require_once('/var/www/engine...')
+#3 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_template.php(713): Smarty->loadPlugin('Smarty_Internal...')
+#4 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_template.php(197): Smarty_Internal_Template->__get('compiler')
+#5 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_templatebase.php(155): Smarty_Internal_Template->compileTemplateSource()
+#6 /var/www/engine.loc/controllers/core/Template.php(108): Smarty_Internal_TemplateBase->fetch('admin/login in /var/www/engine.loc/bootstrap.php on line 31
+[24-Dec-2015 10:16:03 Europe/Kiev] PHP Fatal error:  Uncaught exception 'Exception' with message 'Try to load className: <b>Smarty_Internal_TemplateCompilerBase</b> on line 32. Error, file: Smarty/Internal/TemplateCompilerBase.php not found' in /var/www/engine.loc/bootstrap.php:31
+Stack trace:
+#0 [internal function]: autoLoad('Smarty_Internal...')
+#1 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_smartytemplatecompiler.php(23): spl_autoload_call('Smarty_Internal...')
+#2 /var/www/engine.loc/vendor/smarty/Smarty.class.php(1384): require_once('/var/www/engine...')
+#3 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_template.php(713): Smarty->loadPlugin('Smarty_Internal...')
+#4 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_template.php(197): Smarty_Internal_Template->__get('compiler')
+#5 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_templatebase.php(155): Smarty_Internal_Template->compileTemplateSource()
+#6 /var/www/engine.loc/controllers/core/Template.php(108): Smarty_Internal_TemplateBase->fetch('admin/login in /var/www/engine.loc/bootstrap.php on line 31
+[24-Dec-2015 10:20:54 Europe/Kiev] PHP Fatal error:  Call to a member function assign() on a non-object in /var/www/engine.loc/controllers/engine/Admin.php on line 74
+[24-Dec-2015 10:23:29 Europe/Kiev] PHP Fatal error:  Uncaught exception 'Exception' with message 'Try to load className: <b>Smarty_Internal_TemplateCompilerBase</b> on line 32. Error, file: Smarty/Internal/TemplateCompilerBase.php not found' in /var/www/engine.loc/bootstrap.php:31
+Stack trace:
+#0 [internal function]: autoLoad('Smarty_Internal...')
+#1 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_smartytemplatecompiler.php(23): spl_autoload_call('Smarty_Internal...')
+#2 /var/www/engine.loc/vendor/smarty/Smarty.class.php(1384): require_once('/var/www/engine...')
+#3 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_template.php(713): Smarty->loadPlugin('Smarty_Internal...')
+#4 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_template.php(197): Smarty_Internal_Template->__get('compiler')
+#5 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_templatebase.php(155): Smarty_Internal_Template->compileTemplateSource()
+#6 /var/www/engine.loc/controllers/core/Template.php(109): Smarty_Internal_TemplateBase->fetch('admin/login in /var/www/engine.loc/bootstrap.php on line 31
+[24-Dec-2015 10:30:51 Europe/Kiev] PHP Fatal error:  Uncaught exception 'Exception' with message 'Try to load className: <b>Smarty_Internal_TemplateCompilerBase</b> on line 32. Error, file: Smarty/Internal/TemplateCompilerBase.php not found' in /var/www/engine.loc/bootstrap.php:31
+Stack trace:
+#0 [internal function]: autoLoad('Smarty_Internal...')
+#1 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_smartytemplatecompiler.php(23): spl_autoload_call('Smarty_Internal...')
+#2 /var/www/engine.loc/vendor/smarty/Smarty.class.php(1384): require_once('/var/www/engine...')
+#3 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_template.php(713): Smarty->loadPlugin('Smarty_Internal...')
+#4 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_template.php(197): Smarty_Internal_Template->__get('compiler')
+#5 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_templatebase.php(155): Smarty_Internal_Template->compileTemplateSource()
+#6 /var/www/engine.loc/controllers/core/Template.php(109): Smarty_Internal_TemplateBase->fetch('admin/login in /var/www/engine.loc/bootstrap.php on line 31
+[24-Dec-2015 10:32:08 Europe/Kiev] PHP Fatal error:  Uncaught exception 'Exception' with message 'Try to load className: <b>Smarty_Internal_TemplateCompilerBase</b> on line 32. Error, file: Smarty/Internal/TemplateCompilerBase.php not found' in /var/www/engine.loc/bootstrap.php:31
+Stack trace:
+#0 [internal function]: autoLoad('Smarty_Internal...')
+#1 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_smartytemplatecompiler.php(23): spl_autoload_call('Smarty_Internal...')
+#2 /var/www/engine.loc/vendor/smarty/Smarty.class.php(1384): require_once('/var/www/engine...')
+#3 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_template.php(713): Smarty->loadPlugin('Smarty_Internal...')
+#4 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_template.php(197): Smarty_Internal_Template->__get('compiler')
+#5 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_templatebase.php(155): Smarty_Internal_Template->compileTemplateSource()
+#6 /var/www/engine.loc/controllers/core/Template.php(109): Smarty_Internal_TemplateBase->fetch('admin/login in /var/www/engine.loc/bootstrap.php on line 31
+[24-Dec-2015 10:32:27 Europe/Kiev] PHP Fatal error:  Uncaught exception 'Exception' with message 'Try to load className: <b>Smarty_Internal_TemplateCompilerBase</b> on line 32. Error, file: Smarty/Internal/TemplateCompilerBase.php not found' in /var/www/engine.loc/bootstrap.php:31
+Stack trace:
+#0 [internal function]: autoLoad('Smarty_Internal...')
+#1 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_smartytemplatecompiler.php(23): spl_autoload_call('Smarty_Internal...')
+#2 /var/www/engine.loc/vendor/smarty/Smarty.class.php(1384): require_once('/var/www/engine...')
+#3 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_template.php(713): Smarty->loadPlugin('Smarty_Internal...')
+#4 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_template.php(197): Smarty_Internal_Template->__get('compiler')
+#5 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_templatebase.php(155): Smarty_Internal_Template->compileTemplateSource()
+#6 /var/www/engine.loc/controllers/core/Template.php(109): Smarty_Internal_TemplateBase->fetch('admin/login in /var/www/engine.loc/bootstrap.php on line 31
+[24-Dec-2015 10:32:47 Europe/Kiev] PHP Fatal error:  Uncaught exception 'Exception' with message 'Try to load className: <b>Smarty_Internal_TemplateCompilerBase</b> on line 32. Error, file: Smarty/Internal/TemplateCompilerBase.php not found' in /var/www/engine.loc/bootstrap.php:31
+Stack trace:
+#0 [internal function]: autoLoad('Smarty_Internal...')
+#1 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_smartytemplatecompiler.php(23): spl_autoload_call('Smarty_Internal...')
+#2 /var/www/engine.loc/vendor/smarty/Smarty.class.php(1384): require_once('/var/www/engine...')
+#3 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_template.php(713): Smarty->loadPlugin('Smarty_Internal...')
+#4 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_template.php(197): Smarty_Internal_Template->__get('compiler')
+#5 /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_templatebase.php(155): Smarty_Internal_Template->compileTemplateSource()
+#6 /var/www/engine.loc/controllers/core/Template.php(109): Smarty_Internal_TemplateBase->fetch('admin/login in /var/www/engine.loc/bootstrap.php on line 31
