@@ -8,7 +8,7 @@
 
 namespace controllers\engine;
 
-class Localization
+class Lang
 {
     private static $instance;
 
@@ -16,7 +16,7 @@ class Localization
 
     private function __construct()
     {
-        $dir = DOCROOT . '/themes/engine/languages/';
+        $dir = DOCROOT . '/themes/engine/lang/';
         if ($handle = opendir($dir)) {
             while (false !== ($entry = readdir($handle))) {
                 if ($entry != "." && $entry != ".."){
@@ -36,7 +36,7 @@ class Localization
     public static function getInstance()
     {
         if(self::$instance == null){
-            self::$instance = new Localization();
+            self::$instance = new Lang();
         }
 
         return self::$instance;
