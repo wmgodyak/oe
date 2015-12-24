@@ -20,13 +20,8 @@
     if(!defined('CPATH')) define('CPATH', DOCROOT . 'controllers/');
 
     // load startup file
-    include_once "bootstrap.php";
+    include_once "config/bootstrap.php";
 
 
     // Routing
     \controllers\core\Route::run();
-
-//    // вивід на екран
-//    \controllers\core\Output::render($time_start);
-
-die('<br>END');
