@@ -26,7 +26,7 @@ class Theme {
 
     public static function switchTo($app='engine')
     {
-        self::$theme = Config::instance()->get("themes.$app");
+        self::$theme = Config::getInstance()->get("themes.$app");
     }
 
 

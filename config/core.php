@@ -10,5 +10,6 @@
     ini_set('display_errors', 1);
 
     return array(
-        'debug' => true
+        'debug' => true,
+        'lang'  => 'uk'
     );

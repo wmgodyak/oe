@@ -14,8 +14,6 @@
 
     if (version_compare(phpversion(), '5.3.0', '<') == true) { die ('PHP 5.3+ Only'); }
 
-    $time_start = microtime(true);
-
     if(!defined('DOCROOT')) define('DOCROOT', str_replace("\\", "/", $_SERVER['DOCUMENT_ROOT'] . '/'));
     if(!defined('CPATH')) define('CPATH', DOCROOT . 'controllers/');
 
@@ -25,4 +23,4 @@
     // Routing
     \controllers\core\Route::run();
 
-    \controllers\core\Response::instance()->render();
+    \controllers\core\Response::getInstance()->render();

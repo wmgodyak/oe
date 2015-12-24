@@ -15,6 +15,7 @@ use controllers\core\Session;
 use controllers\core\Settings;
 use controllers\core\Template;
 use controllers\engine\Admin;
+use controllers\engine\Lang;
 
 //use controllers\engine\Auth;
 //use controllers\engine\Plugins;
@@ -70,7 +71,7 @@ abstract class Engine extends Controller
     {
         parent::__construct();
 
-        $this->request = Request::instance();
+        $this->request = Request::getInstance();
 
         if(
             (
@@ -86,19 +87,28 @@ abstract class Engine extends Controller
         }
 
         // response
-        $this->response = Response::instance();
+        $this->response = Response::getInstance();
 
         // settings
-        $this->settings = Settings::instance()->get();
+        $this->settings = Settings::getInstance()->get();
 
-        // шаблонізатор
-        $theme = $this->settings['themes_path'] . $this->settings['engine_theme_current'];
-        $this->template = Template::instance($theme);
+        // template settings
+        $theme = $this->settings['engine_theme_current'];
+        $this->template = Template::getInstance($theme);
+        $this->template->assign('base_url',    APPURL . 'engine/');
+        $this->template->assign('controller',  $this->request->get('controller'));
+        $this->template->assign('action',      $this->request->get('action'));
+        $this->template->assign('t',           Lang::getInstance()->t());
+    }
 
-        // авторизуватись
-        // що треба визначити
-        // мову адмінки
-
+    /**
+     * translations
+     * @param $key
+     * @return string
+     */
+    protected function t($key)
+    {
+        return Lang::getInstance()->t($key);
     }
 
     protected function setSidebar($sb)

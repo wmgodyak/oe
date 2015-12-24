@@ -18,7 +18,7 @@ class Settings
      */
     public function get()
     {
-        return DB::instance()->select("select name, value from settings order by id asc")->all();
+        return DB::getInstance()->select("select name, value from settings order by id asc")->all();
     }
 
     /**
@@ -28,7 +28,7 @@ class Settings
      */
     public function set($name, $value)
     {
-        return DB::instance()->update("settings", array('value' => $value), " name = '{$name}' limit 1");
+        return DB::getInstance()->update("settings", array('value' => $value), " name = '{$name}' limit 1");
     }
 
     /**
@@ -40,7 +40,7 @@ class Settings
      */
     public function create($name, $value, $title, $description = '')
     {
-        return DB::instance()->insert
+        return DB::getInstance()->insert
             (
                 'settings',
                 array(

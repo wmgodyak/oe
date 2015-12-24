@@ -49,7 +49,7 @@ class Config
     /**
      * @return Config
      */
-    public static function instance(){
+    public static function getInstance(){
         if(self::$instance == null){
             self::$instance = new Config();
         }

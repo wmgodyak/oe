@@ -24,7 +24,7 @@ class Settings {
     /**
      * @return Settings
      */
-    public static function instance(){
+    public static function getInstance(){
         if(self::$_instance == null){
             self::$_instance = new Settings();
             self::refresh();

@@ -20,12 +20,17 @@ class Template
     private static $instance;
     private $settings;
     private $smarty;
+    private $theme = null;
 
-    public function __construct($theme_path)
+    public function __construct($theme)
     {
+        if(!$theme) throw new \Exception('Wrong theme path');
+
+        $this->theme = $theme;
+
         // load config
-        $config = Config::instance()->get('smarty');
-        $this->settings = Settings::instance()->get();
+        $config = Config::getInstance()->get('smarty');
+        $this->settings = Settings::getInstance()->get();
 
         // init smarty
         $this->smarty = new \Smarty();
@@ -37,10 +42,10 @@ class Template
         $this->smarty->error_reporting = E_ALL & ~E_NOTICE;
 
         // get theme
-        $theme = $theme_path . '/' . $this->settings['app_views_path'] .'/';
+        $theme = $this->settings['themes_path'] . $theme . '/';
 
-        $this->smarty->setCompileDir(DOCROOT . '/tmp/' . $theme_path);
-        $this->smarty->setTemplateDir(DOCROOT . $theme);
+        $this->smarty->setCompileDir(DOCROOT . '/tmp/' . $theme . $this->settings['app_views_path'] .'/');
+        $this->smarty->setTemplateDir(DOCROOT . $theme. $this->settings['app_views_path'] .'/');
 
         if(!is_dir($this->smarty->getCompileDir()))
             mkdir($this->smarty->getCompileDir(), 0777, true);
@@ -48,29 +53,34 @@ class Template
         $this->smarty->setCacheDir(DOCROOT . '/tmp/cache/');
 
         // custom vars
-        $template_path = DOCROOT. $theme_path . '/';
+        $template_path = DOCROOT. $theme;
+
         if(is_dir($template_path)) {
-            $template_url = APPURL . $theme_path . '/';
+
+            $template_url = APPURL . $theme ;
             $this->smarty->assign('template_url', $template_url);
             $this->smarty->assign('base_url', APPURL);
             $this->smarty->assign('token',    TOKEN);
+
         } else {
+
             echo self::fatalErrorTemplateContent(array(
                 'description' => 'No topic is set by default. Please go to content management system and activate the current theme. Or check the current theme folder in the system',
                 'code' => 'Not found theme - '. $template_path
             ));
             die();
+
         }
     }
 
     /**
-     * @param $theme_path
+     * @param $theme
      * @return Template
      */
-    public static function instance($theme_path)
+    public static function getInstance($theme = null)
     {
         if(self::$instance == null){
-            self::$instance = new self($theme_path);
+            self::$instance = new self($theme);
         }
 
         return self::$instance;

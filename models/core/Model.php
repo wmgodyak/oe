@@ -17,22 +17,34 @@ class Model {
 
     protected static $db;
 
+    protected $error = [];
+
     public function __construct()
     {
-        self::$db = DB::instance();
+        self::$db = DB::getInstance();
     }
 
-    public function getErrorCode()
+    public function setError($msg)
+    {
+        $this->error[] = $msg;
+    }
+
+    public function getDBError()
+    {
+        return $this->error;
+    }
+
+    public function getDBErrorCode()
     {
         return self::$db->getErrorCode();
     }
 
-    public function getErrorMessage()
+    public function getDBErrorMessage()
     {
         return self::$db->getErrorMessage();
     }
 
-    public function hasError()
+    public function hasDBError()
     {
         return self::$db->hasError();
     }

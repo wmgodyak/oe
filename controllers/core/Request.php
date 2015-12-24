@@ -26,10 +26,17 @@ class Request {
 
     private $param = array();
 
-    public $mode;
+    private $mode;
 
-    private function __construct()
+    private function __construct($mode)
     {
+        if(!$mode) {
+            echo '<pre>';
+            throw new \Exception('Wrong mode');
+        }
+
+        $this->mode = $mode;
+
         foreach ($_REQUEST as $k=>$v) {
             $this->param[$k] = $v;
         }
@@ -37,12 +44,24 @@ class Request {
 
     private function __clone(){}
 
-    public static function instance()
+    /**
+     * @param null $mode
+     * @return Request
+     */
+    public static function getInstance($mode = null)
     {
         if(!self::$instance instanceof self){
-            self::$instance = new Request;
+            self::$instance = new Request($mode);
         }
         return self::$instance;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMode()
+    {
+        return $this->mode;
     }
 
     public function get($name='', $type = null)

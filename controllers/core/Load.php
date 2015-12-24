@@ -49,21 +49,21 @@ class Load
      */
     public function view($name, array $vars = null)
     {
-        $mode = Request::instance()->mode;
+        $mode = Request::getInstance()->mode;
 
-        $themes_path = Settings::instance()->get('themes_path');
-        $views_path = Settings::instance()->get('app_views_path');
+        $themes_path = Settings::getInstance()->get('themes_path');
+        $views_path = Settings::getInstance()->get('app_views_path');
 
         if($mode == 'engine')
         {
-            $current = Settings::instance()->get('engine_theme_current');
+            $current = Settings::getInstance()->get('engine_theme_current');
 //            $base = $themes_path . $current . '/';
             // load translation
             $lang = Languages::instance()->getTranslations();
         } else {
             return " <pre>this method is deprecated on app mode.\r\n Use this->template->assign('key', 'value');\r\n return this->template->fetch('path/to/file')</pre>";
             // App
-//            $current = Settings::instance()->get('app_theme_current');
+//            $current = Settings::getInstance()->get('app_theme_current');
 //            $base = $themes_path . $current.'/';
 //            $t = $this->translations;
         }
@@ -94,10 +94,10 @@ class Load
     public function chunk($name, array $vars = null)
     {
         return 'this method is depredated';
-        $themes_path = Settings::instance()->get('themes_path');
+        $themes_path = Settings::getInstance()->get('themes_path');
 
-        $current = Settings::instance()->get('app_theme_current');
-        $chunks_path = Settings::instance()->get('app_chunks_path');
+        $current = Settings::getInstance()->get('app_theme_current');
+        $chunks_path = Settings::getInstance()->get('app_chunks_path');
         $base = $themes_path . $current.'/';
         $t = $this->translations;
 
@@ -106,7 +106,7 @@ class Load
 
         // дані про сторінку
         if(!isset($vars['page'])){
-            $request = Request::instance();
+            $request = Request::getInstance();
             $vars['page'] = $request->param();
         }
 
@@ -188,7 +188,7 @@ class Load
 
     public function module($controller , $action = 'index' , $params = array())
     {
-        $mod_path = Settings::instance()->get('mod_path');
+        $mod_path = Settings::getInstance()->get('mod_path');
         $controller= $mod_path . $controller;
 
         $className = ltrim($controller, '\\');

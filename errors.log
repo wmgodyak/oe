@@ -139,3 +139,62 @@ Stack trace:
 [24-Dec-2015 13:52:03 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
 [24-Dec-2015 13:52:31 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
 [24-Dec-2015 13:52:31 Europe/Kiev] PHP Fatal error:  Cannot redeclare autoLoad() (previously declared in /var/www/engine.loc/config/bootstrap.php:19) in /var/www/engine.loc/config/bootstrap.php on line 19
+[24-Dec-2015 14:28:04 Europe/Kiev] PHP Fatal error:  Uncaught exception 'Exception' with message 'Wrong mode' in /var/www/engine.loc/controllers/core/Request.php:33
+Stack trace:
+#0 /var/www/engine.loc/controllers/core/Request.php(51): controllers\core\Request->__construct(NULL)
+#1 /var/www/engine.loc/controllers/core/Route.php(92): controllers\core\Request::getInstance()
+#2 /var/www/engine.loc/index.php(26): controllers\core\Route::run()
+#3 {main}
+  thrown in /var/www/engine.loc/controllers/core/Request.php on line 33
+[24-Dec-2015 14:28:04 Europe/Kiev] PHP Fatal error:  Uncaught exception 'Exception' with message 'Wrong mode' in /var/www/engine.loc/controllers/core/Request.php:33
+Stack trace:
+#0 /var/www/engine.loc/controllers/core/Request.php(51): controllers\core\Request->__construct(NULL)
+#1 /var/www/engine.loc/controllers/core/Route.php(92): controllers\core\Request::getInstance()
+#2 /var/www/engine.loc/index.php(26): controllers\core\Route::run()
+#3 {main}
+  thrown in /var/www/engine.loc/controllers/core/Request.php on line 33
+[24-Dec-2015 14:29:41 Europe/Helsinki] PHP Fatal error:  Class 'controllers\core\Session' not found in /var/www/engine.loc/config/bootstrap.php on line 20
+[24-Dec-2015 14:29:41 Europe/Helsinki] PHP Fatal error:  Class 'controllers\core\Session' not found in /var/www/engine.loc/config/bootstrap.php on line 20
+[24-Dec-2015 14:29:58 Europe/Kiev] PHP Fatal error:  Uncaught exception 'Exception' with message 'Wrong mode' in /var/www/engine.loc/controllers/core/Request.php:33
+Stack trace:
+#0 /var/www/engine.loc/controllers/core/Request.php(51): controllers\core\Request->__construct(NULL)
+#1 /var/www/engine.loc/controllers/core/Route.php(92): controllers\core\Request::getInstance()
+#2 /var/www/engine.loc/index.php(26): controllers\core\Route::run()
+#3 {main}
+  thrown in /var/www/engine.loc/controllers/core/Request.php on line 33
+[24-Dec-2015 14:29:58 Europe/Kiev] PHP Fatal error:  Uncaught exception 'Exception' with message 'Wrong mode' in /var/www/engine.loc/controllers/core/Request.php:33
+Stack trace:
+#0 /var/www/engine.loc/controllers/core/Request.php(51): controllers\core\Request->__construct(NULL)
+#1 /var/www/engine.loc/controllers/core/Route.php(92): controllers\core\Request::getInstance()
+#2 /var/www/engine.loc/index.php(26): controllers\core\Route::run()
+#3 {main}
+  thrown in /var/www/engine.loc/controllers/core/Request.php on line 33
+[24-Dec-2015 14:30:09 Europe/Kiev] PHP Fatal error:  Uncaught exception 'Exception' with message 'Wrong mode' in /var/www/engine.loc/controllers/core/Request.php:35
+Stack trace:
+#0 /var/www/engine.loc/controllers/core/Request.php(54): controllers\core\Request->__construct(NULL)
+#1 /var/www/engine.loc/controllers/core/Route.php(92): controllers\core\Request::getInstance()
+#2 /var/www/engine.loc/index.php(26): controllers\core\Route::run()
+#3 {main}
+  thrown in /var/www/engine.loc/controllers/core/Request.php on line 35
+[24-Dec-2015 14:30:09 Europe/Kiev] PHP Fatal error:  Uncaught exception 'Exception' with message 'Wrong mode' in /var/www/engine.loc/controllers/core/Request.php:35
+Stack trace:
+#0 /var/www/engine.loc/controllers/core/Request.php(54): controllers\core\Request->__construct(NULL)
+#1 /var/www/engine.loc/controllers/core/Route.php(92): controllers\core\Request::getInstance()
+#2 /var/www/engine.loc/index.php(26): controllers\core\Route::run()
+#3 {main}
+  thrown in /var/www/engine.loc/controllers/core/Request.php on line 35
+[24-Dec-2015 14:32:01 Europe/Kiev] PHP Fatal error:  Uncaught exception 'Exception' with message 'Wrong mode' in /var/www/engine.loc/controllers/core/Request.php:35
+Stack trace:
+#0 /var/www/engine.loc/controllers/core/Request.php(54): controllers\core\Request->__construct(NULL)
+#1 /var/www/engine.loc/controllers/core/Route.php(92): controllers\core\Request::getInstance()
+#2 /var/www/engine.loc/index.php(26): controllers\core\Route::run()
+#3 {main}
+  thrown in /var/www/engine.loc/controllers/core/Request.php on line 35
+[24-Dec-2015 14:32:01 Europe/Kiev] PHP Fatal error:  Uncaught exception 'Exception' with message 'Wrong mode' in /var/www/engine.loc/controllers/core/Request.php:35
+Stack trace:
+#0 /var/www/engine.loc/controllers/core/Request.php(54): controllers\core\Request->__construct(NULL)
+#1 /var/www/engine.loc/controllers/core/Route.php(92): controllers\core\Request::getInstance()
+#2 /var/www/engine.loc/index.php(26): controllers\core\Route::run()
+#3 {main}
+  thrown in /var/www/engine.loc/controllers/core/Request.php on line 35
+[24-Dec-2015 18:25:44 Europe/Kiev] PHP Notice:  Array to string conversion in /var/www/engine.loc/controllers/core/Response.php on line 103

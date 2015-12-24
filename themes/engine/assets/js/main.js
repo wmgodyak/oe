@@ -1,5 +1,30 @@
-var app = {
-
+var engine = {
+    request:  {
+        /**
+         * send get request
+         * @param url
+         * @param success
+         * @param dataType
+         * @returns {*}
+         */
+        get: function(url, success, dataType)
+        {
+            var data =  {token: TOKEN};
+            return $.ajax({
+                url      : url,
+                data     : data,
+                success  : success,
+                dataType : dataType,
+                type     : 'get'
+            })
+        },
+        post: function(data)
+        {
+            data['data']['token'] = TOKEN;
+            data['type'] = 'post';
+            return $.ajax(data)
+        }
+    },
     toggleSidebar: function(){
         var page = $('.page');
         var sidebarBtn = $('.sidebar .toggle-btn');
@@ -38,34 +63,6 @@ var app = {
             }
         })();
 
-        (function() {
-            var logForm = $('#login');
-            if(logForm.length){
-                logForm.find('.input-group').each(function(){
-                    $(this).find('input').on('focus', function(){
-                        $(this).parent().addClass('transformed');
-                    });
-                    $(this).find('input').on('focusout', function(){
-                        if($(this).val()==''){
-                            $(this).parent().removeClass('transformed');
-                        }
-                    });
-                });
-                $('#show-value').on('click', function(){
-                    var input =  $('#password');
-                    var inputType =  input.attr('type');
-                    $(this).toggleClass('visible');
-                    if(inputType == 'password'){
-                        input.attr('type','text');
-                    }else{
-                        input.attr('type','password');
-                    }
-
-                });
-            }
-        })();
-
-
         (function(){
             $('.side-nav').find('.has-child').on('click', function(){
                 var drop = $(this).find('.second-level');
@@ -87,9 +84,9 @@ var app = {
         })();
 
         (function(){
-            $( "#dialog" ).dialog();
-            $( "#datepicker" ).datepicker();
-            $('#example').DataTable();
+            //$( "#dialog" ).dialog();
+            //$( "#datepicker" ).datepicker();
+            //$('#example').DataTable();
         })();
 
         (function(){
@@ -122,17 +119,81 @@ var app = {
                 });
             }
         })();
+    },
+     validateError: function(form, inp)
+    {
+        var $validator = $(form).validate(), e = [];
 
-
-
+        $(inp).each(function(k, i){
+            $validator.showErrors(i);
+        });
     }
-
-
 };
 
 $(document).ready(function(){
-    app.init();
-    app.toggleSidebar();
-    app.toggleNav();
+    engine.init();
+    engine.toggleSidebar();
+    engine.toggleNav();
+    engine.admin.init();
 });
 
+engine.admin = {
+    init : function()
+    {
+        var logForm = $('#adminLogin');
+        if(logForm.length == 0) return ;
+
+        logForm.find('.input-group').each(function(){
+            $(this).find('input').on('focus', function(){
+                $(this).parent().addClass('transformed');
+            });
+            $(this).find('input').on('focusout', function(){
+                if($(this).val()==''){
+                    $(this).parent().removeClass('transformed');
+                }
+            });
+        });
+
+        $(document).on('click', '#show-pass', function(){
+            var input =  $('#password');
+            var inputType =  input.attr('type');
+            $(this).toggleClass('visible');
+            if(inputType == 'password'){
+                input.attr('type','text');
+            }else{
+                input.attr('type','password');
+            }
+
+        });
+
+        logForm.validate({
+            rules: {
+                data_email: {
+                    required: true,
+                    email: true
+                }
+            },
+            submitHandler: function(form) {
+
+                var bSubmit = $('.b-submit');
+                $(form).ajaxSubmit({
+                    dataType: 'json',
+                    beforeSend: function()
+                    {
+                        bSubmit.attr('disabled', true);
+                        return true;
+                    },
+                    success: function(d)
+                    {
+                        bSubmit.removeAttr('disabled');
+                        if(d.s){
+                            self.location.href = "/engine/dashboard";
+                        } else {
+                            engine.validateError(form, d.i)
+                        }
+                    }
+                });
+            }
+        });
+    }
+};

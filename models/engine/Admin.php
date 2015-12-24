@@ -23,13 +23,37 @@ class Admin extends Model
     public static function isOnline($id, $sid)
     {
         return
-            DB::instance()
+            DB::getInstance()
             ->select("select id from users where id = '{$id}' and sessid = '{$sid}' limit 1")
             ->row('id') > 0;
+    }
+
+    /**
+     * @param $email
+     * @return array|mixed
+     */
+    public function getUserByEmail($email)
+    {
+        return self::$db->select("
+            select u.*, g.rang
+            from users u
+            join users_group g on g.id=u.group_id
+            where u.email = '{$email}'
+            limit 1
+          ")->row();
     }
 
     public function logout($id)
     {
         return self::$db->update('users', array('sessid'=>''), " id = '{$id}' limit 1");
+    }
+
+    /**
+     * @param $user
+     * @return bool
+     */
+    public function login($user)
+    {
+        return self::$db->update('users', ['sessid' => session_id(), 'lastlogin' => date('Y-m-d H:i:s')], " id = {$user['id']} limit 1");
     }
 }

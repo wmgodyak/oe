@@ -31,7 +31,7 @@ abstract class Controller {
     {
         $this->sys_name = base64_decode('T1lpLkVuZ2luZSA2');
         $this->load = Load::instance();
-        $this->request = Request::instance();
+        $this->request = Request::getInstance();
 
         if($this->request->isPost()){
             $token = $this->request->post('token');

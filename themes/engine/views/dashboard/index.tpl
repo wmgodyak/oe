@@ -1,20 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-    <title></title>
-    <meta name="keywords" content="" />
-    <meta name="description" content="" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <link href="assets/css/vendor/style.css" rel="stylesheet">
-    <link href="assets/css/vendor/jquery.materialripple.css" rel="stylesheet">
-    <link href="assets/css/vendor/jquery-ui.min.css" rel="stylesheet">
-    <link href="assets/css/vendor/jquery.dataTables.min.css" rel="stylesheet">
-    <link href="assets/css/style.css" rel="stylesheet">
-</head>
-
-<body>
 
 <div class="dashboard">
     <!--side navigation-->
@@ -197,7 +180,7 @@
                 <i class="fa fa-chevron-left"></i>
             </div>
             <div class="sidebar-heading">
-                <img src="assets/img/logo/logo-black.png">
+                <img src="{$template_url}assets/img/logo/logo-black.png">
             </div>
             <div class="title">
                 <i class="fa fa-file-o"></i>
@@ -290,7 +273,7 @@
                         </div>
                         <div class="table-cell">
                             <div class="avatar">
-                                <img src="assets/img/1.png">
+                                <img src="{$template_url}assets/img/1.png">
                             </div>
                         </div>
                         <div class="table-cell">
@@ -835,12 +818,3 @@
         </div>
     </div>
 </div>
-<script src="assets/js/vendor/jquery-1.11.3.min.js"></script>
-<script src="assets/js/vendor/pace.js"></script>
-<script src="assets/js/vendor/jstree.min.js"></script>
-<script src="assets/js/vendor/jquery.materialripple.js"></script>
-<script src="assets/js/vendor/jquery-ui.min.js"></script>
-<script src="assets/js/vendor/jquery.dataTables.min.js"></script>
-<script src="assets/js/main.js"></script>
-</body>
-</html>

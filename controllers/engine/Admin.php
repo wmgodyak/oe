@@ -9,6 +9,7 @@
 namespace controllers\engine;
 
 use controllers\Engine;
+use models\engine\User;
 
 defined('CPATH') or die();
 
@@ -65,7 +66,56 @@ class Admin extends Engine {
     public function login()
     {
         if($this->request->isPost()){
-//            return $this->loginProcess();
+            $status = 0; $inp = []; $data = $this->request->post('data');
+
+            $secpic = $this->request->post('secpic');
+
+            $fail = isset($_COOKIE['fail']) ? $_COOKIE['fail'] : 0;
+
+            if($fail > 5){
+                $e[] = $this->t('admin.ban');
+
+            } elseif(empty($data['email']) || empty($data['password'])){
+                $inp[] = ['data[password]' => $this->t('admin.e_login_pass')];
+
+                setcookie('fail', ++$fail, time()+3600);
+
+            } elseif ( $fail > 0 && ( isset($_SESSION['secpic']) && $_SESSION['secpic'] != $secpic)) {
+                $inp[] = ['data[secpic]' => $this->t('admin.e_captcha')];
+
+                setcookie('fail', ++$fail, time()+3600);
+
+            } else {
+                $user = $this->mAdmin->getUserByEmail($data['email']);
+
+                if(empty($user)){
+                    $inp[] = ['data[password]' => $this->t('admin.e_login_pass')];
+                    setcookie('fail', ++$fail, time()+3600);
+
+                } else if (User::checkPassword($data['password'], $user['password'])){
+                    if($user['rang'] <= 100) {
+                        $inp[] = ['data[password]' => $this->t('admin.e_rang')];
+                        setcookie('fail', ++$fail, time() + 3600);
+                    } else {
+                        $status = $this->mAdmin->login($user);
+                        if($status){
+                            foreach ($user as $k=>$v) {
+                                self::data($k, $v);
+                            }
+                            setcookie('fail', '', time() - 3600);
+                        }
+                    }
+                } else {
+                    $inp[] = ['data[password]' => $this->t('admin.e_login_pass')];
+                    setcookie('fail', ++$fail, time()+3600);
+                }
+            }
+
+            $this->response->body(array(
+                's' => $status > 0,
+                'i' => $inp,
+                'f' => $fail > 0
+            ))->asJSON();
         }
 
         // витягнути список доступних мовних версій
@@ -76,88 +126,23 @@ class Admin extends Engine {
         $this->response->body($this->template->fetch('admin/login'));
     }
 
-    private function loginProcess()
-    {
-//        $this->dump($_SESSION); die();
-        // init languages
-        $this->lang = Languages::instance()->getTranslations();
-        $status = 0;
-//        $_SESSION['fail'] = 1;
-        if(!isset($_SESSION['fail'])) $_SESSION['fail'] = 0;
-
-        if($_SESSION['fail'] > 5){
-            $this->error[] = $this->lang->auth['e_login_limit_ex'];
-
-        } elseif(empty($_POST['email']) || empty($_POST['password'])){
-            $this->error[] = $this->lang->auth['e_bad_e_p'];
-            $_SESSION['fail']++;
-
-        } elseif ( $_SESSION['fail'] > 0 && ( isset($_SESSION['secpic']) && $_SESSION['secpic'] != $_POST['secpic'])) {
-            $this->error[] = $this->lang->auth['e_bad_code'];
-            $_SESSION['fail']++;
-
-        } else {
-            $user = $this->ma->userDataByEmail($_POST['email']);
-//            $this->dump($user); die();
-            if(empty($user)){
-                $this->error[] = $this->lang->auth['e_bad_e_p'];
-                $_SESSION['fail']++;
-
-            } else if (crypt($_POST['password'],$user['password']) == $user['password']){
-
-                if($user['rang'] <= 100) {
-                    $this->error[] = $this->lang->auth['e_permission_denied'];
-                    $_SESSION['fail']++;
-                } else {
-                    $this->ma->updateSession($user['id']);
-
-                    Admin::data('id', $user['id']);
-                    Admin::data('name', $user['name']);
-                    Admin::data('rang', $user['rang']);
-                    Admin::data('email', $user['email']);
-                    Admin::data(
-                        'languages',
-                        array(
-                        'id'=>$user['languages_id'],
-                        'code'=>$user['code']
-                        )
-                    );
-
-                    $this->error[] = $this->lang->auth['e_success'];
-                    unset($_SESSION['fail']);
-                    $status = 1;
-                }
-            } else {
-                $this->error[] = $this->lang->auth['e_bad_e_p'];
-                $_SESSION['fail']++;
-            }
-        }
-
-        echo json_encode(array(
-            't' => $this->lang->auth['e_title_error'],
-            's' => $status,
-            'm' => implode('<br>', $this->error),
-            'f' => isset($_SESSION['fail']) ? $_SESSION['fail'] : 0
-        ));
-    }
-
     public function fp()
     {
         $status=0;
         $this->lang = Languages::instance()->getTranslations();
         if(empty($_POST['email'])){
-            $this->error[] = $this->lang->auth['e_email'];
+            $e[] = $this->lang->auth['e_email'];
         } else {
             $user = $this->ma->userDataByEmail($_POST['email']);
             if(empty($user)){
-                $this->error[] = $this->lang->auth['e_email'];
+                $e[] = $this->lang->auth['e_email'];
             } else {
                 $pwd = $this->generatePassword();
 
                 if($this->ma->updatePassword($user['id'], crypt($pwd))) {
                     mail($user['email'], 'NEW PASWORD', "Ви надсилали запит на зміну паролю.<br> Ваш новий пароль: $pwd.");
                     $status = 1;
-                    $this->error[] = $this->lang->auth['e_fp_success'];
+                    $e[] = $this->lang->auth['e_fp_success'];
                 }
             }
         }
@@ -169,30 +154,6 @@ class Admin extends Engine {
         ));
     }
 
-    /**
-     * generate random password
-     * @param int $number
-     * @return string
-     */
-    private function generatePassword($number = 6)
-    {
-        $arr = array(
-            'A','B','C','D','E','F',
-            'G','H','I','J','K','L',
-            'M','N','O','P','R','S',
-            'T','U','V','X','Y','Z',
-            '1','2','3','4','5','6',
-            '7','8','9','0'
-        );
-
-        $pass = "";
-        for($i = 0; $i < $number; $i++)
-        {
-            $index = rand(0, count($arr) - 1);
-            $pass .= $arr[$index];
-        }
-        return $pass;
-    }
 
     /**
      * logout user

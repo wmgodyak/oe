@@ -43,7 +43,7 @@ class DB extends \PDO {
          * For example, fetch mode FETCH_ASSOC would return results like this: $result["user_name] !
          * @see http://www.php.net/manual/en/pdostatement.fetch.php
          */
-        $conf = Config::instance()->get('db');
+        $conf = Config::getInstance()->get('db');
         $this->db_name = $conf['db'];
 
         $options = array(
@@ -92,7 +92,7 @@ class DB extends \PDO {
     }
 
 
-    public static function instance()
+    public static function getInstance()
     {
 
         if(!self::$instance instanceof self){
@@ -100,6 +100,19 @@ class DB extends \PDO {
         }
 
         return self::$instance;
+    }
+
+    /**
+     * close connection
+     */
+    public function close()
+    {
+        self::$instance = null;
+    }
+
+    public function getQueryCount()
+    {
+        return self::$count;
     }
 
     public function select($sql, $debug = false)

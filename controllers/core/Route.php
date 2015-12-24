@@ -18,7 +18,7 @@ class Route
      */
     private static function getRoutes()
     {
-        $r = Config::instance()->get('routes');
+        $r = Config::getInstance()->get('routes');
         if(empty($r)) throw new \Exception('No routes.');
 
         foreach ($r as $k => $v) {
@@ -87,9 +87,9 @@ class Route
 
         $action = rtrim($action,'/');
 
-//        echo "<br>NS: $namespace. C: $controller. A: $action. P:"; print_r($params);
+        $mode = strpos($namespace, 'engine') !== FALSE ? 'engine' : 'app';
 
-        Request::instance()
+        Request::getInstance($mode)
             ->setParam('controller', $controller)
             ->setParam('action', $action)
             ->setParam('args', $params);
@@ -122,7 +122,7 @@ class Route
         Event::flush($c, $action, $params);
 
         if($res){
-            Response::instance()->body($res);
+            Response::getInstance()->body($res);
         }
     }
 

@@ -7,6 +7,8 @@
 
 namespace controllers\core;
 
+use models\core\DB;
+
 defined("CPATH") or die();
 
 /**
@@ -33,7 +35,7 @@ class Response
     /**
      * @return Response
      */
-    public static function instance()
+    public static function getInstance()
     {
         if(self::$instance == null){
             self::$instance = new Response;
@@ -47,20 +49,58 @@ class Response
      */
     public function render()
     {
-        switch($this->ct){
-            case 'text/plain':
-                header('Content-Type: text/plain');
-                $body = $this->body;
-                break;
+        header('Content-Type: ' . $this->ct);
 
-            case 'json':
-                header('Content-Type: application/json');
-                $body = json_encode($this->body);
-                break;
+        if($this->ct == 'application/json'){
+            echo json_encode($this->body);die;
+        }
 
-            default:
-                header('Content-Type: text/html');
-                $body = $this->body;
+        $body = $this->body;
+
+        $mode = Request::getInstance()->getMode();
+
+        switch($mode){
+            case 'engine':
+                if(Request::getInstance()->isGet()){
+                    Template::getInstance()->assign('body', $body);
+
+                    $body = Template::getInstance()->fetch('index');
+                    $debug = Config::getInstance()->get('core.debug');
+
+                    $db = DB::getInstance();
+
+                    if($debug ){
+                        $time = $_SERVER['REQUEST_TIME_FLOAT'];
+                        $q = $db->getQueryCount();
+
+                        $body.= "\r\n<!--\r\n";
+                        $time_end = microtime(true);
+                        $exec_time = round($time_end-$time, 4);
+                        $mu = memory_get_usage();
+                        $mp = 0; $mpf=0;
+                        if(function_exists('memory_get_peak_usage')){
+                            $mp = memory_get_peak_usage();
+                            $mpf = round(($mp / 1024) / 1024, 3);
+                        }
+                        $muf = round((memory_get_usage() / 1024) / 1024, 3);
+                        $ml=ini_get('memory_limit');
+
+                        if($mp > 0){
+                            $body.= "    Memory peak in use: $mp ($mpf M)\r\n";
+                        }
+
+                        $body.= "    Page generation time: ".$exec_time." seconds\r\n";
+                        $body.= "    Memory in use: $mu ($muf M) \r\n";
+                        $body.= "    Memory limit: $ml \r\n";
+                        $body.= "    Total queries: $q \r\n";
+                        $body.=  "-->";
+                    }
+
+                    $db->close();
+                }
+
+                break;
+            case 'app':
                 break;
         }
 
@@ -98,14 +138,14 @@ class Response
 
     public function asJSON()
     {
-        $this->ct = 'json';
+        $this->ct = 'application/json';
 
         $this->render();
     }
 
     public function asXML()
     {
-        $this->ct = 'xml';
+        $this->ct = 'application/xml';
 
         $this->render();
     }
