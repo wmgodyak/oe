@@ -39,6 +39,7 @@ class Admin extends Engine {
     public static function data($key = null, $val = null)
     {
         if(! $key && ! $val){
+            if(! isset($_SESSION['engine']['admin'])) return null;
             return $_SESSION['engine']['admin'];
         } elseif(!$val){
             if(isset($_SESSION['engine']['admin'][$key])){
@@ -52,6 +53,8 @@ class Admin extends Engine {
         if(!isset($_SESSION['engine']['admin'])) $_SESSION['engine']['admin'] = array();
 
         $_SESSION['engine']['admin'][$key] = $val;
+
+        return $val;
     }
 
 
@@ -70,48 +73,51 @@ class Admin extends Engine {
     public function login($lang=null)
     {
         if($this->request->isPost()){
-            $status = 0; $inp = []; $data = $this->request->post('data');
 
+            $status = 0; $inp = []; $data = $this->request->post('data');
+            $ban_time = time()+3600;
             $secpic = $this->request->post('secpic');
 
             $fail = isset($_COOKIE['fail']) ? $_COOKIE['fail'] : 0;
 
             if($fail > 5){
-                $e[] = $this->t('admin.ban');
+                $inp[] = ['data[password]' => $this->t('admin.ban')];
 
             } elseif(empty($data['email']) || empty($data['password'])){
                 $inp[] = ['data[password]' => $this->t('admin.e_login_pass')];
 
-                setcookie('fail', ++$fail, time()+3600);
+                setcookie('fail', ++$fail, $ban_time);
 
             } elseif ( $fail > 0 && ( isset($_SESSION['secpic']) && $_SESSION['secpic'] != $secpic)) {
-                $inp[] = ['data[secpic]' => $this->t('admin.e_captcha')];
+                $inp[] = ['data[password]' => $this->t('admin.e_captcha')];
 
-                setcookie('fail', ++$fail, time()+3600);
+                setcookie('fail', ++$fail, $ban_time);
 
             } else {
                 $user = $this->mAdmin->getUserByEmail($data['email']);
 
                 if(empty($user)){
                     $inp[] = ['data[password]' => $this->t('admin.e_login_pass')];
-                    setcookie('fail', ++$fail, time()+3600);
+                    setcookie('fail', ++$fail, $ban_time);
 
                 } else if (User::checkPassword($data['password'], $user['password'])){
                     if($user['rang'] <= 100) {
                         $inp[] = ['data[password]' => $this->t('admin.e_rang')];
-                        setcookie('fail', ++$fail, time() + 3600);
+                        setcookie('fail', ++$fail, $ban_time);
                     } else {
                         $status = $this->mAdmin->login($user);
                         if($status){
                             foreach ($user as $k=>$v) {
                                 self::data($k, $v);
                             }
-                            setcookie('fail', '', time() - 3600);
+                            setcookie('fail', '', time() - 60);
+                        } else{
+                            $inp[] = ['data[password]' => $this->mAdmin->getDBError()];
                         }
                     }
                 } else {
                     $inp[] = ['data[password]' => $this->t('admin.e_login_pass')];
-                    setcookie('fail', ++$fail, time()+3600);
+                    setcookie('fail', ++$fail, $ban_time);
                 }
             }
 
@@ -127,7 +133,7 @@ class Admin extends Engine {
         foreach ($langs as $l) {
             if($lang == $l['code']){
                 Config::getInstance()->set('core.lang', $lang);
-                setcookie('lang', $lang, time()+3600+8, "/", "." . $_SERVER['HTTP_HOST']);
+                setcookie('lang', $lang, 3600+8, "/", "." . $_SERVER['HTTP_HOST']);
                 $this->template->assign('t', Lang::getInstance($lang, true)->t());
                 $c=true;
             }
@@ -157,14 +163,14 @@ class Admin extends Engine {
             } elseif(empty($data['email'])){
                 $inp[] = ['data[email]' => $this->t('admin.e_email')];
 
-                setcookie('fail', ++$fail, time()+3600);
+                setcookie('fail', ++$fail, time()+60*15);
 
             } else {
                 $user = $this->mAdmin->getUserByEmail($data['email']);
 
                 if(empty($user)){
                     $inp[] = ['data[email]' => $this->t('admin.e_email')];
-                    setcookie('fail', ++$fail, time()+3600);
+                    setcookie('fail', ++$fail, time()+60*15);
                 } else {
                     // new password
                     $psw = User::generatePassword();

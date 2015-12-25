@@ -66,18 +66,16 @@ abstract class Engine extends Controller
         parent::__construct();
 
         $this->request = Request::getInstance();
-
+//        echo $this->request->get('controller') , $this->request->get('action');die;
         if(
             (
-                $this->request->get('controller') != 'Admin' &&
-                $this->request->get('action') != 'login'
-            )
-            && (
                 engine\Admin::id() == null ||
                 ! \models\engine\Admin::isOnline(engine\Admin::id(), Session::id())
             )
         ){
-            $this->redirect('/engine/admin/login');
+            if( $this->request->get('controller') != 'Admin' && $this->request->get('action')     != 'login' ){
+                $this->redirect('/engine/admin/login');
+            }
         }
 
         // response

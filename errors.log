@@ -204,3 +204,12 @@ Stack trace:
 [25-Dec-2015 10:32:48 Europe/Kiev] PHP Warning:  syntax error, unexpected '(' in /var/www/engine.loc/themes/engine/lang/en/core.ini on line 5
  in /var/www/engine.loc/controllers/engine/Lang.php on line 33
 [25-Dec-2015 12:09:56 Europe/Kiev] PHP Notice:  Undefined index: admin in /var/www/engine.loc/controllers/engine/Admin.php on line 201
+[25-Dec-2015 15:52:18 Europe/Kiev] PHP Notice:  Undefined index: engine in /var/www/engine.loc/controllers/engine/Admin.php on line 42
+[25-Dec-2015 15:52:18 Europe/Kiev] PHP Notice:  Undefined index: engine in /var/www/engine.loc/controllers/engine/Admin.php on line 42
+[25-Dec-2015 15:52:18 Europe/Kiev] PHP Notice:  Undefined index: engine in /var/www/engine.loc/controllers/engine/Admin.php on line 42
+[25-Dec-2015 15:52:30 Europe/Kiev] PHP Notice:  Undefined index: engine in /var/www/engine.loc/controllers/engine/Admin.php on line 42
+[25-Dec-2015 15:52:30 Europe/Kiev] PHP Notice:  Undefined index: engine in /var/www/engine.loc/controllers/engine/Admin.php on line 42
+[25-Dec-2015 15:52:30 Europe/Kiev] PHP Notice:  Undefined index: engine in /var/www/engine.loc/controllers/engine/Admin.php on line 42
+[25-Dec-2015 15:52:35 Europe/Kiev] PHP Notice:  Undefined index: engine in /var/www/engine.loc/controllers/engine/Admin.php on line 42
+[25-Dec-2015 15:52:35 Europe/Kiev] PHP Notice:  Undefined index: engine in /var/www/engine.loc/controllers/engine/Admin.php on line 42
+[25-Dec-2015 15:52:35 Europe/Kiev] PHP Notice:  Undefined index: engine in /var/www/engine.loc/controllers/engine/Admin.php on line 42

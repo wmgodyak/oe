@@ -140,7 +140,7 @@
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a href="#">
+                                                    <a href="admin/logout">
                                                         <i class="fa fa-power-off"></i>
                                                         <span>Вихід</span>
                                                     </a>
