@@ -198,3 +198,9 @@ Stack trace:
 #3 {main}
   thrown in /var/www/engine.loc/controllers/core/Request.php on line 35
 [24-Dec-2015 18:25:44 Europe/Kiev] PHP Notice:  Array to string conversion in /var/www/engine.loc/controllers/core/Response.php on line 103
+[25-Dec-2015 10:04:35 Europe/Kiev] PHP Fatal error:  Call to undefined function models\engine\mcrypt_create_iv() in /var/www/engine.loc/models/engine/User.php on line 58
+[25-Dec-2015 10:32:48 Europe/Kiev] PHP Warning:  syntax error, unexpected '(' in /var/www/engine.loc/themes/engine/lang/ru/core.ini on line 5
+ in /var/www/engine.loc/controllers/engine/Lang.php on line 33
+[25-Dec-2015 10:32:48 Europe/Kiev] PHP Warning:  syntax error, unexpected '(' in /var/www/engine.loc/themes/engine/lang/en/core.ini on line 5
+ in /var/www/engine.loc/controllers/engine/Lang.php on line 33
+[25-Dec-2015 12:09:56 Europe/Kiev] PHP Notice:  Undefined index: admin in /var/www/engine.loc/controllers/engine/Admin.php on line 201

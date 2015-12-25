@@ -13,6 +13,7 @@ use controllers\core\Response;
 use controllers\core\Session;
 use controllers\core\Settings;
 use controllers\core\Template;
+use controllers\engine\Admin;
 use controllers\engine\Lang;
 
 if ( !defined("CPATH") ) die();
@@ -92,6 +93,21 @@ abstract class Engine extends Controller
         $this->template->assign('controller',  $this->request->get('controller'));
         $this->template->assign('action',      $this->request->get('action'));
         $this->template->assign('t',           Lang::getInstance()->t());
+
+        // admin structure
+        if($this->request->isGet() && ! $this->request->isXhr()){
+            $this->structure();
+            $this->template->assign('admin', Admin::data());
+        }
+    }
+
+    /**
+     *
+     */
+    private function structure()
+    {
+        $s = $this->template->fetch('structure');
+        $this->template->assign('structure', $s);
     }
 
     /**

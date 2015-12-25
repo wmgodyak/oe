@@ -9,6 +9,7 @@
 namespace controllers\engine;
 
 use controllers\core\Config;
+use controllers\core\Session;
 use controllers\Engine;
 use models\engine\User;
 
@@ -35,9 +36,11 @@ class Admin extends Engine {
      * @param null $val
      * @return null
      */
-    public static function data($key, $val = null)
+    public static function data($key = null, $val = null)
     {
-        if(!$val){
+        if(! $key && ! $val){
+            return $_SESSION['engine']['admin'];
+        } elseif(!$val){
             if(isset($_SESSION['engine']['admin'][$key])){
                 return $_SESSION['engine']['admin'][$key];
             }
@@ -198,11 +201,13 @@ class Admin extends Engine {
      */
     public function logout()
     {
-        $uid = $_SESSION['admin']['id'];
-
-        unset($_SESSION['admin']);
-
+        Session::destroy();
+        setcookie('fail', '', time() - 3600);
+        $this->redirect('/');
     }
+
+    public function profile(){}
+
     public function index()
     {
         return $this->login();

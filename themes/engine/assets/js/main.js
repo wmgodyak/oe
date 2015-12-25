@@ -84,9 +84,9 @@ var engine = {
         })();
 
         (function(){
-            //$( "#dialog" ).dialog();
-            //$( "#datepicker" ).datepicker();
-            //$('#example').DataTable();
+            $( "#dialog" ).dialog();
+            $( "#datepicker" ).datepicker();
+            $('#example').DataTable();
         })();
 
         (function(){
