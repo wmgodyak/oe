@@ -13,6 +13,16 @@ use models\core\Model;
 
 class User extends Model
 {
+    /**
+     * @param $id
+     * @param $password
+     * @return bool
+     */
+    public static function changePassword($id, $password)
+    {
+        $password = self::cryptPassword($password);
+        return self::$db->update('users', ['password' => $password], " id = {$id} limit 1");
+    }
 
     /**
      * generate random password
@@ -45,7 +55,7 @@ class User extends Model
      */
     public static function cryptPassword($password)
     {
-        $salt = strtr(base64_encode(mcrypt_create_iv(16, MCRYPT_DEV_URANDOM)), '+', '.');
+        $salt = strtr(base64_encode(mt_rand()), '+', '.');
 
         return crypt($password, $salt);
     }

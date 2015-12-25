@@ -140,7 +140,7 @@ $(document).ready(function(){
 engine.admin = {
     init : function()
     {
-        var logForm = $('#adminLogin');
+        var logForm = $('#adminLogin'), fpForm = $('#adminFp');
         if(logForm.length == 0) return ;
 
         logForm.find('.input-group').each(function(){
@@ -168,7 +168,7 @@ engine.admin = {
 
         logForm.validate({
             rules: {
-                data_email: {
+                'data[email]': {
                     required: true,
                     email: true
                 }
@@ -194,6 +194,53 @@ engine.admin = {
                     }
                 });
             }
+        });
+
+        fpForm.validate({
+            rules: {
+                'data[email]': {
+                    required: true,
+                    email: true
+                }
+            },
+            submitHandler: function(form) {
+
+                var bSubmit = $('.b-submit');
+                $(form).ajaxSubmit({
+                    dataType: 'json',
+                    beforeSend: function()
+                    {
+                        bSubmit.attr('disabled', true);
+                        return true;
+                    },
+                    success: function(d)
+                    {
+                        bSubmit.removeAttr('disabled');
+                        engine.validateError(form, d.i);
+                        if(d.s){
+                            setTimeout(function(){$('.b-admin-login').click();}, 1500);
+                        }
+                    }
+                });
+            }
+        });
+
+        $(document).on('change', '#adminLang', function(e){
+            e.preventDefault();
+            var l = this.value;
+            self.location.href= '/engine/admin/login/'+l;
+        });
+        $(document).on('click', '.b-admin-fp', function(e){
+            e.preventDefault();
+            logForm.slideUp(300, function(){
+                fpForm.slideDown(300);
+            });
+        });
+        $(document).on('click', '.b-admin-login', function(e){
+            e.preventDefault();
+            fpForm.slideUp(300, function(){
+                logForm.slideDown(300);
+            });
         });
     }
 };

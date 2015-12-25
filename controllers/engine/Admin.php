@@ -8,6 +8,7 @@
 
 namespace controllers\engine;
 
+use controllers\core\Config;
 use controllers\Engine;
 use models\engine\User;
 
@@ -63,7 +64,7 @@ class Admin extends Engine {
      * Login user
      * @return string
      */
-    public function login()
+    public function login($lang=null)
     {
         if($this->request->isPost()){
             $status = 0; $inp = []; $data = $this->request->post('data');
@@ -119,41 +120,77 @@ class Admin extends Engine {
         }
 
         // витягнути список доступних мовних версій
-        $langs = Lang::getInstance()->getLangs();
+        $langs = Lang::getInstance()->getLangs(); $c= false;
+        foreach ($langs as $l) {
+            if($lang == $l['code']){
+                Config::getInstance()->set('core.lang', $lang);
+                setcookie('lang', $lang, time()+3600+8, "/", "." . $_SERVER['HTTP_HOST']);
+                $this->template->assign('t', Lang::getInstance($lang, true)->t());
+                $c=true;
+            }
+        }
+        if(! $c){
+            $lang = Config::getInstance()->get('core.lang');
+        }
 
+        $this->template->assign('s_lang', $lang);
         $this->template->assign('langs', $langs);
 
         $this->response->body($this->template->fetch('admin/login'));
     }
 
+    /**
+     * @throws \phpmailerException
+     */
     public function fp()
     {
-        $status=0;
-        $this->lang = Languages::instance()->getTranslations();
-        if(empty($_POST['email'])){
-            $e[] = $this->lang->auth['e_email'];
-        } else {
-            $user = $this->ma->userDataByEmail($_POST['email']);
-            if(empty($user)){
-                $e[] = $this->lang->auth['e_email'];
-            } else {
-                $pwd = $this->generatePassword();
+        if($this->request->isPost()){
+            $status = 0; $inp = []; $data = $this->request->post('data');
 
-                if($this->ma->updatePassword($user['id'], crypt($pwd))) {
-                    mail($user['email'], 'NEW PASWORD', "Ви надсилали запит на зміну паролю.<br> Ваш новий пароль: $pwd.");
-                    $status = 1;
-                    $e[] = $this->lang->auth['e_fp_success'];
+            $fail = isset($_COOKIE['fail']) ? $_COOKIE['fail'] : 0;
+
+            if($fail > 5){
+                $e[] = $this->t('admin.ban');
+            } elseif(empty($data['email'])){
+                $inp[] = ['data[email]' => $this->t('admin.e_email')];
+
+                setcookie('fail', ++$fail, time()+3600);
+
+            } else {
+                $user = $this->mAdmin->getUserByEmail($data['email']);
+
+                if(empty($user)){
+                    $inp[] = ['data[email]' => $this->t('admin.e_email')];
+                    setcookie('fail', ++$fail, time()+3600);
+                } else {
+                    // new password
+                    $psw = User::generatePassword();
+                    if(User::changePassword($user['id'], $psw)){
+
+                        include_once DOCROOT . "/vendor/phpmailer/PHPMailer.php";
+                        $mail = new \PHPMailer();
+                        $mail->addAddress($data['email']);
+                        $mail->setFrom('no-reply@' . $_SERVER['HTTP_HOST'], $this->t('core.sys_name'));
+
+                        $tpl = implode("\r\n", $this->t('admin.fp_tpl'));
+                        $mail->Body = str_replace(['{psw}'],[$psw], $tpl);
+                        $status = $mail->send();
+                        if($status){
+                            $inp[] = ['data[email]' => $this->t('admin.fp_success')];
+                        } else{
+                            $inp[] = ['data[email]' => 'Error. Message not send.'];
+                        }
+                    }
                 }
             }
+
+            $this->response->body(array(
+                's' => $status > 0,
+                'i' => $inp,
+                'f' => $fail > 0
+            ))->asJSON();
         }
-
-        echo json_encode(array(
-            't' =>$this->lang->auth['e_title_success'],
-            's' => $status,
-            'm' =>implode('<br>', $this->error)
-        ));
     }
-
 
     /**
      * logout user
@@ -164,30 +201,29 @@ class Admin extends Engine {
         $uid = $_SESSION['admin']['id'];
 
         unset($_SESSION['admin']);
-        setcookie('rmus','',time() - 1,'/' );
 
     }
     public function index()
     {
-        // TODO: Implement index() method.
+        return $this->login();
     }
 
     public function create()
     {
-        // TODO: Implement create() method.
+        return $this->login();
     }
 
     public function edit($id)
     {
-        // TODO: Implement edit() method.
+        return $this->login();
     }
 
     public function process($id)
     {
-        // TODO: Implement process() method.
+        return $this->login();
     }
     public function delete($id)
     {
-        // TODO: Implement delete() method.
+        return $this->login();
     }
 }

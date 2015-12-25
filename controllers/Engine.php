@@ -8,19 +8,12 @@
 namespace controllers;
 
 use controllers\core\Controller;
-use controllers\core\Event;
 use controllers\core\Request;
 use controllers\core\Response;
 use controllers\core\Session;
 use controllers\core\Settings;
 use controllers\core\Template;
-use controllers\engine\Admin;
 use controllers\engine\Lang;
-
-//use controllers\engine\Auth;
-//use controllers\engine\Plugins;
-//use controllers\core\Languages;
-//use models\engine\content\Images;
 
 if ( !defined("CPATH") ) die();
 

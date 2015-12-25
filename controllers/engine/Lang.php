@@ -19,7 +19,7 @@ class Lang
     private $translations;
     private $dir;
 
-    private function __construct()
+    private function __construct($lang)
     {
         $this->dir = DOCROOT . 'themes/engine/lang/';
 
@@ -36,13 +36,20 @@ class Lang
             }
             closedir($handle);
         }
+        if(! $lang){
+            if(! isset($_COOKIE['lang'])){
+                $lang = Config::getInstance()->get('core.lang');
+            } else {
+                $lang = $_COOKIE['lang'];
+            }
 
-        $this->setTranslations();
+        }
+
+        $this->setTranslations($lang);
     }
 
-    private function setTranslations()
+    private function setTranslations($lang)
     {
-        $lang = Config::getInstance()->get('core.lang');
         if ($handle = opendir($this->dir . $lang. '/')) {
             while (false !== ($entry = readdir($handle))) {
                 if ($entry != "." && $entry != ".."){
@@ -96,10 +103,10 @@ class Lang
 
     private function __clone(){}
 
-    public static function getInstance()
+    public static function getInstance($lang = null, $clear_instance = null)
     {
-        if(self::$instance == null){
-            self::$instance = new Lang();
+        if(self::$instance == null || $clear_instance){
+            self::$instance = new Lang($lang);
         }
 
         return self::$instance;

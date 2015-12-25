@@ -99,6 +99,27 @@ class Config
      * @return mixed
      */
     public function set($key,$val){
+        if(strpos($key,'.')){
+
+            $parts = explode('.', $key);
+            $c = count($parts);
+
+            if($c == 1){
+                if(isset(self::$data[$parts[0]])){
+                    self::$data[$parts[0]] = $val;
+                }
+            }else if($c == 2){
+                if(isset(self::$data[$parts[0]][$parts[1]])){
+                    self::$data[$parts[0]][$parts[1]] = $val;
+                }
+            }else if($c == 3){
+                if(isset(self::$data[$parts[0]][$parts[1]][$parts[2]])){
+                    self::$data[$parts[0]][$parts[1]][$parts[2]] = $val;
+                }
+            }
+
+            return self::$instance;
+        }
 
         if(isset(self::$data[$key])){
             self::$data[$key] = $val;

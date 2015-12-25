@@ -15,7 +15,7 @@ class Dashboard extends Engine
 {
     public function index()
     {
-        // TODO: Implement index() method.
+        $this->response->body($this->template->fetch('dashboard/index'));
     }
 
     public function create()
