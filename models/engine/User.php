@@ -69,4 +69,18 @@ class User extends Model
     {
         return crypt($password, $hash) == $hash;
     }
+
+    /**
+     * @param $id
+     * @param $data
+     * @return bool
+     */
+    public function updateProfile($id, $data)
+    {
+        $data['updated'] = $this->now();
+        if(isset($data['password'])){
+            $data['password'] = $this->cryptPassword($data['password']);
+        }
+        return self::$db->update('users', $data, " id={$id} limit 1");
+    }
 }

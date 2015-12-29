@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Дек 24 2015 г., 19:20
+-- Время создания: Дек 29 2015 г., 14:29
 -- Версия сервера: 5.5.46-0ubuntu0.14.04.2
 -- Версия PHP: 5.5.9-1ubuntu4.14
 
@@ -19,6 +19,30 @@ SET time_zone = "+00:00";
 --
 -- База данных: `e7`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `components`
+--
+
+CREATE TABLE IF NOT EXISTS `components` (
+  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `parent_id` tinyint(3) unsigned DEFAULT NULL,
+  `isfolder` tinyint(1) unsigned DEFAULT NULL,
+  `icon` varchar(30) DEFAULT NULL,
+  `controller` varchar(150) DEFAULT NULL,
+  `sort` tinyint(3) unsigned DEFAULT '0',
+  `published` tinyint(1) NOT NULL DEFAULT '0',
+  `rang` int(4) unsigned DEFAULT NULL,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `parent_id` (`parent_id`),
+  KEY `isfolder` (`isfolder`),
+  KEY `sort` (`sort`),
+  KEY `published` (`published`),
+  KEY `controller` (`controller`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -111,19 +135,19 @@ CREATE TABLE IF NOT EXISTS `users` (
   `avatar` varchar(100) DEFAULT NULL,
   `skey` varchar(35) DEFAULT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `edited` datetime NOT NULL,
+  `updated` datetime NOT NULL,
   `lastlogin` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`,`group_id`,`languages_id`),
   UNIQUE KEY `phone` (`phone`,`email`),
   KEY `fk_users_group1_idx` (`group_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
 -- Дамп данных таблицы `users`
 --
 
-INSERT INTO `users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `edited`, `lastlogin`) VALUES
-(1, 1, 0, 'r6stvd88p8b0iq4ducje43dga1', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', '$1$nR6ggLeq$T/DTcdKOPBokGgjAAOiLy/', NULL, '', '2015-12-24 14:36:04', '0000-00-00 00:00:00', '2015-12-24 17:17:59');
+INSERT INTO `users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `updated`, `lastlogin`) VALUES
+(1, 1, 0, 'didp4duo1629ac8k7rki2hkot6', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', NULL, '', '2015-12-24 14:36:04', '2015-12-29 14:28:31', '2015-12-29 11:49:16');
 
 -- --------------------------------------------------------
 

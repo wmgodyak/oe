@@ -1,4 +1,54 @@
 var engine = {
+    validateAjaxForm: function(myForm, onSuccess, ajaxParams, rules){
+        rules = typeof rules == 'undefined' ? [] : rules;
+
+        $(myForm).validate({
+            errorElement: 'span',
+            rules: rules,
+            debug: true,
+            submitHandler: function(form) {
+                var bSubmit = $('.b-submit, .ui-button');
+                var settings = {
+                    dataType: 'json',
+                    beforeSend: function()
+                    {
+                        bSubmit.attr('disabled', true);
+                        return true;
+                    },
+                    success: function(d)
+                    {
+                        bSubmit.removeAttr('disabled');
+                        if(! d.s ){
+                            engine.validateError(form, d.i)
+                        } else {
+                            if(typeof onSuccess != 'undefined'){
+                                onSuccess(d);
+                            }
+                        }
+                    },
+                    error: function(d)
+                    {
+                        alert(d.responseText);
+                    }
+                };
+
+                if(typeof ajaxParams != 'undefined'){
+                    settings = $.extend(settings, ajaxParams);
+                }
+
+                $(form).ajaxSubmit(settings);
+            }
+        });
+    },
+    dialog: function(args)
+    {
+        return $('<div></div>')
+            .attr('id', 'modal' + Date.now())
+            .html(args.content)
+            .appendTo('body')
+            .dialog(args)
+        ;
+    },
     request:  {
         /**
          * send get request
@@ -84,7 +134,7 @@ var engine = {
         })();
 
         (function(){
-            $( "#dialog" ).dialog();
+            //$( "#dialog" ).dialog();
             $( "#datepicker" ).datepicker();
             $('#example').DataTable();
         })();
@@ -141,7 +191,7 @@ engine.admin = {
     init : function()
     {
         var logForm = $('#adminLogin'), fpForm = $('#adminFp');
-        if(logForm.length == 0) return ;
+        //if(logForm.length == 0) return ;
 
         logForm.find('.input-group').each(function(){
             $(this).find('input').on('focus', function(){
@@ -166,63 +216,12 @@ engine.admin = {
 
         });
 
-        logForm.validate({
-            rules: {
-                'data[email]': {
-                    required: true,
-                    email: true
-                }
-            },
-            submitHandler: function(form) {
-
-                var bSubmit = $('.b-submit');
-                $(form).ajaxSubmit({
-                    dataType: 'json',
-                    beforeSend: function()
-                    {
-                        bSubmit.attr('disabled', true);
-                        return true;
-                    },
-                    success: function(d)
-                    {
-                        bSubmit.removeAttr('disabled');
-                        if(d.s){
-                            self.location.href = "/engine/dashboard";
-                        } else {
-                            engine.validateError(form, d.i)
-                        }
-                    }
-                });
-            }
+        engine.validateAjaxForm('#adminLogin', function () {
+            self.location.href = "/engine/dashboard";
         });
 
-        fpForm.validate({
-            rules: {
-                'data[email]': {
-                    required: true,
-                    email: true
-                }
-            },
-            submitHandler: function(form) {
-
-                var bSubmit = $('.b-submit');
-                $(form).ajaxSubmit({
-                    dataType: 'json',
-                    beforeSend: function()
-                    {
-                        bSubmit.attr('disabled', true);
-                        return true;
-                    },
-                    success: function(d)
-                    {
-                        bSubmit.removeAttr('disabled');
-                        engine.validateError(form, d.i);
-                        if(d.s){
-                            setTimeout(function(){$('.b-admin-login').click();}, 1500);
-                        }
-                    }
-                });
-            }
+        engine.validateAjaxForm('#adminFp', function () {
+            setTimeout(function(){$('.b-admin-login').click();}, 1500);
         });
 
         $(document).on('change', '#adminLang', function(e){
@@ -236,11 +235,35 @@ engine.admin = {
                 fpForm.slideDown(300);
             });
         });
+
         $(document).on('click', '.b-admin-login', function(e){
             e.preventDefault();
             fpForm.slideUp(300, function(){
                 logForm.slideDown(300);
             });
+        });
+
+        $(document).on('click','.b-admin-profile', function(e){
+            e.preventDefault();
+            engine.admin.editProfile();
+        });
+    },
+    editProfile: function()
+    {
+        engine.request.get('admin/profile', function(d){
+           var pw = engine.dialog({
+                content: d,
+                title: 'Мій профіль',
+                autoOpen: true,
+                width: 750,
+                modal: true,
+                buttons: {
+                    "Зберегти": function(){
+                        $('#editProfileForm').submit();
+                    }
+                }
+            });
+            engine.validateAjaxForm('#editProfileForm', function(d){pw.dialog('close')});
         });
     }
 };

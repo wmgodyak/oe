@@ -19,7 +19,7 @@ class FormValidation
     const REQUIRED = 'required';
     const EMAIL    = 'email';
 
-    private static $rules = [];
+    private static $rules  = [];
     private static $errors = [];
 
     private static $messages =
@@ -28,6 +28,15 @@ class FormValidation
             'remote'   => "Будь ласка, перевірте це поле",
             'email'    => "Введіть коректну електронну скриньку"
         ];
+
+    /**
+     *
+     */
+    public static function clear()
+    {
+        self::$rules  = [];
+        self::$errors = [];
+    }
 
     /**
      * @param $input

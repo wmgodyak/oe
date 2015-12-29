@@ -72,4 +72,13 @@ class Model {
     {
         return self::$db->rollback();
     }
+
+    /**
+     * return current timestamp
+     * @return bool|string
+     */
+    protected function now()
+    {
+        return date('Y-m-d H:i:s');
+    }
 } 

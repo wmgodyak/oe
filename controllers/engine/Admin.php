@@ -11,6 +11,7 @@ namespace controllers\engine;
 use controllers\core\Config;
 use controllers\core\Session;
 use controllers\Engine;
+use helpers\FormValidation;
 use models\engine\User;
 
 defined('CPATH') or die();
@@ -212,7 +213,48 @@ class Admin extends Engine {
         $this->redirect('/');
     }
 
-    public function profile(){}
+    public function profile()
+    {
+        if($this->request->isPost()){
+            $data = $this->request->post('data'); $s=0; $i=[]; $user_id = self::data('id');
+
+            // правила
+            FormValidation::setRule(['name', 'surname', 'email', 'phone'], FormValidation::REQUIRED);
+            FormValidation::setRule('email', FormValidation::EMAIL);
+
+            // валідація
+            FormValidation::run($data);
+
+            if(FormValidation::hasErrors()){
+                $i = FormValidation::getErrors();
+            } elseif(!empty($data['password']) && ($data['password_c'] != $data['password'])){
+                $i[] = ["data[password_c]" => $this->t('admin_profile.e_pasw_equal')];
+            } else {
+
+                if(empty($data['password'])){
+                    unset($data['password']);
+                }
+                unset($data['password_c']);
+
+                // оновлення даних
+                $mUser = new User();
+                $s = $mUser->updateProfile($user_id, $data);
+
+                if($s == 0){
+                    echo $mUser->getDBErrorMessage();
+                } else {
+                    foreach ($data as $k=>$v) {
+                        self::data($k, $v);
+                    }
+                }
+
+            }
+
+            $this->response->body(['s'=>$s, 'i' => $i])->asJSON();
+        }
+        $this->template->assign('ui', self::data());
+        $this->response->body($this->template->fetch('admin/edit_profile'))->render();
+    }
 
     public function index()
     {

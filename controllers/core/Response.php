@@ -61,7 +61,7 @@ class Response
 
         switch($mode){
             case 'engine':
-                if(Request::getInstance()->isGet()){
+                if(! Request::getInstance()->isXhr()){
                     Template::getInstance()->assign('body', $body);
 
                     $body = Template::getInstance()->fetch('index');
@@ -69,7 +69,7 @@ class Response
 
                     $db = DB::getInstance();
 
-                    if($debug ){
+                    if( $debug ){
                         $time = $_SERVER['REQUEST_TIME_FLOAT'];
                         $q = $db->getQueryCount();
 

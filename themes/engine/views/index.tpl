@@ -10,6 +10,7 @@
     <link href="{$template_url}assets/css/vendor/jquery.materialripple.css" rel="stylesheet">
     <link href="{$template_url}assets/css/vendor/jquery-ui.min.css" rel="stylesheet">
     <link href="{$template_url}assets/css/vendor/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="{$template_url}assets/css/vendor/bootstrap.min.css" rel="stylesheet">
     <link href="{$template_url}assets/css/style.css" rel="stylesheet">
 </head>
 
@@ -134,7 +135,7 @@
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a href="admin/profile">
+                                                    <a href="admin/profile" onclick="return false;" class="b-admin-profile">
                                                         <i class="fa fa-sliders"></i>
                                                         <span>Налаштування</span>
                                                     </a>
@@ -186,6 +187,7 @@
 <script src="{$template_url}assets/js/vendor/jquery-ui.min.js"></script>
 <script src="{$template_url}assets/js/vendor/jquery.form.min.js"></script>
 <script src="{$template_url}assets/js/vendor/jquery.validate.min.js"></script>
+<script src="{$template_url}assets/js/vendor/bootstrap.min.js"></script>
 
 <script>
     var TOKEN = '{$token}', ONLINE = 0;
