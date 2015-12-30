@@ -83,4 +83,33 @@ class User extends Model
         }
         return self::$db->update('users', $data, " id={$id} limit 1");
     }
+
+    public function changeAvatar($id)
+    {
+        $path = "uploads/avatars/";
+        $fname =  '/'.$path . md5($id) . '.png';
+
+        $allowed = ['image/png', 'image/jpeg']; $size = 500000; $s=0; $m=[];
+
+        $img = $_FILES['avatar'];
+
+        if(!in_array($img['type'], $allowed)){
+            $m = 'not_allowed';
+        } elseif($img['size'] > $size){
+            $m = 'max_size';
+        } else {
+
+            if(file_exists(DOCROOT . $fname)) unlink(DOCROOT. $fname);
+
+            include_once DOCROOT . '/vendor/acimage/AcImage.php';
+
+            $img = \AcImage::createImage($img['tmp_name']);
+            $img->thumbnail(160, 120);
+            $img->saveAsPNG(DOCROOT . $fname);
+
+            $s = self::$db->update('users', ['avatar' => $fname], "id = '{$id}' limit 1");
+        }
+
+        return ['s' => $s, 'm' => $m, 'f' => $fname];
+    }
 }

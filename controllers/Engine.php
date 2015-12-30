@@ -92,9 +92,14 @@ abstract class Engine extends Controller
         $this->template->assign('action',      $this->request->get('action'));
         $this->template->assign('t',           Lang::getInstance()->t());
 
+
         // admin structure
         if($this->request->isGet() && ! $this->request->isXhr()){
             $this->structure();
+            $a = Admin::data('avatar');
+            if(empty($a)){
+                Admin::data('avatar', '/uploads/avatars/0.png');
+            }
             $this->template->assign('admin', Admin::data());
         }
     }

@@ -111,6 +111,10 @@ class Admin extends Engine {
                             foreach ($user as $k=>$v) {
                                 self::data($k, $v);
                             }
+                            $a = self::data('avatar');
+                            if(empty($a)){
+                                self::data('avatar', '/uploads/avatars/0.png');
+                            }
                             setcookie('fail', '', time() - 60);
                         } else{
                             $inp[] = ['data[password]' => $this->mAdmin->getDBError()];
@@ -243,6 +247,13 @@ class Admin extends Engine {
                 if($s == 0){
                     echo $mUser->getDBErrorMessage();
                 } else {
+                    if(isset($_FILES['avatar'])){
+                       $a = $mUser->changeAvatar($user_id);
+                        if($a['s']){
+                            self::data('avatar', $a['f']);
+                        }
+                    }
+
                     foreach ($data as $k=>$v) {
                         self::data($k, $v);
                     }
@@ -250,12 +261,12 @@ class Admin extends Engine {
 
             }
 
-            $this->response->body(['s'=>$s, 'i' => $i])->asJSON();
+            $this->response->body(['s'=>$s, 'i' => $i, 'a' => isset($a) ? $a['f'] : null])->asJSON();
         }
+
         $this->template->assign('ui', self::data());
         $this->response->body($this->template->fetch('admin/edit_profile'))->render();
     }
-
     public function index()
     {
         return $this->login();

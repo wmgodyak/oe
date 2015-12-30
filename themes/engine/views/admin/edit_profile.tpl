@@ -1,4 +1,4 @@
-<form class="form-horizontal" action="admin/profile" method="post" id="editProfileForm">
+<form class="form-horizontal" action="admin/profile" enctype="multipart/form-data" method="post" id="editProfileForm">
 <div class="row">
     <div class="col-md-9">
         <fieldset>
@@ -32,8 +32,11 @@
     <div class="col-md-3">
         <fieldset style="height: 245px;">
             <legend>Фото</legend>
-            <img src="/uploads/avatars/1.jpg" alt="">
-            <div><button type="button" class="btn btn-default">Змінити</button></div>
+            <div style="text-align: center; margin-bottom: 1em;"><img src="{$ui.avatar}" alt="" class="admin-avatar"></div>
+            <div style="display: none">
+                <input type="file" name="avatar" id="adminAvatar">
+            </div>
+            <div style="text-align: center"><button type="button" id="changeAvatar" class="btn btn-default">Змінити</button></div>
         </fieldset>
     </div>
 </div>

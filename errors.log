@@ -213,3 +213,13 @@ Stack trace:
 [25-Dec-2015 15:52:35 Europe/Kiev] PHP Notice:  Undefined index: engine in /var/www/engine.loc/controllers/engine/Admin.php on line 42
 [25-Dec-2015 15:52:35 Europe/Kiev] PHP Notice:  Undefined index: engine in /var/www/engine.loc/controllers/engine/Admin.php on line 42
 [25-Dec-2015 15:52:35 Europe/Kiev] PHP Notice:  Undefined index: engine in /var/www/engine.loc/controllers/engine/Admin.php on line 42
+[29-Dec-2015 14:25:35 Europe/Kiev] PHP Notice:  Undefined index: e_pasw_equal in /var/www/engine.loc/controllers/engine/Lang.php on line 101
+[30-Dec-2015 11:50:38 Europe/Kiev] PHP Fatal error:  Uncaught exception 'FileAlreadyExistsException' with message 'File /var/www/engine.loc/uploads/avatars/c4ca4238a0b923820dcc509a6f75849b.png is already exists!' in /var/www/engine.loc/vendor/acimage/AcImage.php:213
+Stack trace:
+#0 /var/www/engine.loc/models/engine/User.php(106): AcImage->saveAsPNG('/var/www/engine...')
+#1 /var/www/engine.loc/controllers/engine/Admin.php(247): models\engine\User->changeAvatar('1')
+#2 [internal function]: controllers\engine\Admin->profile()
+#3 /var/www/engine.loc/controllers/core/Route.php(117): call_user_func(Array)
+#4 /var/www/engine.loc/index.php(24): controllers\core\Route::run()
+#5 {main}
+  thrown in /var/www/engine.loc/vendor/acimage/AcImage.php on line 213

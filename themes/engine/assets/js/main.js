@@ -263,7 +263,21 @@ engine.admin = {
                     }
                 }
             });
-            engine.validateAjaxForm('#editProfileForm', function(d){pw.dialog('close')});
+            engine.validateAjaxForm('#editProfileForm', function(d){
+                if(d.a == null){
+                    pw.dialog('close');
+                } else{
+                    $('.admin-avatar').attr('src' , d.a);
+                }
+
+            });
+            $('#changeAvatar').click(function(){
+                $('#adminAvatar')
+                       .trigger('click')
+                       .change(function(){
+                           $('#editProfileForm').submit();
+                       });
+            });
         });
     }
 };

@@ -120,7 +120,7 @@
                                 </div>
                                 <div class="table-cell">
                                     <div class="avatar">
-                                        <img src="{$template_url}assets/img/1.png">
+                                        <img class="admin-avatar" src="{$admin.avatar}">
                                     </div>
                                 </div>
                                 <div class="table-cell">
