@@ -8,16 +8,19 @@
 
 namespace controllers\engine;
 
+
 use controllers\Engine;
-defined("CPATH") or die();
 
 /**
- * Class Components
- * @name Компоненти
- * @ion fa fa-puzzle-piece
+ * Class Admins
+ * @name Адміністратори
+ * @icon fa fa-users
+ * @position 5
+ * @author Volodymyr Hodiak
+ * @version 7.0.0
  * @package controllers\engine
  */
-class Components extends Engine
+class Admins extends Engine
 {
     public function index()
     {

@@ -19,7 +19,7 @@
         {$body}
     {else}
         <div class="dashboard">
-            {$structure}
+            {$nav}
             <div class="page">
                 {if $sidebar != ''}
                 <div class="sidebar sidebar-open">

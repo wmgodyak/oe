@@ -95,7 +95,7 @@ abstract class Engine extends Controller
 
         // admin structure
         if($this->request->isGet() && ! $this->request->isXhr()){
-            $this->structure();
+            $this->makeNav();
             $a = Admin::data('avatar');
             if(empty($a)){
                 Admin::data('avatar', '/uploads/avatars/0.png');
@@ -107,10 +107,10 @@ abstract class Engine extends Controller
     /**
      *
      */
-    private function structure()
+    private function makeNav()
     {
-        $s = $this->template->fetch('structure');
-        $this->template->assign('structure', $s);
+        $s = $this->template->fetch('nav');
+        $this->template->assign('nav', $s);
     }
 
     /**
