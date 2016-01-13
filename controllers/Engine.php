@@ -61,12 +61,14 @@ abstract class Engine extends Controller
 
     protected $template;
 
+    private $panel_nav = [];
+
     public function __construct()
     {
         parent::__construct();
 
         $this->request = Request::getInstance();
-//        echo $this->request->get('controller') , $this->request->get('action');die;
+//        echo $this->request->get('controller') ,'.', $this->request->get('action');die;
         if(
             (
                 engine\Admin::id() == null ||
@@ -100,8 +102,128 @@ abstract class Engine extends Controller
             if(empty($a)){
                 Admin::data('avatar', '/uploads/avatars/0.png');
             }
+
+            $c = $this->request->get('controller');
+            $a = $this->request->get('action');
+
+            $this->template->assign('title', $this->t($c . '.action_' . $a));
+            $this->template->assign('name', $this->t($c . '.action_' . $a));
             $this->template->assign('admin', Admin::data());
         }
+    }
+
+    protected final function setButtonsPanel($buttons)
+    {
+        if(is_string($buttons)){
+            $this->panel_nav = array($buttons);
+        } else {
+            $this->panel_nav = $buttons;
+        }
+        return $this;
+    }
+
+    /**
+     * @param $name
+     * @param array $args
+     * @param null $icon
+     * @return $this
+     */
+    protected final function prependButtonToPanel($name, array $args, $icon=null)
+    {
+        $button = [
+            'type'   => 'button',
+            'name'   => $name,
+            'args'   => $this->parseArgs($args),
+            'icon'   => $icon
+        ];
+
+        array_unshift($this->panel_nav, $button);
+
+        return $this;
+    }
+
+    /**
+     * @param $name
+     * @param array $args
+     * @param null $icon
+     * @return $this
+     */
+    protected final function appendButtonToPanel($name, array $args, $icon=null)
+    {
+
+        $button = [
+            'type'   => 'button',
+            'name'   => $name,
+            'args'   => $this->parseArgs($args),
+            'icon'   => $icon
+        ];
+
+        $this->panel_nav[] = $button;
+
+        return $this;
+    }
+
+    /**
+     * @param $name
+     * @param array $args
+     * @param null $icon
+     * @return $this
+     */
+    protected final function prependLinkToPanel($name, array $args, $icon=null)
+    {
+        $button = [
+            'type'   => 'link',
+            'name'   => $name,
+            'args'   => $this->parseArgs($args),
+            'icon'   => $icon
+        ];
+
+        array_unshift($this->panel_nav, $button);
+
+        return $this;
+    }
+
+    /**
+     * @param $name
+     * @param array $args
+     * @param null $icon
+     * @return $this
+     */
+    protected final function appendLinkToPanel($name, array $args, $icon=null)
+    {
+        $button = [
+            'type'   => 'link',
+            'name'   => $name,
+            'args'   => $this->parseArgs($args),
+            'icon'   => $icon
+        ];
+
+        $this->panel_nav[] = $button;
+
+        return $this;
+    }
+
+
+    /**
+     * @param array $args
+     * @return string
+     */
+    private function parseArgs(array $args)
+    {
+        $_args = ''; $has_class = false;
+        foreach ($args as $k => $v) {
+            if($k == 'class'){
+                $a = explode(' ', $v);
+                if (!in_array('btn', $a))  $v .= ' btn';
+                $has_class = true;
+            }
+
+            if(!$has_class){ $_args .= " class=\"btn btn-md\"";}
+
+            $_args .= " $k=\"$v\"";
+        }
+
+        return $_args;
     }
 
     /**
@@ -138,8 +260,20 @@ abstract class Engine extends Controller
         $this->content = $c;
     }
 
-    protected function output()
+    private final function renderHeadingPanel()
     {
+        $this->template->assign('panel_nav', $this->panel_nav);
+        $this->template->assign('heading_panel', $this->template->fetch('heading_panel'));
+//        echo $this->template->fetch('heading_panel');die;
+    }
+    /**
+     * @param $body
+     */
+    protected final function output($body)
+    {
+        $this->renderHeadingPanel();
+        $this->response->body($body)->render();
+
 //        $this->request->mode = "engine";
 //        return $this->load->view('content',array(
 //            'title_block' => $this->load->view('title_block',array(

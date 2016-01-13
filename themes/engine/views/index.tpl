@@ -4,7 +4,7 @@
     <base href="{$base_url}">
     <meta charset="utf-8" />
     <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-    <title>{$t.core.sys_name}</title>
+    <title>{$title} :: {$t.system.name}</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link href="{$template_url}assets/css/vendor/style.css" rel="stylesheet">
     <link href="{$template_url}assets/css/vendor/jquery.materialripple.css" rel="stylesheet">
@@ -12,6 +12,7 @@
     <link href="{$template_url}assets/css/vendor/jquery.dataTables.min.css" rel="stylesheet">
     <link href="{$template_url}assets/css/vendor/bootstrap.min.css" rel="stylesheet">
     <link href="{$template_url}assets/css/style.css" rel="stylesheet">
+    <script src="{$template_url}assets/js/vendor/jquery-1.11.3.min.js"></script>
 </head>
 
 <body {*class="{$controller} {$action}"*}>
@@ -31,7 +32,7 @@
                     </div>
                     <div class="title">
                         <i class="fa fa-file-o"></i>
-                        <span>Сторінки</span>
+                        <span>+Сторінки+</span>
                     </div>
                     <div class="pages-tree" id="tree">
                         <ul>
@@ -104,11 +105,11 @@
                             <div class="breadcrumb">
                                 <ul>
                                     <li>
-                                        <a href="#">
+                                        <a href="./dashboard">
                                             <i class="fa fa-home"></i>
                                         </a>
                                     </li>
-                                    <li>Сторінки</li>
+                                    <li>{$name}</li>
                                 </ul>
                             </div>
                             <div class="user-panel">
@@ -153,33 +154,20 @@
                             </div>
                         </div>
                         <!--end-->
-
-                        <!--heading-->
-                        <div class="dashboard-heading">
-                            <div class="dashboard-title">
-                                <i class="fa fa-file-o"></i>
-                                <h1>Сторінки</h1>
-                            </div>
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-md btn-info" disabled="disabled">Створити</button>
-                            </div>
-
-                        </div>
-                        <!--end-->
+                        {$heading_panel}
 
                         {$body}
 
                     </div> <!--end-->
                     <footer>
                         <div class="copyright">
-                            {$t.core.copyright}
+                            {$t.system.copyright}
                         </div>
                     </footer>
                 </div>
             </div>
         </div>
     {/if}
-<script src="{$template_url}assets/js/vendor/jquery-1.11.3.min.js"></script>
 <script src="{$template_url}assets/js/vendor/pace.js"></script>
 <script src="{$template_url}assets/js/vendor/jstree.min.js"></script>
 <script src="{$template_url}assets/js/vendor/jquery.materialripple.js"></script>

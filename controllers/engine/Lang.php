@@ -71,11 +71,12 @@ class Lang
 
     public function t($key = null)
     {
+        $key = mb_strtolower($key);
         if($key){
 
-            $data = '';
-
             if(strpos($key,'.')){
+
+                $data = $key;
 
                 $parts = explode('.', $key);
                 $c = count($parts);
@@ -84,11 +85,11 @@ class Lang
                     if(isset($this->translations[$parts[0]])){
                         $data = $this->translations[$parts[0]];
                     }
-                }else if($c == 2){
+                } else if($c == 2){
                     if(isset($this->translations[$parts[0]][$parts[1]])){
                         $data = $this->translations[$parts[0]][$parts[1]];
                     }
-                }else if($c == 3){
+                } else if($c == 3){
                     if(isset($this->translations[$parts[0]][$parts[1]][$parts[2]])){
                         $data = $this->translations[$parts[0]][$parts[1]][$parts[2]];
                     }

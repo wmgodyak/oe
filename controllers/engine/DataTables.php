@@ -457,9 +457,10 @@ class DataTables {
     /**
      * @param array $data
      * @param int $recordsTotal
+     * @param bool $encode
      * @return string
      */
-    public function renderJSON(array $data, $recordsTotal=0)
+    public function renderJSON(array $data, $recordsTotal=0, $encode = true)
     {
         $_data = array(); $draw= isset($_POST['draw']) ? (int)$_POST['draw'] : 1;  $recordsFiltered = $recordsTotal;
         if($recordsTotal == 0){
@@ -469,14 +470,14 @@ class DataTables {
             $_data[] = array_values($row);
         }
 
-        return json_encode(
-            array(
-                'draw'            => $draw,
-                'data'            => $_data,
-                'recordsTotal'    => (int) $recordsTotal,
-                'recordsFiltered' => (int) $recordsFiltered
-            )
+        $a = array(
+            'draw'            => $draw,
+            'data'            => $_data,
+            'recordsTotal'    => (int) $recordsTotal,
+            'recordsFiltered' => (int) $recordsFiltered
         );
+
+        return $encode ? json_encode($a) : $a;
     }
 
     /**
@@ -490,10 +491,10 @@ class DataTables {
 
         if(!empty($this->title)){
             $html .= "<div class='panel panel-default panel-block'>";
+            $html .= $this->title;
         }
 
-        $html .= $this->title;
-        $html .= "
+        $html .= "<div class='table'>
                     <table class='display table' style='width: 100%; cellspacing: 0;' id='{$this->table_id}'>
                     <thead>
                     <tr>\r\n";
@@ -519,7 +520,7 @@ class DataTables {
                     </tr>
                 </tbody>\r\n";
         }
-        $html .= "</table>";
+        $html .= "</table></div>";
 
         if(!empty($this->title)){
             $html .= "</div>"; // .panel

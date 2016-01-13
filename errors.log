@@ -223,3 +223,92 @@ Stack trace:
 #4 /var/www/engine.loc/index.php(24): controllers\core\Route::run()
 #5 {main}
   thrown in /var/www/engine.loc/vendor/acimage/AcImage.php on line 213
+[13-Jan-2016 09:53:25 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/engine/ComponentsFactory.php on line 19
+[13-Jan-2016 09:53:50 Europe/Kiev] PHP Fatal error:  Uncaught exception 'Exception' with message 'Контроллер компоненту components не знайдено.' in /var/www/engine.loc/controllers/engine/ComponentsFactory.php:19
+Stack trace:
+#0 /var/www/engine.loc/controllers/engine/Components.php(29): controllers\engine\ComponentsFactory::create('components')
+#1 [internal function]: controllers\engine\Components->index()
+#2 /var/www/engine.loc/controllers/core/Route.php(117): call_user_func(Array)
+#3 /var/www/engine.loc/index.php(24): controllers\core\Route::run()
+#4 {main}
+  thrown in /var/www/engine.loc/controllers/engine/ComponentsFactory.php on line 19
+[13-Jan-2016 10:03:26 Europe/Kiev] PHP Fatal error:  Uncaught controllers\core\exceptions\NotFound: [0]: Контроллер компоненту components не знайдено.
+
+  thrown in /var/www/engine.loc/controllers/engine/ComponentsFactory.php on line 22
+[13-Jan-2016 10:03:52 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/engine/ComponentsFactory.php on line 22
+[13-Jan-2016 10:04:38 Europe/Kiev] PHP Fatal error:  Class 'controllers\engine\FileNotFoundException' not found in /var/www/engine.loc/controllers/engine/ComponentsFactory.php on line 22
+[13-Jan-2016 10:04:40 Europe/Kiev] PHP Fatal error:  Class 'controllers\engine\FileNotFoundException' not found in /var/www/engine.loc/controllers/engine/ComponentsFactory.php on line 22
+[13-Jan-2016 10:04:52 Europe/Kiev] PHP Fatal error:  Class 'controllers\engine\FileNotFoundException' not found in /var/www/engine.loc/controllers/engine/ComponentsFactory.php on line 22
+[13-Jan-2016 10:04:56 Europe/Kiev] PHP Fatal error:  Class 'controllers\engine\FileNotFoundException' not found in /var/www/engine.loc/controllers/engine/ComponentsFactory.php on line 22
+[13-Jan-2016 10:05:03 Europe/Kiev] PHP Fatal error:  Class 'controllers\engine\FileNotFoundException' not found in /var/www/engine.loc/controllers/engine/ComponentsFactory.php on line 22
+[13-Jan-2016 10:05:33 Europe/Kiev] PHP Fatal error:  Uncaught controllers\core\exceptions\FileNotFoundException: [0]: Контроллер компоненту components не знайдено.
+
+  thrown in /var/www/engine.loc/controllers/engine/ComponentsFactory.php on line 22
+[13-Jan-2016 10:08:11 Europe/Kiev] PHP Fatal error:  Uncaught controllers\core\exceptions\FileNotFoundException: [0]: Контроллер компоненту components не знайдено.
+
+  thrown in /var/www/engine.loc/controllers/engine/ComponentsFactory.php on line 22
+[13-Jan-2016 10:08:42 Europe/Kiev] PHP Fatal error:  Uncaught controllers\core\exceptions\FileNotFoundException: [0]: Контроллер компоненту components не знайдено.
+
+  thrown in /var/www/engine.loc/controllers/engine/ComponentsFactory.php on line 22
+[13-Jan-2016 10:09:44 Europe/Kiev] PHP Fatal error:  Uncaught controllers\core\exceptions\FileNotFoundException: [0]: Контроллер компоненту bla не знайдено.
+
+  thrown in /var/www/engine.loc/controllers/engine/ComponentsFactory.php on line 21
+[13-Jan-2016 10:11:44 Europe/Kiev] PHP Fatal error:  Uncaught controllers\core\exceptions\FileNotFoundException: [0]: Контроллер компоненту bla не знайдено.
+
+  thrown in /var/www/engine.loc/controllers/engine/ComponentsFactory.php on line 21
+[13-Jan-2016 10:12:59 Europe/Kiev] PHP Fatal error:  Uncaught controllers\core\exceptions\FileNotFoundException: [0]: Контроллер компоненту bla не знайдено.
+
+  thrown in /var/www/engine.loc/controllers/engine/ComponentsFactory.php on line 21
+[13-Jan-2016 10:13:04 Europe/Kiev] PHP Fatal error:  Uncaught controllers\core\exceptions\FileNotFoundException: [0]: Контроллер компоненту bla не знайдено.
+
+  thrown in /var/www/engine.loc/controllers/engine/ComponentsFactory.php on line 21
+[13-Jan-2016 10:13:12 Europe/Kiev] PHP Fatal error:  Uncaught controllers\core\exceptions\FileNotFoundException: [0]: Контроллер компоненту bla не знайдено.
+
+  thrown in /var/www/engine.loc/controllers/engine/ComponentsFactory.php on line 21
+[13-Jan-2016 10:13:25 Europe/Kiev] PHP Fatal error:  Uncaught controllers\core\exceptions\FileNotFoundException: [0]: Контроллер компоненту bla не знайдено.
+
+  thrown in /var/www/engine.loc/controllers/engine/ComponentsFactory.php on line 21
+[13-Jan-2016 10:13:29 Europe/Kiev] PHP Fatal error:  Uncaught controllers\core\exceptions\FileNotFoundException: [0]: Контроллер компоненту bla не знайдено.
+
+  thrown in /var/www/engine.loc/controllers/engine/ComponentsFactory.php on line 21
+[13-Jan-2016 10:13:36 Europe/Kiev] PHP Fatal error:  Uncaught controllers\core\exceptions\FileNotFoundException: [0]: Контроллер компоненту bla не знайдено.
+
+  thrown in /var/www/engine.loc/controllers/engine/ComponentsFactory.php on line 21
+[13-Jan-2016 11:05:53 Europe/Kiev] PHP Fatal error:  Uncaught  --> Smarty Compiler: Syntax error in template "/var/www/engine.loc/themes/engine/views/heading_panel.tpl"  on line 9 "{foreach $panel_nav}" missing "item" attribute <-- 
+  thrown in /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_templatecompilerbase.php on line 9
+[13-Jan-2016 11:05:54 Europe/Kiev] PHP Fatal error:  Uncaught  --> Smarty Compiler: Syntax error in template "/var/www/engine.loc/themes/engine/views/heading_panel.tpl"  on line 9 "{foreach $panel_nav}" missing "item" attribute <-- 
+  thrown in /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_templatecompilerbase.php on line 9
+[13-Jan-2016 12:05:37 Europe/Kiev] PHP Fatal error:  Uncaught exception 'ReflectionException' with message 'Class controllers\engineInstaller does not exist' in /var/www/engine.loc/helpers/PHPDocReader.php:19
+Stack trace:
+#0 /var/www/engine.loc/helpers/PHPDocReader.php(19): ReflectionClass->__construct('controllers\eng...')
+#1 /var/www/engine.loc/controllers/engine/components/Components.php(62): helpers\PHPDocReader::getMeta('controllers\eng...')
+#2 /var/www/engine.loc/controllers/engine/components/Components.php(37): controllers\engine\components\Components->items()
+#3 /var/www/engine.loc/controllers/engine/Components.php(30): controllers\engine\components\Components->index()
+#4 [internal function]: controllers\engine\Components->index()
+#5 /var/www/engine.loc/controllers/core/Route.php(117): call_user_func(Array)
+#6 /var/www/engine.loc/index.php(24): controllers\core\Route::run()
+#7 {main}
+  thrown in /var/www/engine.loc/helpers/PHPDocReader.php on line 19
+[13-Jan-2016 12:06:08 Europe/Kiev] PHP Notice:  Undefined offset: 1 in /var/www/engine.loc/helpers/PHPDocReader.php on line 27
+[13-Jan-2016 12:06:08 Europe/Kiev] PHP Notice:  Undefined offset: 1 in /var/www/engine.loc/helpers/PHPDocReader.php on line 27
+[13-Jan-2016 12:06:08 Europe/Kiev] PHP Notice:  Undefined offset: 1 in /var/www/engine.loc/helpers/PHPDocReader.php on line 27
+[13-Jan-2016 12:06:08 Europe/Kiev] PHP Notice:  Undefined offset: 1 in /var/www/engine.loc/helpers/PHPDocReader.php on line 27
+[13-Jan-2016 12:25:56 Europe/Kiev] PHP Notice:  Undefined index: functions in /var/www/engine.loc/controllers/engine/components/Components.php on line 77
+[13-Jan-2016 12:25:56 Europe/Kiev] PHP Notice:  Undefined index: functions in /var/www/engine.loc/controllers/engine/components/Components.php on line 77
+[13-Jan-2016 12:25:56 Europe/Kiev] PHP Notice:  Undefined index: functions in /var/www/engine.loc/controllers/engine/components/Components.php on line 77
+[13-Jan-2016 12:30:31 Europe/Kiev] PHP Parse error:  syntax error, unexpected '(' in /var/www/engine.loc/controllers/engine/components/Components.php on line 85
+[13-Jan-2016 12:30:32 Europe/Kiev] PHP Parse error:  syntax error, unexpected '(' in /var/www/engine.loc/controllers/engine/components/Components.php on line 85
+[13-Jan-2016 12:32:00 Europe/Kiev] PHP Parse error:  syntax error, unexpected ';' in /var/www/engine.loc/controllers/engine/components/Components.php on line 87
+[13-Jan-2016 14:33:46 Europe/Kiev] PHP Fatal error:  Call to undefined function Installer() in /var/www/engine.loc/controllers/engine/components/Components.php on line 85
+[13-Jan-2016 16:03:58 Europe/Kiev] PHP Catchable fatal error:  Argument 2 passed to helpers\bootstrap\Button::create() must be of the type array, none given, called in /var/www/engine.loc/controllers/engine/components/Components.php on line 43 and defined in /var/www/engine.loc/helpers/bootstrap/Button.php on line 90
+[13-Jan-2016 16:50:24 Europe/Kiev] PHP Catchable fatal error:  Argument 3 passed to helpers\bootstrap\Link::create() must be of the type array, object given, called in /var/www/engine.loc/controllers/engine/components/Components.php on line 46 and defined in /var/www/engine.loc/helpers/bootstrap/Button.php on line 138
+[13-Jan-2016 16:50:50 Europe/Kiev] PHP Catchable fatal error:  Argument 3 passed to helpers\bootstrap\Link::create() must be of the type array, object given, called in /var/www/engine.loc/controllers/engine/components/Components.php on line 46 and defined in /var/www/engine.loc/helpers/bootstrap/Button.php on line 138
+[13-Jan-2016 16:50:51 Europe/Kiev] PHP Catchable fatal error:  Argument 3 passed to helpers\bootstrap\Link::create() must be of the type array, object given, called in /var/www/engine.loc/controllers/engine/components/Components.php on line 46 and defined in /var/www/engine.loc/helpers/bootstrap/Button.php on line 138
+[13-Jan-2016 16:51:14 Europe/Kiev] PHP Catchable fatal error:  Argument 3 passed to helpers\bootstrap\Link::create() must be of the type array, object given, called in /var/www/engine.loc/controllers/engine/components/Components.php on line 46 and defined in /var/www/engine.loc/helpers/bootstrap/Button.php on line 138
+[13-Jan-2016 16:51:24 Europe/Kiev] PHP Catchable fatal error:  Argument 3 passed to helpers\bootstrap\Link::create() must be of the type array, object given, called in /var/www/engine.loc/controllers/engine/components/Components.php on line 46 and defined in /var/www/engine.loc/helpers/bootstrap/Button.php on line 138
+[13-Jan-2016 17:01:57 Europe/Kiev] PHP Fatal error:  Class 'helpers\bootstrap\Link' not found in /var/www/engine.loc/controllers/engine/components/Components.php on line 61
+[13-Jan-2016 17:21:37 Europe/Kiev] PHP Warning:  Illegal string offset 'href' in /var/www/engine.loc/helpers/bootstrap/Button.php on line 143
+[13-Jan-2016 17:21:37 Europe/Kiev] PHP Warning:  Illegal string offset 'class' in /var/www/engine.loc/helpers/bootstrap/Button.php on line 144
+[13-Jan-2016 17:21:37 Europe/Kiev] PHP Warning:  Illegal string offset 'class' in /var/www/engine.loc/helpers/bootstrap/Button.php on line 148
+[13-Jan-2016 17:21:37 Europe/Kiev] PHP Catchable fatal error:  Argument 2 passed to helpers\bootstrap\ButtonBuilder::__construct() must be of the type array, string given, called in /var/www/engine.loc/helpers/bootstrap/Button.php on line 151 and defined in /var/www/engine.loc/helpers/bootstrap/Button.php on line 49
+[13-Jan-2016 18:16:42 Europe/Kiev] PHP Fatal error:  Undefined class constant 'TYPE_INSTAL' in /var/www/engine.loc/controllers/engine/components/Components.php on line 98

@@ -8,16 +8,17 @@
 
 namespace controllers\engine;
 
-
 use controllers\Engine;
+
+defined("CPATH") or die();
 
 /**
  * Class Admins
  * @name Адміністратори
  * @icon fa fa-users
- * @position 5
  * @author Volodymyr Hodiak
- * @version 7.0.0
+ * @version 1.0.0
+ * @rang 300
  * @package controllers\engine
  */
 class Admins extends Engine
