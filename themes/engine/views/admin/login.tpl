@@ -3,7 +3,7 @@
         <div class="table-cell">
             <form class="login" action="admin/login" method="post" id="adminLogin">
                 <div class="logo">
-                    <img src="{$template_url}assets/img/logo/logo.png">
+                    <img src="{$theme_url}assets/img/logo/logo.png">
                 </div>
                 <div class="input-group">
                     <label for="email">{$t.admin.email}</label>
@@ -34,7 +34,7 @@
 
             <form class="login" action="admin/fp" method="post" id="adminFp" style="display: none">
                 <div class="logo">
-                    <img src="{$template_url}assets/img/logo/logo.png">
+                    <img src="{$theme_url}assets/img/logo/logo.png">
                 </div>
                 <div class="input-group">
                     <label for="email">{$t.admin.email}</label>

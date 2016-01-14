@@ -20,7 +20,9 @@ abstract class IconBuilder
 
     const TYPE_INSTALL      = 'fa-toggle-on';
     const TYPE_UNINSTALL    = 'fa-toggle-off';
-
+    const TYPE_PUBLISHED    = 'fa-eye';
+    const TYPE_HIDDEN       = 'fa-eye-slash';
+    const TYPE_EDIT         = 'fa-pencil';
     
     protected $type;
     protected $white;

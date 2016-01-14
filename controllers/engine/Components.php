@@ -9,6 +9,8 @@
 namespace controllers\engine;
 
 use controllers\Engine;
+use helpers\FormValidation;
+use helpers\PHPDocReader;
 
 defined("CPATH") or die();
 
@@ -23,6 +25,14 @@ defined("CPATH") or die();
  */
 class Components extends Engine
 {
+    private $mComponents;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->mComponents = new \models\engine\Components();
+    }
     public function index($component = '')
     {
         if(empty($component)) $component = 'components';
@@ -39,23 +49,128 @@ class Components extends Engine
         $cl ->items();
     }
 
-    public function create()
-    {
-        // TODO: Implement create() method.
-    }
 
     public function edit($id)
     {
-        // TODO: Implement edit() method.
+        $component = $this->request->post('c');
+
+        if(empty($component)) $component = 'components';
+
+        $cl = ComponentsFactory::create($component);
+        $cl ->edit($id);
+    }
+
+    public function create()
+    {
+
     }
 
     public function delete($id)
     {
-        // TODO: Implement delete() method.
+
     }
 
     public function process($id)
     {
-        // TODO: Implement process() method.
+        $component = $this->request->post('c');
+
+        if(empty($component)) $component = 'components';
+
+        $cl = ComponentsFactory::create($component);
+        $cl ->process($id);
+    }
+
+    public function pub()
+    {
+        $id = $this->request->post('id', 'i');
+        if(empty($id)) die;
+        $isset = $this->mComponents->is($id);
+        if($isset){
+            $this->response->body($this->mComponents->pub($id))->asPlainText();
+        }
+    }
+
+    public function hide()
+    {
+        $id = $this->request->post('id', 'i');
+        if(empty($id)) die;
+        $isset = $this->mComponents->is($id);
+        if($isset){
+            $this->response->body($this->mComponents->hide($id))->asPlainText();
+        }
+    }
+
+    public function install()
+    {
+
+        $component = $this->request->post('c');
+        $type      = $this->request->post('t');
+
+        if(empty($component) || empty($type)) return 0;
+
+        if($this->request->post('action') == 'install'){
+            switch($type){
+                case 'component':
+                    return $this->installComponent($component);
+                default:
+                    break;
+            }
+        }
+
+        switch($type){
+            case 'component':
+                $this->template->assign('tree', $this->mComponents->tree());
+                break;
+            default:
+
+                break;
+        }
+
+        $this->template->assign('component', $component);
+        $this->template->assign('type', $type);
+
+        return $this->template->fetch('components/install_' . $type);
+    }
+
+    private function installComponent($controller)
+    {
+        $data = $this->request->post('data'); $s=0; $i=[];
+        $data['controller'] = $controller;
+
+        FormValidation::setRule(['type', 'controller'], FormValidation::REQUIRED);
+
+        FormValidation::run($data);
+
+        if(FormValidation::hasErrors()){
+            $i = FormValidation::getErrors();
+        } elseif($this->mComponents->isInstalled($controller)){
+            $i[] = ["data[parent_id]" => $this->t('components.error_component_installed')];
+        } else {
+            // do install
+            // буду розширяти по факту
+            $meta = PHPDocReader::getMeta('controllers\engine\\'. $controller);
+//            $this->dump($meta);
+
+            if(isset($meta['icon']))     $data['icon']     = $meta['icon'];
+            if(isset($meta['position'])) $data['position'] = $meta['position'];
+            if(isset($meta['author']))   $data['author']   = $meta['author'];
+            if(isset($meta['rang']))     $data['rang']     = $meta['rang'];
+
+            $data['published'] = 1;
+
+            $s = $this->mComponents->create($data);
+        }
+
+        $this->response->body(['s'=>$s, 'i' => $i])->asJSON();
+    }
+
+    public function uninstall()
+    {
+        $id = $this->request->post('id', 'i');
+        if(empty($id)) die;
+        $isset = $this->mComponents->is($id);
+        if($isset){
+            $this->response->body($this->mComponents->delete($id))->asPlainText();
+        }
     }
 }

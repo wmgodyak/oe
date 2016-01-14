@@ -1,4 +1,12 @@
 var engine = {
+    require: function(src)
+    {
+        var sc = document.createElement('script');
+        sc.type = 'text/javascript';
+        sc.async = true;
+        sc.src = '/themes/engine/assets/js/bootstrap/' + src + '.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(sc, s);
+    },
     validateAjaxForm: function(myForm, onSuccess, ajaxParams, rules){
         rules = typeof rules == 'undefined' ? [] : rules;
 
@@ -49,6 +57,19 @@ var engine = {
             .dialog(args)
         ;
     },
+    confirm: function(msg, success)
+    {
+        return engine.dialog({
+            content: msg,
+            title: 'Увага',
+            autoOpen: true,
+            width: 500,
+            modal: true,
+            buttons: {
+                "Так": success
+            }
+        });
+    },
     request:  {
         /**
          * send get request
@@ -70,10 +91,22 @@ var engine = {
         },
         post: function(data)
         {
+            if(typeof data['data'] == 'undefined') {
+                alert('Post data is undefined');
+            }
             data['data']['token'] = TOKEN;
             data['type'] = 'post';
             return $.ajax(data)
         }
+    },
+    /**
+     * Refresh DataTables
+     * @param tableId
+     */
+    refreshDataTable: function(tableId)
+    {
+        var oTable = $('#'+tableId).dataTable();
+        oTable.fnDraw(oTable.fnSettings());
     },
     toggleSidebar: function(){
         var page = $('.page');

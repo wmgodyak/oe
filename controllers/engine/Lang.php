@@ -99,7 +99,7 @@ class Lang
             }
         }
 
-        return $key ? $this->translations[$key] : $this->translations;
+        return $key && isset($this->translations[$key])? $this->translations[$key] : $this->translations;
     }
 
     private function __clone(){}

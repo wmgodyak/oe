@@ -63,9 +63,15 @@ abstract class Engine extends Controller
 
     private $panel_nav = [];
 
+    private $require_components = [];
+    private $required_components = [];
+
     public function __construct()
     {
         parent::__construct();
+
+        $controller  = $this->request->get('controller');
+        $action      = $this->request->get('action');
 
         $this->request = Request::getInstance();
 //        echo $this->request->get('controller') ,'.', $this->request->get('action');die;
@@ -75,7 +81,7 @@ abstract class Engine extends Controller
                 ! \models\engine\Admin::isOnline(engine\Admin::id(), Session::id())
             )
         ){
-            if( $this->request->get('controller') != 'Admin' && $this->request->get('action')     != 'login' ){
+            if( $controller != 'Admin' && $action != 'login' ){
                 $this->redirect('/engine/admin/login');
             }
         }
@@ -89,11 +95,11 @@ abstract class Engine extends Controller
         // template settings
         $theme = $this->settings['engine_theme_current'];
         $this->template = Template::getInstance($theme);
+
         $this->template->assign('base_url',    APPURL . 'engine/');
-        $this->template->assign('controller',  $this->request->get('controller'));
+        $this->template->assign('controller',  mb_strtolower($this->request->get('controller')));
         $this->template->assign('action',      $this->request->get('action'));
         $this->template->assign('t',           Lang::getInstance()->t());
-
 
         // admin structure
         if($this->request->isGet() && ! $this->request->isXhr()){
@@ -109,7 +115,25 @@ abstract class Engine extends Controller
             $this->template->assign('title', $this->t($c . '.action_' . $a));
             $this->template->assign('name', $this->t($c . '.action_' . $a));
             $this->template->assign('admin', Admin::data());
+
+            $this->requireComponents();
         }
+
+        $t_json = [
+            'common' => Lang::getInstance()->t('common'),
+            mb_strtolower($controller) => Lang::getInstance()->t(mb_strtolower($controller))
+        ];
+
+
+        foreach ($this->required_components as $c) {
+            $t_json[$c] = $this->t($c);
+        }
+
+        $this->template->assign
+        (
+            't_json',
+            json_encode($t_json)
+        );
     }
 
     protected final function setButtonsPanel($buttons)
@@ -266,6 +290,30 @@ abstract class Engine extends Controller
         $this->template->assign('heading_panel', $this->template->fetch('heading_panel'));
 //        echo $this->template->fetch('heading_panel');die;
     }
+
+    protected function requireComponent($component)
+    {
+        $this->require_components[] = $component;
+
+        return $this;
+    }
+
+    private function requireComponents()
+    {
+        $components = [];
+        foreach ($this->require_components as $component) {
+            $component = mb_strtolower($component);
+            $path = 'assets/js/bootstrap/' . $component . '.js';
+            if(!file_exists($this->template->getThemePath() . $path)) continue;
+            $components[] = $this->template->getThemeUrl() . $path;
+            $this->required_components[] = $component;
+        }
+
+        if(!empty($components)){
+            $this->template->assign('required_components', $components);
+        }
+    }
+
     /**
      * @param $body
      */

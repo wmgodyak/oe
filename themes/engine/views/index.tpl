@@ -6,17 +6,18 @@
     <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
     <title>{$title} :: {$t.system.name}</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-    <link href="{$template_url}assets/css/vendor/style.css" rel="stylesheet">
-    <link href="{$template_url}assets/css/vendor/jquery.materialripple.css" rel="stylesheet">
-    <link href="{$template_url}assets/css/vendor/jquery-ui.min.css" rel="stylesheet">
-    <link href="{$template_url}assets/css/vendor/jquery.dataTables.min.css" rel="stylesheet">
-    <link href="{$template_url}assets/css/vendor/bootstrap.min.css" rel="stylesheet">
-    <link href="{$template_url}assets/css/style.css" rel="stylesheet">
-    <script src="{$template_url}assets/js/vendor/jquery-1.11.3.min.js"></script>
+    <link href="{$theme_url}assets/css/vendor/style.css" rel="stylesheet">
+    <link href="{$theme_url}assets/css/vendor/jquery.materialripple.css" rel="stylesheet">
+    <link href="{$theme_url}assets/css/vendor/jquery-ui.min.css" rel="stylesheet">
+    <link href="{$theme_url}assets/css/vendor/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="{$theme_url}assets/css/vendor/bootstrap.min.css" rel="stylesheet">
+    <link href="{$theme_url}assets/css/vendor/select2.min.css" rel="stylesheet">
+    <link href="{$theme_url}assets/css/style.css" rel="stylesheet">
+    <script src="{$theme_url}assets/js/vendor/jquery-1.11.3.min.js"></script>
 </head>
 
 <body {*class="{$controller} {$action}"*}>
-    {if $controller == 'Admin' && $action == 'login'}
+    {if $controller == 'admin' && $action == 'login'}
         {$body}
     {else}
         <div class="dashboard">
@@ -28,7 +29,7 @@
                         <i class="fa fa-chevron-left"></i>
                     </div>
                     <div class="sidebar-heading">
-                        <img src="{$template_url}assets/img/logo/logo-black.png">
+                        <img src="{$theme_url}assets/img/logo/logo-black.png">
                     </div>
                     <div class="title">
                         <i class="fa fa-file-o"></i>
@@ -168,17 +169,17 @@
             </div>
         </div>
     {/if}
-<script src="{$template_url}assets/js/vendor/pace.js"></script>
-<script src="{$template_url}assets/js/vendor/jstree.min.js"></script>
-<script src="{$template_url}assets/js/vendor/jquery.materialripple.js"></script>
-<script src="{$template_url}assets/js/vendor/jquery.dataTables.min.js"></script>
-<script src="{$template_url}assets/js/vendor/jquery-ui.min.js"></script>
-<script src="{$template_url}assets/js/vendor/jquery.form.min.js"></script>
-<script src="{$template_url}assets/js/vendor/jquery.validate.min.js"></script>
-<script src="{$template_url}assets/js/vendor/bootstrap.min.js"></script>
-
+<script src="{$theme_url}assets/js/vendor/pace.js"></script>
+<script src="{$theme_url}assets/js/vendor/jstree.min.js"></script>
+<script src="{$theme_url}assets/js/vendor/jquery.materialripple.js"></script>
+<script src="{$theme_url}assets/js/vendor/jquery.dataTables.min.js"></script>
+<script src="{$theme_url}assets/js/vendor/jquery-ui.min.js"></script>
+<script src="{$theme_url}assets/js/vendor/jquery.form.min.js"></script>
+<script src="{$theme_url}assets/js/vendor/jquery.validate.min.js"></script>
+<script src="{$theme_url}assets/js/vendor/bootstrap.min.js"></script>
+<script src="{$theme_url}assets/js/vendor/select2.min.js"></script>
 <script>
-    var TOKEN = '{$token}', ONLINE = 0;
+    var TOKEN = '{$token}', ONLINE = 0, t = {$t_json};
 
     jQuery.extend(jQuery.validator.messages, {
         required: "Це поле обов'язкове",
@@ -186,6 +187,10 @@
         email: "Введіть коректну електронну скриньку"
     });
 </script>
-<script src="{$template_url}assets/js/main.js"></script>
+<script src="{$theme_url}assets/js/main.js"></script>
+    {foreach $required_components as $c}
+        <script src="{$c}"></script>
+    {/foreach}
+<script src="{$theme_url}assets/js/bootstrap/{$controller}.js"></script>
 </body>
 </html>

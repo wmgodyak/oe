@@ -21,6 +21,8 @@ class Template
     private $settings;
     private $smarty;
     private $theme = null;
+    private $theme_url;
+    private $theme_path;
 
     public function __construct($theme)
     {
@@ -53,25 +55,28 @@ class Template
         $this->smarty->setCacheDir(DOCROOT . '/tmp/cache/');
 
         // custom vars
-        $template_path = DOCROOT. $theme;
+        $theme_path = DOCROOT. $theme;
+        
+        if(is_dir($theme_path)) {
 
-        if(is_dir($template_path)) {
-
-            $template_url = APPURL . $theme ;
-            $this->smarty->assign('template_url', $template_url);
+            $theme_url = APPURL . $theme ;
+            $this->smarty->assign('theme_url', $theme_url);
             $this->smarty->assign('base_url', APPURL);
             $this->smarty->assign('token',    TOKEN);
-
+            
+            $this->theme_url = $theme_url;
+            $this->theme_path = $theme_path;
+            
         } else {
-
             echo self::fatalErrorTemplateContent(array(
                 'description' => 'No topic is set by default. Please go to content management system and activate the current theme. Or check the current theme folder in the system',
-                'code' => 'Not found theme - '. $template_path
+                'code' => 'Not found theme - '. $theme_path
             ));
             die();
 
         }
     }
+    
 
     /**
      * @param $theme
@@ -86,6 +91,15 @@ class Template
         return self::$instance;
     }
 
+    public function getThemeUrl()
+    {
+        return $this->theme_url;
+    }
+    
+    public function getThemePath()
+    {
+        return $this->theme_path;
+    }
     /**
      * @param $tpl_var
      * @param null $value
