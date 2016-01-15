@@ -9,7 +9,13 @@ var engine = {
     },
     validateAjaxForm: function(myForm, onSuccess, ajaxParams, rules){
         rules = typeof rules == 'undefined' ? [] : rules;
-
+        function showError(form, inp)
+        {
+            var $validator = $(form).validate(), e = [];
+            $(inp).each(function(k, i){
+                $validator.showErrors(i);
+            });
+        }
         $(myForm).validate({
             errorElement: 'span',
             rules: rules,
@@ -27,7 +33,7 @@ var engine = {
                     {
                         bSubmit.removeAttr('disabled');
                         if(! d.s ){
-                            engine.validateError(form, d.i)
+                            showError(form, d.i)
                         } else {
                             if(typeof onSuccess != 'undefined'){
                                 onSuccess(d);
@@ -70,6 +76,19 @@ var engine = {
             }
         });
     },
+    alert: function(msg)
+    {
+        return engine.dialog({
+            content: msg,
+            title: 'Інфомація',
+            autoOpen: true,
+            width: 500,
+            modal: true,
+            buttons: {
+                "Ok": function(){$(this).dialog('close');}
+            }
+        });
+    },
     request:  {
         /**
          * send get request
@@ -80,10 +99,10 @@ var engine = {
          */
         get: function(url, success, dataType)
         {
-            var data =  {token: TOKEN};
+            //var data =  {token: TOKEN};
             return $.ajax({
                 url      : url,
-                data     : data,
+                //data     : data,
                 success  : success,
                 dataType : dataType,
                 type     : 'get'
@@ -202,14 +221,6 @@ var engine = {
                 });
             }
         })();
-    },
-     validateError: function(form, inp)
-    {
-        var $validator = $(form).validate(), e = [];
-
-        $(inp).each(function(k, i){
-            $validator.showErrors(i);
-        });
     }
 };
 

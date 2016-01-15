@@ -23,7 +23,8 @@ abstract class IconBuilder
     const TYPE_PUBLISHED    = 'fa-eye';
     const TYPE_HIDDEN       = 'fa-eye-slash';
     const TYPE_EDIT         = 'fa-pencil';
-    
+    const TYPE_DELETE       = 'fa-remove';
+
     protected $type;
     protected $white;
 

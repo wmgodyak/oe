@@ -178,6 +178,7 @@
 <script src="{$theme_url}assets/js/vendor/jquery.validate.min.js"></script>
 <script src="{$theme_url}assets/js/vendor/bootstrap.min.js"></script>
 <script src="{$theme_url}assets/js/vendor/select2.min.js"></script>
+<script src="{$theme_url}assets/js/vendor/jquery.maskedinput.min.js"></script>
 <script>
     var TOKEN = '{$token}', ONLINE = 0, t = {$t_json};
 

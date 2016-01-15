@@ -106,23 +106,28 @@ class Components extends Engine
         $component = $this->request->post('c');
         $type      = $this->request->post('t');
 
-        if(empty($component) || empty($type)) return 0;
 
-        if($this->request->post('action') == 'install'){
+        if($this->request->post('action')){
             switch($type){
                 case 'component':
+                    if(empty($component) || empty($type)) return 0;
                     return $this->installComponent($component);
                 default:
-                    break;
+                    // archive
+                    return $this->installArchive();
             }
         }
 
         switch($type){
             case 'component':
+                if(empty($component) || empty($type)) return 0;
                 $this->template->assign('tree', $this->mComponents->tree());
                 break;
             default:
-
+                // archive
+                $this->template->assign('tree', $this->mComponents->tree());
+                // тип
+                $this->template->assign('ctype', ['component', 'module', 'plugin']);
                 break;
         }
 
@@ -130,6 +135,59 @@ class Components extends Engine
         $this->template->assign('type', $type);
 
         return $this->template->fetch('components/install_' . $type);
+    }
+
+    private function installArchive()
+    {
+        $data = $this->request->post('data'); $s=0; $i=[]; $m='';
+        $file = $_FILES['file'];
+        // перевірка підтримки zip
+        if (! class_exists('ZipArchive')) {
+            $i[] = ["file" => $this->t('components.error_component_installed')];
+        } else {
+            $file_info = pathinfo($file['name']);
+            $file_extension = $file_info['extension'];
+            $file_content = file_get_contents($file['tmp_name']);
+
+            if(empty($file_content)){
+                $i[] = ["file" => 'failure php://input  return empty string'];
+            }
+            if(empty($i)){
+                if ($file_extension == 'zip' && class_exists('ZipArchive')) {
+
+                    $zip = new \ZipArchive();
+                    $res = $zip->open($file['tmp_name']);
+                    $files_exists = [];
+
+                    for ($c = 0; $c < $zip->numFiles; $c++) {
+                        if(
+                            !is_dir(DOCROOT . $zip->getNameIndex($c)) &&
+                            file_exists(DOCROOT . $zip->getNameIndex($c))
+                        )
+                        {
+                            $files_exists[] = $zip->getNameIndex($c);
+                        }
+                    }
+
+                    if(!empty($files_exists)){
+                        $i[] = ["file" =>  $this->t('components.error_file_exists') . implode('<br>', $files_exists)];
+                    }
+
+                    if ($res > 0 && $res != TRUE) {
+                        $i[] = ["file" => 'failure code:' . $res];
+                    }
+
+                    if(empty($i)){
+                        $zip->extractTo(DOCROOT);
+
+                        $s=1;
+                    }
+                    $zip->close();
+                }
+            }
+        }
+
+        $this->response->body(['s'=>$s, 'i' => $i, 'm' => $m])->asJSON();
     }
 
     private function installComponent($controller)

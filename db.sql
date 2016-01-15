@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Янв 13 2016 г., 18:00
+-- Время создания: Янв 15 2016 г., 17:54
 -- Версия сервера: 5.5.46-0ubuntu0.14.04.2
 -- Версия PHP: 5.5.9-1ubuntu4.14
 
@@ -47,7 +47,15 @@ CREATE TABLE IF NOT EXISTS `components` (
   KEY `position` (`position`),
   KEY `published` (`published`),
   KEY `module` (`controller`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+
+--
+-- Дамп данных таблицы `components`
+--
+
+INSERT INTO `components` (`id`, `parent_id`, `isfolder`, `icon`, `author`, `version`, `controller`, `position`, `published`, `rang`, `type`, `settings`, `place`, `created`) VALUES
+(1, 1, 0, 'fa-cubes', 'Volodymyr Hodiak', '1.0', 'components', 0, 1, 400, 'component', NULL, NULL, '2016-01-13 16:03:08'),
+(4, 0, 0, 'fa fa-users', 'Volodymyr Hodiak', NULL, 'admins', 0, 1, 300, 'component', NULL, NULL, '2016-01-15 14:00:13');
 
 -- --------------------------------------------------------
 
@@ -63,14 +71,14 @@ CREATE TABLE IF NOT EXISTS `languages` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`),
   KEY `is_main` (`is_main`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15 ;
 
 --
 -- Дамп данных таблицы `languages`
 --
 
 INSERT INTO `languages` (`id`, `code`, `name`, `is_main`) VALUES
-(1, 'uk', 'Default', 1);
+(1, 'uk', 'Українська', 1);
 
 -- --------------------------------------------------------
 
@@ -152,7 +160,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `updated`, `lastlogin`) VALUES
-(1, 1, 0, '7srp34mpmu824qmr2ul9me4e05', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c4ca4238a0b923820dcc509a6f75849b.png', '', '2015-12-24 14:36:04', '2015-12-30 12:22:17', '2016-01-13 13:37:56');
+(1, 1, 0, 'of4lt5ups6i7h98na1pnsnk8b6', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c4ca4238a0b923820dcc509a6f75849b.png', '', '2015-12-24 14:36:04', '2015-12-30 12:22:17', '2016-01-15 12:47:55');
 
 -- --------------------------------------------------------
 

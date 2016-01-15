@@ -147,107 +147,25 @@ abstract class Engine extends Controller
     }
 
     /**
-     * @param $name
-     * @param array $args
-     * @param null $icon
+     * @param $button
      * @return $this
      */
-    protected final function prependButtonToPanel($name, array $args, $icon=null)
+    protected final function prependToPanel($button)
     {
-        $button = [
-            'type'   => 'button',
-            'name'   => $name,
-            'args'   => $this->parseArgs($args),
-            'icon'   => $icon
-        ];
-
         array_unshift($this->panel_nav, $button);
 
         return $this;
     }
 
     /**
-     * @param $name
-     * @param array $args
-     * @param null $icon
+     * @param $button
      * @return $this
      */
-    protected final function appendButtonToPanel($name, array $args, $icon=null)
+    protected final function appendToPanel($button)
     {
-
-        $button = [
-            'type'   => 'button',
-            'name'   => $name,
-            'args'   => $this->parseArgs($args),
-            'icon'   => $icon
-        ];
-
         $this->panel_nav[] = $button;
 
         return $this;
-    }
-
-    /**
-     * @param $name
-     * @param array $args
-     * @param null $icon
-     * @return $this
-     */
-    protected final function prependLinkToPanel($name, array $args, $icon=null)
-    {
-        $button = [
-            'type'   => 'link',
-            'name'   => $name,
-            'args'   => $this->parseArgs($args),
-            'icon'   => $icon
-        ];
-
-        array_unshift($this->panel_nav, $button);
-
-        return $this;
-    }
-
-    /**
-     * @param $name
-     * @param array $args
-     * @param null $icon
-     * @return $this
-     */
-    protected final function appendLinkToPanel($name, array $args, $icon=null)
-    {
-        $button = [
-            'type'   => 'link',
-            'name'   => $name,
-            'args'   => $this->parseArgs($args),
-            'icon'   => $icon
-        ];
-
-        $this->panel_nav[] = $button;
-
-        return $this;
-    }
-
-
-    /**
-     * @param array $args
-     * @return string
-     */
-    private function parseArgs(array $args)
-    {
-        $_args = ''; $has_class = false;
-        foreach ($args as $k => $v) {
-            if($k == 'class'){
-                $a = explode(' ', $v);
-                if (!in_array('btn', $a))  $v .= ' btn';
-                $has_class = true;
-            }
-
-            if(!$has_class){ $_args .= " class=\"btn btn-md\"";}
-
-            $_args .= " $k=\"$v\"";
-        }
-
-        return $_args;
     }
 
     /**

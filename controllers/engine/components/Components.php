@@ -39,7 +39,7 @@ class Components extends Engine
 
     public function index()
     {
-        $this->appendButtonToPanel($this->t('components.install'), ['onclick' => 'engine.components.install();']);
+        $this->appendToPanel((string)Button::create($this->t('components.install'), ['class' => 'btn-md install-archive']));
 
         $t = new DataTables();
 

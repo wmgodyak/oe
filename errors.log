@@ -356,3 +356,89 @@ Stack trace:
 [14-Jan-2016 16:07:09 Europe/Kiev] PHP Fatal error:  Uncaught controllers\core\exceptions\FileNotFoundException: [0]: Контроллер компоненту component не знайдено.
 
   thrown in /var/www/engine.loc/controllers/engine/ComponentsFactory.php on line 21
+[14-Jan-2016 17:21:20 Europe/Kiev] PHP Warning:  syntax error, unexpected '(' in /var/www/engine.loc/themes/engine/lang/uk/components.ini on line 28
+ in /var/www/engine.loc/controllers/engine/Lang.php on line 61
+[14-Jan-2016 17:21:20 Europe/Kiev] PHP Warning:  Invalid argument supplied for foreach() in /var/www/engine.loc/controllers/engine/Lang.php on line 63
+[14-Jan-2016 17:21:20 Europe/Kiev] PHP Warning:  syntax error, unexpected '(' in /var/www/engine.loc/themes/engine/lang/uk/components.ini on line 28
+ in /var/www/engine.loc/controllers/engine/Lang.php on line 61
+[14-Jan-2016 17:21:20 Europe/Kiev] PHP Warning:  Invalid argument supplied for foreach() in /var/www/engine.loc/controllers/engine/Lang.php on line 63
+[14-Jan-2016 17:27:06 Europe/Kiev] PHP Catchable fatal error:  Argument 2 passed to helpers\bootstrap\Button::create() must be of the type array, none given, called in /var/www/engine.loc/controllers/engine/components/Components.php on line 42 and defined in /var/www/engine.loc/helpers/bootstrap/Button.php on line 19
+[14-Jan-2016 17:27:47 Europe/Kiev] PHP Catchable fatal error:  Argument 2 passed to helpers\bootstrap\Button::create() must be of the type array, none given, called in /var/www/engine.loc/controllers/engine/components/Components.php on line 42 and defined in /var/www/engine.loc/helpers/bootstrap/Button.php on line 19
+[14-Jan-2016 17:28:05 Europe/Kiev] PHP Fatal error:  Cannot use object of type helpers\bootstrap\Button as array in /var/www/engine.loc/tmp/themes/engine/views/f28238b68f8fe96871dd5acb247d3b535d87f16c.file.heading_panel.tpl.php on line 42
+[14-Jan-2016 17:28:37 Europe/Kiev] PHP Warning:  Illegal string offset 'type' in /var/www/engine.loc/tmp/themes/engine/views/f28238b68f8fe96871dd5acb247d3b535d87f16c.file.heading_panel.tpl.php on line 42
+[14-Jan-2016 17:28:37 Europe/Kiev] PHP Warning:  Illegal string offset 'type' in /var/www/engine.loc/tmp/themes/engine/views/f28238b68f8fe96871dd5acb247d3b535d87f16c.file.heading_panel.tpl.php on line 48
+[14-Jan-2016 17:28:43 Europe/Kiev] PHP Warning:  Illegal string offset 'type' in /var/www/engine.loc/tmp/themes/engine/views/f28238b68f8fe96871dd5acb247d3b535d87f16c.file.heading_panel.tpl.php on line 42
+[14-Jan-2016 17:28:43 Europe/Kiev] PHP Warning:  Illegal string offset 'type' in /var/www/engine.loc/tmp/themes/engine/views/f28238b68f8fe96871dd5acb247d3b535d87f16c.file.heading_panel.tpl.php on line 48
+[14-Jan-2016 17:29:01 Europe/Kiev] PHP Warning:  Illegal string offset 'type' in /var/www/engine.loc/tmp/themes/engine/views/f28238b68f8fe96871dd5acb247d3b535d87f16c.file.heading_panel.tpl.php on line 42
+[14-Jan-2016 17:29:01 Europe/Kiev] PHP Warning:  Illegal string offset 'type' in /var/www/engine.loc/tmp/themes/engine/views/f28238b68f8fe96871dd5acb247d3b535d87f16c.file.heading_panel.tpl.php on line 48
+[14-Jan-2016 17:29:23 Europe/Kiev] PHP Warning:  Illegal string offset 'type' in /var/www/engine.loc/tmp/themes/engine/views/f28238b68f8fe96871dd5acb247d3b535d87f16c.file.heading_panel.tpl.php on line 42
+[14-Jan-2016 17:29:23 Europe/Kiev] PHP Warning:  Illegal string offset 'type' in /var/www/engine.loc/tmp/themes/engine/views/f28238b68f8fe96871dd5acb247d3b535d87f16c.file.heading_panel.tpl.php on line 48
+[14-Jan-2016 18:05:19 Europe/Kiev] PHP Notice:  Undefined index: file in /var/www/engine.loc/controllers/engine/Components.php on line 144
+[14-Jan-2016 18:05:19 Europe/Kiev] PHP Notice:  Undefined index: extension in /var/www/engine.loc/controllers/engine/Components.php on line 150
+[14-Jan-2016 18:05:42 Europe/Kiev] PHP Warning:  pathinfo() expects parameter 1 to be string, array given in /var/www/engine.loc/controllers/engine/Components.php on line 149
+[14-Jan-2016 18:13:11 Europe/Kiev] PHP Warning:  ZipArchive::extractTo(): Invalid or unitialized Zip object in /var/www/engine.loc/controllers/engine/Components.php on line 167
+[14-Jan-2016 18:13:11 Europe/Kiev] PHP Warning:  ZipArchive::close(): Invalid or unitialized Zip object in /var/www/engine.loc/controllers/engine/Components.php on line 170
+[15-Jan-2016 09:32:23 Europe/Kiev] PHP Warning:  Cannot use a scalar value as an array in /var/www/engine.loc/controllers/engine/Components.php on line 167
+[15-Jan-2016 09:33:11 Europe/Kiev] PHP Warning:  Cannot use a scalar value as an array in /var/www/engine.loc/controllers/engine/Components.php on line 168
+[15-Jan-2016 09:33:27 Europe/Kiev] PHP Warning:  Cannot use a scalar value as an array in /var/www/engine.loc/controllers/engine/Components.php on line 168
+[15-Jan-2016 09:33:54 Europe/Kiev] PHP Warning:  Cannot use a scalar value as an array in /var/www/engine.loc/controllers/engine/Components.php on line 168
+[15-Jan-2016 09:34:48 Europe/Kiev] PHP Warning:  Cannot use a scalar value as an array in /var/www/engine.loc/controllers/engine/Components.php on line 168
+[15-Jan-2016 09:37:58 Europe/Kiev] PHP Warning:  ZipArchive::extractTo(/var/www/engine.loc//controllers/engine/Admins.php): failed to open stream: Відмовлено у доступі in /var/www/engine.loc/controllers/engine/Components.php on line 173
+[15-Jan-2016 14:50:18 Europe/Kiev] PHP Warning:  ZipArchive::extractTo(/var/www/engine.loc/controllers/engine/Admins.php): failed to open stream: Відмовлено у доступі in /var/www/engine.loc/controllers/engine/Components.php on line 173
+[15-Jan-2016 15:03:44 Europe/Kiev] PHP Fatal error:  Uncaught exception 'ReflectionException' with message 'Class controllers\engine\Admins~ does not exist' in /var/www/engine.loc/helpers/PHPDocReader.php:19
+Stack trace:
+#0 /var/www/engine.loc/helpers/PHPDocReader.php(19): ReflectionClass->__construct('controllers\eng...')
+#1 /var/www/engine.loc/controllers/engine/components/Components.php(70): helpers\PHPDocReader::getMeta('controllers\eng...')
+#2 /var/www/engine.loc/controllers/engine/Components.php(49): controllers\engine\components\Components->items()
+#3 [internal function]: controllers\engine\Components->items()
+#4 /var/www/engine.loc/controllers/core/Route.php(117): call_user_func(Array)
+#5 /var/www/engine.loc/index.php(24): controllers\core\Route::run()
+#6 {main}
+  thrown in /var/www/engine.loc/helpers/PHPDocReader.php on line 19
+[15-Jan-2016 15:03:59 Europe/Kiev] PHP Fatal error:  Uncaught exception 'ReflectionException' with message 'Class controllers\engine\Admins~ does not exist' in /var/www/engine.loc/helpers/PHPDocReader.php:19
+Stack trace:
+#0 /var/www/engine.loc/helpers/PHPDocReader.php(19): ReflectionClass->__construct('controllers\eng...')
+#1 /var/www/engine.loc/controllers/engine/components/Components.php(70): helpers\PHPDocReader::getMeta('controllers\eng...')
+#2 /var/www/engine.loc/controllers/engine/Components.php(49): controllers\engine\components\Components->items()
+#3 [internal function]: controllers\engine\Components->items()
+#4 /var/www/engine.loc/controllers/core/Route.php(117): call_user_func(Array)
+#5 /var/www/engine.loc/index.php(24): controllers\core\Route::run()
+#6 {main}
+  thrown in /var/www/engine.loc/helpers/PHPDocReader.php on line 19
+[15-Jan-2016 15:04:41 Europe/Kiev] PHP Fatal error:  Uncaught exception 'ReflectionException' with message 'Class controllers\engine\Admins~ does not exist' in /var/www/engine.loc/helpers/PHPDocReader.php:19
+Stack trace:
+#0 /var/www/engine.loc/helpers/PHPDocReader.php(19): ReflectionClass->__construct('controllers\eng...')
+#1 /var/www/engine.loc/controllers/engine/components/Components.php(70): helpers\PHPDocReader::getMeta('controllers\eng...')
+#2 /var/www/engine.loc/controllers/engine/Components.php(49): controllers\engine\components\Components->items()
+#3 [internal function]: controllers\engine\Components->items()
+#4 /var/www/engine.loc/controllers/core/Route.php(117): call_user_func(Array)
+#5 /var/www/engine.loc/index.php(24): controllers\core\Route::run()
+#6 {main}
+  thrown in /var/www/engine.loc/helpers/PHPDocReader.php on line 19
+[15-Jan-2016 15:06:08 Europe/Kiev] PHP Fatal error:  Uncaught exception 'ReflectionException' with message 'Class controllers\engine\Admins~ does not exist' in /var/www/engine.loc/helpers/PHPDocReader.php:20
+Stack trace:
+#0 /var/www/engine.loc/helpers/PHPDocReader.php(20): ReflectionClass->__construct('controllers\eng...')
+#1 /var/www/engine.loc/controllers/engine/components/Components.php(70): helpers\PHPDocReader::getMeta('controllers\eng...')
+#2 /var/www/engine.loc/controllers/engine/Components.php(49): controllers\engine\components\Components->items()
+#3 [internal function]: controllers\engine\Components->items()
+#4 /var/www/engine.loc/controllers/core/Route.php(117): call_user_func(Array)
+#5 /var/www/engine.loc/index.php(24): controllers\core\Route::run()
+#6 {main}
+  thrown in /var/www/engine.loc/helpers/PHPDocReader.php on line 20
+[15-Jan-2016 15:06:26 Europe/Kiev] PHP Fatal error:  Uncaught exception 'ReflectionException' with message 'Class controllers\engine\Admins~ does not exist' in /var/www/engine.loc/helpers/PHPDocReader.php:20
+Stack trace:
+#0 /var/www/engine.loc/helpers/PHPDocReader.php(20): ReflectionClass->__construct('controllers\eng...')
+#1 /var/www/engine.loc/controllers/engine/components/Components.php(70): helpers\PHPDocReader::getMeta('controllers\eng...')
+#2 /var/www/engine.loc/controllers/engine/Components.php(49): controllers\engine\components\Components->items()
+#3 [internal function]: controllers\engine\Components->items()
+#4 /var/www/engine.loc/controllers/core/Route.php(117): call_user_func(Array)
+#5 /var/www/engine.loc/index.php(24): controllers\core\Route::run()
+#6 {main}
+  thrown in /var/www/engine.loc/helpers/PHPDocReader.php on line 20
+[15-Jan-2016 16:48:23 Europe/Kiev] PHP Warning:  syntax error, unexpected '(' in /var/www/engine.loc/themes/engine/lang/uk/languages.ini on line 3
+ in /var/www/engine.loc/controllers/engine/Lang.php on line 61
+[15-Jan-2016 16:48:23 Europe/Kiev] PHP Warning:  Invalid argument supplied for foreach() in /var/www/engine.loc/controllers/engine/Lang.php on line 63
+[15-Jan-2016 16:48:24 Europe/Kiev] PHP Warning:  syntax error, unexpected '(' in /var/www/engine.loc/themes/engine/lang/uk/languages.ini on line 3
+ in /var/www/engine.loc/controllers/engine/Lang.php on line 61
+[15-Jan-2016 16:48:24 Europe/Kiev] PHP Warning:  Invalid argument supplied for foreach() in /var/www/engine.loc/controllers/engine/Lang.php on line 63
+[15-Jan-2016 17:13:20 Europe/Kiev] PHP Warning:  Missing argument 1 for controllers\engine\Languages::process() in /var/www/engine.loc/controllers/engine/Languages.php on line 101
