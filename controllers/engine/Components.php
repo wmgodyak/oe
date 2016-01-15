@@ -17,7 +17,7 @@ defined("CPATH") or die();
 /**
  * Class Components
  * @name Компоненти
- * @icon fa fa-users
+ * @icon fa-wrench
  * @position 5
  * @author Volodymyr Hodiak
  * @version 7.0.0
@@ -105,7 +105,6 @@ class Components extends Engine
 
         $component = $this->request->post('c');
         $type      = $this->request->post('t');
-
 
         if($this->request->post('action')){
             switch($type){
@@ -213,6 +212,7 @@ class Components extends Engine
             if(isset($meta['position'])) $data['position'] = $meta['position'];
             if(isset($meta['author']))   $data['author']   = $meta['author'];
             if(isset($meta['rang']))     $data['rang']     = $meta['rang'];
+            if(isset($meta['version']))  $data['version']  = $meta['version'];
 
             $data['published'] = 1;
 

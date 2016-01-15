@@ -119,7 +119,8 @@ abstract class Engine extends Controller
             $this->requireComponents();
         }
 
-        $t_json = [
+        $t_json =
+        [
             'common' => Lang::getInstance()->t('common'),
             mb_strtolower($controller) => Lang::getInstance()->t(mb_strtolower($controller))
         ];
@@ -173,6 +174,8 @@ abstract class Engine extends Controller
      */
     private function makeNav()
     {
+        $nav = new \models\Engine();
+        $this->template->assign('nav_items', $nav->nav());
         $s = $this->template->fetch('nav');
         $this->template->assign('nav', $s);
     }
@@ -239,21 +242,6 @@ abstract class Engine extends Controller
     {
         $this->renderHeadingPanel();
         $this->response->body($body)->render();
-
-//        $this->request->mode = "engine";
-//        return $this->load->view('content',array(
-//            'title_block' => $this->load->view('title_block',array(
-//                'title'       => $this->request->name,
-//                'icon'       => $this->request->icon,
-//                'description' => $this->request->description,
-//                'buttons'     => $this->buttons
-//            )),
-//            'user_menu'   => $this->load->view('user_menu'),
-//            'breadcrumb'  => $this->breadcrumb($this->request->namespace . $this->request->controller),
-//            'sidebar'     => $this->sidebar,
-//            'content'     => $this->content,
-//            'js_file'     => $this->getJs()
-//        ));
     }
 
 

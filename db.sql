@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Янв 15 2016 г., 17:54
+-- Время создания: Янв 15 2016 г., 18:41
 -- Версия сервера: 5.5.46-0ubuntu0.14.04.2
 -- Версия PHP: 5.5.9-1ubuntu4.14
 
@@ -47,15 +47,15 @@ CREATE TABLE IF NOT EXISTS `components` (
   KEY `position` (`position`),
   KEY `published` (`published`),
   KEY `module` (`controller`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
 
 --
 -- Дамп данных таблицы `components`
 --
 
 INSERT INTO `components` (`id`, `parent_id`, `isfolder`, `icon`, `author`, `version`, `controller`, `position`, `published`, `rang`, `type`, `settings`, `place`, `created`) VALUES
-(1, 1, 0, 'fa-cubes', 'Volodymyr Hodiak', '1.0', 'components', 0, 1, 400, 'component', NULL, NULL, '2016-01-13 16:03:08'),
-(4, 0, 0, 'fa fa-users', 'Volodymyr Hodiak', NULL, 'admins', 0, 1, 300, 'component', NULL, NULL, '2016-01-15 14:00:13');
+(9, 0, 0, 'fa-flag', 'Volodymyr Hodiak', '1.0.0', 'languages', 0, 1, 300, 'component', NULL, NULL, '2016-01-15 16:38:00'),
+(10, 0, 0, 'fa-wrench', 'Volodymyr Hodiak', '7.0.0', 'components', 5, 1, NULL, 'component', NULL, NULL, '2016-01-15 16:40:01');
 
 -- --------------------------------------------------------
 
@@ -160,7 +160,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `updated`, `lastlogin`) VALUES
-(1, 1, 0, 'of4lt5ups6i7h98na1pnsnk8b6', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c4ca4238a0b923820dcc509a6f75849b.png', '', '2015-12-24 14:36:04', '2015-12-30 12:22:17', '2016-01-15 12:47:55');
+(1, 1, 0, 'of4lt5ups6i7h98na1pnsnk8b6', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c4ca4238a0b923820dcc509a6f75849b.png', '', '2015-12-24 14:36:04', '2016-01-15 18:41:01', '2016-01-15 12:47:55');
 
 -- --------------------------------------------------------
 

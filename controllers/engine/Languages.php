@@ -18,7 +18,7 @@ defined("CPATH") or die();
 /**
  * Class Languages
  * @name Мови
- * @icon fa fa-users
+ * @icon fa-flag
  * @author Volodymyr Hodiak
  * @version 1.0.0
  * @rang 300
