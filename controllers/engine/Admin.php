@@ -12,7 +12,7 @@ use controllers\core\Config;
 use controllers\core\Session;
 use controllers\Engine;
 use helpers\FormValidation;
-use models\engine\User;
+use models\engine\Users;
 
 defined('CPATH') or die();
 
@@ -101,7 +101,7 @@ class Admin extends Engine {
                     $inp[] = ['data[password]' => $this->t('admin.e_login_pass')];
                     setcookie('fail', ++$fail, $ban_time);
 
-                } else if (User::checkPassword($data['password'], $user['password'])){
+                } else if (Users::checkPassword($data['password'], $user['password'])){
                     if($user['rang'] <= 100) {
                         $inp[] = ['data[password]' => $this->t('admin.e_rang')];
                         setcookie('fail', ++$fail, $ban_time);
@@ -178,8 +178,8 @@ class Admin extends Engine {
                     setcookie('fail', ++$fail, time()+60*15);
                 } else {
                     // new password
-                    $psw = User::generatePassword();
-                    if(User::changePassword($user['id'], $psw)){
+                    $psw = Users::generatePassword();
+                    if(Users::changePassword($user['id'], $psw)){
 
                         include_once DOCROOT . "/vendor/phpmailer/PHPMailer.php";
                         $mail = new \PHPMailer();
@@ -241,7 +241,7 @@ class Admin extends Engine {
                 unset($data['password_c']);
 
                 // оновлення даних
-                $mUser = new User();
+                $mUser = new Users();
                 $s = $mUser->updateProfile($user_id, $data);
 
                 if($s == 0){

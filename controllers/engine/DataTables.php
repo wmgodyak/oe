@@ -135,11 +135,12 @@ class DataTables {
 
     /**
      * @param $q
+     * @param string $type
      * @return $this
      */
-    public function join($q)
+    public function join($q, $type = "join ")
     {
-        $this->join[] = $q;
+        $this->join[] = $type .' '. $q;
 
         return $this;
     }

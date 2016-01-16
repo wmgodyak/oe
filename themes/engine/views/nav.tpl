@@ -3,7 +3,7 @@
     <nav class="side-nav">
         <ul class="first-level">
             <li class="active">
-                <a href="#">
+                <a href="./dashboard">
                     <i class="fa fa-home"></i>
                     <span>{$t.system.name}</span>
                 </a>

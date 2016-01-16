@@ -444,3 +444,7 @@ Stack trace:
 [15-Jan-2016 17:13:20 Europe/Kiev] PHP Warning:  Missing argument 1 for controllers\engine\Languages::process() in /var/www/engine.loc/controllers/engine/Languages.php on line 101
 [15-Jan-2016 18:19:56 Europe/Kiev] PHP Fatal error:  Uncaught  --> Smarty Compiler: Syntax error in template "/var/www/engine.loc/themes/engine/views/nav.tpl"  on line 8 "<span>{t.system.name}</span>"  - Unexpected ".", expected one of: "}" <-- 
   thrown in /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_templatecompilerbase.php on line 8
+[16-Jan-2016 10:29:39 Europe/Kiev] PHP Notice:  Undefined index: u.created in /var/www/engine.loc/controllers/engine/Admins.php on line 74
+[16-Jan-2016 10:29:39 Europe/Kiev] PHP Notice:  Undefined index: u.lastlogin in /var/www/engine.loc/controllers/engine/Admins.php on line 75
+[16-Jan-2016 10:29:39 Europe/Kiev] PHP Notice:  Undefined index: is_main in /var/www/engine.loc/controllers/engine/Admins.php on line 82
+[16-Jan-2016 10:29:57 Europe/Kiev] PHP Notice:  Undefined index: is_main in /var/www/engine.loc/controllers/engine/Admins.php on line 82

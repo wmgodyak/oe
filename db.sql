@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Янв 15 2016 г., 18:41
+-- Время создания: Янв 16 2016 г., 15:37
 -- Версия сервера: 5.5.46-0ubuntu0.14.04.2
 -- Версия PHP: 5.5.9-1ubuntu4.14
 
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `components` (
   KEY `position` (`position`),
   KEY `published` (`published`),
   KEY `module` (`controller`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
 
 --
 -- Дамп данных таблицы `components`
@@ -55,7 +55,8 @@ CREATE TABLE IF NOT EXISTS `components` (
 
 INSERT INTO `components` (`id`, `parent_id`, `isfolder`, `icon`, `author`, `version`, `controller`, `position`, `published`, `rang`, `type`, `settings`, `place`, `created`) VALUES
 (9, 0, 0, 'fa-flag', 'Volodymyr Hodiak', '1.0.0', 'languages', 0, 1, 300, 'component', NULL, NULL, '2016-01-15 16:38:00'),
-(10, 0, 0, 'fa-wrench', 'Volodymyr Hodiak', '7.0.0', 'components', 5, 1, NULL, 'component', NULL, NULL, '2016-01-15 16:40:01');
+(10, 0, 0, 'fa-wrench', 'Volodymyr Hodiak', '7.0.0', 'components', 5, 1, NULL, 'component', NULL, NULL, '2016-01-15 16:40:01'),
+(11, 0, 0, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'admins', 0, 1, 300, 'component', NULL, NULL, '2016-01-16 07:41:23');
 
 -- --------------------------------------------------------
 
@@ -71,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `languages` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`),
   KEY `is_main` (`is_main`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
 -- Дамп данных таблицы `languages`
@@ -153,14 +154,18 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`id`,`group_id`,`languages_id`),
   UNIQUE KEY `phone` (`phone`,`email`),
   KEY `fk_users_group1_idx` (`group_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
 
 --
 -- Дамп данных таблицы `users`
 --
 
 INSERT INTO `users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `updated`, `lastlogin`) VALUES
-(1, 1, 0, 'of4lt5ups6i7h98na1pnsnk8b6', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c4ca4238a0b923820dcc509a6f75849b.png', '', '2015-12-24 14:36:04', '2016-01-15 18:41:01', '2016-01-15 12:47:55');
+(1, 1, 0, '6lkgjuoph6qc0fg3svj7t3dpi1', 'Володимир', 'Годяк', '+38 (067) 6736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c4ca4238a0b923820dcc509a6f75849b.png', '', '2015-12-24 14:36:04', '2016-01-16 14:38:32', '2016-01-16 12:38:20'),
+(2, 2, 0, NULL, 'Мирослав', 'Луців', '+21 (321) 1323123', 'ml@otakoyi.com', 'MjQCkqQenXh9E', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-01-16 10:39:11', '2016-01-16 14:41:22', NULL),
+(3, 1, 0, NULL, 'Юра', 'Столярчук', '+12 (123) 2132131', 'us@gmail.com', '', NULL, NULL, '2016-01-16 10:46:18', '2016-01-16 14:39:00', NULL),
+(4, 2, 0, NULL, 'Сергій', 'Лавриненко', '+78 (978) 9789778', 's.lavrynenko@gmail.com', '', NULL, NULL, '2016-01-16 10:55:59', '2016-01-16 13:10:05', NULL),
+(7, 1, 0, NULL, 'Maxim', 'Lukyanov', '+38 (012) 3456789', 'maximssu@gmail.com', 'ODtI5JdYnfAJ6', NULL, NULL, '2016-01-16 11:13:09', '0000-00-00 00:00:00', NULL);
 
 -- --------------------------------------------------------
 
@@ -171,19 +176,22 @@ INSERT INTO `users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surnam
 CREATE TABLE IF NOT EXISTS `users_group` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` tinyint(3) unsigned NOT NULL,
+  `isfolder` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `rang` smallint(3) unsigned NOT NULL,
   `sort` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `pid` (`parent_id`),
-  KEY `sort` (`sort`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+  KEY `sort` (`sort`),
+  KEY `isfolder` (`isfolder`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Дамп данных таблицы `users_group`
 --
 
-INSERT INTO `users_group` (`id`, `parent_id`, `rang`, `sort`) VALUES
-(1, 0, 999, 0);
+INSERT INTO `users_group` (`id`, `parent_id`, `isfolder`, `rang`, `sort`) VALUES
+(1, 0, 0, 999, 0),
+(2, 0, 0, 300, 2);
 
 -- --------------------------------------------------------
 
@@ -200,14 +208,15 @@ CREATE TABLE IF NOT EXISTS `users_group_info` (
   UNIQUE KEY `group_id` (`group_id`,`languages_id`),
   KEY `fk_users_group_info_users_group1_idx` (`group_id`),
   KEY `fk_users_group_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Дамп данных таблицы `users_group_info`
 --
 
 INSERT INTO `users_group_info` (`id`, `group_id`, `languages_id`, `name`) VALUES
-(1, 1, 1, 'Admins');
+(1, 1, 1, 'Admins'),
+(2, 2, 1, 'Редактор');
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц

@@ -3,16 +3,59 @@
  * OYiEngine 7
  * @author Volodymyr Hodiak mailto:support@otakoi.com
  * @copyright Copyright (c) 2015 Otakoyi.com
- * Date: 24.12.15 : 18:05
+ * Date: 16.01.16 : 10:10
  */
+
 
 namespace models\engine;
 
 
 use models\core\Model;
 
-class User extends Model
+defined("CPATH") or die();
+
+class Users extends Model
 {
+    /**
+     * @param $id
+     * @return array|mixed
+     */
+    public function getData($id)
+    {
+        return self::$db->select("select * from users where id='{$id}'")->row();
+    }
+
+    /**
+     * @param $data
+     * @return bool|string
+     */
+    public function create($data)
+    {
+        $data['password'] = $this->cryptPassword($data['password']);
+        return self::$db->insert('users', $data);
+    }
+
+    /**
+     * @param $id
+     * @param $data
+     * @return bool
+     */
+    public function update($id, $data)
+    {
+        if(empty($data['password'])){
+            unset($data['password']);
+        } else {
+            $data['password'] = $this->cryptPassword($data['password']);
+        }
+        $data['updated'] = $this->now();
+        return self::$db->update('users', $data, " id={$id} limit 1");
+    }
+
+    public function delete($id)
+    {
+        return self::$db->delete('users', " id={$id} limit 1");
+    }
+
     /**
      * @param $id
      * @param $password
@@ -111,5 +154,16 @@ class User extends Model
         }
 
         return ['s' => $s, 'm' => $m, 'f' => $fname];
+    }
+
+    /**
+     * @param $email
+     * @param null $id
+     * @return bool
+     */
+    public function issetEmail($email, $id = null)
+    {
+        $and = $id ? " id <> {$id} and " : '';
+        return self::$db->select("select id from users where {$and} email = '{$email}'  limit 1")->row('id') > 0;
     }
 }
