@@ -448,3 +448,9 @@ Stack trace:
 [16-Jan-2016 10:29:39 Europe/Kiev] PHP Notice:  Undefined index: u.lastlogin in /var/www/engine.loc/controllers/engine/Admins.php on line 75
 [16-Jan-2016 10:29:39 Europe/Kiev] PHP Notice:  Undefined index: is_main in /var/www/engine.loc/controllers/engine/Admins.php on line 82
 [16-Jan-2016 10:29:57 Europe/Kiev] PHP Notice:  Undefined index: is_main in /var/www/engine.loc/controllers/engine/Admins.php on line 82
+[26-Jan-2016 14:22:37 Europe/Kiev] PHP Fatal error:  Call to a member function getPlugins() on a non-object in /var/www/engine.loc/controllers/Engine.php on line 145
+[26-Jan-2016 14:22:41 Europe/Kiev] PHP Fatal error:  Call to a member function getPlugins() on a non-object in /var/www/engine.loc/controllers/Engine.php on line 145
+[26-Jan-2016 16:29:27 Europe/Kiev] PHP Fatal error:  Uncaught  --> Smarty: Unable to load template file 'plugins/admins/group/tree.tpl' <-- 
+  thrown in /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_templatebase.php on line 129
+[26-Jan-2016 16:29:34 Europe/Kiev] PHP Warning:  call_user_func_array() expects parameter 1 to be a valid callback, class 'controllers\engine\plugins\UsersGroup' does not have a method 'items' in /var/www/engine.loc/controllers/Plugins.php on line 46
+[26-Jan-2016 16:32:30 Europe/Kiev] PHP Warning:  call_user_func_array() expects parameter 1 to be a valid callback, class 'controllers\engine\plugins\UsersGroup' does not have a method 'items' in /var/www/engine.loc/controllers/Plugins.php on line 45

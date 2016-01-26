@@ -23,7 +23,7 @@
         <div class="dashboard">
             {$nav}
             <div class="page">
-                {if $sidebar != ''}
+                {if !empty($plugins.sidebar) != ''}
                 <div class="sidebar sidebar-open">
                     <div class="toggle-btn">
                         <i class="fa fa-chevron-left"></i>
@@ -31,75 +31,10 @@
                     <div class="sidebar-heading">
                         <img src="{$theme_url}assets/img/logo/logo-black.png">
                     </div>
-                    <div class="title">
-                        <i class="fa fa-file-o"></i>
-                        <span>+Сторінки+</span>
-                    </div>
-                    <div class="pages-tree" id="tree">
-                        <ul>
-                            <li>
-                                <a href="#">GasInfoService #1</a>
-                                <ul>
-                                    <li>
-                                        <a href="#">Новини #10</a>
-                                        <ul>
-                                            <li><a href="#">Реалізація #7</a></li>
-                                            <li><a href="#">Підприємства, які працюють</a></li>
-                                            <li><a href="#">БМР #75</a></li>
-                                            <li><a href="#">Оптова реалізація конденсту</a></li>
-                                            <li>
-                                                <a href="#">Оптова реалізація</a>
-                                                <ul>
-                                                    <li><a href="#">Реалізація #7</a></li>
-                                                    <li><a href="#">Підприємства</a></li>
-                                                    <li><a href="#">БМР #75</a></li>
-                                                    <li><a href="#">Оптова </a></li>
-                                                    <li><a href="#">Оптова реалізація</a></li>
-                                                    <li><a href="#">Трейдери з продажу</a></li>
-                                                    <li><a href="#">Роздрібна реалізація</a></li>
-                                                    <li><a href="#">АГНКС #80</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="#">Трейдери з продажу газу #78</a></li>
-                                            <li><a href="#">Роздрібна реалізація вуглево</a></li>
-                                            <li><a href="#">АГНКС #80</a></li>
-                                        </ul>
-                                    </li>
-                                    <li><a href="#">Підприємства, які працюють</a></li>
-                                    <li><a href="#">БМР #75</a></li>
-                                    <li><a href="#">Оптова реалізація конденсту</a></li>
-                                    <li>
-                                        <a href="#">Новини #10</a>
-                                        <ul>
-                                            <li><a href="#">Реалізація #7</a></li>
-                                            <li><a href="#">Підприємства, які працюють</a></li>
-                                            <li><a href="#">БМР #75</a></li>
-                                            <li><a href="#">Оптова реалізація конденсту</a></li>
-                                            <li>
-                                                <a href="#">Оптова реалізація</a>
-                                                <ul>
-                                                    <li><a href="#">Реалізація #7</a></li>
-                                                    <li><a href="#">Підприємства</a></li>
-                                                    <li><a href="#">БМР #75</a></li>
-                                                    <li><a href="#">Оптова </a></li>
-                                                    <li><a href="#">Оптова реалізація</a></li>
-                                                    <li><a href="#">Трейдери з продажу</a></li>
-                                                    <li><a href="#">Роздрібна реалізація</a></li>
-                                                    <li><a href="#">АГНКС #80</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="#">Трейдери з продажу газу #78</a></li>
-                                            <li><a href="#">Роздрібна реалізація вуглево</a></li>
-                                            <li><a href="#">АГНКС #80</a></li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
+                    {implode("\r\n", $plugins.sidebar)}
                 </div>
                 {/if}
-                <div class="dashboard-content {if $sidebar != ''} sidebar-open{/if}">
+                <div class="dashboard-content {if !empty($plugins.sidebar)} sidebar-open{/if}">
                     <div class="content-wrapper"> <!--dashboard-->
                         <!--top line-->
                         <div class="top-line">

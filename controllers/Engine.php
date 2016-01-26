@@ -15,6 +15,7 @@ use controllers\core\Settings;
 use controllers\core\Template;
 use controllers\engine\Admin;
 use controllers\engine\Lang;
+use controllers\engine\PluginsFactory;
 
 if ( !defined("CPATH") ) die();
 
@@ -39,17 +40,6 @@ abstract class Engine extends Controller
      * @var array
      */
     private $buttons = array();
-    /**
-     * right sidebar
-     * @var
-     */
-    private $sidebar;
-
-    /**
-     * plugins list
-     * @var
-     */
-    private $plugins;
 
     private $settings;
 
@@ -66,14 +56,31 @@ abstract class Engine extends Controller
     private $require_components = [];
     private $required_components = [];
 
+    private $engine;
+
+    private static $initialized = false;
+
     public function __construct()
     {
         parent::__construct();
+
+        $this->engine = new \models\Engine();
 
         $controller  = $this->request->get('controller');
         $action      = $this->request->get('action');
 
         $this->request = Request::getInstance();
+
+        // response
+        $this->response = Response::getInstance();
+
+        // settings
+        $this->settings = Settings::getInstance()->get();
+
+        // template settings
+        $theme = $this->settings['engine_theme_current'];
+        $this->template = Template::getInstance($theme);
+
 //        echo $this->request->get('controller') ,'.', $this->request->get('action');die;
         if(
             (
@@ -86,15 +93,15 @@ abstract class Engine extends Controller
             }
         }
 
-        // response
-        $this->response = Response::getInstance();
+        if(!self::$initialized){
+            $this->init();
+        }
+    }
 
-        // settings
-        $this->settings = Settings::getInstance()->get();
-
-        // template settings
-        $theme = $this->settings['engine_theme_current'];
-        $this->template = Template::getInstance($theme);
+    private function init()
+    {
+        self::$initialized = true;
+//        echo "Engine::init();\r\n";
 
         $this->template->assign('base_url',    APPURL . 'engine/');
         $this->template->assign('controller',  mb_strtolower($this->request->get('controller')));
@@ -103,8 +110,11 @@ abstract class Engine extends Controller
 
         // admin structure
         if($this->request->isGet() && ! $this->request->isXhr()){
+
             $this->makeNav();
+
             $a = Admin::data('avatar');
+
             if(empty($a)){
                 Admin::data('avatar', '/uploads/avatars/0.png');
             }
@@ -119,11 +129,14 @@ abstract class Engine extends Controller
             $this->requireComponents();
         }
 
+        $controller  = $this->request->get('controller');
+        $action      = $this->request->get('action');
+
         $t_json =
-        [
-            'common' => Lang::getInstance()->t('common'),
-            mb_strtolower($controller) => Lang::getInstance()->t(mb_strtolower($controller))
-        ];
+            [
+                'common' => Lang::getInstance()->t('common'),
+                mb_strtolower($controller) => Lang::getInstance()->t(mb_strtolower($controller))
+            ];
 
 
         foreach ($this->required_components as $c) {
@@ -135,6 +148,9 @@ abstract class Engine extends Controller
             't_json',
             json_encode($t_json)
         );
+
+        $plugins = Plugins::get();
+        $this->template->assign('plugins', $plugins);
     }
 
     protected final function setButtonsPanel($buttons)
@@ -174,8 +190,7 @@ abstract class Engine extends Controller
      */
     private function makeNav()
     {
-        $nav = new \models\Engine();
-        $this->template->assign('nav_items', $nav->nav());
+        $this->template->assign('nav_items', $this->engine->nav());
         $s = $this->template->fetch('nav');
         $this->template->assign('nav', $s);
     }
@@ -188,11 +203,6 @@ abstract class Engine extends Controller
     protected function t($key)
     {
         return Lang::getInstance()->t($key);
-    }
-
-    protected function setSidebar($sb)
-    {
-        $this->sidebar = $sb;
     }
 
     protected function setNav($b)

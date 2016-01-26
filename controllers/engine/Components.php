@@ -33,6 +33,7 @@ class Components extends Engine
 
         $this->mComponents = new \models\engine\Components();
     }
+
     public function index($component = '')
     {
         if(empty($component)) $component = 'components';

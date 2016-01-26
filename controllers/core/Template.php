@@ -24,7 +24,7 @@ class Template
     private $theme_url;
     private $theme_path;
 
-    public function __construct($theme)
+    private function __construct($theme)
     {
         if(!$theme) throw new \Exception('Wrong theme path');
 

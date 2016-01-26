@@ -221,6 +221,111 @@ var engine = {
                 });
             }
         })();
+    },
+    tree : function(id)
+    {
+        id = typeof id == 'undefined' ? 'tree' : id;
+
+        var config = {
+            'core': {
+                'themes' : {
+                    'responsive': false
+                },
+                'data': {
+                    'url': "",
+                    'type': 'GET',
+                    'dataType': 'JSON',
+                    'contentType':'application/json',
+                    'data': function (node) {
+                        return { token: TOKEN, id: node.id};
+                    }
+                }
+            },
+            'types' : {
+                /*'default' : {
+                    'icon' : 'fa fa-folder icon-state-info icon-md'
+                },
+                'model' : {
+                    'icon' : 'fa fa-file icon-state-default icon-md'
+                }*/
+            },
+            "contextmenu" : {
+                items: {
+                    "ccp" : false
+                }
+            },
+            "plugins" : [ "wholerow" ]
+        };
+
+        return {
+            setPlugin: function(plugin)
+            {
+                config.plugins.push(plugin);
+
+                return this;
+            },
+            setType: function(type, args)
+            {
+                config.types[type] = args;
+
+                this.setPlugin('types');
+
+                return this;
+            },
+            setData : function(data)
+            {
+                config.core.data = $.extend(config.data, data);
+
+                return this;
+            },
+            setUrl: function(url)
+            {
+                config.core.data.url = url;
+
+                return this;
+            },
+            setConfig: function(c){
+                config = $.extend(config, c);
+
+                return this;
+            },
+            /**
+             * action ecample "action": function (obj) {
+                            var node_id= obj.reference[0].id;
+                        }
+             * @param name
+             * @param label
+             * @param icon
+             * @param action
+             * @returns {engine}
+             */
+            setContextMenu: function(name, label, icon, action)
+            {
+
+                //config.contextmenu.items.ccp = false;
+
+                config.contextmenu.items[name] = {
+                    "label" : label,
+                    "icon" : 'fa ' + icon,
+                    "action": action
+                };
+
+                //this.setPlugin('contextmenu');
+
+                return this;
+            },
+            init: function()
+            {
+                console.dir(config);
+                var $tree = $('#' + id);
+                if($tree.length == 0) {
+                    console.error('Tree #' + id + ' not found');
+                    return ;
+                }
+
+                $tree.jstree(config);
+            }
+        };
     }
 };
 
@@ -229,6 +334,17 @@ $(document).ready(function(){
     engine.toggleSidebar();
     engine.toggleNav();
     engine.admin.init();
+
+    var tree = new engine.tree('usersGroup');
+    console.dir(tree);
+    tree
+        .setUrl('./plugins/UsersGroup/items')
+        .setContextMenu('create', 'Додати', 'fa-file', function(o){
+            var node_id= o.reference[0].id;
+
+            }
+        )
+        .init();
 });
 
 engine.admin = {
