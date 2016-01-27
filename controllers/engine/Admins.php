@@ -39,14 +39,14 @@ class Admins extends Engine
     /**
      *
      */
-    public function index()
+    public function index($group_id = null)
     {
         $this->appendToPanel((string)Button::create($this->t('common.button_create'), ['class' => 'btn-md b-admins-create']));
 
         $t = new DataTables();
 
         $t  -> setId('admins')
-            -> ajaxConfig('admins/items')
+            -> ajaxConfig('admins/items/'.$group_id)
 //            -> setConfig('order', array(0, 'desc'))
             -> th($this->t('common.id'))
             -> th($this->t('admins.pib'))
@@ -64,9 +64,9 @@ class Admins extends Engine
      * @param int $group_id
      * @return string
      */
-    public function items($group_id=null)
+    public function items($group_id = null)
     {
-        $and = ($group_id > 0) ? " ug.id={$group_id}" : '';
+        $and = ($group_id > 0) ? " and ug.id={$group_id}" : '';
         $t = new DataTables();
         $t  -> table('users u')
             -> get('u.id,u.name, u.surname, u.email, u.phone, u.created, u.lastlogin')

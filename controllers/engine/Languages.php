@@ -26,15 +26,6 @@ defined("CPATH") or die();
  */
 class Languages extends Engine
 {
-    private $languages;
-
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->languages = new \models\engine\Languages();
-    }
-
     public function index()
     {
         $this->appendToPanel((string)Button::create($this->t('common.button_create'), ['class' => 'btn-md b-languages-create']));

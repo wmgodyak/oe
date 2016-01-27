@@ -57,4 +57,9 @@ class Languages extends Model
     {
         return self::$db->delete('languages', " id={$id} limit 1");
     }
+
+    public function get()
+    {
+        return self::$db->select("select * from languages order by is_main desc, name asc")->all();
+    }
 }

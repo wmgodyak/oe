@@ -454,3 +454,49 @@ Stack trace:
   thrown in /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_templatebase.php on line 129
 [26-Jan-2016 16:29:34 Europe/Kiev] PHP Warning:  call_user_func_array() expects parameter 1 to be a valid callback, class 'controllers\engine\plugins\UsersGroup' does not have a method 'items' in /var/www/engine.loc/controllers/Plugins.php on line 46
 [26-Jan-2016 16:32:30 Europe/Kiev] PHP Warning:  call_user_func_array() expects parameter 1 to be a valid callback, class 'controllers\engine\plugins\UsersGroup' does not have a method 'items' in /var/www/engine.loc/controllers/Plugins.php on line 45
+[27-Jan-2016 11:26:29 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:26:35 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:27:04 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:27:04 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:27:04 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:27:05 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:27:13 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:27:14 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:27:14 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:27:16 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:28:17 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:28:18 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:28:18 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:28:19 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:28:19 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:28:19 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:28:19 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:28:19 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:28:20 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:28:20 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:28:21 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:28:21 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:28:22 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:28:22 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:28:22 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:28:22 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:28:22 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:28:22 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:28:22 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:28:22 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:28:39 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:28:40 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:28:43 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:28:55 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:28:55 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 62
+[27-Jan-2016 11:29:18 Europe/Kiev] PHP Fatal error:  Class 'FileNotFoundException' not found in /var/www/engine.loc/controllers/Plugins.php on line 63
+[27-Jan-2016 11:58:02 Europe/Kiev] PHP Fatal error:  Access level to controllers\engine\Languages::$languages must be protected (as in class controllers\Engine) or weaker in /var/www/engine.loc/controllers/engine/Languages.php on line 28
+[27-Jan-2016 12:01:31 Europe/Kiev] PHP Strict Standards:  Non-static method models\engine\Languages::get() should not be called statically, assuming $this from incompatible context in /var/www/engine.loc/controllers/Engine.php on line 111
+[27-Jan-2016 12:01:31 Europe/Kiev] PHP Strict Standards:  Non-static method models\engine\Languages::get() should not be called statically, assuming $this from incompatible context in /var/www/engine.loc/controllers/Engine.php on line 111
+[27-Jan-2016 12:24:11 Europe/Kiev] PHP Warning:  Missing argument 1 for controllers\engine\plugins\AdminsGroup::process() in /var/www/engine.loc/controllers/engine/plugins/AdminsGroup.php on line 69
+[27-Jan-2016 15:22:21 Europe/Kiev] PHP Fatal error:  Uncaught  --> Smarty: Unable to load template file 'options.tpl' in 'plugins/admins/groups/form.tpl' <-- 
+  thrown in /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_templatebase.php on line 129
+[27-Jan-2016 15:23:09 Europe/Kiev] PHP Fatal error:  Uncaught  --> Smarty: Unable to load template file '/themes/engine/views/plugins/admins/groups/options.tpl' in 'plugins/admins/groups/form.tpl' <-- 
+  thrown in /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_templatebase.php on line 129
+[27-Jan-2016 15:29:25 Europe/Kiev] PHP Fatal error:  Uncaught  --> Smarty: Unable to load template file 'options.tpl' in 'plugins/admins/groups/form.tpl' <-- 
+  thrown in /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_templatebase.php on line 129

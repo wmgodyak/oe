@@ -16,6 +16,7 @@ use controllers\core\Template;
 use controllers\engine\Admin;
 use controllers\engine\Lang;
 use controllers\engine\PluginsFactory;
+use models\engine\Languages;
 
 if ( !defined("CPATH") ) die();
 
@@ -60,11 +61,15 @@ abstract class Engine extends Controller
 
     private static $initialized = false;
 
+    protected $languages;
+
     public function __construct()
     {
         parent::__construct();
 
         $this->engine = new \models\Engine();
+
+        $this->languages = new Languages();
 
         $controller  = $this->request->get('controller');
         $action      = $this->request->get('action');
@@ -129,25 +134,25 @@ abstract class Engine extends Controller
             $this->requireComponents();
         }
 
-        $controller  = $this->request->get('controller');
-        $action      = $this->request->get('action');
+//        $controller  = $this->request->get('controller');
+//        $action      = $this->request->get('action');
 
-        $t_json =
-            [
-                'common' => Lang::getInstance()->t('common'),
-                mb_strtolower($controller) => Lang::getInstance()->t(mb_strtolower($controller))
-            ];
-
-
-        foreach ($this->required_components as $c) {
-            $t_json[$c] = $this->t($c);
-        }
-
-        $this->template->assign
-        (
-            't_json',
-            json_encode($t_json)
-        );
+//        $t_json =
+//            [
+//                'common' => Lang::getInstance()->t('common'),
+//                mb_strtolower($controller) => Lang::getInstance()->t(mb_strtolower($controller))
+//            ];
+//
+//
+//        foreach ($this->required_components as $c) {
+//            $t_json[$c] = $this->t($c);
+//        }
+//
+//        $this->template->assign
+//        (
+//            't_json',
+//            json_encode($t_json)
+//        );
 
         $plugins = Plugins::get();
         $this->template->assign('plugins', $plugins);

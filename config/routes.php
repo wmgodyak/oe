@@ -11,7 +11,7 @@ $routes = array();
 //$routes[] = array('/engine/content/images/([a-zA-Z_]+)/([a-zA-Z_]+)/?(.*)', 'controllers\engine\content\images\:controller:action');
 
     //http://engine_6x.loc/engine/content/group/edit/3
-//    $routes[]  = array('/engine/plugins/([a-zA-Z_]+)/([a-zA-Z_]+)/?(.*)', 'controllers\engine\plugins\:controller:action');
+    $routes[]  = array('/engine/plugins/([a-zA-Z_]+)/([a-zA-Z_]+)/?(.*)', 'controllers\engine\plugins\:controller:action');
 //    $routes[]  = array('/engine/content/([a-zA-Z_]+)/([a-zA-Z_]+)/?(.*)', 'controllers\engine\content\:controller:action');
     //http://engine_6x.loc/engine/users/group/edit/3
 //    $routes[]  = array('/engine/users/([a-zA-Z_]+)/([a-zA-Z_]+)/?(.*)', 'controllers\engine\users\:controller:action');

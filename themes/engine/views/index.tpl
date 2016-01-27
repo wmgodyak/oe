@@ -105,6 +105,7 @@
         </div>
     {/if}
 <script src="{$theme_url}assets/js/vendor/pace.js"></script>
+<script src="{$theme_url}assets/js/vendor/jquery.cookie.js"></script>
 <script src="{$theme_url}assets/js/vendor/jstree.min.js"></script>
 <script src="{$theme_url}assets/js/vendor/jquery.materialripple.js"></script>
 <script src="{$theme_url}assets/js/vendor/jquery.dataTables.min.js"></script>
@@ -115,7 +116,7 @@
 <script src="{$theme_url}assets/js/vendor/select2.min.js"></script>
 <script src="{$theme_url}assets/js/vendor/jquery.maskedinput.min.js"></script>
 <script>
-    var TOKEN = '{$token}', ONLINE = 0, t = {$t_json};
+    var TOKEN = '{$token}', ONLINE = 0, t = {json_encode($t)};
 
     jQuery.extend(jQuery.validator.messages, {
         required: "Це поле обов'язкове",

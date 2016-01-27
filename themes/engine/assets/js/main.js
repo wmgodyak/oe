@@ -191,36 +191,6 @@ var engine = {
             $('#example').DataTable();
         })();
 
-        (function(){
-            var treeList = $('#tree');
-            if(treeList.length){
-                treeList.jstree({
-                    "plugins" : [ "themes", "html_data", "ui", "crrm", "contextmenu" ],
-                    "contextmenu": {
-                        "items": function () {
-                            return {
-                                "Create": {
-                                    "label": "Додати сторінку",
-                                    'icon': "fa fa-plus"
-                                },
-                                "Edit": {
-                                    "label": "Редагувати сторінгку",
-                                    'icon':'fa fa-pencil'
-                                },
-                                "List": {
-                                    "label": "Список підсторінок",
-                                    'icon': 'fa fa-list'
-                                },
-                                "Delete": {
-                                    "label": "Видалити сторінку",
-                                    'icon': 'fa fa-times-circle-o'
-                                }
-                            };
-                        }
-                    }
-                });
-            }
-        })();
     },
     tree : function(id)
     {
@@ -228,6 +198,7 @@ var engine = {
 
         var config = {
             'core': {
+                "check_callback" : true,
                 'themes' : {
                     'responsive': false
                 },
@@ -241,25 +212,40 @@ var engine = {
                     }
                 }
             },
+            /*"cookies" : {
+                "cookie_options" : {path: '/'}
+            },*/
             'types' : {
                 /*'default' : {
-                    'icon' : 'fa fa-folder icon-state-info icon-md'
+                    'icon' : 'fa fa-folder icon-state-info icon-md',
                 },
-                'model' : {
+                'file' : {
                     'icon' : 'fa fa-file icon-state-default icon-md'
                 }*/
             },
             "contextmenu" : {
                 items: {
                     "ccp" : false
-                }
+                },
+                hide_on_mouseleave: true
             },
-            "plugins" : [ "wholerow" ]
+            "plugins" : [ "wholerow",  "ui", 'crrm', "cookies" ]
         };
 
+        var moveCallback;
+
         return {
+            refresh : function()
+            {
+                $('#'+id).jstree("refresh");
+            },
             setPlugin: function(plugin)
             {
+                for(var i=0;i<config.plugins.length; i++){
+                    if(config.plugins[i] == plugin){
+                        return this;
+                    }
+                }
                 config.plugins.push(plugin);
 
                 return this;
@@ -290,7 +276,7 @@ var engine = {
                 return this;
             },
             /**
-             * action ecample "action": function (obj) {
+             * action example "action": function (obj) {
                             var node_id= obj.reference[0].id;
                         }
              * @param name
@@ -301,16 +287,20 @@ var engine = {
              */
             setContextMenu: function(name, label, icon, action)
             {
-
-                //config.contextmenu.items.ccp = false;
-
                 config.contextmenu.items[name] = {
                     "label" : label,
                     "icon" : 'fa ' + icon,
                     "action": action
                 };
 
-                //this.setPlugin('contextmenu');
+                this.setPlugin('contextmenu');
+
+                return this;
+            },
+            move: function(callback)
+            {
+                moveCallback = callback;
+                this.setPlugin('dnd');
 
                 return this;
             },
@@ -323,7 +313,26 @@ var engine = {
                     return ;
                 }
 
-                $tree.jstree(config);
+                $tree.jstree(config)
+                    .on('click', 'a', function(e) {
+                        e.preventDefault();
+                        var treeLink = $(this).attr("href");
+                        if (treeLink !== "#"){
+                            self.location.href = treeLink;
+                        }
+                    });
+
+                    if(typeof moveCallback != 'undefined'){
+                        $tree.bind("move_node.jstree", moveCallback);
+                    }
+
+
+                    //$tree.delegate('a', 'contextmenu', function(e) {
+                    //    var id = $.jstree._focused()._get_node(this).attr('id');
+                    //    $.cookie('jstree_select', '#'+id);
+                    //    $('.jstree a').removeClass('jstree-clicked');
+                    //    $('li#'+id).find('a:first').addClass('jstree-clicked');
+                    //});
             }
         };
     }
@@ -334,17 +343,6 @@ $(document).ready(function(){
     engine.toggleSidebar();
     engine.toggleNav();
     engine.admin.init();
-
-    var tree = new engine.tree('usersGroup');
-    console.dir(tree);
-    tree
-        .setUrl('./plugins/UsersGroup/items')
-        .setContextMenu('create', 'Додати', 'fa-file', function(o){
-            var node_id= o.reference[0].id;
-
-            }
-        )
-        .init();
 });
 
 engine.admin = {
