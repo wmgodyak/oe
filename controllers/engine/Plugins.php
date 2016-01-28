@@ -16,41 +16,41 @@ use helpers\PHPDocReader;
 defined("CPATH") or die();
 
 /**
- * Class Components
- * @name Компоненти
+ * Class Plugins
+ * @name Плагіни
  * @icon fa-puzzle-piece
  * @author Volodymyr Hodiak
  * @version 1.0.0
  * @rang 300
  * @package controllers\engine
  */
-class Components extends Engine
+class Plugins extends Engine
 {
-    private $mComponents;
+    private $mPlugins;
 
-    const PATH = 'controllers/engine/';
+    const PATH = 'controllers/engine/plugins/';
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->mComponents = new \models\engine\Components();
+        $this->mPlugins = new \models\engine\Plugins();
     }
 
     public function index()
     {
-        //  $this->appendToPanel((string)Button::create($this->t('components.install'), ['class' => 'btn-md install-archive']));
+        //  $this->appendToPanel((string)Button::create($this->t('plugins.install'), ['class' => 'btn-md install-archive']));
 
         $t = new DataTables();
 
-        $t  -> setId('components')
-            -> ajaxConfig('components/items')
+        $t  -> setId('plugins')
+            -> ajaxConfig('plugins/items')
 //            -> setConfig('order', array(0, 'desc'))
             -> th($this->t('common.tbl_name'))
-            -> th($this->t('components.author'))
-            -> th($this->t('components.controller'))
-            -> th($this->t('components.version'))
-            -> th($this->t('components.rang'))
+            -> th($this->t('plugins.author'))
+            -> th($this->t('plugins.controller'))
+            -> th($this->t('plugins.version'))
+            -> th($this->t('plugins.rang'))
             -> th($this->t('common.tbl_func'))
         ;
 
@@ -82,9 +82,9 @@ class Components extends Engine
 
         $res = array();
         $t = new DataTables();
-        $t_installed = $this->t('components.installed');
+        $t_installed = $this->t('plugins.installed');
         foreach ($items as $i=>$item) {
-            $data = $this->mComponents->data($item['controller']);
+            $data = $this->mPlugins->data($item['controller']);
             $installed = isset($data['id']);
 
             if($installed) $item = array_merge($item, $data);
@@ -103,19 +103,18 @@ class Components extends Engine
                 (
                     Icon::create($icon),
                     [
-                        'class'     => Button::TYPE_PRIMARY  . " b-component-" . ($installed ? 'uninstall' : 'install'),
+                        'class'     => Button::TYPE_PRIMARY  . " b-plugin-" . ($installed ? 'uninstall' : 'install'),
                         'data-id'   => ($installed ? $data['id'] : $item['controller']),
-                        'data-type' => 'component',
-                        'title'     => ($installed ? $this->t('components.uninstall') : $this->t('components.install'))
+                        'title'     => ($installed ? $this->t('plugins.uninstall') : $this->t('plugins.install'))
                     ]
                 ) . ($installed ?
                     (string) Button::create
                     (
                         Icon::create($icon_pub),
                         [
-                            'class' => Button::TYPE_PRIMARY  . " b-component-" . ($installed && $data['published'] == 1 ? 'hide' : 'pub'),
+                            'class' => Button::TYPE_PRIMARY  . " b-plugin-" . ($installed && $data['published'] == 1 ? 'hide' : 'pub'),
                             'data-id' => $data['id'],
-                            'title'   => ($installed && $data['published'] == 1 ? $this->t('components.pub') : $this->t('components.hide'))
+                            'title'   => ($installed && $data['published'] == 1 ? $this->t('plugins.pub') : $this->t('plugins.hide'))
                         ]
                     ) : '').
                 ($installed ?
@@ -123,10 +122,9 @@ class Components extends Engine
                     (
                         Icon::create(Icon::TYPE_EDIT),
                         [
-                            'class'   => Button::TYPE_PRIMARY  . " b-component-edit",
+                            'class'   => Button::TYPE_PRIMARY  . " b-plugin-edit",
                             'data-id' => $data['id'],
-                            'data-type' => 'components',
-                            'title'   => $this->t('components.edit')
+                            'title'   => $this->t('plugins.edit')
                         ]
                     )
                     : '')
@@ -139,17 +137,15 @@ class Components extends Engine
 
     public function create()
     {
-        // TODO: Implement create() method.
+
     }
 
     public function edit($id)
     {
-        $data = $this->mComponents->getDataByID($id);
-
+        die('OKI');
+        $data = $this->mPlugins->getDataByID($id);
         $this->template->assign('data', $data);
-        $this->template->assign('tree', $this->mComponents->tree());
-
-        $this->response->body($this->template->fetch('components/edit'))->asHtml();
+        $this->response->body($this->template->fetch('plugins/edit'))->asHtml();
     }
 
     public function delete($id)
@@ -170,7 +166,8 @@ class Components extends Engine
         if(FormValidation::hasErrors()){
             $i = FormValidation::getErrors();
         } else {
-            $s = $this->mComponents->update($id, $data);
+            $components = $this->request->post('components');
+            $s = $this->mPlugins->update($id, $data, $components);
         }
 
         $this->response->body(['s'=>$s, 'i' => $i])->asJSON();
@@ -180,24 +177,24 @@ class Components extends Engine
 
     public function install()
     {
-        $component = $this->request->post('c');
+        $plugin = $this->request->post('c');
 
         if($this->request->post('action')){
 
             $data = $this->request->post('data'); $s=0; $i=[];
-            $data['controller'] = $component;
+            $data['controller'] = $plugin;
 
-            FormValidation::setRule(['type', 'controller'], FormValidation::REQUIRED);
+            FormValidation::setRule(['controller'], FormValidation::REQUIRED);
 
             FormValidation::run($data);
 
             if(FormValidation::hasErrors()){
                 $i = FormValidation::getErrors();
-            } elseif($this->mComponents->isInstalled($component)){
-                $i[] = ["data[parent_id]" => $this->t('components.error_component_installed')];
+            } elseif($this->mPlugins->isInstalled($plugin)){
+                $i[] = ["data[parent_id]" => $this->t('plugins.error_plugin_installed')];
             } else {
 
-                $meta = PHPDocReader::getMeta('controllers\engine\\'. $component);
+                $meta = PHPDocReader::getMeta('controllers\engine\plugins\\'. $plugin);
 
                 if(isset($meta['icon']))     $data['icon']     = $meta['icon'];
                 if(isset($meta['position'])) $data['position'] = $meta['position'];
@@ -206,78 +203,47 @@ class Components extends Engine
                 if(isset($meta['version']))  $data['version']  = $meta['version'];
 
                 $data['published'] = 1;
-
-                $s = $this->mComponents->create($data);
+                $components = $this->request->post('components');
+                $s = $this->mPlugins->create($data, $components);
             }
 
             $this->response->body(['s'=>$s, 'i' => $i])->asJSON();
         }
 
-        $this->template->assign('tree', $this->mComponents->tree());
-        $this->template->assign('component', $component);
-        return $this->template->fetch('components/install_component');
-    }
-
-    private function installArchive()
-    {
-        $data = $this->request->post('data'); $s=0; $i=[]; $m='';
-        $file = $_FILES['file'];
-        // перевірка підтримки zip
-        if (! class_exists('ZipArchive')) {
-            $i[] = ["file" => $this->t('components.error_component_installed')];
-        } else {
-            $file_info = pathinfo($file['name']);
-            $file_extension = $file_info['extension'];
-            $file_content = file_get_contents($file['tmp_name']);
-
-            if(empty($file_content)){
-                $i[] = ["file" => 'failure php://input  return empty string'];
-            }
-            if(empty($i)){
-                if ($file_extension == 'zip' && class_exists('ZipArchive')) {
-
-                    $zip = new \ZipArchive();
-                    $res = $zip->open($file['tmp_name']);
-                    $files_exists = [];
-
-                    for ($c = 0; $c < $zip->numFiles; $c++) {
-                        if(
-                            !is_dir(DOCROOT . $zip->getNameIndex($c)) &&
-                            file_exists(DOCROOT . $zip->getNameIndex($c))
-                        )
-                        {
-                            $files_exists[] = $zip->getNameIndex($c);
-                        }
-                    }
-
-                    if(!empty($files_exists)){
-                        $i[] = ["file" =>  $this->t('components.error_file_exists') . implode('<br>', $files_exists)];
-                    }
-
-                    if ($res > 0 && $res != TRUE) {
-                        $i[] = ["file" => 'failure code:' . $res];
-                    }
-
-                    if(empty($i)){
-                        $zip->extractTo(DOCROOT);
-
-                        $s=1;
-                    }
-                    $zip->close();
-                }
-            }
-        }
-
-        $this->response->body(['s'=>$s, 'i' => $i, 'm' => $m])->asJSON();
+        $this->template->assign('components', $this->mPlugins->getComponents());
+        $this->template->assign('plugin', $plugin);
+        return $this->template->fetch('plugins/install');
     }
 
     public function uninstall()
     {
         $id = $this->request->post('id', 'i');
         if(empty($id)) die;
-        $isset = $this->mComponents->is($id);
+        $isset = $this->mPlugins->is($id);
         if($isset){
-            $this->response->body($this->mComponents->delete($id))->asPlainText();
+            $this->response->body($this->mPlugins->delete($id))->asPlainText();
         }
     }
+
+
+    public function pub()
+    {
+        $id = $this->request->post('id', 'i');
+        if(empty($id)) die;
+        $isset = $this->mPlugins->is($id);
+        if($isset){
+            $this->response->body($this->mPlugins->pub($id))->asPlainText();
+        }
+    }
+
+    public function hide()
+    {
+        $id = $this->request->post('id', 'i');
+        if(empty($id)) die;
+        $isset = $this->mPlugins->is($id);
+        if($isset){
+            $this->response->body($this->mPlugins->hide($id))->asPlainText();
+        }
+    }
+
 }

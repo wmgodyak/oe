@@ -10,7 +10,6 @@
 namespace controllers;
 
 use controllers\core\Request;
-use controllers\core\Template;
 use models\core\DB;
 
 defined("CPATH") or die();
@@ -30,11 +29,19 @@ class Plugins
     {
         $request = Request::getInstance();
 
-        $action  = $request->get('action');
-        $args    = $request->get('args');
+        $controller  = $request->get('controller');
+        $action      = $request->get('action');
+        $args        = $request->get('args');
 
         $r = DB::getInstance()
-            -> select("select controller, icon, rang, place, settings from components where type='plugin' order by abs(position) asc")
+            -> select("
+                select p.controller, p.icon, p.rang, p.place, p.settings
+                from plugins p
+                join components c on c.controller = '{$controller}'
+                join plugins_components pc on pc.plugins_id=p.id and pc.components_id=c.id
+                where p.published=1
+                order by abs(p.position) asc
+            ")
             -> all();
 
         foreach ($r as $item) {

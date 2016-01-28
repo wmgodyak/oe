@@ -30,4 +30,5 @@
 
     <input type="hidden" name="action" value="{$action}">
     <input type="hidden" name="token" value="{$token}">
+    <input type="hidden" name="a" value="1">
 </form>

@@ -6,20 +6,26 @@
  * Date: 28.01.16 : 14:02
  */
 
-
 namespace models\engine;
 
-
+use helpers\PHPDocReader;
 use models\core\Model;
 
 defined("CPATH") or die();
 
-class Components extends Model
+class Plugins extends Model
 {
-    public function create($data)
+    public function create($data, $components)
     {
         $data['controller'] = lcfirst($data['controller']);
-        return self::$db->insert('components', $data);
+        $plugins_id = self::$db->insert('plugins', $data);
+        if($plugins_id > 0){
+            foreach ($components as $k=>$components_id) {
+                PluginsComponents::create($plugins_id, $components_id);
+            }
+        }
+
+        return $plugins_id;
     }
     /**
      * @param $controller
@@ -28,7 +34,7 @@ class Components extends Model
     public function isInstalled($controller)
     {
         $controller = lcfirst($controller);
-        return self::$db->select("select id from components where controller = '{$controller}' limit 1")->row('id') > 0;
+        return self::$db->select("select id from plugins where controller = '{$controller}' limit 1")->row('id') > 0;
     }
 
     /**
@@ -38,7 +44,7 @@ class Components extends Model
      */
     public function data($controller, $key = '*')
     {
-        return self::$db->select("select {$key} from components where controller = '{$controller}' limit 1")->row($key);
+        return self::$db->select("select {$key} from plugins where controller = '{$controller}' limit 1")->row($key);
     }
 
 
@@ -49,7 +55,7 @@ class Components extends Model
      */
     public function getDataByID($id, $key = '*')
     {
-        return self::$db->select("select {$key} from components where id={$id} limit 1")->row($key);
+        return self::$db->select("select {$key} from plugins where id={$id} limit 1")->row($key);
     }
 
 
@@ -60,7 +66,7 @@ class Components extends Model
      */
     public function is($id)
     {
-        return self::$db->select("select id from components where id = '{$id}' limit 1")->row('id') > 0;
+        return self::$db->select("select id from plugins where id = '{$id}' limit 1")->row('id') > 0;
     }
 
 
@@ -70,7 +76,7 @@ class Components extends Model
      */
     public function pub($id)
     {
-        return self::$db->update('components', ['published' => 1], "id= '{$id}' limit 1");
+        return self::$db->update('plugins', ['published' => 1], "id= '{$id}' limit 1");
     }
 
     /**
@@ -79,31 +85,7 @@ class Components extends Model
      */
     public function hide($id)
     {
-        return self::$db->update('components', ['published' => 0], "id= '{$id}' limit 1");
-    }
-
-    /**
-     * @return array
-     */
-    public function tree()
-    {
-        $res = [];
-        foreach ($this->treeItems(0) as $item) {
-            if($item['isfolder']) $item['children'] = $this->treeItems($item['id']);
-            $res[] = $item;
-        }
-        return $res;
-    }
-
-    /**
-     * @param $parent_id
-     * @return mixed
-     */
-    private function treeItems($parent_id)
-    {
-        return self::$db
-            ->select("select id,isfolder,controller from components where parent_id={$parent_id} and published=1")
-            ->all();
+        return self::$db->update('plugins', ['published' => 0], "id= '{$id}' limit 1");
     }
 
     /**
@@ -112,16 +94,44 @@ class Components extends Model
      */
     public function delete($id)
     {
-        return self::$db->delete('components', " id={$id} limit 1");
+        return self::$db->delete('plugins', " id={$id} limit 1");
     }
 
     /**
      * @param $id
      * @param $data
+     * @param $components
      * @return bool
      */
-    public function update($id, $data)
+    public function update($id, $data, $components)
     {
-        return self::$db->update('components', $data, "id = '{$id}' limit 1");
+        $in = PluginsComponents::getComponents($id);
+        foreach ($components as $i=>$components_id) {
+            if(in_array($components_id, $in)){
+                $k = array_search($components_id, $in);
+                unset($k); continue;
+            }
+            PluginsComponents::create($id, $components_id);
+        }
+        if(!empty($in)){
+            foreach ($in as $i=>$components_id) {
+                PluginsComponents::delete($id, $components_id);
+            }
+        }
+        return self::$db->update('plugins', $data, "id = '{$id}' limit 1");
+    }
+
+    public function getComponents()
+    {
+        $res = [];
+        foreach (self::$db->select("select id, controller from components where published=1")->all() as $item) {
+
+            $row = PHPDocReader::getMeta('controllers\engine\\' . ucfirst($item['controller']));
+            if(!isset($row['name'])) continue;
+
+            $item['name'] = $row['name'];
+            $res[] = $item;
+        }
+        return $res;
     }
 }

@@ -505,3 +505,105 @@ Stack trace:
 [28-Jan-2016 10:44:54 Europe/Kiev] PHP Warning:  Missing argument 1 for controllers\engine\plugins\AdminsGroup::__construct(), called in /var/www/engine.loc/controllers/core/Route.php on line 106 and defined in /var/www/engine.loc/controllers/engine/plugins/AdminsGroup.php on line 28
 [28-Jan-2016 11:12:17 Europe/Kiev] PHP Fatal error:  Call to a member function setMeta() on a non-object in /var/www/engine.loc/controllers/Plugins.php on line 65
 [28-Jan-2016 11:13:13 Europe/Kiev] PHP Fatal error:  Call to a member function setMeta() on a non-object in /var/www/engine.loc/controllers/Plugins.php on line 65
+[28-Jan-2016 12:10:43 Europe/Kiev] PHP Fatal error:  Class 'models\engine\Components' not found in /var/www/engine.loc/controllers/engine/Components.php on line 34
+[28-Jan-2016 12:11:17 Europe/Kiev] PHP Fatal error:  Class 'models\engine\Components' not found in /var/www/engine.loc/controllers/engine/Components.php on line 34
+[28-Jan-2016 12:11:58 Europe/Kiev] PHP Fatal error:  Class 'models\engine\Components' not found in /var/www/engine.loc/controllers/engine/Components.php on line 34
+[28-Jan-2016 12:11:58 Europe/Kiev] PHP Fatal error:  Class 'models\engine\Components' not found in /var/www/engine.loc/controllers/engine/Components.php on line 34
+[28-Jan-2016 12:11:59 Europe/Kiev] PHP Fatal error:  Class 'models\engine\Components' not found in /var/www/engine.loc/controllers/engine/Components.php on line 34
+[28-Jan-2016 13:45:58 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:45:58 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:45:58 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:45:58 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:45:59 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:45:59 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:45:59 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:46:45 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:46:45 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:46:45 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:46:45 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:46:45 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:46:45 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:46:45 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:46:49 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:46:49 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:46:49 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:46:49 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:46:49 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:46:49 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:46:50 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:47:13 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:47:13 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:47:14 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:47:14 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:47:14 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:47:14 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:47:14 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:47:16 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:47:16 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:47:16 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:47:36 Europe/Kiev] PHP Fatal error:  Cannot redeclare class controllers\engine\Components in /var/www/engine.loc/controllers/engine/Components.php on line 178
+[28-Jan-2016 13:48:47 Europe/Kiev] PHP Fatal error:  Cannot redeclare class controllers\engine\Components in /var/www/engine.loc/controllers/engine/Components.php on line 177
+[28-Jan-2016 13:50:47 Europe/Kiev] PHP Fatal error:  Cannot redeclare class controllers\engine\Components in /var/www/engine.loc/controllers/engine/Components.php on line 178
+[28-Jan-2016 13:50:54 Europe/Kiev] PHP Fatal error:  Cannot redeclare class controllers\engine\Components in /var/www/engine.loc/controllers/engine/Components.php on line 178
+[28-Jan-2016 13:51:14 Europe/Kiev] PHP Fatal error:  Cannot redeclare class controllers\engine\Components in /var/www/engine.loc/controllers/engine/Components.php on line 176
+[28-Jan-2016 13:56:05 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:56:06 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:56:06 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 178
+[28-Jan-2016 13:56:06 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:56:06 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:56:06 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:56:06 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 177
+[28-Jan-2016 13:56:10 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:56:10 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:56:11 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:56:11 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 176
+[28-Jan-2016 13:56:11 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:56:11 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 178
+[28-Jan-2016 13:56:11 Europe/Kiev] PHP Fatal error:  Cannot override final method controllers\Engine::setButtonsPanel() in /var/www/engine.loc/controllers/engine/Components.php on line 0
+[28-Jan-2016 13:56:33 Europe/Kiev] PHP Fatal error:  Cannot redeclare class controllers\engine\Components in /var/www/engine.loc/controllers/engine/Components.php on line 177
+[28-Jan-2016 14:03:11 Europe/Kiev] PHP Fatal error:  Class 'controllers\engine\PHPDocReader' not found in /var/www/engine.loc/controllers/engine/Components.php on line 59
+[28-Jan-2016 15:06:45 Europe/Kiev] PHP Fatal error:  Uncaught exception 'ReflectionException' with message 'Class controllers\engine\pluginsAdminsGroup does not exist' in /var/www/engine.loc/helpers/PHPDocReader.php:19
+Stack trace:
+#0 /var/www/engine.loc/helpers/PHPDocReader.php(19): ReflectionClass->__construct('controllers\eng...')
+#1 /var/www/engine.loc/controllers/engine/Plugins.php(70): helpers\PHPDocReader::getMeta('controllers\eng...')
+#2 [internal function]: controllers\engine\Plugins->items()
+#3 /var/www/engine.loc/controllers/core/Route.php(117): call_user_func(Array)
+#4 /var/www/engine.loc/index.php(24): controllers\core\Route::run()
+#5 {main}
+  thrown in /var/www/engine.loc/helpers/PHPDocReader.php on line 19
+[28-Jan-2016 15:07:40 Europe/Kiev] PHP Fatal error:  Call to undefined method models\engine\Plugins::tree() in /var/www/engine.loc/controllers/engine/Plugins.php on line 214
+[28-Jan-2016 15:08:49 Europe/Kiev] PHP Fatal error:  Call to undefined method models\engine\Plugins::tree() in /var/www/engine.loc/controllers/engine/Plugins.php on line 214
+[28-Jan-2016 15:09:01 Europe/Kiev] PHP Fatal error:  Uncaught  --> Smarty: Unable to load template file 'plugins/install_component.tpl' <-- 
+  thrown in /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_templatebase.php on line 129
+[28-Jan-2016 15:14:41 Europe/Kiev] PHP Fatal error:  Uncaught  --> Smarty: Unable to load template file 'plugins/install_plugin.tpl' <-- 
+  thrown in /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_templatebase.php on line 129
+[28-Jan-2016 15:14:44 Europe/Kiev] PHP Fatal error:  Uncaught  --> Smarty: Unable to load template file 'plugins/install_plugin.tpl' <-- 
+  thrown in /var/www/engine.loc/vendor/smarty/sysplugins/smarty_internal_templatebase.php on line 129
+[28-Jan-2016 15:29:05 Europe/Kiev] PHP Fatal error:  Uncaught exception 'ReflectionException' with message 'Class controllers\engine\plugins\Admins does not exist' in /var/www/engine.loc/helpers/PHPDocReader.php:19
+Stack trace:
+#0 /var/www/engine.loc/helpers/PHPDocReader.php(19): ReflectionClass->__construct('controllers\eng...')
+#1 /var/www/engine.loc/models/engine/Plugins.php(108): helpers\PHPDocReader::getMeta('controllers\eng...')
+#2 /var/www/engine.loc/controllers/engine/Plugins.php(212): models\engine\Plugins->getComponents()
+#3 [internal function]: controllers\engine\Plugins->install()
+#4 /var/www/engine.loc/controllers/core/Route.php(117): call_user_func(Array)
+#5 /var/www/engine.loc/index.php(24): controllers\core\Route::run()
+#6 {main}
+  thrown in /var/www/engine.loc/helpers/PHPDocReader.php on line 19
+[28-Jan-2016 15:37:41 Europe/Kiev] PHP Fatal error:  Uncaught exception 'ReflectionException' with message 'Class controllers\engine\ does not exist' in /var/www/engine.loc/helpers/PHPDocReader.php:19
+Stack trace:
+#0 /var/www/engine.loc/helpers/PHPDocReader.php(19): ReflectionClass->__construct('controllers\eng...')
+#1 /var/www/engine.loc/controllers/engine/Plugins.php(196): helpers\PHPDocReader::getMeta('controllers\eng...')
+#2 [internal function]: controllers\engine\Plugins->install()
+#3 /var/www/engine.loc/controllers/core/Route.php(117): call_user_func(Array)
+#4 /var/www/engine.loc/index.php(24): controllers\core\Route::run()
+#5 {main}
+  thrown in /var/www/engine.loc/helpers/PHPDocReader.php on line 19
+[28-Jan-2016 15:52:46 Europe/Kiev] PHP Fatal error:  Uncaught exception 'ReflectionException' with message 'Class controllers\engine\plugins\ does not exist' in /var/www/engine.loc/helpers/PHPDocReader.php:19
+Stack trace:
+#0 /var/www/engine.loc/helpers/PHPDocReader.php(19): ReflectionClass->__construct('controllers\eng...')
+#1 /var/www/engine.loc/controllers/engine/Plugins.php(197): helpers\PHPDocReader::getMeta('controllers\eng...')
+#2 [internal function]: controllers\engine\Plugins->install()
+#3 /var/www/engine.loc/controllers/core/Route.php(117): call_user_func(Array)
+#4 /var/www/engine.loc/index.php(24): controllers\core\Route::run()
+#5 {main}
+  thrown in /var/www/engine.loc/helpers/PHPDocReader.php on line 19

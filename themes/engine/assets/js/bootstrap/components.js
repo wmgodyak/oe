@@ -1,46 +1,46 @@
-engine.plugins = {
+engine.components = {
     init: function()
     {
         //engine.require('installer');
 
-        console.log('Init plugins');
+        console.log('Init components');
 
-        $(document).on('click', '.b-plugin-pub', function(){
-            engine.plugins.pub($(this).data('id'));
+        $(document).on('click', '.b-component-pub', function(){
+            engine.components.pub($(this).data('id'));
         });
 
-        $(document).on('click', '.b-plugin-hide', function(){
-            engine.plugins.hide($(this).data('id'));
+        $(document).on('click', '.b-component-hide', function(){
+            engine.components.hide($(this).data('id'));
         });
 
-        $(document).on('click', '.b-plugin-install', function(){
-            engine.plugins.install($(this).data('id'));
+        $(document).on('click', '.b-component-install', function(){
+            engine.components.install($(this).data('id'),$(this).data('type'));
         });
 
-        $(document).on('click', '.b-plugin-uninstall', function(){
-            engine.plugins.uninstall($(this).data('id'));
+        $(document).on('click', '.b-component-uninstall', function(){
+            engine.components.uninstall($(this).data('id'));
         });
-        $(document).on('click', '.b-plugin-edit', function(){
-            engine.plugins.edit($(this).data('id'));
+        $(document).on('click', '.b-component-edit', function(){
+            engine.components.edit($(this).data('id'), $(this).data('type'));
         });
         $(document).on('click', '.install-archive', function(){
-            engine.plugins.install(null, 'archive');
+            engine.components.install(null, 'archive');
         });
     },
     pub : function(id)
     {
         engine.confirm
         (
-            t.plugins.pub_question,
+            t.components.pub_question,
             function()
             {
                 engine.request.post({
-                    url: './plugins/pub',
+                    url: './components/pub',
                     data: {id: id},
                     success: function(d)
                     {
                         if(d > 0){
-                            engine.refreshDataTable('plugins');
+                            engine.refreshDataTable('components');
                         }
                     }
                 });
@@ -52,16 +52,16 @@ engine.plugins = {
     {
         engine.confirm
         (
-            t.plugins.hide_question,
+            t.components.hide_question,
             function()
             {
                 engine.request.post({
-                    url: './plugins/hide',
+                    url: './components/hide',
                     data: {id: id},
                     success: function(d)
                     {
                         if(d > 0){
-                            engine.refreshDataTable('plugins');
+                            engine.refreshDataTable('components');
                         }
                     }
                 });
@@ -69,30 +69,31 @@ engine.plugins = {
             }
         );
     },
-    install: function(plugin)
+    install: function(component, type)
     {
         engine.request.post({
-            url: './plugins/install',
-            data: {c: plugin},
+            url: './components/install',
+            data: {c: component, t: type},
             success: function(d)
             {
-                var bi = t.plugins.button_install;
+                var bi = t.components.button_install;
                 var buttons = {};
                 buttons[bi] =  function(){
-                    $('#pluginsInstall').submit();
+                    $('#componentsInstall').submit();
                 };
                 var dialog = engine.dialog({
                     content: d,
-                    title: t.plugins.install_title,
+                    title: 'Встановлення компоненту',
                     autoOpen: true,
                     width: 750,
                     modal: true,
                     buttons: buttons
                 });
-                $('#components').select2();
-                engine.validateAjaxForm('#pluginsInstall', function(d){
+                $('#data_parent_id').select2();
+
+                engine.validateAjaxForm('#componentsInstall', function(d){
                     if(d.s){
-                        engine.refreshDataTable('plugins');
+                        engine.refreshDataTable('components');
                         dialog.dialog('close').dialog('destroy').remove();
                         if(typeof d.m != 'undefined' && d.m != ''){
                             engine.alert(d.m);
@@ -107,16 +108,16 @@ engine.plugins = {
     {
         engine.confirm
         (
-            t.plugins.uninstall_question,
+            t.components.uninstall_question,
             function()
             {
                 engine.request.post({
-                    url: './plugins/uninstall',
+                    url: './components/uninstall',
                     data: {id: id},
                     success: function(d)
                     {
                         if(d > 0){
-                            engine.refreshDataTable('plugins');
+                            engine.refreshDataTable('components');
                         }
                     }
                 });
@@ -124,11 +125,11 @@ engine.plugins = {
             }
         );
     },
-    edit: function(id)
+    edit: function(id, type)
     {
         engine.request.post({
-            url: './plugins/edit/' + id,
-            data: {id: id},
+            url: './components/edit/' + id,
+            data: {id: id, c: type},
             success: function(d)
             {
                 var bi = t.common.button_save;
@@ -138,26 +139,25 @@ engine.plugins = {
                 };
                 var dialog = engine.dialog({
                     content: d,
-                    title: t.plugins.edit_title,
+                    title: t.components.edit_title,
                     autoOpen: true,
                     width: 750,
                     modal: true,
                     buttons: buttons
                 });
-
-                $('#components').select2();
+                $('#data_parent_id').select2();
 
                 engine.validateAjaxForm('#form', function(d){
                     if(d.s){
-                        engine.refreshDataTable('plugins');
+                        engine.refreshDataTable('components');
                         dialog.dialog('close').dialog('destroy').remove();
                     }
                 });
             }
         })
-    }
+    },
 };
 
 $(document).ready(function(){
-   engine.plugins.init();
+   engine.components.init();
 });

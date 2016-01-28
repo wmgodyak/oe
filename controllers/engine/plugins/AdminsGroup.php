@@ -16,8 +16,13 @@ use models\engine\UsersGroup;
 defined("CPATH") or die();
 
 /**
- * Class UsersGroup
- * @package controllers\engine\plugins
+ * Class AdminsGroup
+ * @name Групи користувачів
+ * @icon fa-users
+ * @author Volodymyr Hodiak
+ * @version 1.0.0
+ * @rang 300
+ * @package controllers\engine
  */
 class AdminsGroup extends Plugin
 {
@@ -40,34 +45,40 @@ class AdminsGroup extends Plugin
 
     public function create($parent_id=0)
     {
+        if(! $this->request->post('a')) return;
         $this->template->assign('action', 'create');
         $this->template->assign('data', ['parent_id' => $parent_id]);
         $this->template->assign('groups', $this->usersGroup->get());
         $this->template->assign('languages', $this->languages->get());
         $this->response->body($this->template->fetch('plugins/admins/groups/form'))->asHtml();
+//        return $this->template->fetch('plugins/admins/groups/form');
     }
 
     public function edit($id)
     {
+        if(! $this->request->post('a')) return;
         $this->template->assign('action', 'edit');
         $this->template->assign('groups', $this->usersGroup->get());
         $this->template->assign('languages', $this->languages->get());
         $this->template->assign('data', $this->adminsGroup->getData($id));
         $this->template->assign('info', $this->adminsGroup->getInfo($id));
         $this->response->body($this->template->fetch('plugins/admins/groups/form'))->asHtml();
+//        $this->template->fetch('plugins/admins/groups/form');
     }
 
     public function delete($id)
     {
+        if(! $this->request->post('a')) return '';
         return $this->adminsGroup->delete($id);
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @throws \Exception
      */
     public function process($id = 0)
     {
+        if(! $this->request->post('a')) return;
         if(! $this->request->isPost()) die;
 
         $data = $this->request->post('data');

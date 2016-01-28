@@ -10,9 +10,6 @@
             </select>
         </div>
     </div>
-
-    <input type="hidden" name="data[type]" value="{$type}">
-    <input type="hidden" name="t" value="{$type}">
     <input type="hidden" name="token" value="{$token}">
     <input type="hidden" name="c" value="{$component}">
     <input type="hidden" name="action" value="install">

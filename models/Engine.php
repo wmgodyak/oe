@@ -42,7 +42,7 @@ class Engine extends Model
             ->select("
                     select id, icon, isfolder, controller, rang
                     from components
-                    where parent_id={$parent_id} and type='component'
+                    where parent_id={$parent_id}
                     order by abs(position) asc
                 ")
             ->all();
