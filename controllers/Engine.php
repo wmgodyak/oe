@@ -134,26 +134,6 @@ abstract class Engine extends Controller
             $this->requireComponents();
         }
 
-//        $controller  = $this->request->get('controller');
-//        $action      = $this->request->get('action');
-
-//        $t_json =
-//            [
-//                'common' => Lang::getInstance()->t('common'),
-//                mb_strtolower($controller) => Lang::getInstance()->t(mb_strtolower($controller))
-//            ];
-//
-//
-//        foreach ($this->required_components as $c) {
-//            $t_json[$c] = $this->t($c);
-//        }
-//
-//        $this->template->assign
-//        (
-//            't_json',
-//            json_encode($t_json)
-//        );
-
         $plugins = Plugins::get();
         $this->template->assign('plugins', $plugins);
     }

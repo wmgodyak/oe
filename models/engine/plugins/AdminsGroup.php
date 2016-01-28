@@ -121,7 +121,22 @@ class AdminsGroup extends Model
                 self::$db->update('users_group', ['isfolder' => 0], "id={$parent_id} limit 1");
             }
         }
+
+        $this->deleteChildren($id);
         return self::$db->delete("users_group", "id={$id} limit 1");
+    }
+
+    /**
+     * @param $parent_id
+     */
+    private function deleteChildren($parent_id)
+    {
+        foreach (self::$db->select("select id, isfolder from users_group where parent_id={$parent_id}")->all() as $item) {
+            if($item['isfolder']){
+                $this->deleteChildren($item['id']);
+            }
+        }
+        self::$db->delete("users_group", " parent_id={$parent_id}");
     }
 
     /**

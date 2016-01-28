@@ -9,6 +9,7 @@
 namespace controllers\engine\plugins;
 
 use controllers\Engine;
+use controllers\engine\Plugin;
 use helpers\FormValidation;
 use models\engine\UsersGroup;
 
@@ -18,7 +19,7 @@ defined("CPATH") or die();
  * Class UsersGroup
  * @package controllers\engine\plugins
  */
-class AdminsGroup extends Engine
+class AdminsGroup extends Plugin
 {
     private $adminsGroup;
     private $usersGroup;
@@ -31,11 +32,9 @@ class AdminsGroup extends Engine
         $this->usersGroup  = new UsersGroup();
     }
 
-
     public function index()
     {
-//        die('oki');
-        // TODO: Implement index() method.
+        $this->template->assign('admins_groups_icon', $this->meta['icon']);
         return $this->template->fetch('plugins/admins/groups/tree');
     }
 
@@ -50,7 +49,6 @@ class AdminsGroup extends Engine
 
     public function edit($id)
     {
-//        die('oki');
         $this->template->assign('action', 'edit');
         $this->template->assign('groups', $this->usersGroup->get());
         $this->template->assign('languages', $this->languages->get());
@@ -122,7 +120,7 @@ class AdminsGroup extends Engine
                 $item['parent'] = $parent_id;
             }
             $item['a_attr'] = array('id'=> $item['id'], 'href' => './admins/index/' . $item['id']);
-            $item['li_attr'] = array('id'=> $item['id']);
+            $item['li_attr'] = array('id'=> 'li_'.$item['id']);
             $item['type'] = $item['isfolder'] ? 'folder': 'file';
 //            $item['icon'] = 'fa fa-file icon-state-info icon-md';
 

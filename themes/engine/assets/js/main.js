@@ -212,9 +212,10 @@ var engine = {
                     }
                 }
             },
-            /*"cookies" : {
-                "cookie_options" : {path: '/'}
-            },*/
+            "cookies" : {
+                auto_save: true,
+                cookie_options : {path: '/'}
+            },
             'types' : {
                 /*'default' : {
                     'icon' : 'fa fa-folder icon-state-info icon-md',
