@@ -3,24 +3,26 @@
  * OYiEngine 7
  * @author Volodymyr Hodiak mailto:support@otakoi.com
  * @copyright Copyright (c) 2015 Otakoyi.com
- * Date: 13.01.16 : 9:46
+ * Date: 28.01.16 : 14:01
  */
-
-namespace controllers\engine\components;
+namespace controllers\engine;
 
 use controllers\Engine;
-use controllers\engine\DataTables;
 use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
 use helpers\FormValidation;
 use helpers\PHPDocReader;
-use models\engine\Component;
 
 defined("CPATH") or die();
 
 /**
  * Class Components
- * @package controllers\engine\components
+ * @name Компоненти
+ * @icon fa-puzzle-piece
+ * @author Volodymyr Hodiak
+ * @version 1.0.0
+ * @rang 300
+ * @package controllers\engine
  */
 class Components extends Engine
 {
@@ -30,8 +32,6 @@ class Components extends Engine
 
     public function __construct()
     {
-//        $this->requireComponent('Installer');
-
         parent::__construct();
 
         $this->mComponents = new \models\engine\Components();
@@ -39,7 +39,7 @@ class Components extends Engine
 
     public function index()
     {
-        $this->appendToPanel((string)Button::create($this->t('components.install'), ['class' => 'btn-md install-archive']));
+        //  $this->appendToPanel((string)Button::create($this->t('components.install'), ['class' => 'btn-md install-archive']));
 
         $t = new DataTables();
 
@@ -56,7 +56,7 @@ class Components extends Engine
 
         $this->output($t->render());
     }
-    
+
     public function items()
     {
         $items = array();
@@ -84,7 +84,7 @@ class Components extends Engine
         $t = new DataTables();
         $t_installed = $this->t('components.installed');
         foreach ($items as $i=>$item) {
-            $data = $this->mComponents->data($item['controller'], 'component');
+            $data = $this->mComponents->data($item['controller']);
             $installed = isset($data['id']);
 
             if($installed) $item = array_merge($item, $data);
@@ -144,12 +144,12 @@ class Components extends Engine
 
     public function edit($id)
     {
-        $data = Component::create($id)->data();
+        $data = $this->mComponents->getDataByID($id);
 
         $this->template->assign('data', $data);
         $this->template->assign('tree', $this->mComponents->tree());
 
-       $this->response->body($this->template->fetch('components/edit'))->asHtml();
+        $this->response->body($this->template->fetch('components/edit'))->asHtml();
     }
 
     public function delete($id)
@@ -170,9 +170,114 @@ class Components extends Engine
         if(FormValidation::hasErrors()){
             $i = FormValidation::getErrors();
         } else {
-            $s = Component::create($id)->update($data);
+            $s = $this->mComponents->update($id, $data);
         }
 
         $this->response->body(['s'=>$s, 'i' => $i])->asJSON();
+    }
+
+
+
+    public function install()
+    {
+        $component = $this->request->post('c');
+
+        if($this->request->post('action')){
+
+            $data = $this->request->post('data'); $s=0; $i=[];
+            $data['controller'] = $component;
+
+            FormValidation::setRule(['type', 'controller'], FormValidation::REQUIRED);
+
+            FormValidation::run($data);
+
+            if(FormValidation::hasErrors()){
+                $i = FormValidation::getErrors();
+            } elseif($this->mComponents->isInstalled($component)){
+                $i[] = ["data[parent_id]" => $this->t('components.error_component_installed')];
+            } else {
+
+                $meta = PHPDocReader::getMeta('controllers\engine\\'. $component);
+
+                if(isset($meta['icon']))     $data['icon']     = $meta['icon'];
+                if(isset($meta['position'])) $data['position'] = $meta['position'];
+                if(isset($meta['author']))   $data['author']   = $meta['author'];
+                if(isset($meta['rang']))     $data['rang']     = $meta['rang'];
+                if(isset($meta['version']))  $data['version']  = $meta['version'];
+
+                $data['published'] = 1;
+
+                $s = $this->mComponents->create($data);
+            }
+
+            $this->response->body(['s'=>$s, 'i' => $i])->asJSON();
+        }
+
+        $this->template->assign('tree', $this->mComponents->tree());
+        $this->template->assign('component', $component);
+        return $this->template->fetch('components/install_component');
+    }
+
+    private function installArchive()
+    {
+        $data = $this->request->post('data'); $s=0; $i=[]; $m='';
+        $file = $_FILES['file'];
+        // перевірка підтримки zip
+        if (! class_exists('ZipArchive')) {
+            $i[] = ["file" => $this->t('components.error_component_installed')];
+        } else {
+            $file_info = pathinfo($file['name']);
+            $file_extension = $file_info['extension'];
+            $file_content = file_get_contents($file['tmp_name']);
+
+            if(empty($file_content)){
+                $i[] = ["file" => 'failure php://input  return empty string'];
+            }
+            if(empty($i)){
+                if ($file_extension == 'zip' && class_exists('ZipArchive')) {
+
+                    $zip = new \ZipArchive();
+                    $res = $zip->open($file['tmp_name']);
+                    $files_exists = [];
+
+                    for ($c = 0; $c < $zip->numFiles; $c++) {
+                        if(
+                            !is_dir(DOCROOT . $zip->getNameIndex($c)) &&
+                            file_exists(DOCROOT . $zip->getNameIndex($c))
+                        )
+                        {
+                            $files_exists[] = $zip->getNameIndex($c);
+                        }
+                    }
+
+                    if(!empty($files_exists)){
+                        $i[] = ["file" =>  $this->t('components.error_file_exists') . implode('<br>', $files_exists)];
+                    }
+
+                    if ($res > 0 && $res != TRUE) {
+                        $i[] = ["file" => 'failure code:' . $res];
+                    }
+
+                    if(empty($i)){
+                        $zip->extractTo(DOCROOT);
+
+                        $s=1;
+                    }
+                    $zip->close();
+                }
+            }
+        }
+
+        $this->response->body(['s'=>$s, 'i' => $i, 'm' => $m])->asJSON();
+    }
+
+    public function uninstall()
+    {
+        $id = $this->request->post('id', 'i');
+        if(empty($id)) die;
+        $isset = $this->mComponents->is($id);
+        if($isset){
+            $this->response->body($this->mComponents->delete($id))->asPlainText();
+        }
     }
 }

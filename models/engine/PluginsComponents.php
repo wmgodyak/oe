@@ -3,16 +3,16 @@
  * OYiEngine 7
  * @author Volodymyr Hodiak mailto:support@otakoi.com
  * @copyright Copyright (c) 2015 Otakoyi.com
- * Date: 28.01.16 : 14:01
+ * Date: 28.01.16 : 15:20
  */
 
 
-namespace controllers\engine;
+namespace models\engine;
 
 
 defined("CPATH") or die();
 
-class Components
+class PluginsComponents
 {
 
 }
