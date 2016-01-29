@@ -18,6 +18,13 @@ defined("CPATH") or die();
  */
 abstract class Plugin extends Engine
 {
+    /**
+     * Автоматично запускати методи плагіну відповідно до екшинів
+     *
+     * @var bool
+     */
+    public $disallow_actions = [];
+
     protected $meta;
     protected $settings;
 

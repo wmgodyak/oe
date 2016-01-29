@@ -48,7 +48,8 @@ class Plugins
             if(!empty($item['settings'])) $item['settings'] = unserialize($item['settings']);
 
             $p = self::getItem($item['controller'], $item);
-            if(method_exists($p, $action)){
+            if(method_exists($p, $action) && !in_array($action, $p->disallow_actions)){ //  && $p->autoload == true
+
                 self::$plugins[$item['place']][] = call_user_func_array(array($p, $action), $args);
             }
         }

@@ -5,11 +5,16 @@ engine.admins = {
         $(document).on('click', '.b-admins-create', function(){
             engine.admins.create();
         });
+
         $(document).on('click', '.b-admins-edit', function(){
             engine.admins.edit($(this).data('id'));
         });
+
         $(document).on('click', '.b-admins-delete', function(){
             engine.admins.delete($(this).data('id'));
+        });
+        $(document).on('click', '.b-admins-group-create', function(){
+            engine.admins.group.create();
         });
 
         $(document).on('click','#changeAdminAvatar',function(){

@@ -91,6 +91,7 @@ class AdminsGroup extends Model
           from users_group g
           join users_group_info i on i.group_id=g.id and i.languages_id = {$this->languages_id}
           where g.parent_id={$parent_id} and g.rang >= {$rang}
+          order by abs(g.position) asc
           ")->all();
     }
 

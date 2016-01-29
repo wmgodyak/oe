@@ -33,6 +33,8 @@ class AdminsGroup extends Plugin
     {
         parent::__construct();
 
+        $this->disallow_actions = ['create', 'edit', 'delete', 'process'];
+
         $this->adminsGroup = new \models\engine\plugins\AdminsGroup();
         $this->usersGroup  = new UsersGroup();
     }
@@ -45,7 +47,8 @@ class AdminsGroup extends Plugin
 
     public function create($parent_id=0)
     {
-        if(! $this->request->post('a')) return;
+        $this->autoload = false;
+
         $this->template->assign('action', 'create');
         $this->template->assign('data', ['parent_id' => $parent_id]);
         $this->template->assign('groups', $this->usersGroup->get());
@@ -56,7 +59,8 @@ class AdminsGroup extends Plugin
 
     public function edit($id)
     {
-        if(! $this->request->post('a')) return;
+        $this->autoload = false;
+
         $this->template->assign('action', 'edit');
         $this->template->assign('groups', $this->usersGroup->get());
         $this->template->assign('languages', $this->languages->get());
@@ -68,7 +72,8 @@ class AdminsGroup extends Plugin
 
     public function delete($id)
     {
-        if(! $this->request->post('a')) return '';
+        $this->autoload = false;
+
         return $this->adminsGroup->delete($id);
     }
 
@@ -78,7 +83,8 @@ class AdminsGroup extends Plugin
      */
     public function process($id = 0)
     {
-        if(! $this->request->post('a')) return;
+        $this->autoload = false;
+
         if(! $this->request->isPost()) die;
 
         $data = $this->request->post('data');
@@ -121,6 +127,8 @@ class AdminsGroup extends Plugin
 
     public function tree()
     {
+        $this->autoload = false;
+
         if(! $this->request->isXhr()) die;
 
         $items = array();
@@ -143,6 +151,8 @@ class AdminsGroup extends Plugin
 
     public function move()
     {
+        $this->autoload = false;
+
         if(! $this->request->isPost()) die(403);
 
         $id            = $this->request->post('id', 'i');
