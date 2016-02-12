@@ -28,9 +28,11 @@ class Lang
                 if ($entry != "." && $entry != ".."){
 
                     $fn = $this->dir. $entry . '/core.ini';
+
                     if(!file_exists($fn)) continue;
 
                     $a = parse_ini_file($fn, true);
+
                     $this->langs[] = $a['lang'];
                 }
             }
@@ -71,7 +73,6 @@ class Lang
 
     public function t($key = null)
     {
-        $key = mb_strtolower($key);
         if($key){
 
             if(strpos($key,'.')){

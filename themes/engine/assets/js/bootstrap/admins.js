@@ -13,6 +13,15 @@ engine.admins = {
         $(document).on('click', '.b-admins-delete', function(){
             engine.admins.delete($(this).data('id'));
         });
+        $(document).on('click', '.b-admins-restore', function(){
+            engine.admins.restore($(this).data('id'));
+        });
+        $(document).on('click', '.b-admins-remove', function(){
+            engine.admins.remove($(this).data('id'));
+        });
+        $(document).on('click', '.b-admins-ban', function(){
+            engine.admins.ban($(this).data('id'));
+        });
         $(document).on('click', '.b-admins-group-create', function(){
             engine.admins.group.create();
         });
@@ -152,6 +161,54 @@ engine.admins = {
             function()
             {
                 engine.request.get('./admins/delete/' + id, function(d){
+                    if(d > 0){
+                        engine.refreshDataTable('admins');
+                    }
+                });
+                $(this).dialog('close').dialog('destroy').remove();
+            }
+        );
+    },
+    ban: function(id)
+    {
+        engine.confirm
+        (
+            t.admins.ban_question,
+            function()
+            {
+                engine.request.get('./admins/ban/' + id, function(d){
+                    if(d > 0){
+                        engine.refreshDataTable('admins');
+                    }
+                });
+                $(this).dialog('close').dialog('destroy').remove();
+            }
+        );
+    },
+    remove: function(id)
+    {
+        engine.confirm
+        (
+            t.admins.remove_question,
+            function()
+            {
+                engine.request.get('./admins/remove/' + id, function(d){
+                    if(d > 0){
+                        engine.refreshDataTable('admins');
+                    }
+                });
+                $(this).dialog('close').dialog('destroy').remove();
+            }
+        );
+    },
+    restore: function(id)
+    {
+        engine.confirm
+        (
+            t.admins.restore_question,
+            function()
+            {
+                engine.request.get('./admins/restore/' + id, function(d){
                     if(d > 0){
                         engine.refreshDataTable('admins');
                     }

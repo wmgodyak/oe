@@ -101,6 +101,13 @@ class Admin extends Engine {
                     $inp[] = ['data[password]' => $this->t('admin.e_login_pass')];
                     setcookie('fail', ++$fail, $ban_time);
 
+                } elseif($user['status'] == 'ban'){
+                    $inp[] = ['data[password]' => $this->t('admin.e_login_ban')];
+                    setcookie('fail', ++$fail, $ban_time);
+
+                } elseif($user['status'] == 'deleted'){
+                    $inp[] = ['data[password]' => $this->t('admin.e_login_deleted')];
+                    setcookie('fail', ++$fail, $ban_time);
                 } else if (Users::checkPassword($data['password'], $user['password'])){
                     if($user['rang'] <= 100) {
                         $inp[] = ['data[password]' => $this->t('admin.e_rang')];

@@ -11,5 +11,6 @@
 
     return array(
         'debug' => true,
-        'lang'  => 'uk'
+        'lang'  => 'uk',
+        'user'  => 'wg'
     );

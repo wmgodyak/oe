@@ -8,7 +8,9 @@ var engine = {
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(sc, s);
     },
     validateAjaxForm: function(myForm, onSuccess, ajaxParams, rules){
+
         rules = typeof rules == 'undefined' ? [] : rules;
+
         function showError(form, inp)
         {
             var $validator = $(form).validate(), e = [];
@@ -16,12 +18,13 @@ var engine = {
                 $validator.showErrors(i);
             });
         }
+
         $(myForm).validate({
             errorElement: 'span',
             rules: rules,
             debug: true,
             submitHandler: function(form) {
-                var bSubmit = $('.b-submit, .ui-button');
+                var bSubmit = $('.b-submit, .ui-button, .b-form-save');
                 var settings = {
                     dataType: 'json',
                     beforeSend: function()
@@ -35,7 +38,21 @@ var engine = {
                         if(! d.s ){
                             showError(form, d.i)
                         } else {
-                            if(typeof onSuccess != 'undefined'){
+
+                            if(typeof d.m != 'undefined'){
+                                d.e = typeof d.e == 'undefined' ? null : d.e;
+                                engine.notify(d.m, d.t, 'success');
+                            }
+
+                            if(typeof onSuccess == 'string'){
+                                try {
+                                    onSuccess += '(d)';
+                                    var fn = new Function('d', onSuccess);
+                                    fn(d);
+                                } catch (err) {
+                                    console.info(onSuccess + ' is undefined.');
+                                }
+                            } else if(typeof onSuccess != 'undefined'){
                                 onSuccess(d);
                             }
                         }
@@ -89,6 +106,17 @@ var engine = {
             }
         });
     },
+    notify: function(msg, title, status)
+    {
+        var c = $('.inline-notifications');
+        title = typeof title   =='undefined' ?  'Інформація' : title;
+        status = typeof status =='undefined' ? 'info' : status;
+        c.html("<div class='alert alert-"+status+" alert-dismissible' role='alert'>\
+            <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\
+            <strong>"+title+"</strong>"+status+"\
+        </div>");
+        setTimeout(function(){c.html('');}, 7000)
+     },
     request:  {
         /**
          * send get request
@@ -157,6 +185,12 @@ var engine = {
     },
 
     init: function(){
+
+        var $form = $('#form') ;
+        if($form.length){
+            engine.validateAjaxForm('#form', $form.data('success'), $form.data('rules'));
+            $('.b-form-save').click(function(){$form.submit();})
+        }
 
         (function(){
             var button = $(".btn");
@@ -375,25 +409,29 @@ engine.admin = {
 
         });
 
-        engine.validateAjaxForm('#adminLogin', function () {
-            self.location.href = "/engine/dashboard";
-        });
+        if(logForm.length){
 
-        engine.validateAjaxForm('#adminFp', function () {
-            setTimeout(function(){$('.b-admin-login').click();}, 1500);
-        });
-
-        $(document).on('change', '#adminLang', function(e){
-            e.preventDefault();
-            var l = this.value;
-            self.location.href= '/engine/admin/login/'+l;
-        });
-        $(document).on('click', '.b-admin-fp', function(e){
-            e.preventDefault();
-            logForm.slideUp(300, function(){
-                fpForm.slideDown(300);
+            engine.validateAjaxForm('#adminLogin', function () {
+                self.location.href = "/engine/dashboard";
             });
-        });
+
+            engine.validateAjaxForm('#adminFp', function () {
+                setTimeout(function(){$('.b-admin-login').click();}, 1500);
+            });
+
+            $(document).on('change', '#adminLang', function(e){
+                e.preventDefault();
+                var l = this.value;
+                self.location.href= '/engine/admin/login/'+l;
+            });
+            $(document).on('click', '.b-admin-fp', function(e){
+                e.preventDefault();
+                logForm.slideUp(300, function(){
+                    fpForm.slideDown(300);
+                });
+            });
+        }
+
 
         $(document).on('click', '.b-admin-login', function(e){
             e.preventDefault();

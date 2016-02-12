@@ -40,7 +40,7 @@ abstract class Controller {
             }
         }
     }
-
+    abstract public function before();
     /**
      * @return mixed
      */
@@ -87,6 +87,11 @@ abstract class Controller {
 
     public function redirect($uri)
     {
+        switch($uri){
+            case 404:
+                $uri = 'NotFound';
+                break;
+        }
         header('Location: ' . $uri);die;
     }
 } 

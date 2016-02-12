@@ -28,6 +28,15 @@ class Languages extends Model
     }
 
     /**
+     * @param string $key
+     * @return array|mixed
+     */
+    public function getDefault($key='*')
+    {
+        return self::$db->select("select {$key} from languages where is_main=1")->row($key);
+    }
+
+    /**
      * @param $data
      * @return bool|string
      */
@@ -62,4 +71,5 @@ class Languages extends Model
     {
         return self::$db->select("select * from languages order by is_main desc, name asc")->all();
     }
+
 }

@@ -28,12 +28,14 @@ defined("CPATH") or die();
 class Admins extends Engine
 {
     private $admins;
+    private $usersGroup;
 
     public function __construct()
     {
         parent::__construct();
 
         $this->admins = new \models\engine\Admins();
+        $this->usersGroup = new \models\engine\UsersGroup();
     }
 
     /**
@@ -50,6 +52,7 @@ class Admins extends Engine
 //            -> setConfig('order', array(0, 'desc'))
             -> th($this->t('common.id'))
             -> th($this->t('admins.pib'))
+            -> th($this->t('admins.group'))
             -> th($this->t('admins.email'))
             -> th($this->t('admins.phone'))
             -> th($this->t('admins.created'))
@@ -69,31 +72,55 @@ class Admins extends Engine
         $and = ($group_id > 0) ? " and ug.id={$group_id}" : '';
         $t = new DataTables();
         $t  -> table('users u')
-            -> get('u.id,u.name, u.surname, u.email, u.phone, u.created, u.lastlogin')
+            -> get('u.id,u.name, u.surname, ugi.name as user_group, u.email, u.phone, u.created, u.lastlogin, u.status')
             -> join(" users_group ug on ug.rang > 100 {$and}")
+            -> join(" users_group_info ugi on ugi.group_id=ug.id and ugi.languages_id={$this->languages_id}")
             -> where(" u.group_id=ug.id")
             -> execute();
-
+        $s = ['ban' => $this->t('admins.status_ban'), 'deleted' => $this->t('admins.status_deleted')];
         $res = array();
         foreach ($t->getResults(false) as $i=>$row) {
             $res[$i][] = $row['id'];
-            $res[$i][] = $row['surname'] .' '. $row['name'];
+            $res[$i][] = $row['surname'] .' '. $row['name']  .
+                ($row['status'] != 'active' ? "<br><label class='label label-danger'>{$s[$row['status']]}</label>" : '');
+            $res[$i][] = $row['user_group'];
             $res[$i][] = $row['email'];
             $res[$i][] = $row['phone'];
             $res[$i][] = $row['created'];
             $res[$i][] = $row['lastlogin'] ? DateTime::ago(strtotime($row['lastlogin'])) : '';
-            $res[$i][] =
-                (string)Button::create
+
+            $b = [];
+            $b[] = (string)Button::create
+            (
+                Icon::create(Icon::TYPE_EDIT),
+                ['class' => 'b-admins-edit', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
+            );
+            if($row['status'] == 'active'){
+                $b[] =  (string)Button::create
                 (
-                    Icon::create(Icon::TYPE_EDIT),
-                    ['class' => 'b-admins-edit', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
-                ) .
-                (string)Button::create
+                    Icon::create(Icon::TYPE_BAN),
+                    ['class' => 'b-admins-ban', 'data-id' => $row['id'], 'title' => $this->t('admins.title_ban')]
+                );
+                $b[] = (string)Button::create
                 (
                     Icon::create(Icon::TYPE_DELETE),
                     ['class' => 'b-admins-delete', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
-                )
-            ;
+                );
+            } elseif($row['status'] == 'deleted' || $row['status'] == 'ban'){
+                $b[] =  (string)Button::create
+                (
+                    Icon::create(Icon::TYPE_RESTORE),
+                    ['class' => 'b-admins-restore', 'data-id' => $row['id'], 'title' => $this->t('admins.title_restore')]
+                );
+            }
+
+            $b[] = (string)Button::create
+            (
+                Icon::create(Icon::TYPE_TRASH),
+                ['class' => 'b-admins-remove', 'data-id' => $row['id'], 'title' => $this->t('common.title_remove')]
+            );
+
+            $res[$i][] = implode('', $b);
         }
 
         return $t->renderJSON($res, $t->getTotal());
@@ -104,13 +131,13 @@ class Admins extends Engine
     public function create()
     {
         $this->template->assign('action', 'create');
-        $this->template->assign('groups', $this->admins->getUsersGroups());
+        $this->template->assign('groups', $this->usersGroup->get());
         $this->response->body($this->template->fetch('admins/form'))->asHtml();
     }
 
     public function edit($id)
     {
-        $this->template->assign('groups', $this->admins->getUsersGroups());
+        $this->template->assign('groups', $this->usersGroup->get());
         $this->template->assign('data', $this->admins->getData($id));
         $this->template->assign('action', 'edit');
         $this->response->body($this->template->fetch('admins/form'))->asHtml();
@@ -204,6 +231,20 @@ class Admins extends Engine
     public function delete($id)
     {
         return $this->admins->delete($id);
+    }
+
+    public function remove($id)
+    {
+        return $this->admins->remove($id);
+    }
+
+    public function ban($id)
+    {
+        return $this->admins->ban($id);
+    }
+    public function restore($id)
+    {
+        return $this->admins->restore($id);
     }
 
 }

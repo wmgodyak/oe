@@ -1678,6 +1678,9 @@ textarea.input-lg, select[multiple].input-lg {
         margin-bottom: 0;
         padding-top: 7px
     }
+    .form-horizontal .control-label.required {
+        font-weight: bold;
+    }
 }
 
 .form-horizontal .has-feedback .form-control-feedback {

@@ -51,7 +51,37 @@ class Users extends Model
         return self::$db->update('users', $data, " id={$id} limit 1");
     }
 
+    /**
+     * @param $id
+     * @return bool
+     */
     public function delete($id)
+    {
+        return self::$db->update('users', ['status' => 'deleted'], " id={$id} limit 1");
+    }
+    /**
+     * @param $id
+     * @return bool
+     */
+    public function restore($id)
+    {
+        return self::$db->update('users', ['status' => 'active'], " id={$id} limit 1");
+    }
+
+    /**
+     * @param $id
+     * @return bool
+     */
+    public function ban($id)
+    {
+        return self::$db->update('users', ['status' => 'ban'], " id={$id} limit 1");
+    }
+
+    /**
+     * @param $id
+     * @return int
+     */
+    public function remove($id)
     {
         return self::$db->delete('users', " id={$id} limit 1");
     }

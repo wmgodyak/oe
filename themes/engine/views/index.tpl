@@ -6,6 +6,7 @@
     <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
     <title>{$title} :: {$t.system.name}</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    {*<link rel="stylesheet" href="{$theme_url}assets/css/vendor/font-awesome.min.css">*}
     <link href="{$theme_url}assets/css/vendor/style.css" rel="stylesheet">
     <link href="{$theme_url}assets/css/vendor/jquery.materialripple.css" rel="stylesheet">
     <link href="{$theme_url}assets/css/vendor/jquery-ui.min.css" rel="stylesheet">
@@ -91,7 +92,7 @@
                         </div>
                         <!--end-->
                         {$heading_panel}
-
+                        <div class="inline-notifications"></div>
                         {$body}
 
                     </div> <!--end-->

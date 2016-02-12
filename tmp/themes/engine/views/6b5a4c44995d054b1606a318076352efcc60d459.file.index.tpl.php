@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-01-27 17:01:54
+<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-02-11 17:17:31
          compiled from "/var/www/engine.loc/themes/engine/views/index.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:1202898852567be873c6fe20-51470877%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '6b5a4c44995d054b1606a318076352efcc60d459' => 
     array (
       0 => '/var/www/engine.loc/themes/engine/views/index.tpl',
-      1 => 1453906913,
+      1 => 1455203744,
       2 => 'file',
     ),
   ),
@@ -50,6 +50,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
  :: <?php echo $_smarty_tpl->tpl_vars['t']->value['system']['name'];?>
 </title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    
     <link href="<?php echo $_smarty_tpl->tpl_vars['theme_url']->value;?>
 assets/css/vendor/style.css" rel="stylesheet">
     <link href="<?php echo $_smarty_tpl->tpl_vars['theme_url']->value;?>
@@ -153,7 +154,7 @@ assets/img/logo/logo-black.png">
                         <!--end-->
                         <?php echo $_smarty_tpl->tpl_vars['heading_panel']->value;?>
 
-
+                        <div class="inline-notifications"></div>
                         <?php echo $_smarty_tpl->tpl_vars['body']->value;?>
 
 

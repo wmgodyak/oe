@@ -62,6 +62,7 @@ abstract class Engine extends Controller
     private static $initialized = false;
 
     protected $languages;
+    protected $languages_id;
 
     public function __construct()
     {
@@ -70,6 +71,7 @@ abstract class Engine extends Controller
         $this->engine = new \models\Engine();
 
         $this->languages = new Languages();
+        $this->languages_id = $this->languages->getDefault('id');
 
         $controller  = $this->request->get('controller');
         $action      = $this->request->get('action');
@@ -108,11 +110,15 @@ abstract class Engine extends Controller
         self::$initialized = true;
 //        echo "Engine::init();\r\n";
 
-        $this->template->assign('base_url',    APPURL . 'engine/');
-        $this->template->assign('controller',  mb_strtolower($this->request->get('controller')));
-        $this->template->assign('action',      $this->request->get('action'));
-        $this->template->assign('t',           Lang::getInstance()->t());
+        $controller = $this->request->get('controller');
+        $action = $this->request->get('action');
+        $controller = lcfirst($controller);
 
+        $this->template->assign('base_url',    APPURL . 'engine/');
+        $this->template->assign('controller',  $controller);
+        $this->template->assign('action',      $action);
+        $this->template->assign('t',           Lang::getInstance()->t());
+//        echo '<pre>'; print_r(Lang::getInstance()->t()); die;
         // admin structure
         if($this->request->isGet() && ! $this->request->isXhr()){
 
@@ -124,11 +130,11 @@ abstract class Engine extends Controller
                 Admin::data('avatar', '/uploads/avatars/0.png');
             }
 
-            $c = $this->request->get('controller');
-            $a = $this->request->get('action');
+            $this->template->assign('title', $this->t($controller . '.action_' . $action));
+            $this->template->assign('name', $this->t($controller . '.action_' . $action));
 
-            $this->template->assign('title', $this->t($c . '.action_' . $a));
-            $this->template->assign('name', $this->t($c . '.action_' . $a));
+//            die($controller . '.action_' . $action .' // '. $this->t($controller . '.action_' . $action));
+
             $this->template->assign('admin', Admin::data());
 
             $this->requireComponents();
@@ -136,6 +142,11 @@ abstract class Engine extends Controller
 
         $plugins = Plugins::get();
         $this->template->assign('plugins', $plugins);
+    }
+
+    public function before()
+    {
+
     }
 
     protected final function setButtonsPanel($buttons)

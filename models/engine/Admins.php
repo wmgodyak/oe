@@ -18,33 +18,5 @@ defined("CPATH") or die();
  */
 class Admins extends Users
 {
-    /**
-     * @return array
-     */
-    public function getUsersGroups()
-    {
-        $res = [];
-        foreach ($this->usersGroups(0) as $usersGroup) {
-            if($usersGroup['isfolder']){
-                $usersGroup['items'] = $this->usersGroups($usersGroup['id']);
-            }
-            $res[] = $usersGroup;
-        }
-        return $res;
-    }
 
-    /**
-     * @param $parent_id
-     * @return mixed
-     */
-    private function usersGroups($parent_id)
-    {
-        return self::$db
-            -> select("
-                  select g.id, i.name, g.isfolder
-                  from users_group g, users_group_info i 
-                  where g.parent_id={$parent_id} and g.rang > 100 and i.group_id=g.id and i.languages_id = {$this->languages_id}
-              ")
-            -> all();
-    }
 }

@@ -47,4 +47,36 @@ class Engine extends Model
                 ")
             ->all();
     }
+
+    /**
+     * @param $table
+     * @param $data
+     * @param int $debug
+     * @return bool|string
+     */
+    protected function createRow($table, $data, $debug = 0)
+    {
+        return self::$db->insert($table, $data, $debug);
+    }
+
+    /**
+     * @param $table
+     * @param $id
+     * @param $data
+     * @return bool
+     */
+    protected function updateRow($table, $id, $data)
+    {
+        return self::$db->update($table, $data, "id={$id} limit 1");
+    }
+
+    /**
+     * @param $table
+     * @param $id
+     * @return int
+     */
+    protected function deleteRow($table, $id)
+    {
+        return self::$db->delete($table, "id={$id} limit 1");
+    }
 }

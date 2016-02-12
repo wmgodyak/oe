@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Янв 28 2016 г., 18:27
+-- Время создания: Фев 12 2016 г., 18:37
 -- Версия сервера: 5.5.46-0ubuntu0.14.04.2
 -- Версия PHP: 5.5.9-1ubuntu4.14
 
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `components` (
   KEY `position` (`position`),
   KEY `published` (`published`),
   KEY `module` (`controller`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=22 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=24 ;
 
 --
 -- Дамп данных таблицы `components`
@@ -55,7 +55,79 @@ INSERT INTO `components` (`id`, `parent_id`, `isfolder`, `icon`, `author`, `vers
 (16, 0, 0, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'admins', 0, 1, 300, NULL, '2016-01-28 12:34:05'),
 (17, 0, 0, 'fa-flag', 'Volodymyr Hodiak', '1.0.0', 'languages', 0, 1, 300, NULL, '2016-01-28 12:34:07'),
 (19, 0, 0, 'fa-puzzle-piece', 'Volodymyr Hodiak', '1.0.0', 'components', 0, 1, 300, NULL, '2016-01-28 12:37:32'),
-(21, 0, 0, 'fa-puzzle-piece', 'Volodymyr Hodiak', '1.0.0', 'plugins', 0, 1, 300, NULL, '2016-01-28 14:37:07');
+(22, 0, 0, 'fa-cubes', 'Volodymyr Hodiak', '1.0.0', 'contentTypes', 0, 1, 300, NULL, '2016-02-05 10:15:28'),
+(23, 0, 0, 'fa-puzzle-piece', 'Volodymyr Hodiak', '1.0.0', 'plugins', 0, 1, 300, NULL, '2016-02-12 16:24:27');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `content`
+--
+
+CREATE TABLE IF NOT EXISTS `content` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `content_type_id` tinyint(3) unsigned NOT NULL,
+  `users_id` int(11) unsigned NOT NULL,
+  `parent_id` int(10) unsigned DEFAULT '0',
+  `isfolder` tinyint(1) unsigned DEFAULT '0',
+  `position` tinyint(3) unsigned DEFAULT '0',
+  `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `edited` timestamp NULL DEFAULT NULL,
+  `status` enum('blank','draft','published','deleted') DEFAULT 'blank',
+  PRIMARY KEY (`id`,`content_type_id`,`users_id`),
+  KEY `fk_content_content_type1_idx` (`content_type_id`),
+  KEY `fk_content_users1_idx` (`users_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `content_info`
+--
+
+CREATE TABLE IF NOT EXISTS `content_info` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `content_id` int(10) unsigned NOT NULL,
+  `languages_id` tinyint(3) unsigned NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `url` varchar(160) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
+  `h1` varchar(255) DEFAULT NULL,
+  `keywords` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`,`content_id`,`languages_id`),
+  KEY `fk_content_info_content1_idx` (`content_id`),
+  KEY `fk_content_info_languages1_idx` (`languages_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `content_type`
+--
+
+CREATE TABLE IF NOT EXISTS `content_type` (
+  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `parent_id` tinyint(3) unsigned DEFAULT '0',
+  `isfolder` tinyint(1) unsigned DEFAULT '0',
+  `type` varchar(45) NOT NULL,
+  `name` varchar(60) NOT NULL,
+  `is_main` tinyint(1) unsigned DEFAULT NULL,
+  `settings` text,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `parent_id` (`parent_id`,`type`),
+  KEY `is_main` (`is_main`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=97 ;
+
+--
+-- Дамп данных таблицы `content_type`
+--
+
+INSERT INTO `content_type` (`id`, `parent_id`, `isfolder`, `type`, `name`, `is_main`, `settings`) VALUES
+(93, 0, 1, 'a', 'a', NULL, NULL),
+(94, 93, 0, 'aa', 'aa', NULL, NULL),
+(95, 0, 1, 'b', 'b', NULL, NULL),
+(96, 95, 0, 'bb', 'bb', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -203,20 +275,19 @@ CREATE TABLE IF NOT EXISTS `users` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated` datetime NOT NULL,
   `lastlogin` timestamp NULL DEFAULT NULL,
+  `status` enum('active','ban','deleted') NOT NULL DEFAULT 'active',
   PRIMARY KEY (`id`,`group_id`,`languages_id`),
   UNIQUE KEY `phone` (`phone`,`email`),
-  KEY `fk_users_group1_idx` (`group_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+  KEY `fk_users_group1_idx` (`group_id`),
+  KEY `status` (`status`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
 -- Дамп данных таблицы `users`
 --
 
-INSERT INTO `users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `updated`, `lastlogin`) VALUES
-(1, 1, 0, 'k50u41eor43ec8khvts5e4ja86', 'Володимир', 'Годяк', '+38 (067) 6736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c4ca4238a0b923820dcc509a6f75849b.png', '', '2015-12-24 14:36:04', '2016-01-26 14:54:20', '2016-01-28 11:16:17'),
-(3, 1, 0, NULL, 'Юра', 'Столярчук', '+12 (123) 2132131', 'us@gmail.com', '', NULL, NULL, '2016-01-16 10:46:18', '2016-01-16 14:39:00', NULL),
-(4, 2, 0, NULL, 'Сергій', 'Лавриненко', '+78 (978) 9789778', 's.lavrynenko@gmail.com', '', NULL, NULL, '2016-01-16 10:55:59', '2016-01-16 13:10:05', NULL),
-(7, 1, 0, NULL, 'Maxim', 'Lukyanov', '+38 (012) 3456789', 'maximssu@gmail.com', 'ODtI5JdYnfAJ6', NULL, NULL, '2016-01-16 11:13:09', '0000-00-00 00:00:00', NULL);
+INSERT INTO `users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `updated`, `lastlogin`, `status`) VALUES
+(1, 1, 0, 'rrqq56um783etrcdqn5hg0t4p3', 'Володимир', 'Годяк', '+38 (067) 6736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c4ca4238a0b923820dcc509a6f75849b.png', '', '2015-12-24 14:36:04', '2016-01-26 14:54:20', '2016-02-12 13:51:19', 'active');
 
 -- --------------------------------------------------------
 
@@ -234,17 +305,20 @@ CREATE TABLE IF NOT EXISTS `users_group` (
   KEY `pid` (`parent_id`),
   KEY `sort` (`position`),
   KEY `isfolder` (`isfolder`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
 
 --
 -- Дамп данных таблицы `users_group`
 --
 
 INSERT INTO `users_group` (`id`, `parent_id`, `isfolder`, `rang`, `position`) VALUES
-(1, 0, 1, 999, 0),
-(2, 1, 1, 305, 0),
-(3, 1, 0, 150, 0),
-(8, 2, 0, 111, 0);
+(1, 2, 0, 999, 0),
+(2, 0, 1, 305, 0),
+(3, 2, 1, 150, 0),
+(9, 3, 0, 111, 0),
+(10, 3, 0, 111, 0),
+(11, 3, 0, 111, 0),
+(12, 3, 0, 111, 1);
 
 -- --------------------------------------------------------
 
@@ -261,7 +335,7 @@ CREATE TABLE IF NOT EXISTS `users_group_info` (
   UNIQUE KEY `group_id` (`group_id`,`languages_id`),
   KEY `fk_users_group_info_users_group1_idx` (`group_id`),
   KEY `fk_users_group_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
 
 --
 -- Дамп данных таблицы `users_group_info`
@@ -271,18 +345,35 @@ INSERT INTO `users_group_info` (`id`, `group_id`, `languages_id`, `name`) VALUES
 (1, 1, 1, 'Admins'),
 (2, 2, 1, 'Редактор'),
 (3, 3, 1, 'Менеджери a'),
-(8, 8, 1, 'aaa');
+(9, 9, 1, 'subadmins'),
+(10, 10, 1, 'aaa'),
+(11, 11, 1, 'bbbb'),
+(12, 12, 1, 'cccc');
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц
 --
 
 --
+-- Ограничения внешнего ключа таблицы `content`
+--
+ALTER TABLE `content`
+  ADD CONSTRAINT `fk_content_content_type1` FOREIGN KEY (`content_type_id`) REFERENCES `content_type` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_content_users1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `content_info`
+--
+ALTER TABLE `content_info`
+  ADD CONSTRAINT `fk_content_info_content1` FOREIGN KEY (`content_id`) REFERENCES `content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_content_info_languages1` FOREIGN KEY (`languages_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Ограничения внешнего ключа таблицы `plugins_components`
 --
 ALTER TABLE `plugins_components`
-  ADD CONSTRAINT `fk_plugins_components_plugins1` FOREIGN KEY (`plugins_id`) REFERENCES `plugins` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_plugins_components_components1` FOREIGN KEY (`components_id`) REFERENCES `components` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_plugins_components_components1` FOREIGN KEY (`components_id`) REFERENCES `components` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_plugins_components_plugins1` FOREIGN KEY (`plugins_id`) REFERENCES `plugins` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `users`
