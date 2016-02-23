@@ -1,4 +1,4 @@
-<form class="form-horizontal" action="contentTypes/process/{$data.id}" enctype="multipart/form-data" method="post" id="form" data-success = 'engine.contentTypes.on{ucfirst($action)}Success' >
+<form class="form-horizontal" action="contentTypes/process/{$data.id}"  method="post" id="form" data-success="engine.contentTypes.on{ucfirst($action)}Success">
     <div class="row">
         <div class="col-md-9">
             <fieldset>
@@ -47,7 +47,7 @@
                         <div class="form-group">
                             <label for="bu_select_grid" class="col-sm-3 control-label">Сітка</label>
                             <div class="col-sm-8">
-                                <select id="bu_select_grid" class="form-control">
+                                <select id="bu_select_grid" class="form-control" name="grid">
                                     <option value="">Виберіть</option>
                                     <option value="12">12</option>
                                     <option value="6x6">6x6</option>
@@ -66,106 +66,55 @@
                             <label for="bu_select_grid" class="col-sm-3 control-label">Компоненти</label>
                             <div class="col-sm-8">
                                <div class="boxes" id="baseComponents">
+                                   {literal}
                                    <div class="box">
-                                       <fieldset>
-                                           <legend>
-                                               <span class="box-name">Основне</span>
-                                               <a href="" onclick="return false;" class="b-move"><i class="fa fa-arrows"></i></a>
-                                               <a href="" onclick="return false;" class="b-field-add"><i class="fa fa-plus"></i></a>
-                                               <a href="" onclick="return false;" class="b-box-edit"><i class="fa fa-pencil"></i></a>
-                                               <a href="" onclick="return false;" class="b-box-remove"><i class="fa fa-remove"></i></a>
-                                           </legend>
-                                           <ul class="form-fields">
-                                               <li class="field">
-                                                   <span class="name">Назва</span>
-                                                   <a href="" onclick="return false;" class="b-field-edit"><i class="fa fa-pencil"></i></a>
-                                                   <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a>
-                                                   <input type="hidden" class="field-settings" value="title=%D0%9D%D0%B0%D0%B7%D0%B2%D0%B0&type=text&name=info%5B%24lang.id%5D%5Bname%5D&placeholder=%D0%9C%D0%B0%D0%BA%D1%81.+160+%D1%81%D0%B8%D0%BC%D0%B2%D0%BE%D0%BB%D1%96%D0%B2&required=on">
-                                               </li>
-                                               <li class="field">
-                                                   <span class="name">Url</span>
-                                                   <a href="" onclick="return false;" class="b-field-edit"><i class="fa fa-pencil"></i></a>
-                                                   <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a>
-                                                   <input type="hidden" class="field-settings" value="title=Url&type=text&name=info%5B%24lang.id%5D%5Burl%5D&placeholder=%D0%9C%D0%B0%D0%BA%D1%81.160+%D1%81%D0%B8%D0%BC%D0%B2%D0%BE%D0%BB%D1%96%D0%B2&required=on">
-                                               </li>
-                                           </ul>
-                                       </fieldset>
+                                       <div class="preview">
+                                           <fieldset>
+                                               <legend>
+                                                   <span class="box-name" contenteditable="true">Основне</span>
+                                               </legend>
+
+                                               <a href="" onclick="return false;" class="b-move" title="Таскати"><i class="fa fa-arrows"></i></a>
+                                               <a href="" onclick="return false;" class="b-field-add" title="Додати поле"><i class="fa fa-plus"></i></a>
+                                               <!--a href="" onclick="return false;" class="b-box-edit"><i class="fa fa-pencil"></i></a-->
+                                               <a href="" onclick="return false;" class="b-box-remove" title="Видалити блок"><i class="fa fa-remove"></i></a>
+                                               <ul>
+                                                   <li>
+                                                       <span class="name">Назва</span>
+                                                       <a href="" onclick="return false;" class="b-field-edit"><i class="fa fa-pencil"></i></a>
+                                                       <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a>
+                                                   </li>
+                                                   <li>
+                                                       <span class="name">Url</span>
+                                                       <a href="" onclick="return false;" class="b-field-edit"><i class="fa fa-pencil"></i></a>
+                                                       <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a>
+                                                   </li>
+                                               </ul>
+                                           </fieldset>
+                                       </div>
+                                       <div class="source">
+                                           <fieldset>
+                                               <legend>
+                                                   <span class="box-name">Основне</span>
+                                               </legend>
+                                               {foreach $languages as $lang}
+                                                   <div class="form-group">
+                                                       <label for="info_{$lang.code}_name" class="col-sm-3 control-label">Назва({$lang.code}):</label>
+                                                       <div class="col-sm-9">
+                                                           <input type="text" class="form-control" name="info[{$lang.id}][name]" id="info_{$lang.code}_name" required="">
+                                                       </div>
+                                                   </div>
+                                                   <div class="form-group">
+                                                       <label for="info_{$lang.code}_url" class="col-sm-3 control-label">Url({$lang.code}):</label>
+                                                       <div class="col-sm-9">
+                                                           <input type="text" class="form-control" name="info[{$lang.id}][url]" id="info_{$lang.code}_url" required="">
+                                                       </div>
+                                                   </div>
+                                               {/foreach}
+                                           </fieldset>
+                                       </div>
                                    </div>
-                                   <div class="box">
-                                       <fieldset>
-                                           <legend>
-                                               <span class="box-name">Мета дані</span>
-                                               <a href="" onclick="return false;" class="b-move"><i class="fa fa-arrows"></i></a>
-                                               <a href="" onclick="return false;" class="b-field-add"><i class="fa fa-plus"></i></a>
-                                               <a href="" onclick="return false;" class="b-box-edit"><i class="fa fa-pencil"></i></a>
-                                               <a href="" onclick="return false;" class="b-box-remove"><i class="fa fa-remove"></i></a>
-                                           </legend>
-                                           <ul class="form-fields">
-                                               <li class="field">
-                                                   <span class="name">Title</span>
-                                                   <a href="" onclick="return false;" class="b-field-edit"><i class="fa fa-pencil"></i></a>
-                                                   <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a>
-                                                   <input type="hidden" class="field-settings" value="title=%D0%9D%D0%B0%D0%B7%D0%B2%D0%B0&type=text&name=info%5B%24lang.id%5D%5Bname%5D&placeholder=%D0%9C%D0%B0%D0%BA%D1%81.+160+%D1%81%D0%B8%D0%BC%D0%B2%D0%BE%D0%BB%D1%96%D0%B2&required=on">
-                                               </li>
-                                               <li class="field">
-                                                   <span class="name">Keywords</span>
-                                                   <a href="" onclick="return false;" class="b-field-edit"><i class="fa fa-pencil"></i></a>
-                                                   <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a>
-                                                   <input type="hidden" class="field-settings" value="title=Url&type=text&name=info%5B%24lang.id%5D%5Burl%5D&placeholder=%D0%9C%D0%B0%D0%BA%D1%81.160+%D1%81%D0%B8%D0%BC%D0%B2%D0%BE%D0%BB%D1%96%D0%B2&required=on">
-                                               </li>
-                                               <li class="field">
-                                                   <span class="name">Description</span>
-                                                   <a href="" onclick="return false;" class="b-field-edit"><i class="fa fa-pencil"></i></a>
-                                                   <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a>
-                                                   <input type="hidden" class="field-settings" value="title=Url&type=text&name=info%5B%24lang.id%5D%5Burl%5D&placeholder=%D0%9C%D0%B0%D0%BA%D1%81.160+%D1%81%D0%B8%D0%BC%D0%B2%D0%BE%D0%BB%D1%96%D0%B2&required=on">
-                                               </li>
-                                           </ul>
-                                       </fieldset>
-                                   </div>
-                                   <div class="box">
-                                       <fieldset>
-                                           <legend>
-                                               <span class="box-name">Контент</span>
-                                               <a href="" onclick="return false;" class="b-move"><i class="fa fa-arrows"></i></a>
-                                               <a href="" onclick="return false;" class="b-field-add"><i class="fa fa-plus"></i></a>
-                                               <a href="" onclick="return false;" class="b-box-edit"><i class="fa fa-pencil"></i></a>
-                                               <a href="" onclick="return false;" class="b-box-remove"><i class="fa fa-remove"></i></a>
-                                           </legend>
-                                           <ul class="form-fields">
-                                               <li class="field">
-                                                   <span class="name">Контент</span>
-                                                   <a href="" onclick="return false;" class="b-field-edit"><i class="fa fa-pencil"></i></a>
-                                                   <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a>
-                                                   <input type="hidden" class="field-settings" value="title=%D0%9D%D0%B0%D0%B7%D0%B2%D0%B0&type=text&name=info%5B%24lang.id%5D%5Bname%5D&placeholder=%D0%9C%D0%B0%D0%BA%D1%81.+160+%D1%81%D0%B8%D0%BC%D0%B2%D0%BE%D0%BB%D1%96%D0%B2&required=on">
-                                               </li>
-                                           </ul>
-                                       </fieldset>
-                                   </div>
-                                   <div class="box">
-                                       <fieldset>
-                                           <legend>
-                                               <span class="box-name">Параметри</span>
-                                               <a href="" onclick="return false;" class="b-move"><i class="fa fa-arrows"></i></a>
-                                               <a href="" onclick="return false;" class="b-field-add"><i class="fa fa-plus"></i></a>
-                                               <a href="" onclick="return false;" class="b-box-edit"><i class="fa fa-pencil"></i></a>
-                                               <a href="" onclick="return false;" class="b-box-remove"><i class="fa fa-remove"></i></a>
-                                           </legend>
-                                           <ul class="form-fields">
-                                               <li class="field">
-                                                   <span class="name">Шаблон</span>
-                                                   <a href="" onclick="return false;" class="b-field-edit"><i class="fa fa-pencil"></i></a>
-                                                   <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a>
-                                                   <input type="hidden" class="field-settings" value="title=%D0%9D%D0%B0%D0%B7%D0%B2%D0%B0&type=text&name=info%5B%24lang.id%5D%5Bname%5D&placeholder=%D0%9C%D0%B0%D0%BA%D1%81.+160+%D1%81%D0%B8%D0%BC%D0%B2%D0%BE%D0%BB%D1%96%D0%B2&required=on">
-                                               </li>
-                                               <li class="field">
-                                                   <span class="name">Статус</span>
-                                                   <a href="" onclick="return false;" class="b-field-edit"><i class="fa fa-pencil"></i></a>
-                                                   <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a>
-                                                   <input type="hidden" class="field-settings" value="title=Url&type=text&name=info%5B%24lang.id%5D%5Burl%5D&placeholder=%D0%9C%D0%B0%D0%BA%D1%81.160+%D1%81%D0%B8%D0%BC%D0%B2%D0%BE%D0%BB%D1%96%D0%B2&required=on">
-                                               </li>
-                                           </ul>
-                                       </fieldset>
-                                   </div>
+                                   {/literal}
                                </div>
                             </div>
                         </div>
@@ -179,7 +128,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="ui-sortable htmlpage" id="builder"></div>
+                <div class="ui-sortable htmlpage" id="builder">{$data.settings.form}</div>
+                <textarea style="height: 500px;width:100%" name="data[settings][form]" id="data_settings_form">{$data.settings.form}</textarea>
             </fieldset>
         </div>
     </div>
@@ -202,6 +152,41 @@
      <input type="hidden" name="data[parent_id]" value="{$data.parent_id}">
      <input type="hidden" name="data[id]" value="{$data.id}">
 </form>
+<script type="text/template" id="editFieldFormTpl">
+    <form id="fieldEditForm" class="form-horizontal">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Назва:</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="fieldName" required name="title" value="<%- data.title %>">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Тип:</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" required name="type" value="<%- data.type %>">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Код:</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" required name="name" value="<%- data.name %>">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Плейсхолдер:</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" name="placeholder" value="<%- data.placeholder %>">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-8 col-sm-offset-4">
+                <div class="checkbox">
+                    <input type="checkbox" <%- data.checked %> name="required"> Обов'язкове
+                </div>
+            </div>
+        </div>
+    </form>
+</script>
 {literal}
     <style>
         .boxes {
@@ -215,31 +200,34 @@
             background: #89BDFF;
             color: #fff;
         }
-        .boxes .box fieldset {
+        .boxes .box .preview {
             display: inline-block;
             padding: 0;
             margin-bottom:0;
             border:0;
+            padding-left: 20px;
         }
-        .boxes .box fieldset ul{display: none;}
-
-        .boxes .box fieldset legend{
-            display: inline-block;
-            padding: 0;
-            margin-bottom:0;
+        .boxes .box .preview fieldset {
             border:0;
-            font-size:12px;
+            padding: 0;
+            display: inline;
+            margin-bottom:0;
         }
-        .boxes .box fieldset legend a.b-field-add,
-        .boxes .box fieldset legend a.b-box-edit,
-        .boxes .box fieldset legend a.b-box-remove
-        {
-            display: none;
+        .boxes .box .preview fieldset legend{
+            border:0;
+            padding: 0;
+            display: inline;
+            margin-bottom:0;
         }
-        .boxes .box fieldset legend a.b-move{
-            float: left;
-            margin-right:0.5em;
+        .boxes .box .preview a, .boxes .box .preview ul{
+            display: none
         }
+        .boxes .box .preview a.b-move{
+            display: inline-block;
+            position: absolute;
+            top:5px;left:5px;
+        }
+        .boxes .box .source{display: none;}
 
         .htmlpage {
             background: #fff;
@@ -254,7 +242,11 @@
             border: 1px solid #DDDDDD;
             position: relative;
         }
-        .htmlpage .row a {
+
+        .htmlpage .row > a{
+            position: absolute;
+            top:1px;
+            right:1px;
             border: 1px solid #DDDDDD;
             border-radius: 4px 0 4px 0;
             color: #9DA0A4;
@@ -263,15 +255,12 @@
             padding: 3px 7px;
             position: absolute;
             top: 1px;
+            right: 1px;
             cursor:pointer
         }
-        .htmlpage .row a.b-row-remove {
-            right: 1px;
-         }
-        .htmlpage .row a.b-move {
-            right: 30px;
-            cursor:move;
-         }
+        .htmlpage .row > a.b-move{
+            right:31px;
+        }
         .htmlpage .column:after {
             border: 1px solid #DDDDDD;
             border-radius: 4px 0 4px 0;
@@ -296,60 +285,36 @@
             position: relative;
             width:100%;
         }
-        .htmlpage .box fieldset legend{
+        .htmlpage .box .source{
+            display: none;
+        }
+        .htmlpage .box .preview fieldset{
             position: relative;
-            padding-right:140px;
-            /*cursor: move;*/
         }
-        .htmlpage .box fieldset legend a.b-box-remove{
+        .htmlpage .box .preview fieldset > a{
+
+            position: absolute;
+            top:16px;
+            right:1px;
             border: 1px solid #DDDDDD;
             border-radius: 4px 0 4px 0;
             color: #9DA0A4;
             font-size: 12px;
             font-weight: bold;
             padding: 3px 7px;
-            position: absolute;
-            top: 1px;
-            right: 1px;
             cursor:pointer
         }
-        .htmlpage .box fieldset legend a.b-box-edit{
-            border: 1px solid #DDDDDD;
-            border-radius: 4px 0 4px 0;
-            color: #9DA0A4;
-            font-size: 12px;
-            font-weight: bold;
-            padding: 3px 7px;
-            position: absolute;
-            top: 1px;
-            right: 31px;
-            cursor:pointer
+        .htmlpage .box .preview fieldset > a.b-box-remove{
+            right:31px;
         }
-        .htmlpage .box fieldset legend a.b-field-add{
-            border: 1px solid #DDDDDD;
-            border-radius: 4px 0 4px 0;
-            color: #9DA0A4;
-            font-size: 12px;
-            font-weight: bold;
-            padding: 3px 7px;
-            position: absolute;
-            top: 1px;
-            right: 61px;
-            cursor:pointer;
+        /*
+        .htmlpage .box .preview fieldset > a.b-box-edit{
+            right:61px;
+        }*/
+        .htmlpage .box .preview fieldset > a.b-field-add{
+            right:61px;
         }
-        .htmlpage .box fieldset legend a.b-move{
-            border: 1px solid #DDDDDD;
-            border-radius: 4px 0 4px 0;
-            color: #9DA0A4;
-            font-size: 12px;
-            font-weight: bold;
-            padding: 3px 7px;
-            position: absolute;
-            top: 1px;
-            right: 91px;
-            cursor:move;
-        }
-        .htmlpage .box fieldset ul li{
+        .htmlpage .box .preview fieldset ul li{
             position: relative;
             display: block;
             padding: 10px 15px;
@@ -357,35 +322,21 @@
             background-color: #fff;
             border: 1px solid #ddd;
         }
-        .htmlpage .box fieldset ul a.b-field-remove{
+
+        .htmlpage .box .preview fieldset ul li > a{
+            position: absolute;
+            top:16px;
+            right:31px;
             border: 1px solid #DDDDDD;
             border-radius: 4px 0 4px 0;
             color: #9DA0A4;
             font-size: 12px;
             font-weight: bold;
             padding: 3px 7px;
-            position: absolute;
-            top: 1px;
-            right: 1px;
             cursor:pointer
         }
-        .htmlpage .box fieldset ul a.b-field-edit{
-            border: 1px solid #DDDDDD;
-            border-radius: 4px 0 4px 0;
-            color: #9DA0A4;
-            font-size: 12px;
-            font-weight: bold;
-            padding: 3px 7px;
-            position: absolute;
-            top: 1px;
-            right: 31px;
-            cursor:pointer
-        }
-        .htmlpage .box .editable{
-            background: #fff;
-            border:1px solid #f1f1f1;
-            line-height:16px;
-            padding: 0 5px;
+        .htmlpage .box .preview fieldset ul li > a + a{
+            right:1px;
         }
     </style>
 {/literal}

@@ -16,7 +16,7 @@ engine.contentTypes = {
     {
         console.log('engine.contentTypes.initBuilder()');
 
-        var $builder = $('#builder');
+        var $builder = $('#builder'), bSubmit = $('.b-form-save');
 
         function initDragabble()
         {
@@ -32,6 +32,9 @@ engine.contentTypes = {
                 },
                 stop: function (e, t)
                 {
+                    $('.ui-sortable-placeholder').each(function(){
+                        $(this).remove();
+                    })
                 }
             });
         }
@@ -51,20 +54,18 @@ engine.contentTypes = {
         $(document).on('click', '.b-box-remove', function(e){
             removeBox(this);
         });
-
-        $(document).on('click', '.b-box-edit', function(e){
-            editBox(this);
-        });
-
         $(document).on('click', '.b-field-remove', function(e){
-            removeField(this); // todo завтра придумати склад полів і туди їх складати
+            removeField(this);
         });
         $(document).on('click', '.b-field-edit', function(e){
             editField(this);
         });
-        $(document).on('click', '.b-field-add', function(e){
-            addField(this);
+
+        $builder.bind('DOMNodeInserted DOMNodeRemoved', function(event) {
+            var html = this.innerHTML;
+            $('#data_settings_form').html(html);
         });
+
 
         initDragabble();
 
@@ -108,18 +109,50 @@ engine.contentTypes = {
         {
             var d = engine.confirm('Дійсно видалити рядок?', function(){
                 $(el).parent().remove();
+                $builder.trigger('DOMNodeRemoved');
                 d.dialog('close');
             })
         }
         function removeBox(el)
         {
             var d = engine.confirm('Дійсно видалити блок?', function(){
-                var box = $(el).parents('.box');
-                console.log(box);
-                box.draggable({revert:true});
+                $(el).parents('.box').remove();
+                $builder.trigger('DOMNodeRemoved');
                 d.dialog('close');
             })
         }
+        function editField(el)
+        {
+            var field = $(el).parents('.field:eq(0)'), s = field.find('.field-settings').val(),
+                settings = {title: '', type: '', name: '', placeholder: '', required: ''}, ts = new Date().getTime();
+
+            settings.required = typeof settings.required == 'undefined' ? '' : 'checked';
+
+            var a = field.find('span.name');
+            console.log(a);
+
+            var c = _.template('<p>sdf</p>');//document.getElementById('editFieldFormTpl').innerHTML
+
+            var pw = engine.dialog({
+                content:c,
+                title: 'Налаштування поля',
+                autoOpen: true,
+                width: 600,
+                modal: true,
+                buttons: {
+                    "Зберегти": function(){
+                        var n = $('#fieldName'+ts).val();
+                        var data = $('#fieldEditForm'+ts).serializeArray();
+
+                        field.find('span.name').text(n);
+                        field.find('.field-settings').val(data);
+                        pw.dialog('close').remove();
+                    }
+                }
+            });
+
+        }
+
         function removeField(el)
         {
             var d = engine.confirm('Дійсно видалити поле?', function(){
@@ -127,7 +160,16 @@ engine.contentTypes = {
                 d.dialog('close');
             })
         }
+/*
 
+ $(document).on('click', '.b-box-edit', function(e){
+ editBox(this);
+ });
+
+
+ $(document).on('click', '.b-field-add', function(e){
+ addField(this);
+ });
         function addField(el)
         {
             var formFields = $(el).parents('fieldset:eq(0)').find('.form-fields'),
@@ -257,37 +299,18 @@ engine.contentTypes = {
 
         }
 
-        function editBox(el)
+        function removeField(el)
         {
-            var legend = $(el).parent('legend'),span =legend.find('span.box-name'), text = span.text();
-            var c = $('<form id="boxEditForm">\
-                            <div class="form-group">\
-                                <label for="data_name" class="col-sm-3 control-label">Назва:</label>\
-                                    <div class="col-sm-9">\
-                                        <input type="text" class="form-control" required id="boxName" value="'+text+'">\
-                                    </div>\
-                            </div>\
-                </form>');
-            var pw = engine.dialog({
-                content:c,
-                title: 'Налаштування блоку',
-                autoOpen: true,
-                width: 600,
-                modal: true,
-                buttons: {
-                    "Зберегти": function(){
-                        var name = $('#boxName').val();
-                        legend.data('name', name);
-                        span.text(name);
-                        pw.dialog('close').remove();
-                    }
-                }
-            });
-        }
+            var d = engine.confirm('Дійсно видалити поле?', function(){
+                $(el).parent().remove();
+                d.dialog('close');
+            })
+        }*/
+
     },
     onCreateSuccess: function(d)
     {
-        //location.href = "./contentTypes";
+        location.href = "./contentTypes";
     },
     delete: function(id)
     {

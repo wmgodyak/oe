@@ -7,7 +7,7 @@ var engine = {
         sc.src = '/themes/engine/assets/js/bootstrap/' + src + '.js';
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(sc, s);
     },
-    validateAjaxForm: function(myForm, onSuccess, ajaxParams, rules){
+    validateAjaxForm: function(myForm, onSuccess, ajaxParams, rules, onBeforeSend){
 
         rules = typeof rules == 'undefined' ? [] : rules;
 
@@ -29,7 +29,19 @@ var engine = {
                     dataType: 'json',
                     beforeSend: function()
                     {
+                        //console.log(onBeforeSend);
                         bSubmit.attr('disabled', true);
+                        if(typeof onBeforeSend == 'string'){
+                            try {
+                                onBeforeSend += '()';
+                                var fn = new Function('', onBeforeSend);
+                               return fn();
+                            } catch (err) {
+                                console.info(onBeforeSend + ' is undefined.');
+                            }
+                        } else if(typeof onBeforeSend != 'undefined'){
+                           return onBeforeSend();
+                        }
                         return true;
                     },
                     success: function(d)
@@ -188,7 +200,8 @@ var engine = {
 
         var $form = $('#form') ;
         if($form.length){
-            engine.validateAjaxForm('#form', $form.data('success'), $form.data('rules'));
+            //validateAjaxForm: function(myForm, onSuccess, ajaxParams, rules, onBeforeSend){
+            engine.validateAjaxForm('#form', $form.data('success'), {}, $form.data('rules'), $form.data('beforesend'));
             $('.b-form-save').click(function(){$form.submit();})
         }
 

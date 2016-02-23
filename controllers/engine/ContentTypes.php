@@ -196,6 +196,7 @@ class ContentTypes extends Engine
         } elseif($this->contentTypes->issetTemplate($data['parent_id'], $data['type'], $data['id'])){
             $i[] = ["data[type]" => $this->t('contentTypes.error_isset_type')];
         } else {
+            $data['settings'] = serialize($data['settings']);
             switch($this->request->post('action')){
                 case 'create':
                     $s = $this->contentTypes->create($data);
