@@ -121,20 +121,54 @@ engine.contentTypes = {
                 d.dialog('close');
             })
         }
+
         function editField(el)
         {
-            var field = $(el).parents('.field:eq(0)'), s = field.find('.field-settings').val(),
-                settings = {title: '', type: '', name: '', placeholder: '', required: ''}, ts = new Date().getTime();
+            var field = $(el).parent('li'),
+                data = {title: '', type: '', name: '', placeholder: '', required: ''}, ts = new Date().getTime();
 
-            settings.required = typeof settings.required == 'undefined' ? '' : 'checked';
+            data.required = typeof data.required == 'undefined' ? '' : 'checked';
 
-            var a = field.find('span.name');
-            console.log(a);
+            var a = field.find('span.box-name');
+            data.title = a.text();
+            data.required = typeof data.required == 'undefined' ? '' : 'checked';
 
-            var c = _.template('<p>sdf</p>');//document.getElementById('editFieldFormTpl').innerHTML
+            var c = $('<form id="fieldEditForm'+ts+'" class="form-horizontal">\
+                            <div class="form-group">\
+                                <label class="col-sm-3 control-label">Назва:</label>\
+                                <div class="col-sm-9">\
+                                    <input type="text" class="form-control" id="fieldName'+ts+'" required name="title" value="'+data.title+'">\
+                                </div>\
+                            </div>\
+                            <div class="form-group">\
+                                <label class="col-sm-3 control-label">Тип:</label>\
+                                <div class="col-sm-9">\
+                                    <input type="text" class="form-control" required name="type" value="'+data.type+'">\
+                                </div>\
+                            </div>\
+                            <div class="form-group">\
+                                <label class="col-sm-3 control-label">Код:</label>\
+                                <div class="col-sm-9">\
+                                    <input type="text" class="form-control" required name="name" value="'+data.name+'">\
+                                </div>\
+                            </div>\
+                            <div class="form-group">\
+                                <label class="col-sm-3 control-label">Плейсхолдер:</label>\
+                                <div class="col-sm-9">\
+                                    <input type="text" class="form-control" name="placeholder" value="'+data.placeholder+'">\
+                                </div>\
+                            </div>\
+                            <div class="form-group">\
+                                <div class="col-sm-8 col-sm-offset-4">\
+                                    <div class="checkbox">\
+                                    <input type="checkbox" '+data.required+' name="required"> Обов\'язкове\
+                                    </div>\
+                                </div>\
+                            </div>\
+                </form>');
 
             var pw = engine.dialog({
-                content:c,
+                content: c,
                 title: 'Налаштування поля',
                 autoOpen: true,
                 width: 600,
@@ -142,10 +176,8 @@ engine.contentTypes = {
                 buttons: {
                     "Зберегти": function(){
                         var n = $('#fieldName'+ts).val();
-                        var data = $('#fieldEditForm'+ts).serializeArray();
-
+                        //var data = $('#fieldEditForm'+ts).serializeArray();
                         field.find('span.name').text(n);
-                        field.find('.field-settings').val(data);
                         pw.dialog('close').remove();
                     }
                 }

@@ -79,12 +79,12 @@
                                                <!--a href="" onclick="return false;" class="b-box-edit"><i class="fa fa-pencil"></i></a-->
                                                <a href="" onclick="return false;" class="b-box-remove" title="Видалити блок"><i class="fa fa-remove"></i></a>
                                                <ul>
-                                                   <li>
+                                                   <li id="info_name">
                                                        <span class="name">Назва</span>
                                                        <a href="" onclick="return false;" class="b-field-edit"><i class="fa fa-pencil"></i></a>
                                                        <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a>
                                                    </li>
-                                                   <li>
+                                                   <li id="info_url">
                                                        <span class="name">Url</span>
                                                        <a href="" onclick="return false;" class="b-field-edit"><i class="fa fa-pencil"></i></a>
                                                        <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a>
@@ -98,7 +98,7 @@
                                                    <span class="box-name">Основне</span>
                                                </legend>
                                                {foreach $languages as $lang}
-                                                   <div class="form-group">
+                                                   <div class="form-group" id="info_name_group">
                                                        <label for="info_{$lang.code}_name" class="col-sm-3 control-label">Назва({$lang.code}):</label>
                                                        <div class="col-sm-9">
                                                            <input type="text" class="form-control" name="info[{$lang.id}][name]" id="info_{$lang.code}_name" required="">
@@ -152,41 +152,6 @@
      <input type="hidden" name="data[parent_id]" value="{$data.parent_id}">
      <input type="hidden" name="data[id]" value="{$data.id}">
 </form>
-<script type="text/template" id="editFieldFormTpl">
-    <form id="fieldEditForm" class="form-horizontal">
-        <div class="form-group">
-            <label class="col-sm-3 control-label">Назва:</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="fieldName" required name="title" value="<%- data.title %>">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">Тип:</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" required name="type" value="<%- data.type %>">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">Код:</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" required name="name" value="<%- data.name %>">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">Плейсхолдер:</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" name="placeholder" value="<%- data.placeholder %>">
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="col-sm-8 col-sm-offset-4">
-                <div class="checkbox">
-                    <input type="checkbox" <%- data.checked %> name="required"> Обов'язкове
-                </div>
-            </div>
-        </div>
-    </form>
-</script>
 {literal}
     <style>
         .boxes {
