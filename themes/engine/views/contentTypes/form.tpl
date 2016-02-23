@@ -68,38 +68,101 @@
                                <div class="boxes" id="baseComponents">
                                    <div class="box">
                                        <fieldset>
-                                           <legend><i class="fa fa-info"></i> Основне <a href="" onclick="return false;" class="b-box-remove"><i class="fa fa-remove"></i></a></legend>
+                                           <legend>
+                                               <span class="box-name">Основне</span>
+                                               <a href="" onclick="return false;" class="b-move"><i class="fa fa-arrows"></i></a>
+                                               <a href="" onclick="return false;" class="b-field-add"><i class="fa fa-plus"></i></a>
+                                               <a href="" onclick="return false;" class="b-box-edit"><i class="fa fa-pencil"></i></a>
+                                               <a href="" onclick="return false;" class="b-box-remove"><i class="fa fa-remove"></i></a>
+                                           </legend>
                                            <ul class="form-fields">
-                                               <li class="field">Назва <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a></li>
-                                               <li class="field">Url <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a></li>
+                                               <li class="field">
+                                                   <span class="name">Назва</span>
+                                                   <a href="" onclick="return false;" class="b-field-edit"><i class="fa fa-pencil"></i></a>
+                                                   <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a>
+                                                   <input type="hidden" class="field-settings" value="title=%D0%9D%D0%B0%D0%B7%D0%B2%D0%B0&type=text&name=info%5B%24lang.id%5D%5Bname%5D&placeholder=%D0%9C%D0%B0%D0%BA%D1%81.+160+%D1%81%D0%B8%D0%BC%D0%B2%D0%BE%D0%BB%D1%96%D0%B2&required=on">
+                                               </li>
+                                               <li class="field">
+                                                   <span class="name">Url</span>
+                                                   <a href="" onclick="return false;" class="b-field-edit"><i class="fa fa-pencil"></i></a>
+                                                   <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a>
+                                                   <input type="hidden" class="field-settings" value="title=Url&type=text&name=info%5B%24lang.id%5D%5Burl%5D&placeholder=%D0%9C%D0%B0%D0%BA%D1%81.160+%D1%81%D0%B8%D0%BC%D0%B2%D0%BE%D0%BB%D1%96%D0%B2&required=on">
+                                               </li>
                                            </ul>
                                        </fieldset>
                                    </div>
                                    <div class="box">
                                        <fieldset>
-                                           <legend><i class="fa fa-info"></i> Мета дані <a href="" onclick="return false;" class="b-box-remove"><i class="fa fa-remove"></i></a></legend>
+                                           <legend>
+                                               <span class="box-name">Мета дані</span>
+                                               <a href="" onclick="return false;" class="b-move"><i class="fa fa-arrows"></i></a>
+                                               <a href="" onclick="return false;" class="b-field-add"><i class="fa fa-plus"></i></a>
+                                               <a href="" onclick="return false;" class="b-box-edit"><i class="fa fa-pencil"></i></a>
+                                               <a href="" onclick="return false;" class="b-box-remove"><i class="fa fa-remove"></i></a>
+                                           </legend>
                                            <ul class="form-fields">
-                                               <li class="field">Title <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a></li>
-                                               <li class="field">Keywords <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a></li>
-                                               <li class="field">Description <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a></li>
+                                               <li class="field">
+                                                   <span class="name">Title</span>
+                                                   <a href="" onclick="return false;" class="b-field-edit"><i class="fa fa-pencil"></i></a>
+                                                   <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a>
+                                                   <input type="hidden" class="field-settings" value="title=%D0%9D%D0%B0%D0%B7%D0%B2%D0%B0&type=text&name=info%5B%24lang.id%5D%5Bname%5D&placeholder=%D0%9C%D0%B0%D0%BA%D1%81.+160+%D1%81%D0%B8%D0%BC%D0%B2%D0%BE%D0%BB%D1%96%D0%B2&required=on">
+                                               </li>
+                                               <li class="field">
+                                                   <span class="name">Keywords</span>
+                                                   <a href="" onclick="return false;" class="b-field-edit"><i class="fa fa-pencil"></i></a>
+                                                   <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a>
+                                                   <input type="hidden" class="field-settings" value="title=Url&type=text&name=info%5B%24lang.id%5D%5Burl%5D&placeholder=%D0%9C%D0%B0%D0%BA%D1%81.160+%D1%81%D0%B8%D0%BC%D0%B2%D0%BE%D0%BB%D1%96%D0%B2&required=on">
+                                               </li>
+                                               <li class="field">
+                                                   <span class="name">Description</span>
+                                                   <a href="" onclick="return false;" class="b-field-edit"><i class="fa fa-pencil"></i></a>
+                                                   <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a>
+                                                   <input type="hidden" class="field-settings" value="title=Url&type=text&name=info%5B%24lang.id%5D%5Burl%5D&placeholder=%D0%9C%D0%B0%D0%BA%D1%81.160+%D1%81%D0%B8%D0%BC%D0%B2%D0%BE%D0%BB%D1%96%D0%B2&required=on">
+                                               </li>
                                            </ul>
                                        </fieldset>
                                    </div>
                                    <div class="box">
                                        <fieldset>
-                                           <legend><i class="fa fa-info"></i> Контент <a href="" onclick="return false;" class="b-box-remove"><i class="fa fa-remove"></i></a></legend>
-
+                                           <legend>
+                                               <span class="box-name">Контент</span>
+                                               <a href="" onclick="return false;" class="b-move"><i class="fa fa-arrows"></i></a>
+                                               <a href="" onclick="return false;" class="b-field-add"><i class="fa fa-plus"></i></a>
+                                               <a href="" onclick="return false;" class="b-box-edit"><i class="fa fa-pencil"></i></a>
+                                               <a href="" onclick="return false;" class="b-box-remove"><i class="fa fa-remove"></i></a>
+                                           </legend>
                                            <ul class="form-fields">
-                                               <li class="field">Content <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a></li>
+                                               <li class="field">
+                                                   <span class="name">Контент</span>
+                                                   <a href="" onclick="return false;" class="b-field-edit"><i class="fa fa-pencil"></i></a>
+                                                   <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a>
+                                                   <input type="hidden" class="field-settings" value="title=%D0%9D%D0%B0%D0%B7%D0%B2%D0%B0&type=text&name=info%5B%24lang.id%5D%5Bname%5D&placeholder=%D0%9C%D0%B0%D0%BA%D1%81.+160+%D1%81%D0%B8%D0%BC%D0%B2%D0%BE%D0%BB%D1%96%D0%B2&required=on">
+                                               </li>
                                            </ul>
                                        </fieldset>
                                    </div>
                                    <div class="box">
                                        <fieldset>
-                                           <legend><i class="fa fa-info"></i> Параметри <a href="" onclick="return false;" class="b-box-remove"><i class="fa fa-remove"></i></a></legend>
+                                           <legend>
+                                               <span class="box-name">Параметри</span>
+                                               <a href="" onclick="return false;" class="b-move"><i class="fa fa-arrows"></i></a>
+                                               <a href="" onclick="return false;" class="b-field-add"><i class="fa fa-plus"></i></a>
+                                               <a href="" onclick="return false;" class="b-box-edit"><i class="fa fa-pencil"></i></a>
+                                               <a href="" onclick="return false;" class="b-box-remove"><i class="fa fa-remove"></i></a>
+                                           </legend>
                                            <ul class="form-fields">
-                                               <li class="field">Шаблон <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a></li>
-                                               <li class="field">Статус <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a></li>
+                                               <li class="field">
+                                                   <span class="name">Шаблон</span>
+                                                   <a href="" onclick="return false;" class="b-field-edit"><i class="fa fa-pencil"></i></a>
+                                                   <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a>
+                                                   <input type="hidden" class="field-settings" value="title=%D0%9D%D0%B0%D0%B7%D0%B2%D0%B0&type=text&name=info%5B%24lang.id%5D%5Bname%5D&placeholder=%D0%9C%D0%B0%D0%BA%D1%81.+160+%D1%81%D0%B8%D0%BC%D0%B2%D0%BE%D0%BB%D1%96%D0%B2&required=on">
+                                               </li>
+                                               <li class="field">
+                                                   <span class="name">Статус</span>
+                                                   <a href="" onclick="return false;" class="b-field-edit"><i class="fa fa-pencil"></i></a>
+                                                   <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a>
+                                                   <input type="hidden" class="field-settings" value="title=Url&type=text&name=info%5B%24lang.id%5D%5Burl%5D&placeholder=%D0%9C%D0%B0%D0%BA%D1%81.160+%D1%81%D0%B8%D0%BC%D0%B2%D0%BE%D0%BB%D1%96%D0%B2&required=on">
+                                               </li>
                                            </ul>
                                        </fieldset>
                                    </div>
@@ -167,6 +230,16 @@
             border:0;
             font-size:12px;
         }
+        .boxes .box fieldset legend a.b-field-add,
+        .boxes .box fieldset legend a.b-box-edit,
+        .boxes .box fieldset legend a.b-box-remove
+        {
+            display: none;
+        }
+        .boxes .box fieldset legend a.b-move{
+            float: left;
+            margin-right:0.5em;
+        }
 
         .htmlpage {
             background: #fff;
@@ -225,8 +298,8 @@
         }
         .htmlpage .box fieldset legend{
             position: relative;
-            padding-right:50px;
-            cursor: move;
+            padding-right:140px;
+            /*cursor: move;*/
         }
         .htmlpage .box fieldset legend a.b-box-remove{
             border: 1px solid #DDDDDD;
@@ -239,6 +312,42 @@
             top: 1px;
             right: 1px;
             cursor:pointer
+        }
+        .htmlpage .box fieldset legend a.b-box-edit{
+            border: 1px solid #DDDDDD;
+            border-radius: 4px 0 4px 0;
+            color: #9DA0A4;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 3px 7px;
+            position: absolute;
+            top: 1px;
+            right: 31px;
+            cursor:pointer
+        }
+        .htmlpage .box fieldset legend a.b-field-add{
+            border: 1px solid #DDDDDD;
+            border-radius: 4px 0 4px 0;
+            color: #9DA0A4;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 3px 7px;
+            position: absolute;
+            top: 1px;
+            right: 61px;
+            cursor:pointer;
+        }
+        .htmlpage .box fieldset legend a.b-move{
+            border: 1px solid #DDDDDD;
+            border-radius: 4px 0 4px 0;
+            color: #9DA0A4;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 3px 7px;
+            position: absolute;
+            top: 1px;
+            right: 91px;
+            cursor:move;
         }
         .htmlpage .box fieldset ul li{
             position: relative;
@@ -259,6 +368,24 @@
             top: 1px;
             right: 1px;
             cursor:pointer
+        }
+        .htmlpage .box fieldset ul a.b-field-edit{
+            border: 1px solid #DDDDDD;
+            border-radius: 4px 0 4px 0;
+            color: #9DA0A4;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 3px 7px;
+            position: absolute;
+            top: 1px;
+            right: 31px;
+            cursor:pointer
+        }
+        .htmlpage .box .editable{
+            background: #fff;
+            border:1px solid #f1f1f1;
+            line-height:16px;
+            padding: 0 5px;
         }
     </style>
 {/literal}

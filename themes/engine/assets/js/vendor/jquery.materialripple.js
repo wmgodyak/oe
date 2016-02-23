@@ -4,7 +4,7 @@
 $.fn.materialripple = function(options) {
 	var defaults = {
 		rippleClass: 'ripple-wrapper'
-	}
+	};
 	$.extend(defaults, options);
 
 	$('body').on('animationend webkitAnimationEnd oAnimationEnd', '.' + defaults.rippleClass, function () {
@@ -31,11 +31,11 @@ $.fn.materialripple = function(options) {
 
 		// Position the Ripple Element
 		newRippleElement.css('top', rippleY+'px').css('left', rippleX+'px').addClass('animated');
-	}
+	};
 
 	var removeRippleElement = function($element) {
 		$element.remove();
-	}
+	};
 
 	// add Ripple-Wrapper to all Elements
 	$(this).addClass('has-ripple');
@@ -44,4 +44,4 @@ $.fn.materialripple = function(options) {
 	$(this).bind('click', function(e){
 		addRippleElement(this, e);
 	});
-}
+};

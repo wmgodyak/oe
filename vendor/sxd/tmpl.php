@@ -283,7 +283,7 @@ return <<<HTML
 sxd.init();
 sxd.backupUrl = '{$SXD->CFG['backup_url']}';
 sxd.tbar.init('sxdToolbar', {$SXD->VAR['toolbar']}); 
-{$SXD->VAR['combos']}
+{$SXD->VAR['combos']};
 sxd.actions.tab_backup();
 </script>
 </body>

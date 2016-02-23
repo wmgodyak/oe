@@ -22,10 +22,18 @@ engine.contentTypes = {
         {
             $(".htmlpage, .htmlpage .column").sortable({connectWith: ".column", handle: ".b-move"});//
 
-            $(".boxes .box").draggable({connectToSortable: ".htmlpage .column", drag: function (e, t) {
-                t.helper.width(100 + '%');
-            }, stop: function (e, t) {
-            }});
+            $(".boxes .box").draggable({
+                connectToSortable: ".htmlpage .column",
+                //revert:true,
+                handle: ".b-move",
+                drag: function (e, t)
+                {
+                    t.helper.width(100 + '%');
+                },
+                stop: function (e, t)
+                {
+                }
+            });
         }
 
 
@@ -44,8 +52,18 @@ engine.contentTypes = {
             removeBox(this);
         });
 
+        $(document).on('click', '.b-box-edit', function(e){
+            editBox(this);
+        });
+
         $(document).on('click', '.b-field-remove', function(e){
             removeField(this); // todo завтра придумати склад полів і туди їх складати
+        });
+        $(document).on('click', '.b-field-edit', function(e){
+            editField(this);
+        });
+        $(document).on('click', '.b-field-add', function(e){
+            addField(this);
         });
 
         initDragabble();
@@ -96,7 +114,9 @@ engine.contentTypes = {
         function removeBox(el)
         {
             var d = engine.confirm('Дійсно видалити блок?', function(){
-                $(el).parents('.box').remove();
+                var box = $(el).parents('.box');
+                console.log(box);
+                box.draggable({revert:true});
                 d.dialog('close');
             })
         }
@@ -106,6 +126,163 @@ engine.contentTypes = {
                 $(el).parent().remove();
                 d.dialog('close');
             })
+        }
+
+        function addField(el)
+        {
+            var formFields = $(el).parents('fieldset:eq(0)').find('.form-fields'),
+                ts = new Date().getTime();
+            console.log(formFields.html());
+            var c = $('<form id="fieldEditForm'+ts+'" class="form-horizontal">\
+                            <div class="form-group">\
+                                <label class="col-sm-3 control-label">Назва:</label>\
+                                <div class="col-sm-9">\
+                                    <input type="text" class="form-control" id="fieldName'+ts+'" required name="title">\
+                                </div>\
+                            </div>\
+                            <div class="form-group">\
+                                <label class="col-sm-3 control-label">Тип:</label>\
+                                <div class="col-sm-9">\
+                                    <input type="text" class="form-control" required name="type">\
+                                </div>\
+                            </div>\
+                            <div class="form-group">\
+                                <label class="col-sm-3 control-label">Код:</label>\
+                                <div class="col-sm-9">\
+                                    <input type="text" class="form-control" required name="name">\
+                                </div>\
+                            </div>\
+                            <div class="form-group">\
+                                <label class="col-sm-3 control-label">Плейсхолдер:</label>\
+                                <div class="col-sm-9">\
+                                    <input type="text" class="form-control" name="placeholder">\
+                                </div>\
+                            </div>\
+                            <div class="form-group">\
+                                <div class="col-sm-8 col-sm-offset-4">\
+                                    <div class="checkbox">\
+                                    <input type="checkbox" name="required"> Обов\'язкове\
+                                    </div>\
+                                </div>\
+                            </div>\
+                </form>');
+
+            var pw = engine.dialog({
+                content:c,
+                title: 'Додати поле',
+                autoOpen: true,
+                width: 600,
+                modal: true,
+                buttons: {
+                    "Зберегти": function(){
+                        var n = $('#fieldName'+ts).val();
+                        var data = $('#fieldEditForm'+ts).serialize();
+                        formFields.append('<li class="field">\
+                            <span class="name">'+n+'</span>\
+                            <a href="" onclick="return false;" class="b-field-edit"><i class="fa fa-pencil"></i></a>\
+                            <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a>\
+                            <input type="hidden" class="field-settings" value="'+data+'">\
+                            </li>');
+                        pw.dialog('close').remove();
+                    }
+                }
+            });
+
+        }
+        function editField(el)
+        {
+            var field = $(el).parents('.field:eq(0)'), s = field.find('.field-settings').val(),
+                settings = {title: '', type: '', name: '', placeholder: '', required: ''}, ts = new Date().getTime();
+            if(s != ''){
+                var pairs = s.split('&');
+                for(var i in pairs){
+                    var split = pairs[i].split('=');
+                    settings[decodeURIComponent(split[0])] = decodeURIComponent(split[1]);
+                }
+            }
+
+            settings.required = typeof settings.required == 'undefined' ? '' : 'checked';
+
+            var c = $('<form id="fieldEditForm'+ts+'" class="form-horizontal">\
+                            <div class="form-group">\
+                                <label class="col-sm-3 control-label">Назва:</label>\
+                                <div class="col-sm-9">\
+                                    <input type="text" class="form-control" id="fieldName'+ts+'" required name="title" value="'+settings.title+'">\
+                                </div>\
+                            </div>\
+                            <div class="form-group">\
+                                <label class="col-sm-3 control-label">Тип:</label>\
+                                <div class="col-sm-9">\
+                                    <input type="text" class="form-control" required name="type" value="'+settings.type+'">\
+                                </div>\
+                            </div>\
+                            <div class="form-group">\
+                                <label class="col-sm-3 control-label">Код:</label>\
+                                <div class="col-sm-9">\
+                                    <input type="text" class="form-control" required name="name" value="'+settings.name+'">\
+                                </div>\
+                            </div>\
+                            <div class="form-group">\
+                                <label class="col-sm-3 control-label">Плейсхолдер:</label>\
+                                <div class="col-sm-9">\
+                                    <input type="text" class="form-control" name="placeholder" value="'+settings.placeholder+'">\
+                                </div>\
+                            </div>\
+                            <div class="form-group">\
+                                <div class="col-sm-8 col-sm-offset-4">\
+                                    <div class="checkbox">\
+                                    <input type="checkbox" '+settings.required+' name="required"> Обов\'язкове\
+                                    </div>\
+                                </div>\
+                            </div>\
+                </form>');
+
+            var pw = engine.dialog({
+                content:c,
+                title: 'Налаштування поля',
+                autoOpen: true,
+                width: 600,
+                modal: true,
+                buttons: {
+                    "Зберегти": function(){
+                        var n = $('#fieldName'+ts).val();
+                        var data = $('#fieldEditForm'+ts).serialize();
+
+                        field.find('span.name').text(n);
+                        field.find('.field-settings').val(data);
+                        pw.dialog('close').remove();
+                    }
+                }
+            });
+
+        }
+
+        function editBox(el)
+        {
+            var legend = $(el).parent('legend'),span =legend.find('span.box-name'), text = span.text();
+            var c = $('<form id="boxEditForm">\
+                            <div class="form-group">\
+                                <label for="data_name" class="col-sm-3 control-label">Назва:</label>\
+                                    <div class="col-sm-9">\
+                                        <input type="text" class="form-control" required id="boxName" value="'+text+'">\
+                                    </div>\
+                            </div>\
+                </form>');
+            var pw = engine.dialog({
+                content:c,
+                title: 'Налаштування блоку',
+                autoOpen: true,
+                width: 600,
+                modal: true,
+                buttons: {
+                    "Зберегти": function(){
+                        var name = $('#boxName').val();
+                        legend.data('name', name);
+                        span.text(name);
+                        pw.dialog('close').remove();
+                    }
+                }
+            });
         }
     },
     onCreateSuccess: function(d)
