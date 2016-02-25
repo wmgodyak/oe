@@ -42,7 +42,7 @@
         <div class="col-md-12">
             <fieldset>
                 <legend>Конфігурація полів</legend>
-                <div class="row">
+                <div class="row" id="configComponents">
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="bu_select_grid" class="col-sm-3 control-label">Сітка</label>
@@ -67,13 +67,12 @@
                             <div class="col-sm-8">
                                <div class="boxes" id="baseComponents">
                                    {literal}
-                                   <div class="box">
+                                   <div class="box" id="main">
                                        <div class="preview">
                                            <fieldset>
                                                <legend>
                                                    <span class="box-name" contenteditable="true">Основне</span>
                                                </legend>
-
                                                <a href="" onclick="return false;" class="b-move" title="Таскати"><i class="fa fa-arrows"></i></a>
                                                <a href="" onclick="return false;" class="b-field-add" title="Додати поле"><i class="fa fa-plus"></i></a>
                                                <!--a href="" onclick="return false;" class="b-box-edit"><i class="fa fa-pencil"></i></a-->
@@ -153,6 +152,67 @@
      <input type="hidden" name="data[id]" value="{$data.id}">
 </form>
 {literal}
+
+    <script type="text/template" id="sourceTplText">
+        <div class="form-group" id="<%-id%>_group">
+            <label for="<%-name%>" class="col-sm-3 control-label"><%-title%></label>
+            <div class="col-sm-9">
+                <% if(type == 'text') { %>
+                <input type="text" class="form-control" name="<%-name%>" id="<%-name%>" placeholder="<%-placeholder%>" <% if(required) { %> required <% } %>>
+                <% } else if(type == 'textarea') { %>
+                <textarea class="form-control" name="<%-name%>" id="<%-id%>" placeholder="<%-placeholder%>" <% if(required) { %> required <% } %>></textarea>
+                <% } else if(type == 'editor') { %>
+                <textarea class="form-control ckeditor" name="<%-name%>" id="<%-name%>" placeholder="<%-placeholder%>" <% if(required) { %> required <% } %>></textarea>
+                <% } %>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/template" id="editFieldTpl">
+        <form id="fieldEditForm" class="form-horizontal">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Заголовок:</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control do-kp" id="t_title" required name="title" value="<%-data.title%>">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Тип:</label>
+                <div class="col-sm-9">
+                    <select name="type" class="form-control do-kp" id="t_type">
+                        <option value="text">input:text</option>
+                        <option value="textarea">textarea</option>
+                        <option value="editor">editor</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Назва:</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control do-kp" id="t_name" required name="name" value="<%-data.name%>">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Плейсхолдер:</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control do-kp" name="placeholder" id="t_placeholder" value="<%-data.placeholder%>">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-8 col-sm-offset-4">
+                    <div class="checkbox">
+                        <input type="checkbox" class="do-kp" id="t_required" <%-data.required%> name="required"> Обов'язкове
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12 ">
+                    <textarea id="htmlOut" style="width:100%;height:200px"><%=data.source%></textarea>
+                </div>
+            </div>
+        </form>
+    </script>
+
     <style>
         .boxes {
             position: relative;

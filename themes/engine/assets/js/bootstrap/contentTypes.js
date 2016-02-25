@@ -17,7 +17,13 @@ engine.contentTypes = {
         console.log('engine.contentTypes.initBuilder()');
 
         var $builder = $('#builder'), bSubmit = $('.b-form-save');
-
+        $builder.find('.box').each(function(){
+            var id = $(this).attr('id');
+            console.log(id);
+            if(typeof id != 'undefined') {
+                $('#configComponents').find('#'+id).remove();
+            }
+        });
         function initDragabble()
         {
             $(".htmlpage, .htmlpage .column").sortable({connectWith: ".column", handle: ".b-move"});//
@@ -54,9 +60,11 @@ engine.contentTypes = {
         $(document).on('click', '.b-box-remove', function(e){
             removeBox(this);
         });
+
         $(document).on('click', '.b-field-remove', function(e){
             removeField(this);
         });
+
         $(document).on('click', '.b-field-edit', function(e){
             editField(this);
         });
@@ -68,6 +76,76 @@ engine.contentTypes = {
 
 
         initDragabble();
+
+        function editField(el)
+        {
+            function makeSource(data){
+                data = $.extend({
+                    title: '',
+                    type: 'text',
+                    name: '',
+                    id:   '',
+                    placeholder: '',
+                    required: '',
+                }, data);
+                var tpl = _.template(document.getElementById('sourceTplText').innerHTML);
+                return tpl(data);
+            }
+            var id = $(el).parent('li').attr('id'),
+                group = $('#' + id + '_group'),
+                previewName = $(el).parent('li').find('.name'),
+                source =''
+                ;
+
+            var tmpl = _.template(document.getElementById('editFieldTpl').innerHTML);
+                var inp = group.find('.form-control');
+
+                var data = {
+                    title: group.find('.control-label').html(),
+                    type: inp.attr('type') || 'textarea',
+                    name: inp.attr('name'),
+                    id  : inp.attr('name'),//.replace('[', '_').replace(']', '_'),
+                    placeholder: inp.attr('placeholder'),
+                    required: inp.attr('required'),
+                    source :makeSource(data)
+                }
+                ;
+
+            var result = tmpl({data: data, ts: new Date().getTime()});
+
+            var pw = engine.dialog({
+                content:result,
+                title: 'Редагування поля',
+                autoOpen: true,
+                width: 750,
+                modal: true,
+                buttons: {
+                    "Зберегти": function(){
+                        previewName.text(data.title);
+                        pw.dialog('close').remove();
+                        group.replaceWith(source);
+                        $builder.trigger('DOMNodeRemoved');
+                    }
+                }
+            });
+
+
+            $('.do-kp').on('change keyup',function(){
+
+                data = {
+                    title: $("#t_title").val(),
+                    type: $("#t_type").find('option:selected').val(),
+                    name: $("#t_name").val(),
+                    placeholder: $("#t_placeholder").val(),
+                    required:  $("#t_required").is(':checked')
+                };
+
+                source = makeSource(data);
+                $('#htmlOut').html(source);
+            });
+
+            $('.do-kp:first').trigger('change');
+        }
 
         function getTemplate(size)
         {
@@ -122,69 +200,6 @@ engine.contentTypes = {
             })
         }
 
-        function editField(el)
-        {
-            var field = $(el).parent('li'),
-                data = {title: '', type: '', name: '', placeholder: '', required: ''}, ts = new Date().getTime();
-
-            data.required = typeof data.required == 'undefined' ? '' : 'checked';
-
-            var a = field.find('span.box-name');
-            data.title = a.text();
-            data.required = typeof data.required == 'undefined' ? '' : 'checked';
-
-            var c = $('<form id="fieldEditForm'+ts+'" class="form-horizontal">\
-                            <div class="form-group">\
-                                <label class="col-sm-3 control-label">Назва:</label>\
-                                <div class="col-sm-9">\
-                                    <input type="text" class="form-control" id="fieldName'+ts+'" required name="title" value="'+data.title+'">\
-                                </div>\
-                            </div>\
-                            <div class="form-group">\
-                                <label class="col-sm-3 control-label">Тип:</label>\
-                                <div class="col-sm-9">\
-                                    <input type="text" class="form-control" required name="type" value="'+data.type+'">\
-                                </div>\
-                            </div>\
-                            <div class="form-group">\
-                                <label class="col-sm-3 control-label">Код:</label>\
-                                <div class="col-sm-9">\
-                                    <input type="text" class="form-control" required name="name" value="'+data.name+'">\
-                                </div>\
-                            </div>\
-                            <div class="form-group">\
-                                <label class="col-sm-3 control-label">Плейсхолдер:</label>\
-                                <div class="col-sm-9">\
-                                    <input type="text" class="form-control" name="placeholder" value="'+data.placeholder+'">\
-                                </div>\
-                            </div>\
-                            <div class="form-group">\
-                                <div class="col-sm-8 col-sm-offset-4">\
-                                    <div class="checkbox">\
-                                    <input type="checkbox" '+data.required+' name="required"> Обов\'язкове\
-                                    </div>\
-                                </div>\
-                            </div>\
-                </form>');
-
-            var pw = engine.dialog({
-                content: c,
-                title: 'Налаштування поля',
-                autoOpen: true,
-                width: 600,
-                modal: true,
-                buttons: {
-                    "Зберегти": function(){
-                        var n = $('#fieldName'+ts).val();
-                        //var data = $('#fieldEditForm'+ts).serializeArray();
-                        field.find('span.name').text(n);
-                        pw.dialog('close').remove();
-                    }
-                }
-            });
-
-        }
-
         function removeField(el)
         {
             var d = engine.confirm('Дійсно видалити поле?', function(){
@@ -193,6 +208,70 @@ engine.contentTypes = {
             })
         }
 /*
+
+
+ function editField(el)
+ {
+ var field = $(el).parent('li'), id = field.attr('id'), sourceID = id + '_group',
+ ts = new Date().getTime(),
+ data = {title: '', type: '', name: '', placeholder: '', required: ''}
+ ;
+
+ var a = field.find('span.box-name');
+ data.title = a.text();
+ data.required = typeof data.required == 'undefined' ? '' : 'checked';
+
+ var c = $('<form id="fieldEditForm'+ts+'" class="form-horizontal">\
+ <div class="form-group">\
+ <label class="col-sm-3 control-label">Назва:</label>\
+ <div class="col-sm-9">\
+ <input type="text" class="form-control" id="fieldName'+ts+'" required name="title" value="'+data.title+'">\
+ </div>\
+ </div>\
+ <div class="form-group">\
+ <label class="col-sm-3 control-label">Тип:</label>\
+ <div class="col-sm-9">\
+ <input type="text" class="form-control" required name="type" value="'+data.type+'">\
+ </div>\
+ </div>\
+ <div class="form-group">\
+ <label class="col-sm-3 control-label">Код:</label>\
+ <div class="col-sm-9">\
+ <input type="text" class="form-control" required name="name" value="'+data.name+'">\
+ </div>\
+ </div>\
+ <div class="form-group">\
+ <label class="col-sm-3 control-label">Плейсхолдер:</label>\
+ <div class="col-sm-9">\
+ <input type="text" class="form-control" name="placeholder" value="'+data.placeholder+'">\
+ </div>\
+ </div>\
+ <div class="form-group">\
+ <div class="col-sm-8 col-sm-offset-4">\
+ <div class="checkbox">\
+ <input type="checkbox" '+data.required+' name="required"> Обов\'язкове\
+ </div>\
+ </div>\
+ </div>\
+ </form>');
+
+ var pw = engine.dialog({
+ content: c,
+ title: 'Налаштування поля',
+ autoOpen: true,
+ width: 600,
+ modal: true,
+ buttons: {
+ "Зберегти": function(){
+ var n = $('#fieldName'+ts).val();
+ //var data = $('#fieldEditForm'+ts).serializeArray();
+ field.find('span.name').text(n);
+ pw.dialog('close').remove();
+ }
+ }
+ });
+
+ }
 
  $(document).on('click', '.b-box-edit', function(e){
  editBox(this);
