@@ -137,6 +137,14 @@ engine.contentTypes = {
             return out;
         }
 
+        function removeRow(el)
+        {
+            var d = engine.confirm('Дійсно видалити рядок?', function(){
+                $(el).parent().remove();
+                $builder.trigger('DOMNodeRemoved');
+                d.dialog('close');
+            })
+        }
     },
     onCreateSuccess: function(d)
     {
