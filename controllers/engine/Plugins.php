@@ -142,7 +142,7 @@ class Plugins extends Engine
 
     public function edit($id)
     {
-        die('OKI');
+//        die('OKI');
         $data = $this->mPlugins->getDataByID($id);
         $this->template->assign('data', $data);
         $this->response->body($this->template->fetch('plugins/edit'))->asHtml();

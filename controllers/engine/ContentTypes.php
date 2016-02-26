@@ -8,13 +8,13 @@
 
 namespace controllers\engine;
 
-use controllers\core\Config;
 use controllers\core\Settings;
 use controllers\Engine;
 use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
 use helpers\bootstrap\Link;
 use helpers\FormValidation;
+use helpers\PHPDocReader;
 
 defined("CPATH") or die();
 /**
@@ -31,7 +31,8 @@ class ContentTypes extends Engine
     private $contentTypes;
     private $path;
 
-    const DIR = 'content_type/';
+    const DIR = 'content_types/';
+    const PATH = 'controllers/engine/content_types/';
     const EXT = '.tpl';
 
     public function __construct()
@@ -89,7 +90,7 @@ class ContentTypes extends Engine
     public function items($parent_id = 0)
     {
         $t = new DataTables();
-        $t  -> table('content_type')
+        $t  -> table('content_types')
             -> get('id, name, type, isfolder, is_main')
             -> where(" parent_id = {$parent_id}")
             -> execute();
@@ -137,6 +138,7 @@ class ContentTypes extends Engine
             )
         );
         $data = ['parent_id' => $parent_id];
+//        $data['controllers'] = $this->getContentTypes();
         $this->template->assign('data', $data);
         $this->template->assign('action', 'create');
         $this->output($this->template->fetch('contentTypes/form'));
@@ -169,12 +171,39 @@ class ContentTypes extends Engine
         );
 
         $data['template'] = $this->readTemplate($id);
-        $data['plugins'] = $this->contentTypes->getPlugins();
+
+//        $data['controllers'] = $this->getContentTypes();
         $this->template->assign('data', $data);
         $this->template->assign('action', 'edit');
         $this->output($this->template->fetch('contentTypes/form'));
     }
+/*
+    private function getContentTypes()
+    {
+        $items = array();
+        if ($handle = opendir(DOCROOT . self::PATH)) {
+            while (false !== ($entry = readdir($handle))) {
+                if ($entry != "." && $entry != ".." && !is_dir(DOCROOT . self::PATH . $entry)) {
 
+                    $module = str_replace('.php', '', $entry);
+                    $ns = str_replace('/', '\\', self::PATH);
+
+                    $row = PHPDocReader::getMeta($ns . ucfirst($module));
+                    if(!isset($row['name'])) continue;
+
+                    $row['controller'] = ucfirst($module);
+
+                    if(!isset($row['rang'])) $row['rang'] = 101;
+
+                    $items[] = $row;
+                }
+            }
+            closedir($handle);
+        }
+
+        return $items;
+    }
+*/
     /**
      * @param null $id
      * @throws \Exception
