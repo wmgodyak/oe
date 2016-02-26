@@ -24,6 +24,24 @@ engine.contentTypes = {
                 $('#configComponents').find('#'+id).remove();
             }
         });
+
+        $(document).on('click', '.b-row-remove', function(e){
+            removeRow(this);
+        });
+
+
+        $(document).on('change', '#bu_select_grid', function(e){
+            var tpl = getTemplate(this.value);
+            $builder.append(tpl);
+            initDragabble();
+            $(this).find('option:first').attr('selected', true);
+        });
+
+        $builder.bind('DOMNodeInserted DOMNodeRemoved', function(event) {
+            var html = this.innerHTML;
+            $('#data_settings_form').html(html);
+        });
+
         function initDragabble()
         {
             var boxes = $('.boxes'), htmlpage = $('.htmlpage');
@@ -62,7 +80,6 @@ engine.contentTypes = {
             //        //})
             //    }
             //});
-
             $(".htmlpage, .htmlpage .column,.boxes").sortable({connectWith: ".column"});//, handle: ".b-move"
 
             $(".boxes .box").draggable({
@@ -85,20 +102,6 @@ engine.contentTypes = {
 
 
         }
-
-
-        $(document).on('change', '#bu_select_grid', function(e){
-            var tpl = getTemplate(this.value);
-            $builder.append(tpl);
-            initDragabble();
-            $(this).find('option:first').attr('selected', true);
-        });
-
-        $builder.bind('DOMNodeInserted DOMNodeRemoved', function(event) {
-            var html = this.innerHTML;
-            $('#data_settings_form').html(html);
-        });
-
         initDragabble();
 
         function getTemplate(size)

@@ -85,4 +85,13 @@ class ContentTypes extends Engine
             where parent_id={$parent_id} and type='{$type}' ". ($id ? " and id <> $id" : '') ." limit 1")
             ->row('id');
     }
+
+    public function getPlugins()
+    {
+        return self::$db
+            ->select("
+                select controller from plugins
+              ")
+            ->all();
+    }
 }

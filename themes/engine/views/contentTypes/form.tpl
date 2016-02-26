@@ -78,7 +78,11 @@
                         <div class="form-group">
                             <label for="bu_select_grid" class="col-sm-3 control-label">Плагіни</label>
                             <div class="col-sm-8">
-
+                                <div class="boxes" id="baseComponents">
+                                {foreach $data.plugins as $plugin}
+                                    <div class="box" id="plugin_{$plugin.controller}">{$plugin.controller}</div>
+                                {/foreach}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -117,7 +121,7 @@
         .boxes .box {
             cursor: move;
             display: inline-block;
-            padding: 5px;
+            padding: 15px;
             line-height:20px;
             height: 25px!important;
             background: #89BDFF;
@@ -179,13 +183,13 @@
         .htmlpage .box {
             position: relative;
             width:100%;
-
             border: 1px solid #DDDDDD;
             border-radius: 4px 0 4px 0;
             color: #9DA0A4;
-            font-size: 12px;
+            font-size: 14px;
             font-weight: bold;
-            padding: 3px 7px;
+            padding: 0 10px;
+            line-height:30px;
             cursor:pointer
         }
     </style>

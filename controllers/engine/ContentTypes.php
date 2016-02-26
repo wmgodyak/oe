@@ -169,7 +169,7 @@ class ContentTypes extends Engine
         );
 
         $data['template'] = $this->readTemplate($id);
-
+        $data['plugins'] = $this->contentTypes->getPlugins();
         $this->template->assign('data', $data);
         $this->template->assign('action', 'edit');
         $this->output($this->template->fetch('contentTypes/form'));
