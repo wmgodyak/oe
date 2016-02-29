@@ -118,6 +118,7 @@ abstract class Engine extends Controller
         $this->template->assign('controller',  $controller);
         $this->template->assign('action',      $action);
         $this->template->assign('t',           Lang::getInstance()->t());
+
 //        echo '<pre>'; print_r(Lang::getInstance()->t()); die;
         // admin structure
         if($this->request->isGet() && ! $this->request->isXhr()){
@@ -133,7 +134,7 @@ abstract class Engine extends Controller
             $this->template->assign('title', $this->t($controller . '.action_' . $action));
             $this->template->assign('name', $this->t($controller . '.action_' . $action));
 
-//            die($controller . '.action_' . $action .' // '. $this->t($controller . '.action_' . $action));
+            $this->template->assign('languages',   $this->languages->get());
 
             $this->template->assign('admin', Admin::data());
 

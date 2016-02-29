@@ -6,9 +6,10 @@
  * Date: 26.02.16 : 16:00
  */
 
-namespace controllers\engine\ctypes;
+namespace controllers\engine\content;
 
 use controllers\Engine;
+use controllers\engine\Content;
 use controllers\engine\CTypes;
 use controllers\engine\DataTables;
 use helpers\bootstrap\Button;
@@ -26,12 +27,8 @@ defined("CPATH") or die();
  * @rang 300
  * @package controllers\engine\content_types
  */
-class Pages extends CTypes
+class Pages extends Content
 {
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     public function index($parent_id=0)
     {
@@ -40,7 +37,7 @@ class Pages extends CTypes
             $this->appendToPanel((string)Link::create
             (
                 $this->t('common.back'),
-                ['class' => 'btn-md b-ct-pages-create', 'href'=> 'cTypes/run/pages/index' . ($data['parent_id']>0 ? '/' . $data['parent_id'] : '')]
+                ['class' => 'btn-md', 'href'=> './content/pages/index' . ($data['parent_id']>0 ? '/' . $data['parent_id'] : '')]
             )
             );
         }
@@ -50,19 +47,19 @@ class Pages extends CTypes
             (string)Link::create
             (
                 $this->t('common.button_create'),
-                ['class' => 'btn-md b-ct-pages-create', 'href'=> 'cTypes/run/pages/create' . ($parent_id? "/$parent_id" : '')]
+                ['class' => 'btn-md', 'href'=> './content/pages/create' . ($parent_id? "/$parent_id" : '')]
             )
         );
 
         $t = new DataTables();
 
-        $t  -> setId('cTypes/run/pages')
-            -> ajaxConfig('cTypes/run/pages/items/' . $parent_id)
+        $t  -> setId('content_pages')
+            -> ajaxConfig('content/pages/items/' . $parent_id)
 //            -> setConfig('order', array(0, 'desc'))
             -> th($this->t('common.id'))
-            -> th($this->t('cTypes/run/pages.name'))
-            -> th($this->t('cTypes/run/pages.type'))
-            -> th($this->t('cTypes/run/pages.template'))
+            -> th($this->t('common.name'))
+            -> th($this->t('common.created'))
+            -> th($this->t('common.updated'))
             -> th($this->t('common.tbl_func'), '', 'width: 60px')
         ;
 
@@ -72,27 +69,28 @@ class Pages extends CTypes
     public function items($parent_id = 0)
     {
         $t = new DataTables();
-        $t  -> table('content_types')
-            -> get('id, name, type, isfolder, is_main')
-            -> where(" parent_id = {$parent_id}")
+        $t  -> table('content c')
+            -> get('c.id, ci.name, ci.url, c.created, c.updated, c.status, c.isfolder')
+            -> join("content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}")
+            -> where(" c.parent_id = {$parent_id}")
             -> execute();
 
         $res = array();
         foreach ($t->getResults(false) as $i=>$row) {
             $res[$i][] = $row['id'];
-            $res[$i][] = "<a href='cTypes/run/pages/index/{$row['id']}'>{$row['name']}</a>";
-            $res[$i][] = $row['type'];
-            $res[$i][] = $this->getPath($row['id'], false);
+            $res[$i][] = "<a href='content/pages/index/{$row['id']}'>{$row['name']}</a>";
+            $res[$i][] = date('d.m.Y H:i:s', strtotime($row['created']));
+            $res[$i][] = date('d.m.Y H:i:s', strtotime($row['edited']));
             $res[$i][] =
                 (string)Link::create
                 (
                     Icon::create(Icon::TYPE_EDIT),
-                    ['class' => 'btn-primary', 'href' => "cTypes/run/pages/edit/" . $row['id'], 'title' => $this->t('common.title_edit')]
+                    ['class' => 'btn-primary', 'href' => "content/pages/edit/" . $row['id'], 'title' => $this->t('common.title_edit')]
                 ) .
                 ($row['is_main'] == 0 && $row['isfolder'] == 0 ? (string)Button::create
                 (
                     Icon::create(Icon::TYPE_DELETE),
-                    ['class' => 'b-ct-pages-delete', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+                    ['class' => 'b-pages-delete', 'data-id' => $row['id'], 'title' => $this->t('pages.delete_question')]
                 ) : "")
 
             ;
@@ -100,9 +98,30 @@ class Pages extends CTypes
 
         return $t->renderJSON($res, $t->getTotal());
     }
-    public function create()
+
+    public function create($parent_id = 0)
     {
-        echo 'Pages::create()';
+        if($parent_id > 0){
+            $data = $this->mContent->getData($parent_id);
+            $this->appendToPanel((string)Link::create
+            (
+                $this->t('common.back'),
+                ['class' => 'btn-md', 'href'=> './content/pages/' . ($data['parent_id']>0 ? 'index/' . $data['parent_id'] : '')]
+            )
+            );
+        }
+
+        $this->appendToPanel
+        (
+            (string)Link::create
+            (
+                $this->t('common.button_save'),
+                ['class' => 'btn-md ', 'href'=> './content/pages/create' . ($parent_id? "/$parent_id" : '')]
+            )
+        );
+
+        $form = $this->template->fetch($this->form_template);
+        $this->output($form);
     }
     public function edit($id)
     {

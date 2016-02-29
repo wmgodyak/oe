@@ -54,6 +54,7 @@ class Route
                         }
 
                         if(isset($s[2]) && $s[2] == 'action') {
+                            $matches[2] = isset($matches[2]) ? $matches[2] : 'index';
                             $action = $matches[2];
                         }
 
