@@ -6,9 +6,7 @@
  * Date: 26.02.16 : 16:00
  */
 
-
-namespace controllers\engine\ctypes;
-
+namespace controllers\engine\content;
 
 use controllers\Engine;
 

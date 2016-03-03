@@ -125,8 +125,12 @@ class Plugins extends Model
     {
         $res = [];
         foreach (self::$db->select("select id, controller from components where published=1")->all() as $item) {
-
-            $row = PHPDocReader::getMeta('controllers\engine\\' . ucfirst($item['controller']));
+            if(strpos($item['controller'], '/') === FALSE){
+                $item['controller'] = ucfirst($item['controller']);
+            } else{
+                $item['controller'] = str_replace('/','\\', $item['controller']);
+            }
+            $row = PHPDocReader::getMeta('controllers\engine\\' . $item['controller']);
             if(!isset($row['name'])) continue;
 
             $item['name'] = $row['name'];

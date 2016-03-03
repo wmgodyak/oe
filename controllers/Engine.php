@@ -15,6 +15,7 @@ use controllers\core\Settings;
 use controllers\core\Template;
 use controllers\engine\Admin;
 use controllers\engine\Lang;
+use controllers\engine\Plugins;
 use controllers\engine\PluginsFactory;
 use models\engine\Languages;
 
@@ -108,7 +109,6 @@ abstract class Engine extends Controller
     private function init()
     {
         self::$initialized = true;
-//        echo "Engine::init();\r\n";
 
         $controller = $this->request->get('controller');
         $action = $this->request->get('action');
@@ -145,10 +145,7 @@ abstract class Engine extends Controller
         $this->template->assign('plugins', $plugins);
     }
 
-    public function before()
-    {
-
-    }
+    public function before(){}
 
     protected final function setButtonsPanel($buttons)
     {
@@ -187,7 +184,19 @@ abstract class Engine extends Controller
      */
     private function makeNav()
     {
-        $this->template->assign('nav_items', $this->engine->nav());
+        $nav = [];
+        foreach ($this->engine->nav() as $item) {
+            $c = $item['controller'];
+            if(strpos($c, '/') !== false){
+                $a = explode('/', $c);
+                $c = end($a);
+                $c = mb_strtolower($c);
+            }
+            $item['name'] = $this->t($c . '.action_index');
+            $nav[] = $item;
+        }
+
+        $this->template->assign('nav_items', $nav);
         $s = $this->template->fetch('nav');
         $this->template->assign('nav', $s);
     }

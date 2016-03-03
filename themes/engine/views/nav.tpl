@@ -12,7 +12,7 @@
             <li>
                 <a href="./{$item.controller}">
                     <i class="fa {$item.icon}"></i>
-                    <span>{$t[$item.controller].action_index}</span>
+                    <span>{$item.name}</span>
                 </a>
             </li>
             {/foreach}

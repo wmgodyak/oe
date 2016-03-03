@@ -7,11 +7,13 @@
  */
 namespace controllers\engine;
 
+use controllers\core\Request;
 use controllers\Engine;
 use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
 use helpers\FormValidation;
 use helpers\PHPDocReader;
+use models\core\DB;
 
 defined("CPATH") or die();
 
@@ -142,7 +144,7 @@ class Plugins extends Engine
 
     public function edit($id)
     {
-//        die('OKI');
+        die('Дію заборонено');
         $data = $this->mPlugins->getDataByID($id);
         $this->template->assign('data', $data);
         $this->response->body($this->template->fetch('plugins/edit'))->asHtml();
@@ -177,6 +179,7 @@ class Plugins extends Engine
 
     public function install()
     {
+
         $plugin = $this->request->post('c');
 
         if($this->request->post('action')){
@@ -246,4 +249,62 @@ class Plugins extends Engine
         }
     }
 
+
+
+    public static function get()
+    {
+        $request = Request::getInstance();
+
+        $controller  = $request->get('controller');
+        $action      = $request->get('action');
+        $args        = $request->get('args');
+        $ns          = $request->get('namespace');
+        $ns = str_replace('\\','/', $ns);
+        $ns = str_replace('controllers/engine/', '', $ns);
+        $controller = $ns . $controller;
+
+        $r = DB::getInstance()
+            -> select("
+                select p.controller, p.icon, p.rang, p.place, p.settings
+                from plugins p
+                join components c on c.controller = '{$controller}'
+                join plugins_components pc on pc.plugins_id=p.id and pc.components_id=c.id
+                where p.published=1
+                order by abs(p.position) asc
+            ")
+            -> all();
+
+        $plugins = [];
+        foreach ($r as $item) {
+            if(!empty($item['settings'])) $item['settings'] = unserialize($item['settings']);
+
+            $p = self::getPlugin($item['controller'], $item);
+            if(method_exists($p, $action) && !in_array($action, $p->disallow_actions)){ //  && $p->autoload == true
+
+                $plugins[$item['place']][] = call_user_func_array(array($p, $action), $args);
+            }
+        }
+
+        return $plugins;
+    }
+
+    /**
+     * @param $plugin
+     * @param null $data
+     * @return mixed
+     * @throws \FileNotFoundException
+     */
+    private static function getPlugin($plugin, $data=null)
+    {
+        if(! file_exists(DOCROOT . 'controllers/engine/plugins/' . ucfirst($plugin) . '.php')) {
+            throw new \FileNotFoundException("Контроллер плагіну {$plugin} не знайдено.");
+        }
+
+        $cl = '\controllers\engine\plugins\\' .  ucfirst($plugin);
+
+        $cl = new $cl();
+        $cl->setMeta($data);
+
+        return $cl;
+    }
 }

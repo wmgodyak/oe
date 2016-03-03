@@ -19,7 +19,7 @@ defined("CPATH") or die();
 abstract class Plugin extends Engine
 {
     /**
-     * Автоматично запускати методи плагіну відповідно до екшинів
+     * Блокування екшинів
      *
      * @var bool
      */

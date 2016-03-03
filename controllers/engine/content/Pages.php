@@ -10,7 +10,6 @@ namespace controllers\engine\content;
 
 use controllers\Engine;
 use controllers\engine\Content;
-use controllers\engine\CTypes;
 use controllers\engine\DataTables;
 use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
@@ -21,7 +20,7 @@ defined("CPATH") or die();
 /**
  * Class Pages
  * @name Сторінки
- * @icon fa-pages
+ * @icon fa-file-text
  * @author Volodymyr Hodiak
  * @version 1.0.0
  * @rang 300

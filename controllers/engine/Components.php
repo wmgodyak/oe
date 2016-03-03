@@ -57,28 +57,39 @@ class Components extends Engine
         $this->output($t->render());
     }
 
-    public function items()
+    private function readComponents($path)
     {
-        $items = array();
-        if ($handle = opendir(DOCROOT . self::PATH)) {
+        $items  = []; $disabled = ['.','..', 'plugins'];
+        if ($handle = opendir(DOCROOT . $path)) {
             while (false !== ($entry = readdir($handle))) {
-                if ($entry != "." && $entry != ".." && !is_dir(DOCROOT . self::PATH . $entry)) {
+                if (in_array($entry, $disabled)) continue;
+
+                    if(is_dir($path . $entry)){
+                        $items = array_merge($items, $this->readComponents($path . $entry . '/'));
+                    }
 
                     $module = str_replace('.php', '', $entry);
-                    $ns = str_replace('/', '\\', self::PATH);
+                    $ns = str_replace('/', '\\', $path);
 
                     $row = PHPDocReader::getMeta($ns . ucfirst($module));
                     if(!isset($row['name'])) continue;
 
-                    $row['controller'] = ucfirst($module);
+                    $row['controller'] = str_replace('controllers/engine/','', $path . ucfirst($module));
 
                     if(!isset($row['rang'])) $row['rang'] = 101;
 
                     $items[] = $row;
-                }
+
             }
             closedir($handle);
         }
+
+        return $items;
+    }
+
+    public function items()
+    {
+        $items = $this->readComponents(self::PATH);
 
         $res = array();
         $t = new DataTables();
@@ -144,7 +155,7 @@ class Components extends Engine
 
     public function edit($id)
     {
-        die('COmponents::edit');
+        die('Дію заборонено');
         $data = $this->mComponents->getDataByID($id);
 
         $this->template->assign('data', $data);
@@ -197,7 +208,7 @@ class Components extends Engine
             } elseif($this->mComponents->isInstalled($component)){
                 $i[] = ["data[parent_id]" => $this->t('components.error_component_installed')];
             } else {
-
+                $component = str_replace('/','\\', $component);
                 $meta = PHPDocReader::getMeta('controllers\engine\\'. $component);
 
                 if(isset($meta['icon']))     $data['icon']     = $meta['icon'];
