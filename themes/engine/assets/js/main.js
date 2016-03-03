@@ -5,7 +5,8 @@ var engine = {
         sc.type = 'text/javascript';
         sc.async = true;
         sc.src = '/themes/engine/assets/js/bootstrap/' + src + '.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(sc, s);
+        var s = document.getElementById('componentScript');
+        s.parentNode.insertBefore(sc, s);
     },
     validateAjaxForm: function(myForm, onSuccess, ajaxParams, rules, onBeforeSend){
 
@@ -82,6 +83,9 @@ var engine = {
                 $(form).ajaxSubmit(settings);
             }
         });
+    },
+    closeDialog: function(){
+      $('.ui-dialog, .ui-widget-overlay').remove();
     },
     dialog: function(args)
     {
@@ -200,6 +204,10 @@ var engine = {
 
         var $form = $('#form') ;
         if($form.length){
+            $('.datepicker').datepicker({
+                dateFormat: 'dd.mm.yy'
+            });
+
             //validateAjaxForm: function(myForm, onSuccess, ajaxParams, rules, onBeforeSend){
             engine.validateAjaxForm('#form', $form.data('success'), {}, $form.data('rules'), $form.data('beforesend'));
             $('.b-form-save').click(function(){$form.submit();})
@@ -261,7 +269,7 @@ var engine = {
             },
             "cookies" : {
                 auto_save: true,
-                cookie_options : {path: '/'}
+                cookie_options : {path: '/engine'}
             },
             'types' : {
                 /*'default' : {
@@ -354,7 +362,6 @@ var engine = {
             },
             init: function()
             {
-                console.dir(config);
                 var $tree = $('#' + id);
                 if($tree.length == 0) {
                     console.error('Tree #' + id + ' not found');

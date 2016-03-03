@@ -7,6 +7,8 @@
 
 namespace models\core;
 
+use controllers\core\Request;
+
 defined("CPATH") or die();
 
 /**
@@ -29,9 +31,13 @@ class Model {
 
     protected $error = [];
 
+    protected $request;
+
     public function __construct()
     {
         self::$db = DB::getInstance();
+
+        $this->request = Request::getInstance();
     }
 
     public function setError($msg)
@@ -56,7 +62,7 @@ class Model {
 
     public function hasDBError()
     {
-        return self::$db->hasError();
+        return !empty($this->error) || self::$db->hasError();
     }
 
     /**

@@ -8,7 +8,9 @@
 
 namespace models;
 
+use controllers\core\Session;
 use models\core\Model;
+use models\engine\Languages;
 
 defined("CPATH") or die();
 
@@ -18,6 +20,21 @@ defined("CPATH") or die();
  */
 class Engine extends Model
 {
+    protected $admin;
+    protected $languages;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->admin = Session::get('engine.admin');
+
+        $l = new Languages();
+        $this->languages    = $l->get();
+        $this->languages_id = $l->getDefault('id');
+        self::$language_id  = $this->languages_id;
+    }
+
     /**
      * @return array
      */
@@ -65,9 +82,9 @@ class Engine extends Model
      * @param $data
      * @return bool
      */
-    protected function updateRow($table, $id, $data)
+    protected function updateRow($table, $id, $data, $debug = 0)
     {
-        return self::$db->update($table, $data, "id={$id} limit 1");
+        return self::$db->update($table, $data, "id={$id} limit 1", $debug);
     }
 
     /**

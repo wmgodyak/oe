@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-02-29 15:19:02
+<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-03-03 10:11:24
          compiled from "/var/www/engine.loc/themes/engine/views/index.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:1202898852567be873c6fe20-51470877%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '6b5a4c44995d054b1606a318076352efcc60d459' => 
     array (
       0 => '/var/www/engine.loc/themes/engine/views/index.tpl',
-      1 => 1456751761,
+      1 => 1456992634,
       2 => 'file',
     ),
   ),
@@ -32,8 +32,6 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'admin' => 0,
     'heading_panel' => 0,
     'token' => 0,
-    'required_components' => 0,
-    'c' => 0,
   ),
   'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
@@ -63,6 +61,8 @@ assets/css/vendor/jquery.dataTables.min.css" rel="stylesheet">
 assets/css/vendor/bootstrap.min.css" rel="stylesheet">
     <link href="<?php echo $_smarty_tpl->tpl_vars['theme_url']->value;?>
 assets/css/vendor/select2.min.css" rel="stylesheet">
+    <link href="<?php echo $_smarty_tpl->tpl_vars['theme_url']->value;?>
+assets/css/my.css" rel="stylesheet">
     <link href="<?php echo $_smarty_tpl->tpl_vars['theme_url']->value;?>
 assets/css/style.css" rel="stylesheet">
     <?php echo '<script'; ?>
@@ -225,7 +225,9 @@ assets/js/vendor/charCount.js"><?php echo '</script'; ?>
 >
     var TOKEN = '<?php echo $_smarty_tpl->tpl_vars['token']->value;?>
 ', ONLINE = 0, t = <?php echo json_encode($_smarty_tpl->tpl_vars['t']->value);?>
-;
+, CONTROLLER = '<?php echo $_smarty_tpl->tpl_vars['controller']->value;?>
+', ACTION = '<?php echo $_smarty_tpl->tpl_vars['action']->value;?>
+';
 
     jQuery.extend(jQuery.validator.messages, {
         required: "Це поле обов'язкове",
@@ -235,21 +237,14 @@ assets/js/vendor/charCount.js"><?php echo '</script'; ?>
 <?php echo '</script'; ?>
 >
 <?php echo '<script'; ?>
- src="<?php echo $_smarty_tpl->tpl_vars['theme_url']->value;?>
+ id="mainScript" src="<?php echo $_smarty_tpl->tpl_vars['theme_url']->value;?>
 assets/js/main.js"><?php echo '</script'; ?>
 >
-    <?php  $_smarty_tpl->tpl_vars['c'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['c']->_loop = false;
- $_from = $_smarty_tpl->tpl_vars['required_components']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
-foreach ($_from as $_smarty_tpl->tpl_vars['c']->key => $_smarty_tpl->tpl_vars['c']->value) {
-$_smarty_tpl->tpl_vars['c']->_loop = true;
-?>
-        <?php echo '<script'; ?>
- src="<?php echo $_smarty_tpl->tpl_vars['c']->value;?>
-"><?php echo '</script'; ?>
->
-    <?php } ?>
+    
+        
+    
 <?php echo '<script'; ?>
- src="<?php echo $_smarty_tpl->tpl_vars['theme_url']->value;?>
+ id="componentScript" src="<?php echo $_smarty_tpl->tpl_vars['theme_url']->value;?>
 assets/js/bootstrap/<?php echo $_smarty_tpl->tpl_vars['controller']->value;?>
 .js"><?php echo '</script'; ?>
 >

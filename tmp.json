@@ -1,1 +1,0 @@
-{"legend": "Основне","fields": [{"type": "text","name": "info[$lang.id][name]","title": "Назва","required": "required", "placeholder": "[a-zA-ZА-Я0-9_ ]{2,160}" }, {"type": "text","name": "info[$lang.id][url]","title": "URL","required": "required","placeholder": "[a-zA-ZА-Я0-9_ ]{2,160}"} ]}

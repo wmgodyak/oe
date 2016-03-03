@@ -9,41 +9,104 @@
 
 namespace controllers\engine;
 
+use controllers\core\exceptions\DbException;
 use controllers\Engine;
+use helpers\bootstrap\Button;
+use helpers\bootstrap\Link;
 
 defined("CPATH") or die();
 
+/**
+ * Class Content
+ * @package controllers\engine
+ */
 class Content extends Engine
 {
     protected $mContent;
+    /**
+     * Content Type
+     * @var
+     */
+    protected $type = 'pages';
 
     protected $form_template = 'content/default';
+    protected $form_action   = '';
+    protected $form_success  = '';
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->mContent = new \models\engine\Content();
+        $this->mContent = new \models\engine\Content($this->type);
+
+        if(empty($this->form_action)){
+            $this->form_action = 'content/' . $this->type . '/process/';
+        }
     }
 
     public function index()
     {
-        echo 'ShopCategories::index';
+
     }
-    public function create($id=0)
+
+    public function create($parent_id=0)
     {
-        echo 'ShopCategories::create';
+        return $this->mContent->create($parent_id);
     }
+
     public function edit($id)
     {
-        // TODO: Implement edit() method.
+        $this->appendToPanel
+        (
+            (string)Button::create
+            (
+                $this->t('common.button_save'),
+                ['class' => 'btn-md b-form-save']
+            )
+        );
+
+
+        $content = $this->mContent->getData($id);
+
+        if($this->mContent->hasDBError()){
+            throw new DbException($this->mContent->getDBErrorMessage());
+        }
+
+        $this->template->assign('content', $content);
+        $this->template->assign('form_action', $this->form_action . $id);
+        $this->template->assign('form_success', $this->form_success);
+        $form = $this->template->fetch($this->form_template);
+
+        $this->output($form);
     }
+
     public function delete($id)
     {
-        // TODO: Implement delete() method.
+        $s = $this->mContent->delete($id);
+        $m = $this->mContent->getDBError();
+
+        $this->response->body(['s'=>$s,'m' => $m])->asJSON();
     }
+
     public function process($id)
     {
-        // TODO: Implement process() method.
+        $i=[]; $m = $this->t('common.update_success');
+        $s = $this->mContent->update($id);
+        if(! $s){
+            $i = $this->mContent->getDBError();
+            $m = $this->mContent->getDBErrorMessage();
+        }
+        $this->response->body(['s'=>$s, 'i' => $i, 'm' => $m])->asJSON();
     }
+
+    public function pub($id)
+    {
+        return $this->mContent->pub($id);
+    }
+
+    public function hide($id)
+    {
+        return $this->mContent->hide($id);
+    }
+
 }

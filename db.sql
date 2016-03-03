@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Фев 25 2016 г., 13:15
+-- Время создания: Мар 03 2016 г., 10:57
 -- Версия сервера: 5.5.46-0ubuntu0.14.04.2
 -- Версия PHP: 5.5.9-1ubuntu4.14
 
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `components` (
   KEY `position` (`position`),
   KEY `published` (`published`),
   KEY `module` (`controller`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=24 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=25 ;
 
 --
 -- Дамп данных таблицы `components`
@@ -56,7 +56,8 @@ INSERT INTO `components` (`id`, `parent_id`, `isfolder`, `icon`, `author`, `vers
 (17, 0, 0, 'fa-flag', 'Volodymyr Hodiak', '1.0.0', 'languages', 0, 1, 300, NULL, '2016-01-28 12:34:07'),
 (19, 0, 0, 'fa-puzzle-piece', 'Volodymyr Hodiak', '1.0.0', 'components', 0, 1, 300, NULL, '2016-01-28 12:37:32'),
 (22, 0, 0, 'fa-cubes', 'Volodymyr Hodiak', '1.0.0', 'contentTypes', 0, 1, 300, NULL, '2016-02-05 10:15:28'),
-(23, 0, 0, 'fa-puzzle-piece', 'Volodymyr Hodiak', '1.0.0', 'plugins', 0, 1, 300, NULL, '2016-02-12 16:24:27');
+(23, 0, 0, 'fa-puzzle-piece', 'Volodymyr Hodiak', '1.0.0', 'plugins', 0, 1, 300, NULL, '2016-02-12 16:24:27'),
+(24, 0, 0, 'fa-file', 'wmgodyak', '1.0', 'content/pages', 1, 1, 300, NULL, '2016-03-02 15:48:31');
 
 -- --------------------------------------------------------
 
@@ -66,18 +67,37 @@ INSERT INTO `components` (`id`, `parent_id`, `isfolder`, `icon`, `author`, `vers
 
 CREATE TABLE IF NOT EXISTS `content` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `content_type_id` tinyint(3) unsigned NOT NULL,
-  `users_id` int(11) unsigned NOT NULL,
+  `types_id` tinyint(3) unsigned NOT NULL,
+  `subtypes_id` tinyint(3) unsigned NOT NULL,
+  `owner_id` int(11) unsigned NOT NULL,
   `parent_id` int(10) unsigned DEFAULT '0',
   `isfolder` tinyint(1) unsigned DEFAULT '0',
   `position` tinyint(3) unsigned DEFAULT '0',
   `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `edited` timestamp NULL DEFAULT NULL,
-  `status` enum('blank','draft','published','deleted') DEFAULT 'blank',
-  PRIMARY KEY (`id`,`content_type_id`,`users_id`),
-  KEY `fk_content_content_type1_idx` (`content_type_id`),
-  KEY `fk_content_users1_idx` (`users_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `updated` timestamp NULL DEFAULT NULL,
+  `published` date DEFAULT NULL,
+  `status` enum('blank','hidden','published','deleted') DEFAULT 'blank',
+  PRIMARY KEY (`id`,`types_id`,`subtypes_id`,`owner_id`),
+  KEY `fk_content_content_types1_idx` (`types_id`),
+  KEY `fk_content_content_subtypes1_idx` (`subtypes_id`),
+  KEY `fk_content_owner_idx` (`owner_id`),
+  KEY `status` (`status`),
+  KEY `published` (`published`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=25 ;
+
+--
+-- Дамп данных таблицы `content`
+--
+
+INSERT INTO `content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id`, `isfolder`, `position`, `created`, `updated`, `published`, `status`) VALUES
+(1, 1, 1, 1, 0, 1, 0, '2016-03-02 09:42:18', NULL, '2016-03-02', 'published'),
+(2, 1, 1, 1, 1, 0, 0, '2016-03-02 10:23:34', NULL, '2016-03-02', 'published'),
+(3, 1, 1, 1, 1, 1, 0, '2016-03-02 11:14:49', NULL, '2016-03-02', 'hidden'),
+(9, 1, 1, 1, 10, 0, 0, '2016-03-02 14:05:12', NULL, '2016-03-02', 'published'),
+(10, 1, 1, 1, 3, 1, 0, '2016-03-02 15:13:03', NULL, '2016-03-02', 'hidden'),
+(11, 1, 1, 1, 1, 0, 0, '2016-03-02 15:13:15', NULL, '2016-03-02', 'deleted'),
+(13, 1, 1, 1, 3, 0, 0, '2016-03-02 15:13:34', NULL, '2016-03-02', 'published'),
+(24, 1, 1, 1, 10, 0, 0, '2016-03-03 07:52:20', NULL, NULL, 'published');
 
 -- --------------------------------------------------------
 
@@ -91,22 +111,43 @@ CREATE TABLE IF NOT EXISTS `content_info` (
   `languages_id` tinyint(3) unsigned NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `url` varchar(160) DEFAULT NULL,
-  `title` varchar(255) DEFAULT NULL,
   `h1` varchar(255) DEFAULT NULL,
+  `title` varchar(255) DEFAULT NULL,
   `keywords` varchar(255) DEFAULT NULL,
   `description` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`,`content_id`,`languages_id`),
+  UNIQUE KEY `url_uq` (`content_id`,`languages_id`,`url`),
   KEY `fk_content_info_content1_idx` (`content_id`),
   KEY `fk_content_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=25 ;
+
+--
+-- Дамп данных таблицы `content_info`
+--
+
+INSERT INTO `content_info` (`id`, `content_id`, `languages_id`, `name`, `url`, `h1`, `title`, `keywords`, `description`) VALUES
+(1, 1, 1, 'Головна', 'ua', '', '', '', ''),
+(2, 1, 2, 'главная', 'ru', '', '', '', ''),
+(5, 2, 1, 'Про нас', 'pro-nas', '', '', '', ''),
+(6, 2, 2, 'О нас', 'o-nas', '', '', '', ''),
+(7, 3, 1, 'Контакти', 'contacty', '', '', '', ''),
+(8, 3, 2, 'Контакти', 'contacts', '', '', '', ''),
+(17, 9, 1, 'sdfsdfsdf', 'sdfsdfsd', '', '', '', ''),
+(18, 9, 2, 'fdsfsdfdsf', 'fsdfsdfsd', '', '', '', ''),
+(19, 10, 1, 'Про нас', 'pro-nas', '', 'Про нас', '', ''),
+(20, 10, 2, 'Про нас', 'pro-nas', '', 'Про нас', '', ''),
+(21, 11, 1, 'Контакти', 'kontakty', '', 'Контакти', '', ''),
+(22, 11, 2, 'Контакти', 'kontakti', '', 'Контакти', '', ''),
+(23, 13, 1, 'Ваканції', 'vakanciї', '', 'Ваканції', '', ''),
+(24, 13, 2, 'Ваканції', 'vakancії', '', 'Ваканції', '', '');
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `content_type`
+-- Структура таблицы `content_types`
 --
 
-CREATE TABLE IF NOT EXISTS `content_type` (
+CREATE TABLE IF NOT EXISTS `content_types` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` tinyint(3) unsigned DEFAULT '0',
   `isfolder` tinyint(1) unsigned DEFAULT '0',
@@ -116,18 +157,16 @@ CREATE TABLE IF NOT EXISTS `content_type` (
   `settings` text,
   PRIMARY KEY (`id`),
   UNIQUE KEY `parent_id` (`parent_id`,`type`),
+  UNIQUE KEY `parent_id_2` (`parent_id`,`is_main`),
   KEY `is_main` (`is_main`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=97 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
--- Дамп данных таблицы `content_type`
+-- Дамп данных таблицы `content_types`
 --
 
-INSERT INTO `content_type` (`id`, `parent_id`, `isfolder`, `type`, `name`, `is_main`, `settings`) VALUES
-(93, 0, 1, 'a', 'a', NULL, 'a:1:{s:4:"form";s:4505:"<div class="row clearfix"><div class="col-md-6 column ui-sortable"><div class="box ui-draggable ui-draggable-dragging" style="position: relative; width: 100%; height: 135px;">\n                                       <div class="preview">\n                                           <fieldset>\n                                               <legend>\n                                                   <span class="box-name" contenteditable="true">Основне</span>\n                                               </legend>\n\n                                               <a href="" onclick="return false;" class="b-move ui-draggable-handle ui-sortable-handle" title="Таскати"><i class="fa fa-arrows"></i></a>\n                                               <a href="" onclick="return false;" class="b-field-add" title="Додати поле"><i class="fa fa-plus"></i></a>\n                                               <!--a href="" onclick="return false;" class="b-box-edit"><i class="fa fa-pencil"></i></a-->\n                                               <a href="" onclick="return false;" class="b-box-remove" title="Видалити блок"><i class="fa fa-remove"></i></a>\n                                               <ul>\n                                                   <li id="info_name">\n                                                       <span class="name">Назва</span>\n                                                       <a href="" onclick="return false;" class="b-field-edit"><i class="fa fa-pencil"></i></a>\n                                                       <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a>\n                                                   </li>\n                                                   <li id="info_url">\n                                                       <span class="name">Url</span>\n                                                       <a href="" onclick="return false;" class="b-field-edit"><i class="fa fa-pencil"></i></a>\n                                                       <a href="" onclick="return false;" class="b-field-remove"><i class="fa fa-remove"></i></a>\n                                                   </li>\n                                               </ul>\n                                           </fieldset>\n                                       </div>\n                                       <div class="source">\n                                           <fieldset>\n                                               <legend>\n                                                   <span class="box-name">Основне</span>\n                                               </legend>\n                                               {foreach $languages as $lang}\n                                                   <div class="form-group" id="info_name_group">\n                                                       <label for="info_{$lang.code}_name" class="col-sm-3 control-label">Назва({$lang.code}):</label>\n                                                       <div class="col-sm-9">\n                                                           <input type="text" class="form-control" name="info[{$lang.id}][name]" id="info_{$lang.code}_name" required="" aria-required="true">\n                                                       </div>\n                                                   </div>\n                                                   <div class="form-group">\n                                                       <label for="info_{$lang.code}_url" class="col-sm-3 control-label">Url({$lang.code}):</label>\n                                                       <div class="col-sm-9">\n                                                           <input type="text" class="form-control" name="info[{$lang.id}][url]" id="info_{$lang.code}_url" required="" aria-required="true">\n                                                       </div>\n                                                   </div>\n                                               {/foreach}\n                                           </fieldset>\n                                       </div>\n                                   </div></div><div class="col-md-6 column ui-sortable"></div><a class="b-row-remove" href="" onclick="return false"><i class="fa fa-remove"></i></a><a class="b-move ui-sortable-handle" href="" onclick="return false"><i class="fa fa-arrows"></i></a></div>";}'),
-(94, 93, 0, 'aa', 'aa', NULL, 'a:1:{s:4:"form";s:0:"";}'),
-(95, 0, 1, 'b', 'b', NULL, NULL),
-(96, 95, 0, 'bb', 'bb', NULL, NULL);
+INSERT INTO `content_types` (`id`, `parent_id`, `isfolder`, `type`, `name`, `is_main`, `settings`) VALUES
+(1, 0, 0, 'pages', 'Сторінки', 1, 'a:2:{s:9:"parent_id";s:1:"0";s:7:"ext_url";s:1:"0";}');
 
 -- --------------------------------------------------------
 
@@ -143,14 +182,15 @@ CREATE TABLE IF NOT EXISTS `languages` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`),
   KEY `is_main` (`is_main`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Дамп данных таблицы `languages`
 --
 
 INSERT INTO `languages` (`id`, `code`, `name`, `is_main`) VALUES
-(1, 'uk', 'Українська', 1);
+(1, 'uk', 'Українська', 1),
+(2, 'ru', 'Російська', 0);
 
 -- --------------------------------------------------------
 
@@ -174,14 +214,15 @@ CREATE TABLE IF NOT EXISTS `plugins` (
   KEY `position` (`position`),
   KEY `published` (`published`),
   KEY `module` (`controller`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- Дамп данных таблицы `plugins`
 --
 
 INSERT INTO `plugins` (`id`, `icon`, `author`, `version`, `controller`, `position`, `place`, `published`, `rang`, `settings`, `created`) VALUES
-(3, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'adminsGroup', 0, 'sidebar', 1, 300, NULL, '2016-01-28 14:38:03');
+(3, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'adminsGroup', 0, 'sidebar', 1, 300, NULL, '2016-01-28 14:38:03'),
+(4, 'fa-folder-o', 'Volodymyr Hodiak', '1.0.0', 'pagesTree', 0, 'sidebar', 1, 300, NULL, '2016-03-02 15:47:16');
 
 -- --------------------------------------------------------
 
@@ -196,14 +237,15 @@ CREATE TABLE IF NOT EXISTS `plugins_components` (
   PRIMARY KEY (`id`,`plugins_id`,`components_id`),
   KEY `fk_plugins_components_plugins1_idx` (`plugins_id`),
   KEY `fk_plugins_components_components1_idx` (`components_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Дамп данных таблицы `plugins_components`
 --
 
 INSERT INTO `plugins_components` (`id`, `plugins_id`, `components_id`) VALUES
-(4, 3, 16);
+(4, 3, 16),
+(5, 4, 24);
 
 -- --------------------------------------------------------
 
@@ -287,7 +329,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `updated`, `lastlogin`, `status`) VALUES
-(1, 1, 0, 's9k8pu9fgf96b9jvntmcpfpt10', 'Володимир', 'Годяк', '+38 (067) 6736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c4ca4238a0b923820dcc509a6f75849b.png', '', '2015-12-24 14:36:04', '2016-01-26 14:54:20', '2016-02-25 11:14:23', 'active');
+(1, 1, 0, 'l207iq5ga2fto4qjmp9cog90b3', 'Володимир', 'Годяк', '+38 (067) 6736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c4ca4238a0b923820dcc509a6f75849b.png', '', '2015-12-24 14:36:04', '2016-01-26 14:54:20', '2016-03-03 07:16:56', 'active');
 
 -- --------------------------------------------------------
 
@@ -358,8 +400,9 @@ INSERT INTO `users_group_info` (`id`, `group_id`, `languages_id`, `name`) VALUES
 -- Ограничения внешнего ключа таблицы `content`
 --
 ALTER TABLE `content`
-  ADD CONSTRAINT `fk_content_content_type1` FOREIGN KEY (`content_type_id`) REFERENCES `content_type` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_content_users1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_content_content_subtypes1` FOREIGN KEY (`subtypes_id`) REFERENCES `content_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_content_content_types1` FOREIGN KEY (`types_id`) REFERENCES `content_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_content_owner_id1` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `content_info`

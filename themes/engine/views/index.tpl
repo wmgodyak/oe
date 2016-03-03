@@ -13,6 +13,7 @@
     <link href="{$theme_url}assets/css/vendor/jquery.dataTables.min.css" rel="stylesheet">
     <link href="{$theme_url}assets/css/vendor/bootstrap.min.css" rel="stylesheet">
     <link href="{$theme_url}assets/css/vendor/select2.min.css" rel="stylesheet">
+    <link href="{$theme_url}assets/css/my.css" rel="stylesheet">
     <link href="{$theme_url}assets/css/style.css" rel="stylesheet">
     <script src="{$theme_url}assets/js/vendor/jquery-1.11.3.min.js"></script>
 </head>
@@ -119,7 +120,7 @@
 <script src="{$theme_url}assets/js/vendor/lodash.min.js"></script>
 <script src="{$theme_url}assets/js/vendor/charCount.js"></script>
 <script>
-    var TOKEN = '{$token}', ONLINE = 0, t = {json_encode($t)};
+    var TOKEN = '{$token}', ONLINE = 0, t = {json_encode($t)}, CONTROLLER = '{$controller}', ACTION = '{$action}';
 
     jQuery.extend(jQuery.validator.messages, {
         required: "Це поле обов'язкове",
@@ -127,10 +128,10 @@
         email: "Введіть коректну електронну скриньку"
     });
 </script>
-<script src="{$theme_url}assets/js/main.js"></script>
-    {foreach $required_components as $c}
-        <script src="{$c}"></script>
-    {/foreach}
-<script src="{$theme_url}assets/js/bootstrap/{$controller}.js"></script>
+<script id="mainScript" src="{$theme_url}assets/js/main.js"></script>
+    {*{foreach $required_components as $c}*}
+        {*<script id="{$c}Script" src="{$c}"></script>*}
+    {*{/foreach}*}
+<script id="componentScript" src="{$theme_url}assets/js/bootstrap/{$controller}.js"></script>
 </body>
 </html>

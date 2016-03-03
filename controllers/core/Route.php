@@ -91,9 +91,10 @@ class Route
         $mode = strpos($namespace, 'engine') !== FALSE ? 'engine' : 'app';
 
         Request::getInstance($mode)
+            ->setParam('namespace',  $namespace)
             ->setParam('controller', $controller)
-            ->setParam('action', $action)
-            ->setParam('args', $params);
+            ->setParam('action',     $action)
+            ->setParam('args',       $params);
 
 
 

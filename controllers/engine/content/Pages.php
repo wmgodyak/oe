@@ -29,6 +29,12 @@ defined("CPATH") or die();
  */
 class Pages extends Content
 {
+    public function __construct()
+    {
+        $this->type = 'pages';
+
+        parent::__construct();
+    }
 
     public function index($parent_id=0)
     {
@@ -53,7 +59,7 @@ class Pages extends Content
 
         $t = new DataTables();
 
-        $t  -> setId('content_pages')
+        $t  -> setId('content')
             -> ajaxConfig('content/pages/items/' . $parent_id)
 //            -> setConfig('order', array(0, 'desc'))
             -> th($this->t('common.id'))
@@ -70,24 +76,54 @@ class Pages extends Content
     {
         $t = new DataTables();
         $t  -> table('content c')
-            -> get('c.id, ci.name, ci.url, c.created, c.updated, c.status, c.isfolder')
+            -> get('c.id, ci.name, ci.url, c.created, c.updated, c.status, c.isfolder, CONCAT(u.name, \' \' , u.surname) as owner')
             -> join("content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}")
-            -> where(" c.parent_id = {$parent_id}")
+            -> join('users u on u.id=c.owner_id')
+            -> where(" c.parent_id = {$parent_id} and c.status in ('published', 'hidden')")
             -> execute();
 
         $res = array();
         foreach ($t->getResults(false) as $i=>$row) {
+            $icon = Icon::create(($row['isfolder'] ? 'fa-folder' : 'fa-file'));
+            $icon_link = Icon::create('fa-external-link');
+            $status = $this->t('pages.status_' . $row['status']);
             $res[$i][] = $row['id'];
-            $res[$i][] = "<a href='content/pages/index/{$row['id']}'>{$row['name']}</a>";
-            $res[$i][] = date('d.m.Y H:i:s', strtotime($row['created']));
-            $res[$i][] = date('d.m.Y H:i:s', strtotime($row['edited']));
             $res[$i][] =
+                           " <a class='status-{$row['status']}' title='{$status}' href='content/pages/index/{$row['id']}'>{$icon}  {$row['name']}</a>"
+                         . " <a href='/{$row['url']}' target='_blank'>{$icon_link}</a>"
+                         . "<br><small class='label label-info'>Автор:{$row['owner']} </small>"
+                            ;
+            $res[$i][] = date('d.m.Y H:i:s', strtotime($row['created']));
+            $res[$i][] = $row['updated'] ? date('d.m.Y H:i:s', strtotime($row['updated'])) : '';
+            $res[$i][] =
+                (string)(
+                    $row['status'] == 'published' ?
+                        Link::create
+                        (
+                            Icon::create(Icon::TYPE_PUBLISHED),
+                            [
+                                'class' => 'btn-primary b-pages-hide',
+                                'title' => $this->t('common.title_pub'),
+                                'data-id' => $row['id']
+                            ]
+                        )
+                        :
+                        Link::create
+                        (
+                            Icon::create(Icon::TYPE_HIDDEN),
+                            [
+                                'class' => 'btn-primary b-pages-pub',
+                                'title' => $this->t('common.title_hide'),
+                                'data-id' => $row['id']
+                            ]
+                        )
+                ) .
                 (string)Link::create
                 (
                     Icon::create(Icon::TYPE_EDIT),
                     ['class' => 'btn-primary', 'href' => "content/pages/edit/" . $row['id'], 'title' => $this->t('common.title_edit')]
                 ) .
-                ($row['is_main'] == 0 && $row['isfolder'] == 0 ? (string)Button::create
+                ($row['isfolder'] == 0 ? (string)Button::create
                 (
                     Icon::create(Icon::TYPE_DELETE),
                     ['class' => 'b-pages-delete', 'data-id' => $row['id'], 'title' => $this->t('pages.delete_question')]
@@ -101,38 +137,22 @@ class Pages extends Content
 
     public function create($parent_id = 0)
     {
-        if($parent_id > 0){
-            $data = $this->mContent->getData($parent_id);
-            $this->appendToPanel((string)Link::create
-            (
-                $this->t('common.back'),
-                ['class' => 'btn-md', 'href'=> './content/pages/' . ($data['parent_id']>0 ? 'index/' . $data['parent_id'] : '')]
-            )
-            );
-        }
+        $id = parent::create($parent_id);
 
-        $this->appendToPanel
-        (
-            (string)Link::create
-            (
-                $this->t('common.button_save'),
-                ['class' => 'btn-md ', 'href'=> './content/pages/create' . ($parent_id? "/$parent_id" : '')]
-            )
-        );
-
-        $form = $this->template->fetch($this->form_template);
-        $this->output($form);
+        return $this->edit($id);
     }
+
     public function edit($id)
     {
-        echo 'Pages::edit('.$id.')';
-    }
-    public function delete($id)
-    {
-        // TODO: Implement delete() method.
-    }
-    public function process($id)
-    {
-        // TODO: Implement process() method.
+        $parent_id = $this->mContent->getData($id, 'parent_id');
+
+        $this->appendToPanel((string)Link::create
+        (
+            $this->t('common.back'),
+            ['class' => 'btn-md', 'href'=> './content/'. $this->type . ($parent_id > 0 ? '/index/' . $parent_id : '')]
+        )
+        );
+
+        parent::edit($id);
     }
 }

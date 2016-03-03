@@ -3,16 +3,23 @@
  * OYiEngine 7
  * @author Volodymyr Hodiak mailto:support@otakoi.com
  * @copyright Copyright (c) 2015 Otakoyi.com
- * Date: 13.01.16 : 10:00
+ * Date: 02.03.16 : 9:47
  */
 
 namespace controllers\core\exceptions;
 
 defined("CPATH") or die();
 
-class FileNotFoundException extends \Exception
+class DbException extends \Exception
 {
+    // Переопределим исключение так, что параметр message станет обязательным
     public function __construct($message, $code = 0, \Exception $previous = null) {
+
+        parent::__construct($message, $code, $previous);
+    }
+
+    // Переопределим строковое представление объекта.
+    public function __toString() {
         echo '
         <style>
         pre {
@@ -39,6 +46,6 @@ class FileNotFoundException extends \Exception
             }
         </style>
         <pre>';
-        parent::__construct($message, $code, $previous);
+        return parent::__toString();
     }
 }

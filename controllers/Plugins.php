@@ -32,6 +32,10 @@ class Plugins
         $controller  = $request->get('controller');
         $action      = $request->get('action');
         $args        = $request->get('args');
+        $ns          = $request->get('namespace');
+        $ns = str_replace('\\','/', $ns);
+        $ns = str_replace('controllers/engine/', '', $ns);
+        $controller = $ns . $controller;
 
         $r = DB::getInstance()
             -> select("

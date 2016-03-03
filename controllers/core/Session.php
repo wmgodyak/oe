@@ -49,10 +49,17 @@ class Session {
      * @return mixed
      */
     public static function get($key){
-        if (isset($_SESSION[$key])) {
-            return $_SESSION[$key];
+        $parsed = explode('.', $key);
+        $result = $_SESSION;
+        while ($parsed) {
+            $next = array_shift($parsed);
+            if (isset($result[$next])) {
+                $result = $result[$next];
+            } else {
+                return null;
+            }
         }
-        return null;
+        return $result;
     }
 
     /**

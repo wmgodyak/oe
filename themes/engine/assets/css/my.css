@@ -1,0 +1,13 @@
+.btn {
+    line-height: 30px;
+    padding: 0 20px;
+    font-size: 16px;
+}
+/* в дереві зліва */
+.jstree-node.status-hidden{
+    color: #ccc;
+}
+/*в таблииці списку сторінок чи ін */
+.table .status-hidden{
+    color: #ccc;
+}
