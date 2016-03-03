@@ -65,6 +65,8 @@ abstract class Engine extends Controller
     protected $languages;
     protected $languages_id;
 
+    protected $plugins;
+
     public function __construct()
     {
         parent::__construct();
@@ -141,8 +143,8 @@ abstract class Engine extends Controller
             $this->requireComponents();
         }
 
-        $plugins = Plugins::get();
-        $this->template->assign('plugins', $plugins);
+        $this->plugins = Plugins::get();
+        $this->template->assign('plugins', $this->plugins);
     }
 
     public function before(){}
@@ -259,7 +261,6 @@ abstract class Engine extends Controller
         $this->renderHeadingPanel();
         $this->response->body($body)->render();
     }
-
 
     /**
      * @return mixed

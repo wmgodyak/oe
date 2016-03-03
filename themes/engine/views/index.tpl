@@ -33,7 +33,7 @@
                     <div class="sidebar-heading">
                         <img src="{$theme_url}assets/img/logo/logo-black.png">
                     </div>
-                    {implode("\r\n", $plugins.sidebar)}
+                    {if isset($plugins.sidebar)}{implode("\r\n", $plugins.sidebar)}{/if}
                 </div>
                 {/if}
                 <div class="dashboard-content {if !empty($plugins.sidebar)} sidebar-open{/if}">
@@ -94,8 +94,9 @@
                         <!--end-->
                         {$heading_panel}
                         <div class="inline-notifications"></div>
+                        {if $action == 'index' && isset($plugins.top)}{implode("\r\n", $plugins.top)}{/if}
                         {$body}
-
+                        {if $action == 'index' && isset($plugins.bottom)}{implode("\r\n", $plugins.bottom)}{/if}
                     </div> <!--end-->
                     <footer>
                         <div class="copyright">

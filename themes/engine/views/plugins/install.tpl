@@ -10,9 +10,13 @@
         </div>
     </div>
     <div class="form-group">
-        <label for="data_name" class="col-sm-3 control-label">{$t.plugins.install_label_place}</label>
+        <label for="data_place" class="col-sm-3 control-label">{$t.plugins.install_label_place}</label>
         <div class="col-sm-9">
-            <input type="text" name="data[place]" required value="{$data.place}" class="form-control" placeholder="{$t.plugins.install_label_place_ph}">
+            <select name="data[place]" id="data_place" required class="form-control">
+                {foreach $place as $k=>$c}
+                    <option value="{$c}">{$c}</option>
+                {/foreach}
+            </select>
         </div>
     </div>
     <input type="hidden" name="token" value="{$token}">

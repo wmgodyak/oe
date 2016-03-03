@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-02-25 15:28:42
+<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-03-03 15:46:42
          compiled from "/var/www/engine.loc/themes/engine/views/plugins/install.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:106998018356aa14902edb16-39845159%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'f7d039320d9435788e23e56c078a3614798f3a90' => 
     array (
       0 => '/var/www/engine.loc/themes/engine/views/plugins/install.tpl',
-      1 => 1453998705,
+      1 => 1457012800,
       2 => 'file',
     ),
   ),
@@ -22,7 +22,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     't' => 0,
     'components' => 0,
     'c' => 0,
-    'data' => 0,
+    'place' => 0,
     'token' => 0,
     'plugin' => 0,
   ),
@@ -47,12 +47,22 @@ $_smarty_tpl->tpl_vars['c']->_loop = true;
         </div>
     </div>
     <div class="form-group">
-        <label for="data_name" class="col-sm-3 control-label"><?php echo $_smarty_tpl->tpl_vars['t']->value['plugins']['install_label_place'];?>
+        <label for="data_place" class="col-sm-3 control-label"><?php echo $_smarty_tpl->tpl_vars['t']->value['plugins']['install_label_place'];?>
 </label>
         <div class="col-sm-9">
-            <input type="text" name="data[place]" required value="<?php echo $_smarty_tpl->tpl_vars['data']->value['place'];?>
-" class="form-control" placeholder="<?php echo $_smarty_tpl->tpl_vars['t']->value['plugins']['install_label_place_ph'];?>
-">
+            <select name="data[place]" id="data_place" required class="form-control">
+                <?php  $_smarty_tpl->tpl_vars['c'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['c']->_loop = false;
+ $_smarty_tpl->tpl_vars['k'] = new Smarty_Variable;
+ $_from = $_smarty_tpl->tpl_vars['place']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
+foreach ($_from as $_smarty_tpl->tpl_vars['c']->key => $_smarty_tpl->tpl_vars['c']->value) {
+$_smarty_tpl->tpl_vars['c']->_loop = true;
+ $_smarty_tpl->tpl_vars['k']->value = $_smarty_tpl->tpl_vars['c']->key;
+?>
+                    <option value="<?php echo $_smarty_tpl->tpl_vars['c']->value;?>
+"><?php echo $_smarty_tpl->tpl_vars['c']->value;?>
+</option>
+                <?php } ?>
+            </select>
         </div>
     </div>
     <input type="hidden" name="token" value="<?php echo $_smarty_tpl->tpl_vars['token']->value;?>

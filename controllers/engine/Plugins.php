@@ -94,7 +94,7 @@ class Plugins extends Engine
             $icon  = $installed ? (string) Icon::TYPE_UNINSTALL : (string) Icon::TYPE_INSTALL;
             $icon_pub  = $installed && $data['published'] == 1 ? (string) Icon::TYPE_PUBLISHED : (string) Icon::TYPE_HIDDEN;
 
-            $res[$i][] = $item['name'] . ($installed ? "<br><label class=\"label label-info\">{$t_installed}</label>" : '');
+            $res[$i][] = $item['name'];// . ($installed ? "<br><label class=\"label label-info\">{$t_installed}</label>" : '');
             $res[$i][] = $item['author'];
             $res[$i][] = (isset($item['package']) ? $item['package'] ."\\" : '') . $item['controller'] ;
             $res[$i][] = $item['version'];
@@ -144,9 +144,10 @@ class Plugins extends Engine
 
     public function edit($id)
     {
-        die('Дію заборонено');
         $data = $this->mPlugins->getDataByID($id);
         $this->template->assign('data', $data);
+        $this->template->assign('components', $this->mPlugins->getComponents());
+        $this->template->assign('place', $this->mPlugins->getPlace());
         $this->response->body($this->template->fetch('plugins/edit'))->asHtml();
     }
 
@@ -159,20 +160,14 @@ class Plugins extends Engine
     {
         if(! $this->request->isPost()) die;
 
-        $data = $this->request->post('data'); $s=0; $i=[];
+        $data = $this->request->post('data'); $s=0; $i=[]; $m = null;
+        $components = $this->request->post('components');
+        $s = $this->mPlugins->update($id, $data, $components);
 
-        FormValidation::setRule(['icon', 'position'], FormValidation::REQUIRED);
-
-        FormValidation::run($data);
-
-        if(FormValidation::hasErrors()){
-            $i = FormValidation::getErrors();
-        } else {
-            $components = $this->request->post('components');
-            $s = $this->mPlugins->update($id, $data, $components);
+        if($this->mPlugins->hasDBError()){
+            $m = $this->mPlugins->getDBError() . $this->mPlugins->getDBErrorMessage();
         }
-
-        $this->response->body(['s'=>$s, 'i' => $i])->asJSON();
+        $this->response->body(['s'=>$s, 'i' => $i, 'm' => $m])->asJSON();
     }
 
 
@@ -200,7 +195,6 @@ class Plugins extends Engine
                 $meta = PHPDocReader::getMeta('controllers\engine\plugins\\'. $plugin);
 
                 if(isset($meta['icon']))     $data['icon']     = $meta['icon'];
-                if(isset($meta['position'])) $data['position'] = $meta['position'];
                 if(isset($meta['author']))   $data['author']   = $meta['author'];
                 if(isset($meta['rang']))     $data['rang']     = $meta['rang'];
                 if(isset($meta['version']))  $data['version']  = $meta['version'];
@@ -214,6 +208,7 @@ class Plugins extends Engine
         }
 
         $this->template->assign('components', $this->mPlugins->getComponents());
+        $this->template->assign('place', $this->mPlugins->getPlace());
         $this->template->assign('plugin', $plugin);
         return $this->template->fetch('plugins/install');
     }
@@ -270,7 +265,6 @@ class Plugins extends Engine
                 join components c on c.controller = '{$controller}'
                 join plugins_components pc on pc.plugins_id=p.id and pc.components_id=c.id
                 where p.published=1
-                order by abs(p.position) asc
             ")
             -> all();
 
@@ -280,8 +274,11 @@ class Plugins extends Engine
 
             $p = self::getPlugin($item['controller'], $item);
             if(method_exists($p, $action) && !in_array($action, $p->disallow_actions)){ //  && $p->autoload == true
+                $ds = call_user_func_array(array($p, $action), $args);
 
-                $plugins[$item['place']][] = call_user_func_array(array($p, $action), $args);
+                if(empty($ds)) continue;
+
+                $plugins[$item['place']][] = $ds;
             }
         }
 

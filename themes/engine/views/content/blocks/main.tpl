@@ -23,5 +23,4 @@
         </div>
     </div>
     {/foreach}
-    ----  plugins.content_main -----
 </fieldset>

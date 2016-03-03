@@ -24,15 +24,15 @@ class SecondPlugin extends Plugin
 {
     public function index()
     {
-        // TODO: Implement index() method.
+        return 'SecondPlugin::index';
     }
     public function create()
     {
-        // TODO: Implement create() method.
+        return 'SecondPlugin::create';
     }
     public function edit($id)
     {
-        // TODO: Implement edit() method.
+        return 'SecondPlugin::edit';
     }
     public function delete($id)
     {

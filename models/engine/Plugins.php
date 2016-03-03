@@ -55,7 +55,21 @@ class Plugins extends Model
      */
     public function getDataByID($id, $key = '*')
     {
-        return self::$db->select("select {$key} from plugins where id={$id} limit 1")->row($key);
+        $data = self::$db->select("select {$key} from plugins where id={$id} limit 1")->row($key);
+
+        if($key != '*') return $data;
+
+        $c = self::$db
+            ->select("select components_id from plugins_components where plugins_id = {$id}")
+            ->all();
+
+        $data['components'] = [];
+
+        foreach ($c as $item) {
+            $data['components'][] = $item['components_id'];
+        }
+
+        return $data;
     }
 
 
@@ -107,9 +121,9 @@ class Plugins extends Model
     {
         $in = PluginsComponents::getComponents($id);
         foreach ($components as $i=>$components_id) {
-            if(in_array($components_id, $in)){
-                $k = array_search($components_id, $in);
-                unset($k); continue;
+            if(isset($in[$components_id])){
+                unset($in[$components_id]);
+                continue;
             }
             PluginsComponents::create($id, $components_id);
         }
@@ -124,7 +138,7 @@ class Plugins extends Model
     public function getComponents()
     {
         $res = [];
-        foreach (self::$db->select("select id, controller from components where published=1")->all() as $item) {
+        foreach (self::$db->select("select id, controller from components where published = 1")->all() as $item) {
             if(strpos($item['controller'], '/') === FALSE){
                 $item['controller'] = ucfirst($item['controller']);
             } else{
@@ -137,5 +151,10 @@ class Plugins extends Model
             $res[] = $item;
         }
         return $res;
+    }
+
+    public function getPlace()
+    {
+        return self::$db->enumValues('plugins', 'place');
     }
 }

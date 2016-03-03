@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-03-03 11:09:50
+<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-03-03 16:12:26
          compiled from "/var/www/engine.loc/themes/engine/views/index.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:1202898852567be873c6fe20-51470877%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '6b5a4c44995d054b1606a318076352efcc60d459' => 
     array (
       0 => '/var/www/engine.loc/themes/engine/views/index.tpl',
-      1 => 1456996052,
+      1 => 1457014276,
       2 => 'file',
     ),
   ),
@@ -89,8 +89,9 @@ assets/js/vendor/jquery-1.11.3.min.js"><?php echo '</script'; ?>
                         <img src="<?php echo $_smarty_tpl->tpl_vars['theme_url']->value;?>
 assets/img/logo/logo-black.png">
                     </div>
-                    <?php echo implode("\r\n",$_smarty_tpl->tpl_vars['plugins']->value['sidebar']);?>
-
+                    <?php if (isset($_smarty_tpl->tpl_vars['plugins']->value['sidebar'])) {
+echo implode("\r\n",$_smarty_tpl->tpl_vars['plugins']->value['sidebar']);
+}?>
                 </div>
                 <?php }?>
                 <div class="dashboard-content <?php if (!empty($_smarty_tpl->tpl_vars['plugins']->value['sidebar'])) {?> sidebar-open<?php }?>">
@@ -155,9 +156,14 @@ assets/img/logo/logo-black.png">
                         <?php echo $_smarty_tpl->tpl_vars['heading_panel']->value;?>
 
                         <div class="inline-notifications"></div>
+                        <?php if ($_smarty_tpl->tpl_vars['action']->value=='index'&&isset($_smarty_tpl->tpl_vars['plugins']->value['top'])) {
+echo implode("\r\n",$_smarty_tpl->tpl_vars['plugins']->value['top']);
+}?>
                         <?php echo $_smarty_tpl->tpl_vars['body']->value;?>
 
-
+                        <?php if ($_smarty_tpl->tpl_vars['action']->value=='index'&&isset($_smarty_tpl->tpl_vars['plugins']->value['bottom'])) {
+echo implode("\r\n",$_smarty_tpl->tpl_vars['plugins']->value['bottom']);
+}?>
                     </div> <!--end-->
                     <footer>
                         <div class="copyright">

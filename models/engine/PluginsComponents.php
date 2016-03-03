@@ -38,6 +38,13 @@ class PluginsComponents extends Model
         return self::$db->delete("plugins_components", " plugins_id={$plugins_id} and components_id={$components_id} limit 1");
     }
 
+    public static function getID($plugins_id, $components_id)
+    {
+        return self::$db
+            ->select("select id from plugins_components where  plugins_id={$plugins_id} and components_id={$components_id} limit 1")
+            ->row('id');
+    }
+
     /**
      * @param $plugins_id
      * @return array
@@ -46,7 +53,7 @@ class PluginsComponents extends Model
     {
         $res = [];
         foreach (self::$db->select("select components_id from plugins_components where plugins_id={$plugins_id} ")->all() as $item) {
-            $res[] = $item['components_id'];
+            $res[$item['components_id']] = $item['components_id'];
         }
         return $res;
     }

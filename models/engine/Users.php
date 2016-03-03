@@ -129,7 +129,6 @@ class Users extends Model
     public static function cryptPassword($password)
     {
         $salt = strtr(base64_encode(mt_rand()), '+', '.');
-
         return crypt($password, $salt);
     }
 

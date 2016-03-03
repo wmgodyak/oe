@@ -23,15 +23,15 @@ class FirstPlugin extends Plugin
 {
     public function index()
     {
-        // TODO: Implement index() method.
+        return 'FirstPlugin::index';
     }
     public function create()
     {
-        // TODO: Implement create() method.
+        return 'FirstPlugin::create';
     }
     public function edit($id)
     {
-        // TODO: Implement edit() method.
+        return 'FirstPlugin::edit';
     }
     public function delete($id)
     {
