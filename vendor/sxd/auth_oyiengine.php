@@ -8,12 +8,12 @@ session_name('oyiengine');
 session_start();
 if(!empty($_SESSION['admin'])){
     define('SYSPATH', 1);
-    $path =  '../../system/config.php';
+    $path =  '../../config/db.php';
     $conf= include($path);
 
-    if($this->connect($conf['db']['host'], $conf['db']['port'], $conf['db']['user'], $conf['db']['pass'])){
-        $this->CFG['my_db'] = $conf['db']['db'];
-        $this->CFG['exitURL'] = './auth/logout';
+    if($this->connect($conf['host'], $conf['port'], $conf['user'], $conf['pass'])){
+        $this->CFG['my_db'] = $conf['db'];
+        $this->CFG['exitURL'] = './admin/logout';
         $auth = 1;
     }
 }
