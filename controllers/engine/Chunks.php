@@ -51,13 +51,6 @@ class Chunks extends Engine
 
     public function index($parent_id=0)
     {
-        $this->appendToPanel((string)Link::create
-        (
-            $this->t('common.back'),
-            ['class' => 'btn-md', 'href'=> 'chunks']
-        )
-        );
-
         $this->appendToPanel
         (
             (string)Link::create
@@ -92,7 +85,6 @@ class Chunks extends Engine
         foreach ($t->getResults(false) as $i=>$row) {
             $res[$i][] = $row['id'];
             $res[$i][] = "<a href='chunks/edit/{$row['id']}'>{$row['name']}</a>";
-            $res[$i][] = $row['template'];
             $res[$i][] = $this->getPath($row['id'], false);
             $res[$i][] =
                 (string)Link::create
@@ -159,9 +151,8 @@ class Chunks extends Engine
             )
         );
 
-        $data['template'] = $this->readTemplate($id);
-
         $this->template->assign('data', $data);
+        $this->template->assign('template', $this->readTemplate($id));
         $this->template->assign('action', 'edit');
         $this->output($this->template->fetch('chunks/form'));
     }
@@ -199,7 +190,7 @@ class Chunks extends Engine
                         $prev_type = $this->chunks->getData($id, 'template');
                         $s = $this->chunks->update($id, $data);
 
-                        if($prev_type !== $data['type']){
+                        if($prev_type !== $data['template']){
                             $this->renameTemplate($prev_type, $data['template']);
                         }
 
@@ -227,7 +218,7 @@ class Chunks extends Engine
 
         $s = $this->chunks->delete($id);
         if($s>0){
-            unlink($template);
+            @unlink($template);
         }
         return $s;
     }

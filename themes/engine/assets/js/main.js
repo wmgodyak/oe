@@ -8,6 +8,13 @@ var engine = {
         var s = document.getElementById('componentScript');
         s.parentNode.insertBefore(sc, s);
     },
+    showFormErrors: function (form, inp)
+    {
+        var $validator = $(form).validate(), e = [];
+        $(inp).each(function(k, i){
+            $validator.showErrors(i);
+        });
+    },
     validateAjaxForm: function(myForm, onSuccess, ajaxParams, rules, onBeforeSend){
 
         rules = typeof rules == 'undefined' ? [] : rules;
