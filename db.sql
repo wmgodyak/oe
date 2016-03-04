@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Мар 04 2016 г., 14:59
+-- Время создания: Мар 04 2016 г., 15:34
 -- Версия сервера: 5.5.46-0ubuntu0.14.04.2
 -- Версия PHP: 5.5.9-1ubuntu4.14
 
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `components` (
   KEY `position` (`position`),
   KEY `published` (`published`),
   KEY `module` (`controller`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=35 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=36 ;
 
 --
 -- Дамп данных таблицы `components`
@@ -74,7 +74,8 @@ INSERT INTO `components` (`id`, `parent_id`, `isfolder`, `icon`, `author`, `vers
 (30, 0, 0, 'fa-puzzle-piece', 'Volodymyr Hodiak', '1.0.0', 'components', 0, 1, 300, NULL, '2016-03-03 10:14:52'),
 (31, 0, 0, 'fa-puzzle-piece', 'Volodymyr Hodiak', '1.0.0', 'plugins', 0, 1, 300, NULL, '2016-03-03 10:14:56'),
 (33, 0, 0, 'fa-file-code-o', 'Volodymyr Hodiak', '1.0.0', 'chunks', 0, 1, 300, NULL, '2016-03-03 15:31:14'),
-(34, 0, 0, 'fa-globe', 'Volodymyr Hodiak', '1.0.0', 'translations', 0, 1, 300, NULL, '2016-03-04 11:20:00');
+(34, 0, 0, 'fa-globe', 'Volodymyr Hodiak', '1.0.0', 'translations', 0, 1, 300, NULL, '2016-03-04 11:20:00'),
+(35, 0, 0, 'fa-book', 'Volodymyr Hodiak', '1.0.0', 'guides', 0, 1, 300, NULL, '2016-03-04 13:14:50');
 
 -- --------------------------------------------------------
 
@@ -166,6 +167,39 @@ CREATE TABLE IF NOT EXISTS `content_types` (
 
 INSERT INTO `content_types` (`id`, `parent_id`, `isfolder`, `type`, `name`, `is_main`, `settings`) VALUES
 (1, 0, 0, 'pages', 'Сторінки', 1, 'a:2:{s:9:"parent_id";s:1:"0";s:7:"ext_url";s:1:"0";}');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `guides`
+--
+
+CREATE TABLE IF NOT EXISTS `guides` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11) unsigned NOT NULL,
+  `position` tinyint(3) unsigned NOT NULL,
+  `code` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `parent_id` (`parent_id`),
+  KEY `position` (`position`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `guides_info`
+--
+
+CREATE TABLE IF NOT EXISTS `guides_info` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `guides_id` int(11) unsigned NOT NULL,
+  `languages_id` tinyint(3) unsigned NOT NULL,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`,`guides_id`,`languages_id`),
+  UNIQUE KEY `guides_id` (`guides_id`,`languages_id`),
+  KEY `fk_guides_info_languages2_idx` (`languages_id`),
+  KEY `fk_guides_info_guides2_idx` (`guides_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -427,6 +461,13 @@ ALTER TABLE `content`
 ALTER TABLE `content_info`
   ADD CONSTRAINT `fk_content_info_content1` FOREIGN KEY (`content_id`) REFERENCES `content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_content_info_languages1` FOREIGN KEY (`languages_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `guides_info`
+--
+ALTER TABLE `guides_info`
+  ADD CONSTRAINT `fk_guides_info_guides2` FOREIGN KEY (`guides_id`) REFERENCES `guides` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_guides_info_languages2` FOREIGN KEY (`languages_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `plugins_components`

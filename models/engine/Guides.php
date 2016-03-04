@@ -13,21 +13,25 @@ use models\Engine;
 defined("CPATH") or die();
 
 /**
- * Class Translations
+ * Class Guides
  * @package models\engine
  */
-class Translations extends Engine
+class Guides extends Engine
 {
     /**
      * @param $id
+     * @param string $key
      * @return array|mixed
      */
-    public function getData($id)
+    public function getData($id, $key = '*')
     {
-        $data =  self::$db->select("select * from translations where id={$id}")->row();
+        $data =  self::$db->select("select {$key} from guides where id={$id}")->row($key);
+
+        if($key != '*') return $data;
+
         foreach ($this->languages as $language) {
             $data['info'][$language['id']] = self::$db
-                ->select("select value from translations_info where translations_id={$id} and languages_id={$language['id']} limit 1")
+                ->select("select name from guides_info where guides_id={$id} and languages_id={$language['id']} limit 1")
                 ->row();
         }
         return $data;
@@ -39,22 +43,22 @@ class Translations extends Engine
      */
     public function create()
     {
-        $translations = $this->request->post('translations');
-        $translations_info = $this->request->post('translations_info');
+        $guides = $this->request->post('guides');
+        $guides_info = $this->request->post('guides_info');
 
         $this->beginTransaction();
 
-        $id = $this->createRow('translations', $translations);
+        $id = $this->createRow('guides', $guides);
 
         if($this->hasDBError()){
             $this->rollback();
             return false;
         }
 
-        foreach ($translations_info as $languages_id=> $item) {
+        foreach ($guides_info as $languages_id=> $item) {
             $item['languages_id']    = $languages_id;
-            $item['translations_id'] = $id;
-           $this->createRow('translations_info', $item);
+            $item['guides_id'] = $id;
+           $this->createRow('guides_info', $item);
         }
 
         if($this->hasDBError()){
@@ -73,26 +77,27 @@ class Translations extends Engine
      */
     public function update($id)
     {
-        $translations = $this->request->post('translations');
-        $translations_info = $this->request->post('translations_info');
+        $guides = $this->request->post('guides');
+        $guides_info = $this->request->post('guides_info');
+
         $this->beginTransaction();
-        $this->updateRow('translations', $id, $translations);
+        $this->updateRow('guides', $id, $guides);
 
         if($this->hasDBError()){
             $this->rollback();
             return false;
         }
 
-        foreach ($translations_info as $languages_id=> $item) {
+        foreach ($guides_info as $languages_id=> $item) {
             $aid = self::$db
-                ->select("select id from translations_info where translations_id={$id} and languages_id={$languages_id} limit 1")
+                ->select("select id from guides_info where guides_id={$id} and languages_id={$languages_id} limit 1")
                 ->row('id');
             if(empty($aid)){
                 $item['languages_id']    = $languages_id;
-                $item['translations_id'] = $id;
-                $this->createRow('translations_info', $item);
+                $item['guides_id'] = $id;
+                $this->createRow('guides_info', $item);
             } else {
-                $this->updateRow('translations_info', $aid, $item);
+                $this->updateRow('guides_info', $aid, $item);
             }
         }
         if($this->hasDBError()){
@@ -107,16 +112,6 @@ class Translations extends Engine
 
     public function delete($id)
     {
-        return self::$db->delete('translations', " id={$id} limit 1");
+        return self::$db->delete('guides', " id={$id} limit 1");
     }
-
-    /**
-     * @param $code
-     * @return bool
-     */
-    public function is($code)
-    {
-        return self::$db->select("select id from translations where code = '{$code}' limit 1")->row('id') > 0;
-    }
-
 }
