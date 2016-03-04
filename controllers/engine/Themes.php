@@ -11,18 +11,29 @@ namespace controllers\engine;
 use controllers\Engine;
 use controllers\core\Settings;
 
-defined('SYSPATH') or die();
+defined('CPATH') or die();
 
+/**
+ * Class Themes
+ * @name Теми
+ * @icon fa-television
+ * @author Volodymyr Hodiak
+ * @version 1.0.0
+ * @rang 300
+ * @package controllers\engine
+ */
 class Themes extends Engine {
+
     private $path = '';
+    private $themes;
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->tm = $this->load->model('engine\Themes');
+        $this->themes = new \models\engine\Themes();
 
-        $this->path = Settings::instance()->get('themes_path');
+        $this->path = Settings::getInstance()->get('themes_path');
     }
 
 
@@ -31,11 +42,12 @@ class Themes extends Engine {
      * @return mixed
      */
     public function index(){
-        $current = Settings::instance()->get('app_theme_current');
-//        var_dump($current);
+        $current = Settings::getInstance()->get('app_theme_current');
         // зчитую теми з папки
         $path = DOCROOT .'/'. $this->path;
         $path_url = APPURL .'/'. $this->path;
+
+
         $themes = array();
         if ($handle = opendir($path)) {
             while (false !== ($theme = readdir($handle))) {
@@ -58,17 +70,9 @@ class Themes extends Engine {
             }
             closedir($handle);
         }
-
-        $content = $this->load->view(
-            'themes',
-            array(
-                'themes' => $themes
-            )
-        );
-
-        $this->setContent($content);
-
-        return $this->output();
+        $this->template->assign('items', $themes);
+        $content = $this->template->fetch('themes/index');
+        $this->output($content);
     }
 
     /**
@@ -79,8 +83,7 @@ class Themes extends Engine {
     public function activate($theme)
     {
         if(empty($theme)) return 0;
-
-        return Settings::instance()->set('app_theme_current', $theme);
+        return $this->themes->activate($theme);
     }
 
     /**
@@ -93,7 +96,6 @@ class Themes extends Engine {
      * @return mixed
      */
     public function edit($id){}
-
 
     /**
      * @param $id

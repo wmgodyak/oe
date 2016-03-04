@@ -41,50 +41,7 @@ class Load
         if(!$this->storage[$key]) throw new \Exception("Key {$key} issues in Load storage");
         return $this->storage[$key];
     }
-     /**
-     * @param $name
-     * @param array $vars
-     * @return string
-     * @throws Exceptions
-     */
-    public function view($name, array $vars = null)
-    {
-        $mode = Request::getInstance()->mode;
 
-        $themes_path = Settings::getInstance()->get('themes_path');
-        $views_path = Settings::getInstance()->get('app_views_path');
-
-        if($mode == 'engine')
-        {
-            $current = Settings::getInstance()->get('engine_theme_current');
-//            $base = $themes_path . $current . '/';
-            // load translation
-            $lang = Languages::instance()->getTranslations();
-        } else {
-            return " <pre>this method is deprecated on app mode.\r\n Use this->template->assign('key', 'value');\r\n return this->template->fetch('path/to/file')</pre>";
-            // App
-//            $current = Settings::getInstance()->get('app_theme_current');
-//            $base = $themes_path . $current.'/';
-//            $t = $this->translations;
-        }
-        $template_url = APPURL . $themes_path . $current . '/';
-        $base_url = APPURL;
-        $file = $themes_path . $current . '/' . $views_path .'/'. $name .'.php';
-
-        if(is_readable($file)){
-
-            ob_start();
-
-            if(isset($vars)){
-                extract($vars);
-            }
-
-            require($file);
-
-            return ob_get_clean();
-        }
-        throw new Exceptions("View: <b>{$file}</b> issues");
-    }
      /**
      * @param $name
      * @param array $vars
@@ -128,64 +85,6 @@ class Load
         throw new Exceptions("Chunk: <b>{$file}</b> issues");
     }
 
-    public function model($name, $newName ='')
-    {
-        $name = MPATH . $name;
-//        echo $name,'<br>';
-        $className = ltrim($name, '\\');
-        $fileName  = ''; $namespace='';
-        if ($lastNsPos = strrpos($className, '\\')) {
-            $namespace = substr($className, 0, $lastNsPos);
-            $className = substr($className, $lastNsPos + 1);
-            $fileName  = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
-        }
-        $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
-        $fileName = DOCROOT .'/'. $fileName;
-        if (is_readable($fileName)){
-
-            require_once($fileName);
-
-            $c = $namespace .'\\'. $className;
-
-            if(class_exists($c)){
-                $className = empty($newName) ? $className : $newName;
-
-                $this->$className =  new $c;
-                return $this->$className;
-            }
-        }
-
-        throw new Exceptions("Model '$name' issues.");
-    }
-
-    public function plugin($name)
-    {
-        $className = ltrim($name, '\\');
-        $fileName  = ''; $namespace='';
-        if ($lastNsPos = strrpos($className, '\\')) {
-            $namespace = substr($className, 0, $lastNsPos);
-            $className = substr($className, $lastNsPos + 1);
-            $fileName  = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
-        }
-        $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
-        $fileName = $_SERVER['DOCUMENT_ROOT'] .'/'. $fileName;
-        if (is_readable($fileName)){
-
-            require_once($fileName);
-
-            $c = $namespace .'\\'. $className;
-
-            if(class_exists($c)){
-                $className = empty($newName) ? $className : $newName;
-
-                $this->$className =  new $c;
-                return $this->$className;
-            }
-        }
-
-        throw new Exceptions("plugin '$name' issues.");
-    }
-
     public function module($controller , $action = 'index' , $params = array())
     {
         $mod_path = Settings::getInstance()->get('mod_path');
@@ -224,52 +123,5 @@ class Load
         }
 
         throw new Exceptions("Module {$controller} :: {$action} issues.");
-    }
-
-    /**
-     * load component structure
-     * @param $controller
-     * @return mixed
-     * @throws Exceptions
-     */
-    public function component($controller)
-    {
-        $controller = str_replace('/','\\',$controller);
-        $className = ltrim($controller, '\\');
-        $fileName  = ''; $namespace='';
-        if ($lastNsPos = strrpos($className, '\\')) {
-            $namespace = substr($className, 0, $lastNsPos);
-            $className = substr($className, $lastNsPos + 1);
-            $className = ucfirst($className);
-            $fileName  = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
-        }
-        $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
-        $fileName = DOCROOT . $fileName;
-        if (is_readable($fileName)){
-
-            require_once($fileName);
-
-            $c = $namespace .'\\'. $className;
-
-            if(class_exists($c)){
-
-                return new $c;
-            }
-        }
-
-        throw new Exceptions("Component {$controller} issues.");
-    }
-
-    /**
-     * Load helper from /helpers
-     * @param $fileName
-     */
-    public function helper($fileName)
-    {
-        $path = DOCROOT . "helpers/$fileName.php";
-        if (is_readable($path)){
-
-            require_once($path);
-        }
     }
 }
