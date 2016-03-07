@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-03-03 16:12:26
+<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-03-07 17:46:00
          compiled from "/var/www/engine.loc/themes/engine/views/index.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:1202898852567be873c6fe20-51470877%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '6b5a4c44995d054b1606a318076352efcc60d459' => 
     array (
       0 => '/var/www/engine.loc/themes/engine/views/index.tpl',
-      1 => 1457014276,
+      1 => 1457365560,
       2 => 'file',
     ),
   ),
@@ -226,6 +226,9 @@ assets/js/vendor/lodash.min.js"><?php echo '</script'; ?>
 <?php echo '<script'; ?>
  src="<?php echo $_smarty_tpl->tpl_vars['theme_url']->value;?>
 assets/js/vendor/charCount.js"><?php echo '</script'; ?>
+>
+<?php echo '<script'; ?>
+ src="/vendor/ckeditor/ckeditor.js"><?php echo '</script'; ?>
 >
 <?php echo '<script'; ?>
 >

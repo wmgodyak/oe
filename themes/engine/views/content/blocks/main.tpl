@@ -1,5 +1,6 @@
 <fieldset>
     <legend>Основне</legend>
+    {if count($languages) > 1}
     <div class="form-group">
         <label class="col-md-3 control-label">Мова:</label>
         <div class="btn-group col-md-9" id="switchLanguages" role="group">
@@ -8,6 +9,7 @@
             {/foreach}
         </div>
     </div>
+    {/if}
     {foreach $languages as $i=>$lang}
     <div class="form-group lang-{$lang.code} switch-lang" {if $i>0}style="display:none"{/if}>
         <label for="info_{$lang.id}_name" class="col-md-3 control-label">Назва</label>
