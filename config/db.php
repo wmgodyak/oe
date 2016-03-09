@@ -8,9 +8,9 @@
 return array(
     'type'     => 'mysql',
     'host'     => 'localhost',
-    'db'       => 'e7',
+    'db'       => 'engine',
     'user'     => 'root',
-    'pass'     => 'dell',
+    'pass'     => 'hp',
     'port'     => 3306,
     'charset'  => 'utf8'
 );

@@ -90,10 +90,11 @@ class Engine extends Model
     /**
      * @param $table
      * @param $id
+     * @param int $debug
      * @return int
      */
-    protected function deleteRow($table, $id)
+    protected function deleteRow($table, $id, $debug = 0)
     {
-        return self::$db->delete($table, "id={$id} limit 1");
+        return self::$db->delete($table, "id={$id} limit 1", $debug);
     }
 }
