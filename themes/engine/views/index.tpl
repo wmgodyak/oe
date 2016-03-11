@@ -120,6 +120,7 @@
 <script src="{$theme_url}assets/js/vendor/jquery.maskedinput.min.js"></script>
 <script src="{$theme_url}assets/js/vendor/lodash.min.js"></script>
 <script src="{$theme_url}assets/js/vendor/charCount.js"></script>
+<script src="{$theme_url}assets/js/vendor/dropzone.min.js"></script>
 <script src="/vendor/ckeditor/ckeditor.js"></script>
 <script>
     var TOKEN = '{$token}', ONLINE = 0, t = {json_encode($t)}, CONTROLLER = '{$controller}', ACTION = '{$action}';

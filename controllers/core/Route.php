@@ -121,8 +121,6 @@ class Route
 
         Event::fire($c, 'after' . ucfirst($action), $params);
 
-        Event::flush($c, $action, $params);
-
         if($res){
             Response::getInstance()->body($res);
         }

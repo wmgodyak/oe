@@ -2,7 +2,7 @@
     <div class="form-group">
         <label for="data_size" class="col-sm-3 control-label">{$t.contentImagesSizes.size}</label>
         <div class="col-sm-9">
-            <input name="data[size]" id="data_size"  class="form-control" value="{$data.size}" required>
+            <input {if $action == 'edit'}readonly{/if} name="data[size]" id="data_size"  class="form-control" value="{$data.size}" required>
         </div>
     </div>
     <div class="form-group">

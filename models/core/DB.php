@@ -150,8 +150,17 @@ class DB extends \PDO {
     /**
      * @return mixed
      */
-    public function all()
+    public function all($key = null)
     {
+        if($key){
+            $r = $this->result->fetchAll(DB::FETCH_ASSOC);
+            $res = [];
+            foreach ($r as $item) {
+                $res[] = $item[$key];
+            }
+            return $res;
+        }
+
         return $this->result->fetchAll(DB::FETCH_ASSOC);
     }
 

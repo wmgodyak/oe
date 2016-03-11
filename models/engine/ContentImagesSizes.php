@@ -126,6 +126,22 @@ class ContentImagesSizes extends Engine
 
     public function delete($id)
     {
+        $items = self::$db
+            -> select
+                ("
+                      select CONCAT(ci.path,cis.size, '/',ci.image) as img
+                      from content_types_images_sizes ctis
+                      join content_images_sizes cis on ctis.images_sizes_id=cis.id
+                      join content c on c.subtypes_id=ctis.types_id
+                      join content_images ci on ci.content_id=c.id
+                      where ctis.images_sizes_id={$id}
+                ")
+            -> all('img');
+
+        foreach ($items as $i=>$src) {
+            @unlink(DOCROOT. $src);
+        }
+
         return self::$db->delete('content_images_sizes', " id={$id} limit 1");
     }
 
@@ -149,4 +165,6 @@ class ContentImagesSizes extends Engine
         }
         return $r;
     }
+
+
 }

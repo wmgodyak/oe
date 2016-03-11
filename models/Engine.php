@@ -96,4 +96,15 @@ class Engine extends Model
     {
         return self::$db->delete($table, "id={$id} limit 1");
     }
+
+    /**
+     * @param $table
+     * @param $id
+     * @param string $key
+     * @return array|mixed
+     */
+    protected function rowData($table, $id, $key = '*')
+    {
+        return self::$db->select("select {$key} from {$table} where id={$id} limit 1")->row($key);
+    }
 }

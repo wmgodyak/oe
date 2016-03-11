@@ -78,6 +78,11 @@ class ContentImagesSizes extends Engine
             $res[$i][] =
                 (string)Button::create
                 (
+                    Icon::create(Icon::TYPE_CROP),
+                    ['class' => 'b-contentImagesSizes-crop', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
+                ) .
+                (string)Button::create
+                (
                     Icon::create(Icon::TYPE_EDIT),
                     ['class' => 'b-contentImagesSizes-edit', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
                 ) .
