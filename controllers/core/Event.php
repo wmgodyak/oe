@@ -54,6 +54,8 @@ class Event
      */
     public static function fire($controller, $action, $args = array())
     {
+//        echo $controller, '::', $action, "\r\n";
+
         foreach (self::$events as $event) {
             if($event['event'] != $controller . '::' . $action) continue;
 

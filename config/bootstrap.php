@@ -56,3 +56,5 @@
         $_POST = clearGpc($_POST);
         $_REQUEST = clearGpc($_REQUEST);
     }
+
+    include_once "events.php";
