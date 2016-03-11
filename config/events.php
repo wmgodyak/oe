@@ -8,9 +8,12 @@
 
 defined("CPATH") or die();
 
-
+/*
+ * Example
+ *
     \controllers\core\Event::listen
     (
         'controllers\engine\Content::beforeDelete',
         'controllers\engine\plugins\ContentImages::ondDeleteContent'
     );
+ * */

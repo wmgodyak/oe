@@ -7,6 +7,7 @@
  */
 namespace controllers\engine\plugins;
 
+use controllers\core\Event;
 use controllers\core\Settings;
 use controllers\engine\Plugin;
 use helpers\Translit;
@@ -55,6 +56,12 @@ class ContentImages extends Plugin
         $this->source_dir  = Settings::getInstance()->get('content_images_source_dir');
         $this->quality     = (int) Settings::getInstance()->get('content_images_quality');
         if($this->quality == 0) $this->quality = 60;
+
+        Event::listen
+        (
+            'controllers\engine\Content::beforeDelete',
+            'controllers\engine\plugins\ContentImages::ondDeleteContent'
+        );
     }
 
     public function index()
@@ -64,14 +71,15 @@ class ContentImages extends Plugin
 
     public function create()
     {
-        return $this->template->fetch('plugins/content/images/upload.tpl');
+        $this->template->assign('images', json_encode([]));
+        return $this->template->fetch('plugins/content/images/upload');
     }
 
     public function edit($id)
     {
         $this->template->assign('id', $id);
         $this->template->assign('images', json_encode($this->mContentImages->get($id)));
-        return $this->template->fetch('plugins/content/images/upload.tpl');
+        return $this->template->fetch('plugins/content/images/upload');
     }
 
     public function delete($id)
@@ -82,6 +90,11 @@ class ContentImages extends Plugin
     public function process($id)
     {
         // TODO: Implement process() method.
+    }
+
+    public function ondDeleteContent($content_id)
+    {
+        $this->mContentImages->deleteContentImages($content_id);
     }
 
     public function upload($content_id)
@@ -312,6 +325,5 @@ class ContentImages extends Plugin
         imagedestroy($square_image);
 
     }
-
 
 }
