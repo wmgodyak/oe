@@ -166,5 +166,35 @@ class ContentImagesSizes extends Engine
         return $r;
     }
 
+    public function cropGetTotal($sizes_id)
+    {
+        return self::$db
+            -> select
+            ("
+                  select count(ci.id) as t
+                  from content_types_images_sizes ctis
+                  join content c on c.subtypes_id=ctis.types_id and c.status='published'
+                  join content_images_sizes cis on cis.id=ctis.images_sizes_id
+                  join content_images ci on ci.content_id=c.id
+                  where ctis.images_sizes_id={$sizes_id}
+                ")
+            -> row('t');
+    }
+
+    public function cropGetItems($sizes_id, $start, $num = 10)
+    {
+        return self::$db
+            -> select
+            ("
+                  select ci.path, ci.image
+                  from content_types_images_sizes ctis
+                  join content c on c.subtypes_id=ctis.types_id and c.status='published'
+                  join content_images_sizes cis on cis.id=ctis.images_sizes_id
+                  join content_images ci on ci.content_id=c.id
+                  where ctis.images_sizes_id={$sizes_id}
+                  limit {$start}, {$num}
+            ")
+            -> row('t');
+    }
 
 }

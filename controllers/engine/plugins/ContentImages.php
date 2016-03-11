@@ -59,8 +59,8 @@ class ContentImages extends Plugin
 
         Event::listen
         (
-            'controllers\engine\Content::beforeDelete',
-            'controllers\engine\plugins\ContentImages::ondDeleteContent'
+            'controllers\engine\Content::beforeDrop',
+            'controllers\engine\plugins\ContentImages::onDropContent'
         );
     }
 
@@ -92,7 +92,7 @@ class ContentImages extends Plugin
         // TODO: Implement process() method.
     }
 
-    public function ondDeleteContent($content_id)
+    public function onDropContent($content_id)
     {
         $this->mContentImages->deleteContentImages($content_id);
     }
