@@ -35,25 +35,35 @@ class Features extends Engine
         $this->features = new \models\engine\Features();
     }
 
-    public function index()
+    public function index($parent_id=0)
     {
+        if($parent_id > 0){
+            $data = $this->features->getData($parent_id, 'parent_id');
+            $this->appendToPanel((string)Link::create
+            (
+                $this->t('common.back'),
+                ['class' => 'btn-md', 'href'=> './features/index' . ($data>0 ? '/' . $data : '')]
+            )
+            );
+        }
         $this->appendToPanel
         (
             (string)Link::create
                 (
                     $this->t('common.button_create'),
-                    ['class' => 'btn-md', 'href'=> 'features/create']
+                    ['class' => 'btn-md', 'href'=> 'features/create' . ($parent_id>0? "/{$parent_id}" : '')]
                 )
         );
 
         $t = new DataTables();
 
         $t  -> setId('features')
-            -> ajaxConfig('features/items')
+            -> ajaxConfig('features/items/'.$parent_id)
 //            -> setConfig('order', array(0, 'desc'))
             -> th($this->t('common.id'))
             -> th($this->t('features.name'))
             -> th($this->t('features.code'))
+            -> th($this->t('features.type'))
             -> th($this->t('features.categories'))
             -> th($this->t('common.tbl_func'), '', 'width: 60px')
         ;
@@ -61,20 +71,23 @@ class Features extends Engine
         $this->output($t->render());
     }
 
-    public function items()
+    public function items($parent_id=0)
     {
         $t = new DataTables();
         $t  -> table('features f')
             -> join("features_info i on i.features_id=f.id and i.languages_id={$this->languages_id}")
-            -> get('f.id, i.name, f.code, f.status')
+            -> get('f.id, i.name, f.code,f.type, f.status')
+            -> where("f.parent_id = {$parent_id}")
             -> execute();
 
         $res = array();
         foreach ($t->getResults(false) as $i=>$row) {
+            $it = $row['type'] == 'folder' ? 'folder' : 'file';
             $res[$i][] = $row['id'];
-            $res[$i][] = "<a href='features/edit/{$row['id']}'>{$row['name']}</a>";
+            $res[$i][] = "<a href='features/index/{$row['id']}'><i class='fa fa-{$it}'></i> {$row['name']}</a>";
             $res[$i][] = $row['code'];
-            $res[$i][] = $row['code'];
+            $res[$i][] = $row['type'];
+            $res[$i][] = $row['type'];
             $res[$i][] =
                 (string)(
                 $row['status'] == 'published' ?

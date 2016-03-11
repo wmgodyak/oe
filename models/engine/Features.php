@@ -93,6 +93,15 @@ class Features extends Engine
             return false;
         }
 
+        if($data['parent_id'] > 0){
+            $this->updateRow('features', $data['parent_id'], ['type' => 'folder']);
+        }
+
+        if($this->hasDBError()){
+            $this->rollback();
+            return false;
+        }
+
         $this->commit();
 
         return true;

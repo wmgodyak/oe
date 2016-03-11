@@ -84,4 +84,5 @@
         </div>
     {/if}
     <input type="hidden" name="token" value="{$token}">
+    <input type="hidden" name="data[parent_id]" value="{$data.parent_id}">
 </form>
