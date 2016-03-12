@@ -19,9 +19,9 @@
                     </div>
                 {/foreach}
                 <div class="form-group">
-                    <label for="guides_code" class="col-sm-3 control-label">{$t.features.code}</label>
+                    <label for="data_code" class="col-sm-3 control-label">{$t.features.code}</label>
                     <div class="col-sm-9">
-                        <input name="guides[code]" id="guides_code"  class="form-control" value="{$data.code}">
+                        <input name="data[code]" id="data_code"  class="form-control" value="{$data.code}">
                     </div>
                 </div>
                 <div class="form-group">
@@ -29,7 +29,8 @@
                     <div class="col-md-9">
                         <select name="data[type]" id="data_type" class="form-control">
                             {foreach $data.types as $i=>$item}
-                                <option {if $data.type == $item}selected{/if} value="{$item}">{$item}</option>
+                                {assign var="item_name" value="type_$item"}
+                                <option {if $data.type == $item}selected{/if} value="{$item}">{$t.features[$item_name]}</option>
                             {/foreach}
                         </select>
                     </div>
@@ -52,7 +53,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group fg-show-filter" style="display: none">
                     <div class="col-md-9 col-md-offset-3">
                         <div class="checkbox">
                             <label>
@@ -62,7 +63,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group fg-multiple" style="display: none">
                     <div class="col-md-9 col-md-offset-3">
                         <div class="checkbox">
                             <label>
@@ -73,6 +74,11 @@
                     </div>
                 </div>
                 {if isset($plugins.params)}{implode("\r\n", $plugins.params)}{/if}
+            </fieldset>
+
+            <fieldset>
+                <legend>Показувати в <a href="javascript:;" data-id="{$data.id}" class="b-features-select-ct">Вибрати</a></legend>
+                <div id="content_types"></div>
             </fieldset>
         </div>
     </div>
@@ -86,3 +92,25 @@
     <input type="hidden" name="token" value="{$token}">
     <input type="hidden" name="data[parent_id]" value="{$data.parent_id}">
 </form>
+<script>var selected_content = {json_encode($data.selected_content)}</script>
+
+{literal}
+    <script type="text/template" id="ctList" >
+        <table class="table table-bordered">
+            <tr>
+                <th>Тип</th>
+                <th>Підтип</th>
+                <th>Сторінка</th>
+                <th>Видалити</th>
+            </tr>
+            <% for(var i=0;i < items.length; i++) { %>
+            <tr id="f-sc-<%- items[i].id %>">
+                <td><%- items[i].type %></td>
+                <td><%- items[i].subtype %></td>
+                <td><%- items[i].content %></td>
+                <td><a class="b-features-delete-ct" data-id="<%- items[i].id %>" title="Видалити" href="javascript:;"><i class="fa fa-remove"></i></a></td>
+            </tr>
+            <% } %>
+        </table>
+    </script>
+{/literal}
