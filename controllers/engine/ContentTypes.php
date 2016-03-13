@@ -14,7 +14,6 @@ use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
 use helpers\bootstrap\Link;
 use helpers\FormValidation;
-use helpers\PHPDocReader;
 
 defined("CPATH") or die();
 /**
@@ -172,38 +171,12 @@ class ContentTypes extends Engine
 
         $data['template'] = $this->readTemplate($id);
 
-//        $data['controllers'] = $this->getContentTypes();
         $this->template->assign('data', $data);
+        $this->template->assign('features', $this->contentTypes->getFeatures());
         $this->template->assign('action', 'edit');
         $this->output($this->template->fetch('contentTypes/form'));
     }
-/*
-    private function getContentTypes()
-    {
-        $items = array();
-        if ($handle = opendir(DOCROOT . self::PATH)) {
-            while (false !== ($entry = readdir($handle))) {
-                if ($entry != "." && $entry != ".." && !is_dir(DOCROOT . self::PATH . $entry)) {
 
-                    $module = str_replace('.php', '', $entry);
-                    $ns = str_replace('/', '\\', self::PATH);
-
-                    $row = PHPDocReader::getMeta($ns . ucfirst($module));
-                    if(!isset($row['name'])) continue;
-
-                    $row['controller'] = ucfirst($module);
-
-                    if(!isset($row['rang'])) $row['rang'] = 101;
-
-                    $items[] = $row;
-                }
-            }
-            closedir($handle);
-        }
-
-        return $items;
-    }
-*/
     /**
      * @param null $id
      * @throws \Exception
@@ -358,6 +331,11 @@ class ContentTypes extends Engine
         return file_put_contents($template, $text);
     }
 
+    /**
+     * @param $id
+     * @param bool $abs
+     * @return mixed|string
+     */
     private function getPath($id, $abs = true)
     {
         $data = $this->contentTypes->getData($id);
@@ -371,5 +349,40 @@ class ContentTypes extends Engine
         }
 
         return !$abs ? str_replace(DOCROOT , '', $template) : $template;
+    }
+
+    /**
+     * @param $types_id
+     * @param $subtypes_id
+     * @param $features_id
+     * @return int
+     */
+    public function selectFeatures($types_id, $subtypes_id, $features_id)
+    {
+        if(empty($features_id)) return 0;
+
+        if($types_id == 0) {
+            $types_id = $subtypes_id;
+            $subtypes_id = 0;
+        }
+
+        $s = $this->contentTypes->selectFeatures($types_id, $subtypes_id, $features_id);
+        if($this->contentTypes->hasDBError()){
+            echo $this->contentTypes->getDBErrorMessage();
+        }
+
+        $s = $s ? 1 : 0; $sf = null;
+
+        if($s){
+            $sf = $this->contentTypes->getSelectedFeatures($types_id, $subtypes_id);
+        }
+        $this->response->body(['s' => $s, 'sf' => $sf])->asJSON();
+    }
+
+    public function deleteFeatures($id)
+    {
+        $s = $this->contentTypes->deleteFeatures($id);
+        $s = $s ? 1 : 0;
+        $this->response->body($s)->asHtml();
     }
 }

@@ -11,6 +11,7 @@ engine.contentTypes = {
         });
 
         this.initBuilder();
+        this.features.init();
     },
     initBuilder: function()
     {
@@ -168,6 +169,61 @@ engine.contentTypes = {
                 $(this).dialog('close').dialog('destroy').remove();
             }
         );
+    },
+    features : {
+        init: function()
+        {
+            var typesID = $('#typesID').val(),
+                subTypesID = $('#subTypesID').val();
+
+            console.log('contentTypes.features.init()');
+
+            $(document).on('change', '#features', function()
+            {
+                if(typesID == ''){
+                    engine.alert('Опція доступна тільки для редагування');
+                    return ;
+                }
+                var features_id = this.value;
+                engine.request.get
+                (
+                    'contentTypes/selectFeatures/'+typesID+'/'+subTypesID + '/' + features_id,
+                    function(d)
+                    {
+                        if(d.s){
+                            engine.contentTypes.features.refresh(d.sf);
+                        }
+                    },
+                    'json'
+                );
+
+            });
+
+            $(document).on('click', '.b-ct-delete-features', function(){
+               var id = $(this).data('id');
+                var w = engine.confirm('Дійсно видалити?', function(){
+                    engine.request.get
+                    (
+                        'contentTypes/deleteFeatures/'+id,
+                        function(d)
+                        {
+                            if(d){
+                                $("#cf-sf-" + id).remove();
+                                w.dialog('destroy').remove();
+                            }
+                        }
+                    );
+                });
+            });
+
+            engine.contentTypes.features.refresh(selected_features);
+        },
+        refresh: function(data)
+        {
+            if(data.length == 0) return ;
+            var tmpl = _.template($('#ftList').html());
+            $("#content_features").html(tmpl({items: data}));
+        }
     }
 };
 
