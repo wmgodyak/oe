@@ -144,6 +144,15 @@ class DB extends \PDO {
     public function row($key='*')
     {
         $res = $this->result->fetch(DB::FETCH_ASSOC);
+        if(strpos($key, ',')){
+            $a = explode(',', $key);
+            $b = [];
+            foreach ($a as $k=>$v) {
+                if(! isset($res[$v])) continue;
+                $b[$v] = $res[$v];
+            }
+            return $b;
+        }
         return $key=='*' ? $res : $res[$key];
     }
 

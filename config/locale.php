@@ -16,5 +16,5 @@
     */
     setlocale(LC_ALL, 'uk_UA.utf-8');
 
-    iconv_set_encoding("internal_encoding", "UTF-8");
+//    iconv_set_encoding("internal_encoding", "UTF-8");
     mb_internal_encoding('UTF-8');

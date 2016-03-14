@@ -35,7 +35,7 @@ engine.contentImagesSizes = {
 
         function resize(sizes_id, total, start)
         {
-            
+
             if(start >= total) {
                 resizeSuccess();
                 return false;

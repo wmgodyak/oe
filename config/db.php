@@ -8,7 +8,7 @@
 return array(
     'type'     => 'mysql',
     'host'     => 'localhost',
-    'db'       => 'e7',
+    'db'       => 'engine',
     'user'     => 'root',
     'pass'     => 'dell',
     'port'     => 3306,

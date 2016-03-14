@@ -5,7 +5,7 @@
         <div class="col-md-9">
             <select name="content[status]" id="content_status" class="form-control">
                 {foreach $content.status as $i=>$item}
-                    <option {if $content.status=$item}selected{/if} value="{$item}">{$item}</option>
+                    <option {if $content.status==$item}selected{/if} value="{$item}">{$item}</option>
                 {/foreach}
             </select>
         </div>
