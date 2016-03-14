@@ -22,32 +22,36 @@ engine.contentImagesSizes = {
     },
     crop: function(id)
     {
+        function resizeSuccess(t)
+        {
+            engine.alert(
+                'Ресайз зображень завершено.',
+                'Зроблено ресайз '+t+' зображень',
+                'success'
+            );
+
+            $("#resizeBox").hide();
+        }
+
         function resize(sizes_id, total, start)
         {
-            console.log('resize', sizes_id, total, start);
+            
             if(start >= total) {
-                engine.alert(
-                    'Ресайз зображень завершено.',
-                    'Зроблено ресайз 100 зображень',
-                    'success'
-                );
-
-                $("#resizeBox").hide();
-
+                resizeSuccess();
                 return false;
             }
 
             var percent =  100 / total, done = Math.round( start * percent ) ;
             $("#progress").find('div').css('width', done + '%');
 
-             setTimeout(function(){
-             start++;
-             resize(sizes_id, total, start);
-             }, 1500);
+             //setTimeout(function(){
+             //start++;
+             //resize(sizes_id, total, start);
+             //}, 1500);
 
 
-            /*engine.request.post({
-                url: './contentImagesSizes/crop',
+            engine.request.post({
+                url: './contentImagesSizes/resizeItems',
                 data: {
                     start: start,
                     sizes_id: sizes_id
@@ -56,9 +60,11 @@ engine.contentImagesSizes = {
                     if(d > 0){
                         start++;
                         resize(sizes_id, total, start);
+                    } else {
+                        resizeSuccess();
                     }
                 }
-            });*/
+            });
 
             return false;
         }
@@ -66,15 +72,14 @@ engine.contentImagesSizes = {
         var dw = engine.confirm(t.contentImagesSizes.crop_confirm, function(){
             $("#resizeBox").css('display', 'block');
             engine.request.post({
-                url: './contentImagesSizes/cropGetTotal',
+                url: './contentImagesSizes/resizeGetTotal',
                 data: {
                     sizes_id: id
                 },
                 success: function(d){
-                    alert(d);
+                    resize(id, d, 0);
                 }
             });
-            //resize(id, 100, 0);
             dw.dialog('close');
         });
     },

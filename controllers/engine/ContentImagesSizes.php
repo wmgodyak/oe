@@ -150,21 +150,27 @@ class ContentImagesSizes extends Engine
         return $this->contentImagesSizes->delete($id);
     }
 
-    public function cropGetTotal()
+    public function resizeGetTotal()
     {
         $size_id = $this->request->post('sizes_id', 'i');
         if(empty($size_id)) die(0);
 
-        $t = $this->contentImagesSizes->cropGetTotal($size_id);
+        $t = $this->contentImagesSizes->resizeGetTotal($size_id);
         echo $this->contentImagesSizes->getDBErrorMessage();
         $this->response->body($t)->asHtml();
     }
 
-    public function crop()
+    public function resizeItems()
     {
-        $size_id = $this->request->post('id', 'i');
-        $this->response->body([
+        $num = 1;
+        $size_id = $this->request->post('sizes_id', 'i');
+        $start   = $this->request->post('start', 'i');
+        if($start > 0){
+            $start = $start * $num;
+        }
 
-        ]);
+        $s = $this->contentImagesSizes->resizeItems($size_id, $start, $num);
+
+        $this->response->body($s)->asHtml();
     }
 }
