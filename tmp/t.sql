@@ -1,17 +1,13 @@
-CREATE TABLE IF NOT EXISTS `features_content` (
-  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `features_id` INT(10) UNSIGNED NOT NULL,
-  `content_types_id` TINYINT(3) UNSIGNED NOT NULL,
-  `content_subtypes_id` TINYINT(3) UNSIGNED NULL,
-  `content_id` INT(10) UNSIGNED NULL,
-  `position` TINYINT(3) UNSIGNED NULL DEFAULT NULL,
-  PRIMARY KEY (`id`, `features_id`, `content_types_id`, `content_subtypes_id`, `content_id`),
-  INDEX `fk_content_features_idx` (`features_id` ASC),
-  INDEX `features_content` (`content_id` ASC, `content_types_id` ASC, `content_subtypes_id` ASC),
-  CONSTRAINT `fk_content_features_idx`
-  FOREIGN KEY (`features_id`)
-  REFERENCES `features` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-  ENGINE = InnoDB
-  DEFAULT CHARACTER SET = utf8
+select *
+from content_types_images_sizes ctis
+join content c on c.subtypes_id=ctis.types_id and c.status='published'
+join content_images_sizes cis on cis.id=ctis.images_sizes_id
+join content_images ci on ci.content_id=c.id
+where ctis.images_sizes_id=8
+limit 0, 10;
+
+select *
+from content_types_images_sizes ctis
+join content c on c.subtypes_id=ctis.types_id and c.status='published'
+join content_images_sizes cis on cis.id=ctis.images_sizes_id
+where ctis.images_sizes_id=0

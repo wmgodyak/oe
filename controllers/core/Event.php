@@ -54,16 +54,23 @@ class Event
      */
     public static function fire($controller, $action, $args = array())
     {
-        $c = new $controller;
-        if(!is_callable(array($c, $action))) return true;
+//        echo $controller, '::', $action, "\r\n";
 
-        if(!empty($args)){
-            $s = call_user_func_array(array($c, $action), $args);
-        } else{
-            $s = call_user_func(array($c, $action));
+        foreach (self::$events as $event) {
+            if($event['event'] != $controller . '::' . $action) continue;
+
+            $a = explode('::', $event['callback']);
+            $_controller = $a[0]; $_action = isset($a[1]) ? $a[1] : 'index';
+
+            $c = new $_controller;
+            if(!is_callable(array($c, $_action))) return true;
+
+            if(!empty($args)){
+                call_user_func_array(array($c, $_action), $args);
+            } else{
+                call_user_func(array($c, $_action));
+            }
         }
-
-        return $s;
     }
 
     public static function flush($controller, $action, $args = array())

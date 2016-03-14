@@ -8,6 +8,8 @@
 
 namespace models\engine;
 
+use controllers\core\Settings;
+use helpers\Image;
 use models\Engine;
 
 defined("CPATH") or die();
@@ -126,6 +128,22 @@ class ContentImagesSizes extends Engine
 
     public function delete($id)
     {
+        $items = self::$db
+            -> select
+                ("
+                      select CONCAT(ci.path,cis.size, '/',ci.image) as img
+                      from content_types_images_sizes ctis
+                      join content_images_sizes cis on ctis.images_sizes_id=cis.id
+                      join content c on c.subtypes_id=ctis.types_id
+                      join content_images ci on ci.content_id=c.id
+                      where ctis.images_sizes_id={$id}
+                ")
+            -> all('img');
+
+        foreach ($items as $i=>$src) {
+            @unlink(DOCROOT. $src);
+        }
+
         return self::$db->delete('content_images_sizes', " id={$id} limit 1");
     }
 
@@ -148,5 +166,84 @@ class ContentImagesSizes extends Engine
             $r[$item['types_id']] = $item['types_id'];
         }
         return $r;
+    }
+
+    public function resizeGetTotal($sizes_id)
+    {
+        return self::$db
+            -> select
+            ("
+                  select count(ci.id) as t
+                  from content_types_images_sizes ctis
+                  join content c on c.subtypes_id=ctis.types_id and c.status='published'
+                  join content_images_sizes cis on cis.id=ctis.images_sizes_id
+                  join content_images ci on ci.content_id=c.id
+                  where ctis.images_sizes_id={$sizes_id}
+                ")
+            -> row('t');
+    }
+
+    /**
+     * @param $sizes_id
+     * @param $start
+     * @param int $num
+     * @return mixed
+     */
+    public function resizeItems($sizes_id, $start, $num = 10)
+    {
+        $r = self::$db
+            -> select
+            ("
+                  select ci.path, ci.image, cis.size, cis.width, cis.height, ci.content_id
+                  from content_types_images_sizes ctis
+                  join content c on c.subtypes_id=ctis.types_id and c.status='published'
+                  join content_images_sizes cis on cis.id=ctis.images_sizes_id
+                  join content_images ci on ci.content_id=c.id
+                  where ctis.images_sizes_id={$sizes_id}
+                  limit {$start}, {$num}
+                ")
+            -> all();
+
+        echo $this->getDBErrorMessage();
+
+        if(empty($r)) return 0;
+
+        include_once DOCROOT . "vendor/acimage/AcImage.php";
+
+        $source = Settings::getInstance()->get('content_images_source_dir');
+
+        foreach ($r as $item) {
+
+            $item['width']  = (int)$item['width'];
+            $item['height'] = (int)$item['height'];
+
+            $image_src  = DOCROOT . $item['path'] . $source . $item['image'];
+
+            $img = \AcImage::createImage($image_src);
+            \AcImage::setRewrite(true);
+            \AcImage::setQuality(80);
+
+
+            $size_path =  $item['path'] . $item['size'] .'/';
+
+            $image_dest = $size_path . $item['image'];
+
+            if(!is_dir($size_path)) mkdir($size_path, 0775, true);
+
+            if($item['width'] == 0) {
+                $img->resizeByHeight($item['height']);
+                $img->save(DOCROOT . $image_dest);
+            } elseif($item['height'] == 0 ) {
+                $img->resizeByWidth($item['width']);
+                $img->save(DOCROOT . $image_dest);
+            } elseif($item['width'] == $item['height']){
+               Image::createSquare($image_src, DOCROOT . $image_dest, $item['width'] );
+            } else {
+                $img->resize($item['width'], $item['height']);
+                $img->save(DOCROOT . $image_dest);
+            }
+        }
+
+        return true;
     }
 }

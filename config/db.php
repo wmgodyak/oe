@@ -10,7 +10,7 @@ return array(
     'host'     => 'localhost',
     'db'       => 'engine',
     'user'     => 'root',
-    'pass'     => 'hp',
+    'pass'     => 'dell',
     'port'     => 3306,
     'charset'  => 'utf8'
 );

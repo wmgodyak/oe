@@ -22,6 +22,7 @@ abstract class IconBuilder
     const TYPE_UNINSTALL    = 'fa-toggle-off';
     const TYPE_PUBLISHED    = 'fa-eye';
     const TYPE_HIDDEN       = 'fa-eye-slash';
+    const TYPE_CROP         = 'fa-crop';
     const TYPE_EDIT         = 'fa-pencil';
     const TYPE_DELETE       = 'fa-remove';
     const TYPE_TRASH        = 'fa-trash';

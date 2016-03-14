@@ -59,7 +59,7 @@ class ContentImagesSizes extends Engine
             -> th($this->t('common.tbl_func'), '', 'width: 90px')
         ;
 
-        $this->output($t->render());
+        $this->output('<div id="resizeBox" class="row" style="display: none"><div id="progress" class=\'progress progress-thin progress-striped active\'><div style=\'width: 0;\' class=\'progress-bar progress-bar-success\'></div></div></div>'. $t->render());
     }
 
     public function items()
@@ -76,6 +76,11 @@ class ContentImagesSizes extends Engine
             $res[$i][] = $row['width'];
             $res[$i][] = $row['height'];
             $res[$i][] =
+                (string)Button::create
+                (
+                    Icon::create(Icon::TYPE_CROP),
+                    ['class' => 'b-contentImagesSizes-crop', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
+                ) .
                 (string)Button::create
                 (
                     Icon::create(Icon::TYPE_EDIT),
@@ -143,5 +148,29 @@ class ContentImagesSizes extends Engine
     public function delete($id)
     {
         return $this->contentImagesSizes->delete($id);
+    }
+
+    public function resizeGetTotal()
+    {
+        $size_id = $this->request->post('sizes_id', 'i');
+        if(empty($size_id)) die(0);
+
+        $t = $this->contentImagesSizes->resizeGetTotal($size_id);
+        echo $this->contentImagesSizes->getDBErrorMessage();
+        $this->response->body($t)->asHtml();
+    }
+
+    public function resizeItems()
+    {
+        $num = 1;
+        $size_id = $this->request->post('sizes_id', 'i');
+        $start   = $this->request->post('start', 'i');
+        if($start > 0){
+            $start = $start * $num;
+        }
+
+        $s = $this->contentImagesSizes->resizeItems($size_id, $start, $num);
+
+        $this->response->body($s)->asHtml();
     }
 }
