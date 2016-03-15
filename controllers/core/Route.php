@@ -114,8 +114,10 @@ class Route
         Event::fire($c, 'before'.ucfirst($action), $params);
 
         if(!empty($params)){
+            call_user_func_array(array($controller, 'before'), $params);
             $res = call_user_func_array(array($controller, $action), $params);
         } else{
+            call_user_func(array($controller, 'before'));
             $res = call_user_func(array($controller, $action));
         }
 
