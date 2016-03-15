@@ -65,7 +65,7 @@ class Pages extends Content
             -> th($this->t('common.name'))
             -> th($this->t('common.created'))
             -> th($this->t('common.updated'))
-            -> th($this->t('common.tbl_func'), '', 'width: 60px')
+            -> th($this->t('common.tbl_func'), '', 'width: 160px')
         ;
 
         $this->output($t->render());

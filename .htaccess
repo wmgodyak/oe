@@ -18,5 +18,5 @@ RewriteRule ^(.+)$ /index.php/$1 [L,QSA]
 # Error Reporting
 php_flag display_startup_errors on
 php_flag display_errors on
-php_flag  log_errors on
-php_value error_log  errors.log
+#php_flag  log_errors on
+#php_value error_log  errors.log
