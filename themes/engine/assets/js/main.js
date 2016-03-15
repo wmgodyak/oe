@@ -39,6 +39,13 @@ var engine = {
                     {
                         //console.log(onBeforeSend);
                         bSubmit.attr('disabled', true);
+
+                        if($('.ckeditor').length){
+                            for ( instance in CKEDITOR.instances ) {
+                                CKEDITOR.instances[instance].updateElement();
+                            }
+                        }
+
                         if(typeof onBeforeSend == 'string'){
                             try {
                                 onBeforeSend += '()';

@@ -15,7 +15,7 @@
         <div class="col-md-9">
             <select name="content[owner_id]" id="content_owner_id" class="form-control">
                 {foreach $content.owners as $item}
-                    <option {if $content.owner_id=$item.id}selected{/if} value="{$item.id}">{$item.name} {$item.surname}</option>
+                    <option {if $content.owner_id==$item.id}selected{/if} value="{$item.id}">{$item.name} {$item.surname}</option>
                 {/foreach}
             </select>
         </div>

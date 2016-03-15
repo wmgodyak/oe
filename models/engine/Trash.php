@@ -34,7 +34,7 @@ class Trash extends Engine
         $s = parent::updateRow('content', $id, ['status' => 'published']);
 
         if($s > 0 && $parent_id > 0){
-            parent::updateRow('content', $parent_id, ['isfolder' => 0]);
+            parent::updateRow('content', $parent_id, ['isfolder' => 1]);
         }
     }
 }
