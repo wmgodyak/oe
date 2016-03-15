@@ -139,6 +139,7 @@ class ContentTypes extends Engine
         $data = ['parent_id' => $parent_id];
 //        $data['controllers'] = $this->getContentTypes();
         $this->template->assign('data', $data);
+        $this->template->assign('imagesSizes', $this->contentTypes->getContentImagesSizes());
         $this->template->assign('action', 'create');
         $this->output($this->template->fetch('contentTypes/form'));
     }
@@ -171,6 +172,7 @@ class ContentTypes extends Engine
 
         $data['template'] = $this->readTemplate($id);
 
+        $this->template->assign('imagesSizes', $this->contentTypes->getContentImagesSizes());
         $this->template->assign('data', $data);
         $this->template->assign('features', $this->contentTypes->getFeatures());
         $this->template->assign('action', 'edit');

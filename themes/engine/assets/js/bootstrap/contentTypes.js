@@ -5,10 +5,21 @@ engine.contentTypes = {
     init: function()
     {
         console.log('engine.contentTypes.init() -> OK');
+
         $(document).on('click', '.b-contentTypes-delete', function(){
             var id = $(this).data('id');
             engine.contentTypes.delete(id);
         });
+
+        $(document).on('change', '#data_settings_ext_url', function(){
+            if($(this).is(':checked')){
+                $("#data_settings_parent_id_cnt").show();
+            } else{
+                $("#data_settings_parent_id_cnt").hide();
+            }
+        });
+
+        $("#contentImagesSizes").select2();
 
         this.initBuilder();
         this.features.init();

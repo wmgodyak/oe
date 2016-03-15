@@ -26,6 +26,9 @@ class ContentTypes extends Engine
     public function getData($id, $key= '*')
     {
         $d = self::$db->select("select {$key} from content_types where id={$id} limit 1")->row($key);
+
+        if($key != '*') return $d;
+
         if(isset($d['settings']) && !empty($d['settings'])) $d['settings'] = unserialize($d['settings']);
 
 
@@ -37,10 +40,17 @@ class ContentTypes extends Engine
             $subtypes_id = 0;
         }
 
-        $d['features'] = $this->getSelectedFeatures($types_id, $subtypes_id);
-
+        $d['features']     = $this->getSelectedFeatures($types_id, $subtypes_id);
+        $d['images_sizes'] = $this->getSelectedImagesSizes($id);
 //        echo $this->getDBErrorMessage();
         return $d;
+    }
+
+    private function getSelectedImagesSizes($types_id)
+    {
+        return self::$db
+            ->select("select images_sizes_id from content_types_images_sizes where types_id={$types_id}")
+            ->all('images_sizes_id');
     }
 
     /**
@@ -53,6 +63,13 @@ class ContentTypes extends Engine
         if($s>0 && $data['parent_id'] > 0){
             self::$db->update('content_types', ['isfolder'=>1], "id={$data['parent_id']} limit 1");
         }
+        if($s>0){
+            // content_types_images_sizes
+            $ct = $this->request->post('ct_images_sizes');
+            foreach ($ct as $k=>$sizes_id) {
+                $this->createRow('content_types_images_sizes', ['types_id' => $s, 'images_sizes_id' => $sizes_id]);
+            }
+        }
         return $s;
     }
 
@@ -63,7 +80,16 @@ class ContentTypes extends Engine
      */
     public function update($id, $data)
     {
-        return parent::updateRow('content_types', $id, $data);
+        $s = parent::updateRow('content_types', $id, $data);
+        if($s>0){
+            self::$db->delete("content_types_images_sizes", "types_id = {$id}");
+            // content_types_images_sizes
+            $ct = $this->request->post('ct_images_sizes');
+            foreach ($ct as $k=>$sizes_id) {
+                $this->createRow('content_types_images_sizes', ['types_id' => $s, 'images_sizes_id' => $sizes_id]);
+            }
+        }
+        return $s;
     }
 
     public function delete($id)
@@ -172,5 +198,10 @@ class ContentTypes extends Engine
     public function deleteFeatures($id)
     {
         return $this->deleteRow('features_content', $id);
+    }
+
+    public function getContentImagesSizes()
+    {
+        return self::$db->select("select * from content_images_sizes order by id asc")->all();
     }
 }

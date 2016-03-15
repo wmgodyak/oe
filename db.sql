@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Мар 14 2016 г., 15:25
+-- Время создания: Мар 14 2016 г., 17:02
 -- Версия сервера: 5.5.46-0ubuntu0.14.04.2
 -- Версия PHP: 5.5.9-1ubuntu4.14
 
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- База данных: `e7`
+-- База данных: `engine`
 --
 
 -- --------------------------------------------------------
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `components` (
   KEY `position` (`position`),
   KEY `published` (`published`),
   KEY `module` (`controller`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=39 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=40 ;
 
 --
 -- Дамп данных таблицы `components`
@@ -78,7 +78,8 @@ INSERT INTO `components` (`id`, `parent_id`, `isfolder`, `icon`, `author`, `vers
 (35, 0, 0, 'fa-book', 'Volodymyr Hodiak', '1.0.0', 'guides', 0, 0, 300, NULL, '2016-03-04 13:14:50'),
 (36, 0, 0, 'fa-file-code-o', 'Volodymyr Hodiak', '1.0.0', 'backup', 0, 0, 300, NULL, '2016-03-04 14:00:18'),
 (37, 0, 0, 'fa-television', 'Volodymyr Hodiak', '1.0.0', 'themes', 0, 1, 300, NULL, '2016-03-04 14:17:19'),
-(38, 0, 0, 'fa-book', 'Volodymyr Hodiak', '1.0.0', 'contentImagesSizes', 0, 1, 300, NULL, '2016-03-09 13:43:18');
+(38, 0, 0, 'fa-book', 'Volodymyr Hodiak', '1.0.0', 'contentImagesSizes', 0, 1, 300, NULL, '2016-03-09 13:43:18'),
+(39, 0, 0, 'fa-file-code-o', 'Volodymyr Hodiak', '1.0.0', 'features', 0, 1, 300, NULL, '2016-03-14 14:51:44');
 
 -- --------------------------------------------------------
 
@@ -124,6 +125,24 @@ INSERT INTO `content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id`,
 (43, 1, 1, 2, 30, 0, 0, '2016-03-14 12:34:05', NULL, '2016-03-14', 'published'),
 (44, 1, 1, 2, 30, 0, 0, '2016-03-14 12:34:14', NULL, '2016-03-14', 'published'),
 (45, 1, 1, 2, 30, 0, 0, '2016-03-14 12:34:24', NULL, '2016-03-14', 'published');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `content_features`
+--
+
+CREATE TABLE IF NOT EXISTS `content_features` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `content_id` int(10) unsigned NOT NULL,
+  `features_id` int(10) unsigned NOT NULL,
+  `languages_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `value` text,
+  PRIMARY KEY (`id`,`content_id`,`features_id`),
+  UNIQUE KEY `content_id` (`content_id`,`features_id`,`languages_id`),
+  KEY `fk_content_features_values_content1_idx` (`content_id`),
+  KEY `fk_content_features_values_features1_idx` (`features_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -267,6 +286,61 @@ INSERT INTO `content_types_images_sizes` (`id`, `types_id`, `images_sizes_id`) V
 (11, 1, 11),
 (12, 1, 12),
 (13, 1, 13);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `features`
+--
+
+CREATE TABLE IF NOT EXISTS `features` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `parent_id` int(10) unsigned DEFAULT NULL,
+  `type` enum('text','textarea','select','file','folder','value','checkbox') DEFAULT NULL,
+  `code` varchar(45) NOT NULL,
+  `multiple` tinyint(1) DEFAULT NULL,
+  `on_filter` tinyint(1) DEFAULT NULL,
+  `owner_id` int(11) unsigned NOT NULL,
+  `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `status` enum('blank','published','hidden') DEFAULT 'blank',
+  PRIMARY KEY (`id`,`owner_id`),
+  UNIQUE KEY `code_UNIQUE` (`code`),
+  KEY `fk_features_users1_idx` (`owner_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=84 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `features_content`
+--
+
+CREATE TABLE IF NOT EXISTS `features_content` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `features_id` int(10) unsigned NOT NULL,
+  `content_types_id` tinyint(3) unsigned NOT NULL,
+  `content_subtypes_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `content_id` int(10) unsigned NOT NULL DEFAULT '0',
+  `position` tinyint(3) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`,`features_id`,`content_types_id`,`content_subtypes_id`,`content_id`),
+  UNIQUE KEY `features_id` (`features_id`,`content_types_id`,`content_subtypes_id`,`content_id`),
+  KEY `fk_content_features_idx` (`features_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `features_info`
+--
+
+CREATE TABLE IF NOT EXISTS `features_info` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `features_id` int(10) unsigned NOT NULL,
+  `languages_id` tinyint(3) unsigned NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`,`features_id`,`languages_id`),
+  KEY `fk_features_info_features1_idx` (`features_id`),
+  KEY `fk_features_info_languages1_idx` (`languages_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=99 ;
 
 -- --------------------------------------------------------
 
@@ -484,7 +558,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `updated`, `lastlogin`, `status`) VALUES
-(2, 1, 0, 'enoeok8s4215em1r34m4u9pqf3', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', NULL, NULL, '2016-03-03 13:25:08', '0000-00-00 00:00:00', '2016-03-14 12:17:51', 'active');
+(2, 1, 0, 'enoeok8s4215em1r34m4u9pqf3', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', NULL, NULL, '2016-03-03 13:25:08', '0000-00-00 00:00:00', '2016-03-14 14:31:03', 'active');
 
 -- --------------------------------------------------------
 
@@ -548,6 +622,13 @@ ALTER TABLE `content`
   ADD CONSTRAINT `fk_content_owner_id1` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Ограничения внешнего ключа таблицы `content_features`
+--
+ALTER TABLE `content_features`
+  ADD CONSTRAINT `fk_content_features_values_content1` FOREIGN KEY (`content_id`) REFERENCES `content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_content_features_values_features1` FOREIGN KEY (`features_id`) REFERENCES `features` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Ограничения внешнего ключа таблицы `content_images`
 --
 ALTER TABLE `content_images`
@@ -566,6 +647,25 @@ ALTER TABLE `content_info`
 ALTER TABLE `content_types_images_sizes`
   ADD CONSTRAINT `fk_content_types_images_sizes1` FOREIGN KEY (`types_id`) REFERENCES `content_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_content_types_images_sizes2` FOREIGN KEY (`images_sizes_id`) REFERENCES `content_images_sizes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `features`
+--
+ALTER TABLE `features`
+  ADD CONSTRAINT `fk_features_users1` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `features_content`
+--
+ALTER TABLE `features_content`
+  ADD CONSTRAINT `fk_content_features_idx` FOREIGN KEY (`features_id`) REFERENCES `features` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `features_info`
+--
+ALTER TABLE `features_info`
+  ADD CONSTRAINT `fk_features_info_features1` FOREIGN KEY (`features_id`) REFERENCES `features` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_features_info_languages1` FOREIGN KEY (`languages_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `guides_info`

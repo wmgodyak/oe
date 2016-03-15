@@ -25,27 +25,40 @@
                         <div class="checkbox">
                             <label>
                                 <input type="checkbox" name="data[settings][ext_url]" value="0">
-                                <input {if $data.settings.ext_url == 1}checked{/if} type="checkbox" name="data[settings][ext_url]" value="1"> Наслідувати Url
+                                <input {if $data.settings.ext_url == 1}checked{/if} id="data_settings_ext_url" type="checkbox" name="data[settings][ext_url]" value="1"> Наслідувати Url
                             </label>
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="data_settings_parent_id_cnt" style="display:{if $data.settings.ext_url == 1}block{else}none{/if}">
                     <label for="settings_parent_id" class="col-md-4 control-label">Ід. ст. батька</label>
                     <div class="col-md-8">
-                        <input type="text" class="form-control" name="data[settings][parent_id]" id="settings_parent_id" value="{$data.settings.parent_id}" required placeholder="[0-9]+">
+                        <input type="text" class="form-control" name="data[settings][parent_id]" id="settings_parent_id" value="{$data.settings.parent_id}" placeholder="[0-9]+">
+                        <p class="help-block">Введіть ід сторінки від якої наслідувати url</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="settings_parent_id" class="col-md-4 control-label">Розміри зображень</label>
+                    <div class="col-md-8">
+                        <select name="ct_images_sizes[]" id="contentImagesSizes" class="form-control" multiple>
+                            {foreach $imagesSizes as $item}
+                                <option {if in_array($item.id, $data.images_sizes)}selected{/if} value="{$item.id}">{$item.size} ({$item.width}x{$item.height})</option>
+                            {/foreach}
+                        </select>
+                        <p class="help-block">Виберіть розміри на які автоматично нарізати зображення</p>
                     </div>
                 </div>
             </fieldset>
         </div>
     </div>
-    {if !empty($features)}
+
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-8">
             <fieldset>
-                <legend>Властивості</legend>
+                <legend>Налаштування властивостей</legend>
+                {if !empty($features)}
                 <div class="form-group">
-                    <label for="settings_parent_id" class="col-md-4 control-label">Виберіть</label>
+                    <label for="settings_parent_id" class="col-md-4 control-label">Виберіть властивість</label>
                     <div class="col-md-8">
                         <select name="features" id="features" class="form-control">
                             <option value="">Виберіть</option>
@@ -56,10 +69,14 @@
                     </div>
                 </div>
                 <div id="content_features"></div>
+                {/if}
             </fieldset>
         </div>
+        <div class="col-md-4">
+
+        </div>
     </div>
-    {/if}
+
     <div class="row">
         <div class="col-md-12">
             <fieldset>
