@@ -53,6 +53,17 @@
                         </select>
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <div class="col-md-9 col-md-offset-3">
+                        <div class="checkbox">
+                            <label>
+                                <input type="hidden" name="data[required]" value="0">
+                                <input {if $data.required == 1}checked{/if} type="checkbox" name="data[required]" value="1"> {$t.features.required}
+                            </label>
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group fg-show-filter" style="display: none">
                     <div class="col-md-9 col-md-offset-3">
                         <div class="checkbox">
@@ -73,6 +84,7 @@
                         </div>
                     </div>
                 </div>
+
                 {if isset($plugins.params)}{implode("\r\n", $plugins.params)}{/if}
             </fieldset>
 

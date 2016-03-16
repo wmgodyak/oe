@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Мар 15 2016 г., 11:31
+-- Время создания: Мар 16 2016 г., 13:44
 -- Версия сервера: 5.5.47-0ubuntu0.14.04.1
 -- Версия PHP: 5.5.9-1ubuntu4.14
 
@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS `content` (
   KEY `fk_content_owner_idx` (`owner_id`),
   KEY `status` (`status`),
   KEY `published` (`published`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- Дамп данных таблицы `content`
@@ -114,7 +114,8 @@ CREATE TABLE IF NOT EXISTS `content` (
 
 INSERT INTO `content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id`, `isfolder`, `position`, `created`, `updated`, `published`, `status`) VALUES
 (1, 1, 1, 2, 0, 1, 0, '2016-03-15 09:25:57', NULL, '2016-03-15', 'published'),
-(2, 1, 1, 2, 1, 0, 0, '2016-03-15 09:26:43', NULL, '2016-03-15', 'hidden');
+(2, 1, 1, 2, 1, 0, 0, '2016-03-15 09:26:43', NULL, '2016-03-15', 'published'),
+(5, 1, 1, 2, 1, 0, 0, '2016-03-16 09:45:20', NULL, '2016-03-16', 'published');
 
 -- --------------------------------------------------------
 
@@ -126,13 +127,72 @@ CREATE TABLE IF NOT EXISTS `content_features` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `content_id` int(10) unsigned NOT NULL,
   `features_id` int(10) unsigned NOT NULL,
+  `values_id` int(10) unsigned DEFAULT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `value` text,
+  `value` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`,`content_id`,`features_id`),
-  UNIQUE KEY `content_id` (`content_id`,`features_id`,`languages_id`),
+  UNIQUE KEY `content_id` (`content_id`,`features_id`,`values_id`,`languages_id`),
   KEY `fk_content_features_values_content1_idx` (`content_id`),
   KEY `fk_content_features_values_features1_idx` (`features_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=70 ;
+
+--
+-- Дамп данных таблицы `content_features`
+--
+
+INSERT INTO `content_features` (`id`, `content_id`, `features_id`, `values_id`, `languages_id`, `value`) VALUES
+(1, 2, 84, NULL, 1, 'ret'),
+(2, 2, 96, NULL, 1, 'retertert'),
+(3, 2, 97, NULL, 0, '/uploads/avatars/c4ca4238a0b923820dcc509a6f75849b.png'),
+(5, 2, 93, NULL, 1, 'reter'),
+(15, 2, 85, 92, 0, NULL),
+(16, 2, 85, 91, 0, NULL),
+(17, 2, 98, NULL, 1, 'цукцук'),
+(25, 2, 100, NULL, 0, '/uploads/avatars/0.png'),
+(26, 2, 87, 90, 0, NULL),
+(27, 2, 99, NULL, 0, '1'),
+(28, 5, 84, NULL, 1, ''),
+(29, 5, 108, NULL, 1, ''),
+(30, 5, 109, NULL, 1, ''),
+(31, 5, 110, NULL, 1, ''),
+(32, 5, 112, NULL, 1, ''),
+(33, 5, 113, NULL, 1, ''),
+(34, 5, 114, NULL, 1, ''),
+(35, 5, 120, NULL, 1, ''),
+(36, 5, 119, NULL, 1, ''),
+(37, 5, 106, NULL, 1, ''),
+(38, 5, 105, NULL, 1, ''),
+(39, 5, 96, NULL, 1, ''),
+(40, 5, 97, NULL, 0, ''),
+(41, 5, 98, NULL, 1, ''),
+(42, 5, 100, NULL, 0, ''),
+(43, 5, 101, NULL, 1, ''),
+(44, 5, 102, NULL, 1, ''),
+(45, 5, 103, NULL, 1, ''),
+(46, 5, 104, NULL, 1, ''),
+(47, 5, 121, NULL, 1, 'sadasd'),
+(48, 5, 87, 88, 0, NULL),
+(49, 5, 93, NULL, 1, ''),
+(50, 5, 124, NULL, 1, 'dasdsad'),
+(51, 5, 125, NULL, 1, 'фів'),
+(52, 2, 109, NULL, 1, ''),
+(53, 2, 110, NULL, 1, ''),
+(54, 2, 112, NULL, 1, ''),
+(55, 2, 113, NULL, 1, ''),
+(56, 2, 114, NULL, 1, ''),
+(57, 2, 120, NULL, 1, ''),
+(58, 2, 119, NULL, 1, ''),
+(59, 2, 121, NULL, 1, 'іва'),
+(60, 2, 108, NULL, 1, ''),
+(61, 2, 106, NULL, 1, ''),
+(62, 2, 105, NULL, 1, ''),
+(63, 2, 101, NULL, 1, ''),
+(64, 2, 102, NULL, 1, ''),
+(65, 2, 103, NULL, 1, ''),
+(66, 2, 104, NULL, 1, ''),
+(67, 2, 124, NULL, 1, 'в'),
+(68, 2, 111, 132, 0, NULL),
+(69, 2, 133, NULL, 0, '3336');
 
 -- --------------------------------------------------------
 
@@ -150,14 +210,15 @@ CREATE TABLE IF NOT EXISTS `content_images` (
   PRIMARY KEY (`id`),
   KEY `fk_content_images_content1_idx` (`content_id`),
   KEY `position` (`position`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Дамп данных таблицы `content_images`
 --
 
 INSERT INTO `content_images` (`id`, `content_id`, `path`, `image`, `position`, `created`) VALUES
-(1, 2, 'uploads/content/2016/03/15/', 'cute-winter-wallpaper-1920x1080-101112152-ebeieeiya-2x.jpg', 1, '2016-03-15 09:27:23');
+(1, 2, 'uploads/content/2016/03/15/', 'cute-winter-wallpaper-1920x1080-101112152-ebeieeiya-2x.jpg', 1, '2016-03-15 09:27:23'),
+(2, 5, 'uploads/content/2016/03/16/', 'cute-winter-wallpaper-1920x1080-101112150-ebeieeiya-5x.jpg', 1, '2016-03-16 11:44:05');
 
 -- --------------------------------------------------------
 
@@ -207,7 +268,7 @@ CREATE TABLE IF NOT EXISTS `content_info` (
   UNIQUE KEY `url_uq` (`content_id`,`languages_id`,`url`),
   KEY `fk_content_info_content1_idx` (`content_id`),
   KEY `fk_content_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=40 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=41 ;
 
 --
 -- Дамп данных таблицы `content_info`
@@ -215,7 +276,8 @@ CREATE TABLE IF NOT EXISTS `content_info` (
 
 INSERT INTO `content_info` (`id`, `content_id`, `languages_id`, `name`, `url`, `h1`, `title`, `keywords`, `description`, `content`) VALUES
 (38, 1, 1, 'Головна', 'golovna', '', 'Головна', '', '', NULL),
-(39, 2, 1, 'Про проект', 'pro-proekt', '', 'Про проект', '', '', '<p>reteert</p>\n');
+(39, 2, 1, 'Про проект', 'pro-proekt', '', 'Про проект', '', '', '<p>reteert</p>\n'),
+(40, 5, 1, 'Допомогти', 'dopomogty', '', 'Допомогти', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -235,7 +297,7 @@ CREATE TABLE IF NOT EXISTS `content_types` (
   UNIQUE KEY `parent_id` (`parent_id`,`type`),
   UNIQUE KEY `parent_id_2` (`parent_id`,`is_main`),
   KEY `is_main` (`is_main`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- Дамп данных таблицы `content_types`
@@ -280,33 +342,67 @@ INSERT INTO `content_types_images_sizes` (`id`, `types_id`, `images_sizes_id`) V
 CREATE TABLE IF NOT EXISTS `features` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int(10) unsigned DEFAULT NULL,
-  `type` enum('text','textarea','select','file','folder','value','checkbox') DEFAULT NULL,
+  `type` enum('text','textarea','select','file','folder','value','checkbox','number') DEFAULT NULL,
   `code` varchar(45) NOT NULL,
   `multiple` tinyint(1) DEFAULT NULL,
   `on_filter` tinyint(1) DEFAULT NULL,
+  `required` tinyint(1) NOT NULL DEFAULT '0',
   `owner_id` int(11) unsigned NOT NULL,
   `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `status` enum('blank','published','hidden') DEFAULT 'blank',
   PRIMARY KEY (`id`,`owner_id`),
   UNIQUE KEY `code_UNIQUE` (`code`),
   KEY `fk_features_users1_idx` (`owner_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=94 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=134 ;
 
 --
 -- Дамп данных таблицы `features`
 --
 
-INSERT INTO `features` (`id`, `parent_id`, `type`, `code`, `multiple`, `on_filter`, `owner_id`, `created`, `status`) VALUES
-(84, 0, 'text', 'feature_1457967964', 0, 0, 2, '2016-03-14 15:06:04', 'published'),
-(85, 0, 'select', 'feature_1457968007', 1, 0, 2, '2016-03-14 15:06:47', 'published'),
-(86, 0, 'folder', 'feature_1457968029', 0, 0, 2, '2016-03-14 15:07:09', 'published'),
-(87, 86, 'select', 'feature_1457968043', 0, 0, 2, '2016-03-14 15:07:23', 'published'),
-(88, 87, 'value', 'ebcc805a9d004ef49fb710baf92cac51', NULL, NULL, 2, '2016-03-14 15:07:59', 'published'),
-(89, 87, 'value', 'fac3c711f4d3df1affbbabdbcae43a78', NULL, NULL, 2, '2016-03-14 15:08:01', 'published'),
-(90, 87, 'value', 'efb927dbeee0f1d9a4fd305a089fb68a', NULL, NULL, 2, '2016-03-14 15:08:09', 'published'),
-(91, 85, 'value', '02cb709925182bb6fc87b4e90201ab2f', NULL, NULL, 2, '2016-03-14 15:08:24', 'published'),
-(92, 85, 'value', 'c78b9754c268702eeee30667b4b5259f', NULL, NULL, 2, '2016-03-14 15:08:27', 'published'),
-(93, 86, 'text', 'feature_1457968111', 0, 0, 2, '2016-03-14 15:08:31', 'published');
+INSERT INTO `features` (`id`, `parent_id`, `type`, `code`, `multiple`, `on_filter`, `required`, `owner_id`, `created`, `status`) VALUES
+(84, 0, 'text', 'feature_1457967964', 0, 0, 0, 2, '2016-03-14 15:06:04', 'published'),
+(85, 0, 'select', 'feature_1457968007', 1, 0, 0, 2, '2016-03-14 15:06:47', 'published'),
+(86, 0, 'folder', 'feature_1457968029', 0, 0, 0, 2, '2016-03-14 15:07:09', 'published'),
+(87, 86, 'select', 'feature_1457968043', 0, 0, 0, 2, '2016-03-14 15:07:23', 'published'),
+(88, 87, 'value', 'ebcc805a9d004ef49fb710baf92cac51', NULL, NULL, 0, 2, '2016-03-14 15:07:59', 'published'),
+(89, 87, 'value', 'fac3c711f4d3df1affbbabdbcae43a78', NULL, NULL, 0, 2, '2016-03-14 15:08:01', 'published'),
+(90, 87, 'value', 'efb927dbeee0f1d9a4fd305a089fb68a', NULL, NULL, 0, 2, '2016-03-14 15:08:09', 'published'),
+(91, 85, 'value', '02cb709925182bb6fc87b4e90201ab2f', NULL, NULL, 0, 2, '2016-03-14 15:08:24', 'published'),
+(92, 85, 'value', 'c78b9754c268702eeee30667b4b5259f', NULL, NULL, 0, 2, '2016-03-14 15:08:27', 'published'),
+(93, 86, 'text', 'feature_1457968111', 0, 0, 0, 2, '2016-03-14 15:08:31', 'published'),
+(94, 0, 'text', 'tekstove_pole', 0, 0, 0, 2, '2016-03-15 11:48:39', 'published'),
+(95, 0, 'text', 'she_odne_tekstove_pole', 0, 0, 0, 2, '2016-03-15 11:49:36', 'published'),
+(96, 0, 'textarea', 'tekstovyj_blok', 0, 0, 0, 2, '2016-03-15 12:03:53', 'published'),
+(97, 0, 'file', 'fajl', 0, 0, 0, 2, '2016-03-15 12:58:57', 'published'),
+(98, 0, 'textarea', 'hz', 0, 0, 0, 2, '2016-03-16 08:56:24', 'published'),
+(99, 0, 'checkbox', 'chekboks', 0, 0, 0, 2, '2016-03-16 09:01:27', 'published'),
+(100, 0, 'file', 'fajl2', 0, 0, 0, 2, '2016-03-16 09:12:53', 'published'),
+(101, 86, 'text', 'asdsadasd', 0, 0, 0, 2, '2016-03-16 09:24:18', 'published'),
+(102, 86, 'text', 'sdfsdfdsfsdfdsf', 0, 0, 0, 2, '2016-03-16 09:24:41', 'published'),
+(103, 86, 'text', 'aaa', 0, 0, 0, 2, '2016-03-16 09:24:51', 'published'),
+(104, 86, 'text', 'ddd', 0, 0, 0, 2, '2016-03-16 09:25:42', 'published'),
+(105, 86, 'text', 'ccc', 0, 0, 0, 2, '2016-03-16 09:26:46', 'published'),
+(106, 86, 'text', 'vvv', 0, 0, 0, 2, '2016-03-16 09:27:06', 'published'),
+(108, 86, 'text', 'bbbb', 0, 0, 0, 2, '2016-03-16 09:28:35', 'published'),
+(109, 0, 'text', 'ryrtyrtyrty', 0, 0, 0, 2, '2016-03-16 09:31:26', 'published'),
+(110, 0, 'text', 'zzz', 0, 0, 0, 2, '2016-03-16 09:31:56', 'published'),
+(111, 86, 'select', 'bbnnn', 1, 0, 0, 2, '2016-03-16 09:32:24', 'published'),
+(112, 86, 'text', 'eeee', 0, 0, 0, 2, '2016-03-16 09:33:52', 'published'),
+(113, 86, 'text', 'ttt', 0, 0, 0, 2, '2016-03-16 09:34:29', 'published'),
+(114, 86, 'text', 'yyy', 0, 0, 0, 2, '2016-03-16 09:34:37', 'published'),
+(115, 86, 'folder', 'group_34343', 0, 0, 0, 2, '2016-03-16 09:34:45', 'published'),
+(119, 0, 'text', '456456aaa', 0, 0, 0, 2, '2016-03-16 09:37:19', 'published'),
+(120, 115, 'text', 'tretertretertert', 0, 0, 0, 2, '2016-03-16 09:37:27', 'published'),
+(121, 0, 'text', 'feature_1458121404', 0, 0, 1, 2, '2016-03-16 09:43:24', 'published'),
+(123, 0, NULL, 'feature_1458121433', NULL, NULL, 0, 2, '2016-03-16 09:43:53', 'blank'),
+(124, 0, 'text', 'asdasdaaaaaa', 0, 0, 1, 2, '2016-03-16 09:47:22', 'published'),
+(125, 0, 'text', 'til_ky_dlya_dopomogty', 0, 0, 1, 2, '2016-03-16 09:48:41', 'published'),
+(128, 111, 'value', '6984ae55ffc4de0cd2058db94de73605', NULL, NULL, 0, 2, '2016-03-16 10:03:25', 'published'),
+(129, 111, 'value', 'b0f820cb3753c03b1ce485977ffe8283', NULL, NULL, 0, 2, '2016-03-16 10:07:50', 'published'),
+(130, 111, 'value', '9a2531cb148bff7bd5084a496d486dea', NULL, NULL, 0, 2, '2016-03-16 10:08:14', 'published'),
+(131, 111, 'value', 'ede039bb4e0c92dcf3a966d36a2b18c1', NULL, NULL, 0, 2, '2016-03-16 10:08:19', 'published'),
+(132, 111, 'value', 'dc9d0d89ea6326c7167515de9d656e0d', NULL, NULL, 0, 2, '2016-03-16 10:08:33', 'published'),
+(133, 0, 'number', 'chyslove_pole', 0, 0, 0, 2, '2016-03-16 10:15:30', 'published');
 
 -- --------------------------------------------------------
 
@@ -324,7 +420,7 @@ CREATE TABLE IF NOT EXISTS `features_content` (
   PRIMARY KEY (`id`,`features_id`,`content_types_id`,`content_subtypes_id`,`content_id`),
   UNIQUE KEY `features_id` (`features_id`,`content_types_id`,`content_subtypes_id`,`content_id`),
   KEY `fk_content_features_idx` (`features_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=48 ;
 
 --
 -- Дамп данных таблицы `features_content`
@@ -335,7 +431,33 @@ INSERT INTO `features_content` (`id`, `features_id`, `content_types_id`, `conten
 (17, 93, 2, 0, 0, NULL),
 (18, 86, 1, 0, 0, 1),
 (19, 85, 1, 0, 0, 2),
-(20, 85, 2, 0, 0, 1);
+(20, 85, 2, 0, 0, 1),
+(21, 96, 1, 1, 0, NULL),
+(22, 97, 1, 1, 0, NULL),
+(23, 98, 1, 1, 0, NULL),
+(24, 99, 1, 1, 0, NULL),
+(25, 100, 1, 1, 0, NULL),
+(26, 101, 1, 1, 0, NULL),
+(27, 102, 1, 1, 0, NULL),
+(28, 103, 1, 1, 0, NULL),
+(29, 104, 1, 1, 0, NULL),
+(30, 105, 1, 1, 0, NULL),
+(31, 106, 1, 1, 0, NULL),
+(32, 108, 1, 1, 0, NULL),
+(33, 109, 1, 1, 0, NULL),
+(34, 110, 1, 1, 0, NULL),
+(35, 111, 1, 1, 0, NULL),
+(36, 112, 1, 1, 0, NULL),
+(37, 113, 1, 1, 0, NULL),
+(38, 114, 1, 1, 0, NULL),
+(39, 115, 1, 1, 0, NULL),
+(40, 119, 1, 1, 0, NULL),
+(41, 120, 1, 1, 0, NULL),
+(43, 123, 1, 0, 0, NULL),
+(44, 121, 1, 0, 0, NULL),
+(45, 124, 1, 1, 0, NULL),
+(46, 125, 1, 1, 5, NULL),
+(47, 133, 1, 1, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -351,7 +473,7 @@ CREATE TABLE IF NOT EXISTS `features_info` (
   PRIMARY KEY (`id`,`features_id`,`languages_id`),
   KEY `fk_features_info_features1_idx` (`features_id`),
   KEY `fk_features_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=109 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=145 ;
 
 --
 -- Дамп данных таблицы `features_info`
@@ -367,7 +489,39 @@ INSERT INTO `features_info` (`id`, `features_id`, `languages_id`, `name`) VALUES
 (105, 90, 1, '3'),
 (106, 91, 1, '1'),
 (107, 92, 1, '2'),
-(108, 93, 1, 'c2');
+(108, 93, 1, 'c2'),
+(109, 94, 1, 'Текстове поле'),
+(110, 95, 1, 'ще одне текстове поле'),
+(111, 96, 1, 'Текстовий блок'),
+(112, 97, 1, 'файл'),
+(113, 98, 1, 'хз'),
+(114, 99, 1, 'чекбокс'),
+(115, 100, 1, 'файл2'),
+(116, 101, 1, 'asdsadasd'),
+(117, 102, 1, 'sdfsdfdsfsdfdsf'),
+(118, 103, 1, 'aaa'),
+(119, 104, 1, 'ddd'),
+(120, 105, 1, 'ccc'),
+(121, 106, 1, 'vvv'),
+(122, 108, 1, 'bbbb'),
+(123, 109, 1, 'ryrtyrtyrty'),
+(124, 110, 1, 'zzz'),
+(125, 111, 1, 'bbnnn'),
+(126, 112, 1, 'eeee'),
+(127, 113, 1, 'ttt'),
+(128, 114, 1, 'yyy'),
+(129, 115, 1, 'group 34343'),
+(133, 119, 1, '456456aaa'),
+(134, 120, 1, 'tretertretertert'),
+(135, 121, 1, 'обовязкове поле'),
+(136, 124, 1, 'asdasdaaaaaa'),
+(137, 125, 1, 'Тільки для допомогти'),
+(139, 128, 1, 'werwerwer'),
+(140, 129, 1, 'tbnnnn'),
+(141, 130, 1, '345435hh'),
+(142, 131, 1, 'ww'),
+(143, 132, 1, 'g'),
+(144, 133, 1, 'Числове поле');
 
 -- --------------------------------------------------------
 
@@ -585,7 +739,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `updated`, `lastlogin`, `status`) VALUES
-(2, 1, 0, 'ugghonipkaec62m2gkvdg8emv6', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', NULL, NULL, '2016-03-03 13:25:08', '0000-00-00 00:00:00', '2016-03-15 08:14:27', 'active');
+(2, 1, 0, '573svbq47d9h1ei26v7cidbar1', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', NULL, NULL, '2016-03-03 13:25:08', '0000-00-00 00:00:00', '2016-03-16 11:42:51', 'active');
 
 -- --------------------------------------------------------
 

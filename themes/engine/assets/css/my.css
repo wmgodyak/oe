@@ -168,25 +168,11 @@
     clear: none
 }
 
-.gallery-uploader .add {
-    margin-top: 15px;
-    display: inline-block;
-    font-size: 14px
-}
-
-.gallery-uploader .add span {
-    -webkit-transition: opacity .1s .3s;
-    transition: opacity .1s .3s
-}
-
 .gallery-uploader .add.finished {
     display: none
 }
 
 .gallery-uploader .add i {
-    position: absolute;
-    top: 0;
-    right: -22px;
     font-size: 16px;
     margin-right: 4px
 }

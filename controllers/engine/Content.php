@@ -65,7 +65,6 @@ class Content extends Engine
             )
         );
 
-
         $content = $this->mContent->getData($id);
 
         if($this->mContent->hasDBError()){
@@ -75,9 +74,23 @@ class Content extends Engine
         $this->template->assign('content', $content);
         $this->template->assign('form_action', $this->form_action . $id);
         $this->template->assign('form_success', $this->form_success);
+
+        $this->makeFeatures($content['features']);
+
         $form = $this->template->fetch($this->form_template);
 
         $this->output($form);
+    }
+
+    private function makeFeatures($features)
+    {
+        $out = '';
+        foreach ($features as $feature) {
+            $this->template->assign('feature', $feature);
+            $out .= $this->template->fetch('contentFeatures/feature');
+        }
+
+        $this->template->assign('content_features', $out);
     }
 
     public function delete($id)

@@ -88,17 +88,20 @@ class Content extends Engine
             $d['published'] = date('d.m.Y', strtotime($d['published']));
         }
 
-        $d['status'] = $this->getStatus();
+        $d['statuses'] = $this->getStatus();
 
-        foreach ($d['status'] as $k=>$s) {
-            if($s == 'blank') unset($d['status'][$k]);
-            elseif($s == 'deleted') unset($d['status'][$k]);
+        foreach ($d['statuses'] as $k=>$s) {
+            if($s == 'blank') unset($d['statuses'][$k]);
+            elseif($s == 'deleted') unset($d['statuses'][$k]);
         }
 
         $d['owners'] = $this->getOwners();
 
         $d['info']   = $this->getInfo($id);
 
+        // features
+
+        $d['features'] = ContentFeatures::get($id);
 
         return $d;
     }
@@ -193,6 +196,17 @@ class Content extends Engine
 
         if($content['parent_id'] > 0){
             $this->updateRow('content', $content['parent_id'], ['isfolder' => 1]);
+        }
+
+        // contentFeatures
+
+        $cf = new ContentFeatures();
+        $cf->save($id);
+
+        if($this->hasDBError()){
+            $this->rollback();
+
+            return false;
         }
 
         $this->commit();

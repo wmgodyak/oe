@@ -15,6 +15,7 @@
         </div>
         <div class="col-md-4">
             {include "content/blocks/params.tpl"}
+            {include "content/blocks/features.tpl"}
             {if isset($plugins.params)}{implode("\r\n", $plugins.params)}{/if}
         </div>
     </div>
