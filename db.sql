@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Мар 16 2016 г., 13:44
+-- Время создания: Мар 16 2016 г., 16:44
 -- Версия сервера: 5.5.47-0ubuntu0.14.04.1
 -- Версия PHP: 5.5.9-1ubuntu4.14
 
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `components` (
   KEY `position` (`position`),
   KEY `published` (`published`),
   KEY `module` (`controller`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=41 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=42 ;
 
 --
 -- Дамп данных таблицы `components`
@@ -80,7 +80,8 @@ INSERT INTO `components` (`id`, `parent_id`, `isfolder`, `icon`, `author`, `vers
 (37, 0, 0, 'fa-television', 'Volodymyr Hodiak', '1.0.0', 'themes', 0, 1, 300, NULL, '2016-03-04 14:17:19'),
 (38, 0, 0, 'fa-book', 'Volodymyr Hodiak', '1.0.0', 'contentImagesSizes', 0, 1, 300, NULL, '2016-03-09 13:43:18'),
 (39, 0, 0, 'fa-file-code-o', 'Volodymyr Hodiak', '1.0.0', 'features', 0, 1, 300, NULL, '2016-03-14 14:51:44'),
-(40, 0, 0, 'fa-trash', 'Volodymyr Hodiak', '1.0.0', 'trash', 0, 1, 300, NULL, '2016-03-15 08:56:31');
+(40, 0, 0, 'fa-trash', 'Volodymyr Hodiak', '1.0.0', 'trash', 0, 1, 300, NULL, '2016-03-15 08:56:31'),
+(41, 0, 0, 'fa-bars', 'Volodymyr Hodiak', '1.0.0', 'nav', 0, 1, 300, NULL, '2016-03-16 12:49:08');
 
 -- --------------------------------------------------------
 
@@ -582,6 +583,38 @@ INSERT INTO `languages` (`id`, `code`, `name`, `is_main`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `nav`
+--
+
+CREATE TABLE IF NOT EXISTS `nav` (
+  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `code` varchar(30) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code` (`code`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `nav_items`
+--
+
+CREATE TABLE IF NOT EXISTS `nav_items` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `nav_id` tinyint(3) unsigned NOT NULL,
+  `content_id` int(11) unsigned NOT NULL,
+  `position` tinyint(3) unsigned NOT NULL,
+  PRIMARY KEY (`id`,`nav_id`,`content_id`),
+  UNIQUE KEY `nav_id` (`nav_id`,`content_id`),
+  KEY `fk_nav_items_nav1_idx` (`nav_id`),
+  KEY `fk_nav_items_content1_idx` (`content_id`),
+  KEY `position` (`position`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `plugins`
 --
 
@@ -739,7 +772,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `updated`, `lastlogin`, `status`) VALUES
-(2, 1, 0, '573svbq47d9h1ei26v7cidbar1', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', NULL, NULL, '2016-03-03 13:25:08', '0000-00-00 00:00:00', '2016-03-16 11:42:51', 'active');
+(2, 1, 0, '573svbq47d9h1ei26v7cidbar1', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', NULL, NULL, '2016-03-03 13:25:08', '0000-00-00 00:00:00', '2016-03-16 12:12:14', 'active');
 
 -- --------------------------------------------------------
 
@@ -854,6 +887,13 @@ ALTER TABLE `features_info`
 ALTER TABLE `guides_info`
   ADD CONSTRAINT `fk_guides_info_guides2` FOREIGN KEY (`guides_id`) REFERENCES `guides` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_guides_info_languages2` FOREIGN KEY (`languages_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `nav_items`
+--
+ALTER TABLE `nav_items`
+  ADD CONSTRAINT `fk_nav_items_content1` FOREIGN KEY (`content_id`) REFERENCES `content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_nav_items_nav1` FOREIGN KEY (`nav_id`) REFERENCES `nav` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `plugins_components`
