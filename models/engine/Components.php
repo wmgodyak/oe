@@ -9,17 +9,23 @@
 
 namespace models\engine;
 
-
-use models\core\Model;
+use models\Engine;
 
 defined("CPATH") or die();
 
-class Components extends Model
+class Components extends Engine
 {
     public function create($data)
     {
         $data['controller'] = lcfirst($data['controller']);
-        return self::$db->insert('components', $data);
+        $s = self::$db->insert('components', $data);
+        if($s){
+            if($data['parent_id'] > 0){
+                $this->updateRow('components', $data['parent_id'], ['isfolder' => 1]);
+            }
+        }
+
+        return $s;
     }
     /**
      * @param $controller
@@ -102,7 +108,7 @@ class Components extends Model
     private function treeItems($parent_id)
     {
         return self::$db
-            ->select("select id,isfolder,controller from components where parent_id={$parent_id} and published=1")
+            ->select("select id, isfolder, controller from components where parent_id={$parent_id} and published=1")
             ->all();
     }
 
@@ -112,7 +118,16 @@ class Components extends Model
      */
     public function delete($id)
     {
-        return self::$db->delete('components', " id={$id} limit 1");
+        $parent_id = self::$db->select("select parent_id from components where id={$id} limit 1")->row('parent_id');
+        $s = self::$db->delete('components', " id={$id} limit 1");
+        if($s){
+            if($parent_id > 0){
+                $t = self::$db->select("select count(id) as t from components where parent_id={$parent_id}")->row('t');
+                if($t == 0){
+                    $this->updateRow('components', $parent_id, ['isfolder' => 0]);
+                }
+            }
+        }
     }
 
     /**

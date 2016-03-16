@@ -5,7 +5,7 @@
             <select name="data[parent_id]" id="data_parent_id" class="form-control">
                 <option value="0">{$t.components.install_label_tree_home}</option>
                 {foreach $tree as $item}
-                    <option value="{$item.id}">{$t[$item.controller].action_index}</option>
+                    <option value="{$item.id}">{$t[$item.controller].action_index} ({$item.controller})</option>
                 {/foreach}
             </select>
         </div>

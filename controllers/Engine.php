@@ -144,6 +144,12 @@ abstract class Engine extends Controller
 
         $this->plugins = Plugins::get();
         $this->template->assign('plugins', $this->plugins);
+
+        $com = '/themes/engine/assets/js/bootstrap/' . lcfirst($controller) . '.js';
+
+        if(file_exists(DOCROOT . $com)){
+            $this->template->assign('component_script',  $com);
+        }
     }
 
     public function before(){}
@@ -185,8 +191,23 @@ abstract class Engine extends Controller
      */
     private function makeNav()
     {
-        $nav = [];
-        foreach ($this->engine->nav() as $item) {
+        $nav = $this->makeNavTranslations($this->engine->nav());
+
+//        $this->dump($nav);die;
+
+        $this->template->assign('nav_items', $nav);
+        $s = $this->template->fetch('nav');
+        $this->template->assign('nav', $s);
+    }
+
+    private function makeNavTranslations($nav)
+    {
+        $res = [];
+        foreach ($nav as $item) {
+            if($item['isfolder']){
+                $item['items'] = $this->makeNavTranslations($item['items']);
+            }
+
             $c = $item['controller'];
             if(strpos($c, '/') !== false){
                 $a = explode('/', $c);
@@ -194,12 +215,10 @@ abstract class Engine extends Controller
                 $c = mb_strtolower($c);
             }
             $item['name'] = $this->t($c . '.action_index');
-            $nav[] = $item;
+            $res[] = $item;
         }
 
-        $this->template->assign('nav_items', $nav);
-        $s = $this->template->fetch('nav');
-        $this->template->assign('nav', $s);
+        return $res;
     }
 
     /**

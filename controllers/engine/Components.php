@@ -103,7 +103,7 @@ class Components extends Engine
             $icon  = $installed ? (string) Icon::TYPE_UNINSTALL : (string) Icon::TYPE_INSTALL;
             $icon_pub  = $installed && $data['published'] == 1 ? (string) Icon::TYPE_PUBLISHED : (string) Icon::TYPE_HIDDEN;
 
-            $res[$i][] = $item['name'] . ($installed ? "<br><label class=\"label label-info\">{$t_installed}</label>" : '');
+            $res[$i][] = $item['name'];// . ($installed ? "<br><label class=\"label label-info\">{$t_installed}</label>" : '');
             $res[$i][] = $item['author'];
             $res[$i][] = (isset($item['package']) ? $item['package'] ."\\" : '') . $item['controller'] ;
             $res[$i][] = $item['version'];
@@ -155,7 +155,7 @@ class Components extends Engine
 
     public function edit($id)
     {
-        die('Дію заборонено');
+//        die('Дію заборонено');
         $data = $this->mComponents->getDataByID($id);
 
         $this->template->assign('data', $data);

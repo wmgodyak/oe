@@ -132,9 +132,8 @@
     });
 </script>
 <script id="mainScript" src="{$theme_url}assets/js/main.js"></script>
-    {*{foreach $required_components as $c}*}
-        {*<script id="{$c}Script" src="{$c}"></script>*}
-    {*{/foreach}*}
-<script id="componentScript" src="{$theme_url}assets/js/bootstrap/{$controller}.js"></script>
+{if $component_script }
+    <script id="componentScript" src="{$component_script}"></script>
+{/if}
 </body>
 </html>

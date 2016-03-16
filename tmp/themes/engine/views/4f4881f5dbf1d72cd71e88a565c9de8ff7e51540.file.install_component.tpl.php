@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-03-09 23:18:39
+<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-03-16 17:18:23
          compiled from "/var/www/engine.loc/themes/engine/views/components/install_component.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:150950108956978bb10860e7-24022422%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '4f4881f5dbf1d72cd71e88a565c9de8ff7e51540' => 
     array (
       0 => '/var/www/engine.loc/themes/engine/views/components/install_component.tpl',
-      1 => 1457553216,
+      1 => 1458141501,
       2 => 'file',
     ),
   ),
@@ -42,7 +42,8 @@ $_smarty_tpl->tpl_vars['item']->_loop = true;
 ?>
                     <option value="<?php echo $_smarty_tpl->tpl_vars['item']->value['id'];?>
 "><?php echo $_smarty_tpl->tpl_vars['t']->value[$_smarty_tpl->tpl_vars['item']->value['controller']]['action_index'];?>
-</option>
+ (<?php echo $_smarty_tpl->tpl_vars['item']->value['controller'];?>
+)</option>
                 <?php } ?>
             </select>
         </div>

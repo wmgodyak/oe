@@ -36,33 +36,30 @@ class Engine extends Model
     }
 
     /**
+     * @param int $parent_id
      * @return array
      */
-    public function nav()
+    public function nav($parent_id=0)
     {
         $res = [];
-        foreach ($this->items(0) as $item) {
 
-            if($item['isfolder']) $item['children'] = $this->items($item['id']);
-            $res[] = $item;
-        }
-        return $res;
-    }
-
-    /**
-     * @param $parent_id
-     * @return mixed
-     */
-    private function items($parent_id)
-    {
-        return self::$db
-            ->select("
+        $r = self::$db
+        ->select("
                     select id, icon, isfolder, controller, rang
                     from components
                     where parent_id={$parent_id}
                     order by abs(position) asc
                 ")
-            ->all();
+        ->all();
+
+        foreach ($r as $item) {
+
+            if($item['isfolder']) {
+                $item['items'] = $this->nav($item['id']);
+            }
+            $res[] = $item;
+        }
+        return $res;
     }
 
     /**

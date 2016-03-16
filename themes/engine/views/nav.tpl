@@ -9,11 +9,17 @@
                 </a>
             </li>
             {foreach $nav_items as $item}
-            <li>
-                <a href="./{$item.controller}">
+            <li {if $item.isfolder}class="has-child"{/if}>
+                <a href="./{$item.controller}" {if $item.isfolder}onclick="return false;" {/if}>
+                    {if $item.isfolder}<div class="toggle-child"><i class="fa fa-plus"></i></div>{/if}
                     <i class="fa {$item.icon}"></i>
                     <span>{$item.name}</span>
                 </a>
+                <ul class="second-level">
+                    {foreach $item.items as $subitem}
+                        <li><a href="./{$subitem.controller}">{$subitem.name}</a></li>
+                    {/foreach}
+                </ul>
             </li>
             {/foreach}
             {*
