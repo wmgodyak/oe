@@ -66,8 +66,10 @@ class ContentTypes extends Engine
         if($s>0){
             // content_types_images_sizes
             $ct = $this->request->post('ct_images_sizes');
-            foreach ($ct as $k=>$sizes_id) {
-                $this->createRow('content_types_images_sizes', ['types_id' => $s, 'images_sizes_id' => $sizes_id]);
+            if($ct){
+                foreach ($ct as $k=>$sizes_id) {
+                    $this->createRow('content_types_images_sizes', ['types_id' => $s, 'images_sizes_id' => $sizes_id]);
+                }
             }
         }
         return $s;
@@ -85,8 +87,11 @@ class ContentTypes extends Engine
             self::$db->delete("content_types_images_sizes", "types_id = {$id}");
             // content_types_images_sizes
             $ct = $this->request->post('ct_images_sizes');
-            foreach ($ct as $k=>$sizes_id) {
-                $this->createRow('content_types_images_sizes', ['types_id' => $s, 'images_sizes_id' => $sizes_id]);
+            if($ct){
+
+                foreach ($ct as $k=>$sizes_id) {
+                    $this->createRow('content_types_images_sizes', ['types_id' => $s, 'images_sizes_id' => $sizes_id]);
+                }
             }
         }
         return $s;

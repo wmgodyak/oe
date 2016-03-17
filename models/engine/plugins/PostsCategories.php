@@ -1,0 +1,34 @@
+<?php
+/**
+ * OYiEngine 7
+ * @author Volodymyr Hodiak mailto:support@otakoi.com
+ * @copyright Copyright (c) 2015 Otakoyi.com
+ * Date: 21.01.16 : 17:22
+ */
+
+namespace models\engine\plugins;
+
+use models\engine\Content;
+
+defined("CPATH") or die();
+
+class PostsCategories extends Content
+{
+    public function __construct()
+    {
+        parent::__construct('posts_categories');
+    }
+
+    public function getItems($parent_id)
+    {
+        $parent_id = (int) $parent_id;
+
+        return self::$db->select("
+          select c.id, c.isfolder, c.status, ci.name as text
+          from content c
+          join content_types ct on ct.type = '{$this->type}' and ct.id=c.types_id
+          join content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
+          where c.parent_id={$parent_id} and c.status in ('published', 'hidden')
+          ")->all();
+    }
+}

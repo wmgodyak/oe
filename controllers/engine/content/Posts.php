@@ -18,19 +18,19 @@ use helpers\bootstrap\Link;
 defined("CPATH") or die();
 
 /**
- * Class Pages
- * @name Сторінки
- * @icon fa-file-text
+ * Class Posts
+ * @name Статті
+ * @icon fa-pencil
  * @author Volodymyr Hodiak
  * @version 1.0.0
  * @rang 300
  * @package controllers\engine\content_types
  */
-class Pages extends Content
+class Posts extends Content
 {
     public function __construct()
     {
-        $this->type = 'pages';
+        $this->type = 'posts';
 
         parent::__construct();
     }
@@ -42,7 +42,7 @@ class Pages extends Content
             $this->appendToPanel((string)Link::create
             (
                 $this->t('common.back'),
-                ['class' => 'btn-md', 'href'=> './content/pages/index' . ($data['parent_id']>0 ? '/' . $data['parent_id'] : '')]
+                ['class' => 'btn-md', 'href'=> './content/'.$this->type.'/index' . ($data['parent_id']>0 ? '/' . $data['parent_id'] : '')]
             )
             );
         }
@@ -52,14 +52,14 @@ class Pages extends Content
             (string)Link::create
             (
                 $this->t('common.button_create'),
-                ['class' => 'btn-md', 'href'=> './content/pages/create' . ($parent_id? "/$parent_id" : '')]
+                ['class' => 'btn-md', 'href'=> './content/'.$this->type.'/create' . ($parent_id? "/$parent_id" : '')]
             )
         );
 
         $t = new DataTables();
 
         $t  -> setId('content')
-            -> ajaxConfig('content/pages/items/' . $parent_id)
+            -> ajaxConfig('content/'.$this->type.'/items/' . $parent_id)
 //            -> setConfig('order', array(0, 'desc'))
             -> th($this->t('common.id'))
             -> th($this->t('common.name'))
@@ -76,7 +76,7 @@ class Pages extends Content
         $t = new DataTables();
         $t  -> table('content c')
             -> get('c.id, ci.name, ci.url, c.created, c.updated, c.status, c.isfolder, CONCAT(u.name, \' \' , u.surname) as owner')
-            -> join("content_types ct on ct.type = '{$this->type}' and ct.id=c.types_id")
+            ->join("content_types ct on ct.type = '{$this->type}' and ct.id=c.types_id")
             -> join("content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}")
             -> join('users u on u.id=c.owner_id')
             -> where(" c.parent_id = {$parent_id} and c.status in ('published', 'hidden')")
@@ -86,10 +86,10 @@ class Pages extends Content
         foreach ($t->getResults(false) as $i=>$row) {
             $icon = Icon::create(($row['isfolder'] ? 'fa-folder' : 'fa-file'));
             $icon_link = Icon::create('fa-external-link');
-            $status = $this->t('pages.status_' . $row['status']);
+            $status = $this->t($this->type .'.status_' . $row['status']);
             $res[$i][] = $row['id'];
             $res[$i][] =
-                           " <a class='status-{$row['status']}' title='{$status}' href='content/pages/index/{$row['id']}'>{$icon}  {$row['name']}</a>"
+                           " <a class='status-{$row['status']}' title='{$status}' href='content/{$this->type}/index/{$row['id']}'>{$icon}  {$row['name']}</a>"
                          . " <a href='/{$row['url']}' target='_blank'>{$icon_link}</a>"
                          . "<br><small class='label label-info'>Автор:{$row['owner']} </small>"
                             ;
@@ -102,7 +102,7 @@ class Pages extends Content
                         (
                             Icon::create(Icon::TYPE_PUBLISHED),
                             [
-                                'class' => 'btn-primary b-pages-hide',
+                                'class' => 'btn-primary b-'.$this->type.'-hide',
                                 'title' => $this->t('common.title_pub'),
                                 'data-id' => $row['id']
                             ]
@@ -112,7 +112,7 @@ class Pages extends Content
                         (
                             Icon::create(Icon::TYPE_HIDDEN),
                             [
-                                'class' => 'btn-primary b-pages-pub',
+                                'class' => 'btn-primary b-'.$this->type.'-pub',
                                 'title' => $this->t('common.title_hide'),
                                 'data-id' => $row['id']
                             ]
@@ -121,12 +121,12 @@ class Pages extends Content
                 (string)Link::create
                 (
                     Icon::create(Icon::TYPE_EDIT),
-                    ['class' => 'btn-primary', 'href' => "content/pages/edit/" . $row['id'], 'title' => $this->t('common.title_edit')]
+                    ['class' => 'btn-primary', 'href' => "content/{$this->type}/edit/" . $row['id'], 'title' => $this->t('common.title_edit')]
                 ) .
                 ($row['isfolder'] == 0 ? (string)Button::create
                 (
                     Icon::create(Icon::TYPE_DELETE),
-                    ['class' => 'b-pages-delete', 'data-id' => $row['id'], 'title' => $this->t('pages.delete_question')]
+                    ['class' => 'b-'.$this->type.'-delete', 'data-id' => $row['id'], 'title' => $this->t($this->type.'.delete_question')]
                 ) : "")
 
             ;

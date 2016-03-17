@@ -232,6 +232,8 @@ class ContentFeatures extends Engine
      */
     public function save($content_id)
     {
+        if(!isset($_POST['content_features'])) return ;
+
         foreach ($_POST['content_features'] as $features_id => $a) {
             $fdata = self::$db->select("select type, multiple from features where id={$features_id} limit 1")->row();
             switch($fdata['type']){

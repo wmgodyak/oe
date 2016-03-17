@@ -136,7 +136,7 @@ class ContentTypes extends Engine
                 ['class' => 'btn-md b-form-save']
             )
         );
-        $data = ['parent_id' => $parent_id];
+        $data = ['parent_id' => $parent_id,'images_sizes' => []];
 //        $data['controllers'] = $this->getContentTypes();
         $this->template->assign('data', $data);
         $this->template->assign('imagesSizes', $this->contentTypes->getContentImagesSizes());
