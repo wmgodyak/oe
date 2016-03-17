@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Мар 16 2016 г., 16:44
+-- Время создания: Мар 17 2016 г., 11:30
 -- Версия сервера: 5.5.47-0ubuntu0.14.04.1
 -- Версия PHP: 5.5.9-1ubuntu4.14
 
@@ -60,28 +60,31 @@ CREATE TABLE IF NOT EXISTS `components` (
   KEY `position` (`position`),
   KEY `published` (`published`),
   KEY `module` (`controller`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=42 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=62 ;
 
 --
 -- Дамп данных таблицы `components`
 --
 
 INSERT INTO `components` (`id`, `parent_id`, `isfolder`, `icon`, `author`, `version`, `controller`, `position`, `published`, `rang`, `settings`, `created`) VALUES
-(25, 0, 0, 'fa-flag', 'Volodymyr Hodiak', '1.0.0', 'languages', 0, 0, 300, NULL, '2016-03-03 10:07:48'),
-(26, 0, 0, 'fa-cubes', 'Volodymyr Hodiak', '1.0.0', 'contentTypes', 0, 1, 300, NULL, '2016-03-03 10:07:57'),
-(28, 0, 0, 'fa-file-text', 'Volodymyr Hodiak', '1.0.0', 'content/Pages', 0, 1, 300, NULL, '2016-03-03 10:14:21'),
-(29, 0, 0, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'admins', 0, 0, 300, NULL, '2016-03-03 10:14:48'),
-(30, 0, 0, 'fa-puzzle-piece', 'Volodymyr Hodiak', '1.0.0', 'components', 0, 1, 300, NULL, '2016-03-03 10:14:52'),
-(31, 0, 0, 'fa-puzzle-piece', 'Volodymyr Hodiak', '1.0.0', 'plugins', 0, 0, 300, NULL, '2016-03-03 10:14:56'),
-(33, 0, 0, 'fa-file-code-o', 'Volodymyr Hodiak', '1.0.0', 'chunks', 0, 0, 300, NULL, '2016-03-03 15:31:14'),
-(34, 0, 0, 'fa-globe', 'Volodymyr Hodiak', '1.0.0', 'translations', 0, 0, 300, NULL, '2016-03-04 11:20:00'),
-(35, 0, 0, 'fa-book', 'Volodymyr Hodiak', '1.0.0', 'guides', 0, 0, 300, NULL, '2016-03-04 13:14:50'),
-(36, 0, 0, 'fa-file-code-o', 'Volodymyr Hodiak', '1.0.0', 'backup', 0, 0, 300, NULL, '2016-03-04 14:00:18'),
-(37, 0, 0, 'fa-television', 'Volodymyr Hodiak', '1.0.0', 'themes', 0, 1, 300, NULL, '2016-03-04 14:17:19'),
-(38, 0, 0, 'fa-book', 'Volodymyr Hodiak', '1.0.0', 'contentImagesSizes', 0, 1, 300, NULL, '2016-03-09 13:43:18'),
-(39, 0, 0, 'fa-file-code-o', 'Volodymyr Hodiak', '1.0.0', 'features', 0, 1, 300, NULL, '2016-03-14 14:51:44'),
-(40, 0, 0, 'fa-trash', 'Volodymyr Hodiak', '1.0.0', 'trash', 0, 1, 300, NULL, '2016-03-15 08:56:31'),
-(41, 0, 0, 'fa-bars', 'Volodymyr Hodiak', '1.0.0', 'nav', 0, 1, 300, NULL, '2016-03-16 12:49:08');
+(43, 0, 0, 'fa-file-text', 'Volodymyr Hodiak', '1.0.0', 'content/Pages', 0, 1, 300, NULL, '2016-03-16 15:09:36'),
+(45, 0, 1, 'fa-cogs', 'Volodymyr Hodiak', '1.0.0', 'tools', 0, 1, 300, NULL, '2016-03-16 15:10:15'),
+(46, 45, 0, 'fa-bars', 'Volodymyr Hodiak', '1.0.0', 'nav', 0, 1, 300, NULL, '2016-03-16 15:18:30'),
+(47, 60, 1, 'fa-puzzle-piece', 'Volodymyr Hodiak', '1.0.0', 'components', 0, 1, 300, NULL, '2016-03-16 15:18:54'),
+(48, 60, 0, 'fa-puzzle-piece', 'Volodymyr Hodiak', '1.0.0', 'plugins', 0, 1, 300, NULL, '2016-03-16 15:19:05'),
+(49, 45, 0, 'fa-television', 'Volodymyr Hodiak', '1.0.0', 'themes', 0, 1, 300, NULL, '2016-03-16 15:21:51'),
+(50, 45, 0, 'fa-file-code-o', 'Volodymyr Hodiak', '1.0.0', 'chunks', 0, 1, 300, NULL, '2016-03-16 15:21:56'),
+(51, 0, 0, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'admins', 0, 1, 300, NULL, '2016-03-16 15:22:03'),
+(52, 45, 0, 'fa-file-code-o', 'Volodymyr Hodiak', '1.0.0', 'features', 0, 1, 300, NULL, '2016-03-16 15:24:22'),
+(53, 45, 0, 'fa-globe', 'Volodymyr Hodiak', '1.0.0', 'translations', 0, 1, 300, NULL, '2016-03-16 15:24:52'),
+(54, 45, 0, 'fa-book', 'Volodymyr Hodiak', '1.0.0', 'guides', 0, 1, 300, NULL, '2016-03-16 15:25:16'),
+(55, 0, 0, 'fa-trash', 'Volodymyr Hodiak', '1.0.0', 'trash', 0, 1, 300, NULL, '2016-03-16 15:25:45'),
+(56, 45, 0, 'fa-book', 'Volodymyr Hodiak', '1.0.0', 'contentImagesSizes', 0, 1, 300, NULL, '2016-03-16 15:25:52'),
+(57, 45, 0, 'fa-cubes', 'Volodymyr Hodiak', '1.0.0', 'contentTypes', 0, 1, 300, NULL, '2016-03-16 15:26:02'),
+(58, 0, 0, 'fa-flag', 'Volodymyr Hodiak', '1.0.0', 'languages', 0, 1, 300, NULL, '2016-03-16 15:26:13'),
+(59, 45, 0, 'fa-file-code-o', 'Volodymyr Hodiak', '1.0.0', 'backup', 0, 1, 300, NULL, '2016-03-16 15:26:21'),
+(60, 0, 1, 'fa-puzzle-piece', 'Volodymyr Hodiak', '1.0.0', 'componentsGroup', 0, 1, 300, NULL, '2016-03-17 07:52:27'),
+(61, 0, 0, 'fa-cogs', 'Volodymyr Hodiak', '1.0.0', 'settings', 0, 1, 300, NULL, '2016-03-17 07:54:17');
 
 -- --------------------------------------------------------
 
@@ -592,7 +595,7 @@ CREATE TABLE IF NOT EXISTS `nav` (
   `code` varchar(30) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -610,7 +613,7 @@ CREATE TABLE IF NOT EXISTS `nav_items` (
   KEY `fk_nav_items_nav1_idx` (`nav_id`),
   KEY `fk_nav_items_content1_idx` (`content_id`),
   KEY `position` (`position`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -658,16 +661,7 @@ CREATE TABLE IF NOT EXISTS `plugins_components` (
   KEY `fk_plugins_components_plugins1_idx` (`plugins_id`),
   KEY `fk_plugins_components_components1_idx` (`components_id`),
   KEY `position` (`position`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=23 ;
-
---
--- Дамп данных таблицы `plugins_components`
---
-
-INSERT INTO `plugins_components` (`id`, `plugins_id`, `components_id`, `position`) VALUES
-(20, 14, 28, 0),
-(21, 15, 29, 0),
-(22, 16, 28, 0);
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -679,7 +673,8 @@ CREATE TABLE IF NOT EXISTS `settings` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   `value` varchar(45) NOT NULL,
-  `description` varchar(160) DEFAULT NULL,
+  `group` enum('common','images','themes','editor','content') NOT NULL,
+  `type` enum('text','textarea') NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `sname` (`name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=24 ;
@@ -688,27 +683,25 @@ CREATE TABLE IF NOT EXISTS `settings` (
 -- Дамп данных таблицы `settings`
 --
 
-INSERT INTO `settings` (`id`, `name`, `value`, `description`) VALUES
-(1, 'autofil_title', '1', 'Автоматично заповнювати title в стоірнках на основі назви'),
-(2, 'autotranslit_alias', '1', 'Автоматично генерувати аліас'),
-(3, 'editor_language', 'uk', 'Мова редактора по замовчуванню'),
-(4, 'editor_bodyId', 'cms_content', 'ID body в шаблоні '),
-(5, 'editor_bodyClass', 'cms_content', 'Клас контенту для редкатора'),
-(6, 'editor_contentsCss', '/themes/default/assets/css/style.css', 'Шлях до стилів сайту, можна задавати через кому декілька'),
-(7, 'products_list_update_price', '1', 'Оновляти ціни в списку товарів\r\n'),
-(8, 'languages_create_info', '1', 'При створенні мови, автоматично згенерувати переклади у всіх розділах системи'),
-(9, 'app_theme_current', 'default', 'Тема по замовчуванню для сайту'),
-(10, 'app_views_path', 'views/', 'Шлях до шаблонів'),
-(11, 'app_chunks_path', 'chunks/', 'Шлях до чанків'),
-(12, 'themes_path', 'themes/', 'Папка з темами'),
-(13, 'content_images_dir', 'uploads/content/', 'Шлях до зображень'),
-(14, 'content_images_thumb_dir', 'thumbs/', 'Шлях до превюшок'),
-(15, 'content_images_source_dir', 'source/', 'Шлях до sources'),
-(17, 'engine_theme_current', 'engine', 'Активна тема engine'),
-(19, 'page_404', '4522', 'Ід сторінки 404'),
-(20, 'content_images_source_size', '1600x1200', 'Розмір зображень source по замовчуванню'),
-(21, 'content_images_thumbs_size', '125x125', 'Розмір зображень thumbs по замовчуванню'),
-(23, 'content_images_quality', '70', 'Якість зображень при ресайзі');
+INSERT INTO `settings` (`id`, `name`, `value`, `group`, `type`) VALUES
+(1, 'autofil_title', '1', 'common', 'text'),
+(2, 'autofill_url', '1', 'common', 'text'),
+(4, 'editor_bodyId', 'cms_content', 'editor', 'text'),
+(5, 'editor_body_class', 'cms_content', 'editor', 'text'),
+(6, 'editor_contents_css', '/themes/default/assets/css/style.css', 'editor', 'textarea'),
+(8, 'languages_create_info', '1', 'common', 'text'),
+(9, 'app_theme_current', 'default', 'themes', 'text'),
+(10, 'app_views_path', 'views/', 'themes', 'text'),
+(11, 'app_chunks_path', 'chunks/', 'themes', 'text'),
+(12, 'themes_path', 'themes/', 'themes', 'text'),
+(13, 'content_images_dir', 'uploads/content/', 'images', 'text'),
+(14, 'content_images_thumb_dir', 'thumbs/', 'images', 'text'),
+(15, 'content_images_source_dir', 'source/', 'images', 'text'),
+(17, 'engine_theme_current', 'engine', 'themes', 'text'),
+(19, 'page_404', '0', 'common', 'text'),
+(20, 'content_images_source_size', '1600x1200', 'images', 'text'),
+(21, 'content_images_thumbs_size', '125x125', 'images', 'text'),
+(23, 'content_images_quality', '70', 'images', 'text');
 
 -- --------------------------------------------------------
 
@@ -772,7 +765,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `updated`, `lastlogin`, `status`) VALUES
-(2, 1, 0, '573svbq47d9h1ei26v7cidbar1', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', NULL, NULL, '2016-03-03 13:25:08', '0000-00-00 00:00:00', '2016-03-16 12:12:14', 'active');
+(2, 1, 0, '3a0g9sltj0jtbafpc1ssp63577', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', NULL, NULL, '2016-03-03 13:25:08', '0000-00-00 00:00:00', '2016-03-17 07:17:03', 'active');
 
 -- --------------------------------------------------------
 

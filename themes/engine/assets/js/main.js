@@ -41,7 +41,7 @@ var engine = {
                         bSubmit.attr('disabled', true);
 
                         if($('.ckeditor').length){
-                            for ( instance in CKEDITOR.instances ) {
+                            for (var instance in CKEDITOR.instances ) {
                                 CKEDITOR.instances[instance].updateElement();
                             }
                         }
@@ -2610,6 +2610,13 @@ engine.trash = {
         });
     }
 };
+engine.settings = {
+    init: function()
+    {
+        $('#tabs_settings').tabs().addClass( "ui-tabs-vertical" );
+        //$( "#tabs_settings li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
+    }
+};
 
 $(document).ready(function(){
     engine.admins.init();
@@ -2627,6 +2634,7 @@ $(document).ready(function(){
     engine.themes.init();
     engine.translations.init();
     engine.trash.init();
+    engine.settings.init();
 });
 
 function responsive_filemanager_callback(field_id){

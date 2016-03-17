@@ -508,3 +508,20 @@
 .table .table {
     background-color: #fff;
 }
+
+.ui-tabs-vertical {
+    position: relative;
+    overflow: hidden;
+    clear: both;
+    width:100%;
+}
+.ui-tabs-vertical .ui-tabs-nav { padding: .2em .1em .2em .2em; float: left; width: 200px; }
+.ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 100%; border-bottom-width: 1px !important; border-right-width: 0 !important; margin: 0 -1px .2em 0; }
+.ui-tabs-vertical .ui-tabs-nav li a { display:block; }
+.ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active { padding-bottom: 0; padding-right: .1em; border-right-width: 1px; }
+.ui-tabs-vertical .ui-tabs-panel { float: left; width: 100%; margin-left: -200px; padding-left: 220px;}
+
+.clearfix{
+    clear: both;
+    content: '';
+}
