@@ -49,6 +49,6 @@
             </ul>
         </div>
     </div>
-    
+
     <input type="hidden" name="token" value="{$token}">
 </form>

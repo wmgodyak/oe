@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Мар 17 2016 г., 14:17
+-- Время создания: Мар 17 2016 г., 14:43
 -- Версия сервера: 5.5.47-0ubuntu0.14.04.1
 -- Версия PHP: 5.5.9-1ubuntu4.14
 
@@ -681,12 +681,12 @@ CREATE TABLE IF NOT EXISTS `settings` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   `value` text NOT NULL,
-  `block` enum('common','images','themes','editor','content','seo','analitycs','robots') NOT NULL,
+  `block` enum('common','images','themes','editor','content','seo','analitycs','robots','mail') NOT NULL,
   `type` enum('text','textarea') NOT NULL,
   `required` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `sname` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=36 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=47 ;
 
 --
 -- Дамп данных таблицы `settings`
@@ -721,7 +721,18 @@ INSERT INTO `settings` (`id`, `name`, `value`, `block`, `type`, `required`) VALU
 (32, 'yandex_metric', '', 'analitycs', 'text', 0),
 (33, 'ex_site_name', '1', 'seo', 'text', 1),
 (34, 'ex_cat_name', '1', 'seo', 'text', 1),
-(35, 'ex_delimiter', '/', 'seo', 'text', 1);
+(35, 'ex_delimiter', '/', 'seo', 'text', 1),
+(36, 'mail_email_from', 'me@otakoyi.com', 'mail', 'text', 1),
+(37, 'mail_email_to', 'me@otakoyi.com', 'mail', 'text', 1),
+(38, 'mail_from_name', 'Company Otakoyi.com', 'mail', 'text', 1),
+(39, 'mail_header', '', 'mail', 'textarea', 0),
+(40, 'mail_footer', '', 'mail', 'textarea', 0),
+(41, 'mail_smtp_on', '0', 'mail', 'text', 1),
+(42, 'mail_smtp_host', '', 'mail', 'text', 0),
+(43, 'mail_smtp_port', '', 'mail', 'text', 0),
+(44, 'mail_smtp_user', '', 'mail', 'text', 0),
+(45, 'mail_smtp_password', '', 'mail', 'text', 0),
+(46, 'mail_smtp_secure', 'tls', 'mail', 'text', 0);
 
 -- --------------------------------------------------------
 
