@@ -25,7 +25,7 @@
             <li class="exit">
                 <a href="admin/logout">
                     <i class="fa fa-power-off"></i>
-                    <span>Вихід</span>
+                    <span>{$t.admin.logout}</span>
                 </a>
             </li>
         </ul>

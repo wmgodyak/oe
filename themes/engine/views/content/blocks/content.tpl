@@ -1,5 +1,5 @@
 <fieldset>
-    <legend>Опис</legend>
+    <legend>{$t.content.legend_description}</legend>
     {foreach $languages as $i=>$lang}
         <div class="form-group lang-{$lang.code} switch-lang" {if $i>0}style="display:none"{/if}>
             <div class="col-md-12">

@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-8">
             <fieldset>
-                <legend>Основне</legend>
+                <legend>{$t.common.legend_main}</legend>
                 <div class="form-group">
                     <label for="data_name" class="col-md-3 control-label required">{$t.contentTypes.name}</label>
                     <div class="col-md-9">
@@ -19,33 +19,33 @@
         </div>
         <div class="col-md-4">
             <fieldset>
-                <legend>Параметри</legend>
+                <legend>{$t.common.params}</legend>
                 <div class="form-group">
                     <div class="col-md-8 col-md-offset-4">
                         <div class="checkbox">
                             <label>
                                 <input type="checkbox" name="data[settings][ext_url]" value="0">
-                                <input {if $data.settings.ext_url == 1}checked{/if} id="data_settings_ext_url" type="checkbox" name="data[settings][ext_url]" value="1"> Наслідувати Url
+                                <input {if $data.settings.ext_url == 1}checked{/if} id="data_settings_ext_url" type="checkbox" name="data[settings][ext_url]" value="1"> {$t.features.content_type_ext_url}
                             </label>
                         </div>
                     </div>
                 </div>
                 <div class="form-group" id="data_settings_parent_id_cnt" style="display:{if $data.settings.ext_url == 1}block{else}none{/if}">
-                    <label for="settings_parent_id" class="col-md-4 control-label">Ід. ст. батька</label>
+                    <label for="settings_parent_id" class="col-md-4 control-label">{$t.features.parent_page_id}</label>
                     <div class="col-md-8">
                         <input type="text" class="form-control" name="data[settings][parent_id]" id="settings_parent_id" value="{$data.settings.parent_id}" placeholder="[0-9]+">
-                        <p class="help-block">Введіть ід сторінки від якої наслідувати url</p>
+                        <p class="help-block">{$t.features.parent_id_help}</p>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="settings_parent_id" class="col-md-4 control-label">Розміри зображень</label>
+                    <label for="settings_parent_id" class="col-md-4 control-label">{$t.features.images_sizes}</label>
                     <div class="col-md-8">
                         <select name="ct_images_sizes[]" id="contentImagesSizes" class="form-control" multiple>
                             {foreach $imagesSizes as $item}
                                 <option {if in_array($item.id, $data.images_sizes)}selected{/if} value="{$item.id}">{$item.size} ({$item.width}x{$item.height})</option>
                             {/foreach}
                         </select>
-                        <p class="help-block">Виберіть розміри на які автоматично нарізати зображення</p>
+                        <p class="help-block">{$t.features.images_sizes_help}</p>
                     </div>
                 </div>
             </fieldset>
@@ -55,13 +55,13 @@
     <div class="row">
         <div class="col-md-8">
             <fieldset>
-                <legend>Налаштування властивостей</legend>
+                <legend>{$t.features.label_settings}</legend>
                 {if !empty($features)}
                 <div class="form-group">
-                    <label for="settings_parent_id" class="col-md-4 control-label">Виберіть властивість</label>
+                    <label for="settings_parent_id" class="col-md-4 control-label">{$t.features.select_item}</label>
                     <div class="col-md-8">
                         <select name="features" id="features" class="form-control">
-                            <option value="">Виберіть</option>
+                            <option value="">{$t.common.select}</option>
                             {foreach $features as $item}
                                 <option value="{$item.id}">{$item.name}</option>
                             {/foreach}
@@ -80,7 +80,7 @@
     <div class="row">
         <div class="col-md-12">
             <fieldset>
-                <legend>Вміст шаблону на сайті</legend>
+                <legend>{$t.contentTypes.template_src}</legend>
                 <div class="form-group">
                     <div class="col-md-12">
                         <textarea name="template" id="template" style="width: 100%; height: 500px;">{$data.template}</textarea>

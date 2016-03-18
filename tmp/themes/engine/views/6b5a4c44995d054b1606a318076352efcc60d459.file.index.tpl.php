@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-03-17 10:16:13
+<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-03-18 18:26:18
          compiled from "/var/www/engine.loc/themes/engine/views/index.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:1202898852567be873c6fe20-51470877%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '6b5a4c44995d054b1606a318076352efcc60d459' => 
     array (
       0 => '/var/www/engine.loc/themes/engine/views/index.tpl',
-      1 => 1458202467,
+      1 => 1458318375,
       2 => 'file',
     ),
   ),
@@ -132,19 +132,22 @@ echo implode("\r\n",$_smarty_tpl->tpl_vars['plugins']->value['sidebar']);
                                                 <li>
                                                     <a href="#">
                                                         <i class="fa fa-envelope-o"></i>
-                                                        <span>Повідомлення</span>
+                                                        <span><?php echo $_smarty_tpl->tpl_vars['t']->value['admin']['messages'];?>
+</span>
                                                     </a>
                                                 </li>
                                                 <li>
                                                     <a href="admin/profile" onclick="return false;" class="b-admin-profile">
                                                         <i class="fa fa-sliders"></i>
-                                                        <span>Налаштування</span>
+                                                        <span><?php echo $_smarty_tpl->tpl_vars['t']->value['admin']['profile'];?>
+</span>
                                                     </a>
                                                 </li>
                                                 <li>
                                                     <a href="admin/logout">
                                                         <i class="fa fa-power-off"></i>
-                                                        <span>Вихід</span>
+                                                        <span><?php echo $_smarty_tpl->tpl_vars['t']->value['admin']['logout'];?>
+</span>
                                                     </a>
                                                 </li>
                                             </ul>
@@ -244,9 +247,12 @@ assets/js/vendor/dropzone.min.js"><?php echo '</script'; ?>
 ';
 
     jQuery.extend(jQuery.validator.messages, {
-        required: "Це поле обов'язкове",
-        remote: "Будь ласка, перевірте це поле",
-        email: "Введіть коректну електронну скриньку"
+        required: "<?php echo $_smarty_tpl->tpl_vars['t']->value['common']['e_required'];?>
+",
+        remote: "<?php echo $_smarty_tpl->tpl_vars['t']->value['common']['e_check'];?>
+",
+        email: "<?php echo $_smarty_tpl->tpl_vars['t']->value['common']['e_email'];?>
+"
     });
 <?php echo '</script'; ?>
 >

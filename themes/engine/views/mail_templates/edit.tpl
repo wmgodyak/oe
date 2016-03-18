@@ -14,7 +14,7 @@
 
     {if count($languages) > 1}
         <div class="form-group">
-            <label class="col-md-3 control-label">Мова:</label>
+            <label class="col-md-3 control-label">{$t.common.lang}</label>
             <div class="btn-group col-md-9" id="switchLanguages" role="group">
                 {foreach $languages as $i=>$lang}
                     <button type="button" class="btn {if $i == 0}btn-primary{/if}" data-code="{$lang.code}">{$lang.code}</button>

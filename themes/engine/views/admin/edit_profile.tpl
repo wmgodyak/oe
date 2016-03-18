@@ -2,7 +2,7 @@
 <div class="row">
     <div class="col-md-9">
         <fieldset>
-            <legend>Основне</legend>
+            <legend>{$t.common.legend_main}</legend>
             <div class="form-group">
                 <label for="data_name" class="col-sm-3 control-label">{$t.admin_profile.name}</label>
                 <div class="col-sm-9">
@@ -31,19 +31,19 @@
     </div>
     <div class="col-md-3">
         <fieldset style="height: 245px;">
-            <legend>Фото</legend>
+            <legend>{$t.common.legend_photo}</legend>
             <div style="text-align: center; margin-bottom: 1em;"><img src="{$ui.avatar}" alt="" class="admin-avatar"></div>
             <div style="display: none">
                 <input type="file" name="avatar" id="adminAvatar">
             </div>
-            <div style="text-align: center"><button type="button" id="changeAvatar" class="btn btn-default">Змінити</button></div>
+            <div style="text-align: center"><button type="button" id="changeAvatar" class="btn btn-default">{$t.common.change}</button></div>
         </fieldset>
     </div>
 </div>
     <div class="row">
         <div class="col-md-12">
             <fieldset>
-                <legend>Зміна паролю</legend>
+                <legend>{$t.admin.legend_passowrd}</legend>
                 <div class="form-group">
                     <label for="data_password" class="col-sm-3 control-label">{$t.admin_profile.password}</label>
                     <div class="col-sm-9">

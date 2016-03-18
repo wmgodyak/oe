@@ -10,7 +10,7 @@
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <fieldset>
-                <legend>Основне</legend>
+                <legend>{$t.common.legend_main}</legend>
                 <div class="form-group">
                     <label for="data_name" class="col-md-3 control-label required">{$t.nav.name}</label>
                     <div class="col-md-9">
@@ -25,14 +25,14 @@
                 </div>
             </fieldset>
             <fieldset>
-                <legend>Пунекти меню</legend>
+                <legend>{$t.nav.items}</legend>
                 {if $action == 'create'}
                     <p>Створення, редагування , сортування пунктів меню досутпні при редагуванні</p>
                 {else}
                     <div class="form-group">
                         <div class="col-md-12">
                             <select id="selItems" class="form-control" data-nav="{$data.id}">
-                                <option value="">-- Виберіть -- </option>
+                                <option value="">{$i.common.select}</option>
                                 {call renderSelect items=$items}
                             </select>
                         </div>

@@ -1,7 +1,7 @@
 <fieldset>
-    <legend>Параметри</legend>
+    <legend>{$t.common.legend_params}</legend>
     <div class="form-group">
-        <label for="content_status" class="col-md-3 control-label">Статус</label>
+        <label for="content_status" class="col-md-3 control-label">{$t.common.status}</label>
         <div class="col-md-9">
             <select name="content[status]" id="content_status" class="form-control">
                 {foreach $content.statuses as $i=>$item}
@@ -11,7 +11,7 @@
         </div>
     </div>
     <div class="form-group">
-        <label for="content_owner_id" class="col-md-3 control-label">Автор</label>
+        <label for="content_owner_id" class="col-md-3 control-label">{$t.common.owner}</label>
         <div class="col-md-9">
             <select name="content[owner_id]" id="content_owner_id" class="form-control">
                 {foreach $content.owners as $item}
@@ -21,13 +21,13 @@
         </div>
     </div>
     <div class="form-group">
-        <label for="content_parent_id" class="col-md-3 control-label">ІД батька</label>
+        <label for="content_parent_id" class="col-md-3 control-label">{$t.common.parent_id}</label>
         <div class="col-md-9">
             <input name="content[parent_id]" id="content_parent_id" class="form-control" value="{$content.parent_id}">
         </div>
     </div>
     <div class="form-group">
-        <label for="content_published" class="col-md-3 control-label">Дата публікації</label>
+        <label for="content_published" class="col-md-3 control-label">{$t.common.pub_date}</label>
         <div class="col-md-9">
             <input name="content[published]" id="content_published" class="form-control datepicker" value="{$content.published}">
         </div>

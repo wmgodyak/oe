@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-03-03 13:26:53
+<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-03-18 18:26:28
          compiled from "/var/www/engine.loc/themes/engine/views/plugins/admins/groups/tree.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:160953070556a7892ccd57d3-89836705%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '9584bc361120125538c05e085e9a333947e27469' => 
     array (
       0 => '/var/www/engine.loc/themes/engine/views/plugins/admins/groups/tree.tpl',
-      1 => 1456996052,
+      1 => 1458318072,
       2 => 'file',
     ),
   ),
@@ -29,6 +29,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
 "></i>
     <span><?php echo $_smarty_tpl->tpl_vars['t']->value['pages']['tree_title'];?>
 </span>
-    <button class="btn btn-link b-admins-group-create">Додати</button>
+    <button class="btn btn-link b-admins-group-create"><?php echo $_smarty_tpl->tpl_vars['t']->value['common']['create'];?>
+</button>
 </div>
 <div class="pages-tree" id="usersGroup"></div><?php }} ?>

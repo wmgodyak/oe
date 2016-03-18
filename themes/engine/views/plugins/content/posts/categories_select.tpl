@@ -11,7 +11,7 @@
 {/function}
 
 <div class="form-group">
-    <label for="content_published" class="col-md-3 control-label">Категорії</label>
+    <label for="content_published" class="col-md-3 control-label">{$t.common.categories}</label>
     <div class="col-md-9">
         <select name="categories[]" multiple id="categories" class="form-control" required>
             {call renderSelect items=$categories selected=$selected_categories}

@@ -1,12 +1,12 @@
 <fieldset class="gallery-uploader">
-    <legend>Зображення
+    <legend>{$t.contentImages.image}
     <a href="javascript:;" class="add insert">
         <i class="fa fa-plus-circle"></i>
-        <span>Додати</span>
+        <span>{$t.common.create}</span>
     </a>
     <a href="javascript:;" class="add finished">
         <i class="fa fa-minus-circle"></i>
-        <span>Закрити</span>
+        <span>{$t.contentImages.remove}</span>
     </a>
     </legend>
     <div class="list-group">
@@ -15,10 +15,10 @@
                 <div id="contentImagesDz" data-target="plugins/contentImages/upload/{$id}">
                     <div class="dz-message clearfix">
                         <i class="fa fa-picture-o"></i>
-                        <span>Перетягніть сюди зображення або клікніть щоб вибрати</span>
+                        <span>{$t.contentImages.upload_i}</span>
                         <div class="hover">
                             <i class="fa fa-download"></i>
-                            <span>Кидайте сюди</span>
+                            <span>{$t.contentImages.dragHere}</span>
                         </div>
                     </div>
                 </div>

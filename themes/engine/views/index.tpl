@@ -70,19 +70,19 @@
                                                 <li>
                                                     <a href="#">
                                                         <i class="fa fa-envelope-o"></i>
-                                                        <span>Повідомлення</span>
+                                                        <span>{$t.admin.messages}</span>
                                                     </a>
                                                 </li>
                                                 <li>
                                                     <a href="admin/profile" onclick="return false;" class="b-admin-profile">
                                                         <i class="fa fa-sliders"></i>
-                                                        <span>Налаштування</span>
+                                                        <span>{$t.admin.profile}</span>
                                                     </a>
                                                 </li>
                                                 <li>
                                                     <a href="admin/logout">
                                                         <i class="fa fa-power-off"></i>
-                                                        <span>Вихід</span>
+                                                        <span>{$t.admin.logout}</span>
                                                     </a>
                                                 </li>
                                             </ul>
@@ -126,9 +126,9 @@
     var TOKEN = '{$token}', ONLINE = 0, t = {json_encode($t)}, CONTROLLER = '{$controller}', ACTION = '{$action}';
 
     jQuery.extend(jQuery.validator.messages, {
-        required: "Це поле обов'язкове",
-        remote: "Будь ласка, перевірте це поле",
-        email: "Введіть коректну електронну скриньку"
+        required: "{$t.common.e_required}",
+        remote: "{$t.common.e_check}",
+        email: "{$t.common.e_email}"
     });
 </script>
 <script id="mainScript" src="{$theme_url}assets/js/main.js"></script>

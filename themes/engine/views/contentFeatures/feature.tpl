@@ -62,7 +62,7 @@
         <div class="col-md-11 col-md-offset-1">
             <div class="row">
                 <div class="col-md-12">
-                    <h3>{$feature.name} <a href="javascript:;" class="b-ct-features-add" data-id="{$content.id}" data-parent="{$feature.id}"><i class="fa fa-plus-circle"></i> Додати</a></h3>
+                    <h3>{$feature.name} <a href="javascript:;" class="b-ct-features-add" data-id="{$content.id}" data-parent="{$feature.id}"><i class="fa fa-plus-circle"></i> {$t.common.create}</a></h3>
                 </div>
             </div>
             <div class="row">

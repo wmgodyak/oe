@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-9">
             <fieldset>
-                <legend>Основне</legend>
+                <legend>{$t.common.legend_main}</legend>
                 <div class="form-group">
                     <label for="data_name" class="col-sm-3 control-label required">{$t.chunks.name}</label>
                     <div class="col-sm-9">
@@ -21,7 +21,7 @@
     <div class="row">
         <div class="col-md-12">
             <fieldset>
-                <legend>Вміст шаблону на сайті</legend>
+                <legend>{$t.chunks.template_source}</legend>
                 <div class="form-group">
                     <div class="col-sm-12">
                         <textarea name="template" id="template" style="width: 100%; height: 500px;">{$template}</textarea>

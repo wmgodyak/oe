@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-03-18 17:27:06
+<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-03-18 18:26:18
          compiled from "/var/www/engine.loc/themes/engine/views/nav.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:13410207155694b4d83e02a2-92245890%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'a9817aa026a955795bbed4cb79224eecbd69c043' => 
     array (
       0 => '/var/www/engine.loc/themes/engine/views/nav.tpl',
-      1 => 1458314812,
+      1 => 1458315447,
       2 => 'file',
     ),
   ),
@@ -22,6 +22,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'nav_items' => 0,
     'item' => 0,
     'subitem' => 0,
+    't' => 0,
   ),
   'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
@@ -60,7 +61,8 @@ $_smarty_tpl->tpl_vars['subitem']->_loop = true;
             <li class="exit">
                 <a href="admin/logout">
                     <i class="fa fa-power-off"></i>
-                    <span>Вихід</span>
+                    <span><?php echo $_smarty_tpl->tpl_vars['t']->value['admin']['logout'];?>
+</span>
                 </a>
             </li>
         </ul>

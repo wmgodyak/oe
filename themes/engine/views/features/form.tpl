@@ -9,7 +9,7 @@
     <div class="row">
         <div class="col-md-8">
             <fieldset>
-                <legend>Основне</legend>
+                <legend>{$t.common.legend_main}</legend>
                 {foreach $languages as $lang}
                     <div class="form-group">
                         <label for="name_{$lang.id}" class="col-sm-3 control-label">{$t.features.name} ({$lang.code})</label>
@@ -40,7 +40,7 @@
         </div>
         <div class="col-md-4">
             <fieldset>
-                <legend>Параметри</legend>
+                <legend>{$t.common.params}</legend>
                 <div class="form-group">
                     <label for="data_status" class="col-md-3 control-label">{$t.features.status}</label>
                     <div class="col-md-9">
@@ -89,7 +89,7 @@
             </fieldset>
 
             <fieldset>
-                <legend>Показувати в <a href="javascript:;" data-id="{$data.id}" class="b-features-select-ct">Вибрати</a></legend>
+                <legend>{$t.features.show_on} <a href="javascript:;" data-id="{$data.id}" class="b-features-select-ct"><i class="fa fa-list"></i></a></legend>
                 <div id="content_types"></div>
             </fieldset>
         </div>

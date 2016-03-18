@@ -51,7 +51,7 @@
             <div class="checkbox">
                 <label>
                     <input type="hidden" name="data[required]" value="0">
-                    <input type="checkbox" name="data[required]" value="1"> Обов'язкове
+                    <input type="checkbox" name="data[required]" value="1"> {$t.common.required}
                 </label>
             </div>
         </div>
@@ -62,7 +62,7 @@
             <div class="checkbox">
                 <label>
                     <input type="hidden" name="page_only" value="0">
-                    <input type="checkbox" name="page_only" value="1"> Тільки для цієї сторінки
+                    <input type="checkbox" name="page_only" value="1"> {$t.features.only_this_page}
                 </label>
             </div>
         </div>
