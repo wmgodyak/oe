@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Мар 18 2016 г., 11:24
+-- Время создания: Мар 18 2016 г., 17:29
 -- Версия сервера: 5.5.47-0ubuntu0.14.04.1
 -- Версия PHP: 5.5.9-1ubuntu4.14
 
@@ -33,7 +33,14 @@ CREATE TABLE IF NOT EXISTS `chunks` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `template` (`template`),
   KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Дамп данных таблицы `chunks`
+--
+
+INSERT INTO `chunks` (`id`, `name`, `template`) VALUES
+(1, 'aaasa', 'a');
 
 -- --------------------------------------------------------
 
@@ -60,13 +67,14 @@ CREATE TABLE IF NOT EXISTS `components` (
   KEY `position` (`position`),
   KEY `published` (`published`),
   KEY `module` (`controller`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=64 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=68 ;
 
 --
 -- Дамп данных таблицы `components`
 --
 
 INSERT INTO `components` (`id`, `parent_id`, `isfolder`, `icon`, `author`, `version`, `controller`, `position`, `published`, `rang`, `settings`, `created`) VALUES
+(1, 0, 0, 'fa-home', 'Volodymyr Hodiak', '1.0.0', 'dashboard', 0, 1, 300, NULL, '2016-03-18 15:27:32'),
 (43, 0, 0, 'fa-file-text', 'Volodymyr Hodiak', '1.0.0', 'content/Pages', 0, 1, 300, NULL, '2016-03-16 15:09:36'),
 (45, 0, 1, 'fa-cogs', 'Volodymyr Hodiak', '1.0.0', 'tools', 0, 1, 300, NULL, '2016-03-16 15:10:15'),
 (46, 45, 0, 'fa-bars', 'Volodymyr Hodiak', '1.0.0', 'nav', 0, 1, 300, NULL, '2016-03-16 15:18:30'),
@@ -81,11 +89,13 @@ INSERT INTO `components` (`id`, `parent_id`, `isfolder`, `icon`, `author`, `vers
 (55, 0, 0, 'fa-trash', 'Volodymyr Hodiak', '1.0.0', 'trash', 0, 1, 300, NULL, '2016-03-16 15:25:45'),
 (56, 45, 0, 'fa-book', 'Volodymyr Hodiak', '1.0.0', 'contentImagesSizes', 0, 1, 300, NULL, '2016-03-16 15:25:52'),
 (57, 45, 0, 'fa-cubes', 'Volodymyr Hodiak', '1.0.0', 'contentTypes', 0, 1, 300, NULL, '2016-03-16 15:26:02'),
-(58, 0, 0, 'fa-flag', 'Volodymyr Hodiak', '1.0.0', 'languages', 0, 1, 300, NULL, '2016-03-16 15:26:13'),
+(58, 65, 0, 'fa-flag', 'Volodymyr Hodiak', '1.0.0', 'languages', 0, 1, 300, NULL, '2016-03-16 15:26:13'),
 (59, 45, 0, 'fa-file-code-o', 'Volodymyr Hodiak', '1.0.0', 'backup', 0, 1, 300, NULL, '2016-03-16 15:26:21'),
 (60, 0, 1, 'fa-puzzle-piece', 'Volodymyr Hodiak', '1.0.0', 'componentsGroup', 0, 1, 300, NULL, '2016-03-17 07:52:27'),
-(61, 0, 0, 'fa-cogs', 'Volodymyr Hodiak', '1.0.0', 'settings', 0, 1, 300, NULL, '2016-03-17 07:54:17'),
-(63, 0, 0, 'fa-pencil', 'Volodymyr Hodiak', '1.0.0', 'content/Posts', 0, 1, 300, NULL, '2016-03-17 15:25:19');
+(61, 65, 0, 'fa-cogs', 'Volodymyr Hodiak', '1.0.0', 'settings', 0, 1, 300, NULL, '2016-03-17 07:54:17'),
+(63, 0, 0, 'fa-pencil', 'Volodymyr Hodiak', '1.0.0', 'content/Posts', 0, 1, 300, NULL, '2016-03-17 15:25:19'),
+(64, 45, 0, 'fa-envelope-o', 'Volodymyr Hodiak', '1.0.0', 'mailTemplates', 0, 1, 300, NULL, '2016-03-18 10:14:32'),
+(65, 0, 1, 'fa-cogs', 'Volodymyr Hodiak', '1.0.0', 'settingsGroup', 0, 1, 300, NULL, '2016-03-18 11:41:11');
 
 -- --------------------------------------------------------
 
@@ -159,7 +169,14 @@ CREATE TABLE IF NOT EXISTS `content_features` (
   UNIQUE KEY `content_id` (`content_id`,`features_id`,`values_id`,`languages_id`),
   KEY `fk_content_features_values_content1_idx` (`content_id`),
   KEY `fk_content_features_values_features1_idx` (`features_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Дамп данных таблицы `content_features`
+--
+
+INSERT INTO `content_features` (`id`, `content_id`, `features_id`, `values_id`, `languages_id`, `value`) VALUES
+(1, 1, 1, NULL, 0, '/uploads/files/settings.sql');
 
 -- --------------------------------------------------------
 
@@ -192,7 +209,14 @@ CREATE TABLE IF NOT EXISTS `content_images_sizes` (
   `height` int(5) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `size` (`size`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Дамп данных таблицы `content_images_sizes`
+--
+
+INSERT INTO `content_images_sizes` (`id`, `size`, `width`, `height`) VALUES
+(1, 'post', 320, 240);
 
 -- --------------------------------------------------------
 
@@ -215,14 +239,14 @@ CREATE TABLE IF NOT EXISTS `content_info` (
   UNIQUE KEY `url_uq` (`content_id`,`languages_id`,`url`),
   KEY `fk_content_info_content1_idx` (`content_id`),
   KEY `fk_content_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=65 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=67 ;
 
 --
 -- Дамп данных таблицы `content_info`
 --
 
 INSERT INTO `content_info` (`id`, `content_id`, `languages_id`, `name`, `url`, `h1`, `title`, `keywords`, `description`, `content`) VALUES
-(43, 1, 1, 'Головна', '', '', 'Головна', '', '', ''),
+(43, 1, 1, 'Головна', '', '', 'Головна', '', '', '<p>6456456ertretret&nbsp;bbb 45 645 654b6 45 54fct5454dt45fg45g45g54&nbsp;</p>\n\n<p>fsdfsdfsdf</p>\n\n<p>dsfs dfds f sdf sdf</p>\n'),
 (44, 2, 1, 'Стаття 1', 'stattya-1', '', 'Стаття 1', '', '', '<p>wetertrertewtretwret</p>\n'),
 (45, 3, 1, 'Стаття 2', 'stattya-2', '', 'Стаття 2', '', '', ''),
 (46, 4, 1, 'Стаття 3', 'stattya-3', '', 'Стаття 3', '', '', ''),
@@ -243,7 +267,8 @@ INSERT INTO `content_info` (`id`, `content_id`, `languages_id`, `name`, `url`, `
 (61, 19, 1, 'Категорія 2.1', 'kategoriya-2-1', '', 'Категорія 2.1', '', '', NULL),
 (62, 20, 1, 'Категорія 2.2', 'kategoriya-2-2', '', 'Категорія 2.2', '', '', NULL),
 (63, 21, 1, 'Про нас', 'pro-nas', '', 'Про нас', '', '', ''),
-(64, 23, 1, 'Стаття для категорії 19', 'stattya-dlya-kategoriї-19', '', 'Стаття для категорії 19', '', '', '');
+(64, 23, 1, 'Стаття для категорії 19', 'stattya-dlya-kategoriї-19', '', 'Стаття для категорії 19', '', '', ''),
+(66, 1, 3, '5434', '5434', '', '5434', '', '', '<p>ter treter t</p>\n\n<p>dasas</p>\n');
 
 -- --------------------------------------------------------
 
@@ -314,7 +339,14 @@ CREATE TABLE IF NOT EXISTS `content_types_images_sizes` (
   PRIMARY KEY (`id`,`types_id`,`images_sizes_id`),
   KEY `fk_content_types_images_sizes1_idx` (`types_id`),
   KEY `fk_content_types_images_sizes2_idx` (`images_sizes_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Дамп данных таблицы `content_types_images_sizes`
+--
+
+INSERT INTO `content_types_images_sizes` (`id`, `types_id`, `images_sizes_id`) VALUES
+(1, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -336,7 +368,14 @@ CREATE TABLE IF NOT EXISTS `features` (
   PRIMARY KEY (`id`,`owner_id`),
   UNIQUE KEY `code_UNIQUE` (`code`),
   KEY `fk_features_users1_idx` (`owner_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Дамп данных таблицы `features`
+--
+
+INSERT INTO `features` (`id`, `parent_id`, `type`, `code`, `multiple`, `on_filter`, `required`, `owner_id`, `created`, `status`) VALUES
+(1, 0, 'file', 'wewe', 0, 0, 0, 2, '2016-03-18 13:12:34', 'published');
 
 -- --------------------------------------------------------
 
@@ -354,7 +393,14 @@ CREATE TABLE IF NOT EXISTS `features_content` (
   PRIMARY KEY (`id`,`features_id`,`content_types_id`,`content_subtypes_id`,`content_id`),
   UNIQUE KEY `features_id` (`features_id`,`content_types_id`,`content_subtypes_id`,`content_id`),
   KEY `fk_content_features_idx` (`features_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Дамп данных таблицы `features_content`
+--
+
+INSERT INTO `features_content` (`id`, `features_id`, `content_types_id`, `content_subtypes_id`, `content_id`, `position`) VALUES
+(1, 1, 1, 1, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -370,7 +416,14 @@ CREATE TABLE IF NOT EXISTS `features_info` (
   PRIMARY KEY (`id`,`features_id`,`languages_id`),
   KEY `fk_features_info_features1_idx` (`features_id`),
   KEY `fk_features_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Дамп данных таблицы `features_info`
+--
+
+INSERT INTO `features_info` (`id`, `features_id`, `languages_id`, `name`) VALUES
+(1, 1, 1, 'wewe');
 
 -- --------------------------------------------------------
 
@@ -419,14 +472,15 @@ CREATE TABLE IF NOT EXISTS `languages` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`),
   KEY `is_main` (`is_main`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Дамп данных таблицы `languages`
 --
 
 INSERT INTO `languages` (`id`, `code`, `name`, `is_main`) VALUES
-(1, 'uk', 'Українська', 1);
+(1, 'uk', 'Українська', 1),
+(3, 'ru', 'Rus', 0);
 
 -- --------------------------------------------------------
 
@@ -440,7 +494,14 @@ CREATE TABLE IF NOT EXISTS `mail_templates` (
   `name` varchar(60) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+
+--
+-- Дамп данных таблицы `mail_templates`
+--
+
+INSERT INTO `mail_templates` (`id`, `code`, `name`) VALUES
+(5, 'asfas', 'fsafasf');
 
 -- --------------------------------------------------------
 
@@ -457,7 +518,15 @@ CREATE TABLE IF NOT EXISTS `mail_templates_info` (
   PRIMARY KEY (`id`),
   KEY `fk_mail_templates_info_idx` (`templates_id`),
   KEY `fk_mail_templates_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
+
+--
+-- Дамп данных таблицы `mail_templates_info`
+--
+
+INSERT INTO `mail_templates_info` (`id`, `templates_id`, `languages_id`, `subject`, `body`) VALUES
+(6, 5, 1, 'asfsa1111', '<p>111qqqdsf ds sdfsd</p>\n'),
+(10, 5, 3, 'qwewq eqw 2323', '<p>232323qweqwe</p>\n');
 
 -- --------------------------------------------------------
 
@@ -503,7 +572,7 @@ CREATE TABLE IF NOT EXISTS `plugins` (
   `author` varchar(60) DEFAULT NULL,
   `version` varchar(10) DEFAULT NULL,
   `controller` varchar(150) DEFAULT NULL,
-  `place` enum('top','main','after_main','params','after_params','bottom','sidebar','meta','after_meta','after_features','content','after_content') NOT NULL,
+  `place` enum('top','main','after_main','params','after_params','bottom','sidebar','meta','after_meta','after_features','content','after_content','dashboard') NOT NULL,
   `published` tinyint(1) NOT NULL DEFAULT '0',
   `rang` int(4) unsigned DEFAULT NULL,
   `settings` text,
@@ -511,7 +580,7 @@ CREATE TABLE IF NOT EXISTS `plugins` (
   PRIMARY KEY (`id`),
   KEY `published` (`published`),
   KEY `module` (`controller`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=22 ;
 
 --
 -- Дамп данных таблицы `plugins`
@@ -523,7 +592,8 @@ INSERT INTO `plugins` (`id`, `icon`, `author`, `version`, `controller`, `place`,
 (17, 'fa-folder-o', 'Volodymyr Hodiak', '1.0.0', 'nav', 'sidebar', 1, 300, NULL, '2016-03-17 11:41:40'),
 (18, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'adminsGroup', 'sidebar', 1, 300, NULL, '2016-03-17 14:57:30'),
 (19, 'fa-folder-o', 'Volodymyr Hodiak', '1.0.0', 'postsCategories', 'sidebar', 1, 300, NULL, '2016-03-17 15:58:28'),
-(20, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'postsCategoriesSelect', 'params', 1, 300, NULL, '2016-03-18 07:53:27');
+(20, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'postsCategoriesSelect', 'params', 1, 300, NULL, '2016-03-18 07:53:27'),
+(21, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'dashboard', 'dashboard', 1, 300, NULL, '2016-03-18 15:28:13');
 
 -- --------------------------------------------------------
 
@@ -540,7 +610,7 @@ CREATE TABLE IF NOT EXISTS `plugins_components` (
   KEY `fk_plugins_components_plugins1_idx` (`plugins_id`),
   KEY `fk_plugins_components_components1_idx` (`components_id`),
   KEY `position` (`position`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 --
 -- Дамп данных таблицы `plugins_components`
@@ -552,7 +622,8 @@ INSERT INTO `plugins_components` (`id`, `plugins_id`, `components_id`, `position
 (3, 19, 63, 0),
 (4, 20, 63, 0),
 (5, 16, 43, 0),
-(6, 16, 63, 0);
+(6, 16, 63, 0),
+(7, 21, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -679,7 +750,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `updated`, `lastlogin`, `status`) VALUES
-(2, 1, 0, '3divete6uar1ogiua5tj6etfm6', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', NULL, NULL, '2016-03-03 13:25:08', '2016-03-17 14:49:28', '2016-03-18 06:50:08', 'active');
+(2, 1, 0, '3divete6uar1ogiua5tj6etfm6', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', NULL, NULL, '2016-03-03 13:25:08', '2016-03-17 14:49:28', '2016-03-18 15:15:38', 'active');
 
 -- --------------------------------------------------------
 

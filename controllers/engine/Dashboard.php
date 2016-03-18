@@ -11,6 +11,16 @@ namespace controllers\engine;
 
 use controllers\Engine;
 
+defined("CPATH") or die();
+/**
+ * Class Dashboard
+ * @name SmartEngine 7
+ * @icon fa-home
+ * @author Volodymyr Hodiak
+ * @version 1.0.0
+ * @rang 300
+ * @package controllers\engine
+ */
 class Dashboard extends Engine
 {
     public function index()
