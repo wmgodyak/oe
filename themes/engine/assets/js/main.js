@@ -15,6 +15,10 @@ var engine = {
             $validator.showErrors(i);
         });
     },
+    ckUpdate: function(){
+        for ( instance in CKEDITOR.instances )
+            CKEDITOR.instances[instance].updateElement();
+    },
     validateAjaxForm: function(myForm, onSuccess, ajaxParams, rules, onBeforeSend){
 
         rules = typeof rules == 'undefined' ? [] : rules;
@@ -37,14 +41,8 @@ var engine = {
                     dataType: 'json',
                     beforeSend: function()
                     {
-                        //console.log(onBeforeSend);
+                        console.log('OnBeforeSend >>');
                         bSubmit.attr('disabled', true);
-
-                        if($('.ckeditor').length){
-                            for (instance in CKEDITOR.instances ) {
-                                CKEDITOR.instances[instance].updateElement();
-                            }
-                        }
 
                         if(typeof onBeforeSend == 'string'){
                             try {
@@ -99,7 +97,11 @@ var engine = {
         });
     },
     closeDialog: function(){
-      $('.ui-dialog, .ui-widget-overlay').remove();
+      $(".ui-dialog-content").dialog("close");
+      setTimeout(function(){
+          $('.ui-dialog *').remove();
+      }, 300);
+        //$('.ui-dialog, .ui-widget-overlay').remove();
     },
     dialog: function(args)
     {
@@ -224,7 +226,14 @@ var engine = {
 
             //validateAjaxForm: function(myForm, onSuccess, ajaxParams, rules, onBeforeSend){
             engine.validateAjaxForm('#form', $form.data('success'), {}, $form.data('rules'), $form.data('beforesend'));
-            $('.b-form-save').click(function(){$form.submit();})
+            $('.b-form-save').click(function()
+            {
+                engine.ckUpdate();
+                setTimeout(function(){
+                    $form.submit();
+                },300);
+
+            });
         }
 
         (function(){
@@ -2620,6 +2629,123 @@ engine.settings = {
     }
 };
 
+engine.mailTemplates = {
+    init: function()
+    {
+        $(document).on('click', '.b-mailTemplates-create', function(){
+            engine.mailTemplates.create();
+        });
+        $(document).on('click', '.b-mailTemplates-edit', function(){
+            engine.mailTemplates.edit($(this).data('id'));
+        });
+        $(document).on('click', '.b-mailTemplates-delete', function(){
+            engine.mailTemplates.delete($(this).data('id'));
+        });
+    },
+    before: function()
+    {
+        engine.validateAjaxForm('#form', function(d){
+            if(d.s){
+                engine.refreshDataTable('mailTemplates');
+                engine.closeDialog();
+            } else {
+                engine.showFormErrors('#form', d.i);
+            }
+        });
+
+        $('#switchLanguages').find('button').click(function(){
+            $(this).addClass('btn-primary').siblings().removeClass('btn-primary');
+            var code = $(this).data('code');
+            $('.switch-lang:not(.lang-'+code+')').hide();
+            $('.switch-lang.lang-' + code).show();
+        });
+
+        $('#form .ckeditor').each(function(){
+            var name = $(this).attr('name');
+            //console.log(name);
+            CKEDITOR.replace(name);
+        });
+
+
+    },
+    create: function()
+    {
+        var $this = this;
+        engine.request.get('./mailTemplates/create', function(d)
+        {
+            var bi = t.common.button_save;
+            var buttons = {};
+
+            buttons[bi] =  function(){
+                engine.ckUpdate();
+                setTimeout(function(){
+                    $('#form').submit();
+                },300);
+            };
+
+            var dialog = engine.dialog({
+                content: d,
+                title: t.mailTemplates.create_title,
+                autoOpen: true,
+                width: 900,
+                modal: true,
+                closeOnEscape: false,
+                buttons: buttons
+            });
+
+            $this.before();
+        });
+    },
+    edit: function(id)
+    {
+        var $this = this;
+        engine.request.post({
+            url: './mailTemplates/edit/' + id,
+            data: {id: id},
+            success: function(d)
+            {
+                var bi = t.common.button_save;
+                var buttons = {};
+
+                buttons[bi] =  function(){
+                    engine.ckUpdate();
+                    setTimeout(function(){
+                        $('#form').submit();
+                    },300);
+                };
+
+                var dialog = engine.dialog({
+                    content: d,
+                    title: t.mailTemplates.edit_title,
+                    autoOpen: true,
+                    width: 900,
+                    closeOnEscape: false,
+                    modal: true,
+                    buttons: buttons
+                });
+
+                $this.before();
+            }
+        })
+    },
+    delete: function(id)
+    {
+        engine.confirm
+        (
+            t.mailTemplates.delete_question,
+            function()
+            {
+                engine.request.get('./mailTemplates/delete/' + id, function(d){
+                    if(d > 0){
+                        engine.refreshDataTable('mailTemplates');
+                    }
+                });
+                engine.closeDialog();
+            }
+        );
+    }
+};
+
 $(document).ready(function(){
     engine.admins.init();
     engine.components.init();
@@ -2635,6 +2761,7 @@ $(document).ready(function(){
     engine.plugins.init();
     engine.themes.init();
     engine.translations.init();
+    engine.mailTemplates.init();
     engine.trash.init();
     engine.settings.init();
 });
