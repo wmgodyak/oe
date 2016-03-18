@@ -49,7 +49,7 @@ class ContentImagesSizes extends Engine
 
         $t = new DataTables();
 
-        $t  -> setId('contentImagesSizes')
+        $t  -> setId('contentImagesSizesList')
             -> ajaxConfig('contentImagesSizes/items')
 //            -> setConfig('order', array(0, 'desc'))
             -> th($this->t('common.id'), '', 'width: 20px')

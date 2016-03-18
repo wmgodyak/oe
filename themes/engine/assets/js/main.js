@@ -1491,7 +1491,7 @@ engine.contentImagesSizes = {
 
             engine.validateAjaxForm('#form', function(d){
                 if(d.s){
-                    engine.refreshDataTable('contentImagesSizes');
+                    engine.refreshDataTable('contentImagesSizesList');
                     dialog.dialog('close');
                     dialog.dialog('destroy').remove()
                 } else {
@@ -1520,10 +1520,12 @@ engine.contentImagesSizes = {
                     modal: true,
                     buttons: buttons
                 });
+
                 $('#content_types').select2();
+
                 engine.validateAjaxForm('#form', function(d){
                     if(d.s){
-                        engine.refreshDataTable('contentImagesSizes');
+                        engine.refreshDataTable('contentImagesSizesList');
                         dialog.dialog('close');
                         dialog.dialog('destroy').remove()
                     }
@@ -1540,7 +1542,7 @@ engine.contentImagesSizes = {
             {
                 engine.request.get('./contentImagesSizes/delete/' + id, function(d){
                     if(d > 0){
-                        engine.refreshDataTable('contentImagesSizes');
+                        engine.refreshDataTable('contentImagesSizesList');
                     }
                 });
                 $(this).dialog('close').dialog('destroy').remove();
