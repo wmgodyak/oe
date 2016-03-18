@@ -52,14 +52,8 @@ class PostsCategories extends Plugin
 
     public function delete($id)
     {
-        return $this->template->fetch('plugins/content/posts/categories');
-    }
 
-    public function process($id)
-    {
-        return $this->template->fetch('plugins/content/posts/categories');
     }
-
     public function categories()
     {
         if(! $this->request->isXhr()) die;
@@ -72,7 +66,7 @@ class PostsCategories extends Plugin
                 $item['parent'] = $parent_id;
             }
             $item['text'] .= " #{$item['id']}";
-            $item['a_attr'] = ['id'=> $item['id'], 'href' => './content/posts/edit/' . $item['id']];
+            $item['a_attr'] = ['id'=> $item['id'], 'href' => './content/posts/index/' . $item['id']];
             $item['li_attr'] = [
                 'id'=> 'li_'.$item['id'],
                 'class' => 'status-' . $item['status'],
@@ -106,4 +100,42 @@ class PostsCategories extends Plugin
 
         return 1;
     }
+
+    public function createCategories($parent_id=0)
+    {
+        $this->template->assign('content', ['parent_id' => $parent_id]);
+        $this->template->assign('action', 'create');
+        return $this->template->fetch('plugins/content/posts/createCategories');
+    }
+
+
+    public function editCategories($id)
+    {
+        $this->template->assign('content', $this->categories->getData($id));
+        $this->template->assign('action', 'edit');
+        return $this->template->fetch('plugins/content/posts/createCategories');
+    }
+
+    public function process($id=0)
+    {
+        $i=[]; $m = $this->t('common.update_success'); $s = 0;
+        switch($this->request->post('action')){
+            case 'create':
+                $id = $this->categories->create($id);
+                if($id){
+                    $s = $this->categories->update($id);
+                }
+                break;
+            case 'edit':
+                $s = $this->categories->update($id);
+                break;
+        }
+
+        if(! $s){
+            $i = $this->categories->getDBError();
+            $m = $this->categories->getDBErrorMessage();
+        }
+        $this->response->body(['s'=>$s, 'i' => $i, 'm' => $m])->asJSON();
+    }
+
 }

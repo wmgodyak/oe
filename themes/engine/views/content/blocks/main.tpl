@@ -25,4 +25,5 @@
         </div>
     </div>
     {/foreach}
+    {if isset($plugins.main)}{implode("\r\n", $plugins.main)}{/if}
 </fieldset>

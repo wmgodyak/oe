@@ -163,7 +163,12 @@ class Content extends Engine
 
         $this->beginTransaction();
 
-        $content['published'] = date('Y-m-d', strtotime($content['published']));
+        if(!empty($content['published'])){
+            $content['published'] = date('Y-m-d', strtotime($content['published']));
+        } else{
+            $content['published'] = date('Y-m-d');
+        }
+
         $this->updateRow('content', $id, $content);
 
         if($this->hasDBError()){

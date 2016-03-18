@@ -32,7 +32,7 @@ var engine = {
             rules: rules,
             debug: true,
             submitHandler: function(form) {
-                var bSubmit = $('.b-submit, .ui-button, .b-form-save');
+                var bSubmit = $('.b-submit, .b-form-save');
                 var settings = {
                     dataType: 'json',
                     beforeSend: function()
@@ -41,7 +41,7 @@ var engine = {
                         bSubmit.attr('disabled', true);
 
                         if($('.ckeditor').length){
-                            for (var instance in CKEDITOR.instances ) {
+                            for (instance in CKEDITOR.instances ) {
                                 CKEDITOR.instances[instance].updateElement();
                             }
                         }
@@ -1025,7 +1025,7 @@ engine.chunks = {
  */
 engine.content = {
     init: function () {
-        console.log('engine.content.init()');
+        //console.log('engine.content.init()');
 
         var infoName = $(".info-name");
         infoName.charCount({"counterText": "Залишилось:", "allowed": 200, "warning": 25});

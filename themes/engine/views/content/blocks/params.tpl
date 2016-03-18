@@ -32,4 +32,5 @@
             <input name="content[published]" id="content_published" class="form-control datepicker" value="{$content.published}">
         </div>
     </div>
+    {if isset($plugins.params)}{implode("\r\n", $plugins.params)}{/if}
 </fieldset>

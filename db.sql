@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Мар 17 2016 г., 18:14
+-- Время создания: Мар 18 2016 г., 11:24
 -- Версия сервера: 5.5.47-0ubuntu0.14.04.1
 -- Версия PHP: 5.5.9-1ubuntu4.14
 
@@ -111,19 +111,36 @@ CREATE TABLE IF NOT EXISTS `content` (
   KEY `fk_content_owner_idx` (`owner_id`),
   KEY `status` (`status`),
   KEY `published` (`published`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=27 ;
 
 --
 -- Дамп данных таблицы `content`
 --
 
 INSERT INTO `content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id`, `isfolder`, `position`, `created`, `updated`, `published`, `status`) VALUES
-(1, 1, 1, 2, 0, 0, 0, '2016-03-17 15:49:09', NULL, '2016-03-17', 'published'),
-(2, 2, 2, 2, 0, 0, 0, '2016-03-17 15:49:38', NULL, '2016-03-17', 'published'),
+(1, 1, 1, 2, 0, 1, 0, '2016-03-17 15:49:09', NULL, '2016-03-17', 'published'),
+(2, 2, 2, 2, 0, 0, 0, '2016-03-17 15:49:38', NULL, '2016-03-18', 'published'),
 (3, 2, 2, 2, 0, 0, 0, '2016-03-17 15:49:49', NULL, '2016-03-17', 'published'),
 (4, 2, 2, 2, 0, 0, 0, '2016-03-17 15:50:29', NULL, '2016-03-17', 'published'),
 (5, 2, 2, 2, 0, 0, 0, '2016-03-17 15:50:40', NULL, '2016-03-17', 'published'),
-(6, 2, 2, 2, 0, 0, 0, '2016-03-17 15:51:22', NULL, '2016-03-17', 'published');
+(6, 2, 2, 2, 0, 0, 0, '2016-03-17 15:51:22', NULL, '2016-03-17', 'published'),
+(7, 3, 3, 2, 0, 0, 0, '2016-03-18 07:24:33', NULL, '1970-01-01', 'published'),
+(8, 3, 3, 2, 0, 1, 0, '2016-03-18 07:26:22', NULL, '2016-03-18', 'published'),
+(9, 3, 3, 2, 0, 1, 0, '2016-03-18 07:29:41', NULL, '2016-03-18', 'published'),
+(10, 3, 3, 2, 0, 0, 0, '2016-03-18 07:29:50', NULL, '2016-03-18', 'published'),
+(11, 3, 3, 2, 0, 0, 0, '2016-03-18 07:30:03', NULL, '2016-03-18', 'published'),
+(12, 3, 3, 2, 0, 0, 0, '2016-03-18 07:31:02', NULL, '2016-03-18', 'published'),
+(13, 3, 3, 2, 0, 0, 0, '2016-03-18 07:31:54', NULL, '2016-03-18', 'published'),
+(14, 3, 3, 2, 0, 0, 0, '2016-03-18 07:32:07', NULL, '2016-03-18', 'published'),
+(15, 3, 3, 2, 0, 0, 0, '2016-03-18 07:36:52', NULL, '2016-03-18', 'published'),
+(16, 3, 3, 2, 0, 0, 0, '2016-03-18 07:37:50', NULL, '2016-03-18', 'deleted'),
+(17, 3, 3, 2, 8, 0, 0, '2016-03-18 07:45:56', NULL, '2016-03-18', 'published'),
+(18, 3, 3, 2, 8, 0, 0, '2016-03-18 07:46:06', NULL, '2016-03-18', 'published'),
+(19, 3, 3, 2, 9, 0, 0, '2016-03-18 07:46:16', NULL, '2016-03-18', 'published'),
+(20, 3, 3, 2, 9, 0, 0, '2016-03-18 07:46:24', NULL, '2016-03-18', 'published'),
+(21, 1, 1, 2, 1, 0, 0, '2016-03-18 09:19:29', NULL, '2016-03-18', 'published'),
+(23, 2, 2, 2, 0, 0, 0, '2016-03-18 09:21:43', NULL, '2016-03-18', 'hidden'),
+(26, 2, 2, 2, 0, 0, 0, '2016-03-18 09:24:23', NULL, NULL, 'blank');
 
 -- --------------------------------------------------------
 
@@ -142,7 +159,7 @@ CREATE TABLE IF NOT EXISTS `content_features` (
   UNIQUE KEY `content_id` (`content_id`,`features_id`,`values_id`,`languages_id`),
   KEY `fk_content_features_values_content1_idx` (`content_id`),
   KEY `fk_content_features_values_features1_idx` (`features_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=121 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -160,7 +177,7 @@ CREATE TABLE IF NOT EXISTS `content_images` (
   PRIMARY KEY (`id`),
   KEY `fk_content_images_content1_idx` (`content_id`),
   KEY `position` (`position`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -175,7 +192,7 @@ CREATE TABLE IF NOT EXISTS `content_images_sizes` (
   `height` int(5) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `size` (`size`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -198,7 +215,7 @@ CREATE TABLE IF NOT EXISTS `content_info` (
   UNIQUE KEY `url_uq` (`content_id`,`languages_id`,`url`),
   KEY `fk_content_info_content1_idx` (`content_id`),
   KEY `fk_content_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=49 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=65 ;
 
 --
 -- Дамп данных таблицы `content_info`
@@ -206,11 +223,54 @@ CREATE TABLE IF NOT EXISTS `content_info` (
 
 INSERT INTO `content_info` (`id`, `content_id`, `languages_id`, `name`, `url`, `h1`, `title`, `keywords`, `description`, `content`) VALUES
 (43, 1, 1, 'Головна', '', '', 'Головна', '', '', ''),
-(44, 2, 1, 'Стаття 1', 'stattya-1', '', 'Стаття 1', '', '', ''),
+(44, 2, 1, 'Стаття 1', 'stattya-1', '', 'Стаття 1', '', '', '<p>wetertrertewtretwret</p>\n'),
 (45, 3, 1, 'Стаття 2', 'stattya-2', '', 'Стаття 2', '', '', ''),
 (46, 4, 1, 'Стаття 3', 'stattya-3', '', 'Стаття 3', '', '', ''),
 (47, 5, 1, 'Стаття 5', 'stattya-5', '', 'Стаття 5', '', '', ''),
-(48, 6, 1, 'Стаття 6', 'stattya-6', '', 'Стаття 6', '', '', '');
+(48, 6, 1, 'Стаття 6', 'stattya-6', '', 'Стаття 6', '', '', ''),
+(49, 7, 1, 'Без категорії', 'bez-kategoriї', '', 'Без категорії', '', '', NULL),
+(50, 8, 1, 'Ктаегорія 1', 'ktaegoriya-1', '', 'Ктаегорія 1', '', '', NULL),
+(51, 9, 1, 'Категорія 2', 'kategoriya-2', '', 'Категорія 2', '', '', NULL),
+(52, 10, 1, 'Категорія 2', 'kategoriya-2', '', 'Категорія 2', '', '', NULL),
+(53, 11, 1, 'Категорія 3', 'kategoriya-3', '', 'Категорія 3', '', '', NULL),
+(54, 12, 1, 'Категорія 3', 'kategoriya-3', '', 'Категорія 3', '', '', NULL),
+(55, 13, 1, 'Категорія 4', 'kategoriya-4', '', 'Категорія 4', '', '', NULL),
+(56, 14, 1, 'Категорія 5', 'kategoriya-5', '', 'Категорія 5', '', '', NULL),
+(57, 15, 1, 'Категорія 6', 'kategoriya-6', '', 'Категорія 6', '', '', NULL),
+(58, 16, 1, 'Категорія 7an', 'kategoriya-7an', '', 'Категорія 7', '', '', NULL),
+(59, 17, 1, 'Категорія 1.1', 'kategoriya-1-1', '', 'Категорія 1.1', '', '', NULL),
+(60, 18, 1, 'Категорія 1.2', 'kategoriya-1-2', '', 'Категорія 1.2', '', '', NULL),
+(61, 19, 1, 'Категорія 2.1', 'kategoriya-2-1', '', 'Категорія 2.1', '', '', NULL),
+(62, 20, 1, 'Категорія 2.2', 'kategoriya-2-2', '', 'Категорія 2.2', '', '', NULL),
+(63, 21, 1, 'Про нас', 'pro-nas', '', 'Про нас', '', '', ''),
+(64, 23, 1, 'Стаття для категорії 19', 'stattya-dlya-kategoriї-19', '', 'Стаття для категорії 19', '', '', '');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `content_relationship`
+--
+
+CREATE TABLE IF NOT EXISTS `content_relationship` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `content_id` int(10) unsigned NOT NULL,
+  `categories_id` int(10) unsigned NOT NULL,
+  `is_main` tinyint(1) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`,`content_id`,`categories_id`),
+  UNIQUE KEY `content_id` (`content_id`,`categories_id`),
+  UNIQUE KEY `content_id_2` (`content_id`,`categories_id`),
+  KEY `fk_content_relationship_content1_idx` (`content_id`),
+  KEY `fk_content_relationship_content2_idx` (`categories_id`),
+  KEY `is_main` (`is_main`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+
+--
+-- Дамп данных таблицы `content_relationship`
+--
+
+INSERT INTO `content_relationship` (`id`, `content_id`, `categories_id`, `is_main`) VALUES
+(4, 2, 19, 0),
+(6, 23, 19, 0);
 
 -- --------------------------------------------------------
 
@@ -254,7 +314,7 @@ CREATE TABLE IF NOT EXISTS `content_types_images_sizes` (
   PRIMARY KEY (`id`,`types_id`,`images_sizes_id`),
   KEY `fk_content_types_images_sizes1_idx` (`types_id`),
   KEY `fk_content_types_images_sizes2_idx` (`images_sizes_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=20 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -276,7 +336,7 @@ CREATE TABLE IF NOT EXISTS `features` (
   PRIMARY KEY (`id`,`owner_id`),
   UNIQUE KEY `code_UNIQUE` (`code`),
   KEY `fk_features_users1_idx` (`owner_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=134 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -294,7 +354,7 @@ CREATE TABLE IF NOT EXISTS `features_content` (
   PRIMARY KEY (`id`,`features_id`,`content_types_id`,`content_subtypes_id`,`content_id`),
   UNIQUE KEY `features_id` (`features_id`,`content_types_id`,`content_subtypes_id`,`content_id`),
   KEY `fk_content_features_idx` (`features_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=48 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -310,7 +370,7 @@ CREATE TABLE IF NOT EXISTS `features_info` (
   PRIMARY KEY (`id`,`features_id`,`languages_id`),
   KEY `fk_features_info_features1_idx` (`features_id`),
   KEY `fk_features_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=145 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -380,7 +440,7 @@ CREATE TABLE IF NOT EXISTS `mail_templates` (
   `name` varchar(60) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -397,7 +457,7 @@ CREATE TABLE IF NOT EXISTS `mail_templates_info` (
   PRIMARY KEY (`id`),
   KEY `fk_mail_templates_info_idx` (`templates_id`),
   KEY `fk_mail_templates_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -443,7 +503,7 @@ CREATE TABLE IF NOT EXISTS `plugins` (
   `author` varchar(60) DEFAULT NULL,
   `version` varchar(10) DEFAULT NULL,
   `controller` varchar(150) DEFAULT NULL,
-  `place` enum('top','main','meta','params','bottom','sidebar') NOT NULL,
+  `place` enum('top','main','after_main','params','after_params','bottom','sidebar','meta','after_meta','after_features','content','after_content') NOT NULL,
   `published` tinyint(1) NOT NULL DEFAULT '0',
   `rang` int(4) unsigned DEFAULT NULL,
   `settings` text,
@@ -451,7 +511,7 @@ CREATE TABLE IF NOT EXISTS `plugins` (
   PRIMARY KEY (`id`),
   KEY `published` (`published`),
   KEY `module` (`controller`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=20 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
 
 --
 -- Дамп данных таблицы `plugins`
@@ -459,10 +519,11 @@ CREATE TABLE IF NOT EXISTS `plugins` (
 
 INSERT INTO `plugins` (`id`, `icon`, `author`, `version`, `controller`, `place`, `published`, `rang`, `settings`, `created`) VALUES
 (14, 'fa-folder-o', 'Volodymyr Hodiak', '1.0.0', 'pagesTree', 'sidebar', 1, 300, NULL, '2016-03-03 14:58:57'),
-(16, 'fa-picture-o', 'Volodymyr Hodiak', '1.0.0', 'contentImages', 'params', 1, 300, NULL, '2016-03-09 11:26:40'),
+(16, 'fa-picture-o', 'Volodymyr Hodiak', '1.0.0', 'contentImages', 'after_params', 1, 300, NULL, '2016-03-09 11:26:40'),
 (17, 'fa-folder-o', 'Volodymyr Hodiak', '1.0.0', 'nav', 'sidebar', 1, 300, NULL, '2016-03-17 11:41:40'),
 (18, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'adminsGroup', 'sidebar', 1, 300, NULL, '2016-03-17 14:57:30'),
-(19, 'fa-folder-o', 'Volodymyr Hodiak', '1.0.0', 'postsCategories', 'sidebar', 1, 300, NULL, '2016-03-17 15:58:28');
+(19, 'fa-folder-o', 'Volodymyr Hodiak', '1.0.0', 'postsCategories', 'sidebar', 1, 300, NULL, '2016-03-17 15:58:28'),
+(20, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'postsCategoriesSelect', 'params', 1, 300, NULL, '2016-03-18 07:53:27');
 
 -- --------------------------------------------------------
 
@@ -479,7 +540,7 @@ CREATE TABLE IF NOT EXISTS `plugins_components` (
   KEY `fk_plugins_components_plugins1_idx` (`plugins_id`),
   KEY `fk_plugins_components_components1_idx` (`components_id`),
   KEY `position` (`position`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Дамп данных таблицы `plugins_components`
@@ -488,7 +549,10 @@ CREATE TABLE IF NOT EXISTS `plugins_components` (
 INSERT INTO `plugins_components` (`id`, `plugins_id`, `components_id`, `position`) VALUES
 (1, 17, 43, 0),
 (2, 18, 51, 0),
-(3, 19, 63, 0);
+(3, 19, 63, 0),
+(4, 20, 63, 0),
+(5, 16, 43, 0),
+(6, 16, 63, 0);
 
 -- --------------------------------------------------------
 
@@ -615,7 +679,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `updated`, `lastlogin`, `status`) VALUES
-(2, 1, 0, '3a0g9sltj0jtbafpc1ssp63577', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', NULL, NULL, '2016-03-03 13:25:08', '2016-03-17 14:49:28', '2016-03-17 14:51:46', 'active');
+(2, 1, 0, '3divete6uar1ogiua5tj6etfm6', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', NULL, NULL, '2016-03-03 13:25:08', '2016-03-17 14:49:28', '2016-03-18 06:50:08', 'active');
 
 -- --------------------------------------------------------
 
@@ -699,6 +763,13 @@ ALTER TABLE `content_info`
   ADD CONSTRAINT `fk_content_info_languages1` FOREIGN KEY (`languages_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Ограничения внешнего ключа таблицы `content_relationship`
+--
+ALTER TABLE `content_relationship`
+  ADD CONSTRAINT `fk_content_relationship_content1` FOREIGN KEY (`content_id`) REFERENCES `content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_content_relationship_content2` FOREIGN KEY (`categories_id`) REFERENCES `content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Ограничения внешнего ключа таблицы `content_types_images_sizes`
 --
 ALTER TABLE `content_types_images_sizes`
@@ -735,8 +806,8 @@ ALTER TABLE `guides_info`
 -- Ограничения внешнего ключа таблицы `mail_templates_info`
 --
 ALTER TABLE `mail_templates_info`
-  ADD CONSTRAINT `fk_mail_templates_info_mail_templates1` FOREIGN KEY (`templates_id`) REFERENCES `mail_templates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_mail_templates_info_languages1` FOREIGN KEY (`languages_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_mail_templates_info_languages1` FOREIGN KEY (`languages_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_mail_templates_info_mail_templates1` FOREIGN KEY (`templates_id`) REFERENCES `mail_templates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `nav_items`

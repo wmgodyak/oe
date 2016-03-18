@@ -137,7 +137,6 @@ abstract class Engine extends Controller
             $this->template->assign('title', $this->t($controller . '.action_' . $action));
             $this->template->assign('name', $this->t($controller . '.action_' . $action));
 
-            $this->template->assign('admin', Admin::data());
 
             $this->requireComponents();
         }
@@ -150,6 +149,8 @@ abstract class Engine extends Controller
         if(file_exists(DOCROOT . $com)){
             $this->template->assign('component_script',  $com);
         }
+
+        $this->template->assign('admin', Admin::data());
     }
 
     public function before(){}

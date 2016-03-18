@@ -7,4 +7,5 @@
             </div>
         </div>
     {/foreach}
+    {if isset($plugins.content)}{implode("\r\n", $plugins.content)}{/if}
 </fieldset>

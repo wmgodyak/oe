@@ -89,7 +89,7 @@ class Posts extends Content
             $status = $this->t($this->type .'.status_' . $row['status']);
             $res[$i][] = $row['id'];
             $res[$i][] =
-                           " <a class='status-{$row['status']}' title='{$status}' href='content/{$this->type}/index/{$row['id']}'>{$icon}  {$row['name']}</a>"
+                           " <a class='status-{$row['status']}' title='{$status}' href='content/{$this->type}/edit/{$row['id']}'>{$icon}  {$row['name']}</a>"
                          . " <a href='/{$row['url']}' target='_blank'>{$icon_link}</a>"
                          . "<br><small class='label label-info'>Автор:{$row['owner']} </small>"
                             ;
@@ -135,9 +135,9 @@ class Posts extends Content
         return $t->renderJSON($res, $t->getTotal());
     }
 
-    public function create($parent_id = 0)
+    public function create()
     {
-        $id = parent::create($parent_id);
+        $id = parent::create(0);
 
         return $this->edit($id);
     }
