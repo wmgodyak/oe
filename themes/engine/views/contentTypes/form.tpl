@@ -117,3 +117,29 @@
         </table>
     </script>
 {/literal}
+
+
+<link rel="stylesheet" href="{$theme_url}assets/js/vendor/codemirror/lib/codemirror.css">
+<script src="{$theme_url}assets/js/vendor/codemirror/lib/codemirror.js"></script>
+<script src="{$theme_url}assets/js/vendor/codemirror/mode/css.js"></script>
+<script src="{$theme_url}assets/js/vendor/codemirror/mode/php.js"></script>
+<script src="{$theme_url}assets/js/vendor/codemirror/mode/htmlmixed.js"></script>
+<script src="{$theme_url}assets/js/vendor/codemirror/mode/sql.js"></script>
+<script src="{$theme_url}assets/js/vendor/codemirror/mode/javascript.js"></script>
+<script>
+    var cm = CodeMirror.fromTextArea(document.getElementById('template'), {
+        theme: 'neo',
+        //                        mode: 'htmlmixed',
+        styleActiveLine: true,
+        lineNumbers: true,
+        lineWrapping: true,
+        autoCloseTags: true,
+        matchBrackets: true
+    });
+
+    cm.on("change", function() {
+        cm.save();
+        var c = cm.getValue();
+        $("textarea#template").html(c);
+    });
+</script>
