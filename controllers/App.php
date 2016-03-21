@@ -8,76 +8,63 @@
 namespace controllers;
 
 use controllers\core\Controller;
+use controllers\core\exceptions\Exception;
 use controllers\core\Request;
 use controllers\core\Response;
 use controllers\core\Session;
 use controllers\core\Settings;
 use controllers\core\Template;
-use controllers\engine\Admin;
-use controllers\engine\Lang;
 use controllers\engine\Plugins;
-use controllers\engine\PluginsFactory;
-use models\engine\Languages;
+use models\app\Content;
+use models\app\Images;
+use models\app\Nav;
+use models\app\Translations;
 
 if ( !defined("CPATH") ) die();
 
 /**
- * Class Engine
- * в адмінці присутні наступні компоненти
- * блок навігації
- * функціональний блок
- * блок з сайдбаром
- * плагіни
+ * Class App
  * @package controllers
  */
-abstract class Engine extends Controller
+class App extends Controller
 {
     /**
-     * content of body
-     * @var string
+     * Request instance
+     * @var
      */
-    private $content;
+    protected $request;
     /**
-     * buttons
+     * Response instance
+     * @var
+     */
+    protected $response;
+    /**
+     * Template instance
+     * @var
+     */
+    protected $template;
+
+    /**
+     * init status
+     * @var bool
+     */
+    private static $initialized = false;
+
+    /**
+     * all system settings
      * @var array
      */
-    private $buttons = array();
-
     private $settings;
 
     protected $images;
 
-    protected $request;
-
-    protected $response;
-
-    protected $template;
-
-    private $panel_nav = [];
-
-    private $require_components = [];
-    private $required_components = [];
-
-    private $engine;
-
-    private static $initialized = false;
-
-    protected $languages;
     protected $languages_id;
 
-    protected $plugins;
+    protected $page;
 
     public function __construct()
     {
         parent::__construct();
-
-        $this->engine = new \models\Engine();
-
-        $this->languages = new Languages();
-        $this->languages_id = $this->languages->getDefault('id');
-
-        $controller  = $this->request->get('controller');
-        $action      = $this->request->get('action');
 
         $this->request = Request::getInstance();
 
@@ -88,20 +75,10 @@ abstract class Engine extends Controller
         $this->settings = Settings::getInstance()->get();
 
         // template settings
-        $theme = $this->settings['engine_theme_current'];
+        $theme = $this->settings['app_theme_current'];
         $this->template = Template::getInstance($theme);
 
-//        echo $this->request->get('controller') ,'.', $this->request->get('action');die;
-        if(
-            (
-                engine\Admin::id() == null ||
-                ! \models\engine\Admin::isOnline(engine\Admin::id(), Session::id())
-            )
-        ){
-            if( $controller != 'Admin' && $action != 'login' ){
-                $this->redirect('/engine/admin/login');
-            }
-        }
+        $this->images   = new Images();
 
         if(!self::$initialized){
             $this->init();
@@ -110,197 +87,129 @@ abstract class Engine extends Controller
 
     private function init()
     {
+//        echo "App::init()\r\n";
         self::$initialized = true;
 
-        $controller = $this->request->get('controller');
-        $action = $this->request->get('action');
-        $controller = lcfirst($controller);
+        $this->template->assign('base_url',    APPURL );
 
-        $this->template->assign('base_url',    APPURL . 'engine/');
-        $this->template->assign('controller',  $controller);
-        $this->template->assign('action',      $action);
-        $this->template->assign('t',           Lang::getInstance()->t());
-        $this->template->assign('languages',   $this->languages->get());
+        if($this->request->isXhr()){
+            die("AjaxRequest in development");
+        } else {
 
-    //        echo '<pre>'; print_r(Lang::getInstance()->t()); die;
-        // admin structure
-        if($this->request->isGet() && ! $this->request->isXhr()){
-
-            $this->makeNav();
-
-            $a = Admin::data('avatar');
-
-            if(empty($a)){
-                Admin::data('avatar', '/uploads/avatars/0.png');
+            if($this->settings['active'] == 0){
+                $a = Session::get('engine.admin');
+                if( ! $a) {
+                    $this->eTechnicalWorks();
+                }
             }
 
-            $this->template->assign('title', $this->t($controller . '.action_' . $action));
-            $this->template->assign('name', $this->t($controller . '.action_' . $action));
+            // init page
+            $args = $this->request->get('args');
 
+            $app = new \models\App($args);
+            $this->page = $app->getPage();
 
-            $this->requireComponents();
+            if(! $this->page){
+                $this->e404();
+            }
+
+            if($this->page['status'] != 'published'){
+                $a = Session::get('engine.admin');
+                if( ! $a){
+                    $this->e404();
+                }
+            }
+
+            // set language
+            $this->languages_id = $this->page['languages_id'];
+
+            //assign page to template
+            $this->template->assign('page', $this->page);
+
+            // для парсера тест
+            $nav = new Nav();
+            $this->template->assign('nav_top', $nav->get('top'));
         }
 
-        $this->plugins = Plugins::get();
-        $this->template->assign('plugins', $this->plugins);
+        // assign translations to template
+        $this->template->assign('t', $this->t());
+    }
 
-        $com = '/themes/engine/assets/js/bootstrap/' . lcfirst($controller) . '.js';
-
-        if(file_exists(DOCROOT . $com)){
-            $this->template->assign('component_script',  $com);
+    private function e404()
+    {
+        $id = $this->settings['page_404'];
+        if(empty($id)){
+            throw new Exception("wrong page");
         }
 
-        $this->template->assign('admin', Admin::data());
+        $content = new Content();
+
+        $url = $content->getUrlById($id);
+
+        $this->redirect( APPURL . $url, 404);
+    }
+
+    private function eTechnicalWorks()
+    {
+        $template_path = $this->settings['themes_path']
+            . $this->settings['app_theme_current'] .'/'
+            . $this->settings['app_views_path'];
+
+        $ds = $this->template->fetch($template_path . 'technical_works');
+
+        $this->response->body($ds)->asHtml();
     }
 
     public function before(){}
 
-    protected final function setButtonsPanel($buttons)
+    /**
+     * get translation by key
+     * @param $key
+     * @return string
+     */
+    protected function t($key=null)
     {
-        if(is_string($buttons)){
-            $this->panel_nav = array($buttons);
-        } else {
-            $this->panel_nav = $buttons;
+        return Translations::getInstance($this->languages_id)->get($key);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function index()
+    {
+        $template_path = $this->settings['themes_path']
+                       . $this->settings['app_theme_current'] .'/'
+                       . $this->settings['app_views_path']
+                       . 'content_types/';
+        $ds = $this->template->fetch($template_path . $this->page['template']);
+
+        $this->response->body($ds);
+
+        if($this->page['id'] == $this->settings['page_404']){
+            $this->response->sendError(404);
         }
-        return $this;
-    }
-
-    /**
-     * @param $button
-     * @return $this
-     */
-    protected final function prependToPanel($button)
-    {
-        array_unshift($this->panel_nav, $button);
-
-        return $this;
-    }
-
-    /**
-     * @param $button
-     * @return $this
-     */
-    protected final function appendToPanel($button)
-    {
-        $this->panel_nav[] = $button;
-
-        return $this;
     }
 
     /**
      *
      */
-    private function makeNav()
-    {
-        $nav = $this->makeNavTranslations($this->engine->nav());
-
-//        $this->dump($nav);die;
-
-        $this->template->assign('nav_items', $nav);
-        $s = $this->template->fetch('nav');
-        $this->template->assign('nav', $s);
-    }
-
-    private function makeNavTranslations($nav)
-    {
-        $res = [];
-        foreach ($nav as $item) {
-            if($item['isfolder']){
-                $item['items'] = $this->makeNavTranslations($item['items']);
-            }
-
-            $c = $item['controller'];
-            if(strpos($c, '/') !== false){
-                $a = explode('/', $c);
-                $c = end($a);
-                $c = mb_strtolower($c);
-            }
-            $item['name'] = $this->t($c . '.action_index');
-            $res[] = $item;
-        }
-
-        return $res;
-    }
-
-    /**
-     * translations
-     * @param $key
-     * @return string
-     */
-    protected function t($key)
-    {
-        return Lang::getInstance()->t($key);
-    }
-
-    protected function setNav($b)
-    {
-        $this->buttons[] = $b;
-    }
-
-    protected function setContent($c)
-    {
-        $this->content = $c;
-    }
-
-    private final function renderHeadingPanel()
-    {
-        $this->template->assign('panel_nav', $this->panel_nav);
-        $this->template->assign('heading_panel', $this->template->fetch('heading_panel'));
-//        echo $this->template->fetch('heading_panel');die;
-    }
-
-    protected function requireComponent($component)
-    {
-        $this->require_components[] = $component;
-
-        return $this;
-    }
-
-    private function requireComponents()
-    {
-        $components = [];
-        foreach ($this->require_components as $component) {
-            $component = mb_strtolower($component);
-            $path = 'assets/js/bootstrap/' . $component . '.js';
-            if(!file_exists($this->template->getThemePath() . $path)) continue;
-            $components[] = $this->template->getThemeUrl() . $path;
-            $this->required_components[] = $component;
-        }
-
-        if(!empty($components)){
-            $this->template->assign('required_components', $components);
-        }
-    }
-
-    /**
-     * @param $body
-     */
-    protected final function output($body)
-    {
-        $this->renderHeadingPanel();
-        $this->response->body($body)->render();
-    }
-
-    /**
-     * @return mixed
-     */
-    abstract public function create();
+    public function create(){}
 
     /**
      * @param $id
      * @return mixed
      */
-    abstract public function edit($id);
+    public function edit($id){}
 
     /**
      * @param $id
      * @return mixed
      */
-    abstract public function process($id);
+    public function process($id){}
 
     /**
      * @param $id
      * @return mixed
      */
-    abstract public function delete($id);
+    public function delete($id){}
 }

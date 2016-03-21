@@ -31,15 +31,20 @@ $routes = array();
 
 // коли чітко задано які змінні мають бути
     $routes[]  = array('/install/?', 'controllers\Install');
-    $routes[]  = array('/ajax/([a-zA-Z0-9-_/]+)/([a-zA-Z0-9-_/]+)/?', 'controllers\modules\:controller:action');
+//    $routes[]  = array('/ajax/([a-zA-Z0-9-_/]+)/([a-zA-Z0-9-_/]+)/?', 'controllers\modules\:controller:action');
 
-//    $routes[]  = array('/([a-z]{2})/([a-zA-Z0-9-_/]+)/tag/([0-9a-zA-Z]+)?', 'controllers\App', 'lang/alias/tag/tag');
-//    $routes[]  = array('/([a-zA-Z0-9-_/]+)/tag/([0-9a-zA-Z]+)?', 'controllers\App', 'alias/tag/tag');
-//    $routes[]  = array('/([a-z]{2})/([a-zA-Z0-9-_/]+)/([0-9]+)/?', 'controllers\App', 'lang/alias/p');
-    $routes[]  = array('/([a-zA-Z0-9-_/]+)/([0-9]+)/?', 'controllers\App', 'alias/p');
-    $routes[]  = array('/([a-z]{2})/([a-zA-Z0-9-_/]+)/?', 'controllers\App', 'lang/alias');
+//    $routes[]  = array('/([a-z]{2})/([a-zA-Z0-9-_/]+)/tag/([0-9a-zA-Z]+)?', 'controllers\App', 'lang/url/tag/tag');
+//    $routes[]  = array('/([a-zA-Z0-9-_/]+)/tag/([0-9a-zA-Z]+)?', 'controllers\App', 'url/tag/tag');
+//    $routes[]  = array('/([a-z]{2})/([a-zA-Z0-9-_/]+)/([0-9]+)/?', 'controllers\App', 'lang/url/p');
+
+    $routes[]  = array('/([a-zA-Z0-9-_/]+)/([0-9]+)/?', 'controllers\App', 'url/p');
+    $routes[]  = array('/([a-z]{2})/([a-zA-Z0-9-_/]+)/?', 'controllers\App', 'lang/url');
     $routes[]  = array('/([a-z]{2})/?', 'controllers\App', 'lang');
-    $routes[]  = array('/([a-zA-Z0-9-_/]*)/?', 'controllers\App', 'alias');
+
+    $routes[]  = array('/([a-zA-Z0-9-_/]*)/?', 'controllers\App', 'url');
+
+    $routes[]  = array('/([^0-9A-Za-zА-Яа-яЁё]+)/?(.*)', 'controllers\App', 'url');
+
     $routes[]  = array('/?', 'controllers\App');
 
 return $routes;

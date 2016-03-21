@@ -305,4 +305,12 @@ class Content extends Engine
             $this->commit();
         }
     }
+
+    public function getSubtypes($types_id)
+    {
+        $res = [['id' => $types_id, 'name' => 'Default']];
+        $r = self::$db->select("select id, name from content_types where parent_id={$types_id}")->all();
+        $res = array_merge($res, $r);
+        return $res;
+    }
 }

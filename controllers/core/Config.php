@@ -19,7 +19,7 @@ class Config
     private static $instance;
     private static $data;
 
-    public function __construct()
+    private function __construct()
     {
         $dir = DOCROOT . 'config/';
 
@@ -44,6 +44,11 @@ class Config
         if(!isset(self::$data['db'])){
             header('Location: /install'); die();   
         }
+    }
+
+    private function __clone()
+    {
+
     }
 
     /**

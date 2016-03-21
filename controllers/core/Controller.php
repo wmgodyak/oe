@@ -85,13 +85,21 @@ abstract class Controller {
         self::dump($var, $use_var_dump); die;
     }
 
-    public function redirect($uri)
+    public function redirect($uri, $header = null)
     {
         switch($uri){
             case 404:
                 $uri = 'NotFound';
                 break;
         }
+        switch($header){
+            case 404:
+                header("HTTP/1.0 404 Not Found");
+                break;
+            default:
+                break;
+        }
+
         header('Location: ' . $uri);die;
     }
 } 

@@ -1,5 +1,18 @@
 <fieldset>
     <legend>{$t.common.legend_params}</legend>
+    {if count($subtypes)>1}
+        <div class="form-group">
+            <label for="content_subtypes_id" class="col-md-3 control-label">{$t.content.subtypes}</label>
+            <div class="col-md-9">
+                <select name="content[subtypes_id]" id="content_subtypes_id" class="form-control">
+                    {foreach $subtypes as $item}
+                        <option {if $content.subtypes_id == $item.id}selected{/if} value="{$item.id}">{$item.name}</option>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+    {/if}
+
     <div class="form-group">
         <label for="content_status" class="col-md-3 control-label">{$t.common.status}</label>
         <div class="col-md-9">

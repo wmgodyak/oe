@@ -72,6 +72,7 @@ class Content extends Engine
         }
 
         $this->template->assign('content', $content);
+        $this->template->assign('subtypes', $this->mContent->getSubtypes($content['types_id']));
         $this->template->assign('form_action', $this->form_action . $id);
         $this->template->assign('form_success', $this->form_success);
 
