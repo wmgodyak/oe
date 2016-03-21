@@ -16,6 +16,7 @@ use controllers\core\Template;
 use controllers\engine\Admin;
 use controllers\engine\Lang;
 use controllers\engine\Plugins;
+use controllers\engine\PluginsFactory;
 use models\engine\Languages;
 
 if ( !defined("CPATH") ) die();
