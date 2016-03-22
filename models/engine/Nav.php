@@ -98,7 +98,7 @@ class Nav extends Engine
     public function getSelectedItems($nav_id)
     {
         return self::$db->select("
-          select c.id, ci.name
+          select ni.id,c.id as content_id, ci.name
           from nav_items ni
           join content c on c.id=ni.content_id and c.status = 'published'
           join content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}

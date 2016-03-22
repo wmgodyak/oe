@@ -69,7 +69,7 @@
                 <% for(var i=0;i < items.length; i++) { %>
                 <tr id="nav-item-<%- items[i].id %>">
                     <td class="sort" style="cursor: move;"><i class="fa fa-list"></i></td>
-                    <td><%- items[i].id %></td>
+                    <td><%- items[i].content_id %></td>
                     <td><%- items[i].name %></td>
                     <td><a class="b-nav-item-delete" data-id="<%- items[i].id %>" title="Видалити" href="javascript:;"><i class="fa fa-remove"></i></a></td>
                 </tr>
