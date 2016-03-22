@@ -113,6 +113,10 @@ class App extends Model
         // cover image
         $page['image'] = $this->images->cover($page['id']);
 
+        if(!empty($page['image'])){
+            $page['images'] = $this->images->get($page['id']);
+        }
+
         // author
         $page['author'] = self::$db
             ->select("select id,name,surname,email,phone from users where id={$page['owner_id']}")

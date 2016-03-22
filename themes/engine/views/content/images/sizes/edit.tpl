@@ -22,12 +22,11 @@
         <div class="col-sm-9">
             <select name="types[]" multiple id="content_types"  class="form-control" required>
                 {foreach $types as $t}
+                    <option  {if in_array($t.id, $data.types)}selected{/if} value="{$t.id}">{$t.name}</option>
                     {if $t.isfolder}
                         {foreach $t.items as $item}
                             <option {if in_array($item.id, $data.types)}selected{/if} value="{$item.id}">{$t.name} / {$item.name}</option>
                         {/foreach}
-                    {else}
-                        <option  {if in_array($t.id, $data.types)}selected{/if} value="{$t.id}">{$t.name}</option>
                     {/if}
                 {/foreach}
             </select>

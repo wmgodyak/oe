@@ -2247,8 +2247,13 @@ engine.nav = {
             });
         });
 
-        var selected_items = typeof selected_items == 'undefined' ? [] : selected_items;
-        engine.nav.renderItems(selected_items);
+        if(typeof selected_items != 'undefined'){
+
+            setTimeout(function(){
+                engine.nav.renderItems(selected_items);
+            }, 100);
+
+        }
 
     },
     delete: function(id)

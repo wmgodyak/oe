@@ -29,7 +29,7 @@ class Parser extends Model
             ->select("select url from content_info where content_id = '{$id}' and languages_id={$languages_id} limit 1")
             ->row('url');
 
-        if($this->languages_id == $def_lang['id']){
+        if($languages_id == $def_lang['id']){
             return $url;
         }
 

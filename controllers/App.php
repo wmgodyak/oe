@@ -127,7 +127,7 @@ class App extends Controller
             //assign page to template
             $this->template->assign('page', $this->page);
 
-            // для парсера тест
+            // для парсера тест todo, прибрати
             $nav = new Nav();
             $this->template->assign('nav_top', $nav->get('top'));
         }

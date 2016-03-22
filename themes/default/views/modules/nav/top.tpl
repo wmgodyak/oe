@@ -1,4 +1,4 @@
-<header class="navbar navbar-inverse hero" role="banner">
+<header class="navbar navbar-inverse {if $page.id==1}hero{else}normal{/if}" role="banner">
     <div class="container">
         <div class="navbar-header">
             <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
