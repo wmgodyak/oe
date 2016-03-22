@@ -7,6 +7,7 @@
 
 namespace controllers\core;
 
+use models\app\Parser;
 use models\core\DB;
 
 defined("CPATH") or die();
@@ -65,44 +66,47 @@ class Response
                     Template::getInstance()->assign('body', $body);
 
                     $body = Template::getInstance()->fetch('index');
-                    $debug = Config::getInstance()->get('core.debug');
-
-                    $db = DB::getInstance();
-
-                    if( $debug ){
-                        $time = $_SERVER['REQUEST_TIME_FLOAT'];
-                        $q = $db->getQueryCount();
-
-                        $body.= "\r\n<!--\r\n";
-                        $time_end = microtime(true);
-                        $exec_time = round($time_end-$time, 4);
-                        $mu = memory_get_usage();
-                        $mp = 0; $mpf=0;
-                        if(function_exists('memory_get_peak_usage')){
-                            $mp = memory_get_peak_usage();
-                            $mpf = round(($mp / 1024) / 1024, 3);
-                        }
-                        $muf = round((memory_get_usage() / 1024) / 1024, 3);
-                        $ml=ini_get('memory_limit');
-
-                        if($mp > 0){
-                            $body.= "    Memory peak in use: $mp ($mpf M)\r\n";
-                        }
-
-                        $body.= "    Page generation time: ".$exec_time." seconds\r\n";
-                        $body.= "    Memory in use: $mu ($muf M) \r\n";
-                        $body.= "    Memory limit: $ml \r\n";
-                        $body.= "    Total queries: $q \r\n";
-                        $body.=  "-->";
-                    }
-
-                    $db->close();
                 }
 
                 break;
             case 'app':
+                $parser = new Parser($this->body);
+                $body = $parser->makeFriendlyUrl();
                 break;
         }
+
+        $debug = Config::getInstance()->get('core.debug');
+
+        $db = DB::getInstance();
+
+        if($debug && ! Request::getInstance()->isXhr()){
+            $time = $_SERVER['REQUEST_TIME_FLOAT'];
+            $q = $db->getQueryCount();
+
+            $body.= "\r\n<!--\r\n";
+            $time_end = microtime(true);
+            $exec_time = round($time_end-$time, 4);
+            $mu = memory_get_usage();
+            $mp = 0; $mpf=0;
+            if(function_exists('memory_get_peak_usage')){
+                $mp = memory_get_peak_usage();
+                $mpf = round(($mp / 1024) / 1024, 3);
+            }
+            $muf = round((memory_get_usage() / 1024) / 1024, 3);
+            $ml=ini_get('memory_limit');
+
+            if($mp > 0){
+                $body.= "    Memory peak in use: $mp ($mpf M)\r\n";
+            }
+
+            $body.= "    Page generation time: ".$exec_time." seconds\r\n";
+            $body.= "    Memory in use: $mu ($muf M) \r\n";
+            $body.= "    Memory limit: $ml \r\n";
+            $body.= "    Total queries: $q \r\n";
+            $body.=  "-->";
+        }
+
+        $db->close();
 
         echo $body; die;
     }

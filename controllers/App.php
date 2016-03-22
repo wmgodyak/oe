@@ -122,6 +122,7 @@ class App extends Controller
 
             // set language
             $this->languages_id = $this->page['languages_id'];
+            $this->request->setParam('languages_id', $this->languages_id);
 
             //assign page to template
             $this->template->assign('page', $this->page);
@@ -135,7 +136,7 @@ class App extends Controller
         $this->template->assign('t', $this->t());
     }
 
-    private function e404()
+    public function e404()
     {
         $id = $this->settings['page_404'];
         if(empty($id)){

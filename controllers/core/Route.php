@@ -38,11 +38,12 @@ class Route
         $namespace = ''; $controller = ''; $action = 'index'; $params = array();
 
         $uri = self::protect($_SERVER['REQUEST_URI']);
-
+        $uri = urldecode($uri);
         self::getRoutes();
-
+        $found_route = false;
         foreach (self::$rules as $route) {
-            if(preg_match("@^" . $route['regex'] . "$@u", $uri, $matches)){
+            if(preg_match("@^" . $route['regex'] . "$@siu", $uri, $matches)){
+                $found_route = true;
                 if(empty($route['params'])) {
                     // вирізаю з неймспейсу :controller :action
                     if(strpos($route['namespace'], ':controller') !== false) {
@@ -82,6 +83,12 @@ class Route
 
                 break;
             }
+        }
+
+        if(!$found_route){
+            $namespace  = '\controllers\\';
+            $controller = 'App';
+            $action     = 'e404';
         }
 
         $controller = ucfirst($controller);
