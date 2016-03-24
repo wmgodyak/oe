@@ -170,13 +170,39 @@ class ContentTypes extends Engine
             )
         );
 
+        $this->getModules();
+
         $data['template'] = $this->readTemplate($id);
 
         $this->template->assign('imagesSizes', $this->contentTypes->getContentImagesSizes());
         $this->template->assign('data', $data);
         $this->template->assign('features', $this->contentTypes->getFeatures());
+
         $this->template->assign('action', 'edit');
         $this->output($this->template->fetch('contentTypes/form'));
+    }
+
+    private function getModules()
+    {
+        $hide_actions = ['__construct', 'e_404', 'before', 'e404', '__set', '__get', 'dump', 'dDump', 'redirect','process','delete'];
+        $path = 'controllers\modules\\';
+        $modules = [];
+        $r = $this->contentTypes->getModules();
+        foreach ($r as $k=>$module) {
+            $controller = ucfirst($module['controller']);
+            $class = new \ReflectionClass($path . $controller);
+            $methods = $class->getMethods(\ReflectionMethod::IS_PUBLIC);
+
+            foreach ($methods as $method) {
+                if(in_array($method->name, $hide_actions)) continue;
+
+                $modules[$controller][] = $controller .'::'. $method->name;
+
+            }
+        }
+//        $this->dump($modules);
+//        die;
+        $this->template->assign('modules', $modules);
     }
 
     /**
@@ -386,5 +412,10 @@ class ContentTypes extends Engine
         $s = $this->contentTypes->deleteFeatures($id);
         $s = $s ? 1 : 0;
         $this->response->body($s)->asHtml();
+    }
+
+    public function getImagesSizes()
+    {
+        $this->response->body(['items' => $this->contentTypes->getContentImagesSizes()])->asJSON();
     }
 }

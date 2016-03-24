@@ -1,0 +1,73 @@
+
+<a href="1"></a>
+<a href="2"></a>
+<a href="3"></a>
+<a href="4"></a>
+<a href="8"></a>
+<a href="1;p=1"></a>
+<a href="2;p=3"></a>
+<a href="3;q=asdjklфів3"></a>
+<a href="3;q=asdjklфів3;p=4"></a>
+<a href="4;tag=seo"></a>
+<a href="4;tag=seo;author=wg"></a>
+<a href="4;tag=іущ"></a>
+<a href="4;author=wg"></a>
+<a href="4;author=wg;p=4"></a>
+<a href="4;brand=apple"></a>
+<a href="4;brand=apple;p=4"></a>
+<a href="4;filter/12=23"></a>
+<a href="4;filter/12=23;23=34"></a>
+<a href="4;filter/12=23;23=34;45=67"></a>
+<a href="4;filter/12=23,33,45;23=34;45=67"></a>
+<a href="4;filter/vendor=acer;display=14"></a>
+<a href="4;filter/vendor=acer;display=14;p=4"></a>
+<a href="4;filter/vendor=acer;display=14;ram=ddr3"></a>
+<a href="4;filter/vendor=acer,lenovo;display=14,15-16;ram=ddr3"></a>
+<a href="4;filter/vendor=acer,lenovo;display=14,15-16;ram=ddr3"></a>
+<a href="4;filter/vendor=acer;display=14;ram=ddr3;p=4"></a>
+<a href="8;order=name-desc"></a>
+<a href="8;order=name-asc"></a>
+<a href="8;order=price-asc"></a>
+<a href="8;order=price-asc"></a>
+<a href="8;order=action-asc"></a>
+<a href="8;order=action-desc"></a>
+<a href="8;order=action-desc;p=5"></a>
+*
+*
+* на
+*
+<a href="uk"></a>
+<a href="uk/pro-nas"></a>
+<a href="uk/novyny"></a>
+<a href="uk/oplata-ta-dostavka"></a>
+<a href="uk/kontakty"></a>
+<a href="uk/page/1"></a>
+<a href="uk/pro-nas/page/3"></a>
+<a href="uk/novyny/q=asdjklфів3"></a>
+<a href="uk/novyny/q=asdjklфів3/page/4"></a>
+<a href="uk/oplata-ta-dostavka/tag=seo"></a>
+<a href="uk/oplata-ta-dostavka/tag=seo/author=wg"></a>
+<a href="uk/oplata-ta-dostavka/tag=іущ"></a>
+<a href="uk/oplata-ta-dostavka/author=wg"></a>
+<a href="uk/oplata-ta-dostavka/author=wg/page/4"></a>
+<a href="uk/oplata-ta-dostavka/brand=apple"></a>
+<a href="uk/oplata-ta-dostavka/brand=apple/page/4"></a>
+<a href="uk/oplata-ta-dostavka/filter/12=23"></a>
+<a href="uk/oplata-ta-dostavka/filter/12=23;23=34"></a>
+<a href="uk/oplata-ta-dostavka/filter/12=23;23=34;45=67"></a>
+<a href="uk/oplata-ta-dostavka/filter/12=23,33,45;23=34;45=67"></a>
+<a href="uk/oplata-ta-dostavka/filter/vendor=acer;display=14"></a>
+<a href="uk/oplata-ta-dostavka/filter/vendor=acer;display=14;/page/4"></a>
+<a href="uk/oplata-ta-dostavka/filter/vendor=acer;display=14;ram=ddr3"></a>
+<a href="uk/oplata-ta-dostavka/filter/vendor=acer,lenovo;display=14,15-16,15.6;ram=ddr3"></a>
+<a href="uk/oplata-ta-dostavka/filter/vendor=acer,lenovo;display=14,15-16;ram=ddr3"></a>
+
+<a href="uk/oplata-ta-dostavka/filter/vendor=acer;display=14;ram=ddr3;/page/4"></a>
+
+<a href="uk/kontakty/order=name-desc"></a>
+<a href="uk/kontakty/order=name-asc"></a>
+<a href="uk/kontakty/order=price-asc"></a>
+<a href="uk/kontakty/order=price-asc"></a>
+<a href="uk/kontakty/order=action-asc"></a>
+<a href="uk/kontakty/order=action-desc"></a>
+<a href="uk/kontakty/order=action-desc/page/5"></a>

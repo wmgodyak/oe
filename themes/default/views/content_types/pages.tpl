@@ -28,6 +28,7 @@
 
 <div id="info">
     <div class="container">
+        <a href="2;#abourt">about anchor</a>
         {$page.content}
     </div>
 </div>

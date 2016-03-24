@@ -1578,147 +1578,39 @@ engine.contentTypes = {
             }
         });
 
-        $("#contentImagesSizes").select2();
+        $("#contentImagesSizes,#settingsModules").select2();
 
-        this.initBuilder();
-        this.features.init();
-    },
-    initBuilder: function()
-    {
-        console.log('engine.contentTypes.initBuilder()');
+        $(document).on('click', '.ct-create-images-size', function(){
 
-        var $builder = $('#builder'), bSubmit = $('.b-form-save');
-        $builder.find('.box').each(function(){
-            var id = $(this).attr('id');
-            console.log(id);
-            if(typeof id != 'undefined') {
-                $('#configComponents').find('#'+id).remove();
-            }
-        });
-
-        $(document).on('click', '.b-row-remove', function(e){
-            removeRow(this);
-        });
-
-
-        $(document).on('change', '#bu_select_grid', function(e){
-            var tpl = getTemplate(this.value);
-            $builder.append(tpl);
-            initDragabble();
-            $(this).find('option:first').attr('selected', true);
-        });
-
-        $builder.bind('DOMNodeInserted DOMNodeRemoved', function(event) {
-            var html = this.innerHTML;
-            $('#data_settings_form').html(html);
-        });
-
-        function initDragabble()
-        {
-            var boxes = $('.boxes'), htmlpage = $('.htmlpage');
-            //$(".htmlpage, .htmlpage .column, .boxes .box").sortable({connectWith: ".column"});//, handle: ".b-move"
-            //
-            //$( ".boxes > .box").draggable({
-            //    connectToSortable: ".htmlpage .column",
-            //    revert: "invalid", // when not dropped, the item will revert back to its initial position
-            //    containment: "document",
-            //    cursor: "move",
-            //    stop: function(){
-            //        $( ".htmlpage .box").draggable({
-            //            connectToSortable: ".boxes",
-            //            revert: "invalid", // when not dropped, the item will revert back to its initial position
-            //            containment: "document",
-            //            cursor: "move",
-            //            stop: function(){
-            //
-            //            }
-            //        });
-            //    }
-            //});
-
-            //$(".htmlpage, .htmlpage .column,.boxes").sortable({connectWith: ".column"});//, handle: ".b-move"
-            //
-            //$(".boxes .box").draggable({
-            //    connectToSortable: ".htmlpage .column, .boxes",
-            //    drag: function (e, t)
-            //    {
-            //        //t.helper.width(100 + '%');
-            //    },
-            //    stop: function (e, t)
-            //    {
-            //        //$('.ui-sortable-placeholder').each(function(){
-            //        //    $(this).remove();
-            //        //})
-            //    }
-            //});
-            $(".htmlpage, .htmlpage .column,.boxes").sortable({connectWith: ".column"});//, handle: ".b-move"
-
-            $(".boxes .box").draggable({
-                connectToSortable: ".htmlpage .column, .boxes",
-                drag: function (e, t)
-                {
-                    //t.helper.width(100 + '%');
-                },
-                stop: function (e, t)
-                {
-                    t.helper.css({
-                        width: '',
-                        height: '',
-                        position: '',
-                        top: '',
-                        left: ''
-                    });
+            var tmpl = _.template($('#sizesCreate').html());
+            var d = tmpl();
+            var pw = engine.dialog({
+                content: d,
+                title: 'Створення розміру',
+                autoOpen: true,
+                width: 500,
+                modal: true,
+                buttons: {
+                    "Зберегти": function(){
+                        $('#formCreateSize').submit();
+                    }
                 }
             });
 
+            engine.validateAjaxForm('#formCreateSize', function(d){
+                if(d.s){
+                    engine.request.get('contentTypes/getImagesSizes', function(res){
+                        var tmpl = _.template('<% for(var i=0;i < items.length; i++) { %><option value="<%- items[i].id %>"><%- items[i].size %></option>  <% } %>');
+                        var d = tmpl({items: res.items});
+                        $("#contentImagesSizes").html(d).select2();
+                        pw.dialog('destroy').remove();
+                    }, 'json');
+                }
+            });
 
-        }
-        initDragabble();
+        });
 
-        function getTemplate(size)
-        {
-            var out = '';
-            switch (size) {
-                case '12':
-                    out = '<div class="row clearfix"><div class="col-md-12 column ui-sortable"></div><a class="b-row-remove" href="" onclick="return false"><i class="fa fa-remove"></i></a><a class="b-move" href="" onclick="return false"><i class="fa fa-arrows"></i></a></div>';
-                    break;
-                case '6x6':
-                    out = '<div class="row clearfix"><div class="col-md-6 column ui-sortable"></div><div class="col-md-6 column ui-sortable"></div><a class="b-row-remove" href="" onclick="return false"><i class="fa fa-remove"></i></a><a class="b-move" href="" onclick="return false"><i class="fa fa-arrows"></i></a></div>';
-                    break;
-                case '4x4x4':
-                    out = '<div class="row clearfix"><div class="col-md-4 column ui-sortable"></div><div class="col-md-4 column ui-sortable"></div><div class="col-md-4 column ui-sortable"></div><a class="b-row-remove" href="" onclick="return false"><i class="fa fa-remove"></i></a><a class="b-move" href="" onclick="return false"><i class="fa fa-arrows"></i></a></div>';
-                    break;
-                case '3x3x3x3':
-                    out = '<div class="row clearfix"><div class="col-md-3 column ui-sortable"></div><div class="col-md-3 column ui-sortable"></div><div class="col-md-3 column ui-sortable"></div><div class="col-md-3 column ui-sortable"></div><a class="b-row-remove" href="" onclick="return false"><i class="fa fa-remove"></i></a><a class="b-move" href="" onclick="return false"><i class="fa fa-arrows"></i></a></div>';
-                    break;
-                case '8x4':
-                    out = '<div class="row clearfix"><div class="col-md-8 column ui-sortable"></div><div class="col-md-4 column ui-sortable"></div><a class="b-row-remove" href="" onclick="return false"><i class="fa fa-remove"></i></a><a class="b-move" href="" onclick="return false"><i class="fa fa-arrows"></i></a></div>';
-                    break;
-                case '4x8':
-                    out = '<div class="row clearfix"><div class="col-md-4 column ui-sortable"></div><div class="col-md-8 column ui-sortable"></div><a class="b-row-remove" href="" onclick="return false"><i class="fa fa-remove"></i></a><a class="b-move" href="" onclick="return false"><i class="fa fa-arrows"></i></a></div>';
-                    break;
-                case '9x3':
-                    out = '<div class="row clearfix"><div class="col-md-9 column ui-sortable"></div><div class="col-md-3 column ui-sortable"></div><a class="b-row-remove" href="" onclick="return false"><i class="fa fa-remove"></i></a><a class="b-move" href="" onclick="return false"><i class="fa fa-arrows"></i></a></div>';
-                    break;
-                case '3x9':
-                    out = '<div class="row clearfix"><div class="col-md-3 column ui-sortable"></div><div class="col-md-9 column ui-sortable"></div><a class="b-row-remove" href="" onclick="return false"><i class="fa fa-remove"></i></a><a class="b-move" href="" onclick="return false"><i class="fa fa-arrows"></i></a></div>';
-                    break;
-                default:
-
-                    break;
-            }
-
-            return out;
-        }
-
-        function removeRow(el)
-        {
-            var d = engine.confirm('Дійсно видалити рядок?', function(){
-                $(el).parent().remove();
-                $builder.trigger('DOMNodeRemoved');
-                d.dialog('close');
-            })
-        }
+        this.features.init();
     },
     onCreateSuccess: function(d)
     {
@@ -2475,6 +2367,95 @@ engine.plugins = {
         })
     }
 };
+
+engine.modules = {
+    init: function()
+    {
+        console.log('Init modules');
+
+        $(document).on('click', '.b-module-install', function(){
+            engine.modules.install($(this).data('id'));
+        });
+
+        $(document).on('click', '.b-module-uninstall', function(){
+            engine.modules.uninstall($(this).data('id'));
+        });
+        $(document).on('click', '.b-module-edit', function(){
+            engine.modules.edit($(this).data('id'));
+        });
+    },
+    install: function(module)
+    {
+        engine.request.post({
+            url: './modules/install',
+            data: {c: module},
+            success: function(d)
+            {
+                if(d.s){
+                    engine.refreshDataTable('modules');
+                    dialog.dialog('close').dialog('destroy').remove();
+                    if(typeof d.m != 'undefined' && d.m != ''){
+                        engine.alert(d.m);
+                    }
+
+                }
+            }
+        })
+    },
+    uninstall: function(id)
+    {
+        engine.confirm
+        (
+            t.modules.uninstall_question,
+            function()
+            {
+                engine.request.post({
+                    url: './modules/uninstall',
+                    data: {id: id},
+                    success: function(d)
+                    {
+                        if(d > 0){
+                            engine.refreshDataTable('modules');
+                        }
+                    }
+                });
+                $(this).dialog('close').dialog('destroy').remove();
+            }
+        );
+    },
+    edit: function(id)
+    {
+        engine.request.post({
+            url: './modules/edit/' + id,
+            data: {id: id},
+            success: function(d)
+            {
+                var bi = t.common.button_save;
+                var buttons = {};
+                buttons[bi] =  function(){
+                    $('#form').submit();
+                };
+                var dialog = engine.dialog({
+                    content: d,
+                    title: t.modules.edit_title,
+                    autoOpen: true,
+                    width: 750,
+                    modal: true,
+                    buttons: buttons
+                });
+
+                $('#components').select2();
+
+                engine.validateAjaxForm('#form', function(d){
+                    if(d.s){
+                        engine.refreshDataTable('modules');
+                        dialog.dialog('close').dialog('destroy').remove();
+                    }
+                });
+            }
+        })
+    }
+};
 /**
  * Created by wg on 08.02.16.
  */
@@ -2764,6 +2745,7 @@ $(document).ready(function(){
     engine.languages.init();
     engine.nav.init();
     engine.plugins.init();
+    engine.modules.init();
     engine.themes.init();
     engine.translations.init();
     engine.mailTemplates.init();

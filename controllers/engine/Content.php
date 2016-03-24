@@ -70,7 +70,7 @@ class Content extends Engine
         if($this->mContent->hasDBError()){
             throw new DbException($this->mContent->getDBErrorMessage());
         }
-
+//        $this->dump($content);die;
         $this->template->assign('content', $content);
         $this->template->assign('subtypes', $this->mContent->getSubtypes($content['types_id']));
         $this->template->assign('form_action', $this->form_action . $id);

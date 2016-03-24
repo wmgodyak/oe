@@ -90,7 +90,7 @@ class ContentTypes extends Engine
             if($ct){
 
                 foreach ($ct as $k=>$sizes_id) {
-                    $this->createRow('content_types_images_sizes', ['types_id' => $s, 'images_sizes_id' => $sizes_id]);
+                    $this->createRow('content_types_images_sizes', ['types_id' => $id, 'images_sizes_id' => $sizes_id]);
                 }
             }
         }
@@ -209,4 +209,12 @@ class ContentTypes extends Engine
     {
         return self::$db->select("select * from content_images_sizes order by id asc")->all();
     }
+
+
+    public function getModules()
+    {
+        return self::$db->select("select controller from modules")->all();
+    }
+
+
 }

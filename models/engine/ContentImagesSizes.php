@@ -42,7 +42,7 @@ class ContentImagesSizes extends Engine
      */
     public function create()
     {
-        $data = $this->request->post('data');
+        $data  = $this->request->post('data');
         $types = $this->request->post('types');
         $this->beginTransaction();
 
@@ -53,19 +53,23 @@ class ContentImagesSizes extends Engine
             return false;
         }
 
-        foreach ($types as $k=>$types_id) {
-            $this->createRow(
-                'content_types_images_sizes',
-                [
-                   'types_id'        => $types_id,
-                   'images_sizes_id' => $images_sizes_id
-                ]
-            );
+        if($types){
 
-            if($this->hasDBError()){
-                $this->rollback();
-                return false;
+            foreach ($types as $k=>$types_id) {
+                $this->createRow(
+                    'content_types_images_sizes',
+                    [
+                        'types_id'        => $types_id,
+                        'images_sizes_id' => $images_sizes_id
+                    ]
+                );
+
+                if($this->hasDBError()){
+                    $this->rollback();
+                    return false;
+                }
             }
+
         }
 
         $this->commit();

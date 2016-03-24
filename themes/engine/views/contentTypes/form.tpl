@@ -18,6 +18,7 @@
             </fieldset>
         </div>
         <div class="col-md-4">
+            {*<pre>{print_r($data)}</pre>*}
             <fieldset>
                 <legend>{$t.common.params}</legend>
                 <div class="form-group">
@@ -38,7 +39,10 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="settings_parent_id" class="col-md-4 control-label">{$t.features.images_sizes}</label>
+                    <label for="settings_parent_id" class="col-md-4 control-label">
+                        {$t.features.images_sizes}
+                        <a href="javascript:;" class="ct-create-images-size"><i class="fa fa-plus-circle"></i> {$t.common.create}</a>
+                    </label>
                     <div class="col-md-8">
                         <select name="ct_images_sizes[]" id="contentImagesSizes" class="form-control" multiple>
                             {foreach $imagesSizes as $item}
@@ -48,18 +52,46 @@
                         <p class="help-block">{$t.features.images_sizes_help}</p>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label for="settings_parent_id" class="col-md-4 control-label">
+                        {$t.contentTypes.modules}
+                    </label>
+                    <div class="col-md-8">
+                        <select name="data[settings][modules][]" id="settingsModules" class="form-control" multiple>
+                            {foreach $modules as $module=>$a}
+                                <optgroup label="{$module}">
+                                    {foreach $a as $k=>$ac}
+                                    <option {if $data.settings.modules && in_array($ac, $data.settings.modules)}selected{/if} value="{$ac}">{$ac}</option>
+                                    {/foreach}
+                                </optgroup>
+                            {/foreach}
+                        </select>
+                        <p class="help-block">{$t.contentTypes.modules_i}</p>
+                    </div>
+                </div>
+                {if $data.parent_id}
+                <div class="form-group">
+                    <div class="col-md-8 col-md-offset-4">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="data[settings][modules_ext]" value="0">
+                                <input {if $data.settings.modules_ext == 1}checked{/if} id="data_settings_modules_ext" type="checkbox" name="data[settings][modules_ext]" value="1"> {$t.contentTypes.modules_ext}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                {/if}
             </fieldset>
         </div>
     </div>
-
+    {if $action == 'edit'}
     <div class="row">
         <div class="col-md-8">
             <fieldset>
                 <legend>{$t.features.label_settings}</legend>
-                {if !empty($features)}
                 <div class="form-group">
                     <label for="settings_parent_id" class="col-md-4 control-label">{$t.features.select_item}</label>
-                    <div class="col-md-8">
+                    <div class="col-md-6">
                         <select name="features" id="features" class="form-control">
                             <option value="">{$t.common.select}</option>
                             {foreach $features as $item}
@@ -67,16 +99,15 @@
                             {/foreach}
                         </select>
                     </div>
+                    <label class="col-md-2 control-label" style="text-align: left"><a data-id="{$data.id}" href="./features/create" target="_blank" class="ct-add-features"><i class="fa fa-plus-circle"></i> {$t.common.create}</a></label>
                 </div>
                 <div id="content_features"></div>
-                {/if}
             </fieldset>
         </div>
         <div class="col-md-4">
-
         </div>
     </div>
-
+    {/if}
     <div class="row">
         <div class="col-md-12">
             <fieldset>
@@ -96,6 +127,27 @@
      <input type="hidden" id="subTypesID" name="data[id]" value="{$data.id}">
 </form>
 <script>var selected_features = {json_encode($data.features)}</script>
+
+{literal}
+    <script type="text/template" id="modules" >
+        <table class="table table-bordered">
+            <tr>
+                <th>#</th>
+                <th>Модуль</th>
+                <th>Тип</th>
+                <th>Видалити</th>
+            </tr>
+            <% for(var i=0;i < items.length; i++) { %>
+            <tr id="cf-sf-<%- items[i].id %>">
+                <td><%- items[i].id %></td>
+                <td><%- items[i].name %></td>
+                <td><%- items[i].type %></td>
+                <td><a class="b-ct-delete-features" data-id="<%- items[i].id %>" title="Видалити" href="javascript:;"><i class="fa fa-remove"></i></a></td>
+            </tr>
+            <% } %>
+        </table>
+    </script>
+{/literal}
 
 {literal}
     <script type="text/template" id="ftList" >
@@ -142,4 +194,29 @@
         var c = cm.getValue();
         $("textarea#template").html(c);
     });
+</script>
+
+<script type="text/template" id="sizesCreate" >
+    <form action="./contentImagesSizes/process" method="post" id="formCreateSize" class="form-horizontal">
+        <div class="form-group">
+            <label for="data_size" class="col-sm-3 control-label">{$t.contentImagesSizes.size}</label>
+            <div class="col-sm-9">
+                <input name="data[size]" id="data_size"  class="form-control" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="data_width" class="col-sm-3 control-label">{$t.contentImagesSizes.width}</label>
+            <div class="col-sm-9">
+                <input name="data[width]" id="data_width"  class="form-control" required onchange="this.value = parseInt(this.value); if (this.value == 'NaN') this.value=0">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="data_height" class="col-sm-3 control-label">{$t.contentImagesSizes.height}</label>
+            <div class="col-sm-9">
+                <input name="data[height]" id="data_height"  class="form-control" required onchange="this.value = parseInt(this.value); if (this.value == 'NaN') this.value=0">
+            </div>
+        </div>
+        <input type="hidden" name="token" value="{$token}">
+        <input type="hidden" name="action" value="{$action}">
+    </form>
 </script>

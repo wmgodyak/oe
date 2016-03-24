@@ -104,7 +104,7 @@ class Nav extends Engine
           join content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
           where ni.nav_id={$nav_id}
           order by abs(ni.position) asc
-          ")->all();
+          " )->all();
     }
 
     private function sortItems($nav_id)

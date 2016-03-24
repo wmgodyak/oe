@@ -82,6 +82,10 @@ class Content extends Engine
             return $d;
         }
 
+        if(!empty($d['settings'])){
+            $d['settings'] = unserialize($d['settings']);
+        }
+
         if(empty($d['published'])){
             $d['published'] = date('d.m.Y');
         } else{
@@ -148,6 +152,12 @@ class Content extends Engine
     public function update($id)
     {
         $content = $this->request->post('content');
+        if(isset($content['settings'])) {
+            $content['settings'] = serialize($content['settings']);
+        } else{
+            $content['settings'] = null;
+        }
+
         $info = $this->request->post('content_info');
 
         FormValidation::setRule(['name', 'url'], FormValidation::REQUIRED);
@@ -169,6 +179,7 @@ class Content extends Engine
             $content['published'] = date('Y-m-d');
         }
 
+        $content['updated'] = $this->now();
         $this->updateRow('content', $id, $content);
 
         if($this->hasDBError()){

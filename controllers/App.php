@@ -126,14 +126,23 @@ class App extends Controller
 
             //assign page to template
             $this->template->assign('page', $this->page);
-
-            // для парсера тест todo, прибрати
-            $nav = new Nav();
-            $this->template->assign('nav_top', $nav->get('top'));
         }
 
         // assign translations to template
         $this->template->assign('t', $this->t());
+
+
+        $template_path = $this->settings['themes_path']
+            . $this->settings['app_theme_current'] .'/'
+            . $this->settings['app_views_path']
+            . 'content_types/';
+        $ds = $this->template->fetch($template_path . $this->page['template']);
+
+        $this->response->body($ds);
+
+        if($this->page['id'] == $this->settings['page_404']){
+            $this->response->sendError(404);
+        }
     }
 
     public function e404()
@@ -173,44 +182,5 @@ class App extends Controller
         return Translations::getInstance($this->languages_id)->get($key);
     }
 
-    /**
-     * @return mixed
-     */
-    public function index()
-    {
-        $template_path = $this->settings['themes_path']
-                       . $this->settings['app_theme_current'] .'/'
-                       . $this->settings['app_views_path']
-                       . 'content_types/';
-        $ds = $this->template->fetch($template_path . $this->page['template']);
-
-        $this->response->body($ds);
-
-        if($this->page['id'] == $this->settings['page_404']){
-            $this->response->sendError(404);
-        }
-    }
-
-    /**
-     *
-     */
-    public function create(){}
-
-    /**
-     * @param $id
-     * @return mixed
-     */
-    public function edit($id){}
-
-    /**
-     * @param $id
-     * @return mixed
-     */
-    public function process($id){}
-
-    /**
-     * @param $id
-     * @return mixed
-     */
-    public function delete($id){}
+    public function index(){}
 }

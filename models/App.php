@@ -8,6 +8,7 @@
 
 namespace models;
 
+use controllers\core\Event;
 use controllers\core\Session;
 use models\app\Images;
 use models\core\Model;
@@ -121,10 +122,71 @@ class App extends Model
         $page['author'] = self::$db
             ->select("select id,name,surname,email,phone from users where id={$page['owner_id']}")
             ->row();
+
+        // modules
+        if(!empty($page['settings'])){
+            $page['settings'] = unserialize($page['settings']);
+        }
+
+        if(!isset($page['settings']['modules'])){
+            $page['settings']['modules'] = [];
+        }
+
+        $s = $this->getContentTypeSettings($page['subtypes_id']);
+
+        if($s){
+            $page['settings']['modules'] = array_merge($s['modules'], $page['settings']['modules']);
+        }
+
+        if(!empty($page['settings']['modules'])){
+            foreach ($page['settings']['modules'] as $k=>$module) {
+                $this->callModule($module);
+            }
+        }
+
         $this->page = $page;
 
 //        echo $this->getDBErrorMessage();
 //        echo '<pre>';print_r($page);die;
+    }
+
+    private function callModule($module)
+    {
+        $a = explode('::', $module);
+        $controller = $a[0]; $action = $a[1];
+
+        $ns = '\controllers\modules\\';
+
+        $c  = $ns . $controller;
+        $path = str_replace("\\", "/", $c);
+
+        if(!file_exists(DOCROOT . $path . '.php')) {
+            die('Controller not found:' . DOCROOT . $path . '.php');
+        }
+
+        $controller = new $c;
+
+        if(!is_callable(array($controller, $action))){
+            die('Action '. $action .'is not callable: ' . DOCROOT . $path . '.php');
+        }
+
+        Event::fire($c, 'before'.ucfirst($action));
+        call_user_func(array($controller, 'before'));
+        call_user_func(array($controller, $action));
+        Event::fire($c, 'after' . ucfirst($action));
+
+    }
+
+    private function getContentTypeSettings($types_id)
+    {
+        $data = self::$db->select("select parent_id, settings from content_types where id={$types_id} limit 1")->row();
+        if(empty($data['settings'])) return null;
+        $s = unserialize($data['settings']);
+        if( $data['parent_id'] > 0 && isset($s['modules_ext']) && $s['modules_ext'] == 1){
+            $ps = $this->getContentTypeSettings($data['parent_id']);
+            $s['modules'] = array_merge($ps['modules'], $s['modules']);
+        }
+        return $s;
     }
 
     public function getPage()
