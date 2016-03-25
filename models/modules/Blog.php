@@ -57,6 +57,13 @@ class Blog extends Content
     {
         $res = [];
         $this->clearQuery();
+
+        $tag = $this->request->param('tag');
+        if($tag){
+            $this->join("tags t on t.tag = '{$tag}'");
+            $this->join("content_tags ct on ct.tags_id=t.id and ct.content_id=c.id");
+        }
+
         if($id <> $this->page_id){
             $this->join("content_relationship cr on cr.content_id=c.id and cr.categories_id={$id} ");
         }
@@ -127,6 +134,16 @@ class Blog extends Content
         return $r[0];
     }
 
-    public function getTags($post_id){}
+    public function getTags($post_id)
+    {
+        return self::$db
+            ->select("
+              select ct.id, t.tag
+              from content_tags ct
+              join tags t on t.id=ct.tags_id
+              where ct.content_id={$post_id} and ct.languages_id = {$this->languages_id}
+            ")
+            ->all();
+    }
     public function getComments($post_id){}
 }

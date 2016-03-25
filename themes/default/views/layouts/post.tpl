@@ -37,6 +37,13 @@
                 <div class="share">
                     <img src="{$theme_url}assets/images/share.png" alt="share" />
                 </div>
+                {if $post.tags|count}
+                <div class="share">
+                    {foreach $post.tags as $tag}
+                        <a href="{$blog_page_id};tag={$tag.tag}">{$tag.tag}</a>
+                    {/foreach}
+                </div>
+                {/if}
                 <div class="other-posts">
                     {if $post.prev_post}
                     <a href="{$post.prev_post.id}" class="prev">

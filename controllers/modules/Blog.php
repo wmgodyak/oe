@@ -35,6 +35,8 @@ class Blog extends App
         parent::__construct();
 
         $this->blog = new \models\modules\Blog(self::CAT_TYPE_ID, self::POST_TYPE_ID, $this->page_id);
+
+        $this->template->assign('blog_page_id', $this->page_id);
     }
 
     public function index()
@@ -76,10 +78,10 @@ class Blog extends App
 
         $post['prev_post'] = $this->blog->getPrevPost($id);
         $post['next_post'] = $this->blog->getNextPost($id);
+        $post['tags']      = $this->blog->getTags($id);
 
         $this->template->assign('post', $post);
     }
 
-    public function tags($post_id){}
     public function comments($post_id){}
 }
