@@ -8,6 +8,8 @@
 
 namespace controllers\core;
 
+use controllers\core\exceptions\Exception;
+
 defined('CPATH') or die();
 
 class Request {
@@ -24,22 +26,17 @@ class Request {
     const METHOD_OPTIONS  = 'OPTIONS';
     const METHOD_OVERRIDE = '_METHOD';
 
-    private $param = array();
+    private $params = array();
 
     private $mode;
 
     private function __construct($mode)
     {
         if(!$mode) {
-            echo '<pre>';
-            throw new \Exception('Wrong mode');
+            throw new Exception('Wrong request mode');
         }
 
         $this->mode = $mode;
-
-        foreach ($_REQUEST as $k=>$v) {
-            $this->param[$k] = $v;
-        }
     }
 
     private function __clone(){}
@@ -67,12 +64,12 @@ class Request {
     public function get($name='', $type = null)
     {
         $val = null;
-        if(isset($this->param[$name])){
-            $val = $this->param[$name];
+        if(isset($_GET[$name])){
+            $val = $_GET[$name];
         }
         // all
         if($name ==''){
-            $val = $this->param;
+            $val = $_GET;
         }
 
         if(!empty($type) && is_array($val))
@@ -88,18 +85,6 @@ class Request {
             return !empty($val);
 
         return $val;
-    }
-
-    /**
-     * @param $key
-     * @param $val
-     * @return $this
-     */
-    public function setParam($key, $val)
-    {
-        $this->param[$key] = $val;
-
-        return $this;
     }
 
     /**
@@ -135,11 +120,14 @@ class Request {
      */
     public function param($key='*', $val=null)
     {
-        if($val !== null) $this->param[$key] = $val;
+        if($val !== null) {
+            $this->params[$key] = $val;
+            return $this;
+        }
 
-        if($key == '*') return $this->param;
+        if($key == '*') return $this->params;
         else {
-            return isset($this->param[$key]) ? $this->param[$key] : null;
+            return isset($this->params[$key]) ? $this->params[$key] : null;
         }
     }
 

@@ -59,14 +59,14 @@ class PostsCategories extends Plugin
         if(! $this->request->isXhr()) die;
 
         $items = array();
-        $parent_id = $this->request->get('id');
+        $parent_id = $this->request->param('id');
         foreach ($this->categories->getItems($parent_id) as $item) {
             $item['children'] = $item['isfolder'] == 1;
             if( $parent_id > 0 ){
                 $item['parent'] = $parent_id;
             }
             $item['text'] .= " #{$item['id']}";
-            $item['a_attr'] = ['id'=> $item['id'], 'href' => './content/posts/index/' . $item['id']];
+            $item['a_attr'] = ['id'=> $item['id'], 'href' => './content/post/index/' . $item['id']];
             $item['li_attr'] = [
                 'id'=> 'li_'.$item['id'],
                 'class' => 'status-' . $item['status'],

@@ -17,7 +17,6 @@ use controllers\core\Template;
 use controllers\engine\Plugins;
 use models\app\Content;
 use models\app\Images;
-use models\app\Nav;
 use models\app\Translations;
 
 if ( !defined("CPATH") ) die();
@@ -83,6 +82,9 @@ class App extends Controller
         if(!self::$initialized){
             $this->init();
         }
+
+        $this->page = $this->template->getVars('page');
+        $this->languages_id = $this->page['languages_id'];
     }
 
     private function init()
@@ -104,28 +106,33 @@ class App extends Controller
             }
 
             // init page
-            $args = $this->request->get('args');
-
+            $args = $this->request->param();
             $app = new \models\App($args);
-            $this->page = $app->getPage();
+            $page = $app->getPage();
 
-            if(! $this->page){
+            Request::getInstance()->param('page', $page);
+            if(! $page){
                 $this->e404();
             }
 
-            if($this->page['status'] != 'published'){
+            if($page['status'] != 'published'){
                 $a = Session::get('engine.admin');
                 if( ! $a){
                     $this->e404();
                 }
             }
 
-            // set language
-            $this->languages_id = $this->page['languages_id'];
-            $this->request->setParam('languages_id', $this->languages_id);
+            $this->languages_id = $page['languages_id'];
+            Request::getInstance()->param('languages_id', $this->languages_id);
 
             //assign page to template
-            $this->template->assign('page', $this->page);
+            $this->template->assign('page', $page);
+
+            if(!empty($page['settings']['modules'])){
+                foreach ($page['settings']['modules'] as $k=>$module) {
+                    $app->callModule($module);
+                }
+            }
         }
 
         // assign translations to template
@@ -135,12 +142,13 @@ class App extends Controller
         $template_path = $this->settings['themes_path']
             . $this->settings['app_theme_current'] .'/'
             . $this->settings['app_views_path']
-            . 'content_types/';
-        $ds = $this->template->fetch($template_path . $this->page['template']);
+            . 'layouts/';
+
+        $ds = $this->template->fetch($template_path . $page['template']);
 
         $this->response->body($ds);
 
-        if($this->page['id'] == $this->settings['page_404']){
+        if($page['id'] == $this->settings['page_404']){
             $this->response->sendError(404);
         }
     }

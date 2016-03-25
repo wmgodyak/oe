@@ -1,10 +1,11 @@
 var engine = {
-    require: function(src)
+    require: function(src, path)
     {
+        path = typeof path == 'undefined' ? '/themes/engine/assets/js/bootstrap/' : path;
         var sc = document.createElement('script');
         sc.type = 'text/javascript';
         sc.async = true;
-        sc.src = '/themes/engine/assets/js/bootstrap/' + src + '.js';
+        sc.src = path + src + '.js';
         var s = document.getElementById('componentScript');
         s.parentNode.insertBefore(sc, s);
     },
@@ -387,7 +388,7 @@ var engine = {
             {
                 var $tree = $('#' + id);
                 if($tree.length == 0) {
-                    //console.error('Tree #' + id + ' not found');
+                    console.error('Tree #' + id + ' not found');
                     return ;
                 }
 
@@ -1109,7 +1110,7 @@ engine.content = {
             case 'uk':
                 transl = {
                     'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'e', 'ж': 'zh',
-                    'з': 'z', 'и': 'y', 'й': 'j', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'і' : 'i',
+                    'з': 'z', 'и': 'y', 'й': 'j', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'і' : 'i', 'ї' : 'i',
                     'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h',
                     'ц': 'c', 'ч': 'ch', 'ш': 'sh', 'щ': 'sh', 'ъ': space, 'ы': 'y', 'ь': space, 'э': 'e', 'ю': 'yu', 'я': 'ya',
                     ' ': space, '_': space, '`': space, '~': space, '!': space, '@': space,
@@ -1123,7 +1124,7 @@ engine.content = {
             case 'ru':
                 transl = {
                     'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'e', 'ж': 'zh',
-                    'з': 'z', 'и': 'i', 'й': 'j', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n',
+                    'з': 'z', 'и': 'i', 'й': 'j', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'ї' : 'i',
                     'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h',
                     'ц': 'c', 'ч': 'ch', 'ш': 'sh', 'щ': 'sh', 'ъ': space, 'ы': 'y', 'ь': space, 'э': 'e', 'ю': 'yu', 'я': 'ya',
                     ' ': space, '_': space, '`': space, '~': space, '!': space, '@': space,

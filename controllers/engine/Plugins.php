@@ -250,10 +250,10 @@ class Plugins extends Engine
     {
         $request = Request::getInstance();
 
-        $controller  = $request->get('controller');
-        $action      = $request->get('action');
-        $args        = $request->get('args');
-        $ns          = $request->get('namespace');
+        $controller  = $request->param('controller');
+        $action      = $request->param('action');
+        $args        = $request->param('args');
+        $ns          = $request->param('namespace');
         $ns = str_replace('\\','/', $ns);
         $ns = str_replace('controllers/engine/', '', $ns);
         $controller = $ns . $controller;

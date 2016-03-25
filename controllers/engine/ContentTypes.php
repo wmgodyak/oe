@@ -30,8 +30,8 @@ class ContentTypes extends Engine
     private $contentTypes;
     private $path;
 
-    const DIR = 'content_types/';
-    const PATH = 'controllers/engine/content_types/';
+    const DIR = 'layouts/';
+    const PATH = 'controllers/engine/layouts/';
     const EXT = '.tpl';
 
     public function __construct()

@@ -37,11 +37,19 @@ class Nav extends App
 
     public function top()
     {
-        $this->template->assign('nav_top', $this->nav->get('top'));
+        $nav = $this->template->getVars('nav');
+        if(! $nav) $nav = [];
+
+        $nav['top'] = $this->nav->get('top');
+        $this->template->assign('nav', $nav);
     }
 
     public function bottom()
     {
-        $this->template->assign('nav_bottom', $this->nav->get('bottom'));
+        $nav = $this->template->getVars('nav');
+        if(! $nav) $nav = [];
+
+        $nav['bottom'] = $this->nav->get('bottom');
+        $this->template->assign('nav', $nav);
     }
 }

@@ -70,7 +70,7 @@ class PagesTree extends Plugin
         if(! $this->request->isXhr()) die;
 
         $items = array();
-        $parent_id = $this->request->get('id');
+        $parent_id = $this->request->get('id','i');
         foreach ($this->tree->getItems($parent_id) as $item) {
             $item['children'] = $item['isfolder'] == 1;
             if( $parent_id > 0 ){

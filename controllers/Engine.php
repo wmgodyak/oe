@@ -75,8 +75,8 @@ abstract class Engine extends Controller
         $this->languages = new Languages();
         $this->languages_id = $this->languages->getDefault('id');
 
-        $controller  = $this->request->get('controller');
-        $action      = $this->request->get('action');
+        $controller  = $this->request->param('controller');
+        $action      = $this->request->param('action');
 
         $this->request = Request::getInstance();
 
@@ -90,7 +90,7 @@ abstract class Engine extends Controller
         $theme = $this->settings['engine_theme_current'];
         $this->template = Template::getInstance($theme);
 
-//        echo $this->request->get('controller') ,'.', $this->request->get('action');die;
+//        echo $this->request->param('controller') ,'.', $this->request->param('action');die;
         if(
             (
                 engine\Admin::id() == null ||
@@ -111,8 +111,8 @@ abstract class Engine extends Controller
     {
         self::$initialized = true;
 
-        $controller = $this->request->get('controller');
-        $action = $this->request->get('action');
+        $controller = $this->request->param('controller');
+        $action = $this->request->param('action');
         $controller = lcfirst($controller);
 
         $this->template->assign('base_url',    APPURL . 'engine/');

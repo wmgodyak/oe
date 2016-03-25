@@ -29,6 +29,8 @@ class Images extends Model
             ->select("select path, image from content_images where content_id={$content_id} order by abs(position) asc limit 1")
             ->row();
 
+        if(empty($image)) return null;
+
         if(!$size) return $image;
 
         return $image['path'] . $size .'/'. $image['image'];
@@ -51,6 +53,8 @@ class Images extends Model
               order by abs(position) asc limit {$start}, {$num}
               ")
             ->all();
+
+        if(empty($items)) return null;
 
         if(!$size) return $items;
 

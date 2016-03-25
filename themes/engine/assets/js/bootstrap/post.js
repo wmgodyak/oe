@@ -1,11 +1,11 @@
 /**
  * Created by wg on 29.02.16.
  */
-engine.posts = {
+engine.post = {
     init: function()
     {
-        engine.require('content');
-
+        //engine.require('content');
+        engine.require('bootstrap-tagsinput.min', '/themes/engine/assets/js/vendor/');
 
         $(document).on('click', '.b-posts-delete', function(){
             var id = $(this).data('id');
@@ -24,7 +24,7 @@ engine.posts = {
 
         $(document).on('click', '.b-posts-categories-create', function(){
             //self.location.href= "content/postsCategories/create";
-            engine.posts.categories.create(0);
+            engine.post.categories.create(0);
         });
 
         $('#categories').select2();
@@ -33,14 +33,14 @@ engine.posts = {
         var $tree = new engine.tree('postsCategories');
         $tree
             .setUrl('./plugins/postsCategories/categories')
-            .setContextMenu('create', t.posts.tree_create, 'fa-file', function(o){
+            .setContextMenu('create', t.post.tree_create, 'fa-file', function(o){
                     var node_id= o.reference[0].id;
-                    engine.posts.categories.create(node_id);
+                    engine.post.categories.create(node_id);
                 }
             )
             .setContextMenu('edit', t.postsCategories.tree_edit, 'fa-pencil', function(o){
                 var node_id= o.reference[0].id;
-                engine.posts.categories.edit(node_id);
+                engine.post.categories.edit(node_id);
                 }
             )
             .setContextMenu('del', t.postsCategories.tree_delete, 'fa-remove', function(o){
@@ -73,6 +73,7 @@ engine.posts = {
                 });
             })
             .init();
+
     },
     categories: {
         before: function()
@@ -131,7 +132,7 @@ engine.posts = {
 
                 engine.validateAjaxForm('#postCategoriesForm', function(d){
                     if(d.s){
-                        dialog.dialog('destroy').remove()
+                        dialog.dialog('destroy').remove();
                         $tree.jstree('refresh');
                     } else {
                         engine.showFormErrors('#postCategoriesForm', d.i);
@@ -166,7 +167,7 @@ engine.posts = {
 
                 engine.validateAjaxForm('#postCategoriesForm', function(d){
                     if(d.s){
-                        dialog.dialog('destroy').remove()
+                        dialog.dialog('destroy').remove();
                         $tree.jstree('refresh');
                     } else {
                         engine.showFormErrors('#postCategoriesForm', d.i);
@@ -181,5 +182,5 @@ engine.posts = {
 };
 
 $(document).ready(function(){
-   engine.posts.init();
+   engine.post.init();
 });

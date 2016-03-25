@@ -124,37 +124,62 @@ class Parser extends Model
     public function makeFriendlyUrl()
     {
         $def_lang = self::$db->select("select id,code from languages where is_main=1 limit 1")->row();
-        $languages_id = $this->request->get('languages_id');
+        $languages_id = $this->request->param('languages_id');
         $self = $this;
 //        $pattern = '@(href|action)="([^\"]*)"@siU'; // ok
-        $pattern = '@(href|action)="([0-9]+)?;??(filter/[a-z0-9_\-]+=[a-z0-9_\-;,=]+)??;??([a-z]+=[a-z0-9а-яА-ЯіїЇІ_\-]+)??;??([a-z]+=[a-z0-9а-яА-ЯіїЇІ_\-]+)??;??([a-z]+=[a-z0-9а-яА-ЯіїЇІ_\-]+)??;??([a-z]+=[a-z0-9а-яА-ЯіїЇІ_\-]+)?"@siu';
+        //$pattern = '@(href|action)="([0-9]+)?;??(filter/[a-z0-9_\-]+=[a-z0-9_\-;,=]+)??;??([a-z]+=[a-z0-9а-яА-ЯіїЇІ_\-]+)??;??([a-z]+=[a-z0-9а-яА-ЯіїЇІ_\-]+)??;??([a-z]+=[a-z0-9а-яА-ЯіїЇІ_\-]+)??;??([a-z]+=[a-z0-9а-яА-ЯіїЇІ_\-]+)??([\?a-z]+=[a-z0-9а-яА-ЯіїЇІ_\-]+)??([\&a-z]+=[a-z0-9а-яА-ЯіїЇІ_\-]+)?"@isu';
+//        $pattern = '@(href|action)="([0-9]+)?;??(filter/[a-z0-9_\-]+=[a-z0-9_\-;,=]+)??([a-z]+=[a-z0-9а-яА-ЯіїЇІ_\-]+)?"@isu';
+        $pattern = '@(href|action)="([0-9]+)?;??(filter/[a-z0-9_\-]+=[a-z0-9_\-;,=]+)??(([?&a-z]+=[a-z0-9а-яА-ЯіїЇІ_\-]+)*)?"@isu';
         $ds = preg_replace_callback
         (
             $pattern,
             function($matches) use ($self, $languages_id, $def_lang)
             {
-
                 if(!isset($matches[1])) return $matches[0];
 
+                if(strpos($matches[0], '?') !== FALSE){
+                    $c = count($matches); $c --;
+                    unset($matches[$c]);
+                }
+
                 $url = '';
+                $a = [];
 
                 foreach ($matches as $k=>$v) {
-                    if($k == 0) continue;
-                    if(empty($v)) {
+
+                    if($k == 0){
+
+                        continue;
+                    }elseif(empty($v)) {
+
                         unset($matches[$k]);
                         continue;
-                    };
+                    } elseif(in_array($v, $a)){
+                        unset($matches[$k]);
+                    }
+
+                    $a[] = $v;
                 }
+
+//                echo '<pre>'; print_r($matches); echo '</pre>';
 
                 $action = $matches[1];
 
+                if(!isset($matches[2])) return $matches[0];
+
                 $id = (int)$matches[2];
                 $url .= $self->getUrlById($id, $languages_id, $def_lang);
+
                 foreach($matches as $k=>$v){
                     if($k > 2){
                         $v = preg_replace('/p=([0-9]+)/u','/page/$1', $v);
+                        $s = substr($v,0,1);
+                        if($s == '?' || $s == '&'){
+                            $url .= "$v";
+                        } else {
+                            $url .= "/$v";
+                        }
 
-                        $url .= "/$v";
                     }
                 }
                 $url = str_replace('//','/', $url);

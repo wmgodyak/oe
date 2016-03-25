@@ -9,10 +9,8 @@
 namespace models;
 
 use controllers\core\Event;
-use controllers\core\Session;
 use models\app\Images;
 use models\core\Model;
-use models\engine\Languages;
 
 defined("CPATH") or die();
 
@@ -72,9 +70,11 @@ class App extends Model
             $this->languages_id = $this->languages->getDefault('id');
         }
 
+        $url = isset($args['url']) ? $args['url'] : '';
+
         // обріжу останній слеш, якщо є
-        if(substr($args['url'],-1,1) == '/') {
-            $args['url'] = substr($args['url'], 0,-1);
+        if(isset($url) && substr($url,-1,1) == '/') {
+            $url = substr($url, 0,-1);
         }
 
         // todo правила редиректів
@@ -85,7 +85,7 @@ class App extends Model
                 select c.*,i.languages_id, i.name,i.title,i.url,i.keywords, i.description,i.content
                 from content_info i
                 join content c on c.id=i.content_id
-                where i.url = '{$args['url']}' and i.languages_id={$this->languages_id}
+                where i.url = '{$url}' and i.languages_id={$this->languages_id}
                 limit 1
                 ")
             ->row();
@@ -120,7 +120,7 @@ class App extends Model
 
         // author
         $page['author'] = self::$db
-            ->select("select id,name,surname,email,phone from users where id={$page['owner_id']}")
+            ->select("select id,name,surname,email,phone,avatar from users where id={$page['owner_id']}")
             ->row();
 
         // modules
@@ -134,14 +134,8 @@ class App extends Model
 
         $s = $this->getContentTypeSettings($page['subtypes_id']);
 
-        if($s){
+        if(!empty($s['modules'])){
             $page['settings']['modules'] = array_merge($s['modules'], $page['settings']['modules']);
-        }
-
-        if(!empty($page['settings']['modules'])){
-            foreach ($page['settings']['modules'] as $k=>$module) {
-                $this->callModule($module);
-            }
         }
 
         $this->page = $page;
@@ -150,7 +144,7 @@ class App extends Model
 //        echo '<pre>';print_r($page);die;
     }
 
-    private function callModule($module)
+    public function callModule($module)
     {
         $a = explode('::', $module);
         $controller = $a[0]; $action = $a[1];
@@ -183,6 +177,7 @@ class App extends Model
         if(empty($data['settings'])) return null;
         $s = unserialize($data['settings']);
         if( $data['parent_id'] > 0 && isset($s['modules_ext']) && $s['modules_ext'] == 1){
+            if(!isset($s['modules'])) $s['modules'] = [];
             $ps = $this->getContentTypeSettings($data['parent_id']);
             $s['modules'] = array_merge($ps['modules'], $s['modules']);
         }

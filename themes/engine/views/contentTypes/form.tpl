@@ -114,7 +114,7 @@
                 <legend>{$t.contentTypes.template_src}</legend>
                 <div class="form-group">
                     <div class="col-md-12">
-                        <textarea name="template" id="template" style="width: 100%; height: 500px;">{$data.template}</textarea>
+                        <textarea name="template" id="template" style="width: 100%; height: 900px;">{$data.template}</textarea>
                     </div>
                 </div>
             </fieldset>

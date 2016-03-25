@@ -1,3 +1,4 @@
+{if $nav.top}
 <header class="navbar navbar-inverse {if $page.id==1}hero{else}normal{/if}" role="banner">
     <div class="container">
         <div class="navbar-header">
@@ -10,7 +11,7 @@
         </div>
         <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
             <ul class="nav navbar-nav navbar-right">
-                {foreach $nav_top as $item}
+                {foreach $nav.top as $item}
                 <li {if $item.isfolder}class="dropdown"{/if}>
                     <a href="{$item.id}" title="{$item.title}" {if $item.isfolder}class="dropdown-toggle" data-toggle="dropdown"{/if}>
                         {$item.name} {if $item.isfolder}<b class="caret"></b>{/if}
@@ -28,3 +29,4 @@
         </nav>
     </div>
 </header>
+{/if}

@@ -38,7 +38,13 @@ class Route
         $namespace = ''; $controller = ''; $action = 'index'; $params = array();
 
         $uri = self::protect($_SERVER['REQUEST_URI']);
+
         $uri = urldecode($uri);
+        if(strpos($uri, '?')){
+            $a = explode('?', $uri);
+            $uri = $a[0];
+        }
+
         self::getRoutes();
         $found_route = false;
         foreach (self::$rules as $route) {
@@ -98,11 +104,15 @@ class Route
         $mode = strpos($namespace, 'engine') !== FALSE ? 'engine' : 'app';
 
         Request::getInstance($mode)
-            ->setParam('namespace',  $namespace)
-            ->setParam('controller', $controller)
-            ->setParam('action',     $action)
-            ->setParam('args',       $params);
+            ->param('namespace',  $namespace)
+            ->param('controller', $controller)
+            ->param('action',     $action);
 
+        Request::getInstance()->param('args', $params);
+
+        foreach ($params as $k=>$v) {
+            Request::getInstance()->param($k, $v);
+        }
 
 
         $c  = $namespace . $controller;

@@ -18,7 +18,7 @@ use helpers\bootstrap\Link;
 defined("CPATH") or die();
 
 /**
- * Class Posts
+ * Class Post
  * @name Статті
  * @icon fa-pencil
  * @author Volodymyr Hodiak
@@ -26,11 +26,11 @@ defined("CPATH") or die();
  * @rang 300
  * @package controllers\engine\content_types
  */
-class Posts extends Content
+class Post extends Content
 {
     public function __construct()
     {
-        $this->type = 'posts';
+        $this->type = 'post';
 
         parent::__construct();
     }
@@ -79,8 +79,11 @@ class Posts extends Content
             ->join("content_types ct on ct.type = '{$this->type}' and ct.id=c.types_id")
             -> join("content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}")
             -> join('users u on u.id=c.owner_id')
-            -> where(" c.parent_id = {$parent_id} and c.status in ('published', 'hidden')")
-            -> execute();
+            -> where("c.status in ('published', 'hidden')");
+         if($parent_id > 0){
+            $t->join("content_relationship cr on cr.content_id=c.id and cr.categories_id={$parent_id}");
+         }
+        $t-> execute();
 
         $res = array();
         foreach ($t->getResults(false) as $i=>$row) {

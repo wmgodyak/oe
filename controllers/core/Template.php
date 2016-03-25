@@ -7,6 +7,8 @@
 
 namespace controllers\core;
 
+use controllers\core\exceptions\Exception;
+
 defined("CPATH") or die();
 
 require_once DOCROOT. "vendor/smarty/Smarty.class.php";
@@ -113,6 +115,33 @@ class Template
         return $this;
     }
 
+    /**
+     * @param null $varname
+     * @param null $_ptr
+     * @param bool $search_parents
+     * @return string
+     */
+    public function getVars($varname = null, $_ptr = null, $search_parents = true)
+    {
+        return $this->smarty->getTemplateVars($varname, $_ptr, $search_parents);
+    }
+
+    /**
+     * @param $varname
+     * @param $value
+     * @return $this
+     * @throws Exception
+     */
+    public function assignToVar($varname, $name, $value)
+    {
+        $var = $this->getVars($varname);
+        if(! $var) {
+            throw new Exception("Variable $varname not found!");
+        }
+        $var[$name] = $value;
+        $this->assign($varname, $var);
+        return $this;
+    }
     /**
      * @param null $template
      * @param null $cache_id

@@ -23,7 +23,7 @@ class PostsCategories extends Content
 
     public function __construct()
     {
-        parent::__construct('posts_categories');
+        parent::__construct('posts_cat');
         $this->rs = new ContentRelationship();
     }
 
