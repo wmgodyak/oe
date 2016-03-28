@@ -102,6 +102,9 @@ class Content extends Engine
         $d['owners'] = $this->getOwners();
 
         $d['info']   = $this->getInfo($id);
+        if($d['parent_id'] > 0){
+            $d['parent_url'] = $this->getParentUrl($d['parent_id']);
+        }
 
         // features
 
@@ -118,6 +121,18 @@ class Content extends Engine
             $info[$language['id']] = self::$db
                 ->select("select * from content_info where content_id={$content_id} and languages_id={$language['id']} limit 1")
                 ->row();
+        }
+
+        return $info;
+    }
+    private function getParentUrl($content_id)
+    {
+        $info = [];
+
+        foreach ($this->languages as $language) {
+            $info[$language['id']] = self::$db
+                ->select("select url from content_info where content_id={$content_id} and languages_id={$language['id']} limit 1")
+                ->row('url');
         }
 
         return $info;

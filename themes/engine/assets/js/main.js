@@ -705,7 +705,7 @@ engine.admins = {
             engine.admins.ban($(this).data('id'));
         });
         $(document).on('click', '.b-admins-group-create', function(){
-            engine.admins.group.create();
+            engine.admins.group.create(0);
         });
 
         $(document).on('click','#changeAdminAvatar',function(){
@@ -1047,7 +1047,9 @@ engine.content = {
 
         infoName.each(function(i,e){
             var inp = $('.info-url:eq('+i+')'), title = $('.info-title:eq('+i+')'), lang = $(this).data('lang');
-            var te = title.val() == '';
+            var te = title.val() == '', parent_url = inp.data('parent-url');
+            if(parent_url != '') parent_url += '/';
+
             $(this).keyup(function(){
                 var text = this.value;
 
@@ -1056,7 +1058,7 @@ engine.content = {
                 }
 
                 var url = engine.content.translit(text, lang);
-                inp.val(url);
+                inp.val(parent_url + url);
             });
         });
 
@@ -1112,7 +1114,8 @@ engine.content = {
                     'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'e', 'ж': 'zh',
                     'з': 'z', 'и': 'y', 'й': 'j', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'і' : 'i', 'ї' : 'i',
                     'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h',
-                    'ц': 'c', 'ч': 'ch', 'ш': 'sh', 'щ': 'sh', 'ъ': space, 'ы': 'y', 'ь': space, 'э': 'e', 'ю': 'yu', 'я': 'ya',
+                    'ц': 'c', 'ч': 'ch', 'ш': 'sh', 'щ': 'sh', 'ъ': space, 'ы': 'y', 'ь': space, 'э': 'e',
+                    'ю': 'yu', 'я': 'ya', 'є': 'ye',
                     ' ': space, '_': space, '`': space, '~': space, '!': space, '@': space,
                     '#': space, '$': space, '%': space, '^': space, '&': space, '*': space,
                     '(': space, ')': space, '-': space, '\=': space, '+': space, '[': space,
@@ -1121,20 +1124,20 @@ engine.content = {
                     '?': space, '<': space, '>': space, '№': space
                 };
                 break;
-            case 'ru':
-                transl = {
-                    'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'e', 'ж': 'zh',
-                    'з': 'z', 'и': 'i', 'й': 'j', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'ї' : 'i',
-                    'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h',
-                    'ц': 'c', 'ч': 'ch', 'ш': 'sh', 'щ': 'sh', 'ъ': space, 'ы': 'y', 'ь': space, 'э': 'e', 'ю': 'yu', 'я': 'ya',
-                    ' ': space, '_': space, '`': space, '~': space, '!': space, '@': space,
-                    '#': space, '$': space, '%': space, '^': space, '&': space, '*': space,
-                    '(': space, ')': space, '-': space, '\=': space, '+': space, '[': space,
-                    ']': space, '\\': space, '|': space, '/': space, '.': space, ',': space,
-                    '{': space, '}': space, '\'': space, '"': space, ';': space, ':': space,
-                    '?': space, '<': space, '>': space, '№': space
-                };
-                break;
+            //case 'ru':
+            //    transl = {
+            //        'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'e', 'ж': 'zh',
+            //        'з': 'z', 'и': 'i', 'й': 'j', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'ї' : 'i',
+            //        'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h',
+            //        'ц': 'c', 'ч': 'ch', 'ш': 'sh', 'щ': 'sh', 'ъ': space, 'ы': 'y', 'ь': space, 'э': 'e', 'ю': 'yu', 'я': 'ya',
+            //        ' ': space, '_': space, '`': space, '~': space, '!': space, '@': space,
+            //        '#': space, '$': space, '%': space, '^': space, '&': space, '*': space,
+            //        '(': space, ')': space, '-': space, '\=': space, '+': space, '[': space,
+            //        ']': space, '\\': space, '|': space, '/': space, '.': space, ',': space,
+            //        '{': space, '}': space, '\'': space, '"': space, ';': space, ':': space,
+            //        '?': space, '<': space, '>': space, '№': space
+            //    };
+            //    break;
             default:
                 transl = {
                     ' ': space, '_': space, '`': space, '~': space, '!': space, '@': space,

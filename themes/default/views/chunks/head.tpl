@@ -34,8 +34,13 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="{$theme_url}assets/js/bootstrap/bootstrap.min.js"></script>
     <script src="{$theme_url}assets/js/theme.js"></script>
+    <script src="{$theme_url}assets/js/plugins.js" id="appScr"></script>
+    <script src="{$theme_url}assets/js/app.js" id="appScr"></script>
 
     <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <script>
+        var TOKEN = '{$token}', LANG_ID={$page.languages_id};
+    </script>
 </head>

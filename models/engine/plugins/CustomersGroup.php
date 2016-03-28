@@ -6,13 +6,14 @@
  * Date: 21.01.16 : 17:22
  */
 
+
 namespace models\engine\plugins;
 
 use models\Engine;
 
 defined("CPATH") or die();
 
-class AdminsGroup extends Engine
+class CustomersGroup extends Engine
 {
     public function create($data, $info)
     {
@@ -89,7 +90,7 @@ class AdminsGroup extends Engine
           select g.id, g.isfolder, CONCAT(i.name, ' #', g.id) as text
           from users_group g
           join users_group_info i on i.group_id=g.id and i.languages_id = {$this->languages_id}
-          where g.parent_id={$parent_id} and g.rang >= {$rang}
+          where g.parent_id={$parent_id} and g.rang <= {$rang}
           order by abs(g.position) asc
           ")->all();
     }
@@ -168,5 +169,29 @@ class AdminsGroup extends Engine
         } else {
             $this->commit();
         }
+    }
+
+    /**
+     * @param int $parent_id
+     * @param int $rang
+     * @return array
+     */
+    public function getGroups($parent_id = 0, $rang = 101)
+    {
+        $res = self::$db
+            -> select("
+                  select g.id, i.name, g.isfolder
+                  from users_group g, users_group_info i
+                  where g.parent_id={$parent_id} and g.rang <= {$rang} and i.group_id=g.id and i.languages_id = {$this->languages_id}
+              ")
+            -> all();
+
+        foreach ($res as $k=>$r) {
+            if($r['isfolder']){
+                $res[$k]['items'] = $this->getGroups($r['id'], $rang);
+            }
+        }
+
+        return $res;
     }
 }

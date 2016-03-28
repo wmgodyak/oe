@@ -28,7 +28,6 @@
 
 <div id="info">
     <div class="container">
-        <a href="2;#abourt">about anchor</a>
         {$page.content}
     </div>
 </div>
@@ -38,8 +37,8 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="wrapper clearfix">
-                    <h4>Try React now and take your own project to a whole new level.</h4>
-                    <a href="signup.html" class="button button-small">Sign up free</a>
+                    <h4>Try engine now and take your own project to a whole new level.</h4>
+                    <a href="30" class="button button-small">Sign up free</a>
                 </div>
             </div>
         </div>

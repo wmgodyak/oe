@@ -21,7 +21,7 @@
     <div class="form-group lang-{$lang.code} switch-lang" {if $i>0}style="display:none"{/if}>
         <label for="info_{$lang.id}_url" class="col-md-3 control-label">{$t.content.url}</label>
         <div class="col-md-9">
-            <input type="text" class="form-control info-url" name="content_info[{$lang.id}][url]" id="content_info_{$lang.id}_url" placeholder="[a-z0-9]+ max:160" value="{$content.info[$lang.id].url}">
+            <input type="text" data-parent-url="{$content.parent_url[$lang.id]}" class="form-control info-url" name="content_info[{$lang.id}][url]" id="content_info_{$lang.id}_url" placeholder="[a-z0-9]+ max:160" value="{$content.info[$lang.id].url}">
         </div>
     </div>
     {/foreach}

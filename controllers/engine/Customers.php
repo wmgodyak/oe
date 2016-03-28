@@ -1,60 +1,59 @@
 <?php
 /**
- * OYiEngine 7
- * @author Volodymyr Hodiak mailto:support@otakoi.com
- * @copyright Copyright (c) 2015 Otakoyi.com
- * Date: 25.12.15 : 17:46
+ * OYiEngine 6.x
+ * Company Otakoyi.com
+ * Author wmgodyak mailto:wmgodyak@gmail.com
+ * Date: 13.07.14 9:57
  */
 
 namespace controllers\engine;
-
 use controllers\Engine;
 use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
 use helpers\DateTime;
 use helpers\FormValidation;
 
-defined("CPATH") or die();
+defined('CPATH') or die();
 
 /**
- * Class Admins
- * @name Адміністратори
+ * Class Customers
+ * @name Клієнти
  * @icon fa-users
  * @author Volodymyr Hodiak
  * @version 1.0.0
  * @rang 300
  * @package controllers\engine
  */
-class Admins extends Engine
-{
-    private $admins;
+class Customers extends Engine {
+
+    private $mCustomers;
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->admins = new \models\engine\Admins();
+        $this->mCustomers = new \models\engine\Customers();
     }
 
     /**
-     *
+     * @param null $group_id
      */
     public function index($group_id = null)
     {
-        $this->appendToPanel((string)Button::create($this->t('common.button_create'), ['class' => 'btn-md b-admins-create']));
+        $this->appendToPanel((string)Button::create($this->t('common.button_create'), ['class' => 'btn-md b-customers-create']));
 
         $t = new DataTables();
 
-        $t  -> setId('admins')
-            -> ajaxConfig('admins/items/'.$group_id)
+        $t  -> setId('customers')
+            -> ajaxConfig('customers/items/'.$group_id)
 //            -> setConfig('order', array(0, 'desc'))
             -> th($this->t('common.id'))
-            -> th($this->t('admins.pib'))
-            -> th($this->t('admins.group'))
-            -> th($this->t('admins.email'))
-            -> th($this->t('admins.phone'))
-            -> th($this->t('admins.created'))
-            -> th($this->t('admins.lastlogin'))
+            -> th($this->t('customers.pib'))
+            -> th($this->t('customers.group'))
+            -> th($this->t('customers.email'))
+            -> th($this->t('customers.phone'))
+            -> th($this->t('customers.created'))
+            -> th($this->t('customers.lastlogin'))
             -> th($this->t('common.tbl_func'), '', 'width: 60px')
         ;
 
@@ -71,11 +70,11 @@ class Admins extends Engine
         $t = new DataTables();
         $t  -> table('users u')
             -> get('u.id,u.name, u.surname, ugi.name as user_group, u.email, u.phone, u.created, u.lastlogin, u.status')
-            -> join(" users_group ug on ug.rang > 100 {$and}")
+            -> join(" users_group ug on ug.rang < 100 {$and}")
             -> join(" users_group_info ugi on ugi.group_id=ug.id and ugi.languages_id={$this->languages_id}")
             -> where(" u.group_id=ug.id")
             -> execute();
-        $s = ['ban' => $this->t('admins.status_ban'), 'deleted' => $this->t('admins.status_deleted')];
+        $s = ['ban' => $this->t('customers.status_ban'), 'deleted' => $this->t('customers.status_deleted')];
         $res = array();
         foreach ($t->getResults(false) as $i=>$row) {
             $res[$i][] = $row['id'];
@@ -91,54 +90,52 @@ class Admins extends Engine
             $b[] = (string)Button::create
             (
                 Icon::create(Icon::TYPE_EDIT),
-                ['class' => 'b-admins-edit', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
+                ['class' => 'b-customers-edit', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
             );
             if($row['status'] == 'active'){
                 $b[] =  (string)Button::create
                 (
                     Icon::create(Icon::TYPE_BAN),
-                    ['class' => 'b-admins-ban', 'data-id' => $row['id'], 'title' => $this->t('admins.title_ban')]
+                    ['class' => 'b-customers-ban', 'data-id' => $row['id'], 'title' => $this->t('customers.title_ban')]
                 );
                 $b[] = (string)Button::create
                 (
                     Icon::create(Icon::TYPE_DELETE),
-                    ['class' => 'b-admins-delete', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+                    ['class' => 'b-customers-delete', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
                 );
             } elseif($row['status'] == 'deleted' || $row['status'] == 'ban'){
                 $b[] =  (string)Button::create
                 (
                     Icon::create(Icon::TYPE_RESTORE),
-                    ['class' => 'b-admins-restore', 'data-id' => $row['id'], 'title' => $this->t('admins.title_restore')]
+                    ['class' => 'b-customers-restore', 'data-id' => $row['id'], 'title' => $this->t('customers.title_restore')]
                 );
             }
 
             $b[] = (string)Button::create
             (
                 Icon::create(Icon::TYPE_TRASH),
-                ['class' => 'b-admins-remove', 'data-id' => $row['id'], 'title' => $this->t('common.title_remove')]
+                ['class' => 'b-customers-remove', 'data-id' => $row['id'], 'title' => $this->t('common.title_remove')]
             );
 
             $res[$i][] = implode('', $b);
         }
 
         return $t->renderJSON($res, $t->getTotal());
-
-//        $this->response->body($t->renderJSON($res, count($res), false))->asJSON();
     }
 
     public function create()
     {
         $this->template->assign('action', 'create');
-        $this->template->assign('groups', $this->admins->getGroups());
-        $this->response->body($this->template->fetch('admins/form'))->asHtml();
+        $this->template->assign('groups', $this->mCustomers->getGroups());
+        $this->response->body($this->template->fetch('customers/form'))->asHtml();
     }
 
     public function edit($id)
     {
-        $this->template->assign('groups', $this->admins->getGroups());
-        $this->template->assign('data', $this->admins->getData($id));
+        $this->template->assign('groups', $this->mCustomers->getGroups());
+        $this->template->assign('data', $this->mCustomers->getData($id));
         $this->template->assign('action', 'edit');
-        $this->response->body($this->template->fetch('admins/form'))->asHtml();
+        $this->response->body($this->template->fetch('customers/form'))->asHtml();
     }
 
     public function process($id= null)
@@ -158,14 +155,14 @@ class Admins extends Engine
                     $i = FormValidation::getErrors();
                 } elseif(!empty($data['password']) && ($data['password_c'] != $data['password'])){
                     $i[] = ["data[password_c]" => $this->t('admin_profile.e_pasw_equal')];
-                } elseif($this->admins->issetEmail($data['email'])){
-                    $i[] = ["data[email]" => $this->t('admins.error_email_not_unique')];
+                } elseif($this->mCustomers->issetEmail($data['email'])){
+                    $i[] = ["data[email]" => $this->t('customers.error_email_not_unique')];
                 } else {
                     unset($data['password_c']);
 
-                    if(empty($data['password'])) $data['password'] = $this->admins->generatePassword();
+                    if(empty($data['password'])) $data['password'] = $this->mCustomers->generatePassword();
 
-                    $s = $this->admins->create($data);
+                    $s = $this->mCustomers->create($data);
 
                     if($s > 0 && $this->request->post('notify', 'i') == 1){
                         $this->notify($data);
@@ -180,16 +177,16 @@ class Admins extends Engine
                         $i = FormValidation::getErrors();
                     } elseif(!empty($data['password']) && ($data['password_c'] != $data['password'])){
                         $i[] = ["data[password_c]" => $this->t('admin_profile.e_pasw_equal')];
-                    } elseif($this->admins->issetEmail($data['email'], $id)){
-                        $i[] = ["data[email]" => $this->t('admins.error_email_not_unique')];
+                    } elseif($this->mCustomers->issetEmail($data['email'], $id)){
+                        $i[] = ["data[email]" => $this->t('customers.error_email_not_unique')];
                     } else {
                         unset($data['password_c']);
 
-                        $s = $this->admins->update($id, $data);
+                        $s = $this->mCustomers->update($id, $data);
 
                         if( $s > 0 ){
                             if(isset($_FILES['avatar'])){
-                                $a = $this->admins->changeAvatar($id);
+                                $a = $this->mCustomers->changeAvatar($id);
                             }
                         }
 
@@ -203,8 +200,8 @@ class Admins extends Engine
                 break;
         }
 
-        if(!$s && $this->admins->hasDBError()){
-            echo $this->admins->getDBErrorMessage();
+        if(!$s && $this->mCustomers->hasDBError()){
+            echo $this->mCustomers->getDBErrorMessage();
         }
 
         $this->response->body(['s'=>$s, 'i' => $i, 'a' => isset($a['f']) ? $a['f'] : null])->asJSON();
@@ -220,7 +217,7 @@ class Admins extends Engine
         $mail->addAddress($data['email']);
         $mail->setFrom('no-reply@' . $_SERVER['HTTP_HOST'], $this->t('core.sys_name'));
         $mail->isHTML(false);
-        $tpl = implode("\r\n", $this->t('admins.notify_tpl'));
+        $tpl = implode("\r\n", $this->t('customers.notify_tpl'));
         $this->template->assign('data', $data);
         $mail->Body = $this->template->fetchString($tpl);
         return $mail->send();
@@ -228,21 +225,20 @@ class Admins extends Engine
 
     public function delete($id)
     {
-        return $this->admins->delete($id);
+        return $this->mCustomers->delete($id);
     }
 
     public function remove($id)
     {
-        return $this->admins->remove($id);
+        return $this->mCustomers->remove($id);
     }
 
     public function ban($id)
     {
-        return $this->admins->ban($id);
+        return $this->mCustomers->ban($id);
     }
     public function restore($id)
     {
-        return $this->admins->restore($id);
+        return $this->mCustomers->restore($id);
     }
-
 }

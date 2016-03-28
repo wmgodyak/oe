@@ -11,12 +11,11 @@ namespace controllers\engine\plugins;
 use controllers\Engine;
 use controllers\engine\Plugin;
 use helpers\FormValidation;
-use models\engine\UsersGroup;
 
 defined("CPATH") or die();
 
 /**
- * Class AdminsGroup
+ * Class CustomersGroup
  * @name Групи користувачів
  * @icon fa-users
  * @author Volodymyr Hodiak
@@ -24,9 +23,9 @@ defined("CPATH") or die();
  * @rang 300
  * @package controllers\engine
  */
-class AdminsGroup extends Plugin
+class CustomersGroup extends Plugin
 {
-    private $adminsGroup;
+    private $customersGroup;
 
     public function __construct()
     {
@@ -34,39 +33,37 @@ class AdminsGroup extends Plugin
 
         $this->disallow_actions = ['create', 'edit', 'delete', 'process'];
 
-        $this->adminsGroup = new \models\engine\plugins\AdminsGroup();
+        $this->customersGroup = new \models\engine\plugins\CustomersGroup();
     }
 
     public function index()
     {
-        $this->template->assign('admins_groups_icon', $this->meta['icon']);
-        return $this->template->fetch('plugins/admins/groups/tree');
+        $this->template->assign('customers_groups_icon', $this->meta['icon']);
+        return $this->template->fetch('customers/groups/tree');
     }
 
     public function create($parent_id=0)
     {
         $this->template->assign('action', 'create');
         $this->template->assign('data', ['parent_id' => $parent_id]);
-        $this->template->assign('groups', $this->usersGroup->get());
+        $this->template->assign('groups', $this->customersGroup->getGroups());
         $this->template->assign('languages', $this->languages->get());
-        $this->response->body($this->template->fetch('plugins/admins/groups/form'))->asHtml();
-//        return $this->template->fetch('plugins/admins/groups/form');
+        $this->response->body($this->template->fetch('customers/groups/form'))->asHtml();
     }
 
     public function edit($id)
     {
         $this->template->assign('action', 'edit');
-        $this->template->assign('groups', $this->usersGroup->get());
+        $this->template->assign('groups', $this->customersGroup->getGroups());
         $this->template->assign('languages', $this->languages->get());
-        $this->template->assign('data', $this->adminsGroup->getData($id));
-        $this->template->assign('info', $this->adminsGroup->getInfo($id));
-        $this->response->body($this->template->fetch('plugins/admins/groups/form'))->asHtml();
-//        $this->template->fetch('plugins/admins/groups/form');
+        $this->template->assign('data', $this->customersGroup->getData($id));
+        $this->template->assign('info', $this->customersGroup->getInfo($id));
+        $this->response->body($this->template->fetch('customers/groups/form'))->asHtml();
     }
 
     public function delete($id)
     {
-        return $this->adminsGroup->delete($id);
+        return $this->customersGroup->delete($id);
     }
 
     /**
@@ -89,16 +86,16 @@ class AdminsGroup extends Plugin
         } else {
             switch($this->request->post('action')){
                 case 'create':
-                    $s = $this->adminsGroup->create($data, $info);
+                    $s = $this->customersGroup->create($data, $info);
                     if(! $s){
-                        $i[] = ["data[rang]" => $this->adminsGroup->getDBErrorCode() .' '. $this->adminsGroup->getDBErrorMessage()];
+                        $i[] = ["data[rang]" => $this->customersGroup->getDBErrorCode() .' '. $this->customersGroup->getDBErrorMessage()];
                     }
                     break;
                 case 'edit':
                     if( $id > 0 ){
-                        $s = $this->adminsGroup->update($id, $data, $info);
+                        $s = $this->customersGroup->update($id, $data, $info);
                         if(! $s){
-                            $i[] = ["data[rang]" => $this->adminsGroup->getDBErrorCode() .' '. $this->adminsGroup->getDBErrorMessage()];
+                            $i[] = ["data[rang]" => $this->customersGroup->getDBErrorCode() .' '. $this->customersGroup->getDBErrorMessage()];
                         }
                     }
                     break;
@@ -108,8 +105,8 @@ class AdminsGroup extends Plugin
         }
 
 
-        if(!$s && $this->adminsGroup->hasDBError()){
-            echo $this->adminsGroup->getDBErrorMessage();
+        if(!$s && $this->customersGroup->hasDBError()){
+            echo $this->customersGroup->getDBErrorMessage();
         }
 
         $this->response->body(['s'=>$s, 'i' => $i, 'a' => isset($a['f']) ? $a['f'] : null])->asJSON();
@@ -120,17 +117,16 @@ class AdminsGroup extends Plugin
         if(! $this->request->isXhr()) die;
 
         $items = array();
-        $parent_id  =$this->request->param('id');
-        foreach ($this->adminsGroup->getItems($parent_id) as $item) {
+        $parent_id = $this->request->get('id','i');
+        foreach ($this->customersGroup->getItems($parent_id, 100) as $item) {
             $item['children'] = $item['isfolder'] == 1;
             if( $parent_id > 0 ){
                 $item['parent'] = $parent_id;
             }
-            $item['a_attr'] = array('id'=> $item['id'], 'href' => './admins/index/' . $item['id']);
+            $item['a_attr'] = array('id'=> $item['id'], 'href' => './customers/index/' . $item['id']);
             $item['li_attr'] = array('id'=> 'li_'.$item['id']);
             $item['type'] = $item['isfolder'] ? 'folder': 'file';
-//            $item['icon'] = 'fa fa-file icon-state-info icon-md';
-
+            
             $items[] = $item;
         }
 
@@ -149,10 +145,10 @@ class AdminsGroup extends Plugin
 
         if(empty($id)) return ;
 
-        $this->adminsGroup->move($id, $old_parent, $parent, $position);
+        $this->customersGroup->move($id, $old_parent, $parent, $position);
         // todo не знімає галочку isfolder з old_parent
-        if($this->adminsGroup->hasDBError()){
-            echo $this->adminsGroup->getDBErrorMessage();
+        if($this->customersGroup->hasDBError()){
+            echo $this->customersGroup->getDBErrorMessage();
         }
 
         echo 'OK';

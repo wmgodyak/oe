@@ -20,7 +20,7 @@
         </p>
         <div class="cta animated fadeInDown">
             <a href="features.html" class="button-outline">See the tour</a>
-            <a href="signup.html" class="button">Sign up free</a>
+            <a href="30" class="button">Sign up free</a>
         </div>
         <div class="img"></div>
     </div>

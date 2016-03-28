@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-01-29 10:54:37
+<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-03-28 12:13:36
          compiled from "/var/www/engine.loc/themes/engine/views/admins/form.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:924019438569a11da17ecf3-87435704%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '4a2c66314ea7ddf9970dbf1c68cb7bfa16c2e8c3' => 
     array (
       0 => '/var/www/engine.loc/themes/engine/views/admins/form.tpl',
-      1 => 1453998705,
+      1 => 1458315778,
       2 => 'file',
     ),
   ),
@@ -34,7 +34,8 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     <div class="row">
         <div class="col-md-9">
             <fieldset>
-                <legend>Основне</legend>
+                <legend><?php echo $_smarty_tpl->tpl_vars['t']->value['common']['legend_main'];?>
+</legend>
                 <div class="form-group">
                     <label for="data_name" class="col-sm-3 control-label"><?php echo $_smarty_tpl->tpl_vars['t']->value['admin_profile']['name'];?>
 </label>
@@ -117,14 +118,16 @@ $_smarty_tpl->tpl_vars['item']->_loop = true;
         </div>
         <div class="col-md-3">
             <fieldset style="height: 330px;">
-                <legend>Фото</legend>
+                <legend><?php echo $_smarty_tpl->tpl_vars['t']->value['admin']['photo'];?>
+</legend>
                 <div style="text-align: center; margin-bottom: 1em;"><img src="<?php echo $_smarty_tpl->tpl_vars['data']->value['avatar'];?>
 " alt="" class="edit-admin-avatar admin-avatar" style="max-width: 130px;"></div>
                 <div style="display: none">
                     <input type="file" name="avatar" id="adminAvatar">
                 </div>
                 <?php if ($_smarty_tpl->tpl_vars['action']->value=='edit') {?>
-                <div style="text-align: center"><button type="button" id="changeAdminAvatar" class="btn btn-default">Змінити</button></div>
+                <div style="text-align: center"><button type="button" id="changeAdminAvatar" class="btn btn-default"><?php echo $_smarty_tpl->tpl_vars['t']->value['common']['btn_change'];?>
+</button></div>
                 <?php }?>
             </fieldset>
         </div>
@@ -132,7 +135,8 @@ $_smarty_tpl->tpl_vars['item']->_loop = true;
     <div class="row">
         <div class="col-md-12">
             <fieldset>
-                <legend>Зміна паролю</legend>
+                <legend><?php echo $_smarty_tpl->tpl_vars['t']->value['admin']['legend_passowrd'];?>
+</legend>
                 <div class="form-group">
                     <label for="data_password" class="col-sm-3 control-label"><?php echo $_smarty_tpl->tpl_vars['t']->value['admin_profile']['password'];?>
 </label>

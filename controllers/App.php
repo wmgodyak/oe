@@ -8,6 +8,7 @@
 namespace controllers;
 
 use controllers\core\Controller;
+use controllers\core\Event;
 use controllers\core\exceptions\Exception;
 use controllers\core\Request;
 use controllers\core\Response;
@@ -87,6 +88,35 @@ class App extends Controller
         $this->languages_id = $this->page['languages_id'];
     }
 
+    private function runModule($controller, $action, $params)
+    {
+        $namespace = '\controllers\modules\\';
+        $c  = $namespace . $controller;
+        $path = str_replace("\\", "/", $c);
+
+        if(! file_exists(DOCROOT . $path . ucfirst($controller) . '.php')) {
+            throw new \FileNotFoundException("Модуль {$controller} не знайдено.");
+        }
+
+        $controller = new $c;
+
+        if(!is_callable(array($controller, $action))){
+            die('Action '. $action .'is not callable: ' . DOCROOT . $path . '.php');
+        }
+
+        Event::fire($c, 'before'.ucfirst($action), $params);
+
+        if(!empty($params)){
+            call_user_func_array(array($controller, 'before'), $params);
+            call_user_func_array(array($controller, $action), $params);
+        } else{
+            call_user_func(array($controller, 'before'));
+            call_user_func(array($controller, $action));
+        }
+
+        Event::fire($c, 'after' . ucfirst($action), $params);
+    }
+
     private function init()
     {
 //        echo "App::init()\r\n";
@@ -95,9 +125,12 @@ class App extends Controller
         $this->template->assign('base_url',    APPURL );
 
         if($this->request->isXhr()){
-            die("AjaxRequest in development");
-        } else {
+            $this->languages_id = isset($_SERVER['HTTP_X_LANGUAGES_ID']) ? (int)$_SERVER['HTTP_X_LANGUAGES_ID'] : null;
 
+            // init page
+            $args = $this->request->param();
+            $app = new \models\App($args);
+        } else {
             if($this->settings['active'] == 0){
                 $a = Session::get('engine.admin');
                 if( ! $a) {
@@ -111,6 +144,7 @@ class App extends Controller
             $page = $app->getPage();
 
             Request::getInstance()->param('page', $page);
+
             if(! $page){
                 $this->e404();
             }
@@ -137,7 +171,6 @@ class App extends Controller
 
         // assign translations to template
         $this->template->assign('t', $this->t());
-
 
         $template_path = $this->settings['themes_path']
             . $this->settings['app_theme_current'] .'/'
