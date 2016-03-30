@@ -18,6 +18,7 @@ class FormValidation
 {
     const REQUIRED = 'required';
     const EMAIL    = 'email';
+    const PASSWORD = 'password';
 
     private static $rules  = [];
     private static $errors = [];
@@ -26,7 +27,8 @@ class FormValidation
         [
             'required' => "Це поле обов'язкове",
             'remote'   => "Будь ласка, перевірте це поле",
-            'email'    => "Введіть коректну електронну скриньку"
+            'email'    => "Введіть коректну електронну скриньку",
+            'password' => 'Слабий пароль. Він має складатись з букв, хоча б одної цифри'
         ];
 
     /**
@@ -74,13 +76,23 @@ class FormValidation
         if(empty(self::$rules)){
             throw new \Exception('Немає що валідувати. Додайте правила. FormValidation::setRule($input, $rule)');
         }
-
-        foreach (self::$rules as $input => $rule) {
-            switch($rule){
+//        print_r(self::$rules);
+        foreach (self::$rules as $k => $rule) {
+            $input = $rule[0];
+            switch($rule[1]){
                 case self::REQUIRED:
                     if(empty($data[$input])){
                         self::$errors[] = ["data[{$input}]" => self::$messages['required']];
                     }
+                    break;
+                case self::PASSWORD:
+
+                    if(!preg_match('/^(?=.*\d)(?=.*[A-Za-z])[0-9A-Za-z]{6,12}$/', $data[$input])) {
+                        self::$errors[] = ["data[{$input}]" => self::$messages['password']];
+                    }
+//                    if (!preg_match("#.*^(?=.{8,20})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$#", $data[$input])){
+//                        self::$errors[] = ["data[{$input}]" => self::$messages['password']];
+//                    }
                     break;
                 case self::EMAIL:
                     //Check this constant first so it works when extension_loaded() is disabled by safe mode

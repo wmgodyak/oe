@@ -116,6 +116,7 @@ class Route
 
 
         $c  = $namespace . $controller;
+
         $path = str_replace("\\", "/", $c);
 
         if(!file_exists(DOCROOT . $path . '.php')) {

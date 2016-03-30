@@ -37,7 +37,7 @@ var App = {
                     dataType: 'json',
                     beforeSend: function(request)
                     {
-                        request.setRequestHeader("x-languages-id", LANG_ID);
+                        //request.setRequestHeader("app-languages-id", LANG_ID);
 
                         bSubmit.attr('disabled', true);
 
@@ -114,7 +114,7 @@ var App = {
                 type     : 'get',
                 beforeSend: function(request)
                 {
-                    request.setRequestHeader("x-languages-id", LANG_ID);
+                    //request.setRequestHeader("app-languages-id", LANG_ID);
                 }
             })
         },
@@ -127,7 +127,7 @@ var App = {
             data['type']       = 'post';
             data['beforeSend'] = function(request)
             {
-                request.setRequestHeader("x-languages-id", LANG_ID);
+                //request.setRequestHeader("app-languages-id", LANG_ID);
             };
             return $.ajax(data)
         }
@@ -136,12 +136,47 @@ var App = {
 
 App.account = {
     init: function(){
+        App.validateAjaxForm('#accountLogin', function () {
+            self.location.href = $('#accountLogin').data('href');
+        });
         App.validateAjaxForm('#accountRegister', function () {
-            self.location.href = $(this).data('href');
+            self.location.href = $('#accountRegister').data('href');
+        });
+        App.validateAjaxForm('#accountProfile', function () {
+            App.alert('Дані оновлено.', 'success', $("#accountProfile .response"));
+        });
+        App.validateAjaxForm('#accountUpdatePassword', function () {
+            App.alert('Дані оновлено.', 'success', $("#accountUpdatePassword .response"));
+        });
+        App.validateAjaxForm('#accountFp', function (d) {
+            App.alert(d.m, 'success', $("#accountFp .response"));
+            setTimeout(function(){
+                self.location.href="/";
+            }, 3000);
+        });
+        App.validateAjaxForm('#accountNewPsw', function (d) {
+            App.alert(d.m, 'success', $("#accountNewPsw .response"));
+            setTimeout(function(){
+                self.location.href = $('#accountNewPsw').data('href');
+            }, 3000);
         });
     },
     login: function(){},
     register: function(){}
+};
+
+App.alert = function(msg, status, target)
+{
+    var tmpl = _.template('<div class="alert alert-<%- status %>"><%- msg %></div>');
+    var data = {
+        msg: msg,
+        status: status
+    };
+    var d = tmpl(data);
+
+    target = typeof target == 'undefined' ? $('.response') : target;
+
+    target.html(d);
 };
 
 $(document).ready(function(){

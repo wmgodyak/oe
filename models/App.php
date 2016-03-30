@@ -9,6 +9,7 @@
 namespace models;
 
 use controllers\core\Event;
+use controllers\core\exceptions\Exception;
 use models\app\Images;
 use models\core\Model;
 
@@ -36,7 +37,7 @@ class App extends Model
      */
     protected $images;
 
-    public function __construct($args = null)
+    public function __construct($args = null, $languages_id = 0)
     {
         parent::__construct();
 
@@ -49,6 +50,10 @@ class App extends Model
 
         if($this->languages_id == 0){
             $this->languages_id = $this->languages->getDefault('id');
+            self::$language_id = $this->languages_id;
+        } elseif($languages_id > 0){
+            $this->languages_id = $languages_id;
+            self::$language_id  = $this->languages_id;
         }
     }
 
@@ -189,8 +194,27 @@ class App extends Model
         return $this->page;
     }
 
-    public function getLanguagesId()
+    public static function languagesID()
     {
-        return $this->languages_id;
+        return self::$language_id;
+    }
+
+    public function __get($name)
+    {
+        if(method_exists($this, $name)){
+            return $this->$name();
+        } elseif(property_exists($this, $name)){
+            return $this->{$name};
+        }
+
+        $ns = '\models\components\\';
+        $c = $ns . ucfirst($name);
+        $path = str_replace("\\", "/", $c);
+
+        if(!file_exists(DOCROOT . $path . '.php')) {
+            throw new Exception("Call to undefined property or method $name");
+        }
+
+        return new $c;
     }
 }

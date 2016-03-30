@@ -31,7 +31,8 @@ $routes = array();
 
 // коли чітко задано які змінні мають бути
     $routes[]  = array('/install/?', 'controllers\Install');
-    $routes[]  = array('/ajax/([a-zA-Z0-9-_/]+)/([a-zA-Z0-9-_/]+)/?(.*)', 'controllers\modules\:controller:action');
+    $routes[]  = array('/route/([a-zA-Z0-9-_]+)/([a-zA-Z0-9-_]+)/?(.*)', 'controllers\modules\:controller:action');
+    $routes[]  = array('/ajax/([a-zA-Z0-9-_]+)/([a-zA-Z0-9-_]+)/?(.*)', 'controllers\modules\:controller:action');
 
 //    $routes[]  = array('/ajax/([a-zA-Z0-9-_/]+)/([a-zA-Z0-9-_/]+)/?', 'controllers\modules\:controller:action');
 

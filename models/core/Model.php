@@ -8,6 +8,8 @@
 namespace models\core;
 
 use controllers\core\Request;
+use models\App;
+use models\Engine;
 
 defined("CPATH") or die();
 
@@ -20,7 +22,7 @@ class Model {
      * default languages id
      * @var int
      */
-    protected static $language_id = 1;
+    protected static $language_id = 0;
     /**
      * default languages id not static only
      * @var int
@@ -38,6 +40,14 @@ class Model {
         self::$db = DB::getInstance();
 
         $this->request = Request::getInstance();
+
+        if($this->request->getMode() == 'engine'){
+            $this->languages_id = Engine::$language_id;
+        } elseif($this->request->getMode() == 'app'){
+            $this->languages_id = App::$language_id;
+        }
+
+        self::$language_id = $this->languages_id;
     }
 
     public function setError($msg)

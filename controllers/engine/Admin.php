@@ -185,8 +185,8 @@ class Admin extends Engine {
                     setcookie('fail', ++$fail, time()+60*15);
                 } else {
                     // new password
-                    $psw = Users::generatePassword();
-                    if(Users::changePassword($user['id'], $psw)){
+                    $psw = \models\components\Users::generatePassword();
+                    if(\models\components\Users::changePassword($user['id'], $psw)){
 
                         include_once DOCROOT . "/vendor/phpmailer/PHPMailer.php";
                         $mail = new \PHPMailer();
@@ -248,14 +248,13 @@ class Admin extends Engine {
                 unset($data['password_c']);
 
                 // оновлення даних
-                $mUser = new Users();
-                $s = $mUser->updateProfile($user_id, $data);
+                $s = $this->mAdmin->updateProfile($user_id, $data);
 
                 if($s == 0){
-                    echo $mUser->getDBErrorMessage();
+                    echo $this->mAdmin->getDBErrorMessage();
                 } else {
                     if(isset($_FILES['avatar'])){
-                       $a = $mUser->changeAvatar($user_id);
+                       $a = $this->mAdmin->changeAvatar($user_id);
                         if($a['s']){
                             self::data('avatar', $a['f']);
                         }

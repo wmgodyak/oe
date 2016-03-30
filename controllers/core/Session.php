@@ -40,6 +40,10 @@ class Session {
      * @param mixed $value
      */
     public static function set($key, $value){
+        if(is_array($key)){
+            $_SESSION = array_merge($_SESSION, $key);
+            return;
+        }
         $_SESSION[$key] = $value;
     }
 
@@ -49,17 +53,28 @@ class Session {
      * @return mixed
      */
     public static function get($key){
-        $parsed = explode('.', $key);
-        $result = $_SESSION;
-        while ($parsed) {
-            $next = array_shift($parsed);
-            if (isset($result[$next])) {
-                $result = $result[$next];
-            } else {
-                return null;
+
+        if(strpos($key,'.')){
+
+            $parts = explode('.', $key);
+            $c = count($parts);
+
+            if($c == 1){
+                if(isset($_SESSION[$parts[0]])){
+                    return $_SESSION[$parts[0]];
+                }
+            } else if($c == 2){
+                if(isset($_SESSION[$parts[0]][$parts[1]])){
+                    return  $_SESSION[$parts[0]][$parts[1]];
+                }
+            } else if($c == 3){
+                if(isset($_SESSION[$parts[0]][$parts[1]][$parts[2]])){
+                    return $_SESSION[$parts[0]][$parts[1]][$parts[2]];
+                }
             }
         }
-        return $result;
+
+        return isset($_SESSION[$key]) ? $_SESSION[$key] : null;
     }
 
     /**

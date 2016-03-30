@@ -18,6 +18,7 @@ use controllers\core\Template;
 use controllers\engine\Plugins;
 use models\app\Content;
 use models\app\Images;
+use models\app\Languages;
 use models\app\Translations;
 
 if ( !defined("CPATH") ) die();
@@ -80,57 +81,38 @@ class App extends Controller
 
         $this->images   = new Images();
 
+        $this->languages_id = Session::get('app.languages_id');
+
         if(!self::$initialized){
             $this->init();
         }
-
-        $this->page = $this->template->getVars('page');
-        $this->languages_id = $this->page['languages_id'];
-    }
-
-    private function runModule($controller, $action, $params)
-    {
-        $namespace = '\controllers\modules\\';
-        $c  = $namespace . $controller;
-        $path = str_replace("\\", "/", $c);
-
-        if(! file_exists(DOCROOT . $path . ucfirst($controller) . '.php')) {
-            throw new \FileNotFoundException("Модуль {$controller} не знайдено.");
-        }
-
-        $controller = new $c;
-
-        if(!is_callable(array($controller, $action))){
-            die('Action '. $action .'is not callable: ' . DOCROOT . $path . '.php');
-        }
-
-        Event::fire($c, 'before'.ucfirst($action), $params);
-
-        if(!empty($params)){
-            call_user_func_array(array($controller, 'before'), $params);
-            call_user_func_array(array($controller, $action), $params);
-        } else{
-            call_user_func(array($controller, 'before'));
-            call_user_func(array($controller, $action));
-        }
-
-        Event::fire($c, 'after' . ucfirst($action), $params);
     }
 
     private function init()
     {
-//        echo "App::init()\r\n";
+//        echo "App::init()\r\n"; $this->dump($_SESSION);
         self::$initialized = true;
 
         $this->template->assign('base_url',    APPURL );
 
-        if($this->request->isXhr()){
-            $this->languages_id = isset($_SERVER['HTTP_X_LANGUAGES_ID']) ? (int)$_SERVER['HTTP_X_LANGUAGES_ID'] : null;
+        // init page
+        $args = $this->request->param();
 
-            // init page
-            $args = $this->request->param();
-            $app = new \models\App($args);
+        if($this->request->isXhr() || (isset($args['controller']) && $args['namespace'] != 'controllers\App') ){
+            if( ! $this->languages_id){
+                $l = new Languages();
+                $a = [];
+                $a['app']['languages_id'] = null;
+                $this->languages_id = $l->getDefault('id');
+                Session::set($a, $this->languages_id);
+            }
+
+            $app = new \models\App(null, $this->languages_id);
+            Request::getInstance()->param('languages_id', $this->languages_id);
+            // assign translations to template
+            $this->template->assign('t', $this->t());
         } else {
+
             if($this->settings['active'] == 0){
                 $a = Session::get('engine.admin');
                 if( ! $a) {
@@ -138,52 +120,60 @@ class App extends Controller
                 }
             }
 
-            // init page
-            $args = $this->request->param();
-            $app = new \models\App($args);
-            $page = $app->getPage();
+                // завантаження сторінки
+                $app = new \models\App($args);
+                $page = $app->getPage();
 
-            Request::getInstance()->param('page', $page);
+                Request::getInstance()->param('page', $page);
 
-            if(! $page){
-                $this->e404();
-            }
-
-            if($page['status'] != 'published'){
-                $a = Session::get('engine.admin');
-                if( ! $a){
+                if (!$page) {
                     $this->e404();
                 }
-            }
 
-            $this->languages_id = $page['languages_id'];
-            Request::getInstance()->param('languages_id', $this->languages_id);
-
-            //assign page to template
-            $this->template->assign('page', $page);
-
-            if(!empty($page['settings']['modules'])){
-                foreach ($page['settings']['modules'] as $k=>$module) {
-                    $app->callModule($module);
+                if ($page['status'] != 'published') {
+                    $a = Session::get('engine.admin');
+                    if (!$a) {
+                        $this->e404();
+                    }
                 }
-            }
+
+                $this->languages_id = $page['languages_id'];
+                $a = [];
+                $a['app']['languages_id'] = $this->languages_id;
+                Session::set($a, $this->languages_id);
+                Request::getInstance()->param('languages_id', $this->languages_id);
+                //assign page to template
+                $this->template->assign('page', $page);
+
+                if (!empty($page['settings']['modules'])) {
+                    foreach ($page['settings']['modules'] as $k => $module) {
+                        $app->callModule($module);
+                    }
+                }
+
+                // assign translations to template
+                $this->template->assign('t', $this->t());
+
+                $template_path = $this->settings['themes_path']
+                    . $this->settings['app_theme_current'] . '/'
+                    . $this->settings['app_views_path']
+                    . 'layouts/';
+
+                $ds = $this->template->fetch($template_path . $page['template']);
+
+                $this->response->body($ds);
+
+                if ($page['id'] == $this->settings['page_404']) {
+                    $this->response->sendError(404);
+                }
+
         }
+    }
 
-        // assign translations to template
-        $this->template->assign('t', $this->t());
-
-        $template_path = $this->settings['themes_path']
-            . $this->settings['app_theme_current'] .'/'
-            . $this->settings['app_views_path']
-            . 'layouts/';
-
-        $ds = $this->template->fetch($template_path . $page['template']);
-
-        $this->response->body($ds);
-
-        if($page['id'] == $this->settings['page_404']){
-            $this->response->sendError(404);
-        }
+    public function getUrl($id)
+    {
+        $content = new Content();
+        return $content->getUrlById($id);
     }
 
     public function e404()

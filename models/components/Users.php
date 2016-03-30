@@ -47,7 +47,9 @@ class Users extends Model
         } else {
             $data['password'] = $this->cryptPassword($data['password']);
         }
+
         $data['updated'] = $this->now();
+
         return self::$db->update('users', $data, " id={$id} limit 1");
     }
 
@@ -221,6 +223,21 @@ class Users extends Model
             from users u
             join users_group g on g.id=u.group_id
             where u.email = '{$email}'
+            limit 1
+          ")->row();
+    }
+
+    /**
+     * @param $skey
+     * @return array|mixed
+     */
+    public function getUserBySkey($skey)
+    {
+        return self::$db->select("
+            select u.*, g.rang
+            from users u
+            join users_group g on g.id=u.group_id
+            where u.skey = '{$skey}'
             limit 1
           ")->row();
     }

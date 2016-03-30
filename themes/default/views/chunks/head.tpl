@@ -41,6 +41,6 @@
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <script>
-        var TOKEN = '{$token}', LANG_ID={$page.languages_id};
+        var TOKEN = '{$token}', LANG_ID={$page.languages_id * 1};
     </script>
 </head>
