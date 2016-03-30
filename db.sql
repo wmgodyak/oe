@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Мар 28 2016 г., 18:16
+-- Время создания: Мар 30 2016 г., 14:35
 -- Версия сервера: 5.5.47-0ubuntu0.14.04.1
 -- Версия PHP: 5.5.9-1ubuntu4.14
 
@@ -168,7 +168,7 @@ CREATE TABLE IF NOT EXISTS `content` (
   KEY `fk_content_owner_idx` (`owner_id`),
   KEY `status` (`status`),
   KEY `published` (`published`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=34 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=35 ;
 
 --
 -- Дамп данных таблицы `content`
@@ -199,10 +199,10 @@ INSERT INTO `content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id`,
 (25, 1, 1, 2, 1, 0, 0, '2016-03-25 09:45:43', '2016-03-25 09:46:08', '2016-03-25', NULL, 'published'),
 (27, 3, 3, 2, 0, 0, 0, '2016-03-25 11:52:31', '2016-03-25 11:52:31', '2016-03-25', NULL, 'published'),
 (28, 1, 1, 2, 1, 1, 0, '2016-03-28 07:15:17', '2016-03-28 12:41:20', '2016-03-28', 'a:1:{s:7:"modules";a:1:{i:0;s:12:"First::index";}}', 'published'),
-(29, 1, 8, 2, 28, 0, 0, '2016-03-28 07:19:02', '2016-03-28 07:31:10', '2016-03-28', 'a:1:{s:7:"modules";a:1:{i:0;s:14:"Account::login";}}', 'published'),
+(29, 1, 8, 2, 28, 0, 0, '2016-03-28 07:19:02', '2016-03-30 07:23:17', '2016-03-28', 'a:1:{s:7:"modules";a:1:{i:0;s:14:"Account::login";}}', 'published'),
 (30, 1, 8, 2, 28, 0, 0, '2016-03-28 07:19:28', '2016-03-28 12:41:33', '2016-03-28', 'a:1:{s:7:"modules";a:1:{i:0;s:17:"Account::register";}}', 'published'),
 (31, 1, 8, 2, 28, 0, 0, '2016-03-28 12:50:28', '2016-03-28 12:50:49', '2016-03-28', 'a:1:{s:7:"modules";a:1:{i:0;s:16:"Account::profile";}}', 'published'),
-(33, 1, 1, 2, 28, 0, 0, '2016-03-28 13:28:00', NULL, NULL, NULL, 'blank');
+(34, 1, 8, 2, 28, 0, 0, '2016-03-30 07:40:52', '2016-03-30 07:41:43', '2016-03-30', 'a:1:{s:7:"modules";a:1:{i:0;s:11:"Account::fp";}}', 'published');
 
 -- --------------------------------------------------------
 
@@ -221,7 +221,15 @@ CREATE TABLE IF NOT EXISTS `content_features` (
   UNIQUE KEY `content_id` (`content_id`,`features_id`,`values_id`,`languages_id`),
   KEY `fk_content_features_values_content1_idx` (`content_id`),
   KEY `fk_content_features_values_features1_idx` (`features_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Дамп данных таблицы `content_features`
+--
+
+INSERT INTO `content_features` (`id`, `content_id`, `features_id`, `values_id`, `languages_id`, `value`) VALUES
+(1, 29, 4, 8, 0, NULL),
+(2, 34, 4, 8, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -306,7 +314,7 @@ CREATE TABLE IF NOT EXISTS `content_info` (
   UNIQUE KEY `languages_id` (`languages_id`,`url`),
   KEY `fk_content_info_content1_idx` (`content_id`),
   KEY `fk_content_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=35 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=36 ;
 
 --
 -- Дамп данных таблицы `content_info`
@@ -337,9 +345,10 @@ INSERT INTO `content_info` (`id`, `content_id`, `languages_id`, `name`, `url`, `
 (28, 25, 1, 'Пошук', 'poshuk', '', 'Пошук', '', '', ''),
 (30, 27, 1, 'Всяка всячина', 'vsyaka-vsyachyna', '', 'Всяка всячина', '', '', NULL),
 (31, 28, 1, 'Аккаунт', 'account', '', 'Аккаунт', '', '', ''),
-(32, 29, 1, 'Вхід', 'akkaunt/vhid', '', 'Вхід', '', '', ''),
+(32, 29, 1, 'Вхід ', 'account/login', '', 'Вхід', '', '', ''),
 (33, 30, 1, 'Реєстрація ', 'account/register', '', 'Реєстрація', '', '', ''),
-(34, 31, 1, 'Профіль', 'account/profile', '', 'Профіль', '', '', '');
+(34, 31, 1, 'Профіль', 'account/profile', '', 'Профіль', '', '', ''),
+(35, 34, 1, 'Нагадати пароль', 'account/fp', '', 'Нагадати пароль', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -486,14 +495,19 @@ CREATE TABLE IF NOT EXISTS `features` (
   PRIMARY KEY (`id`,`owner_id`),
   UNIQUE KEY `code_UNIQUE` (`code`),
   KEY `fk_features_users1_idx` (`owner_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
 
 --
 -- Дамп данных таблицы `features`
 --
 
 INSERT INTO `features` (`id`, `parent_id`, `type`, `code`, `multiple`, `on_filter`, `required`, `owner_id`, `created`, `status`) VALUES
-(3, 0, NULL, 'feature_1459175949', NULL, NULL, 0, 2, '2016-03-28 14:39:09', 'blank');
+(4, 0, 'select', 'feature_1459235829', 0, 0, 0, 2, '2016-03-29 07:17:09', 'published'),
+(5, 0, 'folder', 'grupa', 0, 0, 0, 2, '2016-03-29 07:17:58', 'published'),
+(6, 5, 'text', 'parametr', 0, 0, 0, 2, '2016-03-29 07:18:04', 'published'),
+(7, 0, 'text', 'tekstove_pole', 0, 0, 0, 2, '2016-03-29 07:18:17', 'published'),
+(8, 4, 'value', 'eb801c714177e73003959f11f45676ce', NULL, NULL, 0, 2, '2016-03-29 07:24:05', 'published'),
+(9, 4, 'value', '39f45fb4370f7b7b4bdbf322577d34e5', NULL, NULL, 0, 2, '2016-03-29 07:24:10', 'published');
 
 -- --------------------------------------------------------
 
@@ -511,7 +525,17 @@ CREATE TABLE IF NOT EXISTS `features_content` (
   PRIMARY KEY (`id`,`features_id`,`content_types_id`,`content_subtypes_id`,`content_id`),
   UNIQUE KEY `features_id` (`features_id`,`content_types_id`,`content_subtypes_id`,`content_id`),
   KEY `fk_content_features_idx` (`features_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+
+--
+-- Дамп данных таблицы `features_content`
+--
+
+INSERT INTO `features_content` (`id`, `features_id`, `content_types_id`, `content_subtypes_id`, `content_id`, `position`) VALUES
+(1, 4, 1, 0, 0, NULL),
+(2, 5, 1, 7, 0, NULL),
+(3, 6, 1, 7, 0, NULL),
+(4, 7, 1, 7, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -527,7 +551,19 @@ CREATE TABLE IF NOT EXISTS `features_info` (
   PRIMARY KEY (`id`,`features_id`,`languages_id`),
   KEY `fk_features_info_features1_idx` (`features_id`),
   KEY `fk_features_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+
+--
+-- Дамп данных таблицы `features_info`
+--
+
+INSERT INTO `features_info` (`id`, `features_id`, `languages_id`, `name`) VALUES
+(1, 4, 1, 'Випадайка'),
+(2, 5, 1, 'Група'),
+(3, 6, 1, 'Параметр'),
+(4, 7, 1, 'текстове поле'),
+(5, 8, 1, '1'),
+(6, 9, 1, '2');
 
 -- --------------------------------------------------------
 
@@ -593,11 +629,19 @@ INSERT INTO `languages` (`id`, `code`, `name`, `is_main`) VALUES
 
 CREATE TABLE IF NOT EXISTS `mail_templates` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(45) NOT NULL,
+  `code` varchar(30) NOT NULL,
   `name` varchar(60) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Дамп данных таблицы `mail_templates`
+--
+
+INSERT INTO `mail_templates` (`id`, `code`, `name`) VALUES
+(1, 'account_register', 'Реєстрація користувача'),
+(2, 'account_fp', 'Відновлення паролю');
 
 -- --------------------------------------------------------
 
@@ -614,7 +658,15 @@ CREATE TABLE IF NOT EXISTS `mail_templates_info` (
   PRIMARY KEY (`id`),
   KEY `fk_mail_templates_info_idx` (`templates_id`),
   KEY `fk_mail_templates_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Дамп данных таблицы `mail_templates_info`
+--
+
+INSERT INTO `mail_templates_info` (`id`, `templates_id`, `languages_id`, `subject`, `body`) VALUES
+(1, 1, 1, 'Вітаємо з реєстрацією', '<p>Вітаємо {$data.name}&nbsp;{$data.surname}. Ви успішно зареєстувались на нашому сайті.&nbsp;</p>\n\n<p>Ваш логін:&nbsp;{$data.email}</p>\n\n<p>Ваш пароль:&nbsp;{$data.password}</p>\n\n<p>Бажаєм хороших покупок</p>\n'),
+(2, 2, 1, 'Відновлення паролюцйуцйу', '<p>Вітаємо {$data.name}. Ви отримали це повідомлення, так як здійснили запит на відновлення паролю.</p>\n\n<p>Для цього вам необхідно перейти по <a href="{$data.fp_link}">цьому&nbsp;посиланню</a></p>\n');
 
 -- --------------------------------------------------------
 
@@ -856,51 +908,6 @@ INSERT INTO `tags` (`id`, `tag`) VALUES
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `translations`
---
-
-CREATE TABLE IF NOT EXISTS `translations` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(60) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
-
---
--- Дамп данных таблицы `translations`
---
-
-INSERT INTO `translations` (`id`, `code`) VALUES
-(2, 'go'),
-(1, 'hello');
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `translations_info`
---
-
-CREATE TABLE IF NOT EXISTS `translations_info` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `translations_id` int(11) unsigned NOT NULL,
-  `languages_id` tinyint(3) unsigned NOT NULL,
-  `value` text NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_translations_info_translations1_idx` (`translations_id`),
-  KEY `fk_translations_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
-
---
--- Дамп данных таблицы `translations_info`
---
-
-INSERT INTO `translations_info` (`id`, `translations_id`, `languages_id`, `value`) VALUES
-(1, 1, 1, 'Вітаємо'),
-(2, 2, 1, 'Вперед!!!');
-
--- --------------------------------------------------------
-
---
 -- Структура таблицы `users`
 --
 
@@ -915,7 +922,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `email` varchar(60) NOT NULL,
   `password` varchar(64) NOT NULL,
   `avatar` varchar(100) DEFAULT NULL,
-  `skey` varchar(35) DEFAULT NULL,
+  `skey` varchar(64) DEFAULT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated` datetime NOT NULL,
   `lastlogin` timestamp NULL DEFAULT NULL,
@@ -923,16 +930,27 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`id`,`group_id`,`languages_id`),
   UNIQUE KEY `phone` (`phone`,`email`),
   KEY `fk_users_group1_idx` (`group_id`),
-  KEY `status` (`status`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+  KEY `status` (`status`),
+  KEY `skey` (`skey`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15 ;
 
 --
 -- Дамп данных таблицы `users`
 --
 
 INSERT INTO `users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `updated`, `lastlogin`, `status`) VALUES
-(2, 1, 0, 'jmve9opaujbtgdatpjm9tt7pm4', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-03-24 16:42:51', '2016-03-28 14:38:16', 'active'),
-(3, 5, 0, NULL, 'Жорік', 'Ревазов', '+35 (555) 5555555', 'z@otakoyi.com', 'MTGunGFajoiME', NULL, NULL, '2016-03-28 09:01:38', '2016-03-28 15:23:30', NULL, 'active');
+(2, 1, 0, 'gato153jirm74hbva0lbp0vo44', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-03-24 16:42:51', '2016-03-30 07:30:32', 'active'),
+(3, 5, 0, 't53mo1m6umakqtv5p1lhedkbf1', 'Жорік', 'Ревазов', '+35 (555) 5555555', 'z@otakoyi.com', 'MToUTd7.hmK2o', NULL, NULL, '2016-03-28 09:01:38', '2016-03-30 13:47:30', '2016-03-30 10:47:41', 'active'),
+(5, 2, 0, NULL, 'Жорік', '', '', 'otakoyi@gmail.com', 'MTGRXCzqBsZUI', NULL, NULL, '2016-03-29 12:21:29', '0000-00-00 00:00:00', NULL, 'active'),
+(6, 2, 0, NULL, 'Микола', '', '', 'm@otakoyi.com', 'MTTuFPm3y4m2o', NULL, NULL, '2016-03-29 13:18:45', '0000-00-00 00:00:00', NULL, 'active'),
+(7, 2, 0, NULL, 'Микола', '', '', 'ma@otakoyi.com', 'MTTuFPm3y4m2o', NULL, NULL, '2016-03-29 13:21:09', '0000-00-00 00:00:00', NULL, 'active'),
+(8, 2, 0, NULL, 'Микола', '', '', 'maa@otakoyi.com', 'MTTuFPm3y4m2o', NULL, NULL, '2016-03-29 13:21:48', '0000-00-00 00:00:00', NULL, 'active'),
+(9, 2, 0, NULL, 'Мирослав', '', '', 'a@otakoyi.com', 'MzqZbtJqwKKb2', NULL, NULL, '2016-03-29 13:23:14', '0000-00-00 00:00:00', NULL, 'active'),
+(10, 2, 0, NULL, 'Мирослав', '', '', 'abn@otakoyi.com', 'ODM9/UvU5lRU2', NULL, NULL, '2016-03-29 13:25:31', '0000-00-00 00:00:00', NULL, 'active'),
+(11, 2, 0, NULL, 'Мирослав', '', '', 'aaa1@otakoyi.com', 'OTIINr6XCS672', NULL, NULL, '2016-03-29 15:16:27', '0000-00-00 00:00:00', NULL, 'active'),
+(12, 2, 0, NULL, 'Жорік', 'Ревахов', '380', 'az@otakoyi.com', 'Mj9RxlgpZTdp.', NULL, NULL, '2016-03-30 06:21:45', '2016-03-30 09:29:15', NULL, 'active'),
+(13, 2, 0, NULL, 'Жорік', 'Пуців', '+380505988960', 'aaz@otakoyi.com', 'MTijnUdHaWG6A', NULL, NULL, '2016-03-30 06:50:17', '2016-03-30 09:50:35', NULL, 'active'),
+(14, 2, 0, NULL, 'Мирослав', 'Столярчук', '0675533808', 'zzzza@otakoyi.com', 'Mz90k2TaTlAow', NULL, NULL, '2016-03-30 06:52:09', '2016-03-30 10:21:05', NULL, 'active');
 
 -- --------------------------------------------------------
 
@@ -950,7 +968,7 @@ CREATE TABLE IF NOT EXISTS `users_group` (
   KEY `pid` (`parent_id`),
   KEY `sort` (`position`),
   KEY `isfolder` (`isfolder`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
 -- Дамп данных таблицы `users_group`
@@ -978,7 +996,7 @@ CREATE TABLE IF NOT EXISTS `users_group_info` (
   UNIQUE KEY `group_id` (`group_id`,`languages_id`),
   KEY `fk_users_group_info_users_group1_idx` (`group_id`),
   KEY `fk_users_group_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=22 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
 
 --
 -- Дамп данных таблицы `users_group_info`
@@ -1105,13 +1123,6 @@ ALTER TABLE `nav_items`
 ALTER TABLE `plugins_components`
   ADD CONSTRAINT `fk_plugins_components_components1` FOREIGN KEY (`components_id`) REFERENCES `components` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_plugins_components_plugins1` FOREIGN KEY (`plugins_id`) REFERENCES `plugins` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Ограничения внешнего ключа таблицы `translations_info`
---
-ALTER TABLE `translations_info`
-  ADD CONSTRAINT `fk_translations_info_languages1` FOREIGN KEY (`languages_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_translations_info_translations1` FOREIGN KEY (`translations_id`) REFERENCES `translations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `users`
