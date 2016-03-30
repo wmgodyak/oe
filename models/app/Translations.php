@@ -9,6 +9,7 @@
 namespace models\app;
 
 use controllers\core\exceptions\Exception;
+use controllers\core\Settings;
 use models\core\DB;
 
 defined("CPATH") or die();
@@ -19,28 +20,34 @@ defined("CPATH") or die();
  */
 class Translations
 {
-    private $languages_id = null;
+    private $code = null;
     private static $instance;
-    private static $data = [];
+    private  $data = [];    
+    private $lang_file;
 
-    private function __construct($languages_id)
+    private function __construct($code)
     {
-        if($languages_id){
-            $this->languages_id = $languages_id;
+        if($code){
+            $this->code = $code;
         }
 
+        $this->lang_file = Settings::getInstance()->get('themes_path') .
+                           Settings::getInstance()->get('app_theme_current') . '/'.
+                           'lang/' .
+                           $code . '.ini';
+        
         $this->setData();
     }
 
     private function __clone(){}
 
     /**
-     * @param null $languages_id
+     * @param null $code
      * @return Translations
      */
-    public static function getInstance($languages_id=null){
+    public static function getInstance($code=null){
         if(self::$instance == null){
-            self::$instance = new Translations($languages_id);
+            self::$instance = new Translations($code);
         }
 
         return self::$instance;
@@ -52,28 +59,50 @@ class Translations
      */
     public function get($key = null)
     {
-        if(! $key) return self::$data;
+        if($key){
 
-        if(isset(self::$data[$key])) return self::$data[$key];
+            if(strpos($key,'.')){
 
-        return "t.{$key}";
+                $data = $key;
+
+                $parts = explode('.', $key);
+                $c = count($parts);
+
+                if($c == 1){
+                    if(isset($this->data[$parts[0]])){
+                        $data = $this->data[$parts[0]];
+                    }
+                } else if($c == 2){
+                    if(isset($this->data[$parts[0]][$parts[1]])){
+                        $data = $this->data[$parts[0]][$parts[1]];
+                    }
+                } else if($c == 3){
+                    if(isset($this->data[$parts[0]][$parts[1]][$parts[2]])){
+                        $data = $this->data[$parts[0]][$parts[1]][$parts[2]];
+                    }
+                }
+
+                return $data;
+            }
+        }
+
+        return $key && isset($this->data[$key])? $this->data[$key] : $this->data;
     }
 
     private function setData()
     {
-        if(! $this->languages_id){
-            throw new Exception("Languages_id cannot be null");
+        if(! $this->code){
+            throw new Exception("Languages code cannot be null");
         }
-        $r = DB::getInstance()
-            ->select(
-                "select t.code, i.value
-                 from translations t
-                 join translations_info i on i.translations_id=t.id and i.languages_id='{$this->languages_id}'
-                "
-            )
-            ->all();
-        foreach ($r as $item) {
-            self::$data[$item['code']] = $item['value'];
+
+        if(!file_exists($this->lang_file)) {
+            throw new Exception("Languages file not exists");
+        }
+
+        $a = parse_ini_file($this->lang_file, true);
+
+        foreach ($a as $k=>$v) {
+            $this->data[$k] = $v;
         }
     }
 }

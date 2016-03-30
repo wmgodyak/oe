@@ -87,9 +87,10 @@ class App extends Model
         // інформація про сторінку
         $page = self::$db
             ->select("
-                select c.*,i.languages_id, i.name,i.title,i.url,i.keywords, i.description,i.content
+                select c.*,i.languages_id, i.name,i.title,i.url,i.keywords, i.description,i.content, l.code as languages_code
                 from content_info i
                 join content c on c.id=i.content_id
+                join languages l on l.id=i.languages_id
                 where i.url = '{$url}' and i.languages_id={$this->languages_id}
                 limit 1
                 ")

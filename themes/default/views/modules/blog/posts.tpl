@@ -16,6 +16,6 @@
         <p class="intro">
             {$post.description}
         </p>
-        <a href="{$post.id}" class="continue-reading">Continue reading this post</a>
+        <a href="{$post.id}" class="continue-reading">{$t.blog.readmore}</a>
     </div>
 {/foreach}

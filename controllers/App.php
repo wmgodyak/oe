@@ -8,7 +8,6 @@
 namespace controllers;
 
 use controllers\core\Controller;
-use controllers\core\Event;
 use controllers\core\exceptions\Exception;
 use controllers\core\Request;
 use controllers\core\Response;
@@ -60,6 +59,7 @@ class App extends Controller
     protected $images;
 
     protected $languages_id;
+    protected $languages_code;
 
     protected $page;
 
@@ -81,11 +81,15 @@ class App extends Controller
 
         $this->images   = new Images();
 
-        $this->languages_id = Session::get('app.languages_id');
+        $this->languages_id   = Session::get('app.languages_id');
+        $this->languages_code = Session::get('app.languages_code');
 
         if(!self::$initialized){
             $this->init();
         }
+
+        // to access custom modules
+        $this->page = $this->template->getVars('page');
     }
 
     private function init()
@@ -101,14 +105,20 @@ class App extends Controller
         if($this->request->isXhr() || (isset($args['controller']) && $args['namespace'] != 'controllers\App') ){
             if( ! $this->languages_id){
                 $l = new Languages();
+                $lang = $l->getDefault();
+                $this->languages_id   = $lang['id'];
+                $this->languages_code = $lang['code'];
+
                 $a = [];
-                $a['app']['languages_id'] = null;
-                $this->languages_id = $l->getDefault('id');
+                $a['app']['languages_id']   = $this->languages_id;
+                $a['app']['languages_code'] = $this->languages_code;
+
                 Session::set($a, $this->languages_id);
             }
 
             $app = new \models\App(null, $this->languages_id);
             Request::getInstance()->param('languages_id', $this->languages_id);
+            Request::getInstance()->param('languages_code', $this->languages_code);
             // assign translations to template
             $this->template->assign('t', $this->t());
         } else {
@@ -121,7 +131,7 @@ class App extends Controller
             }
 
                 // завантаження сторінки
-                $app = new \models\App($args);
+                $app  = new \models\App($args);
                 $page = $app->getPage();
 
                 Request::getInstance()->param('page', $page);
@@ -138,10 +148,13 @@ class App extends Controller
                 }
 
                 $this->languages_id = $page['languages_id'];
+                $this->languages_code = $page['languages_code'];
                 $a = [];
                 $a['app']['languages_id'] = $this->languages_id;
+                $a['app']['languages_code'] = $this->languages_code;
                 Session::set($a, $this->languages_id);
                 Request::getInstance()->param('languages_id', $this->languages_id);
+                Request::getInstance()->param('languages_code', $this->languages_code);
                 //assign page to template
                 $this->template->assign('page', $page);
 
@@ -210,7 +223,7 @@ class App extends Controller
      */
     protected function t($key=null)
     {
-        return Translations::getInstance($this->languages_id)->get($key);
+        return Translations::getInstance($this->languages_code)->get($key);
     }
 
     public function index(){}
