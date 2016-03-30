@@ -17,8 +17,8 @@ use controllers\core\Template;
 use controllers\engine\Plugins;
 use models\app\Content;
 use models\app\Images;
+use models\app\Lang;
 use models\app\Languages;
-use models\app\Translations;
 
 if ( !defined("CPATH") ) die();
 
@@ -223,7 +223,7 @@ class App extends Controller
      */
     protected function t($key=null)
     {
-        return Translations::getInstance($this->languages_code)->get($key);
+        return Lang::getInstance($this->languages_code)->get($key);
     }
 
     public function index(){}

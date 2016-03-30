@@ -15,14 +15,14 @@ use models\core\DB;
 defined("CPATH") or die();
 
 /**
- * Class Translations
+ * Class Lang
  * @package models\app
  */
-class Translations
+class Lang
 {
     private $code = null;
     private static $instance;
-    private  $data = [];    
+    private $data = [];
     private $lang_file;
 
     private function __construct($code)
@@ -43,11 +43,11 @@ class Translations
 
     /**
      * @param null $code
-     * @return Translations
+     * @return Lang
      */
     public static function getInstance($code=null){
         if(self::$instance == null){
-            self::$instance = new Translations($code);
+            self::$instance = new Lang($code);
         }
 
         return self::$instance;
