@@ -28,6 +28,7 @@ class Comments extends \models\components\Comments
     {
         $data = self::$db->select("select {$key} from comments where id={$id} limit 1")->row($key);
         if($key != '*') return $data;
+
         $data['user'] = self::$db->select("select name, surname from users where id={$data['users_id']}")->row();
 
         return $data;
