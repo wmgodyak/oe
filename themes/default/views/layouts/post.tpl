@@ -58,6 +58,22 @@
                 </div>
             </div>
         </div>
+        {if $post.comments.enabled}
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    <h3>Comments to {$post.name}.</h3>
+                    <h4>Total comments {$post.comments.total}</h4>
+                    {if $user}
+                        <p><a href="javascript:;" class="{if $post.comments.subscribe}b-comments-un-subscribe{else}b-comments-subscribe{/if}" data-s="Subscribe" data-us="Un subscribe" data-id="{$post.id}">{if $post.comments.subscribe}b-comments-un-subscribe{else}b-comments-subscribe{/if}</a></p>
+                        {include file="modules/comments/create.tpl"}
+                    {else}
+                        <p><a href="29">Авторизуйтесь, щоб мати можливість коментувати статті</a></p>
+                    {/if}
+
+                    {include file="modules/comments/items.tpl"}
+                </div>
+            </div>
+        {/if}
     </div>
 </div>
 

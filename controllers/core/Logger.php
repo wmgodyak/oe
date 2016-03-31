@@ -27,7 +27,7 @@ class Logger
         if(!is_dir(DOCROOT . $path)) mkdir(DOCROOT . $path, 0777, true);
 
         if(!empty($filename)) {
-            $filename = preg_replace('^[a-z0-9]','', $filename);
+            $filename = preg_replace('/[^\w_]+/u', '', $filename);
             $filename .= '-';
         }
 

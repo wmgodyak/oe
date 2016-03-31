@@ -12,10 +12,7 @@ use models\App;
 
 defined("CPATH") or die();
 
-class Comments extends App
+class Comments extends \models\app\Comments
 {
-    public function create()
-    {
-//        $data = $this->request->post('data');
-    }
+
 }

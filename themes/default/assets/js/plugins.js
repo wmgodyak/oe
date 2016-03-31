@@ -14736,7 +14736,7 @@
 
 
 
-;function ($) {
+!function ($) {
     'use strict';
 
     // BUTTON PUBLIC CLASS DEFINITION
@@ -14746,13 +14746,13 @@
         this.$element  = $(element)
         this.options   = $.extend({}, Button.DEFAULTS, options)
         this.isLoading = false
-    }
+    };
 
     Button.VERSION  = '3.3.6'
 
     Button.DEFAULTS = {
         loadingText: 'loading...'
-    }
+    };
 
     Button.prototype.setState = function (state) {
         var d    = 'disabled'

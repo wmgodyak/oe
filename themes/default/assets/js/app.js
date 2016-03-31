@@ -179,7 +179,74 @@ App.alert = function(msg, status, target)
     target.html(d);
 };
 
+
+App.comments = {
+    init: function()
+    {
+        App.validateAjaxForm('#commentsCreate', function (d) {
+            App.alert(d.m, 'success');
+        });
+
+        $(document).on('click', '.comment-reply', function(){
+            var id = $(this).data('parent');
+            $("#commentsParentId").val(id);
+
+            $('html, body').animate({
+                scrollTop: $("#commentsCreate").offset().top
+            }, 1000);
+        });
+
+        $(document).on('click', '.b-comments-subscribe', function(e){
+
+            e.preventDefault();
+
+            var id= $(this).data('id'), $this = $(this), t = $this.data('us');
+            if(typeof id == 'undefined') {
+                return false;
+            }
+
+            App.request.get('ajax/Comments/subscribe/' + id, function(d){
+                if(d>0){
+                    $this.text(t).removeClass('b-comments-subscribe').addClass('b-comments-un-subscribe');
+                }
+            });
+        });
+
+        $(document).on('click', '.b-comments-un-subscribe', function(e){
+
+            e.preventDefault();
+
+            var id= $(this).data('id'), $this = $(this), t = $this.data('s');
+            if(typeof id == 'undefined') return false;
+
+            App.request.get('route/Comments/unSubscribe/' + id, function(d){
+                if(d > 0){
+                    $this.text(t).removeClass('b-comments-un-subscribe').addClass('b-comments-subscribe');
+                }
+            });
+        });
+
+
+        return;
+
+        $('.reviews-container').find('a.toggle-link').click(function(e){
+            e.preventDefault();
+            var $this = $(this),
+                id = $this.data('id'),
+                t = $('.parent-' + id).is(':visible') ? $this.data('show') : $this.data('hide');
+
+            $('.parent-' + id).slideToggle('fast', function(){
+                $this.find('span').text(t);
+                $this.toggleClass('close');
+            })
+        });
+
+
+    }
+};
+
 $(document).ready(function(){
    App.init();
    App.account.init();
+   App.comments.init();
 });

@@ -33,12 +33,12 @@ class Content extends App
             ->row('url');
 
         if($this->languages_id == $this->languages->getDefault('id')){
-            return $url;
+            return APPURL.$url;
         }
 
         $code = $this->languages->getData($this->languages_id, 'code');
 
-        return $code .'/'. $url;
+        return APPURL. $code .'/'. $url;
     }
 
     public function getItems($key = '*')

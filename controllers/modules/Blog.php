@@ -8,7 +8,9 @@
 namespace controllers\modules;
 
 use controllers\App;
+use controllers\core\Session;
 use helpers\Pagination;
+use models\modules\Comments;
 
 defined("CPATH") or die();
 /**
@@ -72,6 +74,7 @@ class Blog extends App
     public function post()
     {
         $id = $this->page['id'];
+        $users_id = Session::get('user.id');
         $post = $this->template->getVars('page');
         $date = new \DateTime($post['published']);
         $post['published'] = $date->format('F d, Y');
@@ -79,6 +82,18 @@ class Blog extends App
         $post['prev_post'] = $this->blog->getPrevPost($id);
         $post['next_post'] = $this->blog->getNextPost($id);
         $post['tags']      = $this->blog->getTags($id);
+
+
+        // comments
+        $comments = new Comments();
+        $c = [
+            'enabled'   => true,
+            'items'     => $comments->get($id),
+            'total'     => $comments->getTotal($id),
+            'subscribe' => $users_id ?  $comments->isSubscribe($users_id, $id) : false
+        ];
+
+        $post['comments'] = $c;
 
         $this->template->assign('post', $post);
     }
