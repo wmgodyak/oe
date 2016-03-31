@@ -12,7 +12,7 @@ use models\App;
 
 defined("CPATH") or die();
 
-class Comments extends \models\app\Comments
+class Comments extends \models\components\Comments
 {
 
 }

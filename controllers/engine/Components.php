@@ -199,7 +199,7 @@ class Components extends Engine
             $data = $this->request->post('data'); $s=0; $i=[];
             $data['controller'] = $component;
 
-            FormValidation::setRule(['type', 'controller'], FormValidation::REQUIRED);
+            FormValidation::setRule(['controller'], FormValidation::REQUIRED);
 
             FormValidation::run($data);
 

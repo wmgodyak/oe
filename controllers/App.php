@@ -101,8 +101,10 @@ class App extends Controller
 
         // init page
         $args = $this->request->param();
-
-        if($this->request->isXhr() || (isset($args['controller']) && $args['namespace'] != 'controllers\App') ){
+        if(
+            $this->request->isXhr() ||
+            (isset($args['controller']) && $args['namespace'] != 'controllers\App' && $args['controller'] != 'App')
+        ){
             if( ! $this->languages_id){
                 $l = new Languages();
                 $lang = $l->getDefault();
@@ -200,7 +202,7 @@ class App extends Controller
 
         $url = $content->getUrlById($id);
 
-        $this->redirect( APPURL . $url, 404);
+        $this->redirect( $url, 404);
     }
 
     private function eTechnicalWorks()

@@ -28,6 +28,7 @@ abstract class IconBuilder
     const TYPE_TRASH        = 'fa-trash';
     const TYPE_TRASH_EMPTY  = 'fa-trash-o';
     const TYPE_BAN          = 'fa-ban';
+    const TYPE_REPLY        = 'fa-reply';
     const TYPE_RESTORE      = 'fa-repeat';
 
     protected $type;

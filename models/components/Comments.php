@@ -6,11 +6,11 @@
  * Date: 30.03.16 : 14:36
  */
 
-namespace models\app;
+namespace models\components;
 
 use controllers\core\Logger;
 use models\App;
-use models\components\Mailer;
+use models\app\Content;
 
 defined("CPATH") or die();
 
@@ -163,7 +163,7 @@ class Comments extends App
                 join users u on u.id=cs.users_id
                 join content_info i on i.content_id={$data['content_id']} and i.languages_id={$this->languages_id}
                 where cs.content_id={$data['content_id']} and users_id <> {$data['users_id']}
-                ",1)
+                ")
             ->all();
 
         if(empty($r)) return;
