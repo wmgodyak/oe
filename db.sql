@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Мар 31 2016 г., 12:09
+-- Время создания: Мар 31 2016 г., 17:46
 -- Версия сервера: 5.5.47-0ubuntu0.14.04.1
 -- Версия PHP: 5.5.9-1ubuntu4.14
 
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `comments` (
   KEY `users_id` (`users_id`),
   KEY `token` (`skey`),
   KEY `isfolder` (`isfolder`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=27 ;
 
 --
 -- Дамп данных таблицы `comments`
@@ -85,14 +85,19 @@ INSERT INTO `comments` (`id`, `parent_id`, `isfolder`, `content_id`, `users_id`,
 (9, 7, 0, 16, 3, 'ewrwer', 1.0, 'approved', '2016-03-30 15:19:43', '127.0.0.1', 'da28c000d5ca20ff3a01ef73e8890d01'),
 (10, 0, 0, 16, 3, 'dsfdsf sdf sdf ', 1.0, 'approved', '2016-03-31 06:17:22', '127.0.0.1', '4c1abdd31bef2c7da87763d22a68de40'),
 (11, 0, 1, 16, 15, 'я опублікувала статтю, в якій перерахувала 25 технік генерації ідей для логотипу. Якщо ви її не читали — обов''язково прочитайте :) А потім повертайтеся сюди :)', 1.0, 'approved', '2016-03-31 06:53:02', '127.0.0.1', '81a66e5c77d7549fd03fcf264c737afe'),
-(12, 11, 0, 16, 3, '345435345 ggdfgdfg', 1.0, 'approved', '2016-03-31 06:54:37', '127.0.0.1', '17cd3a66cfc46e9def2aa961a9e49a58'),
+(12, 11, 1, 16, 3, '345435345 ggdfgdfg', 1.0, 'approved', '2016-03-31 06:54:37', '127.0.0.1', '17cd3a66cfc46e9def2aa961a9e49a58'),
 (13, 0, 0, 16, 15, 'я опублікувала статтю, в якій перерахувала 25 технік генерації ідей для логотипу. Якщо ви її не читали — обов''язково прочитайте :) А потім повертайтеся сюди :)', 1.0, 'approved', '2016-03-31 06:56:08', '127.0.0.1', '81a66e5c77d7549fd03fcf264c737afe'),
 (14, 6, 0, 16, 3, 'Жорік Ревазов\nя опублікувала статтю, в якій перерахувала 25 технік генерації ідей для логотипу. Якщо ви її не читали — обов''язково прочитайте :) А потім повертайтеся сюди :)', 1.0, 'approved', '2016-03-31 06:57:53', '127.0.0.1', 'de5a5df31ef353e979860181e96432fc'),
 (15, 14, 0, 16, 2, 'в якій перерахувала 25 технік генерації ідей для логотипу. Якщо ви її не читали — обов''язково прочитайте :) А потім повертайтеся сюди :)', 1.0, 'approved', '2016-03-31 08:46:30', '127.0.0.1', NULL),
 (16, 14, 0, 16, 2, 'обов''язково прочитайте :) А потім повертайтеся сюди :)', 1.0, 'approved', '2016-03-31 08:48:38', '127.0.0.1', NULL),
 (17, 13, 0, 16, 2, 'ertertert', 1.0, 'approved', '2016-03-31 08:49:52', '127.0.0.1', NULL),
 (18, 13, 0, 16, 2, 'werewrwer', 1.0, 'approved', '2016-03-31 08:49:58', '127.0.0.1', NULL),
-(19, 13, 0, 16, 2, 'werwerwer', 1.0, 'approved', '2016-03-31 08:50:04', '127.0.0.1', NULL);
+(19, 13, 0, 16, 2, 'werwerwer', 1.0, 'approved', '2016-03-31 08:50:04', '127.0.0.1', NULL),
+(21, 19, 0, 16, 2, 'dfdsfsd', 1.0, 'approved', '2016-03-31 09:11:27', '127.0.0.1', NULL),
+(23, 21, 0, 16, 2, 'rtyr', 1.0, 'approved', '2016-03-31 09:15:54', '127.0.0.1', NULL),
+(24, 12, 0, 16, 3, ' Ревазов\nя опублікувала статтю, в якій перерахувала 25 технік генерації ідей для логотипу. Якщо ви її не читали — обов''язково прочитайте :) А потім повертайтеся сюди :)', 1.0, 'approved', '2016-03-31 09:15:58', '127.0.0.1', '94ade8080aa05c1632fc0831d354c220'),
+(25, 0, 0, 16, 3, 'xxzzxczsadf', 1.0, 'approved', '2016-03-31 13:33:43', '127.0.0.1', 'cbf59fc5c2a997a249d3c38fd52edeea'),
+(26, 0, 0, 16, 3, 'xxzzxczsadf', 1.0, 'new', '2016-03-31 13:34:04', '127.0.0.1', 'cbf59fc5c2a997a249d3c38fd52edeea');
 
 -- --------------------------------------------------------
 
@@ -109,15 +114,15 @@ CREATE TABLE IF NOT EXISTS `comments_subscribers` (
   UNIQUE KEY `content_id` (`content_id`,`users_id`),
   KEY `fk_comments_subscribe_content1_idx` (`content_id`),
   KEY `fk_comments_subscribe_users1_idx` (`users_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Дамп данных таблицы `comments_subscribers`
 --
 
 INSERT INTO `comments_subscribers` (`id`, `content_id`, `users_id`, `created`) VALUES
-(1, 16, 3, '2016-03-31 06:17:26'),
-(2, 16, 15, '2016-03-31 06:52:55');
+(2, 16, 15, '2016-03-31 06:52:55'),
+(3, 16, 3, '2016-03-31 13:33:39');
 
 -- --------------------------------------------------------
 
@@ -161,7 +166,6 @@ INSERT INTO `components` (`id`, `parent_id`, `isfolder`, `icon`, `author`, `vers
 (50, 45, 0, 'fa-file-code-o', 'Volodymyr Hodiak', '1.0.0', 'chunks', 50, 1, 300, NULL, '2016-03-16 15:21:56'),
 (51, 0, 0, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'admins', 51, 1, 300, NULL, '2016-03-16 15:22:03'),
 (52, 45, 0, 'fa-file-code-o', 'Volodymyr Hodiak', '1.0.0', 'features', 52, 1, 300, NULL, '2016-03-16 15:24:22'),
-(53, 45, 0, 'fa-globe', 'Volodymyr Hodiak', '1.0.0', 'translations', 53, 1, 300, NULL, '2016-03-16 15:24:52'),
 (54, 45, 0, 'fa-book', 'Volodymyr Hodiak', '1.0.0', 'guides', 54, 1, 300, NULL, '2016-03-16 15:25:16'),
 (55, 45, 0, 'fa-trash', 'Volodymyr Hodiak', '1.0.0', 'trash', 55, 1, 300, NULL, '2016-03-16 15:25:45'),
 (56, 45, 0, 'fa-book', 'Volodymyr Hodiak', '1.0.0', 'contentImagesSizes', 56, 1, 300, NULL, '2016-03-16 15:25:52'),
@@ -216,7 +220,7 @@ INSERT INTO `content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id`,
 (5, 1, 1, 2, 1, 0, 0, '2016-03-21 07:57:23', NULL, '2016-03-21', NULL, 'published'),
 (6, 1, 1, 2, 1, 0, 0, '2016-03-21 07:57:34', NULL, '2016-03-21', NULL, 'published'),
 (7, 1, 1, 2, 1, 0, 0, '2016-03-21 07:58:13', NULL, '2016-03-21', NULL, 'published'),
-(8, 1, 1, 2, 1, 0, 0, '2016-03-21 07:58:21', NULL, '2016-03-21', NULL, 'published'),
+(8, 1, 9, 2, 1, 0, 0, '2016-03-21 07:58:21', '2016-03-31 14:00:44', '2016-03-21', NULL, 'published'),
 (9, 1, 4, 2, 1, 0, 0, '2016-03-21 12:44:48', NULL, '2016-03-21', NULL, 'published'),
 (13, 3, 3, 2, 0, 0, 0, '2016-03-24 13:23:43', '2016-03-25 09:56:19', '2016-03-25', NULL, 'published'),
 (14, 3, 3, 2, 0, 0, 0, '2016-03-24 13:24:00', '2016-03-25 09:56:29', '2016-03-25', NULL, 'published'),
@@ -255,7 +259,7 @@ CREATE TABLE IF NOT EXISTS `content_features` (
   UNIQUE KEY `content_id` (`content_id`,`features_id`,`values_id`,`languages_id`),
   KEY `fk_content_features_values_content1_idx` (`content_id`),
   KEY `fk_content_features_values_features1_idx` (`features_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- Дамп данных таблицы `content_features`
@@ -264,7 +268,8 @@ CREATE TABLE IF NOT EXISTS `content_features` (
 INSERT INTO `content_features` (`id`, `content_id`, `features_id`, `values_id`, `languages_id`, `value`) VALUES
 (1, 29, 4, 8, 0, NULL),
 (2, 34, 4, 8, 0, NULL),
-(3, 2, 4, 8, 0, NULL);
+(3, 2, 4, 8, 0, NULL),
+(4, 8, 4, 8, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -470,7 +475,7 @@ CREATE TABLE IF NOT EXISTS `content_types` (
   UNIQUE KEY `parent_id` (`parent_id`,`type`),
   UNIQUE KEY `parent_id_2` (`parent_id`,`is_main`),
   KEY `is_main` (`is_main`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
 
 --
 -- Дамп данных таблицы `content_types`
@@ -483,7 +488,8 @@ INSERT INTO `content_types` (`id`, `parent_id`, `isfolder`, `type`, `name`, `is_
 (4, 1, 0, '404', '404', NULL, 'a:2:{s:9:"parent_id";s:0:"";s:11:"modules_ext";s:1:"1";}'),
 (6, 1, 0, 'main', 'Головна', NULL, 'a:2:{s:9:"parent_id";s:0:"";s:7:"modules";a:1:{i:0;s:10:"Nav::index";}}'),
 (7, 1, 0, 'blog', 'Блог', NULL, 'a:2:{s:9:"parent_id";s:0:"";s:11:"modules_ext";s:1:"1";}'),
-(8, 1, 0, 'account', 'Аккаунт', NULL, 'a:1:{s:9:"parent_id";s:0:"";}');
+(8, 1, 0, 'account', 'Аккаунт', NULL, 'a:1:{s:9:"parent_id";s:0:"";}'),
+(9, 1, 0, 'contacts', 'Контакти', NULL, 'a:1:{s:9:"parent_id";s:0:"";}');
 
 -- --------------------------------------------------------
 
@@ -668,7 +674,7 @@ CREATE TABLE IF NOT EXISTS `mail_templates` (
   `name` varchar(60) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- Дамп данных таблицы `mail_templates`
@@ -678,7 +684,8 @@ INSERT INTO `mail_templates` (`id`, `code`, `name`) VALUES
 (1, 'account_register', 'Реєстрація користувача'),
 (2, 'account_fp', 'Відновлення паролю'),
 (3, 'comment', 'Новий коментар'),
-(4, 'comments_notify_subscribers', 'Сповіщення підписників про новий кеоментар');
+(4, 'comments_notify_subscribers', 'Сповіщення підписників про новий кеоментар'),
+(5, 'feedback', 'feedback');
 
 -- --------------------------------------------------------
 
@@ -695,7 +702,7 @@ CREATE TABLE IF NOT EXISTS `mail_templates_info` (
   PRIMARY KEY (`id`),
   KEY `fk_mail_templates_info_idx` (`templates_id`),
   KEY `fk_mail_templates_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- Дамп данных таблицы `mail_templates_info`
@@ -705,7 +712,8 @@ INSERT INTO `mail_templates_info` (`id`, `templates_id`, `languages_id`, `subjec
 (1, 1, 1, 'Вітаємо з реєстрацією', '<p>Вітаємо {$data.name}&nbsp;{$data.surname}. Ви успішно зареєстувались на нашому сайті.&nbsp;</p>\n\n<p>Ваш логін:&nbsp;{$data.email}</p>\n\n<p>Ваш пароль:&nbsp;{$data.password}</p>\n\n<p>Бажаєм хороших покупок</p>\n'),
 (2, 2, 1, 'Відновлення паролюцйуцйу', '<p>Вітаємо {$data.name}. Ви отримали це повідомлення, так як здійснили запит на відновлення паролю.</p>\n\n<p>Для цього вам необхідно перейти по <a href="{$data.fp_link}">цьому&nbsp;посиланню</a></p>\n'),
 (3, 3, 1, 'Новий коментар', '<p>Вітаємо.<br />\nНовий коментар до статі {$data.post_name}.<br />\nІм&#39;я: {$data.user.name}<br />\nEmail: {$data.user.email}<br />\nКоментар: {$data.message}<br />\n<br />\n----------------------------------<br />\nВи можете <a href="{$data.approve_url}">опублікувати коменар</a> або <a href="{$data.delete_url}">видалити</a> його.</p>\n'),
-(4, 4, 1, 'Вітаємо. Новий коментар. ', '<p>Вітаємо {$data.name}. Ви отримали це повідомлення, так як слідкуєте за коментарями до статті {$data.page_name}.</p>\n\n<p>Ви можете <a href="{$data.page_url}">переглянути його тут</a>.</p>\n');
+(4, 4, 1, 'Вітаємо. Новий коментар. ', '<p>Вітаємо {$data.name}. Ви отримали це повідомлення, так як слідкуєте за коментарями до статті {$data.page_name}.</p>\n\n<p>Ви можете <a href="{$data.page_url}">переглянути його тут</a>.</p>\n'),
+(5, 5, 1, 'Повідолення з форми контактів', '<p>Вітаємо. Нове повідомлення з форми контактів.</p>\n\n<p>Ім&#39;я: {$data.name}</p>\n\n<p>Телефон: {$data.phone}</p>\n\n<p>Email: {$data.email}</p>\n\n<p>Повідомлення</p>\n\n<p>{$data.message}</p>\n');
 
 -- --------------------------------------------------------
 
@@ -723,7 +731,7 @@ CREATE TABLE IF NOT EXISTS `modules` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `controller` (`controller`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
 
 --
 -- Дамп данных таблицы `modules`
@@ -734,7 +742,8 @@ INSERT INTO `modules` (`id`, `icon`, `author`, `version`, `controller`, `setting
 (7, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'first', NULL, '2016-03-23 14:22:41'),
 (8, 'fa-nav', 'Volodymyr Hodiak', '1.0.0', 'nav', NULL, '2016-03-24 08:44:14'),
 (9, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'blog', NULL, '2016-03-24 13:36:39'),
-(10, 'fa-user', 'Volodymyr Hodiak', '1.0.0', 'account', NULL, '2016-03-28 07:13:08');
+(10, 'fa-user', 'Volodymyr Hodiak', '1.0.0', 'account', NULL, '2016-03-28 07:13:08'),
+(11, 'fa-mail', 'Volodymyr Hodiak', '1.0.0', 'feedback', NULL, '2016-03-31 13:55:23');
 
 -- --------------------------------------------------------
 
@@ -805,7 +814,7 @@ CREATE TABLE IF NOT EXISTS `plugins` (
   PRIMARY KEY (`id`),
   KEY `published` (`published`),
   KEY `module` (`controller`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=28 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=29 ;
 
 --
 -- Дамп данных таблицы `plugins`
@@ -821,7 +830,8 @@ INSERT INTO `plugins` (`id`, `icon`, `author`, `version`, `controller`, `place`,
 (24, 'fa-folder-o', 'Volodymyr Hodiak', '1.0.0', 'postsCategories', 'sidebar', 1, 300, NULL, '2016-03-25 10:53:16'),
 (25, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'postsCategoriesSelect', 'params', 1, 300, NULL, '2016-03-25 12:03:47'),
 (26, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'tags', 'after_params', 1, 300, NULL, '2016-03-25 14:12:23'),
-(27, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'customersGroup', 'sidebar', 1, 300, NULL, '2016-03-28 08:33:12');
+(27, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'customersGroup', 'sidebar', 1, 300, NULL, '2016-03-28 08:33:12'),
+(28, 'fa-comments', 'Volodymyr Hodiak', '1.0.0', 'comments', 'after_content', 1, 300, NULL, '2016-03-31 10:26:15');
 
 -- --------------------------------------------------------
 
@@ -838,7 +848,7 @@ CREATE TABLE IF NOT EXISTS `plugins_components` (
   KEY `fk_plugins_components_plugins1_idx` (`plugins_id`),
   KEY `fk_plugins_components_components1_idx` (`components_id`),
   KEY `position` (`position`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
 
 --
 -- Дамп данных таблицы `plugins_components`
@@ -853,7 +863,8 @@ INSERT INTO `plugins_components` (`id`, `plugins_id`, `components_id`, `position
 (9, 24, 67, 0),
 (10, 25, 67, 0),
 (11, 26, 67, 0),
-(12, 27, 68, 0);
+(12, 27, 68, 0),
+(13, 28, 67, 0);
 
 -- --------------------------------------------------------
 
@@ -978,8 +989,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `updated`, `lastlogin`, `status`) VALUES
-(2, 1, 0, 'qa73af6110ns11364j57uhvl74', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-03-24 16:42:51', '2016-03-31 06:11:37', 'active'),
-(3, 5, 0, 'qa73af6110ns11364j57uhvl74', 'Жорік', 'Ревазов', '+35 (555) 5555555', 'z@otakoyi.com', 'MToUTd7.hmK2o', NULL, NULL, '2016-03-28 09:01:38', '2016-03-30 13:47:30', '2016-03-31 06:16:29', 'active'),
+(2, 1, 0, 'qa73af6110ns11364j57uhvl74', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-03-24 16:42:51', '2016-03-31 13:32:36', 'active'),
+(3, 5, 0, 'qa73af6110ns11364j57uhvl74', 'Жорік', 'Ревазов', '+35 (555) 5555555', 'z@otakoyi.com', 'MToUTd7.hmK2o', NULL, NULL, '2016-03-28 09:01:38', '2016-03-30 13:47:30', '2016-03-31 13:33:25', 'active'),
 (5, 2, 0, NULL, 'Жорік', '', '', 'otakoyi@gmail.com', 'MTGRXCzqBsZUI', NULL, NULL, '2016-03-29 12:21:29', '0000-00-00 00:00:00', NULL, 'active'),
 (6, 2, 0, NULL, 'Микола', '', '', 'm@otakoyi.com', 'MTTuFPm3y4m2o', NULL, NULL, '2016-03-29 13:18:45', '0000-00-00 00:00:00', NULL, 'active'),
 (7, 2, 0, NULL, 'Микола', '', '', 'ma@otakoyi.com', 'MTTuFPm3y4m2o', NULL, NULL, '2016-03-29 13:21:09', '0000-00-00 00:00:00', NULL, 'active'),

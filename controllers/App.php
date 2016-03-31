@@ -185,7 +185,7 @@ class App extends Controller
         }
     }
 
-    public function getUrl($id)
+    protected function getUrl($id)
     {
         $content = new Content();
         return $content->getUrlById($id);

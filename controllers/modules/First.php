@@ -21,5 +21,8 @@ defined("CPATH") or die();
  */
 class First extends App
 {
-    
+    public function send()
+    {
+
+    }
 }

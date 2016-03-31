@@ -19,6 +19,7 @@ class FormValidation
     const REQUIRED = 'required';
     const EMAIL    = 'email';
     const PASSWORD = 'password';
+    const PHONE    = '';
 
     private static $rules  = [];
     private static $errors = [];

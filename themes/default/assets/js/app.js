@@ -15,7 +15,15 @@ var App = {
         var s = document.getElementById('appScr');
         s.parentNode.insertBefore(sc, s);
     },
-    validateAjaxForm: function(myForm, onSuccess, ajaxParams, rules, onBeforeSend){
+    /**
+     * validate form and send request via ajax
+     * @param myForm
+     * @param onSuccess
+     * @param onBeforeSend
+     * @param ajaxParams
+     * @param rules
+     */
+    validateAjaxForm: function(myForm, onSuccess, onBeforeSend, ajaxParams, rules){
 
         rules = typeof rules == 'undefined' ? [] : rules;
 
@@ -225,28 +233,25 @@ App.comments = {
                 }
             });
         });
-
-
-        return;
-
-        $('.reviews-container').find('a.toggle-link').click(function(e){
-            e.preventDefault();
-            var $this = $(this),
-                id = $this.data('id'),
-                t = $('.parent-' + id).is(':visible') ? $this.data('show') : $this.data('hide');
-
-            $('.parent-' + id).slideToggle('fast', function(){
-                $this.find('span').text(t);
-                $this.toggleClass('close');
-            })
-        });
-
-
     }
 };
 
+App.feedback = function(){
+    $('#data_phone').mask('+38(099)999-99-99');
+    App.validateAjaxForm('#feedback', function (d) {
+        App.alert(d.m);
+        setTimeout(function(){
+            //location.reload(true);
+        }, 3000);
+        $('#feedback').resetForm();
+        $('#bSubmit').button('complete');
+    },function(){
+        $('#bSubmit').button('loading');
+    });
+};
 $(document).ready(function(){
-   App.init();
-   App.account.init();
-   App.comments.init();
+    App.init();
+    App.account.init();
+    App.comments.init();
+    App.feedback();
 });
