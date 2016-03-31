@@ -58,7 +58,7 @@ engine.comments = {
                 function(d){
                     if(d.s){
                         var $tabs = $('#tabs').tabs();
-                        var selected = $tabs.tabs('option', 'selected');
+                        var selected = $tabs.tabs('option', 'active');
                         $("#tabs").tabs('load',selected);
                         //engine.refreshDataTable('comments');
                         dialog.dialog('close');
@@ -73,7 +73,7 @@ engine.comments = {
         engine.request.get('./comments/approve/' + id, function(d){
             if(d > 0){
                 var $tabs = $('#tabs').tabs();
-                var selected = $tabs.tabs('option', 'selected');
+                var selected = $tabs.tabs('option', 'active');
                 $("#tabs").tabs('load',selected);
             }
         });
@@ -84,7 +84,7 @@ engine.comments = {
         engine.request.get('./comments/restore/' + id, function(d){
             if(d > 0){
                 var $tabs = $('#tabs').tabs();
-                var selected = $tabs.tabs('option', 'selected');
+                var selected = $tabs.tabs('option', 'active');
                 $("#tabs").tabs('load',selected);
             }
         });
@@ -99,7 +99,9 @@ engine.comments = {
             {
                 engine.request.get('./comments/delete/' + id, function(d){
                     if(d > 0){
-                        engine.refreshDataTable('comments');
+                        var $tabs = $('#tabs').tabs();
+                        var selected = $tabs.tabs('option', 'active');
+                        $("#tabs").tabs('load',selected);
                     }
                 });
                 $(this).dialog('close').dialog('destroy').remove();
@@ -115,9 +117,11 @@ engine.comments = {
             {
                 engine.request.get('./comments/spam/' + id, function(d){
                     if(d > 0){
-                        engine.refreshDataTable('comments');
+                        var $tabs = $('#tabs').tabs();
+                        var selected = $tabs.tabs('option', 'active');
+                        $("#tabs").tabs('load',selected);
                     }
-                })
+                });
 
                 $(this).dialog('close').dialog('destroy').remove();
             }
