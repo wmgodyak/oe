@@ -39,6 +39,7 @@ class Comments extends Plugin
     {
         $comments = $this->comments->get($id);
         $this->template->assign('comments', $comments);
+        $this->template->assign('comments_total', $this->comments->getTotal($id));
         return $this->template->fetch('plugins/comments/index');
     }
 
@@ -46,6 +47,7 @@ class Comments extends Plugin
     {
         $comments = $this->comments->get($id);
         $this->template->assign('comments', $comments);
+        $this->template->assign('comments_total', $this->comments->getTotal($id));
         return $this->template->fetch('plugins/comments/index');
     }
 

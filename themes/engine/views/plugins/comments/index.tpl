@@ -1,6 +1,6 @@
 {*<pre>{print_r($comments)}</pre>*}
 {if $comments|count}
-    <h3>Коментарі</h3>
+    <h3>Коментарі ({$comments_total})</h3>
     <div class="row">
         {function name=renderComment}
             <div class="col-md-12 col-md-offset-{$offset}">

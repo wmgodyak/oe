@@ -14,6 +14,7 @@ use controllers\engine\DataTables;
 use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
 use helpers\bootstrap\Link;
+use models\engine\Comments;
 
 defined("CPATH") or die();
 
@@ -86,7 +87,12 @@ class Post extends Content
         $t-> execute();
 
         $res = array();
+        $comments = new Comments();
+
         foreach ($t->getResults(false) as $i=>$row) {
+            $t_comments = $comments->getTotal($row['id']);
+            $t_comments_new = $comments->getTotalNew($row['id']);
+
             $icon = Icon::create(($row['isfolder'] ? 'fa-folder' : 'fa-file'));
             $icon_link = Icon::create('fa-external-link');
             $status = $this->t($this->type .'.status_' . $row['status']);
@@ -95,6 +101,8 @@ class Post extends Content
                            " <a class='status-{$row['status']}' title='{$status}' href='content/{$this->type}/edit/{$row['id']}'>{$icon}  {$row['name']}</a>"
                          . " <a href='/{$row['url']}' target='_blank'>{$icon_link}</a>"
                          . "<br><small class='label label-info'>Автор:{$row['owner']} </small>"
+                         . "<br><small class='label label-info'>Коментарів: {$t_comments} </small>"
+                         . ($t_comments_new > 0 ? ", <small class='label label-info'>{$t_comments_new} новий</small>" : "")
                             ;
             $res[$i][] = date('d.m.Y H:i:s', strtotime($row['created']));
             $res[$i][] = $row['updated'] ? date('d.m.Y H:i:s', strtotime($row['updated'])) : '';

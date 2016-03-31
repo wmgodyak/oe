@@ -51,6 +51,18 @@ class Comments extends App
             where content_id={$content_id} and status='approved'
         ")->row('t');
     }
+    /**
+     * @param $content_id
+     * @return array|mixed
+     */
+    public function getTotalNew($content_id)
+    {
+        return self::$db->select("
+            select count(id) as t
+            from comments
+            where content_id={$content_id} and status='new'
+        ")->row('t');
+    }
 
     /**
      * @param $data
