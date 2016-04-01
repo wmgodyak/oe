@@ -58,6 +58,16 @@ class Blog extends Content
         $res = [];
         $this->clearQuery();
 
+        $q = $this->request->get('q', 's');
+        if($q){
+            if(strlen($q) >= 3 ){
+                $uq = explode(' ', $q);
+                foreach ($uq as $k=>$v) {
+//                    $this->where( "and i.name like '%". $v ."%'" );
+                }
+            }
+        }
+
         $tag = $this->request->param('tag');
         if($tag){
             $this->join("tags t on t.tag = '{$tag}'");

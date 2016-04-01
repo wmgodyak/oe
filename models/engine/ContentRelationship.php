@@ -58,5 +58,21 @@ class ContentRelationship extends Engine
             ->all('categories_id');
     }
 
+    public function getMainCategoryId($content_id)
+    {
+        return self::$db
+            ->select("select categories_id from content_relationship where content_id={$content_id} and is_main = 1 ")
+            ->row('categories_id');
+    }
+
+    public function clearMainCategory($content_id)
+    {
+        return self::$db->delete
+        (
+            'content_relationship',
+            " content_id={$content_id} and is_main=1 limit 1"
+        );
+    }
+
 
 }

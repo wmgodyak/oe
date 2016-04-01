@@ -17,7 +17,7 @@
             </div>
             <div class="col-md-3 sidebar">
                 <div class="search">
-                    <form action="25">
+                    <form action="3">
                         <span class="icomoon-search"></span>
                         <input type="text" name="q" placeholder="Search on blog..." />
                     </form>
