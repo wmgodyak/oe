@@ -212,7 +212,7 @@ abstract class Engine extends Controller
             if(strpos($c, '/') !== false){
                 $a = explode('/', $c);
                 $c = end($a);
-                $c = mb_strtolower($c);
+                $c = lcfirst($c);
             }
             $item['name'] = $this->t($c . '.action_index');
             $res[] = $item;
