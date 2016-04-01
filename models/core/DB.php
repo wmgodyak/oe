@@ -165,7 +165,7 @@ class DB extends \PDO {
             $r = $this->result->fetchAll(DB::FETCH_ASSOC);
             $res = [];
             foreach ($r as $item) {
-                $res[] = $item[$key];
+                $res[$item[$key]] = $item[$key];
             }
             return $res;
         }

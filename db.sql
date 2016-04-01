@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Апр 01 2016 г., 13:43
+-- Время создания: Апр 01 2016 г., 18:29
 -- Версия сервера: 5.5.47-0ubuntu0.14.04.1
 -- Версия PHP: 5.5.9-1ubuntu4.14
 
@@ -149,7 +149,7 @@ CREATE TABLE IF NOT EXISTS `components` (
   KEY `position` (`position`),
   KEY `published` (`published`),
   KEY `module` (`controller`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=78 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=80 ;
 
 --
 -- Дамп данных таблицы `components`
@@ -183,7 +183,9 @@ INSERT INTO `components` (`id`, `parent_id`, `isfolder`, `icon`, `author`, `vers
 (70, 0, 1, 'fa-shopping-cart', 'Volodymyr Hodiak', '1.0.0', 'shop', 3, 1, 300, NULL, '2016-04-01 06:30:35'),
 (72, 70, 0, 'fa-mobile', 'Volodymyr Hodiak', '1.0.0', 'content/Products', 0, 1, 300, NULL, '2016-04-01 06:38:03'),
 (76, 70, 0, 'fa-file-text', 'Volodymyr Hodiak', '1.0.0', 'content/ProductsCategories', 0, 1, 300, NULL, '2016-04-01 08:10:43'),
-(77, 70, 0, 'fa-money', 'Volodymyr Hodiak', '1.0.0', 'currency', 0, 1, 300, NULL, '2016-04-01 10:28:14');
+(77, 70, 0, 'fa-money', 'Volodymyr Hodiak', '1.0.0', 'currency', 0, 1, 300, NULL, '2016-04-01 10:28:14'),
+(78, 70, 0, 'fa-bus', 'Volodymyr Hodiak', '1.0.0', 'delivery', 0, 1, 300, NULL, '2016-04-01 10:55:57'),
+(79, 70, 0, 'fa-credit-card', 'Volodymyr Hodiak', '1.0.0', 'payment', 0, 1, 300, NULL, '2016-04-01 11:16:34');
 
 -- --------------------------------------------------------
 
@@ -587,7 +589,15 @@ CREATE TABLE IF NOT EXISTS `delivery` (
   `published` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `sort` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+
+--
+-- Дамп данных таблицы `delivery`
+--
+
+INSERT INTO `delivery` (`id`, `free_from`, `price`, `published`, `sort`) VALUES
+(1, 500.00, 10.00, 1, 0),
+(2, 500.00, 30.00, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -604,7 +614,15 @@ CREATE TABLE IF NOT EXISTS `delivery_info` (
   PRIMARY KEY (`id`,`delivery_id`,`languages_id`),
   KEY `fk_delivery_info_delivery1_idx` (`delivery_id`),
   KEY `fk_delivery_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+
+--
+-- Дамп данных таблицы `delivery_info`
+--
+
+INSERT INTO `delivery_info` (`id`, `delivery_id`, `languages_id`, `name`, `description`) VALUES
+(1, 1, 1, 'Самовиз', '12121fds sadsadsa'),
+(2, 2, 1, 'Нова пошта', 'Служба доставки нова пошта');
 
 -- --------------------------------------------------------
 
@@ -616,13 +634,21 @@ CREATE TABLE IF NOT EXISTS `delivery_payment` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `delivery_id` tinyint(3) unsigned NOT NULL,
   `payment_id` tinyint(3) unsigned NOT NULL,
-  `sort` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY (`id`,`delivery_id`,`payment_id`),
   UNIQUE KEY `delivery_id` (`delivery_id`,`payment_id`),
   KEY `fk_delivery_payment_delivery1_idx` (`delivery_id`),
-  KEY `fk_delivery_payment_payment1_idx` (`payment_id`),
-  KEY `sort` (`sort`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  KEY `fk_delivery_payment_payment1_idx` (`payment_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
+
+--
+-- Дамп данных таблицы `delivery_payment`
+--
+
+INSERT INTO `delivery_payment` (`id`, `delivery_id`, `payment_id`) VALUES
+(12, 1, 1),
+(14, 1, 4),
+(15, 1, 3),
+(16, 1, 5);
 
 -- --------------------------------------------------------
 
@@ -910,14 +936,24 @@ INSERT INTO `nav_items` (`id`, `nav_id`, `content_id`, `position`) VALUES
 
 CREATE TABLE IF NOT EXISTS `payment` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
-  `currency_id` tinyint(3) unsigned NOT NULL,
   `published` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `module` varchar(60) NOT NULL,
   `settings` text,
-  `sort` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`,`currency_id`),
-  KEY `fk_payment_currency1_idx` (`currency_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `position` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `module` (`module`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+
+--
+-- Дамп данных таблицы `payment`
+--
+
+INSERT INTO `payment` (`id`, `published`, `module`, `settings`, `position`) VALUES
+(1, 1, 'Platon', 'a:4:{s:3:"key";s:3:"rty";s:8:"password";s:5:"tryrt";s:3:"url";s:6:"yrtyrt";s:9:"error_url";s:7:"yrtytry";}', 0),
+(2, 1, '', NULL, 0),
+(3, 1, 'LiqPay', 'a:5:{s:10:"public_key";s:1:"1";s:11:"private_key";s:1:"2";s:10:"result_url";s:1:"3";s:9:"error_url";s:1:"4";s:7:"sandbox";s:1:"5";}', 0),
+(4, 1, 'YandexMoney', 'a:2:{s:9:"yandex_id";s:1:"1";s:13:"yandex_secret";s:1:"2";}', 0),
+(5, 1, 'WebMoney', 'a:2:{s:5:"purse";s:1:"1";s:10:"secret_key";s:1:"2";}', 0);
 
 -- --------------------------------------------------------
 
@@ -934,7 +970,18 @@ CREATE TABLE IF NOT EXISTS `payment_info` (
   PRIMARY KEY (`id`,`payment_id`,`languages_id`),
   KEY `fk_payment_info_payment1_idx` (`payment_id`),
   KEY `fk_payment_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+
+--
+-- Дамп данных таблицы `payment_info`
+--
+
+INSERT INTO `payment_info` (`id`, `payment_id`, `languages_id`, `name`, `description`) VALUES
+(1, 1, 1, 'При отриманні', ''),
+(2, 2, 1, 'Розрахунковий рахунок', ''),
+(3, 3, 1, 'Онлайн LiqPay', ''),
+(4, 4, 1, 'Онлайн YandexMoney', ''),
+(5, 5, 1, 'WebMoney', '');
 
 -- --------------------------------------------------------
 
@@ -1330,12 +1377,6 @@ ALTER TABLE `mail_templates_info`
 ALTER TABLE `nav_items`
   ADD CONSTRAINT `fk_nav_items_content1` FOREIGN KEY (`content_id`) REFERENCES `content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_nav_items_nav1` FOREIGN KEY (`nav_id`) REFERENCES `nav` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Ограничения внешнего ключа таблицы `payment`
---
-ALTER TABLE `payment`
-  ADD CONSTRAINT `fk_payment_currency1` FOREIGN KEY (`currency_id`) REFERENCES `currency` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `payment_info`

@@ -31,7 +31,7 @@ class Guides extends Engine
 
         foreach ($this->languages as $language) {
             $data['info'][$language['id']] = self::$db
-                ->select("select name from guides_info where guides_id={$id} and languages_id={$language['id']} limit 1")
+                ->select("select * from guides_info where guides_id={$id} and languages_id={$language['id']} limit 1")
                 ->row();
         }
         return $data;
