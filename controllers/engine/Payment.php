@@ -151,7 +151,6 @@ class Payment extends Engine
 
         $settings = PaymentFactory::getSettings($module);
 
-
         $res = [];$i=0;
         foreach ($settings as $k=>$v) {
             $res[$i]['name']  = $k;

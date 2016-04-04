@@ -9,6 +9,7 @@
 namespace controllers\engine;
 
 use controllers\Engine;
+use controllers\modules\DeliveryFactory;
 use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
 use models\engine\DeliveryPayment;
@@ -27,6 +28,8 @@ defined("CPATH") or die();
 class Delivery extends Engine
 {
     private $delivery;
+
+    const MOD_PATH = 'controllers/modules/delivery/';
 
     public function __construct()
     {
@@ -113,6 +116,7 @@ class Delivery extends Engine
     {
         $this->template->assign('action', 'create');
         $this->template->assign('payment', DeliveryPayment::getPayment());
+        $this->template->assign('modules', $this->getModules());
         $this->response->body($this->template->fetch('delivery/edit'))->asHtml();
     }
 
@@ -122,6 +126,7 @@ class Delivery extends Engine
         $this->template->assign('action', 'edit');
         $this->template->assign('payment', DeliveryPayment::getPayment());
         $this->template->assign('selected', DeliveryPayment::getSelectedPayment($id));
+        $this->template->assign('modules', $this->getModules());
         $this->response->body($this->template->fetch('delivery/edit'))->asHtml();
     }
 
@@ -156,6 +161,40 @@ class Delivery extends Engine
         }
 
         $this->response->body(['s'=>$s, 'i' => $i])->asJSON();
+    }
+
+    private function getModules()
+    {
+        $items = array();
+        if ($handle = opendir(DOCROOT . self::MOD_PATH)) {
+            while (false !== ($entry = readdir($handle))) {
+                if ($entry != "." && $entry != ".." ) {
+
+                    $module = str_replace('.php', '', $entry);
+
+                    $items[] = $module;
+                }
+            }
+            closedir($handle);
+        }
+
+        return $items;
+    }
+
+    public function getModuleSettings()
+    {
+        $module = $this->request->post('module');
+        $db_settings = $this->delivery->getSettings($module);
+
+        $settings = DeliveryFactory::getSettings($module);
+
+        $res = [];$i=0;
+        foreach ($settings as $k=>$v) {
+            $res[$i]['name']  = $k;
+            $res[$i]['value'] = isset($db_settings[$k]) ? $db_settings[$k] : null;
+            $i++;
+        }
+        $this->response->body(['s' => $res])->asJSON();
     }
 
     public function delete($id)

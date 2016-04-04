@@ -18,7 +18,7 @@
         <label for="data_module" class="col-sm-3 control-label">{$t.payment.module}</label>
         <div class="col-sm-9">
             <select name="data[module]" id="data_module" class="form-control">
-                <option value="">Немає</option>
+                <option value=''>Немає</option>
                 {foreach $modules as $k=>$item}
                     <option {if $item == $data.module}selected{/if} value="{$item}">{$item}</option>
                 {/foreach}

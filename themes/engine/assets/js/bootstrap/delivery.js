@@ -18,6 +18,23 @@ engine.delivery = {
         $(document).on('click', '.b-delivery-hide', function(){
             engine.delivery.hide($(this).data('id'));
         });
+
+
+        $(document).on('change', '#data_module', function() {
+            var module = this.value;
+
+            var tmpl = _.template($('#settingsList').html()), ps =$("#d_settings") ;
+            ps.html('');
+            if(module == '') return;
+            engine.request.post({
+                url: 'delivery/getModuleSettings',
+                data: {module: module},
+                success: function(res){
+                    ps.html(tmpl({items: res.s}));
+                }
+            });
+        });
+
     },
     create: function()
     {
@@ -72,6 +89,7 @@ engine.delivery = {
 
                 $('#data_code').mask('aaa');
                 $('#data_payment').select2();
+                $('#data_module').trigger('change');
 
                 engine.validateAjaxForm('#form', function(d){
                     if(d.s){

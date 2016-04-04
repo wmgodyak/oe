@@ -44,6 +44,7 @@ class Delivery extends Engine
     {
         $data = $this->request->post('data');
         $info = $this->request->post('info');
+        if(isset($data['settings']) && !empty($data['settings'])) $data['settings'] = serialize($data['settings']);
 
         $this->beginTransaction();
 
@@ -88,6 +89,8 @@ class Delivery extends Engine
     {
         $info = $this->request->post('info');
         $data = $this->request->post('data');
+
+        if(isset($data['settings']) && !empty($data['settings'])) $data['settings'] = serialize($data['settings']);
 
         $this->beginTransaction();
 
@@ -154,5 +157,13 @@ class Delivery extends Engine
     public function hide($id)
     {
         return self::$db->update('delivery',['published' => 0], " id={$id} limit 1");
+    }
+
+    public function getSettings($module)
+    {
+        $s = self::$db->select("select settings from delivery where module='{$module}' limit 1 ")->row('settings');
+        if(empty($s)) return null;
+
+        return unserialize($s);
     }
 }

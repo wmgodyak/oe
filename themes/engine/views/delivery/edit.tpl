@@ -40,6 +40,18 @@
         </div>
     </div>
     <div class="form-group">
+        <label for="data_module" class="col-sm-3 control-label">{$t.payment.module}</label>
+        <div class="col-sm-9">
+            <select name="data[module]" id="data_module" class="form-control">
+                <option value=''>Немає</option>
+                {foreach $modules as $k=>$item}
+                    <option {if $item == $data.module}selected{/if} value="{$item}">{$item}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+    <div id="d_settings"></div>
+    <div class="form-group">
         <label for="data_published" class="col-sm-3 control-label">{$t.delivery.published}</label>
         <div class="col-sm-9">
             <input type="hidden"  name="data[published]"  class="form-control" value="0" >
@@ -49,3 +61,16 @@
     <input type="hidden" name="token" value="{$token}">
     <input type="hidden" name="action" value="{$action}">
 </form>
+{literal}
+    <script type="text/template" id="settingsList" >
+        <% console.log(items); %>
+        <% for(var i=0; i < items.length; i++) { %>
+        <div class="form-group">
+            <label for="" class="col-sm-3 control-label"><%- items[i].name %></label>
+            <div class="col-sm-9">
+                <input type="text" required name="data[settings][<%- items[i].name %>]" class="form-control" value="<%- items[i].value %>" >
+            </div>
+        </div>
+        <% } %>
+    </script>
+{/literal}

@@ -20,8 +20,10 @@ engine.payment = {
 
         $(document).on('change', '#data_module', function() {
             var module = this.value;
+
             var tmpl = _.template($('#settingsList').html()), ps =$("#p_settings") ;
             ps.html('');
+            if(module == '') return;
             engine.request.post({
                 url: 'payment/getModuleSettings',
                 data: {module: module},

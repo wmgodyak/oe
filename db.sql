@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Апр 01 2016 г., 18:29
+-- Время создания: Апр 04 2016 г., 09:56
 -- Версия сервера: 5.5.47-0ubuntu0.14.04.1
 -- Версия PHP: 5.5.9-1ubuntu4.14
 
@@ -437,7 +437,7 @@ CREATE TABLE IF NOT EXISTS `content_relationship` (
   KEY `fk_content_relationship_content1_idx` (`content_id`),
   KEY `fk_content_relationship_content2_idx` (`categories_id`),
   KEY `is_main` (`is_main`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=20 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=16 ;
 
 --
 -- Дамп данных таблицы `content_relationship`
@@ -566,7 +566,7 @@ CREATE TABLE IF NOT EXISTS `currency` (
   UNIQUE KEY `name` (`name`),
   UNIQUE KEY `code` (`code`),
   KEY `is_main` (`is_main`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
 
 --
 -- Дамп данных таблицы `currency`
@@ -586,18 +586,19 @@ CREATE TABLE IF NOT EXISTS `delivery` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `free_from` decimal(10,2) unsigned NOT NULL DEFAULT '0.00',
   `price` decimal(10,2) NOT NULL DEFAULT '0.00',
+  `module` varchar(30) DEFAULT NULL,
+  `settings` text,
   `published` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `sort` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Дамп данных таблицы `delivery`
 --
 
-INSERT INTO `delivery` (`id`, `free_from`, `price`, `published`, `sort`) VALUES
-(1, 500.00, 10.00, 1, 0),
-(2, 500.00, 30.00, 1, 0);
+INSERT INTO `delivery` (`id`, `free_from`, `price`, `module`, `settings`, `published`) VALUES
+(1, 500.00, 10.00, '', 'a:2:{s:3:"key";s:1:"1";s:8:"password";s:1:"2";}', 1),
+(2, 500.00, 30.00, 'NovaPoshta', 'a:2:{s:3:"key";s:1:"1";s:8:"password";s:1:"2";}', 1);
 
 -- --------------------------------------------------------
 
@@ -614,7 +615,7 @@ CREATE TABLE IF NOT EXISTS `delivery_info` (
   PRIMARY KEY (`id`,`delivery_id`,`languages_id`),
   KEY `fk_delivery_info_delivery1_idx` (`delivery_id`),
   KEY `fk_delivery_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Дамп данных таблицы `delivery_info`
@@ -638,7 +639,7 @@ CREATE TABLE IF NOT EXISTS `delivery_payment` (
   UNIQUE KEY `delivery_id` (`delivery_id`,`payment_id`),
   KEY `fk_delivery_payment_delivery1_idx` (`delivery_id`),
   KEY `fk_delivery_payment_payment1_idx` (`payment_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18 ;
 
 --
 -- Дамп данных таблицы `delivery_payment`
@@ -648,7 +649,8 @@ INSERT INTO `delivery_payment` (`id`, `delivery_id`, `payment_id`) VALUES
 (12, 1, 1),
 (14, 1, 4),
 (15, 1, 3),
-(16, 1, 5);
+(16, 1, 5),
+(17, 2, 1);
 
 -- --------------------------------------------------------
 
@@ -949,7 +951,7 @@ CREATE TABLE IF NOT EXISTS `payment` (
 --
 
 INSERT INTO `payment` (`id`, `published`, `module`, `settings`, `position`) VALUES
-(1, 1, 'Platon', 'a:4:{s:3:"key";s:3:"rty";s:8:"password";s:5:"tryrt";s:3:"url";s:6:"yrtyrt";s:9:"error_url";s:7:"yrtytry";}', 0),
+(1, 1, 'YandexMoney', 'a:2:{s:9:"yandex_id";s:1:"1";s:13:"yandex_secret";s:1:"2";}', 0),
 (2, 1, '', NULL, 0),
 (3, 1, 'LiqPay', 'a:5:{s:10:"public_key";s:1:"1";s:11:"private_key";s:1:"2";s:10:"result_url";s:1:"3";s:9:"error_url";s:1:"4";s:7:"sandbox";s:1:"5";}', 0),
 (4, 1, 'YandexMoney', 'a:2:{s:9:"yandex_id";s:1:"1";s:13:"yandex_secret";s:1:"2";}', 0),
@@ -1185,7 +1187,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `updated`, `lastlogin`, `status`) VALUES
-(2, 1, 0, 'gphk7iev06hafo7o612ae226r2', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-03-24 16:42:51', '2016-04-01 10:16:02', 'active'),
+(2, 1, 0, 's2e6kqmu2ngl601c52pqu719n5', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-03-24 16:42:51', '2016-04-04 06:14:51', 'active'),
 (3, 5, 0, 'qa73af6110ns11364j57uhvl74', 'Жорік', 'Ревазов', '+35 (555) 5555555', 'z@otakoyi.com', 'MToUTd7.hmK2o', NULL, NULL, '2016-03-28 09:01:38', '2016-03-30 13:47:30', '2016-03-31 13:33:25', 'active'),
 (5, 2, 0, NULL, 'Жорік', '', '', 'otakoyi@gmail.com', 'MTGRXCzqBsZUI', NULL, NULL, '2016-03-29 12:21:29', '0000-00-00 00:00:00', NULL, 'active'),
 (6, 2, 0, NULL, 'Микола', '', '', 'm@otakoyi.com', 'MTTuFPm3y4m2o', NULL, NULL, '2016-03-29 13:18:45', '0000-00-00 00:00:00', NULL, 'active'),
