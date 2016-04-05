@@ -1043,7 +1043,7 @@ engine.content = {
 
 
         $(".info-url").charCount({"counterText": "Залишилось:", "allowed": 160, "warning": 25});
-        $(".info-title,.into-h1,.info-keywords,.info-description")
+        $(".info-title,.into-h1,.info-description") //.info-keywords,
             .charCount({"counterText": "Залишилось:", "allowed": 255, "warning": 50});
 
         infoName.each(function(i,e){

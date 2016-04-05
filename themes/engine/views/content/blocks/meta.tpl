@@ -19,7 +19,7 @@
         <div class="form-group lang-{$lang.code} switch-lang" {if $i>0}style="display:none"{/if}>
             <label for="info_{$lang.id}_keywords" class="col-md-3 control-label">{$t.content.keywords}</label>
             <div class="col-md-9">
-                <input type="text" class="form-control info-keywords" name="content_info[{$lang.id}][keywords]" id="content_info_{$lang.id}_keywords" placeholder="{$t.content.keywords_i}" value="{$content.info[$lang.id].keywords}">
+                <input type="text" class="form-control info-keywords tags-input" data-role="tagsinput" name="content_info[{$lang.id}][keywords]" id="content_info_{$lang.id}_keywords" placeholder="{$t.content.keywords_i}" value="{$content.info[$lang.id].keywords}">
             </div>
         </div>
 
