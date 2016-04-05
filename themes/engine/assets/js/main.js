@@ -17,6 +17,7 @@ var engine = {
         });
     },
     ckUpdate: function(){
+        if(typeof CKEDITOR =='undefined') return ;
         for ( instance in CKEDITOR.instances )
             CKEDITOR.instances[instance].updateElement();
     },
@@ -1189,14 +1190,38 @@ engine.content = {
             });
 
             $('.cf-feature-select').select2();
+
+            $(document).on('change', '#main_categories_id', function(){
+                var id= this.value;
+                engine.content.features.get(id);
+            });
+            if($('html').data('action') == 'create'){
+                $("#main_categories_id").trigger('change');
+            }
+        },
+        get: function(categories_id)
+        {
+            var cnt = $("#contentFeaturesFs"), content_id=cnt.data('id');
+            engine.request.get
+            (
+                'contentFeatures/index/'+categories_id + '/'+content_id,
+                function(res)
+                {
+                    cnt.html(res);
+                },
+                'html'
+            );
         },
         add: function(content_id, parent_id)
         {
+            var FS = features_settings || [];
             engine.request.post({
                 url: 'contentFeatures/create',
                 data: {
-                    content_id : content_id,
-                    parent_id  : parent_id
+                    content_id     : content_id,
+                    parent_id      : parent_id,
+                    allowed        : (typeof  FS.allowed_types == 'undefined' ? null : FS.allowed_types),
+                    disable_values : (typeof  FS.disable_values == 'undefined' ? 0 : FS.disable_values)
                 },
                 success: function(res){
                     var pw = engine.dialog({
@@ -1642,7 +1667,7 @@ engine.contentTypes = {
             var typesID = $('#typesID').val(),
                 subTypesID = $('#subTypesID').val();
 
-            console.log('contentTypes.features.init()');
+            //console.log('contentTypes.features.init()');
 
             $(document).on('change', '#features', function()
             {
@@ -1683,6 +1708,11 @@ engine.contentTypes = {
             });
             var selected_features = selected_features || [];
             engine.contentTypes.features.refresh(selected_features);
+
+
+            // features settings
+            $("#settings_features_allowed_types,#settings_features_ex_types_id").select2();
+
         },
         refresh: function(data)
         {

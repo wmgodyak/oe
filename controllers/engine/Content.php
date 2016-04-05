@@ -76,17 +76,21 @@ class Content extends Engine
         $this->template->assign('form_action', $this->form_action . $id);
         $this->template->assign('form_success', $this->form_success);
 
-        $this->makeFeatures($content['features']);
+        //$content.settings.type.features
+        $this->makeFeatures($content['features'], $content['settings']['type']['features']);
 
         $form = $this->template->fetch($this->form_template);
 
         $this->output($form);
     }
 
-    private function makeFeatures($features)
+    private function makeFeatures($features, $settings)
     {
+//        $this->dump($settings);die;
         $out = '';
+        $disable_values = isset($settings['disable_values']) ? $settings['disable_values'] : 0;
         foreach ($features as $feature) {
+            $feature['disable_values'] = $disable_values;
             $this->template->assign('feature', $feature);
             $out .= $this->template->fetch('contentFeatures/feature');
         }

@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-03-18 18:26:18
+<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-04-05 09:34:10
          compiled from "/var/www/engine.loc/themes/engine/views/index.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:1202898852567be873c6fe20-51470877%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '6b5a4c44995d054b1606a318076352efcc60d459' => 
     array (
       0 => '/var/www/engine.loc/themes/engine/views/index.tpl',
-      1 => 1458318375,
+      1 => 1459838049,
       2 => 'file',
     ),
   ),
@@ -19,12 +19,12 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'unifunc' => 'content_567be873cb61d8_71422844',
   'variables' => 
   array (
+    'controller' => 0,
+    'action' => 0,
     'base_url' => 0,
     'title' => 0,
     't' => 0,
     'theme_url' => 0,
-    'controller' => 0,
-    'action' => 0,
     'body' => 0,
     'nav' => 0,
     'plugins' => 0,
@@ -37,7 +37,9 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
 <?php if ($_valid && !is_callable('content_567be873cb61d8_71422844')) {function content_567be873cb61d8_71422844($_smarty_tpl) {?><!DOCTYPE html>
-<html>
+<html data-controller="<?php echo $_smarty_tpl->tpl_vars['controller']->value;?>
+" data-action="<?php echo $_smarty_tpl->tpl_vars['action']->value;?>
+">
 <head>
     <base href="<?php echo $_smarty_tpl->tpl_vars['base_url']->value;?>
 ">

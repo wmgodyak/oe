@@ -74,5 +74,6 @@
     <input type="hidden" name="data[parent_id]" value="{$data.parent_id}">
 
     <input type="hidden" name="content_id" value="{$content_id}">
+    <input type="hidden" name="disable_values" value="{$disable_values}">
 
 </form>

@@ -54,7 +54,7 @@ class ContentRelationship extends Engine
     public function getCategories($content_id)
     {
         return self::$db
-            ->select("select categories_id from content_relationship where content_id={$content_id} ")
+            ->select("select categories_id from content_relationship where content_id={$content_id} and is_main=0")
             ->all('categories_id');
     }
 

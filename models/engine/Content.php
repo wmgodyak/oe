@@ -106,11 +106,22 @@ class Content extends Engine
             $d['parent_url'] = $this->getParentUrl($d['parent_id']);
         }
 
-        // features
+        $d['settings']['type'] = $this->getTypeSettings($d['types_id']);
 
-        $d['features'] = ContentFeatures::get($id);
+        // features
+        $s = isset($d['settings']['type']['features']) ? $d['settings']['type']['features'] : null;
+
+        $d['features'] = ContentFeatures::get($id, $s);
 
         return $d;
+    }
+
+    private function getTypeSettings($id)
+    {
+        $s = self::$db->select("select settings from content_types where id={$id} limit 1")->row('settings');
+        if(empty($s)) return null;
+
+        return unserialize($s);
     }
 
     private function getInfo($content_id)
@@ -339,4 +350,5 @@ class Content extends Engine
         $res = array_merge($res, $r);
         return $res;
     }
+
 }

@@ -216,5 +216,13 @@ class ContentTypes extends Engine
         return self::$db->select("select controller from modules")->all();
     }
 
+    public function getFeaturesTypes()
+    {
+        return self::$db->enumValues('features', 'type');
+    }
 
+    public function get($parent_id)
+    {
+        return self::$db->select("select id, name from content_types where parent_id={$parent_id} order by id asc")->all();
+    }
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html data-controller="{$controller}" data-action="{$action}">
 <head>
     <base href="{$base_url}">
     <meta charset="utf-8" />

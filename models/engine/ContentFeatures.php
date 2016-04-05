@@ -12,11 +12,68 @@ use models\Engine;
 
 defined("CPATH") or die();
 
+/**
+ * Class ContentFeatures
+ * @package models\engine
+ */
 class ContentFeatures extends Engine
 {
-    public static function get($content_id)
+    public function getByCategoryId($category_id, $content_id)
     {
-        $page = self::$db->select("select types_id, subtypes_id from content where id={$content_id} limit 1")->row();
+        $page = self::$db->select("select types_id, subtypes_id from content where id={$category_id} limit 1")->row();
+        $res = self::$db
+            ->select
+            ("
+                select f.id, f.type, f.required, f.multiple, fi.name
+                from features_content fc
+                join features f on f.id=fc.features_id and f.status='published'
+                join features_info fi on fi.features_id=f.id and fi.languages_id={$this->languages_id}
+                where
+                  fc.content_types_id={$page['types_id']} and
+                  fc.content_subtypes_id in (0, {$page['subtypes_id']}) and
+                  fc.content_id in (0, {$category_id})
+                order by abs(fc.position) asc
+            ")
+            ->all();
+
+        foreach ($res as $k=>$item) {
+            if($item['type'] == 'folder' || $item['type'] == 'select'){
+                $res[$k]['items'] = self::getFeatures($item['id'], $content_id);
+            } elseif($item['type'] == 'checkbox'){
+                $res[$k]['checked'] = self::isChecked($item['id'], $content_id);
+            }  else {
+                $res[$k]['values'] = self::getContentFeaturesValues($item['id'], $content_id);
+            }
+        }
+
+        return $res;
+    }
+
+    /**
+     * @param $content_id
+     * @param null $settings
+     * @return mixed
+     */
+    public static function get($content_id, $settings = null)
+    {
+//        echo '<pre>'; print_r($settings);die;
+         $ex_content_id = $content_id;
+
+        $page = [];
+
+        if(isset($settings['ex_types_id']) && !empty($settings['ex_types_id'])){
+            $page['types_id'] = $settings['ex_types_id'];
+            $page['subtypes_id'] = $settings['ex_types_id'];
+
+            // get main category
+            $cat_id = self::$db
+                ->select("select categories_id from content_relationship where content_id={$content_id} and is_main=1")
+                ->row('categories_id');
+            if(!empty($cat_id)) $ex_content_id = $cat_id;
+
+        } else {
+            $page = self::$db->select("select types_id, subtypes_id from content where id={$content_id} limit 1")->row();
+        }
 
         $languages_id = self::$language_id;
 
@@ -30,7 +87,7 @@ class ContentFeatures extends Engine
                 where
                   fc.content_types_id={$page['types_id']} and
                   fc.content_subtypes_id in (0, {$page['subtypes_id']}) and
-                  fc.content_id in (0, {$content_id})
+                  fc.content_id in (0, {$ex_content_id})
                 order by abs(fc.position) asc
             ")
             ->all();
@@ -50,6 +107,7 @@ class ContentFeatures extends Engine
 
     /**
      * @param $parent_id
+     * @param $content_id
      * @return mixed
      */
     private static function getFeatures($parent_id, $content_id)
@@ -81,6 +139,11 @@ class ContentFeatures extends Engine
         return $res;
     }
 
+    /**
+     * @param $features_id
+     * @param $content_id
+     * @return array
+     */
     private static function getContentFeaturesValues($features_id, $content_id)
     {
         $res = [];
@@ -117,17 +180,25 @@ class ContentFeatures extends Engine
             ->row('id') > 0;
     }
 
-    public function getFeaturesTypes()
+    public function getFeaturesTypes($allowed = null)
     {
         $data = self::$db->enumValues('features', 'type');
 
         foreach ($data as $k => $type) {
-            if ($type == 'value') {
+            if ($type == 'value' || ($allowed && !in_array($type, $allowed))) {
                 unset($data[$k]);
             }
         }
 
         return $data;
+    }
+
+    private function getTypeSettings($id)
+    {
+        $s = self::$db->select("select settings from content_types where id={$id} limit 1")->row('settings');
+        if(empty($s)) return null;
+
+        return unserialize($s);
     }
 
     public function create()
@@ -164,6 +235,24 @@ class ContentFeatures extends Engine
         }
 
         $page = self::$db->select("select types_id, subtypes_id from content where id={$content_id} limit 1")->row();
+
+        $ts = $this->getTypeSettings($page['types_id']);
+
+        if(isset($ts['features']['ex_types_id']) && !empty($ts['features']['ex_types_id'])){
+
+            $page['types_id']    = $ts['features']['ex_types_id'];
+            $page['subtypes_id'] = $ts['features']['ex_types_id'];
+
+            // get main category
+            $cat_id = self::$db
+                ->select("select categories_id from content_relationship where content_id={$content_id} and is_main=1")
+                ->row('categories_id');
+
+            if(!empty($cat_id)){
+                $page_only = 1;
+                $content_id = $cat_id;
+            }
+        }
 
         $this->createRow
         (

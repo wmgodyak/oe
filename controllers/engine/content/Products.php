@@ -36,7 +36,7 @@ class Products extends Content
         parent::__construct();
 
         // покищо нетреба
-//        $this->form_template = 'content/products';
+        $this->form_template = 'content/products';
     }
 
     public function index($parent_id=0)

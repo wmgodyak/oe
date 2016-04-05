@@ -54,6 +54,11 @@ engine.productsCategories = {
                         });
                 }
             )
+            .setContextMenu('products', t.productsCategories.products, 'fa-list', function(o){
+                    var node_id= o.reference[0].id;
+                    self.location.href='content/products/index/' + node_id;
+                }
+            )
             .move(function(e, data){
                 console.log(data);
 

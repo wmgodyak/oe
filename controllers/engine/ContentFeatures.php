@@ -25,21 +25,34 @@ class ContentFeatures extends Engine
         $this->cf = new \models\engine\ContentFeatures();
     }
 
-    public function index()
+    public function index($categories_id=null, $content_id=null)
     {
-        return 'FirstPlugin::index';
+        if(! $categories_id || !$content_id) return;
+
+        $features = $this->cf->getByCategoryId($categories_id, $content_id);
+
+//        $this->dump($features);
+        $out = '';
+        foreach ($features as $feature) {
+            $out .= $this->makeFeature($feature);
+        }
+
+        $this->response->body($out)->asHtml();
     }
 
     public function create()
     {
         $content_id = $this->request->post('content_id', 'i');
-        $parent_id = $this->request->post('parent_id', 'i');
+        $parent_id  = $this->request->post('parent_id', 'i');
+        $allowed    = $this->request->post('allowed');
+        $disable_values  = $this->request->post('disable_values', 'i');
 
         $data = ['parent_id' => $parent_id];
         $this->template->assign('data', $data);
 
-        $this->template->assign('types', $this->cf->getFeaturesTypes());
+        $this->template->assign('types', $this->cf->getFeaturesTypes($allowed));
         $this->template->assign('content_id', $content_id);
+        $this->template->assign('disable_values', $disable_values);
 
         $this->response->body($this->template->fetch('contentFeatures/create'));
     }
@@ -47,18 +60,18 @@ class ContentFeatures extends Engine
     public function createValue()
     {
         if($this->request->post('action') == 'create'){
-            $data = $this->request->post('data');
+//            $data = $this->request->post('data');
             $info = $this->request->post('info');
 
             $s=0; $i=[]; $m=null;
 
-            FormValidation::setRule(['code'], FormValidation::REQUIRED);
+            /*FormValidation::setRule(['code'], FormValidation::REQUIRED);
 
             FormValidation::run($data);
 
             if(FormValidation::hasErrors()){
                 $i = FormValidation::getErrors();
-            } else {
+            } else {*/
                 foreach ($info as $languages_id=> $item) {
                     if(empty($item['name'])){
                         $i[] = ["info[$languages_id][name]" => $this->t('features.empty_name')];
@@ -67,7 +80,7 @@ class ContentFeatures extends Engine
                 if(empty($i)) {
                     $s = $this->cf->createValue();
                 }
-            }
+//            }
 
             if($this->cf->hasDBError()){
                 $m = $this->cf->getDBErrorMessage();
@@ -80,7 +93,6 @@ class ContentFeatures extends Engine
                 $info  = current($info);
                 $v = ['value' => $s, 'name' => $info['name']];
             }
-
 
             $this->response->body(['s'=>$s, 'i' => $i, 'm' => $m, 'v' => $v])->asJSON();
         }
@@ -113,13 +125,13 @@ class ContentFeatures extends Engine
 
         $s=0; $i=[]; $m=null;
 
-        FormValidation::setRule(['code'], FormValidation::REQUIRED);
+       /* FormValidation::setRule(['code'], FormValidation::REQUIRED);
 
         FormValidation::run($data);
 
         if(FormValidation::hasErrors()){
             $i = FormValidation::getErrors();
-        } else {
+        } else {*/
             foreach ($info as $languages_id=> $item) {
                 if(empty($item['name'])){
                     $i[] = ["info[$languages_id][name]" => $this->t('features.empty_name')];
@@ -128,7 +140,7 @@ class ContentFeatures extends Engine
             if(empty($i)) {
                 $s = $this->cf->create();
             }
-        }
+//        }
 
         if($this->cf->hasDBError()){
             $m = $this->cf->getDBErrorMessage();
@@ -136,12 +148,14 @@ class ContentFeatures extends Engine
 
         $f = null;
         if($s > 0){
-
             $data['id']      = $s;
             $feature = $data;
             reset($info);
-            $info  =current($info);
-            $feature['name'] = $info['name'];
+            $info  = current($info);
+
+            $feature['name']    = $info['name'];
+            $feature['disable_values'] = $this->request->post('disable_values');
+
             $f = $this->makeFeature($feature);
         }
 

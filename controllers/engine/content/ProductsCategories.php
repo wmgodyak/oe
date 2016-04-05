@@ -146,11 +146,12 @@ class ProductsCategories extends Content
     {
         $parent_id = $this->mContent->getData($id, 'parent_id');
 
-        $this->appendToPanel((string)Link::create
-        (
-            $this->t('common.back'),
-            ['class' => 'btn-md', 'href'=> './content/'. $this->type . ($parent_id > 0 ? '/index/' . $parent_id : '')]
-        )
+        $this->appendToPanel(
+            (string)Link::create
+            (
+                $this->t('common.back'),
+                ['class' => 'btn-md', 'href'=> './content/'. $this->type . ($parent_id > 0 ? '/index/' . $parent_id : '')]
+            )
         );
 
         parent::edit($id);

@@ -54,16 +54,19 @@ class ProductsCategories extends Content
         $categories = $this->request->post('categories');
         $selected = $this->rs->getCategories($products_id);
 
-        foreach ($categories as $k=>$categories_id) {
+        if(!empty($categories)){
 
-            $c = array_search($categories_id, $selected);
+            foreach ($categories as $k=>$categories_id) {
 
-            if($c !== FALSE){
-                unset($selected[$c]);
-                continue;
+                $c = array_search($categories_id, $selected);
+
+                if($c !== FALSE){
+                    unset($selected[$c]);
+                    continue;
+                }
+
+                $this->rs->create($products_id, $categories_id);
             }
-
-            $this->rs->create($products_id, $categories_id);
         }
 
         if(!empty($selected)){
