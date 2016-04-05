@@ -1201,7 +1201,7 @@ engine.content = {
         },
         get: function(categories_id)
         {
-            var cnt = $("#contentFeaturesFs"), content_id=cnt.data('id');
+            var cnt = $("#content_features_0"), content_id=cnt.data('id');
             engine.request.get
             (
                 'contentFeatures/index/'+categories_id + '/'+content_id,
