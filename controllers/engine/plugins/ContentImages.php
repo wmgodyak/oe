@@ -243,4 +243,10 @@ class ContentImages extends Plugin
                 )
             ->asJSON();
     }
+
+    public function sort()
+    {
+        $s = $this->mContentImages->sort();
+        $this->response->body(['s' =>$s])->asJSON();
+    }
 }

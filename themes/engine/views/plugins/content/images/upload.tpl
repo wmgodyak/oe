@@ -59,7 +59,4 @@
 
 <script>
     var contentImagesList = {$images};
-    $(document).ready(function(){
-       engine.require('contentImages');
-    });
-</script>
+ </script>

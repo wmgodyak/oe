@@ -142,4 +142,17 @@ class ContentImages extends Engine
             }
         }
     }
+
+    public function sort()
+    {
+        $order = $this->request->post('order');
+        $s=0;
+        $a = explode(',', $order);
+        foreach ($a as $position=>$images_id) {
+            $images_id = str_replace('im-', '', $images_id);
+           $s+= $this->updateRow('content_images', $images_id, ['position' =>$position]);
+        }
+
+        return $s;
+    }
 }

@@ -1366,6 +1366,24 @@ engine.contentImages = {
                 .replace (/{src}/g, img.src);
             cnt.append(item);
         }
+
+        this.initSortable();
+    },
+    initSortable: function(){
+        var g =$( ".gallery-container" );
+        g.sortable({
+            //placeholder: "upload-placeholder",
+            update: function( event, ui ) {
+                var newOrder = $(this).sortable('toArray').toString();
+                engine.request.post({
+                    url:'./plugins/ContentImages/sort',
+                    data: {
+                        order: newOrder
+                    }
+                });
+            }
+        });
+        g.disableSelection();
     },
     removeImage: function(id, e)
     {
@@ -1378,7 +1396,6 @@ engine.contentImages = {
         });
     },
     crop: function(id){
-
     },
     makeDropzone: function () {
 
@@ -1416,6 +1433,8 @@ engine.contentImages = {
                     .replace (/{id}/g, data.id)
                 //    .replace (/{imageName}/g, data.name);
                 div.html(str);
+
+                engine.contentImages.initSortable();
                 return true;
             }
         });
