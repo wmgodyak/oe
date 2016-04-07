@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Апр 07 2016 г., 11:02
+-- Время создания: Апр 07 2016 г., 17:50
 -- Версия сервера: 5.5.47-0ubuntu0.14.04.1
 -- Версия PHP: 5.5.9-1ubuntu4.14
 
@@ -19,6 +19,79 @@ SET time_zone = "+00:00";
 --
 -- База данных: `engine`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `banners`
+--
+
+CREATE TABLE IF NOT EXISTS `banners` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `banners_places_id` int(10) unsigned NOT NULL,
+  `languages_id` tinyint(3) unsigned NOT NULL,
+  `skey` varchar(32) NOT NULL,
+  `img` varchar(255) DEFAULT NULL,
+  `name` varchar(40) NOT NULL,
+  `published` tinyint(1) unsigned DEFAULT '1',
+  `permanent` tinyint(1) DEFAULT '1',
+  `df` date DEFAULT NULL,
+  `dt` date DEFAULT NULL,
+  `url` varchar(200) DEFAULT NULL,
+  `target` enum('_blank','_self') DEFAULT '_self',
+  PRIMARY KEY (`id`,`banners_places_id`,`languages_id`),
+  UNIQUE KEY `skey_UNIQUE` (`skey`),
+  KEY `fk_banners_banners_places1_idx` (`banners_places_id`),
+  KEY `fk_banners_languages1_idx` (`languages_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+
+--
+-- Дамп данных таблицы `banners`
+--
+
+INSERT INTO `banners` (`id`, `banners_places_id`, `languages_id`, `skey`, `img`, `name`, `published`, `permanent`, `df`, `dt`, `url`, `target`) VALUES
+(6, 1, 1, 'd32b004b6fe914a51847bf782648f6a2', NULL, 'aa', 1, 1, '0000-00-00', '0000-00-00', 'a', '_self'),
+(7, 1, 1, '556074529d9c821315235cba2718ef9b', NULL, 'aa', 1, 0, '2016-04-18', '2016-04-21', 'aa', '_self');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `banners_places`
+--
+
+CREATE TABLE IF NOT EXISTS `banners_places` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(45) DEFAULT NULL,
+  `name` varchar(60) DEFAULT NULL,
+  `width` int(11) DEFAULT NULL,
+  `height` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code_UNIQUE` (`code`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+
+--
+-- Дамп данных таблицы `banners_places`
+--
+
+INSERT INTO `banners_places` (`id`, `code`, `name`, `width`, `height`) VALUES
+(1, 'aaa', 'першаaaa', 111, 150),
+(3, 'bbb', 'другий', 1001, 100);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `banners_stat`
+--
+
+CREATE TABLE IF NOT EXISTS `banners_stat` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `banners_id` int(10) unsigned NOT NULL,
+  `shows` int(10) unsigned DEFAULT NULL,
+  `clicks` int(10) unsigned DEFAULT NULL,
+  `date` date DEFAULT NULL,
+  PRIMARY KEY (`id`,`banners_id`),
+  KEY `fk_banners_stat_banners1_idx` (`banners_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -149,7 +222,7 @@ CREATE TABLE IF NOT EXISTS `components` (
   KEY `position` (`position`),
   KEY `published` (`published`),
   KEY `module` (`controller`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=80 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=82 ;
 
 --
 -- Дамп данных таблицы `components`
@@ -185,7 +258,8 @@ INSERT INTO `components` (`id`, `parent_id`, `isfolder`, `icon`, `author`, `vers
 (76, 70, 0, 'fa-file-text', 'Volodymyr Hodiak', '1.0.0', 'content/ProductsCategories', 0, 1, 300, NULL, '2016-04-01 08:10:43'),
 (77, 70, 0, 'fa-money', 'Volodymyr Hodiak', '1.0.0', 'currency', 0, 1, 300, NULL, '2016-04-01 10:28:14'),
 (78, 70, 0, 'fa-bus', 'Volodymyr Hodiak', '1.0.0', 'delivery', 0, 1, 300, NULL, '2016-04-01 10:55:57'),
-(79, 70, 0, 'fa-credit-card', 'Volodymyr Hodiak', '1.0.0', 'payment', 0, 1, 300, NULL, '2016-04-01 11:16:34');
+(79, 70, 0, 'fa-credit-card', 'Volodymyr Hodiak', '1.0.0', 'payment', 0, 1, 300, NULL, '2016-04-01 11:16:34'),
+(81, 0, 0, 'fa-cogs', 'Volodymyr Hodiak', '1.0.0', 'banners', 6, 1, 300, NULL, '2016-04-07 12:06:56');
 
 -- --------------------------------------------------------
 
@@ -314,7 +388,7 @@ CREATE TABLE IF NOT EXISTS `content_images` (
   PRIMARY KEY (`id`),
   KEY `fk_content_images_content1_idx` (`content_id`),
   KEY `position` (`position`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=20 ;
 
 --
 -- Дамп данных таблицы `content_images`
@@ -336,7 +410,10 @@ INSERT INTO `content_images` (`id`, `content_id`, `path`, `image`, `position`, `
 (13, 1, 'uploads/content/2016/03/25/', 'testimonial7-1x12.jpg', 4, '2016-03-25 12:33:08'),
 (14, 1, 'uploads/content/2016/03/25/', 'testimonial2-1x13.jpg', 5, '2016-03-25 12:33:08'),
 (15, 1, 'uploads/content/2016/03/25/', 'testimonial3-1x14.jpg', 6, '2016-03-25 12:33:08'),
-(16, 39, 'uploads/content/2016/04/01/', 'big_93ebd896972498b439b4d378473b5a76-39x.jpg', 1, '2016-04-01 07:39:11');
+(16, 39, 'uploads/content/2016/04/01/', 'big_93ebd896972498b439b4d378473b5a76-39x.jpg', 1, '2016-04-01 07:39:11'),
+(17, 39, 'uploads/content/2016/04/07/', 'pictures-38191-39x16.jpg', 2, '2016-04-07 08:23:14'),
+(18, 39, 'uploads/content/2016/04/07/', 'animals-smile_3379238k-39x17.jpg', 0, '2016-04-07 08:23:19'),
+(19, 39, 'uploads/content/2016/04/07/', 'perfectly-timed-funny-cat-pictures-5-39x18.jpg', 3, '2016-04-07 08:23:19');
 
 -- --------------------------------------------------------
 
@@ -1356,7 +1433,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `updated`, `lastlogin`, `status`) VALUES
-(2, 1, 0, 'j8tku4ip7a7scs3f1ol7ioe0q4', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-03-24 16:42:51', '2016-04-07 06:02:58', 'active'),
+(2, 1, 0, 'j8tku4ip7a7scs3f1ol7ioe0q4', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-03-24 16:42:51', '2016-04-07 11:54:23', 'active'),
 (3, 5, 0, 'qa73af6110ns11364j57uhvl74', 'Жорік', 'Ревазов', '+35 (555) 5555555', 'z@otakoyi.com', 'MToUTd7.hmK2o', NULL, NULL, '2016-03-28 09:01:38', '2016-03-30 13:47:30', '2016-03-31 13:33:25', 'active'),
 (5, 2, 0, NULL, 'Жорік', '', '', 'otakoyi@gmail.com', 'MTGRXCzqBsZUI', NULL, NULL, '2016-03-29 12:21:29', '0000-00-00 00:00:00', NULL, 'active'),
 (6, 2, 0, NULL, 'Микола', '', '', 'm@otakoyi.com', 'MTTuFPm3y4m2o', NULL, NULL, '2016-03-29 13:18:45', '0000-00-00 00:00:00', NULL, 'active'),
@@ -1430,6 +1507,19 @@ INSERT INTO `users_group_info` (`id`, `group_id`, `languages_id`, `name`) VALUES
 --
 -- Ограничения внешнего ключа сохраненных таблиц
 --
+
+--
+-- Ограничения внешнего ключа таблицы `banners`
+--
+ALTER TABLE `banners`
+  ADD CONSTRAINT `fk_banners_banners_places1` FOREIGN KEY (`banners_places_id`) REFERENCES `banners_places` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_banners_languages1` FOREIGN KEY (`languages_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `banners_stat`
+--
+ALTER TABLE `banners_stat`
+  ADD CONSTRAINT `fk_banners_stat_banners1` FOREIGN KEY (`banners_id`) REFERENCES `banners` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `comments`

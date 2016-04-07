@@ -6,9 +6,7 @@
  * Date: 16.01.16 : 10:37
  */
 
-
 namespace helpers;
-
 
 defined("CPATH") or die();
 
