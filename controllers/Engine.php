@@ -140,9 +140,6 @@ abstract class Engine extends Controller
             $this->requireComponents();
         }
 
-        $this->plugins = Plugins::get();
-        $this->template->assign('plugins', $this->plugins);
-
         $com = '/themes/engine/assets/js/bootstrap/' . lcfirst($controller) . '.js';
 
         if(file_exists(DOCROOT . $com)){
@@ -150,6 +147,10 @@ abstract class Engine extends Controller
         }
 
         $this->template->assign('admin', Admin::data());
+
+        $this->plugins = Plugins::get();
+        $this->template->assign('plugins', $this->plugins);
+
     }
 
     public function before(){}

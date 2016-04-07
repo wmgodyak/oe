@@ -43,7 +43,7 @@ var engine = {
                     dataType: 'json',
                     beforeSend: function()
                     {
-                        console.log('OnBeforeSend >>');
+                        // console.log('OnBeforeSend >>');
                         bSubmit.attr('disabled', true);
 
                         if(typeof onBeforeSend == 'string'){
@@ -684,7 +684,7 @@ engine.components = {
 engine.admins = {
     init: function()
     {
-        console.log('Init admins');
+        // console.log('Init admins');
         $(document).on('click', '.b-admins-create', function(){
             engine.admins.create();
         });
@@ -716,40 +716,42 @@ engine.admins = {
                     $('#form').submit();
                 });
         });
+        if($('#usersGroup').length){
 
-        engine.admins.group.tree = new engine.tree('usersGroup');
-        engine.admins.group.tree
-            .setUrl('./plugins/adminsGroup/tree')
-            .setContextMenu('create', t.admins_group.tree_create, 'fa-file', function(o){
-                    var node_id= o.reference[0].id;
-                    engine.admins.group.create(node_id);
-                }
-            )
-            .setContextMenu('edit', t.admins_group.tree_edit, 'fa-pencil', function(o){
-                    var node_id= o.reference[0].id;
-                    engine.admins.group.edit(node_id);
-                }
-            )
-            .setContextMenu('del', t.admins_group.tree_delete, 'fa-remove', function(o){
-                    var node_id= o.reference[0].id;
-                    engine.admins.group.delete(node_id);
-                }
-            )
-            .move(function(e, data){
-                console.log(data);
-
-                engine.request.post({
-                    url : './plugins/adminsGroup/move',
-                    data: {
-                        id: data.node.id,
-                        'old_parent' : data.old_parent,
-                        //'old_position' : data.old_position,
-                        'parent' : data.parent,
-                        'position' : data.position
+            engine.admins.group.tree = new engine.tree('usersGroup');
+            engine.admins.group.tree
+                .setUrl('./plugins/adminsGroup/tree')
+                .setContextMenu('create', t.admins_group.tree_create, 'fa-file', function(o){
+                        var node_id= o.reference[0].id;
+                        engine.admins.group.create(node_id);
                     }
-                });
-            })
-            .init();
+                )
+                .setContextMenu('edit', t.admins_group.tree_edit, 'fa-pencil', function(o){
+                        var node_id= o.reference[0].id;
+                        engine.admins.group.edit(node_id);
+                    }
+                )
+                .setContextMenu('del', t.admins_group.tree_delete, 'fa-remove', function(o){
+                        var node_id= o.reference[0].id;
+                        engine.admins.group.delete(node_id);
+                    }
+                )
+                .move(function(e, data){
+                    // console.log(data);
+
+                    engine.request.post({
+                        url : './plugins/adminsGroup/move',
+                        data: {
+                            id: data.node.id,
+                            'old_parent' : data.old_parent,
+                            //'old_position' : data.old_position,
+                            'parent' : data.parent,
+                            'position' : data.position
+                        }
+                    });
+                })
+                .init();
+        }
 
 
     },
@@ -1004,7 +1006,7 @@ engine.admins = {
 engine.chunks = {
     init: function()
     {
-        console.log('engine.chunks.init() -> OK');
+        // console.log('engine.chunks.init() -> OK');
         $(document).on('click', '.b-chunks-delete', function(){
             var id = $(this).data('id');
             engine.chunks.delete(id);
@@ -1036,7 +1038,7 @@ engine.chunks = {
  */
 engine.content = {
     init: function () {
-        //console.log('engine.content.init()');
+        //// console.log('engine.content.init()');
 
         var infoName = $(".info-name");
         infoName.charCount({"counterText": "Залишилось:", "allowed": 200, "warning": 25});
@@ -1400,10 +1402,10 @@ engine.contentImages = {
             },
             init: function() {
                 this.on("addedfile", function(file) {
-//                    console.log(file);
+//                    // console.log(file);
                 });
 //                this.on("success", function(file) {
-//                    console.log(file);
+//                    // console.log(file);
 //                });
             },
             success: function(file, data) {
@@ -1422,7 +1424,7 @@ engine.contentImages = {
 engine.contentImagesSizes = {
     init: function()
     {
-        console.log('Init contentImagesSizes');
+        // console.log('Init contentImagesSizes');
 
         $(document).on('click', '.b-contentImagesSizes-create', function(){
             engine.contentImagesSizes.create();
@@ -1592,7 +1594,7 @@ engine.contentImagesSizes = {
 engine.contentTypes = {
     init: function()
     {
-        console.log('engine.contentTypes.init() -> OK');
+        // console.log('engine.contentTypes.init() -> OK');
 
         $(document).on('click', '.b-contentTypes-delete', function(){
             var id = $(this).data('id');
@@ -1667,7 +1669,7 @@ engine.contentTypes = {
             var typesID = $('#typesID').val(),
                 subTypesID = $('#subTypesID').val();
 
-            //console.log('contentTypes.features.init()');
+            //// console.log('contentTypes.features.init()');
 
             $(document).on('change', '#features', function()
             {
@@ -1729,7 +1731,7 @@ engine.dashboard = {};
 engine.features = {
     init: function()
     {
-        console.log('engine.features.init() -> OK');
+        // console.log('engine.features.init() -> OK');
         $(document).on('click', '.b-features-delete', function(){
             var id = $(this).data('id');
             engine.features.delete(id);
@@ -1936,7 +1938,7 @@ engine.features = {
 engine.guides = {
     init: function()
     {
-        console.log('Init guides');
+        // console.log('Init guides');
         $(document).on('click', '.b-guides-create', function(){
             var parent_id = $(this).data('parent_id');
             engine.guides.create(parent_id);
@@ -2030,7 +2032,7 @@ engine.guides = {
 engine.languages = {
     init: function()
     {
-        console.log('Init languages');
+        // console.log('Init languages');
         $(document).on('click', '.b-languages-create', function(){
             engine.languages.create();
         });
@@ -2124,7 +2126,7 @@ engine.nav = {
     init: function()
     {
         //engine.require('content');
-        console.log('engine.nav.init() OK');
+        // console.log('engine.nav.init() OK');
 
         $(document).on('click', '.b-nav-delete', function(){
             engine.nav.delete($(this).data('id'));
@@ -2247,7 +2249,7 @@ engine.plugins = {
     {
         //engine.require('installer');
 
-        console.log('Init plugins');
+        // console.log('Init plugins');
 
         $(document).on('click', '.b-plugin-pub', function(){
             engine.plugins.pub($(this).data('id'));
@@ -2405,7 +2407,7 @@ engine.plugins = {
 engine.modules = {
     init: function()
     {
-        console.log('Init modules');
+        // console.log('Init modules');
 
         $(document).on('click', '.b-module-install', function(){
             engine.modules.install($(this).data('id'));
@@ -2496,7 +2498,7 @@ engine.modules = {
 engine.themes = {
     init: function()
     {
-        console.log('engine.themes.init() -> OK');
+        // console.log('engine.themes.init() -> OK');
         $(document).on('click', '.b-themes-activate', function(){
             var theme = $(this).data('theme');
             engine.themes.activate(theme);
@@ -2522,7 +2524,7 @@ engine.themes = {
 engine.translations = {
     init: function()
     {
-        console.log('Init translations');
+        // console.log('Init translations');
         $(document).on('click', '.b-translations-create', function(){
             engine.translations.create();
         });
@@ -2682,7 +2684,7 @@ engine.mailTemplates = {
 
         $('#form .ckeditor').each(function(){
             var name = $(this).attr('name');
-            //console.log(name);
+            //// console.log(name);
             CKEDITOR.replace(name);
         });
 

@@ -30,4 +30,5 @@
         </div>
     {/if}
     <input type="hidden" name="token" value="{$token}">
+    <input type="hidden" id="content_id" value="{$content.id}">
 </form>

@@ -71,4 +71,9 @@ class Currency extends Engine
         self::$db->update('currency',['is_main' => 0]);
         return $this->updateRow('currency', $currency_id, ['is_main' => 1]);
     }
+
+    public static function get()
+    {
+        return self::$db->select("select id, name, code from currency order by is_main desc, id asc")->all();
+    }
 }

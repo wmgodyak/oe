@@ -120,17 +120,17 @@ class Guides extends Engine
     {
         if(! $this->request->isPost()) die;
 
-        $guides = $this->request->post('guides');
+//        $guides = $this->request->post('guides');
         $guides_info = $this->request->post('guides_info');
         $s=0; $i=[];
 
-        FormValidation::setRule(['code'], FormValidation::REQUIRED);
+        /*FormValidation::setRule(['code'], FormValidation::REQUIRED);
 
         FormValidation::run($guides);
 
         if(FormValidation::hasErrors()){
             $i = FormValidation::getErrors();
-        } else {
+        } else {*/
             foreach ($guides_info as $languages_id=> $item) {
                 if(empty($item['name'])){
                     $i[] = ["guides_info[$languages_id][name]" => $this->t('guides.empty_name')];
@@ -151,7 +151,7 @@ class Guides extends Engine
                     echo $this->guides->getDBErrorMessage();
                 }
             }
-        }
+//        }
 
         $this->response->body(['s'=>$s, 'i' => $i])->asJSON();
     }
