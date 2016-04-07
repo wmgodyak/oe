@@ -74,12 +74,20 @@ class ProductsVariants extends Model
     public function update($content_id)
     {
         $variants = $this->request->post('variants');
+        if(empty($variants)){
+            $this->updateRow('content', $content_id, ['has_variants' => 0]);
+            return;
+        }
+
+
         foreach ($variants as $variant_id=>$a) {
             $this->updateRow('products_variants', $variant_id, ['in_stock' => $a['in_stock']]);
             foreach($a['prices'] as $group_id=>$price){
                 $this->variantsPrices->set($content_id, $variant_id, $group_id, $price);
             }
         }
+
+        $this->updateRow('content', $content_id, ['has_variants' => 1]);
     }
 
     /**

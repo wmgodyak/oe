@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Апр 07 2016 г., 10:59
+-- Время создания: Апр 07 2016 г., 11:02
 -- Версия сервера: 5.5.47-0ubuntu0.14.04.1
 -- Версия PHP: 5.5.9-1ubuntu4.14
 
@@ -208,7 +208,7 @@ CREATE TABLE IF NOT EXISTS `content` (
   `status` enum('blank','hidden','published','deleted') DEFAULT 'blank',
   `currency_id` tinyint(3) unsigned DEFAULT NULL,
   `unit_id` tinyint(3) unsigned DEFAULT NULL,
-  `has_varints` tinyint(1) unsigned DEFAULT NULL,
+  `has_variants` tinyint(1) unsigned DEFAULT NULL,
   `in_stock` tinyint(1) unsigned DEFAULT NULL,
   `external_id` char(32) DEFAULT NULL,
   PRIMARY KEY (`id`,`types_id`,`subtypes_id`,`owner_id`),
@@ -223,7 +223,7 @@ CREATE TABLE IF NOT EXISTS `content` (
 -- Дамп данных таблицы `content`
 --
 
-INSERT INTO `content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id`, `isfolder`, `position`, `created`, `updated`, `published`, `settings`, `status`, `currency_id`, `unit_id`, `has_varints`, `in_stock`, `external_id`) VALUES
+INSERT INTO `content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id`, `isfolder`, `position`, `created`, `updated`, `published`, `settings`, `status`, `currency_id`, `unit_id`, `has_variants`, `in_stock`, `external_id`) VALUES
 (1, 1, 6, 2, 0, 1, 0, '2016-03-21 07:55:55', '2016-03-28 12:16:23', '2016-03-21', 'a:1:{s:7:"modules";a:1:{i:0;s:12:"First::index";}}', 'published', NULL, NULL, NULL, NULL, NULL),
 (2, 1, 1, 2, 1, 0, 0, '2016-03-21 07:56:43', '2016-03-30 12:50:47', '2016-03-21', 'a:1:{s:7:"modules";a:1:{i:0;s:12:"First::index";}}', 'published', NULL, NULL, NULL, NULL, NULL),
 (3, 1, 7, 2, 1, 0, 0, '2016-03-21 07:56:57', '2016-03-24 14:04:03', '2016-03-21', 'a:1:{s:7:"modules";a:1:{i:0;s:11:"Blog::index";}}', 'published', NULL, NULL, NULL, NULL, NULL),
@@ -252,7 +252,7 @@ INSERT INTO `content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id`,
 (30, 1, 8, 2, 28, 0, 0, '2016-03-28 07:19:28', '2016-03-28 12:41:33', '2016-03-28', 'a:1:{s:7:"modules";a:1:{i:0;s:17:"Account::register";}}', 'published', NULL, NULL, NULL, NULL, NULL),
 (31, 1, 8, 2, 28, 0, 0, '2016-03-28 12:50:28', '2016-03-28 12:50:49', '2016-03-28', 'a:1:{s:7:"modules";a:1:{i:0;s:16:"Account::profile";}}', 'published', NULL, NULL, NULL, NULL, NULL),
 (34, 1, 8, 2, 28, 0, 0, '2016-03-30 07:40:52', '2016-03-30 07:41:43', '2016-03-30', 'a:1:{s:7:"modules";a:1:{i:0;s:11:"Account::fp";}}', 'published', NULL, NULL, NULL, NULL, NULL),
-(39, 10, 10, 2, 0, 0, 0, '2016-04-01 06:43:59', '2016-04-07 07:58:46', '2016-04-06', NULL, 'published', 2, 2, NULL, 0, NULL),
+(39, 10, 10, 2, 0, 0, 0, '2016-04-01 06:43:59', '2016-04-07 08:02:03', '2016-04-06', NULL, 'published', 2, 2, 1, 0, NULL),
 (40, 11, 11, 2, 0, 1, 0, '2016-04-01 07:08:53', '2016-04-01 07:56:46', '2016-04-01', NULL, 'published', NULL, NULL, NULL, NULL, NULL),
 (41, 11, 11, 2, 40, 0, 0, '2016-04-01 07:09:00', '2016-04-04 14:39:02', '2016-04-01', NULL, 'published', NULL, NULL, NULL, NULL, NULL),
 (42, 11, 11, 2, 0, 0, 0, '2016-04-01 07:10:09', '2016-04-01 07:10:08', '2016-04-01', NULL, 'published', NULL, NULL, NULL, NULL, NULL),
@@ -450,7 +450,7 @@ CREATE TABLE IF NOT EXISTS `content_relationship` (
   KEY `fk_content_relationship_content1_idx` (`content_id`),
   KEY `fk_content_relationship_content2_idx` (`categories_id`),
   KEY `is_main` (`is_main`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=73 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=75 ;
 
 --
 -- Дамп данных таблицы `content_relationship`
@@ -470,7 +470,7 @@ INSERT INTO `content_relationship` (`id`, `content_id`, `categories_id`, `is_mai
 (27, 52, 41, 1),
 (29, 57, 41, 1),
 (30, 59, 41, 1),
-(72, 39, 41, 1);
+(74, 39, 41, 1);
 
 -- --------------------------------------------------------
 
