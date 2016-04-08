@@ -1,7 +1,16 @@
 <form action="./banners/process/{$data.id}" method="post" id="form" class="form-horizontal" enctype="multipart/form-data">
     <div class="row">
         <div class="col-md-5">
-            <fieldset><legend>Зображення</legend></fieldset>
+            <fieldset>
+                <legend>Зображення</legend>
+                <div class="form-group">
+                    <div class="img" style="text-align: center">
+                        <img src="/themes/engine/assets/img/no-image.png" alt="no-image" style="max-width:160px; cursor: pointer;" id="bannersImage">
+                        <p>Розмір: {$sizes.width}x{$sizes.height}px</p>
+                        <input type="file" name="image" style="display: none" id="bannersImageUpload" onchange="engine.banners.encodeImageFileAsURL();">
+                    </div>
+                </div>
+            </fieldset>
         </div>
         <div class="col-md-7">
             <fieldset>

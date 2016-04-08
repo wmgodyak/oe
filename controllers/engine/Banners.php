@@ -104,6 +104,7 @@ class Banners extends Engine
             $lang = $this->banners->getLanguages();
             $res = array();
             foreach ($t->getResults(false) as $i=>$row) {
+                $row['img'] = empty($row['img']) ? "/themes/engine/assets/img/no-image.png" : $row['img'];
                 $res[$i][] = $row['id'];
                 $res[$i][] = "<img src='{$row['img']}' align='banner' style='max-height: 60px; max-width: 120px;'>";
                 $res[$i][] = $lang[$row['languages_id']];
@@ -158,11 +159,14 @@ class Banners extends Engine
     {
         $this->template->assign('action', 'create');
         $this->template->assign('place_id', $id);
+        $this->template->assign('sizes', $this->banners->getSize($id));
         $this->response->body($this->template->fetch('banners/banner'))->asHtml();
     }
     public function edit($id)
     {
-        $this->template->assign('data', $this->banners->getData($id));
+        $data =$this->banners->getData($id);
+        $this->template->assign('data', $data);
+        $this->template->assign('sizes', $this->banners->getSize($data['banners_places_id']));
         $this->template->assign('action', 'edit');
         $this->response->body($this->template->fetch('banners/banner'))->asHtml();
     }

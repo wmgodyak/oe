@@ -105,6 +105,31 @@ engine.banners = {
             );
         }
     },
+    encodeImageFileAsURL: function (){
+        var filesSelected = document.getElementById("bannersImageUpload").files;
+        if (filesSelected.length > 0)
+        {
+            var fileToLoad = filesSelected[0];
+
+            var fileReader = new FileReader();
+
+            fileReader.onload = function(fileLoadedEvent) {
+                document.getElementById("bannersImage").src = fileLoadedEvent.target.result;
+            };
+            fileReader.readAsDataURL(fileToLoad);
+        }
+    },
+    initUpload: function(){
+
+        var $bannersImage = $('#bannersImage'),
+            $bannersImageUpload = $('#bannersImageUpload');
+
+        $bannersImage.on('click', function(){
+            $bannersImageUpload.trigger('click');
+        });
+
+
+    },
     create: function(id)
     {
         engine.request.get('./banners/create/'+id, function(d)
@@ -126,6 +151,7 @@ engine.banners = {
             $("#data_df, #data_dt").datepicker({
                 dateFormat: 'dd.mm.yy'
             });
+            engine.banners.initUpload();
 
             engine.validateAjaxForm('#form', function(d){
                 if(d.s){
@@ -160,6 +186,8 @@ engine.banners = {
                 $("#data_df, #data_dt").datepicker({
                     dateFormat: 'dd.mm.yy'
                 });
+
+                engine.banners.initUpload();
 
                 engine.validateAjaxForm('#form', function(d){
                     if(d.s){
