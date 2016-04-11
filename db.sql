@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Апр 11 2016 г., 11:59
+-- Время создания: Апр 11 2016 г., 16:48
 -- Версия сервера: 5.5.47-0ubuntu0.14.04.1
 -- Версия PHP: 5.5.9-1ubuntu4.14
 
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `banners` (
 --
 
 INSERT INTO `banners` (`id`, `banners_places_id`, `languages_id`, `skey`, `img`, `name`, `published`, `permanent`, `df`, `dt`, `url`, `target`) VALUES
-(6, 1, 1, 'd32b004b6fe914a51847bf782648f6a2', '/uploads/content/2016/04/08/1679091c5a880faf6fb5e6087eb1b2dc.jpg', 'aa', 1, 1, '0000-00-00', '0000-00-00', 'a', '_self'),
+(6, 1, 1, 'd32b004b6fe914a51847bf782648f6a2', '/uploads/content/2016/04/11/1679091c5a880faf6fb5e6087eb1b2dc.jpg', 'aa', 1, 1, '0000-00-00', '0000-00-00', 'a', '_self'),
 (7, 1, 1, '556074529d9c821315235cba2718ef9b', '/uploads/content/2016/04/08/8f14e45fceea167a5a36dedd4bea2543.jpg', 'aa', 1, 0, '2016-04-18', '2016-04-21', 'aa', '_self'),
 (8, 1, 1, '15e85489e56c9b3240c98b292bbc2df4', '/uploads/content/2016/04/08/c9f0f895fb98ab9159f51fd0297e236d.jpg', 'wrwerwe', 1, 1, '0000-00-00', '0000-00-00', 'wrwer', '_self'),
 (9, 1, 1, 'b7568609e20f23e4ca9ee714a4eb0806', '/uploads/content/2016/04/08/45c48cce2e2d7fbdea1afc51c7c6ad26.jpg', 'aaa', 1, 1, '0000-00-00', '0000-00-00', 'aaaaa', '_self'),
@@ -116,14 +116,15 @@ CREATE TABLE IF NOT EXISTS `callbacks` (
   `manager_id` int(11) DEFAULT NULL,
   `updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
 -- Дамп данных таблицы `callbacks`
 --
 
 INSERT INTO `callbacks` (`id`, `users_id`, `phone`, `name`, `message`, `comment`, `created`, `ip`, `status`, `manager_id`, `updated`) VALUES
-(4, 3, '+35 (555) 5555555', 'Жорік Ревазов', 'qwewqe', NULL, '2016-04-11 08:32:36', '127.0.0.1', 'new', 2, '0000-00-00 00:00:00');
+(4, 3, '+35 (555) 5555555', 'Жорік Ревазов', 'qwewqe', '', '2016-04-11 08:32:36', '127.0.0.1', 'processed', 2, '2016-04-11 09:01:19'),
+(6, 3, '+38(055)555-55-55', 'Жорік Ревазов', 'jujjjjjj', NULL, '2016-04-11 09:02:11', '127.0.0.1', 'new', NULL, '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -254,7 +255,7 @@ CREATE TABLE IF NOT EXISTS `components` (
   KEY `position` (`position`),
   KEY `published` (`published`),
   KEY `module` (`controller`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=83 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=84 ;
 
 --
 -- Дамп данных таблицы `components`
@@ -292,7 +293,8 @@ INSERT INTO `components` (`id`, `parent_id`, `isfolder`, `icon`, `author`, `vers
 (78, 70, 0, 'fa-bus', 'Volodymyr Hodiak', '1.0.0', 'delivery', 0, 1, 300, NULL, '2016-04-01 10:55:57'),
 (79, 70, 0, 'fa-credit-card', 'Volodymyr Hodiak', '1.0.0', 'payment', 0, 1, 300, NULL, '2016-04-01 11:16:34'),
 (81, 0, 0, 'fa-cogs', 'Volodymyr Hodiak', '1.0.0', 'banners', 6, 1, 300, NULL, '2016-04-07 12:06:56'),
-(82, 0, 0, 'fa-phone-square', 'Volodymyr Hodiak', '1.0.0', 'callbacks', 5, 1, 300, NULL, '2016-04-11 07:55:03');
+(82, 0, 0, 'fa-phone-square', 'Volodymyr Hodiak', '1.0.0', 'callbacks', 5, 1, 300, NULL, '2016-04-11 07:55:03'),
+(83, 65, 0, 'fa-bus', 'Volodymyr Hodiak', '1.0.0', 'ordersStatus', 3, 1, 300, NULL, '2016-04-11 11:53:42');
 
 -- --------------------------------------------------------
 
@@ -1094,6 +1096,57 @@ INSERT INTO `nav_items` (`id`, `nav_id`, `content_id`, `position`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `orders_status`
+--
+
+CREATE TABLE IF NOT EXISTS `orders_status` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `bg_color` char(7) DEFAULT NULL,
+  `txt_color` varchar(7) DEFAULT NULL,
+  `on_site` tinyint(1) unsigned DEFAULT NULL,
+  `external_id` varchar(64) DEFAULT NULL,
+  `is_main` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `external_id_2` (`external_id`),
+  KEY `on_site` (`on_site`),
+  KEY `external_id` (`external_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+
+--
+-- Дамп данных таблицы `orders_status`
+--
+
+INSERT INTO `orders_status` (`id`, `bg_color`, `txt_color`, `on_site`, `external_id`, `is_main`) VALUES
+(3, '#099bfe', '#eaff00', 1, 'ффффф', 0),
+(4, '#fc0808', '#ffef00', 1, '111111', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `orders_status_info`
+--
+
+CREATE TABLE IF NOT EXISTS `orders_status_info` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `status_id` int(10) unsigned NOT NULL,
+  `languages_id` tinyint(3) unsigned NOT NULL,
+  `status` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`,`status_id`,`languages_id`),
+  KEY `fk_orders_status_info_languages1_idx` (`languages_id`),
+  KEY `fk_orders_status_info_orders_status1_idx` (`status_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+
+--
+-- Дамп данных таблицы `orders_status_info`
+--
+
+INSERT INTO `orders_status_info` (`id`, `status_id`, `languages_id`, `status`) VALUES
+(2, 3, 1, 'aaazzz'),
+(3, 4, 1, 'ффффф');
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `payment`
 --
 
@@ -1468,7 +1521,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `updated`, `lastlogin`, `status`) VALUES
-(2, 1, 0, 'cqib3aongupefr8grbuudirmm2', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-03-24 16:42:51', '2016-04-11 06:41:16', 'active'),
+(2, 1, 0, 'cqib3aongupefr8grbuudirmm2', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-03-24 16:42:51', '2016-04-11 13:26:56', 'active'),
 (3, 5, 0, 'cqib3aongupefr8grbuudirmm2', 'Жорік', 'Ревазов', '+35 (555) 5555555', 'z@otakoyi.com', 'MToUTd7.hmK2o', NULL, NULL, '2016-03-28 09:01:38', '2016-03-30 13:47:30', '2016-04-11 07:35:30', 'active'),
 (5, 2, 0, NULL, 'Жорік', '', '', 'otakoyi@gmail.com', 'MTGRXCzqBsZUI', NULL, NULL, '2016-03-29 12:21:29', '0000-00-00 00:00:00', NULL, 'active'),
 (6, 2, 0, NULL, 'Микола', '', '', 'm@otakoyi.com', 'MTTuFPm3y4m2o', NULL, NULL, '2016-03-29 13:18:45', '0000-00-00 00:00:00', NULL, 'active'),
@@ -1673,6 +1726,13 @@ ALTER TABLE `mail_templates_info`
 ALTER TABLE `nav_items`
   ADD CONSTRAINT `fk_nav_items_content1` FOREIGN KEY (`content_id`) REFERENCES `content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_nav_items_nav1` FOREIGN KEY (`nav_id`) REFERENCES `nav` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `orders_status_info`
+--
+ALTER TABLE `orders_status_info`
+  ADD CONSTRAINT `fk_orders_status_info_languages1` FOREIGN KEY (`languages_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_orders_status_info_orders_status1` FOREIGN KEY (`status_id`) REFERENCES `orders_status` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `payment_info`
