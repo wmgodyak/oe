@@ -165,7 +165,7 @@ class Features extends Engine
                     [
                         'class' => 'btn-primary' . ($row['type'] == 'value' ? ' b-features-edit-value' : ''),
                         'data-id' => $row['id'],
-                        'href' => $a,
+                        'href' => "features/edit/{$row['id']}",
                         'title' => $this->t('common.title_edit')
                     ]
                 ) .

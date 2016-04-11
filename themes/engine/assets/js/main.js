@@ -1751,24 +1751,29 @@ engine.features = {
     init: function()
     {
         // console.log('engine.features.init() -> OK');
-        $(document).on('click', '.b-features-delete', function(){
+        $(document).on('click', '.b-features-delete', function(e){
+            e.preventDefault();
             var id = $(this).data('id');
             engine.features.delete(id);
         });
-        $(document).on('click', '.b-features-pub', function(){
+        $(document).on('click', '.b-features-pub', function(e){
+            e.preventDefault();
             var id = $(this).data('id');
             engine.features.pub(id);
         });
-        $(document).on('click', '.b-features-hide', function(){
+        $(document).on('click', '.b-features-hide', function(e){
+            e.preventDefault();
             var id = $(this).data('id');
             engine.features.hide(id);
         });
-        $(document).on('click', '.b-features-add-value', function(){
+        $(document).on('click', '.b-features-add-value', function(e){
+            e.preventDefault();
             var id = $(this).data('id');
             engine.features.addValue(id);
         });
 
-        $(document).on('click', '.b-features-edit-value', function(){
+        $(document).on('click', '.b-features-edit-value', function(e){
+            e.preventDefault();
             var id = $(this).data('id');
             engine.features.editValue(id);
         });
