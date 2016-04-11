@@ -263,15 +263,6 @@
     </div>
 </div>
 
-<div id="cta">
-    <p>
-        Start your free 14 day trial!
-    </p>
-    <a href="signup.html">
-        Sign up for free
-    </a>
-</div>
-
 <div id="clients">
     <div class="container">
         <div class="row">

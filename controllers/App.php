@@ -90,6 +90,8 @@ class App extends Controller
 
         // to access custom modules
         $this->page = $this->template->getVars('page');
+
+        $this->template->assign('user', Session::get('user'));
     }
 
     private function init()
@@ -181,7 +183,6 @@ class App extends Controller
                 if ($page['id'] == $this->settings['page_404']) {
                     $this->response->sendError(404);
                 }
-
         }
     }
 

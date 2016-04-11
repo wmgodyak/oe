@@ -76,8 +76,10 @@ class Content extends Engine
         $this->template->assign('form_action', $this->form_action . $id);
         $this->template->assign('form_success', $this->form_success);
 
+        if(!empty($content['features'])){
+            $this->makeFeatures($content['features'], $content['settings']['type']['features']);
+        }
         //$content.settings.type.features
-        $this->makeFeatures($content['features'], $content['settings']['type']['features']);
 
         $form = $this->template->fetch($this->form_template);
 

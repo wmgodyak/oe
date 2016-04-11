@@ -249,9 +249,23 @@ App.feedback = function(){
         $('#bSubmit').button('loading');
     });
 };
+App.callback = function(){
+    $('#data_c_phone').mask('+38(099)999-99-99');
+    App.validateAjaxForm('#callback', function (d) {
+        App.alert(d.m);
+        setTimeout(function(){
+            //location.reload(true);
+        }, 3000);
+        $('#callback').resetForm();
+        $('#bSubmit').button('complete');
+    },function(){
+        $('#bSubmit').button('loading');
+    });
+};
 $(document).ready(function(){
     App.init();
     App.account.init();
     App.comments.init();
     App.feedback();
+    App.callback();
 });

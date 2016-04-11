@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Апр 07 2016 г., 17:50
+-- Время создания: Апр 11 2016 г., 11:59
 -- Версия сервера: 5.5.47-0ubuntu0.14.04.1
 -- Версия PHP: 5.5.9-1ubuntu4.14
 
@@ -43,15 +43,19 @@ CREATE TABLE IF NOT EXISTS `banners` (
   UNIQUE KEY `skey_UNIQUE` (`skey`),
   KEY `fk_banners_banners_places1_idx` (`banners_places_id`),
   KEY `fk_banners_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
 
 --
 -- Дамп данных таблицы `banners`
 --
 
 INSERT INTO `banners` (`id`, `banners_places_id`, `languages_id`, `skey`, `img`, `name`, `published`, `permanent`, `df`, `dt`, `url`, `target`) VALUES
-(6, 1, 1, 'd32b004b6fe914a51847bf782648f6a2', NULL, 'aa', 1, 1, '0000-00-00', '0000-00-00', 'a', '_self'),
-(7, 1, 1, '556074529d9c821315235cba2718ef9b', NULL, 'aa', 1, 0, '2016-04-18', '2016-04-21', 'aa', '_self');
+(6, 1, 1, 'd32b004b6fe914a51847bf782648f6a2', '/uploads/content/2016/04/08/1679091c5a880faf6fb5e6087eb1b2dc.jpg', 'aa', 1, 1, '0000-00-00', '0000-00-00', 'a', '_self'),
+(7, 1, 1, '556074529d9c821315235cba2718ef9b', '/uploads/content/2016/04/08/8f14e45fceea167a5a36dedd4bea2543.jpg', 'aa', 1, 0, '2016-04-18', '2016-04-21', 'aa', '_self'),
+(8, 1, 1, '15e85489e56c9b3240c98b292bbc2df4', '/uploads/content/2016/04/08/c9f0f895fb98ab9159f51fd0297e236d.jpg', 'wrwerwe', 1, 1, '0000-00-00', '0000-00-00', 'wrwer', '_self'),
+(9, 1, 1, 'b7568609e20f23e4ca9ee714a4eb0806', '/uploads/content/2016/04/08/45c48cce2e2d7fbdea1afc51c7c6ad26.jpg', 'aaa', 1, 1, '0000-00-00', '0000-00-00', 'aaaaa', '_self'),
+(10, 1, 1, '8532ea7767499e0c9140d9ad3dff3e8b', '/uploads/content/2016/04/08/d3d9446802a44259755d38e6d163e820.jpg', 'aaa', 1, 1, '0000-00-00', '0000-00-00', 'aaaa', '_self'),
+(11, 1, 1, '1571f4a9628a81c6a21d8acb13c17265', '/uploads/content/2016/04/08/6512bd43d9caa6e02c990b0a82652dca.jpg', 'wqewqeqwe', 1, 1, '0000-00-00', '0000-00-00', 'qweqweqwe', '_self');
 
 -- --------------------------------------------------------
 
@@ -67,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `banners_places` (
   `height` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
 -- Дамп данных таблицы `banners_places`
@@ -92,6 +96,34 @@ CREATE TABLE IF NOT EXISTS `banners_stat` (
   PRIMARY KEY (`id`,`banners_id`),
   KEY `fk_banners_stat_banners1_idx` (`banners_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `callbacks`
+--
+
+CREATE TABLE IF NOT EXISTS `callbacks` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `users_id` int(10) unsigned DEFAULT NULL,
+  `phone` varchar(20) NOT NULL,
+  `name` varchar(45) NOT NULL,
+  `message` text NOT NULL,
+  `comment` text,
+  `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `ip` char(16) NOT NULL,
+  `status` enum('processed','spam','new') NOT NULL DEFAULT 'new',
+  `manager_id` int(11) DEFAULT NULL,
+  `updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+
+--
+-- Дамп данных таблицы `callbacks`
+--
+
+INSERT INTO `callbacks` (`id`, `users_id`, `phone`, `name`, `message`, `comment`, `created`, `ip`, `status`, `manager_id`, `updated`) VALUES
+(4, 3, '+35 (555) 5555555', 'Жорік Ревазов', 'qwewqe', NULL, '2016-04-11 08:32:36', '127.0.0.1', 'new', 2, '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -222,7 +254,7 @@ CREATE TABLE IF NOT EXISTS `components` (
   KEY `position` (`position`),
   KEY `published` (`published`),
   KEY `module` (`controller`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=82 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=83 ;
 
 --
 -- Дамп данных таблицы `components`
@@ -259,7 +291,8 @@ INSERT INTO `components` (`id`, `parent_id`, `isfolder`, `icon`, `author`, `vers
 (77, 70, 0, 'fa-money', 'Volodymyr Hodiak', '1.0.0', 'currency', 0, 1, 300, NULL, '2016-04-01 10:28:14'),
 (78, 70, 0, 'fa-bus', 'Volodymyr Hodiak', '1.0.0', 'delivery', 0, 1, 300, NULL, '2016-04-01 10:55:57'),
 (79, 70, 0, 'fa-credit-card', 'Volodymyr Hodiak', '1.0.0', 'payment', 0, 1, 300, NULL, '2016-04-01 11:16:34'),
-(81, 0, 0, 'fa-cogs', 'Volodymyr Hodiak', '1.0.0', 'banners', 6, 1, 300, NULL, '2016-04-07 12:06:56');
+(81, 0, 0, 'fa-cogs', 'Volodymyr Hodiak', '1.0.0', 'banners', 6, 1, 300, NULL, '2016-04-07 12:06:56'),
+(82, 0, 0, 'fa-phone-square', 'Volodymyr Hodiak', '1.0.0', 'callbacks', 5, 1, 300, NULL, '2016-04-11 07:55:03');
 
 -- --------------------------------------------------------
 
@@ -291,7 +324,7 @@ CREATE TABLE IF NOT EXISTS `content` (
   KEY `fk_content_owner_idx` (`owner_id`),
   KEY `status` (`status`),
   KEY `published` (`published`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=72 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=75 ;
 
 --
 -- Дамп данных таблицы `content`
@@ -342,7 +375,7 @@ INSERT INTO `content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id`,
 (55, 10, 10, 2, 0, 0, 0, '2016-04-04 16:22:23', '2016-04-04 16:22:41', '2016-04-04', NULL, 'published', NULL, NULL, NULL, NULL, NULL),
 (57, 10, 10, 2, 0, 0, 0, '2016-04-05 06:12:57', '2016-04-05 06:13:34', '2016-04-05', NULL, 'published', NULL, NULL, NULL, NULL, NULL),
 (59, 10, 10, 2, 0, 0, 0, '2016-04-05 06:27:37', '2016-04-05 06:28:00', '2016-04-05', NULL, 'hidden', NULL, NULL, NULL, NULL, NULL),
-(71, 10, 10, 2, 0, 0, 0, '2016-04-06 10:55:16', NULL, NULL, NULL, 'blank', NULL, NULL, NULL, NULL, NULL);
+(74, 1, 1, 2, 1, 0, 0, '2016-04-11 07:04:37', NULL, NULL, NULL, 'blank', NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -936,7 +969,7 @@ CREATE TABLE IF NOT EXISTS `mail_templates` (
   `name` varchar(60) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
 -- Дамп данных таблицы `mail_templates`
@@ -947,7 +980,8 @@ INSERT INTO `mail_templates` (`id`, `code`, `name`) VALUES
 (2, 'account_fp', 'Відновлення паролю'),
 (3, 'comment', 'Новий коментар'),
 (4, 'comments_notify_subscribers', 'Сповіщення підписників про новий кеоментар'),
-(5, 'feedback', 'feedback');
+(5, 'feedback', 'feedback'),
+(6, 'callback', 'callback');
 
 -- --------------------------------------------------------
 
@@ -964,7 +998,7 @@ CREATE TABLE IF NOT EXISTS `mail_templates_info` (
   PRIMARY KEY (`id`),
   KEY `fk_mail_templates_info_idx` (`templates_id`),
   KEY `fk_mail_templates_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
 -- Дамп данных таблицы `mail_templates_info`
@@ -975,7 +1009,8 @@ INSERT INTO `mail_templates_info` (`id`, `templates_id`, `languages_id`, `subjec
 (2, 2, 1, 'Відновлення паролюцйуцйу', '<p>Вітаємо {$data.name}. Ви отримали це повідомлення, так як здійснили запит на відновлення паролю.</p>\n\n<p>Для цього вам необхідно перейти по <a href="{$data.fp_link}">цьому&nbsp;посиланню</a></p>\n'),
 (3, 3, 1, 'Новий коментар', '<p>Вітаємо.<br />\nНовий коментар до статі {$data.post_name}.<br />\nІм&#39;я: {$data.user.name}<br />\nEmail: {$data.user.email}<br />\nКоментар: {$data.message}<br />\n<br />\n----------------------------------<br />\nВи можете <a href="{$data.approve_url}">опублікувати коменар</a> або <a href="{$data.delete_url}">видалити</a> його.</p>\n'),
 (4, 4, 1, 'Вітаємо. Новий коментар. ', '<p>Вітаємо {$data.name}. Ви отримали це повідомлення, так як слідкуєте за коментарями до статті {$data.page_name}.</p>\n\n<p>Ви можете <a href="{$data.page_url}">переглянути його тут</a>.</p>\n'),
-(5, 5, 1, 'Повідолення з форми контактів', '<p>Вітаємо. Нове повідомлення з форми контактів.</p>\n\n<p>Ім&#39;я: {$data.name}</p>\n\n<p>Телефон: {$data.phone}</p>\n\n<p>Email: {$data.email}</p>\n\n<p>Повідомлення</p>\n\n<p>{$data.message}</p>\n');
+(5, 5, 1, 'Повідолення з форми контактів', '<p>Вітаємо. Нове повідомлення з форми контактів.</p>\n\n<p>Ім&#39;я: {$data.name}</p>\n\n<p>Телефон: {$data.phone}</p>\n\n<p>Email: {$data.email}</p>\n\n<p>Повідомлення</p>\n\n<p>{$data.message}</p>\n'),
+(6, 6, 1, 'Новий зворотній дзвінок', '<p>Вітаємо. Замовлено зворотній дзвінок.</p>\n\n<p>Ім&#39;я: {$data.name}</p>\n\n<p>Телефон: {$data.phone}</p>\n\n<p>Повідомлення</p>\n\n<p>{$data.message}</p>\n');
 
 -- --------------------------------------------------------
 
@@ -1433,8 +1468,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `updated`, `lastlogin`, `status`) VALUES
-(2, 1, 0, 'j8tku4ip7a7scs3f1ol7ioe0q4', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-03-24 16:42:51', '2016-04-07 11:54:23', 'active'),
-(3, 5, 0, 'qa73af6110ns11364j57uhvl74', 'Жорік', 'Ревазов', '+35 (555) 5555555', 'z@otakoyi.com', 'MToUTd7.hmK2o', NULL, NULL, '2016-03-28 09:01:38', '2016-03-30 13:47:30', '2016-03-31 13:33:25', 'active'),
+(2, 1, 0, 'cqib3aongupefr8grbuudirmm2', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-03-24 16:42:51', '2016-04-11 06:41:16', 'active'),
+(3, 5, 0, 'cqib3aongupefr8grbuudirmm2', 'Жорік', 'Ревазов', '+35 (555) 5555555', 'z@otakoyi.com', 'MToUTd7.hmK2o', NULL, NULL, '2016-03-28 09:01:38', '2016-03-30 13:47:30', '2016-04-11 07:35:30', 'active'),
 (5, 2, 0, NULL, 'Жорік', '', '', 'otakoyi@gmail.com', 'MTGRXCzqBsZUI', NULL, NULL, '2016-03-29 12:21:29', '0000-00-00 00:00:00', NULL, 'active'),
 (6, 2, 0, NULL, 'Микола', '', '', 'm@otakoyi.com', 'MTTuFPm3y4m2o', NULL, NULL, '2016-03-29 13:18:45', '0000-00-00 00:00:00', NULL, 'active'),
 (7, 2, 0, NULL, 'Микола', '', '', 'ma@otakoyi.com', 'MTTuFPm3y4m2o', NULL, NULL, '2016-03-29 13:21:09', '0000-00-00 00:00:00', NULL, 'active'),

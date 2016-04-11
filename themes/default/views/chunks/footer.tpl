@@ -72,19 +72,10 @@
             <div class="col-sm-4 newsletter">
                 <div class="signup clearfix">
                     <p>
-                        Sign up for the newsletter and we'll inform you of updates, offers and more.
+                        Callback form
                     </p>
-                    <form>
-                        <input type="text" name="email" class="form-control" placeholder="Your email address" />
-                        <input type="submit" value="Sign up" />
-                    </form>
+                    {include file="modules/callback.tpl"}
                 </div>
-                <a href="#">
-                    <img src="{$theme_url}assets/images/social/social-tw.png" alt="twitter" />
-                </a>
-                <a href="#">
-                    <img src="{$theme_url}assets/images/social/social-dbl.png" alt="dribbble" />
-                </a>
             </div>
         </div>
         <div class="row credits">

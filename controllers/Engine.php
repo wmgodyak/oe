@@ -65,6 +65,7 @@ abstract class Engine extends Controller
     protected $languages_id;
 
     protected $plugins;
+    protected $admin = [];
 
     public function __construct()
     {
@@ -105,6 +106,8 @@ abstract class Engine extends Controller
         if(!self::$initialized){
             $this->init();
         }
+
+        $this->admin = Admin::data();
     }
 
     private function init()
