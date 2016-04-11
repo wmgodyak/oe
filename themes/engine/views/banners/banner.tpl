@@ -5,7 +5,7 @@
                 <legend>Зображення</legend>
                 <div class="form-group">
                     <div class="img" style="text-align: center">
-                        <img src="/themes/engine/assets/img/no-image.png" alt="no-image" style="max-width:160px; cursor: pointer;" id="bannersImage">
+                        <img src="{if $data.img}{$data.img}{else}/themes/engine/assets/img/no-image.png{/if}" alt="no-image" style="max-width:160px; cursor: pointer;" id="bannersImage">
                         <p>Розмір: {$sizes.width}x{$sizes.height}px</p>
                         <input type="file" name="image" style="display: none" id="bannersImageUpload" onchange="engine.banners.encodeImageFileAsURL();">
                     </div>
