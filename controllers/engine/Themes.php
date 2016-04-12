@@ -95,7 +95,65 @@ class Themes extends Engine {
      * @param $id
      * @return mixed
      */
-    public function edit($id){}
+    public function edit($id)
+    {
+        $this->template->assign('theme', $id);
+        $this->template->assign('sidebar', $this->template->fetch('themes/tree'));
+        $this->response->body($this->template->fetch('themes/edit'));
+    }
+
+    public function tree($theme)
+    {
+        if(! $this->request->isXhr()) die;
+
+//        $this->dump($_GET);
+
+        $dir = Settings::getInstance()->get('themes_path');
+
+        $dir = DOCROOT .'/'. $dir . '/' . $theme . '/';
+        $path = $this->request->get('id', 's');
+        $path = str_replace('#', '', $path);
+        $items = array();
+        if ($handle = opendir($dir . $path)) {
+            while (false !== ($fn = readdir($handle))) {
+                if ($fn == "." || $fn == "..")  continue;
+
+                $items[] = [
+                    'text' => $fn,
+                    'type' => is_dir($dir . $path . '/' . $fn) ? 'folder' : 'file',
+                    'children' => is_dir($dir . $path . '/' . $fn) ,
+                    'a_attr' => ['id'=> $path . '/' . $fn, 'href' => './themes/edit/'. $theme.'?path=' . $path . '/' . $fn],
+                    'li_attr' => ['id'=> $path . '/' . $fn]
+                ];
+            }
+            closedir($handle);
+
+        }
+        $this->response->body($items)->asJSON();
+//        $items = array();
+//        $parent_id = $this->request->get('id','i');
+//        foreach ($this->tree->getItems($parent_id) as $item) {
+//            $item['children'] = $item['isfolder'] == 1;
+//            if( $parent_id > 0 ){
+//                $item['parent'] = $parent_id;
+//            }
+//            $item['text'] .= " #{$item['id']}";
+//            $item['a_attr'] = ['id'=> $item['id'], 'href' => './content/pages/edit/' . $item['id']];
+//            $item['li_attr'] = [
+//                'id'=> 'li_'.$item['id'],
+//                'class' => 'status-' . $item['status'],
+//                'title' => ($item['status'] == 'published' ? 'Опублікоавно' : 'Приховано')
+//
+//            ];
+//            $item['type'] = $item['isfolder'] ? 'folder': 'file';
+////            $item['icon'] = 'fa fa-file icon-state-info icon-md';
+//
+//            $items[] = $item;
+//        }
+//
+//        $this->response->body($items)->asJSON();
+    }
+
 
     /**
      * @param $id

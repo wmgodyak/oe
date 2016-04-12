@@ -25,7 +25,7 @@
         <div class="dashboard">
             {$nav}
             <div class="page">
-                {if !empty($plugins.sidebar) != ''}
+                {if !empty($plugins.sidebar) != '' || isset($sidebar)}
                 <div class="sidebar sidebar-open">
                     <div class="toggle-btn">
                         <i class="fa fa-chevron-left"></i>
@@ -34,6 +34,7 @@
                         <img src="{$theme_url}assets/img/logo/logo-black.png">
                     </div>
                     {if isset($plugins.sidebar)}{implode("\r\n", $plugins.sidebar)}{/if}
+                    {if isset($sidebar)}{$sidebar}{/if}
                 </div>
                 {/if}
                 <div class="dashboard-content {if !empty($plugins.sidebar)} sidebar-open{/if}">

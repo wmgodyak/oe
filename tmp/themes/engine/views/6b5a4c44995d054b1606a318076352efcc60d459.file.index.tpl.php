@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-04-05 09:34:10
+<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-04-12 18:44:20
          compiled from "/var/www/engine.loc/themes/engine/views/index.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:1202898852567be873c6fe20-51470877%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '6b5a4c44995d054b1606a318076352efcc60d459' => 
     array (
       0 => '/var/www/engine.loc/themes/engine/views/index.tpl',
-      1 => 1459838049,
+      1 => 1460474373,
       2 => 'file',
     ),
   ),
@@ -28,6 +28,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'body' => 0,
     'nav' => 0,
     'plugins' => 0,
+    'sidebar' => 0,
     'name' => 0,
     'admin' => 0,
     'heading_panel' => 0,
@@ -83,7 +84,7 @@ assets/js/vendor/jquery-1.11.3.min.js"><?php echo '</script'; ?>
             <?php echo $_smarty_tpl->tpl_vars['nav']->value;?>
 
             <div class="page">
-                <?php if (!empty($_smarty_tpl->tpl_vars['plugins']->value['sidebar'])!='') {?>
+                <?php if (!empty($_smarty_tpl->tpl_vars['plugins']->value['sidebar'])!=''||isset($_smarty_tpl->tpl_vars['sidebar']->value)) {?>
                 <div class="sidebar sidebar-open">
                     <div class="toggle-btn">
                         <i class="fa fa-chevron-left"></i>
@@ -94,6 +95,9 @@ assets/img/logo/logo-black.png">
                     </div>
                     <?php if (isset($_smarty_tpl->tpl_vars['plugins']->value['sidebar'])) {
 echo implode("\r\n",$_smarty_tpl->tpl_vars['plugins']->value['sidebar']);
+}?>
+                    <?php if (isset($_smarty_tpl->tpl_vars['sidebar']->value)) {
+echo $_smarty_tpl->tpl_vars['sidebar']->value;
 }?>
                 </div>
                 <?php }?>

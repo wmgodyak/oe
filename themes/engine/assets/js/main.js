@@ -2527,6 +2527,7 @@ engine.themes = {
             var theme = $(this).data('theme');
             engine.themes.activate(theme);
         });
+
     },
     activate: function(theme)
     {
