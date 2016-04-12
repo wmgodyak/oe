@@ -14,6 +14,7 @@ use controllers\engine\DataTables;
 use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
 use helpers\bootstrap\Link;
+use models\app\Images;
 use models\engine\Comments;
 
 defined("CPATH") or die();
@@ -69,7 +70,7 @@ class Products extends Content
             -> th($this->t('common.name'))
             -> th($this->t('common.created'))
             -> th($this->t('common.updated'))
-            -> th($this->t('common.tbl_func'), '', 'width: 160px')
+            -> th($this->t('common.tbl_func'), '', 'width: 180px')
         ;
 
         $this->output($t->render());
@@ -91,17 +92,17 @@ class Products extends Content
 
         $res = array();
         $comments = new Comments();
-
+        $im = new Images();
         foreach ($t->getResults(false) as $i=>$row) {
+            $img = $im->cover($row['id'], 'thumbs');
             $t_comments = $comments->getTotal($row['id']);
             $t_comments_new = $comments->getTotalNew($row['id']);
 
-            $icon = Icon::create(($row['isfolder'] ? 'fa-folder' : 'fa-file'));
             $icon_link = Icon::create('fa-external-link');
             $status = $this->t($this->type .'.status_' . $row['status']);
             $res[$i][] = $row['id'];
             $res[$i][] =
-                           " <a class='status-{$row['status']}' title='{$status}' href='content/{$this->type}/edit/{$row['id']}'>{$icon}  {$row['name']}</a>"
+                           " <a class='status-{$row['status']}' title='{$status}' href='content/{$this->type}/edit/{$row['id']}'><img src='/{$img}' alt='' style='float: left;margin-right: 1em; max-width: 60px;'>  {$row['name']}</a>"
                          . " <a href='/{$row['url']}' target='_blank'>{$icon_link}</a>"
                          . "<br><small class='label label-info'>Автор:{$row['owner']} </small>"
                          . "<br><small class='label label-info'>Коментарів: {$t_comments} </small>"
