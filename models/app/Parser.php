@@ -217,7 +217,7 @@ class Parser extends Model
             (function(w, c) {
                 (w[c] = w[c] || []).push(function() {
                 try {
-                w.yaCounterНОМЕР_СЧЕТЧИКА = new Ya.Metrika({id: НОМЕР_СЧЕТЧИКА, enableAll: true});
+                w.yaCounter$ya_m = new Ya.Metrika({id: $ya_m, enableAll: true});
                 }
                 catch(e){}
                 });
