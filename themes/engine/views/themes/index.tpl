@@ -14,6 +14,11 @@
                 <h3 class="name">{$item.name}</h3>
                 {if $item.current == ''}
                     <div class="actions">
+                        <a
+                            title="Download"
+                            class="btn btn-success"
+                            href="themes/download/{$item.theme}"
+                        ><i class="fa fa-file-zip-o"></i> Download</a>
                         <a onclick="return false;"
                            data-theme="{$item.theme}"
                            class="btn btn-success b-themes-activate"

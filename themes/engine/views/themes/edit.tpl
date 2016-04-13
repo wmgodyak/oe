@@ -1,6 +1,9 @@
 {if $error}
     <div class="alert alert-error">{$error}</div>
 {/if}
+{if $img}
+    <div class="row col-md-8 col-md-offset-2"><img src="{$img}" style="max-width: 100%;" alt=""></div>
+{/if}
 {if $source}
 <form id="form" action="themes/updateSource" method="post"  class="form-horizontal">
     <div class="row">

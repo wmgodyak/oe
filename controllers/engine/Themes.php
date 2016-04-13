@@ -110,7 +110,8 @@ class Themes extends Engine {
      */
     public function edit($theme)
     {
-        $not_allowed = ['png','gif', 'jpeg', 'php','jpg'];
+        $not_allowed = ['php'];
+        $img_ext = ['png','gif', 'jpeg', 'jpg'];
         $path = $this->request->get('path');
         $path = str_replace('../','',$path);
         if($path){
@@ -134,13 +135,16 @@ class Themes extends Engine {
             );
 
             $dir = Settings::getInstance()->get('themes_path');
-            $dir = DOCROOT .'/'. $dir . '/' . $theme . '/';
+            $_dir = $dir . '/' . $theme . '/';
+            $dir = DOCROOT . $dir . '/' . $theme . '/';
             if(file_exists($dir . $path) && !is_dir($dir . $path)){
                 $fileinfo = pathinfo($path);
                 if (in_array(mb_strtolower($fileinfo['extension']), $not_allowed)){
                     $this->template->assign('error', "wrong file extension. Not allowed: " . implode(', ', $not_allowed));
-                } else{
-
+                } else if(in_array(mb_strtolower($fileinfo['extension']), $img_ext)){
+                    $img =  '/'.$_dir . $path;
+                    $this->template->assign('img', $img);
+                } else {
                     $source = file_get_contents($dir.$path);
                     $source = htmlentities($source);
                     $this->template->assign('source', $source);
@@ -189,11 +193,13 @@ class Themes extends Engine {
             while (false !== ($fn = readdir($handle))) {
                 if ($fn == "." || $fn == "..")  continue;
 
+                $href = !is_dir($dir . $path . '/' . $fn) ? './themes/edit/'. $theme.'?path=' . $path . '/' . $fn : '#';
+
                 $items[] = [
                     'text' => $fn,
                     'type' => is_dir($dir . $path . '/' . $fn) ? 'folder' : 'file',
                     'children' => is_dir($dir . $path . '/' . $fn) ,
-                    'a_attr' => ['id'=> $path . '/' . $fn, 'href' => './themes/edit/'. $theme.'?path=' . $path . '/' . $fn],
+                    'a_attr' => ['id'=> $path . '/' . $fn, 'href' => $href],
                     'li_attr' => ['id'=> $path . '/' . $fn]
                 ];
             }
