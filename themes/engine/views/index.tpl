@@ -37,7 +37,7 @@
                     {if isset($sidebar)}{$sidebar}{/if}
                 </div>
                 {/if}
-                <div class="dashboard-content {if !empty($plugins.sidebar)} sidebar-open{/if}">
+                <div class="dashboard-content {if !empty($plugins.sidebar)  || isset($sidebar)} sidebar-open{/if}">
                     <div class="content-wrapper"> <!--dashboard-->
                         <!--top line-->
                         <div class="top-line">

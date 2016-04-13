@@ -10,6 +10,8 @@ namespace controllers\engine;
 
 use controllers\Engine;
 use controllers\core\Settings;
+use helpers\bootstrap\Button;
+use helpers\bootstrap\Link;
 
 defined('CPATH') or die();
 
@@ -52,10 +54,11 @@ class Themes extends Engine {
         if ($handle = opendir($path)) {
             while (false !== ($theme = readdir($handle))) {
                 if ($theme != "." && $theme != "..") {
-                    if(!file_exists($path . '/' . $theme . '/config.php'))
+                    if(!file_exists($path . '/' . $theme . '/config.ini'))
                         continue;
 
-                    $config = include($path . '/' . $theme . '/config.php');
+                    $config = parse_ini_file($path . '/' . $theme . '/config.ini');
+
                     if($config['type'] == 'backend') continue;
 
                     $config['path']    = $path . $theme . '/';
@@ -95,11 +98,69 @@ class Themes extends Engine {
      * @param $id
      * @return mixed
      */
-    public function edit($id)
+    public function edit($theme)
     {
-        $this->template->assign('theme', $id);
+        $not_allowed = ['png','gif', 'jpeg', 'php','jpg'];
+        $path = $this->request->get('path');
+        $path = str_replace('../','',$path);
+        if($path){
+
+            $this->appendToPanel
+            (
+                (string)Link::create
+                (
+                    $this->t('common.back'),
+                    ['class' => 'btn-md', 'href'=> 'themes']
+                )
+            );
+
+            $this->appendToPanel
+            (
+                (string)Button::create
+                (
+                    $this->t('common.button_save'),
+                    ['class' => 'btn-md b-form-save']
+                )
+            );
+
+            $dir = Settings::getInstance()->get('themes_path');
+            $dir = DOCROOT .'/'. $dir . '/' . $theme . '/';
+            if(file_exists($dir . $path) && !is_dir($dir . $path)){
+                $fileinfo = pathinfo($path);
+                if (in_array(mb_strtolower($fileinfo['extension']), $not_allowed)){
+                    $this->template->assign('error', "wrong file extension. Not allowed: " . implode(', ', $not_allowed));
+                } else{
+
+                    $source = file_get_contents($dir.$path);
+                    $source = htmlentities($source);
+                    $this->template->assign('source', $source);
+                    $this->template->assign('path', $path);
+                }
+            } else {
+                $this->template->assign('error', "wrong path");
+            }
+        }
+        $this->template->assign('theme', $theme);
         $this->template->assign('sidebar', $this->template->fetch('themes/tree'));
-        $this->response->body($this->template->fetch('themes/edit'));
+        $this->output($this->template->fetch('themes/edit'));
+    }
+
+    public function updateSource()
+    {
+        $source = $this->request->post('source');
+        $path   = $this->request->post('path');
+        $path = str_replace('../','',$path);
+        $theme  = $this->request->post('theme');
+        $dir = Settings::getInstance()->get('themes_path');
+        $dir = DOCROOT .'/'. $dir . '/' . $theme . '/';
+        $s = 0; $m = null;
+        if(!file_exists($dir . $path)){
+            $m = "wrong path";
+        } else {
+            $s = file_put_contents($dir.$path, $source);
+            $m = 'Source Updated';
+        }
+        $this->response->body(['s' => $s, 'm' => $m])->asJSON();
     }
 
     public function tree($theme)
