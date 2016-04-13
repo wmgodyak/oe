@@ -2522,12 +2522,26 @@ engine.modules = {
 engine.themes = {
     init: function()
     {
-        // console.log('engine.themes.init() -> OK');
         $(document).on('click', '.b-themes-activate', function(){
             var theme = $(this).data('theme');
             engine.themes.activate(theme);
         });
 
+        $(document).on('click', '.b-themes-upload', function(){
+            $("#uploadFileInp").click();
+        });
+
+        $("#uploadFileInp").change(function(){
+            $('#uploadThemeForm').submit();
+        });
+
+        engine.validateAjaxForm('#uploadThemeForm', function(d){
+            if(d.s){
+                location.reload(true);
+            } else {
+                engine.alert(d.m, 'error');
+            }
+        });
     },
     activate: function(theme)
     {

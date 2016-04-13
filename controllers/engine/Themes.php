@@ -44,6 +44,15 @@ class Themes extends Engine {
      * @return mixed
      */
     public function index(){
+
+        $this->appendToPanel
+        (
+            (string)Button::create
+            (
+                'Завантажити .zip',
+                ['class' => 'btn-md b-themes-upload']
+            )
+        );
         $current = Settings::getInstance()->get('app_theme_current');
         // зчитую теми з папки
         $path = DOCROOT .'/'. $this->path;
@@ -73,6 +82,7 @@ class Themes extends Engine {
             }
             closedir($handle);
         }
+
         $this->template->assign('items', $themes);
         $content = $this->template->fetch('themes/index');
         $this->output($content);
@@ -191,30 +201,72 @@ class Themes extends Engine {
 
         }
         $this->response->body($items)->asJSON();
-//        $items = array();
-//        $parent_id = $this->request->get('id','i');
-//        foreach ($this->tree->getItems($parent_id) as $item) {
-//            $item['children'] = $item['isfolder'] == 1;
-//            if( $parent_id > 0 ){
-//                $item['parent'] = $parent_id;
-//            }
-//            $item['text'] .= " #{$item['id']}";
-//            $item['a_attr'] = ['id'=> $item['id'], 'href' => './content/pages/edit/' . $item['id']];
-//            $item['li_attr'] = [
-//                'id'=> 'li_'.$item['id'],
-//                'class' => 'status-' . $item['status'],
-//                'title' => ($item['status'] == 'published' ? 'Опублікоавно' : 'Приховано')
+    }
+    public function download($theme)
+    {
+        $dir = Settings::getInstance()->get('themes_path');
+        $path = DOCROOT . $dir . $theme;
+
+        $zip = new \ZipArchive();
+
+        $zip_name="$theme.zip";
+
+        if(file_exists(DOCROOT."tmp/".$zip_name)) {
+            unlink (DOCROOT."tmp/".$zip_name);
+        }
+        if ($zip->open(DOCROOT."tmp/".$zip_name, \ZIPARCHIVE::CREATE) != TRUE) {
+            die ("Could not open archive");
+        }
 //
-//            ];
-//            $item['type'] = $item['isfolder'] ? 'folder': 'file';
-////            $item['icon'] = 'fa fa-file icon-state-info icon-md';
-//
-//            $items[] = $item;
-//        }
-//
-//        $this->response->body($items)->asJSON();
+
+        $files = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($path),
+            \RecursiveIteratorIterator::LEAVES_ONLY
+        );
+
+        foreach ($files as $name => $file){
+            if (!$file->isDir()){
+                $filePath = $file->getRealPath();
+                $relativePath = substr($filePath, strlen($path) + 1);
+
+                $zip->addFile($filePath, $relativePath);
+            }
+        }
+
+        $zip->close();
+        header('Content-Type: application/zip');
+        header('Content-disposition: attachment; filename='.$zip_name);
+        header('Content-Length: ' . filesize($zip_name));
+        readfile(DOCROOT."tmp/".$zip_name);
     }
 
+    public function upload()
+    {
+        $s=0;$m=null;
+        $dir = Settings::getInstance()->get('themes_path');
+        $tmp_dir  = DOCROOT . 'tmp/';
+        $dir      = DOCROOT . $dir .'/';
+//        $this->dump($_FILES);die;
+        $theme = $_FILES['theme'];
+        if($theme['type'] != 'application/zip'){
+            $m = 'Wrong file extension: ' . $theme['type'];
+        } else {
+            if(!  move_uploaded_file($theme['tmp_name'], "$tmp_dir/{$theme['name']}")){
+                $m = 'Can not upload theme.';
+            } else {
+
+            }
+            $zip = new \ZipArchive;
+            $res = $zip->open( "$tmp_dir/{$theme['name']}" );
+            if ($res === TRUE) {
+                $zip->extractTo($dir);
+                $zip->close();
+                $s=1;
+            }
+        }
+
+        $this->response->body(['s' => $s, 'm' => $m])->asJSON();
+    }
 
     /**
      * @param $id

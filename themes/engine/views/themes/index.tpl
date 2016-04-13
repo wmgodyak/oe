@@ -23,6 +23,11 @@
                     {else}
                     <div class="actions">
                         <a
+                           title="Download"
+                           class="btn btn-success"
+                           href="themes/download/{$item.theme}"
+                        ><i class="fa fa-file-zip-o"></i> Download</a>
+                        <a
                            title="{$t.themes.edit}"
                            class="btn btn-primary"
                            href="themes/edit/{$item.theme}"
@@ -33,4 +38,10 @@
         </section>
     </div>
     {/foreach}
+</div>
+<div style="display: none;">
+    <form action="themes/upload" id="uploadThemeForm" method="post" enctype="multipart/form-data">
+        <input type="file" name="theme" id="uploadFileInp">
+        <input type="hidden" name="token" value="{$token}">
+    </form>
 </div>
