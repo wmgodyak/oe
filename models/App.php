@@ -12,6 +12,7 @@ use controllers\core\Event;
 use controllers\core\exceptions\Exception;
 use models\app\Images;
 use models\core\Model;
+use models\engine\Settings;
 
 defined("CPATH") or die();
 
@@ -98,16 +99,13 @@ class App extends Model
 
         if(empty($page)) return;
 
-        if(empty($page['h1'])) {
-            $page['h1'] = $page['name'];
-        }
-
         // page template
         if($page['types_id'] == $page['subtypes_id']){
            $page['template'] = self::$db
                ->select("select type from content_types where id={$page['subtypes_id']} limit 1")
                ->row('type');
-        } else{
+            $page['type'] =$page['template'];
+        } else {
             $type = self::$db
                 ->select("select type from content_types where id={$page['types_id']} limit 1")
                 ->row('type');
@@ -115,6 +113,8 @@ class App extends Model
                 ->select("select type from content_types where id={$page['subtypes_id']} limit 1")
                 ->row('type');
             $page['template'] = $type .'/'. $subtype;
+
+            $page['type'] =$type;
         }
 
         // cover image
@@ -144,10 +144,118 @@ class App extends Model
             $page['settings']['modules'] = array_merge($s['modules'], $page['settings']['modules']);
         }
 
+        $page = $this->makeMeta($page);
+
         $this->page = $page;
 
 //        echo $this->getDBErrorMessage();
 //        echo '<pre>';print_r($page);die;
+    }
+
+    /**
+     *
+    {title} - заголовок сторінки,
+    {keywords} - ключові слова сторінки,
+    {h1} - заголовок першого рвіня сторінки,
+    {description} - опис сторінки,
+    {company_name} - Назва компанії,
+    {company_phone} - телефон,
+    {category} - категорія,
+    {categories} - список категорій,
+    {delimiter} - розділювач, напр "/"
+     * @param $page
+     * @return mixed
+     */
+    private function makeMeta($page)
+    {
+//        $s = self::$db->select("select value from settings where name='seo' limit 1")->row('value');
+        $settings = \controllers\core\Settings::getInstance()->get();
+        $delimiter = $settings['delimiter'];
+        $company_name  = $settings['company_name'];
+        $company_phone = $settings['company_phone'];
+
+        if(empty($page['h1'])) {
+            $page['h1'] = $page['name'];
+        }
+
+        $meta = ['title', 'keywords', 'description', 'h1'];
+
+        $s = unserialize($settings['seo']);
+//        echo '<pre>'; print_r($s); die;
+        foreach ($meta as $k=>$mk) {
+            if(!isset($s[$page['type']][$this->languages_id][$mk])) continue;
+
+            $tpl = $s[$page['type']][$this->languages_id][$mk];
+            $page[$mk] = str_replace
+            (
+                [
+                    '{title}',
+                    '{keywords}',
+                    '{description}',
+                    '{h1}',
+                    '{delimiter}',
+                    '{company_name}',
+                    '{company_phone}',
+                ],
+                [
+                    $page['title'],
+                    $page['keywords'],
+                    $page['description'],
+                    $page['h1'],
+                    $delimiter,
+                    $company_name,
+                    $company_phone
+                ],
+                $tpl
+            );
+
+            if(strpos($page[$mk], '{category}') !== false){
+                if($page['parent_id'] > 0){
+                    $page[$mk] = str_replace('{category}', $this->pageInfo($page['parent_id'], $mk), $page[$mk]);
+                } else {
+                    $categories_id = $this->getRelationshipCategoryId($page['id']);
+                    if($categories_id > 0){
+                        $page[$mk] = str_replace('{category}', $this->pageInfo($categories_id, $mk), $page[$mk]);
+                    }
+                }
+            }
+        }
+//                echo '<pre>'; print_r($page); die;
+        return $page;
+    }
+
+    private function pageInfo($id, $key)
+    {
+        return self::$db
+            ->select("
+                select {$key}
+                from content_info
+                where content_id={$id} and languages_id={$this->languages_id}
+                limit 1
+                ")
+            ->row($key);
+    }
+
+    private function getRelationshipCategoryId($content_id)
+    {
+        return self::$db
+            ->select("select categories_id from content_relationship where content_id={$content_id} order by is_main desc limit 1")
+            ->row('categories_id');
+    }
+
+    private function _getParentInfo($id)
+    {
+        $page = self::$db
+            ->select("
+                select c.id,c.types_id,c.isfolder,i.name, i.title, i.url, i.keywords, i.description
+                from content_info i
+                join content c on c.id = {$id}
+                where i.content_id={$id} and i.languages_id={$this->languages_id}
+                limit 1
+                ")
+            ->row();
+
+        return $page;
     }
 
     public function callModule($module)

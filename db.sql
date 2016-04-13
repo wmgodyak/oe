@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Апр 12 2016 г., 11:32
+-- Время создания: Апр 13 2016 г., 17:53
 -- Версия сервера: 5.5.47-0ubuntu0.14.04.1
 -- Версия PHP: 5.5.9-1ubuntu4.14
 
@@ -173,7 +173,7 @@ CREATE TABLE IF NOT EXISTS `comments` (
   KEY `users_id` (`users_id`),
   KEY `token` (`skey`),
   KEY `isfolder` (`isfolder`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=27 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=28 ;
 
 --
 -- Дамп данных таблицы `comments`
@@ -203,7 +203,8 @@ INSERT INTO `comments` (`id`, `parent_id`, `isfolder`, `content_id`, `users_id`,
 (23, 21, 0, 16, 2, 'rtyr', 1.0, 'approved', '2016-03-31 09:15:54', '127.0.0.1', NULL),
 (24, 12, 0, 16, 3, ' Ревазов\nя опублікувала статтю, в якій перерахувала 25 технік генерації ідей для логотипу. Якщо ви її не читали — обов''язково прочитайте :) А потім повертайтеся сюди :)', 1.0, 'approved', '2016-03-31 09:15:58', '127.0.0.1', '94ade8080aa05c1632fc0831d354c220'),
 (25, 0, 0, 16, 3, 'xxzzxczsadf', 1.0, 'approved', '2016-03-31 13:33:43', '127.0.0.1', 'cbf59fc5c2a997a249d3c38fd52edeea'),
-(26, 0, 0, 16, 3, 'xxzzxczsadf', 1.0, 'new', '2016-03-31 13:34:04', '127.0.0.1', 'cbf59fc5c2a997a249d3c38fd52edeea');
+(26, 0, 0, 16, 3, 'xxzzxczsadfas', 1.0, 'approved', '2016-03-31 13:34:04', '127.0.0.1', 'cbf59fc5c2a997a249d3c38fd52edeea'),
+(27, 26, 0, 16, 2, 'a', 1.0, 'approved', '2016-04-13 07:03:34', '127.0.0.1', NULL);
 
 -- --------------------------------------------------------
 
@@ -255,7 +256,7 @@ CREATE TABLE IF NOT EXISTS `components` (
   KEY `position` (`position`),
   KEY `published` (`published`),
   KEY `module` (`controller`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=84 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=85 ;
 
 --
 -- Дамп данных таблицы `components`
@@ -294,7 +295,8 @@ INSERT INTO `components` (`id`, `parent_id`, `isfolder`, `icon`, `author`, `vers
 (79, 70, 0, 'fa-credit-card', 'Volodymyr Hodiak', '1.0.0', 'payment', 0, 1, 300, NULL, '2016-04-01 11:16:34'),
 (81, 0, 0, 'fa-cogs', 'Volodymyr Hodiak', '1.0.0', 'banners', 6, 1, 300, NULL, '2016-04-07 12:06:56'),
 (82, 0, 0, 'fa-phone-square', 'Volodymyr Hodiak', '1.0.0', 'callbacks', 5, 1, 300, NULL, '2016-04-11 07:55:03'),
-(83, 65, 0, 'fa-bus', 'Volodymyr Hodiak', '1.0.0', 'ordersStatus', 3, 1, 300, NULL, '2016-04-11 11:53:42');
+(83, 65, 0, 'fa-bus', 'Volodymyr Hodiak', '1.0.0', 'ordersStatus', 3, 1, 300, NULL, '2016-04-11 11:53:42'),
+(84, 65, 0, 'fa-cogs', 'Volodymyr Hodiak', '1.0.0', 'seo', 0, 1, 300, NULL, '2016-04-13 13:10:56');
 
 -- --------------------------------------------------------
 
@@ -365,7 +367,7 @@ INSERT INTO `content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id`,
 (34, 1, 8, 2, 28, 0, 0, '2016-03-30 07:40:52', '2016-03-30 07:41:43', '2016-03-30', 'a:1:{s:7:"modules";a:1:{i:0;s:11:"Account::fp";}}', 'published', '34', NULL, NULL, NULL, NULL, NULL),
 (39, 10, 10, 2, 0, 0, 0, '2016-04-01 06:43:59', '2016-04-07 08:02:03', '2016-04-06', NULL, 'published', '39', 2, 2, 1, 0, NULL),
 (40, 11, 11, 2, 0, 1, 0, '2016-04-01 07:08:53', '2016-04-01 07:56:46', '2016-04-01', NULL, 'published', '40', NULL, NULL, NULL, NULL, NULL),
-(41, 11, 11, 2, 40, 0, 0, '2016-04-01 07:09:00', '2016-04-04 14:39:02', '2016-04-01', NULL, 'published', '41', NULL, NULL, NULL, NULL, NULL),
+(41, 11, 11, 2, 40, 0, 0, '2016-04-01 07:09:00', '2016-04-12 14:32:36', '2016-04-01', NULL, 'published', '41', NULL, NULL, NULL, NULL, NULL),
 (42, 11, 11, 2, 0, 0, 0, '2016-04-01 07:10:09', '2016-04-01 07:10:08', '2016-04-01', NULL, 'published', '42', NULL, NULL, NULL, NULL, NULL),
 (43, 11, 11, 2, 0, 0, 0, '2016-04-01 07:10:40', '2016-04-01 08:26:37', '2016-04-01', NULL, 'published', '43', NULL, NULL, NULL, NULL, NULL),
 (44, 11, 11, 2, 0, 0, 0, '2016-04-01 07:10:45', '2016-04-01 07:10:45', '2016-04-01', NULL, 'published', '44', NULL, NULL, NULL, NULL, NULL),
@@ -375,7 +377,7 @@ INSERT INTO `content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id`,
 (48, 11, 11, 2, 0, 0, 0, '2016-04-01 07:11:12', '2016-04-01 07:11:12', '2016-04-01', NULL, 'published', '48', NULL, NULL, NULL, NULL, NULL),
 (49, 11, 11, 2, 40, 0, 0, '2016-04-01 08:26:25', '2016-04-01 08:26:25', '2016-04-01', NULL, 'published', '49', NULL, NULL, NULL, NULL, NULL),
 (52, 10, 10, 2, 0, 0, 0, '2016-04-04 14:41:04', '2016-04-04 16:24:17', '2016-04-04', NULL, 'published', '52', NULL, NULL, NULL, NULL, NULL),
-(54, 10, 10, 2, 0, 0, 0, '2016-04-04 16:21:23', '2016-04-04 16:21:27', '2016-04-04', NULL, 'published', '54', NULL, NULL, NULL, NULL, NULL),
+(54, 10, 10, 2, 0, 0, 0, '2016-04-04 16:21:23', '2016-04-12 10:57:51', '2016-04-04', NULL, 'published', '54', 2, 2, 0, 0, NULL),
 (55, 10, 10, 2, 0, 0, 0, '2016-04-04 16:22:23', '2016-04-04 16:22:41', '2016-04-04', NULL, 'published', '55', NULL, NULL, NULL, NULL, NULL),
 (57, 10, 10, 2, 0, 0, 0, '2016-04-05 06:12:57', '2016-04-05 06:13:34', '2016-04-05', NULL, 'published', '57', NULL, NULL, NULL, NULL, NULL),
 (59, 10, 10, 2, 0, 0, 0, '2016-04-05 06:27:37', '2016-04-05 06:28:00', '2016-04-05', NULL, 'published', '59', NULL, NULL, NULL, NULL, NULL),
@@ -398,7 +400,7 @@ CREATE TABLE IF NOT EXISTS `content_features` (
   UNIQUE KEY `content_id` (`content_id`,`features_id`,`values_id`,`languages_id`),
   KEY `fk_content_features_values_content1_idx` (`content_id`),
   KEY `fk_content_features_values_features1_idx` (`features_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=24 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=26 ;
 
 --
 -- Дамп данных таблицы `content_features`
@@ -407,7 +409,9 @@ CREATE TABLE IF NOT EXISTS `content_features` (
 INSERT INTO `content_features` (`id`, `content_id`, `features_id`, `values_id`, `languages_id`, `value`) VALUES
 (21, 39, 84, 86, 0, NULL),
 (22, 39, 85, 89, 0, NULL),
-(23, 39, 92, 94, 0, NULL);
+(23, 39, 92, 94, 0, NULL),
+(24, 54, 84, 86, 0, NULL),
+(25, 54, 85, 89, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -569,7 +573,7 @@ CREATE TABLE IF NOT EXISTS `content_relationship` (
   KEY `fk_content_relationship_content1_idx` (`content_id`),
   KEY `fk_content_relationship_content2_idx` (`categories_id`),
   KEY `is_main` (`is_main`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=75 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=77 ;
 
 --
 -- Дамп данных таблицы `content_relationship`
@@ -589,7 +593,8 @@ INSERT INTO `content_relationship` (`id`, `content_id`, `categories_id`, `is_mai
 (27, 52, 41, 1),
 (29, 57, 41, 1),
 (30, 59, 41, 1),
-(74, 39, 41, 1);
+(74, 39, 41, 1),
+(76, 54, 41, 1);
 
 -- --------------------------------------------------------
 
@@ -1226,7 +1231,7 @@ CREATE TABLE IF NOT EXISTS `plugins` (
   PRIMARY KEY (`id`),
   KEY `published` (`published`),
   KEY `module` (`controller`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=35 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=36 ;
 
 --
 -- Дамп данных таблицы `plugins`
@@ -1248,7 +1253,8 @@ INSERT INTO `plugins` (`id`, `icon`, `author`, `version`, `controller`, `place`,
 (31, 'fa-folder-o', 'Volodymyr Hodiak', '1.0.0', 'productsCategories', 'sidebar', 1, 300, NULL, '2016-04-01 08:17:04'),
 (32, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'productsPrices', 'after_main', 1, 300, NULL, '2016-04-05 10:34:07'),
 (33, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'productsVariants', 'after_main', 1, 300, NULL, '2016-04-05 12:29:51'),
-(34, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'productsAccessories', 'after_features', 1, 300, NULL, '2016-04-12 06:14:56');
+(34, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'productsAccessories', 'after_features', 1, 300, NULL, '2016-04-12 06:14:56'),
+(35, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'productsSimilar', 'after_params', 1, 300, NULL, '2016-04-12 13:21:46');
 
 -- --------------------------------------------------------
 
@@ -1265,7 +1271,7 @@ CREATE TABLE IF NOT EXISTS `plugins_components` (
   KEY `fk_plugins_components_plugins1_idx` (`plugins_id`),
   KEY `fk_plugins_components_components1_idx` (`components_id`),
   KEY `position` (`position`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=25 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=26 ;
 
 --
 -- Дамп данных таблицы `plugins_components`
@@ -1289,7 +1295,8 @@ INSERT INTO `plugins_components` (`id`, `plugins_id`, `components_id`, `position
 (21, 31, 76, 0),
 (22, 32, 72, 0),
 (23, 33, 72, 0),
-(24, 34, 72, 0);
+(24, 34, 72, 0),
+(25, 35, 76, 0);
 
 -- --------------------------------------------------------
 
@@ -1305,14 +1312,16 @@ CREATE TABLE IF NOT EXISTS `products_accessories` (
   PRIMARY KEY (`id`,`products_id`,`accessories_id`),
   KEY `fk_products_accessories_content1_idx` (`products_id`),
   KEY `fk_products_accessories_content2_idx` (`accessories_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
 
 --
 -- Дамп данных таблицы `products_accessories`
 --
 
 INSERT INTO `products_accessories` (`id`, `products_id`, `accessories_id`, `position`) VALUES
-(10, 39, 52, 3);
+(14, 39, 54, 1),
+(15, 54, 55, 1),
+(16, 54, 59, 2);
 
 -- --------------------------------------------------------
 
@@ -1330,7 +1339,7 @@ CREATE TABLE IF NOT EXISTS `products_prices` (
   UNIQUE KEY `content_id` (`content_id`,`group_id`),
   KEY `fk_products_prices_content1_idx` (`content_id`),
   KEY `fk_products_prices_users_group1_idx` (`group_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=16 ;
 
 --
 -- Дамп данных таблицы `products_prices`
@@ -1338,7 +1347,31 @@ CREATE TABLE IF NOT EXISTS `products_prices` (
 
 INSERT INTO `products_prices` (`id`, `content_id`, `group_id`, `price`, `price_old`) VALUES
 (7, 39, 5, 7.00, NULL),
-(13, 39, 12, 6.00, NULL);
+(13, 39, 12, 6.00, NULL),
+(14, 54, 12, 1.00, NULL),
+(15, 54, 5, 1.00, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `products_similar`
+--
+
+CREATE TABLE IF NOT EXISTS `products_similar` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `products_id` int(10) unsigned NOT NULL,
+  `features_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`,`products_id`,`features_id`),
+  KEY `fk_products_similar_content1_idx` (`products_id`),
+  KEY `fk_products_similar_features1_idx` (`features_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+--
+-- Дамп данных таблицы `products_similar`
+--
+
+INSERT INTO `products_similar` (`id`, `products_id`, `features_id`) VALUES
+(2, 41, 92);
 
 -- --------------------------------------------------------
 
@@ -1440,12 +1473,12 @@ CREATE TABLE IF NOT EXISTS `settings` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   `value` text NOT NULL,
-  `block` enum('common','images','themes','editor','content','seo','analitycs','robots','mail') NOT NULL,
+  `block` enum('company','common','images','themes','editor','content','seo','analitycs','robots','mail') NOT NULL,
   `type` enum('text','textarea') NOT NULL,
   `required` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `sname` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=47 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=50 ;
 
 --
 -- Дамп данных таблицы `settings`
@@ -1457,7 +1490,7 @@ INSERT INTO `settings` (`id`, `name`, `value`, `block`, `type`, `required`) VALU
 (4, 'editor_bodyId', 'cms_content', 'editor', 'text', 1),
 (5, 'editor_body_class', 'cms_content', 'editor', 'text', 1),
 (6, 'editor_contents_css', '/themes/default/assets/css/style.css', 'editor', 'textarea', 1),
-(8, 'languages_create_info', '1', 'common', 'text', 1),
+(8, 'languages_create_info', '0', 'common', 'text', 1),
 (9, 'app_theme_current', 'default', 'themes', 'text', 1),
 (10, 'app_views_path', 'views/', 'themes', 'text', 1),
 (11, 'app_chunks_path', 'chunks/', 'themes', 'text', 1),
@@ -1480,7 +1513,7 @@ INSERT INTO `settings` (`id`, `name`, `value`, `block`, `type`, `required`) VALU
 (32, 'yandex_metric', '', 'analitycs', 'text', 0),
 (33, 'ex_site_name', '1', 'seo', 'text', 1),
 (34, 'ex_cat_name', '1', 'seo', 'text', 1),
-(35, 'ex_delimiter', '/', 'seo', 'text', 1),
+(35, 'delimiter', '/', 'seo', 'text', 1),
 (36, 'mail_email_from', 'me@otakoyi.com', 'mail', 'text', 1),
 (37, 'mail_email_to', 'me@otakoyi.com', 'mail', 'text', 1),
 (38, 'mail_from_name', 'Company Otakoyi.com', 'mail', 'text', 1),
@@ -1491,7 +1524,10 @@ INSERT INTO `settings` (`id`, `name`, `value`, `block`, `type`, `required`) VALU
 (43, 'mail_smtp_port', '', 'mail', 'text', 0),
 (44, 'mail_smtp_user', '', 'mail', 'text', 0),
 (45, 'mail_smtp_password', '', 'mail', 'text', 0),
-(46, 'mail_smtp_secure', 'tls', 'mail', 'text', 0);
+(46, 'mail_smtp_secure', 'tls', 'mail', 'text', 0),
+(47, 'company_name', 'CMA', 'company', 'text', 1),
+(48, 'company_phone', '111111', 'company', 'text', 1),
+(49, 'seo', 'a:5:{s:5:"pages";a:1:{i:1;a:4:{s:5:"title";s:34:"{title} {delimiter} {company_name}";s:8:"keywords";s:37:"{keywords} {delimiter} {company_name}";s:11:"description";s:40:"{description} {delimiter} {company_name}";s:2:"h1";s:31:"{h1} {delimiter} {company_name}";}}s:4:"post";a:1:{i:1;a:4:{s:5:"title";s:67:"{title} {delimiter}  {category} {delimiter} блог {company_name}";s:8:"keywords";s:46:"{keywords} {delimiter} блог {company_name}";s:11:"description";s:49:"{description} {delimiter} блог {company_name}";s:2:"h1";s:31:"{h1} {delimiter} {company_name}";}}s:9:"posts_cat";a:1:{i:1;a:4:{s:5:"title";s:44:"{title} {delimiter}  блог {company_name}";s:8:"keywords";s:37:"{keywords} {delimiter} {company_name}";s:11:"description";s:40:"{description} {delimiter} {company_name}";s:2:"h1";s:31:"{h1} {delimiter} {company_name}";}}s:8:"products";a:1:{i:1;a:4:{s:5:"title";s:51:"{title} {delimiter} купити в  {company_name}";s:8:"keywords";s:37:"{keywords} {delimiter} {company_name}";s:11:"description";s:40:"{description} {delimiter} {company_name}";s:2:"h1";s:31:"{h1} {delimiter} {company_name}";}}s:18:"productsCategories";a:1:{i:1;a:4:{s:5:"title";s:51:"{title} {delimiter} купити в  {company_name}";s:8:"keywords";s:37:"{keywords} {delimiter} {company_name}";s:11:"description";s:40:"{description} {delimiter} {company_name}";s:2:"h1";s:31:"{h1} {delimiter} {company_name}";}}}', '', '', 0);
 
 -- --------------------------------------------------------
 
@@ -1553,7 +1589,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `updated`, `lastlogin`, `status`) VALUES
-(2, 1, 0, 'm2uk4p2uh4m2jb9ajeqa5v8ck2', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-03-24 16:42:51', '2016-04-12 05:51:50', 'active'),
+(2, 1, 0, '47kl40gulqnhni028ud8li6vj7', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-03-24 16:42:51', '2016-04-13 13:10:24', 'active'),
 (3, 5, 0, 'cqib3aongupefr8grbuudirmm2', 'Жорік', 'Ревазов', '+35 (555) 5555555', 'z@otakoyi.com', 'MToUTd7.hmK2o', NULL, NULL, '2016-03-28 09:01:38', '2016-03-30 13:47:30', '2016-04-11 07:35:30', 'active'),
 (5, 2, 0, NULL, 'Жорік', '', '', 'otakoyi@gmail.com', 'MTGRXCzqBsZUI', NULL, NULL, '2016-03-29 12:21:29', '0000-00-00 00:00:00', NULL, 'active'),
 (6, 2, 0, NULL, 'Микола', '', '', 'm@otakoyi.com', 'MTTuFPm3y4m2o', NULL, NULL, '2016-03-29 13:18:45', '0000-00-00 00:00:00', NULL, 'active'),
@@ -1793,6 +1829,13 @@ ALTER TABLE `products_accessories`
 ALTER TABLE `products_prices`
   ADD CONSTRAINT `fk_products_prices_content1` FOREIGN KEY (`content_id`) REFERENCES `content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_products_prices_users_group1` FOREIGN KEY (`group_id`) REFERENCES `users_group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `products_similar`
+--
+ALTER TABLE `products_similar`
+  ADD CONSTRAINT `fk_products_similar_content1` FOREIGN KEY (`products_id`) REFERENCES `content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_products_similar_features1` FOREIGN KEY (`features_id`) REFERENCES `features` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `products_variants`

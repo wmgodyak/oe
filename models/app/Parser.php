@@ -8,6 +8,7 @@
 
 namespace models\app;
 
+use controllers\core\Settings;
 use models\core\Model;
 
 defined("CPATH") or die();
@@ -130,7 +131,7 @@ class Parser extends Model
         //$pattern = '@(href|action)="([0-9]+)?;??(filter/[a-z0-9_\-]+=[a-z0-9_\-;,=]+)??;??([a-z]+=[a-z0-9а-яА-ЯіїЇІ_\-]+)??;??([a-z]+=[a-z0-9а-яА-ЯіїЇІ_\-]+)??;??([a-z]+=[a-z0-9а-яА-ЯіїЇІ_\-]+)??;??([a-z]+=[a-z0-9а-яА-ЯіїЇІ_\-]+)??([\?a-z]+=[a-z0-9а-яА-ЯіїЇІ_\-]+)??([\&a-z]+=[a-z0-9а-яА-ЯіїЇІ_\-]+)?"@isu';
 //        $pattern = '@(href|action)="([0-9]+)?;??(filter/[a-z0-9_\-]+=[a-z0-9_\-;,=]+)??([a-z]+=[a-z0-9а-яА-ЯіїЇІ_\-]+)?"@isu';
         $pattern = '@(href|action)="([0-9]+)?;??(filter/[a-z0-9_\-]+=[a-z0-9_\-;,=]+)??(([?&a-z]+=[a-z0-9а-яА-ЯіїЇІ_\-]+)*)?"@isu';
-        $ds = preg_replace_callback
+        $this->ds = preg_replace_callback
         (
             $pattern,
             function($matches) use ($self, $languages_id, $def_lang)
@@ -189,7 +190,48 @@ class Parser extends Model
             },
             $this->ds
         );
+    }
 
-        return $ds;
+    public function addAnalytics()
+    {
+        $ga_id = Settings::getInstance()->get('google_analytics_id');
+        $ya_m = Settings::getInstance()->get('yandex_metric');
+
+        $out = null;
+
+        if($ga_id){
+            $out =  "
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o)
+                ,
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+            ga('create', '{$ga_id}', 'auto');
+            ga('send', 'pageview');
+            ";
+        }
+
+        if($ya_m){
+            $out .= "
+            (function(w, c) {
+                (w[c] = w[c] || []).push(function() {
+                try {
+                w.yaCounterНОМЕР_СЧЕТЧИКА = new Ya.Metrika({id: НОМЕР_СЧЕТЧИКА, enableAll: true});
+                }
+                catch(e){}
+                });
+            })(window, \"yandex_metrika_callbacks\");
+            ";
+        }
+        if(!empty($out)){
+            $out = "<script>{$out}</script>";
+            $this->ds = str_replace('</head>', $out . '</head>',$this->ds);
+        }
+    }
+
+    public function getDocumentSource()
+    {
+        return $this->ds;
     }
 }

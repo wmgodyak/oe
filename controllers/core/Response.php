@@ -71,7 +71,11 @@ class Response
                 break;
             case 'app':
                 $parser = new Parser($this->body);
-                $body = $parser->makeFriendlyUrl();
+                $parser->makeFriendlyUrl();
+                $parser->addAnalytics();
+
+                $body = $parser->getDocumentSource();
+
                 break;
         }
 

@@ -2689,6 +2689,13 @@ engine.settings = {
         //$( "#tabs_settings li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
     }
 };
+engine.seo = {
+    init: function()
+    {
+        $('#tabs_seo').tabs().addClass( "ui-tabs-vertical" );
+        //$( "#tabs_settings li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
+    }
+};
 
 engine.mailTemplates = {
     init: function()
@@ -2826,6 +2833,7 @@ $(document).ready(function(){
     engine.mailTemplates.init();
     engine.trash.init();
     engine.settings.init();
+    engine.seo.init();
 });
 
 function responsive_filemanager_callback(field_id){
