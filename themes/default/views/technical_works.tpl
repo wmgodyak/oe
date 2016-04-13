@@ -1,4 +1,3 @@
-
 {include file="chunks/head.tpl"}
 
 <link rel="stylesheet" type="text/css" href="{$theme_url}assets/css/vendor/flipclock.css">

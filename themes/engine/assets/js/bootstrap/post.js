@@ -7,17 +7,17 @@ engine.post = {
         //engine.require('content');
         engine.require('bootstrap-tagsinput.min', '/themes/engine/assets/js/vendor/');
 
-        $(document).on('click', '.b-posts-delete', function(){
+        $(document).on('click', '.b-post-delete', function(){
             var id = $(this).data('id');
             engine.confirm('ДІйсно видалити сторінку?', function(){engine.content.delete(id);});
         });
 
-        $(document).on('click', '.b-posts-pub', function(){
+        $(document).on('click', '.b-post-pub', function(){
             var id = $(this).data('id');
             engine.content.pub(id);
         });
 
-        $(document).on('click', '.b-posts-hide', function(){
+        $(document).on('click', '.b-post-hide', function(){
             var id = $(this).data('id');
             engine.content.hide(id);
         });
