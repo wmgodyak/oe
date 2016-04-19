@@ -35,7 +35,7 @@ class ProductsVariantsPrices extends Model
     {
         return self::$db->select("
           select price
-          from products_variants_prices
+          from __products_variants_prices
           where variants_id={$variants_id} and group_id={$group_id}
           limit 1
           ")->row('price');
@@ -44,7 +44,7 @@ class ProductsVariantsPrices extends Model
     public function set($content_id, $variants_id, $group_id, $price)
     {
         $aid = self::$db
-            ->select("select id from products_variants_prices where variants_id={$variants_id} and group_id={$group_id}")
+            ->select("select id from __products_variants_prices where variants_id={$variants_id} and group_id={$group_id}")
             ->row('id');
 
         if(empty($aid)){
@@ -52,7 +52,7 @@ class ProductsVariantsPrices extends Model
             return true;
         }
 
-        $this->updateRow('products_variants_prices', $aid, ['price' => $price]);
+        $this->updateRow('__products_variants_prices', $aid, ['price' => $price]);
         return true;
     }
 
@@ -85,7 +85,7 @@ class ProductsVariantsPrices extends Model
     private function getGroupPrice($content_id, $group_id)
     {
         return self::$db
-            ->select("select price from products_prices where content_id={$content_id} and group_id={$group_id} limit 1")
+            ->select("select price from __products_prices where content_id={$content_id} and group_id={$group_id} limit 1")
             ->row('price');
     }
 }

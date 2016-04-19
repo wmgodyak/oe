@@ -55,7 +55,7 @@ class MailTemplates extends Engine
     public function items()
     {
         $t = new DataTables();
-        $t  -> table('mail_templates t')
+        $t  -> table('__mail_templates t')
             -> get('t.id, t.name, t.code')
             -> execute();
 

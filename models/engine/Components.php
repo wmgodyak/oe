@@ -18,10 +18,10 @@ class Components extends Engine
     public function create($data)
     {
         $data['controller'] = lcfirst($data['controller']);
-        $s = self::$db->insert('components', $data);
+        $s = self::$db->insert('__components', $data);
         if($s){
             if($data['parent_id'] > 0){
-                $this->updateRow('components', $data['parent_id'], ['isfolder' => 1]);
+                $this->updateRow('__components', $data['parent_id'], ['isfolder' => 1]);
             }
         }
 
@@ -34,7 +34,7 @@ class Components extends Engine
     public function isInstalled($controller)
     {
         $controller = lcfirst($controller);
-        return self::$db->select("select id from components where controller = '{$controller}' limit 1")->row('id') > 0;
+        return self::$db->select("select id from __components where controller = '{$controller}' limit 1")->row('id') > 0;
     }
 
     /**
@@ -44,7 +44,7 @@ class Components extends Engine
      */
     public function data($controller, $key = '*')
     {
-        return self::$db->select("select {$key} from components where controller = '{$controller}' limit 1")->row($key);
+        return self::$db->select("select {$key} from __components where controller = '{$controller}' limit 1")->row($key);
     }
 
 
@@ -55,7 +55,7 @@ class Components extends Engine
      */
     public function getDataByID($id, $key = '*')
     {
-        return self::$db->select("select {$key} from components where id={$id} limit 1")->row($key);
+        return self::$db->select("select {$key} from __components where id={$id} limit 1")->row($key);
     }
 
 
@@ -66,7 +66,7 @@ class Components extends Engine
      */
     public function is($id)
     {
-        return self::$db->select("select id from components where id = '{$id}' limit 1")->row('id') > 0;
+        return self::$db->select("select id from __components where id = '{$id}' limit 1")->row('id') > 0;
     }
 
 
@@ -76,7 +76,7 @@ class Components extends Engine
      */
     public function pub($id)
     {
-        return self::$db->update('components', ['published' => 1], "id= '{$id}' limit 1");
+        return self::$db->update('__components', ['published' => 1], "id= '{$id}' limit 1");
     }
 
     /**
@@ -85,7 +85,7 @@ class Components extends Engine
      */
     public function hide($id)
     {
-        return self::$db->update('components', ['published' => 0], "id= '{$id}' limit 1");
+        return self::$db->update('__components', ['published' => 0], "id= '{$id}' limit 1");
     }
 
     /**
@@ -108,7 +108,7 @@ class Components extends Engine
     private function treeItems($parent_id)
     {
         return self::$db
-            ->select("select id, isfolder, controller from components where parent_id={$parent_id} and published=1")
+            ->select("select id, isfolder, controller from __components where parent_id={$parent_id} and published=1")
             ->all();
     }
 
@@ -118,13 +118,13 @@ class Components extends Engine
      */
     public function delete($id)
     {
-        $parent_id = self::$db->select("select parent_id from components where id={$id} limit 1")->row('parent_id');
+        $parent_id = self::$db->select("select parent_id from __components where id={$id} limit 1")->row('parent_id');
         $s = self::$db->delete('components', " id={$id} limit 1");
         if($s){
             if($parent_id > 0){
-                $t = self::$db->select("select count(id) as t from components where parent_id={$parent_id}")->row('t');
+                $t = self::$db->select("select count(id) as t from __components where parent_id={$parent_id}")->row('t');
                 if($t == 0){
-                    $this->updateRow('components', $parent_id, ['isfolder' => 0]);
+                    $this->updateRow('__components', $parent_id, ['isfolder' => 0]);
                 }
             }
         }
@@ -137,6 +137,6 @@ class Components extends Engine
      */
     public function update($id, $data)
     {
-        return self::$db->update('components', $data, "id = '{$id}' limit 1");
+        return self::$db->update('__components', $data, "id = '{$id}' limit 1");
     }
 }

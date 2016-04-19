@@ -20,7 +20,7 @@ class Users extends Model
      */
     public function getData($id, $key= '*')
     {
-        $data = self::$db->select("select {$key} from users where id='{$id}'")->row($key);
+        $data = self::$db->select("select {$key} from __users where id='{$id}'")->row($key);
 
         return $data;
     }
@@ -32,7 +32,7 @@ class Users extends Model
     public function create($data)
     {
         $data['password'] = $this->cryptPassword($data['password']);
-        return self::$db->insert('users', $data);
+        return self::$db->insert('__users', $data);
     }
 
     /**
@@ -50,7 +50,7 @@ class Users extends Model
 
         $data['updated'] = $this->now();
 
-        return self::$db->update('users', $data, " id={$id} limit 1");
+        return self::$db->update('__users', $data, " id={$id} limit 1");
     }
 
     /**
@@ -59,7 +59,7 @@ class Users extends Model
      */
     public function delete($id)
     {
-        return self::$db->update('users', ['status' => 'deleted'], " id={$id} limit 1");
+        return self::$db->update('__users', ['status' => 'deleted'], " id={$id} limit 1");
     }
     /**
      * @param $id
@@ -67,7 +67,7 @@ class Users extends Model
      */
     public function restore($id)
     {
-        return self::$db->update('users', ['status' => 'active'], " id={$id} limit 1");
+        return self::$db->update('__users', ['status' => 'active'], " id={$id} limit 1");
     }
 
     /**
@@ -76,7 +76,7 @@ class Users extends Model
      */
     public function ban($id)
     {
-        return self::$db->update('users', ['status' => 'ban'], " id={$id} limit 1");
+        return self::$db->update('__users', ['status' => 'ban'], " id={$id} limit 1");
     }
 
     /**
@@ -96,7 +96,7 @@ class Users extends Model
     public static function changePassword($id, $password)
     {
         $password = self::cryptPassword($password);
-        return self::$db->update('users', ['password' => $password], " id = {$id} limit 1");
+        return self::$db->update('__users', ['password' => $password], " id = {$id} limit 1");
     }
 
     /**
@@ -155,7 +155,7 @@ class Users extends Model
         if(isset($data['password'])){
             $data['password'] = $this->cryptPassword($data['password']);
         }
-        return self::$db->update('users', $data, " id={$id} limit 1");
+        return self::$db->update('__users', $data, " id={$id} limit 1");
     }
 
     public function changeAvatar($id)
@@ -181,7 +181,7 @@ class Users extends Model
             $img->thumbnail(160, 120);
             $img->saveAsPNG(DOCROOT . $fname);
 
-            $s = self::$db->update('users', ['avatar' => $fname], "id = '{$id}' limit 1");
+            $s = self::$db->update('__users', ['avatar' => $fname], "id = '{$id}' limit 1");
         }
 
         return ['s' => $s, 'm' => $m, 'f' => $fname];
@@ -195,7 +195,7 @@ class Users extends Model
     public function issetEmail($email, $id = null)
     {
         $and = $id ? " id <> {$id} and " : '';
-        return self::$db->select("select id from users where {$and} email = '{$email}'  limit 1")->row('id') > 0;
+        return self::$db->select("select id from __users where {$and} email = '{$email}'  limit 1")->row('id') > 0;
     }
 
 
@@ -208,7 +208,7 @@ class Users extends Model
     public static function isOnline($id, $sid)
     {
         return self::$db
-                ->select("select id from users where id = '{$id}' and sessid = '{$sid}' limit 1")
+                ->select("select id from __users where id = '{$id}' and sessid = '{$sid}' limit 1")
                 ->row('id') > 0;
     }
 
@@ -220,8 +220,8 @@ class Users extends Model
     {
         return self::$db->select("
             select u.*, g.rang
-            from users u
-            join users_group g on g.id=u.group_id
+            from __users u
+            join __users_group g on g.id=u.group_id
             where u.email = '{$email}'
             limit 1
           ")->row();
@@ -235,8 +235,8 @@ class Users extends Model
     {
         return self::$db->select("
             select u.*, g.rang
-            from users u
-            join users_group g on g.id=u.group_id
+            from __users u
+            join __users_group g on g.id=u.group_id
             where u.skey = '{$skey}'
             limit 1
           ")->row();
@@ -244,6 +244,6 @@ class Users extends Model
 
     public function logout($id)
     {
-        return self::$db->update('users', array('sessid'=>''), " id = '{$id}' limit 1");
+        return self::$db->update('__users', array('sessid'=>''), " id = '{$id}' limit 1");
     }
 }

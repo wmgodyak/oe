@@ -28,10 +28,10 @@ class Nav extends App
         $items = self::$db
             ->select("
               select c.id, c.isfolder, ci.name,ci.title
-              from nav n
-              join nav_items ni on ni.nav_id = n.id
-              join content c on c.id=ni.content_id and c.status='published'
-              join content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
+              from __nav n
+              join __nav_items ni on ni.nav_id = n.id
+              join __content c on c.id=ni.content_id and c.status='published'
+              join __content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
               where n.code = '{$code}'
               order by abs(ni.position) asc
               ")
@@ -61,8 +61,8 @@ class Nav extends App
         $items = self::$db
             ->select("
               select c.id, c.isfolder, ci.name,ci.title
-              from content c on c.id=ni.content_id and c.status='published'
-              join content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
+              from __content c on c.id=ni.content_id and c.status='published'
+              join __content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
               where c.parent_id={$parent_id}
               ")
             ->all();

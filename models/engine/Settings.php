@@ -16,7 +16,7 @@ class Settings extends Engine
 {
     public function get()
     {
-        $r = self::$db->select("select * from settings")->all();
+        $r = self::$db->select("select * from __settings")->all();
         $res = [];
         foreach ($r as $item) {
             $res[$item['block']][$item['id']] = $item;

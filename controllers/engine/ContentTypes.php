@@ -89,7 +89,7 @@ class ContentTypes extends Engine
     public function items($parent_id = 0)
     {
         $t = new DataTables();
-        $t  -> table('content_types')
+        $t  -> table('__content_types')
             -> get('id, name, type, isfolder, is_main')
             -> where(" parent_id = {$parent_id}")
             -> execute();

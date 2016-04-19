@@ -25,7 +25,7 @@ class DeliveryPayment extends Engine
      */
     public static function create($delivery_id, $payment_id)
     {
-        return self::$db->insert('delivery_payment', ['delivery_id' => $delivery_id, 'payment_id' => $payment_id]);
+        return self::$db->insert('__delivery_payment', ['delivery_id' => $delivery_id, 'payment_id' => $payment_id]);
     }
 
     /**
@@ -42,7 +42,7 @@ class DeliveryPayment extends Engine
     {
         $languages_id = self::$language_id;
         return self::$db
-            ->select("select d.id, i.name from delivery d, delivery_info i where i.delivery_id=d.id and i.languages_id={$languages_id}")
+            ->select("select d.id, i.name from __delivery d, delivery_info i where i.delivery_id=d.id and i.languages_id={$languages_id}")
             ->all();
     }
 
@@ -50,7 +50,7 @@ class DeliveryPayment extends Engine
     {
         $languages_id = self::$language_id;
         return self::$db
-            ->select("select d.id, i.name from payment d, payment_info i where i.payment_id=d.id and i.languages_id={$languages_id}")
+            ->select("select d.id, i.name from __payment d, payment_info i where i.payment_id=d.id and i.languages_id={$languages_id}")
             ->all();
     }
 
@@ -62,7 +62,7 @@ class DeliveryPayment extends Engine
     public static function is($delivery_id, $payment_id)
     {
         return self::$db
-            ->select("select id from delivery_payment where delivery_id={$delivery_id} and payment_id={$payment_id} limit 1")
+            ->select("select id from __delivery_payment where delivery_id={$delivery_id} and payment_id={$payment_id} limit 1")
             ->row('id') > 0;
     }
 
@@ -73,7 +73,7 @@ class DeliveryPayment extends Engine
     public static function getSelectedPayment($delivery_id)
     {
         return self::$db
-            ->select("select payment_id from delivery_payment where delivery_id={$delivery_id}")
+            ->select("select payment_id from __delivery_payment where delivery_id={$delivery_id}")
             ->all('payment_id');
     }
 
@@ -84,7 +84,7 @@ class DeliveryPayment extends Engine
     public static function getSelectedDelivery($payment_id)
     {
         return self::$db
-            ->select("select delivery_id from delivery_payment where payment_id={$payment_id}")
+            ->select("select delivery_id from __delivery_payment where payment_id={$payment_id}")
             ->all('delivery_id');
     }
 }

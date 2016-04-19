@@ -195,7 +195,10 @@ class ContentImages extends Plugin
                         $size['width']  = (int)$size['width'];
                         $size['height'] = (int)$size['height'];
 
-                        if(empty($size['width']) && empty($size['height'])) continue;
+                        if(empty($size['width']) && empty($size['height'])) {
+                            $m .= 'Empty width && height for size ' . $size['size'];
+                            continue;
+                        }
 
                         $img = \AcImage::createImage($image_tmp);
                         \AcImage::setRewrite(true);

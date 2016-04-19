@@ -32,13 +32,13 @@ class ProductsVariants extends Model
     public function getMainCategory($content_id)
     {
         return self::$db
-            ->select("select categories_id from content_relationship where content_id={$content_id} limit 1")
+            ->select("select categories_id from __content_relationship where content_id={$content_id} limit 1")
             ->row('categories_id');
     }
 
     public function get($content_id)
     {
-        $r= self::$db->select("select id, in_stock, img from products_variants where content_id = '{$content_id}'")->all();
+        $r= self::$db->select("select id, in_stock, img from __products_variants where content_id = '{$content_id}'")->all();
         $res = [];
         foreach ($r as $row) {
             $row['features'] = $this->variantsFeatures->get($row['id']);
@@ -54,7 +54,7 @@ class ProductsVariants extends Model
         if(empty($data)) return false;
 
         $this->beginTransaction();
-        $variants_id = $this->createRow('products_variants', ['content_id' => $content_id, 'in_stock' => 1]);
+        $variants_id = $this->createRow('__products_variants', ['content_id' => $content_id, 'in_stock' => 1]);
 
         foreach ($data['features_id'] as $k=>$features_id) {
             $values_id = $data['values_id'][$k];
@@ -75,19 +75,19 @@ class ProductsVariants extends Model
     {
         $variants = $this->request->post('variants');
         if(empty($variants)){
-            $this->updateRow('content', $content_id, ['has_variants' => 0]);
+            $this->updateRow('__content', $content_id, ['has_variants' => 0]);
             return;
         }
 
 
         foreach ($variants as $variant_id=>$a) {
-            $this->updateRow('products_variants', $variant_id, ['in_stock' => $a['in_stock']]);
+            $this->updateRow('__products_variants', $variant_id, ['in_stock' => $a['in_stock']]);
             foreach($a['prices'] as $group_id=>$price){
                 $this->variantsPrices->set($content_id, $variant_id, $group_id, $price);
             }
         }
 
-        $this->updateRow('content', $content_id, ['has_variants' => 1]);
+        $this->updateRow('__content', $content_id, ['has_variants' => 1]);
     }
 
     /**
@@ -96,7 +96,7 @@ class ProductsVariants extends Model
      */
     public function delete($id)
     {
-        return $this->deleteRow('products_variants', $id);
+        return $this->deleteRow('__products_variants', $id);
     }
 
     public function uploadImage()
@@ -131,7 +131,7 @@ class ProductsVariants extends Model
             $img->thumbnail(160, 120);
             $img->saveAsPNG(DOCROOT . $fname);
 
-            $s= $this->updateRow('products_variants', $variant_id, ['img' =>$fname]);
+            $s= $this->updateRow('__products_variants', $variant_id, ['img' =>$fname]);
         }
 
         return ['s' => $s, 'm' => $m, 'img' => $fname . '?_=' . time(), 'variant_id' => $variant_id];

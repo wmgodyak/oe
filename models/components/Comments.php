@@ -23,12 +23,12 @@ class Comments extends App
         $res = array();
         $r = self::$db->select("
             select *, DATE_FORMAT(created, '%d.%m.%Y') as pubdate
-            from comments
+            from __comments
             where content_id = '{$content_id}' and parent_id={$parent_id} and status='approved'
             order by abs(id) asc
         ")->all();
         foreach ( $r as $row) {
-            $row['user'] = self::$db->select("select id, name, surname from users where id={$row['users_id']} limit 1")->row();
+            $row['user'] = self::$db->select("select id, name, surname from __users where id={$row['users_id']} limit 1")->row();
 
             if($row['isfolder']){
                 $row['items'] = $this->get($content_id, $row['id']);
@@ -47,7 +47,7 @@ class Comments extends App
     {
         return self::$db->select("
             select count(id) as t
-            from comments
+            from __comments
             where content_id={$content_id} and status='approved'
         ")->row('t');
     }
@@ -59,7 +59,7 @@ class Comments extends App
     {
         return self::$db->select("
             select count(id) as t
-            from comments
+            from __comments
             where content_id={$content_id} and status='new'
         ")->row('t');
     }
@@ -71,7 +71,7 @@ class Comments extends App
     public function create($data)
     {
         $data['ip'] = $_SERVER['REMOTE_ADDR'];
-        return  self::$db->insert('comments', $data);
+        return  self::$db->insert('__comments', $data);
     }
 
     /**
@@ -80,14 +80,14 @@ class Comments extends App
      */
     public function approve($skey)
     {
-        $com = self::$db->select("select id, parent_id, content_id, users_id from comments where skey= '{$skey}' limit 1")->row();
+        $com = self::$db->select("select id, parent_id, content_id, users_id from __comments where skey= '{$skey}' limit 1")->row();
         if(empty($com)) return false;
         $this->comment = $com;
-        $s = $this->updateRow('comments', $com['id'],  ['status' => 'approved']);
+        $s = $this->updateRow('__comments', $com['id'],  ['status' => 'approved']);
 
         if($s > 0){
             if($com['parent_id'] > 0){
-                $this->updateRow('comments', $com['parent_id'],  ['isfolder' => 1]);
+                $this->updateRow('__comments', $com['parent_id'],  ['isfolder' => 1]);
             }
 
             // notify subscribers
@@ -103,16 +103,16 @@ class Comments extends App
      */
     public function del($skey)
     {
-        $com = self::$db->select("select id, parent_id from comments where skey= '{$skey}' limit 1")->row();
+        $com = self::$db->select("select id, parent_id from __comments where skey= '{$skey}' limit 1")->row();
         if(empty($com)) return false;
 
-        $s = $this->deleteRow('comments', $com['id']);
+        $s = $this->deleteRow('__comments', $com['id']);
         if($s > 0 && $com['parent_id'] > 0){
             $t = self::$db
-                ->select("select count(id) as t from comments where parent_id = {$com['parent_id']} and status='approved'")
+                ->select("select count(id) as t from __comments where parent_id = {$com['parent_id']} and status='approved'")
                 ->row('t');
             if($t == 0){
-                $this->updateRow('comments', $com['parent_id'],  ['isfolder' => 0]);
+                $this->updateRow('__comments', $com['parent_id'],  ['isfolder' => 0]);
             }
         }
 
@@ -126,7 +126,7 @@ class Comments extends App
      */
     public function getInfo($id, $key = '*')
     {
-        return self::$db->select("select {$key} from comments where id={$id} limit 1")->row($key);
+        return self::$db->select("select {$key} from __comments where id={$id} limit 1")->row($key);
     }
 
     /**
@@ -137,7 +137,7 @@ class Comments extends App
     public function isSubscribe($users_id, $content_id)
     {
         return self::$db
-            ->select("select id from comments_subscribers where users_id={$users_id} and content_id={$content_id} limit 1")
+            ->select("select id from __comments_subscribers where users_id={$users_id} and content_id={$content_id} limit 1")
             ->row('id') > 0;
     }
 
@@ -149,7 +149,7 @@ class Comments extends App
     public function subscribe($users_id, $content_id)
     {
         return self::$db->insert(
-            'comments_subscribers',
+            '__comments_subscribers',
             array('content_id' => $content_id, 'users_id' => $users_id)
         );
     }
@@ -161,7 +161,7 @@ class Comments extends App
     public function unSubscribe($users_id, $content_id)
     {
         return self::$db->delete(
-            'comments_subscribers',
+            '__comments_subscribers',
             "users_id={$users_id} and content_id={$content_id} limit 1"
         );
     }
@@ -171,9 +171,9 @@ class Comments extends App
         $r = self::$db
             ->select("
                 select u.id, u.name, u.surname, u.email, i.name as page_name
-                from comments_subscribers cs
-                join users u on u.id=cs.users_id
-                join content_info i on i.content_id={$data['content_id']} and i.languages_id={$this->languages_id}
+                from __comments_subscribers cs
+                join __users u on u.id=cs.users_id
+                join __content_info i on i.content_id={$data['content_id']} and i.languages_id={$this->languages_id}
                 where cs.content_id={$data['content_id']} and users_id <> {$data['users_id']}
                 ")
             ->all();

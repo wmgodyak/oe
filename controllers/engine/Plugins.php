@@ -261,9 +261,9 @@ class Plugins extends Engine
         $r = DB::getInstance()
             -> select("
                 select p.controller, p.icon, p.rang, p.place, p.settings
-                from plugins p
-                join components c on c.controller = '{$controller}'
-                join plugins_components pc on pc.plugins_id=p.id and pc.components_id=c.id
+                from __plugins p
+                join __components c on c.controller = '{$controller}'
+                join __plugins_components pc on pc.plugins_id=p.id and pc.components_id=c.id
                 where p.published=1
             ")
             -> all();

@@ -25,8 +25,8 @@ class ProductsAccessories extends Engine
         return self::$db
             ->select("
                 select c.id, concat(c.code, ' - ', i.name) as text
-                from content c
-                join content_info i on i.content_id=c.id and i.languages_id={$this->languages_id}
+                from __content c
+                join __content_info i on i.content_id=c.id and i.languages_id={$this->languages_id}
                 where c.types_id=10 {$and} and c.id <> {$content_id} and c.status='published'
                 limit 30
              ")
@@ -41,13 +41,13 @@ class ProductsAccessories extends Engine
     public function add($products_id, $accessories_id)
     {
         $id = self::$db
-            ->select("select id from products_accessories where products_id={$products_id} and accessories_id={$accessories_id} limit 1")
+            ->select("select id from __products_accessories where products_id={$products_id} and accessories_id={$accessories_id} limit 1")
             ->row('id');
 
         if(!empty($id)) return false;
 
         $t = self::$db
-            ->select("select count(id) as t from products_accessories where products_id={$products_id}")
+            ->select("select count(id) as t from __products_accessories where products_id={$products_id}")
             ->row('t');
 
         self::$db->insert
@@ -63,10 +63,10 @@ class ProductsAccessories extends Engine
         $r = self::$db
             ->select("
                 select c.id, i.name, c.code, ct.type, pc.id as acc_id
-                from products_accessories pc
-                join content c on c.id=pc.accessories_id
-                join content_types ct on ct.id=c.types_id
-                join content_info i on i.content_id=c.id and i.languages_id={$this->languages_id}
+                from __products_accessories pc
+                join __content c on c.id=pc.accessories_id
+                join __content_types ct on ct.id=c.types_id
+                join __content_info i on i.content_id=c.id and i.languages_id={$this->languages_id}
                 where pc.products_id={$products_id}
                 order by abs(pc.position) asc
              ")
@@ -82,6 +82,6 @@ class ProductsAccessories extends Engine
 
     public function delete($id)
     {
-        return $this->deleteRow('products_accessories',$id);
+        return $this->deleteRow('__products_accessories',$id);
     }
 }

@@ -31,6 +31,13 @@
                             <option {if $content.in_stock==0}selected{/if} value="0">немає</option>
                         </select>
                     </div>
+
+                    <div class="form-group" style="margin-left:0; margin-right: 0;">
+                        <label for="content_code" class="col-md-3 control-label">Артикул</label>
+                        <div class="col-md-9">
+                            <input name="content[code]" id="content_code" class="form-control" value="{$content.code}">
+                        </div>
+                    </div>
                 </div>
             </div>
             {else}
@@ -53,6 +60,12 @@
 
             <div class="col-md-4">
                 <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="content_code" class="col-md-3 control-label">Артикул</label>
+                        <div class="col-md-9">
+                            <input name="content[code]" id="content_code" class="form-control" value="{$content.code}">
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label for="content_units" class="col-md-3 control-label">Од. виміру</label>
                         <div class="col-md-9">

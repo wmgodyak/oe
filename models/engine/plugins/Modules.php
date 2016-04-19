@@ -16,12 +16,12 @@ class Modules extends Engine
 {
     public function get()
     {
-        return self::$db->select("select id, controller from modules")->all();
+        return self::$db->select("select id, controller from __modules")->all();
     }
 
     public function getPageSettings($id)
     {
-        $s = self::$db->select("select settings from content where id={$id} limit 1")->row('settings');
+        $s = self::$db->select("select settings from __content where id={$id} limit 1")->row('settings');
         if(empty($s)) return null;
 
         return unserialize($s);

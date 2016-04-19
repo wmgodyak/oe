@@ -20,6 +20,6 @@ class Themes extends Engine
 {
     public function activate($theme)
     {
-        return self::$db->update('settings', ['value' => $theme], "name='app_theme_current' limit 1");
+        return self::$db->update('__settings', ['value' => $theme], "name='app_theme_current' limit 1");
     }
 }

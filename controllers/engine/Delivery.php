@@ -61,8 +61,8 @@ class Delivery extends Engine
     public function items()
     {
         $t = new DataTables();
-        $t  -> table('delivery d')
-            -> join("delivery_info i on i.delivery_id=d.id and i.languages_id={$this->languages_id}")
+        $t  -> table('__delivery d')
+            -> join("__delivery_info i on i.delivery_id=d.id and i.languages_id={$this->languages_id}")
             -> get('d.id,i.name,d.price,d.free_from,d.published')
 
             -> execute();

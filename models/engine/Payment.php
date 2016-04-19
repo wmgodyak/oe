@@ -25,13 +25,13 @@ class Payment extends Engine
      */
     public function getData($id, $key = '*')
     {
-        $data =  self::$db->select("select {$key} from payment where id={$id}")->row($key);
+        $data =  self::$db->select("select {$key} from __payment where id={$id}")->row($key);
 
         if($key != '*') return $data;
 
         foreach ($this->languages as $language) {
             $data['info'][$language['id']] = self::$db
-                ->select("select name, description from payment_info where payment_id={$id} and languages_id={$language['id']} limit 1")
+                ->select("select name, description from __payment_info where payment_id={$id} and languages_id={$language['id']} limit 1")
                 ->row();
         }
         return $data;
@@ -93,7 +93,7 @@ class Payment extends Engine
 
         $this->beginTransaction();
         if(isset($data['settings']) && !empty($data['settings'])) $data['settings'] = serialize($data['settings']);
-        $s = $this->updateRow('payment', $id, $data);
+        $s = $this->updateRow('__payment', $id, $data);
 
         if($this->hasDBError()){
             $this->rollback();
@@ -102,14 +102,14 @@ class Payment extends Engine
 
         foreach ($info as $languages_id=> $item) {
             $aid = self::$db
-                ->select("select id from payment_info where payment_id={$id} and languages_id={$languages_id} limit 1")
+                ->select("select id from __payment_info where payment_id={$id} and languages_id={$languages_id} limit 1")
                 ->row('id');
             if(empty($aid)){
                 $item['languages_id']    = $languages_id;
                 $item['payment_id']     = $id;
                 $this->createRow('payment_info', $item);
             } else {
-                $this->updateRow('payment_info', $aid, $item);
+                $this->updateRow('__payment_info', $aid, $item);
             }
         }
 
@@ -153,17 +153,17 @@ class Payment extends Engine
 
     public function pub($id)
     {
-        return self::$db->update('payment',['published' => 1], " id={$id} limit 1");
+        return self::$db->update('__payment',['published' => 1], " id={$id} limit 1");
     }
 
     public function hide($id)
     {
-        return self::$db->update('payment',['published' => 0], " id={$id} limit 1");
+        return self::$db->update('__payment',['published' => 0], " id={$id} limit 1");
     }
 
     public function getSettings($module)
     {
-        $s = self::$db->select("select settings from payment where module='{$module}' limit 1 ")->row('settings');
+        $s = self::$db->select("select settings from __payment where module='{$module}' limit 1 ")->row('settings');
         if(empty($s)) return null;
 
         return unserialize($s);

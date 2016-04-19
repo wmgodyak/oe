@@ -21,7 +21,7 @@ class Callbacks extends Callback
      */
     public function getData($id, $key= '*')
     {
-        $data = self::$db->select("select {$key} from callbacks where id={$id} limit 1")->row($key);
+        $data = self::$db->select("select {$key} from __callbacks where id={$id} limit 1")->row($key);
         if($key != '*') return $data;
 
         return $data;
@@ -30,28 +30,28 @@ class Callbacks extends Callback
     public function getManagerData($id)
     {
         return self::$db
-            ->select("select CONCAT(name, ' ', surname) as name from users where id={$id} limit 1")
+            ->select("select CONCAT(name, ' ', surname) as name from __users where id={$id} limit 1")
             ->row('name');
     }
 
     public function update($id, $data)
     {
         $data['updated'] = date('Y-m-d H:i:s');
-        return $this->updateRow('callbacks', $id, $data);
+        return $this->updateRow('__callbacks', $id, $data);
     }
 
     public function spam($id, $manager_id)
     {
-        return $this->updateRow('callbacks', $id, ['status' => 'spam', 'manager_id' => $manager_id]);
+        return $this->updateRow('__callbacks', $id, ['status' => 'spam', 'manager_id' => $manager_id]);
     }
 
     public function restore($id, $manager_id)
     {
-        return $this->updateRow('callbacks', $id, ['status' => 'new', 'manager_id' => $manager_id]);
+        return $this->updateRow('__callbacks', $id, ['status' => 'new', 'manager_id' => $manager_id]);
     }
 
     public function delete($id)
     {
-        return $this->deleteRow('callbacks', $id);
+        return $this->deleteRow('__callbacks', $id);
     }
 }

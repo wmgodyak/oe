@@ -26,7 +26,7 @@ class Banners extends Engine
      */
     public function getData($id, $key = '*')
     {
-        $s = self::$db->select("select {$key} from banners where id={$id}")->row($key);
+        $s = self::$db->select("select {$key} from __banners where id={$id}")->row($key);
         return $s;
     }
 
@@ -36,7 +36,7 @@ class Banners extends Engine
     public function getSize($place_id)
     {
         return self::$db
-            ->select("select width, height from banners_places where id={$place_id} limit 1")
+            ->select("select width, height from __banners_places where id={$place_id} limit 1")
             ->row();
     }
 
@@ -80,7 +80,7 @@ class Banners extends Engine
         if(!empty($data['dt'])) {
             $data['dt'] = date('Y-m-d', strtotime($data['dt']));
         }
-        $s = $this->updateRow('banners', $id, $data);
+        $s = $this->updateRow('__banners', $id, $data);
         if(isset($_FILES['image'])){
 
             $place_id = $this->getData($id, 'banners_places_id');
@@ -130,7 +130,7 @@ class Banners extends Engine
 
             $img->saveAsPNG(DOCROOT . $fname);
 
-            $s= $this->updateRow('banners', $banners_id, ['img' => $fname]);
+            $s= $this->updateRow('__banners', $banners_id, ['img' => $fname]);
         }
 
         return ['s' => $s, 'm' => $m, 'img' => $fname . '?_=' . time()];
@@ -143,7 +143,7 @@ class Banners extends Engine
 
     public function getLanguages()
     {
-        $r = self::$db->select("select id,name from languages")->all();
+        $r = self::$db->select("select id,name from __languages")->all();
         $res = [];
         foreach ($r as $row) {
             $res[$row['id']] = $row['name'];

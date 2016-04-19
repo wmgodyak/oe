@@ -51,10 +51,10 @@ class Tags extends Engine
                 foreach ($tc as $item) {
                     self::deleteRow('content_tags', $item['ct_id']);
                     $t = self::$db
-                        ->select("select count(id) as t from content_tags where tags_id={$item['id']}")
+                        ->select("select count(id) as t from __content_tags where tags_id={$item['id']}")
                         ->row('t');
                     if($t == 0){
-                        $this->deleteRow('tags', $item['id']);
+                        $this->deleteRow('__tags', $item['id']);
                     }
                 }
             }
@@ -66,8 +66,8 @@ class Tags extends Engine
         $tags = self::$db
             ->select("
               select t.id, t.tag, ct.languages_id, ct.id as ct_id
-              from content_tags ct
-              join tags t on t.id=ct.tags_id
+              from __content_tags ct
+              join __tags t on t.id=ct.tags_id
               where ct.content_id={$content_id}
             ")
             ->all();
@@ -83,8 +83,8 @@ class Tags extends Engine
         $tags = self::$db
             ->select("
               select t.tag, ct.languages_id
-              from content_tags ct
-              join tags t on t.id=ct.tags_id
+              from __content_tags ct
+              join __tags t on t.id=ct.tags_id
               where ct.content_id={$content_id}
             ")
             ->all();
@@ -111,7 +111,7 @@ class Tags extends Engine
     private function getTagId($tag)
     {
         return self::$db
-            ->select("select id from tags where tag = '{$tag}' limit 1")
+            ->select("select id from __tags where tag = '{$tag}' limit 1")
             ->row('id');
     }
 
@@ -126,7 +126,7 @@ class Tags extends Engine
         $id = self::$db
             ->select("
               select id
-              from content_tags
+              from __content_tags
               where content_id={$content_id} and tags_id={$tags_id} and languages_id={$languages_id} limit 1
               ")
             ->row('id');

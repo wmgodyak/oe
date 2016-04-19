@@ -77,7 +77,7 @@ class Chunks extends Engine
     public function items()
     {
         $t = new DataTables();
-        $t  -> table('chunks')
+        $t  -> table('__chunks')
             -> get('id, name, template')
             -> execute();
 

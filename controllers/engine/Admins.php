@@ -69,10 +69,10 @@ class Admins extends Engine
     {
         $and = ($group_id > 0) ? " and ug.id={$group_id}" : '';
         $t = new DataTables();
-        $t  -> table('users u')
+        $t  -> table('__users u')
             -> get('u.id,u.name, u.surname, ugi.name as user_group, u.email, u.phone, u.created, u.lastlogin, u.status')
-            -> join(" users_group ug on ug.rang > 100 {$and}")
-            -> join(" users_group_info ugi on ugi.group_id=ug.id and ugi.languages_id={$this->languages_id}")
+            -> join("__users_group ug on ug.rang > 100 {$and}")
+            -> join("__users_group_info ugi on ugi.group_id=ug.id and ugi.languages_id={$this->languages_id}")
             -> where(" u.group_id=ug.id")
             -> execute();
         $s = ['ban' => $this->t('admins.status_ban'), 'deleted' => $this->t('admins.status_deleted')];

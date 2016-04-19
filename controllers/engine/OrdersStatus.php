@@ -58,8 +58,8 @@ class OrdersStatus extends Engine
     public function items()
     {
         $t = new DataTables();
-        $t  -> table('orders_status os')
-            -> join("orders_status_info i on i.status_id=os.id and i.languages_id={$this->languages_id}")
+        $t  -> table('__orders_status os')
+            -> join("__orders_status_info i on i.status_id=os.id and i.languages_id={$this->languages_id}")
             -> get('os.id, i.status, os.is_main, os.on_site, os.external_id, os.bg_color, os.txt_color')
             -> execute();
 

@@ -44,7 +44,7 @@ class Content extends Engine
     private function setTypeAndSubtype($type)
     {
         $type = self::$db
-            ->select("select id, isfolder from content_types where parent_id=0 and type='{$type}' limit 1")
+            ->select("select id, isfolder from __content_types where parent_id=0 and type='{$type}' limit 1")
             ->row();
         if(empty($type)){
             throw new \Exception('Невірний тип контенту');
@@ -56,7 +56,7 @@ class Content extends Engine
             $this->subtypes_id = $type['id'];
         } else {
             $subtype = self::$db
-                ->select("select id, isfolder from content_types where parent_id='{$type['id']}' and is_main=1 limit 1")
+                ->select("select id, isfolder from __content_types where parent_id='{$type['id']}' and is_main=1 limit 1")
                 ->row();
 
             if(empty($subtype)){
@@ -76,11 +76,12 @@ class Content extends Engine
      */
     public function getData($id, $key= '*')
     {
-        $d = self::$db->select("select {$key} from content where id={$id} limit 1")->row($key);
+        $d = self::$db->select("select {$key} from __content where id='{$id}' limit 1")->row($key);
 
         if($key != '*') {
             return $d;
         }
+        if(empty($d)) return null;
 
         if(!empty($d['settings'])){
             $d['settings'] = unserialize($d['settings']);
@@ -118,7 +119,7 @@ class Content extends Engine
 
     private function getTypeSettings($id)
     {
-        $s = self::$db->select("select settings from content_types where id={$id} limit 1")->row('settings');
+        $s = self::$db->select("select settings from __content_types where id={$id} limit 1")->row('settings');
         if(empty($s)) return null;
 
         return unserialize($s);
@@ -130,7 +131,7 @@ class Content extends Engine
 
         foreach ($this->languages as $language) {
             $info[$language['id']] = self::$db
-                ->select("select * from content_info where content_id={$content_id} and languages_id={$language['id']} limit 1")
+                ->select("select * from __content_info where content_id={$content_id} and languages_id={$language['id']} limit 1")
                 ->row();
         }
 
@@ -142,7 +143,7 @@ class Content extends Engine
 
         foreach ($this->languages as $language) {
             $info[$language['id']] = self::$db
-                ->select("select url from content_info where content_id={$content_id} and languages_id={$language['id']} limit 1")
+                ->select("select url from __content_info where content_id={$content_id} and languages_id={$language['id']} limit 1")
                 ->row('url');
         }
 
@@ -156,11 +157,11 @@ class Content extends Engine
     public function create($parent_id)
     {
         // delete blank records
-        self::$db->delete("content", "owner_id={$this->admin['id']} and status = 'blank'");
+        self::$db->delete("__content", "owner_id={$this->admin['id']} and status = 'blank'");
 
         // create record
         return parent::createRow(
-            'content',
+            '__content',
             [
                 'parent_id'    => $parent_id,
                 'types_id'     => $this->types_id,
@@ -206,7 +207,7 @@ class Content extends Engine
         }
 
         $content['updated'] = $this->now();
-        $this->updateRow('content', $id, $content);
+        $this->updateRow('__content', $id, $content);
 
         if($this->hasDBError()){
             $this->rollback();
@@ -216,17 +217,17 @@ class Content extends Engine
 
         foreach($info as $languages_id => $data){
             $aid = self::$db
-                ->select("select id from content_info where content_id={$id} and languages_id={$languages_id} limit 1")
+                ->select("select id from __content_info where content_id={$id} and languages_id={$languages_id} limit 1")
             ->row('id');
 
             if($aid > 0) {
                 // update
-                self::$db->update('content_info', $data, "id={$aid} limit 1");
+                self::$db->update('__content_info', $data, "id={$aid} limit 1");
             } else {
                 // insert
                 $data['content_id']   = $id;
                 $data['languages_id'] = $languages_id;
-                self::$db->insert('content_info', $data);
+                self::$db->insert('__content_info', $data);
             }
 
             if($this->hasDBError()){
@@ -237,7 +238,7 @@ class Content extends Engine
         }
 
         if($content['parent_id'] > 0){
-            $this->updateRow('content', $content['parent_id'], ['isfolder' => 1]);
+            $this->updateRow('__content', $content['parent_id'], ['isfolder' => 1]);
         }
 
         // contentFeatures
@@ -267,11 +268,11 @@ class Content extends Engine
         $parent_id = $this->getData($id, 'parent_id');
 
 //
-        $s = parent::updateRow('content', $id, ['status' => 'deleted']);
+        $s = parent::updateRow('__content', $id, ['status' => 'deleted']);
 //
         if($s > 0 && $parent_id > 0){
             $t = self::$db
-                ->select("select count(id) as t from content where parent_id = {$parent_id} and status in ('hidden', 'published')")
+                ->select("select count(id) as t from __content where parent_id = {$parent_id} and status in ('hidden', 'published')")
                 ->row('t');
 
             if($t == 0){
@@ -288,7 +289,7 @@ class Content extends Engine
      */
     public function pub($id)
     {
-        return $this->updateRow('content', $id, ['status' => 'published']);
+        return $this->updateRow('__content', $id, ['status' => 'published']);
     }
 
     /**
@@ -297,18 +298,18 @@ class Content extends Engine
      */
     public function hide($id)
     {
-        return $this->updateRow('content', $id, ['status' => 'hidden']);
+        return $this->updateRow('__content', $id, ['status' => 'hidden']);
     }
 
     public function getStatus()
     {
-        return self::$db->enumValues('content', 'status');
+        return self::$db->enumValues('__content', 'status');
     }
 
     public function getOwners()
     {
         return self::$db
-            ->select("select u.id, u.name, u.surname from users u, users_group ug where u.group_id=ug.id and ug.rang > 100")
+            ->select("select u.id, u.name, u.surname from __users u, __users_group ug where u.group_id=ug.id and ug.rang > 100")
             ->all();
     }
 
@@ -323,16 +324,16 @@ class Content extends Engine
     {
         $this->beginTransaction();
 
-        $s = self::$db->update('content', ['parent_id' => $parent, 'position' => $position], "id={$id} limit 1");
+        $s = self::$db->update('__content', ['parent_id' => $parent, 'position' => $position], "id={$id} limit 1");
 
         if($s > 0){
-            self::$db->update('content', ['isfolder' => 1], "id={$parent} limit 1");
+            self::$db->update('__content', ['isfolder' => 1], "id={$parent} limit 1");
         }
 
         if($s > 0 && $old_parent > 0){
-            $c = self::$db->select("select count(id) as t from content where parent_id={$old_parent}")->row('t');
+            $c = self::$db->select("select count(id) as t from __content where parent_id={$old_parent}")->row('t');
             if($c == 0){
-                self::$db->update('content', ['isfolder' => 0], "id={$old_parent} limit 1");
+                self::$db->update('__content', ['isfolder' => 0], "id={$old_parent} limit 1");
             }
         }
 
@@ -346,7 +347,7 @@ class Content extends Engine
     public function getSubtypes($types_id)
     {
         $res = [['id' => $types_id, 'name' => 'Default']];
-        $r = self::$db->select("select id, name from content_types where parent_id={$types_id}")->all();
+        $r = self::$db->select("select id, name from __content_types where parent_id={$types_id}")->all();
         $res = array_merge($res, $r);
         return $res;
     }

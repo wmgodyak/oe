@@ -36,7 +36,7 @@ class Admins extends Users
         $res = self::$db
             -> select("
                   select g.id, i.name, g.isfolder
-                  from users_group g, users_group_info i
+                  from __users_group g, users_group_info i
                   where g.parent_id={$parent_id} and g.rang >= {$rang} and i.group_id=g.id and i.languages_id = {$this->languages_id}
               ")
             -> all();

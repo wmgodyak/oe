@@ -20,12 +20,12 @@ class Seo extends Engine
 {
     public function getContentTypes()
     {
-        return self::$db->select("select id, type, name from content_types where parent_id=0")->all();
+        return self::$db->select("select id, type, name from __content_types where parent_id=0")->all();
     }
 
     public function get()
     {
-        $v = self::$db->select("select value from settings where name = 'seo' limit 1")->row('value');
+        $v = self::$db->select("select value from __settings where name = 'seo' limit 1")->row('value');
         if(empty($v)) return [];
 
         return unserialize($v);
@@ -34,6 +34,6 @@ class Seo extends Engine
     public function update()
     {
         $seo = $this->request->post('seo');
-        return self::$db->update('settings', ['value' => serialize($seo)], "name='seo' limit 1");
+        return self::$db->update('__settings', ['value' => serialize($seo)], "name='seo' limit 1");
     }
 }

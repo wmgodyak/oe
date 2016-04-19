@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Апр 13 2016 г., 17:53
+-- Время создания: Апр 19 2016 г., 13:24
 -- Версия сервера: 5.5.47-0ubuntu0.14.04.1
 -- Версия PHP: 5.5.9-1ubuntu4.14
 
@@ -23,10 +23,10 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `banners`
+-- Структура таблицы `e_banners`
 --
 
-CREATE TABLE IF NOT EXISTS `banners` (
+CREATE TABLE IF NOT EXISTS `e_banners` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `banners_places_id` int(10) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
@@ -46,10 +46,10 @@ CREATE TABLE IF NOT EXISTS `banners` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
 
 --
--- Дамп данных таблицы `banners`
+-- Дамп данных таблицы `e_banners`
 --
 
-INSERT INTO `banners` (`id`, `banners_places_id`, `languages_id`, `skey`, `img`, `name`, `published`, `permanent`, `df`, `dt`, `url`, `target`) VALUES
+INSERT INTO `e_banners` (`id`, `banners_places_id`, `languages_id`, `skey`, `img`, `name`, `published`, `permanent`, `df`, `dt`, `url`, `target`) VALUES
 (6, 1, 1, 'd32b004b6fe914a51847bf782648f6a2', '/uploads/content/2016/04/11/1679091c5a880faf6fb5e6087eb1b2dc.jpg', 'aa', 1, 1, '0000-00-00', '0000-00-00', 'a', '_self'),
 (7, 1, 1, '556074529d9c821315235cba2718ef9b', '/uploads/content/2016/04/08/8f14e45fceea167a5a36dedd4bea2543.jpg', 'aa', 1, 0, '2016-04-18', '2016-04-21', 'aa', '_self'),
 (8, 1, 1, '15e85489e56c9b3240c98b292bbc2df4', '/uploads/content/2016/04/08/c9f0f895fb98ab9159f51fd0297e236d.jpg', 'wrwerwe', 1, 1, '0000-00-00', '0000-00-00', 'wrwer', '_self'),
@@ -60,10 +60,10 @@ INSERT INTO `banners` (`id`, `banners_places_id`, `languages_id`, `skey`, `img`,
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `banners_places`
+-- Структура таблицы `e_banners_places`
 --
 
-CREATE TABLE IF NOT EXISTS `banners_places` (
+CREATE TABLE IF NOT EXISTS `e_banners_places` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(45) DEFAULT NULL,
   `name` varchar(60) DEFAULT NULL,
@@ -74,20 +74,20 @@ CREATE TABLE IF NOT EXISTS `banners_places` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
--- Дамп данных таблицы `banners_places`
+-- Дамп данных таблицы `e_banners_places`
 --
 
-INSERT INTO `banners_places` (`id`, `code`, `name`, `width`, `height`) VALUES
+INSERT INTO `e_banners_places` (`id`, `code`, `name`, `width`, `height`) VALUES
 (1, 'aaa', 'першаaaa', 111, 150),
 (3, 'bbb', 'другий', 1001, 100);
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `banners_stat`
+-- Структура таблицы `e_banners_stat`
 --
 
-CREATE TABLE IF NOT EXISTS `banners_stat` (
+CREATE TABLE IF NOT EXISTS `e_banners_stat` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `banners_id` int(10) unsigned NOT NULL,
   `shows` int(10) unsigned DEFAULT NULL,
@@ -100,10 +100,10 @@ CREATE TABLE IF NOT EXISTS `banners_stat` (
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `callbacks`
+-- Структура таблицы `e_callbacks`
 --
 
-CREATE TABLE IF NOT EXISTS `callbacks` (
+CREATE TABLE IF NOT EXISTS `e_callbacks` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `users_id` int(10) unsigned DEFAULT NULL,
   `phone` varchar(20) NOT NULL,
@@ -119,20 +119,20 @@ CREATE TABLE IF NOT EXISTS `callbacks` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
--- Дамп данных таблицы `callbacks`
+-- Дамп данных таблицы `e_callbacks`
 --
 
-INSERT INTO `callbacks` (`id`, `users_id`, `phone`, `name`, `message`, `comment`, `created`, `ip`, `status`, `manager_id`, `updated`) VALUES
+INSERT INTO `e_callbacks` (`id`, `users_id`, `phone`, `name`, `message`, `comment`, `created`, `ip`, `status`, `manager_id`, `updated`) VALUES
 (4, 3, '+35 (555) 5555555', 'Жорік Ревазов', 'qwewqe', '', '2016-04-11 08:32:36', '127.0.0.1', 'processed', 2, '2016-04-11 09:01:19'),
 (6, 3, '+38(055)555-55-55', 'Жорік Ревазов', 'jujjjjjj', NULL, '2016-04-11 09:02:11', '127.0.0.1', 'new', NULL, '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `chunks`
+-- Структура таблицы `e_chunks`
 --
 
-CREATE TABLE IF NOT EXISTS `chunks` (
+CREATE TABLE IF NOT EXISTS `e_chunks` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   `template` varchar(255) DEFAULT NULL,
@@ -142,20 +142,20 @@ CREATE TABLE IF NOT EXISTS `chunks` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
--- Дамп данных таблицы `chunks`
+-- Дамп данных таблицы `e_chunks`
 --
 
-INSERT INTO `chunks` (`id`, `name`, `template`) VALUES
+INSERT INTO `e_chunks` (`id`, `name`, `template`) VALUES
 (1, 'head', 'head'),
 (2, 'footer', 'footer');
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `comments`
+-- Структура таблицы `e_comments`
 --
 
-CREATE TABLE IF NOT EXISTS `comments` (
+CREATE TABLE IF NOT EXISTS `e_comments` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) unsigned NOT NULL DEFAULT '0',
   `isfolder` tinyint(3) unsigned NOT NULL,
@@ -176,10 +176,10 @@ CREATE TABLE IF NOT EXISTS `comments` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=28 ;
 
 --
--- Дамп данных таблицы `comments`
+-- Дамп данных таблицы `e_comments`
 --
 
-INSERT INTO `comments` (`id`, `parent_id`, `isfolder`, `content_id`, `users_id`, `message`, `rate`, `status`, `created`, `ip`, `skey`) VALUES
+INSERT INTO `e_comments` (`id`, `parent_id`, `isfolder`, `content_id`, `users_id`, `message`, `rate`, `status`, `created`, `ip`, `skey`) VALUES
 (1, 0, 0, 16, 3, 'eertertert', 1.0, 'approved', '2016-03-30 13:27:52', '127.0.0.1', 'd41d8cd98f00b204e9800998ecf8427e'),
 (2, 0, 0, 16, 3, 'eertertert', 1.0, 'approved', '2016-03-30 13:28:17', '127.0.0.1', 'b48e822fbda90eb3b3bc757517c3836e'),
 (3, 0, 0, 16, 3, 'укекуеуке', 1.0, 'approved', '2016-03-30 13:31:55', '127.0.0.1', '9c25031acc2d3983ea7e726690db5f90'),
@@ -209,10 +209,10 @@ INSERT INTO `comments` (`id`, `parent_id`, `isfolder`, `content_id`, `users_id`,
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `comments_subscribers`
+-- Структура таблицы `e_comments_subscribers`
 --
 
-CREATE TABLE IF NOT EXISTS `comments_subscribers` (
+CREATE TABLE IF NOT EXISTS `e_comments_subscribers` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `content_id` int(10) unsigned NOT NULL,
   `users_id` int(10) unsigned NOT NULL,
@@ -224,20 +224,20 @@ CREATE TABLE IF NOT EXISTS `comments_subscribers` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
--- Дамп данных таблицы `comments_subscribers`
+-- Дамп данных таблицы `e_comments_subscribers`
 --
 
-INSERT INTO `comments_subscribers` (`id`, `content_id`, `users_id`, `created`) VALUES
+INSERT INTO `e_comments_subscribers` (`id`, `content_id`, `users_id`, `created`) VALUES
 (2, 16, 15, '2016-03-31 06:52:55'),
 (3, 16, 3, '2016-03-31 13:33:39');
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `components`
+-- Структура таблицы `e_components`
 --
 
-CREATE TABLE IF NOT EXISTS `components` (
+CREATE TABLE IF NOT EXISTS `e_components` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` tinyint(3) unsigned NOT NULL,
   `isfolder` tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -259,10 +259,10 @@ CREATE TABLE IF NOT EXISTS `components` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=85 ;
 
 --
--- Дамп данных таблицы `components`
+-- Дамп данных таблицы `e_components`
 --
 
-INSERT INTO `components` (`id`, `parent_id`, `isfolder`, `icon`, `author`, `version`, `controller`, `position`, `published`, `rang`, `settings`, `created`) VALUES
+INSERT INTO `e_components` (`id`, `parent_id`, `isfolder`, `icon`, `author`, `version`, `controller`, `position`, `published`, `rang`, `settings`, `created`) VALUES
 (1, 0, 0, 'fa-home', 'Volodymyr Hodiak', '1.0.0', 'dashboard', 1, 1, 300, NULL, '2016-03-18 15:27:32'),
 (43, 0, 0, 'fa-file-text', 'Volodymyr Hodiak', '1.0.0', 'content/Pages', 2, 1, 300, NULL, '2016-03-16 15:09:36'),
 (45, 0, 1, 'fa-cogs', 'Volodymyr Hodiak', '1.0.0', 'tools', 9, 1, 300, NULL, '2016-03-16 15:10:15'),
@@ -301,10 +301,10 @@ INSERT INTO `components` (`id`, `parent_id`, `isfolder`, `icon`, `author`, `vers
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `content`
+-- Структура таблицы `e_content`
 --
 
-CREATE TABLE IF NOT EXISTS `content` (
+CREATE TABLE IF NOT EXISTS `e_content` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `types_id` tinyint(3) unsigned NOT NULL,
   `subtypes_id` tinyint(3) unsigned NOT NULL,
@@ -330,14 +330,14 @@ CREATE TABLE IF NOT EXISTS `content` (
   KEY `status` (`status`),
   KEY `published` (`published`),
   KEY `code` (`code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=75 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=93 ;
 
 --
--- Дамп данных таблицы `content`
+-- Дамп данных таблицы `e_content`
 --
 
-INSERT INTO `content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id`, `isfolder`, `position`, `created`, `updated`, `published`, `settings`, `status`, `code`, `currency_id`, `unit_id`, `has_variants`, `in_stock`, `external_id`) VALUES
-(1, 1, 6, 2, 0, 1, 0, '2016-03-21 07:55:55', '2016-03-28 12:16:23', '2016-03-21', 'a:1:{s:7:"modules";a:1:{i:0;s:12:"First::index";}}', 'published', '1', NULL, NULL, NULL, NULL, NULL),
+INSERT INTO `e_content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id`, `isfolder`, `position`, `created`, `updated`, `published`, `settings`, `status`, `code`, `currency_id`, `unit_id`, `has_variants`, `in_stock`, `external_id`) VALUES
+(1, 1, 6, 2, 0, 1, 0, '2016-03-21 07:55:55', '2016-04-19 08:02:34', '2016-03-21', 'a:1:{s:7:"modules";a:1:{i:0;s:12:"First::index";}}', 'published', '1', NULL, NULL, NULL, NULL, NULL),
 (2, 1, 1, 2, 1, 0, 0, '2016-03-21 07:56:43', '2016-03-30 12:50:47', '2016-03-21', 'a:1:{s:7:"modules";a:1:{i:0;s:12:"First::index";}}', 'published', '2', NULL, NULL, NULL, NULL, NULL),
 (3, 1, 7, 2, 1, 0, 0, '2016-03-21 07:56:57', '2016-03-24 14:04:03', '2016-03-21', 'a:1:{s:7:"modules";a:1:{i:0;s:11:"Blog::index";}}', 'published', '3', NULL, NULL, NULL, NULL, NULL),
 (4, 1, 1, 2, 1, 0, 0, '2016-03-21 07:57:10', NULL, '2016-03-21', NULL, 'published', '4', NULL, NULL, NULL, NULL, NULL),
@@ -365,7 +365,7 @@ INSERT INTO `content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id`,
 (30, 1, 8, 2, 28, 0, 0, '2016-03-28 07:19:28', '2016-03-28 12:41:33', '2016-03-28', 'a:1:{s:7:"modules";a:1:{i:0;s:17:"Account::register";}}', 'published', '30', NULL, NULL, NULL, NULL, NULL),
 (31, 1, 8, 2, 28, 0, 0, '2016-03-28 12:50:28', '2016-03-28 12:50:49', '2016-03-28', 'a:1:{s:7:"modules";a:1:{i:0;s:16:"Account::profile";}}', 'published', '31', NULL, NULL, NULL, NULL, NULL),
 (34, 1, 8, 2, 28, 0, 0, '2016-03-30 07:40:52', '2016-03-30 07:41:43', '2016-03-30', 'a:1:{s:7:"modules";a:1:{i:0;s:11:"Account::fp";}}', 'published', '34', NULL, NULL, NULL, NULL, NULL),
-(39, 10, 10, 2, 0, 0, 0, '2016-04-01 06:43:59', '2016-04-07 08:02:03', '2016-04-06', NULL, 'published', '39', 2, 2, 1, 0, NULL),
+(39, 10, 10, 2, 0, 0, 0, '2016-04-01 06:43:59', '2016-04-07 08:02:03', '2016-04-06', NULL, 'deleted', '39', 2, 2, 1, 0, NULL),
 (40, 11, 11, 2, 0, 1, 0, '2016-04-01 07:08:53', '2016-04-01 07:56:46', '2016-04-01', NULL, 'published', '40', NULL, NULL, NULL, NULL, NULL),
 (41, 11, 11, 2, 40, 0, 0, '2016-04-01 07:09:00', '2016-04-12 14:32:36', '2016-04-01', NULL, 'published', '41', NULL, NULL, NULL, NULL, NULL),
 (42, 11, 11, 2, 0, 0, 0, '2016-04-01 07:10:09', '2016-04-01 07:10:08', '2016-04-01', NULL, 'published', '42', NULL, NULL, NULL, NULL, NULL),
@@ -381,15 +381,15 @@ INSERT INTO `content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id`,
 (55, 10, 10, 2, 0, 0, 0, '2016-04-04 16:22:23', '2016-04-04 16:22:41', '2016-04-04', NULL, 'published', '55', NULL, NULL, NULL, NULL, NULL),
 (57, 10, 10, 2, 0, 0, 0, '2016-04-05 06:12:57', '2016-04-05 06:13:34', '2016-04-05', NULL, 'published', '57', NULL, NULL, NULL, NULL, NULL),
 (59, 10, 10, 2, 0, 0, 0, '2016-04-05 06:27:37', '2016-04-05 06:28:00', '2016-04-05', NULL, 'published', '59', NULL, NULL, NULL, NULL, NULL),
-(74, 1, 1, 2, 1, 0, 0, '2016-04-11 07:04:37', NULL, NULL, NULL, 'blank', '74', NULL, NULL, NULL, NULL, NULL);
+(92, 10, 10, 2, 0, 0, 0, '2016-04-19 08:37:19', '2016-04-19 09:33:42', '2016-04-19', NULL, 'published', '96069', 2, 2, 1, 0, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `content_features`
+-- Структура таблицы `e_content_features`
 --
 
-CREATE TABLE IF NOT EXISTS `content_features` (
+CREATE TABLE IF NOT EXISTS `e_content_features` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `content_id` int(10) unsigned NOT NULL,
   `features_id` int(10) unsigned NOT NULL,
@@ -400,26 +400,30 @@ CREATE TABLE IF NOT EXISTS `content_features` (
   UNIQUE KEY `content_id` (`content_id`,`features_id`,`values_id`,`languages_id`),
   KEY `fk_content_features_values_content1_idx` (`content_id`),
   KEY `fk_content_features_values_features1_idx` (`features_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=26 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=30 ;
 
 --
--- Дамп данных таблицы `content_features`
+-- Дамп данных таблицы `e_content_features`
 --
 
-INSERT INTO `content_features` (`id`, `content_id`, `features_id`, `values_id`, `languages_id`, `value`) VALUES
+INSERT INTO `e_content_features` (`id`, `content_id`, `features_id`, `values_id`, `languages_id`, `value`) VALUES
 (21, 39, 84, 86, 0, NULL),
 (22, 39, 85, 89, 0, NULL),
 (23, 39, 92, 94, 0, NULL),
 (24, 54, 84, 86, 0, NULL),
-(25, 54, 85, 89, 0, NULL);
+(25, 54, 85, 89, 0, NULL),
+(26, 92, 96, 97, 0, NULL),
+(27, 92, 98, 100, 0, NULL),
+(28, 92, 101, 102, 0, NULL),
+(29, 92, 103, 105, 0, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `content_images`
+-- Структура таблицы `e_content_images`
 --
 
-CREATE TABLE IF NOT EXISTS `content_images` (
+CREATE TABLE IF NOT EXISTS `e_content_images` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `content_id` int(11) unsigned NOT NULL,
   `path` varchar(255) NOT NULL,
@@ -429,13 +433,13 @@ CREATE TABLE IF NOT EXISTS `content_images` (
   PRIMARY KEY (`id`),
   KEY `fk_content_images_content1_idx` (`content_id`),
   KEY `position` (`position`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=25 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=28 ;
 
 --
--- Дамп данных таблицы `content_images`
+-- Дамп данных таблицы `e_content_images`
 --
 
-INSERT INTO `content_images` (`id`, `content_id`, `path`, `image`, `position`, `created`) VALUES
+INSERT INTO `e_content_images` (`id`, `content_id`, `path`, `image`, `position`, `created`) VALUES
 (1, 2, 'uploads/content/2016/03/22/', 'office3-2x.png', 1, '2016-03-22 15:14:11'),
 (2, 2, 'uploads/content/2016/03/22/', 'office2-2x1.png', 2, '2016-03-22 15:14:11'),
 (3, 2, 'uploads/content/2016/03/22/', 'office1-2x2.png', 3, '2016-03-22 15:14:11'),
@@ -459,15 +463,18 @@ INSERT INTO `content_images` (`id`, `content_id`, `path`, `image`, `position`, `
 (21, 52, 'uploads/content/2016/04/12/', 'pictures-38191-52x.jpg', 1, '2016-04-12 08:04:17'),
 (22, 57, 'uploads/content/2016/04/12/', 'animals-smile_3379238k-57x.jpg', 1, '2016-04-12 08:04:22'),
 (23, 59, 'uploads/content/2016/04/12/', '1443507958_2cd1e26200000578-0-image-a-312_1443424459664-59x.jpg', 1, '2016-04-12 08:04:26'),
-(24, 55, 'uploads/content/2016/04/12/', '2fab3e6100000578-3377927-andrew_suryono_bali_i_was_taking_pictures_of_some_orangutans_in_-a-42_1451416773881-55x.jpg', 1, '2016-04-12 08:30:17');
+(24, 55, 'uploads/content/2016/04/12/', '2fab3e6100000578-3377927-andrew_suryono_bali_i_was_taking_pictures_of_some_orangutans_in_-a-42_1451416773881-55x.jpg', 1, '2016-04-12 08:30:17'),
+(25, 1, 'uploads/content/2016/04/19/', 'untitled-1-1x15.png', 7, '2016-04-19 08:02:03'),
+(26, 92, 'uploads/content/2016/04/19/', '474561865-92x.jpg', 1, '2016-04-19 08:39:44'),
+(27, 92, 'uploads/content/2016/04/19/', '474561835-92x26.jpg', 2, '2016-04-19 08:39:44');
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `content_images_sizes`
+-- Структура таблицы `e_content_images_sizes`
 --
 
-CREATE TABLE IF NOT EXISTS `content_images_sizes` (
+CREATE TABLE IF NOT EXISTS `e_content_images_sizes` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `size` varchar(16) NOT NULL,
   `width` int(5) unsigned NOT NULL,
@@ -477,20 +484,20 @@ CREATE TABLE IF NOT EXISTS `content_images_sizes` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
--- Дамп данных таблицы `content_images_sizes`
+-- Дамп данных таблицы `e_content_images_sizes`
 --
 
-INSERT INTO `content_images_sizes` (`id`, `size`, `width`, `height`) VALUES
+INSERT INTO `e_content_images_sizes` (`id`, `size`, `width`, `height`) VALUES
 (1, 'post', 635, 310),
 (2, 'slider', 935, 450);
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `content_info`
+-- Структура таблицы `e_content_info`
 --
 
-CREATE TABLE IF NOT EXISTS `content_info` (
+CREATE TABLE IF NOT EXISTS `e_content_info` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `content_id` int(10) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
@@ -505,14 +512,14 @@ CREATE TABLE IF NOT EXISTS `content_info` (
   UNIQUE KEY `languages_id` (`languages_id`,`url`),
   KEY `fk_content_info_content1_idx` (`content_id`),
   KEY `fk_content_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=53 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=54 ;
 
 --
--- Дамп данных таблицы `content_info`
+-- Дамп данных таблицы `e_content_info`
 --
 
-INSERT INTO `content_info` (`id`, `content_id`, `languages_id`, `name`, `url`, `h1`, `title`, `keywords`, `description`, `content`) VALUES
-(1, 1, 1, 'Головна', '', '', 'Головна', '', '', ''),
+INSERT INTO `e_content_info` (`id`, `content_id`, `languages_id`, `name`, `url`, `h1`, `title`, `keywords`, `description`, `content`) VALUES
+(1, 1, 1, 'Головна', 'q', '', 'Головна', '', '', '<p><img alt="" src="http://engine.loc/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png" style="width: 128px; height: 128px;" /></p>\n'),
 (3, 2, 1, 'Про нас', 'pro-nas', '', 'Про нас', '', 'Whether you want to fill this paragraph with some text like I''m doing right now, this place is perfect to describe some features or anything you want - React has a complete solution for you.', '<div class="row">\n<div class="col-md-12">\n<h1>We care about our work</h1>\n</div>\n</div>\n\n<div class="row">\n<div class="col-md-6">\n<p>Whether you want to fill this paragraph with some text like I&#39;m doing right now, this place is perfect to describe some features or anything you want - React has a complete solution for you.</p>\n\n<p>You have complete control over the look &amp; feel of your website, we offer the best quality so you take your site up and running in no time.</p>\n</div>\n\n<div class="col-md-6">\n<p>React is a simple, developer-friendly way to get your site. Full of features, cool documentation ease of use, lots of pages. We want to help bringing cool stuff to people so they can get their projects faster.</p>\n<a class="join-team button button-small" href="#">Join our team</a></div>\n</div>\n\n<div class="row stats">\n<div class="col-sm-3"><strong>13</strong> employees</div>\n\n<div class="col-sm-3"><strong>10k</strong> customers</div>\n\n<div class="col-sm-3"><strong>9</strong> template pages</div>\n\n<div class="col-sm-3"><strong>13k</strong> products sold</div>\n</div>\n'),
 (4, 3, 1, 'Новини', 'novyny', '', 'Новини', '', '', ''),
 (5, 4, 1, 'Оплата та доставка', 'oplata-ta-dostavka', '', 'Оплата та доставка', '', '', ''),
@@ -555,15 +562,16 @@ INSERT INTO `content_info` (`id`, `content_id`, `languages_id`, `name`, `url`, `
 (48, 54, 1, 'Смартфон Samsung J500H Galaxy J5', 'smartfon-samsung-j500h-galaxy-j5', '', 'Смартфон Samsung J500H Galaxy J5', '', '', ''),
 (49, 55, 1, 'Смартфон Keneksi Choice Dual Sim', 'smartfon-keneksi-choice-dual-sim', '', 'Смартфон Keneksi Choice Dual Sim', '', '', ''),
 (51, 57, 1, 'Смартфон Keneksi Choice Dual Sim2', 'smartfon-keneksi-choice-dual-sim2', '', 'Смартфон Keneksi Choice Dual Sim2', '', '', ''),
-(52, 59, 1, 'Смартфон Lenovo A1000 Dual Sim', 'smartfon-lenovo-a1000-dual-sim', '', 'Смартфон Lenovo A1000 Dual Sim', '', '', '');
+(52, 59, 1, 'Смартфон Lenovo A1000 Dual Sim', 'smartfon-lenovo-a1000-dual-sim', '', 'Смартфон Lenovo A1000 Dual Sim', '', '', ''),
+(53, 92, 1, 'PHILIPS E320', 'philips-e320', '', 'PHILIPS E320', '', '', '');
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `content_relationship`
+-- Структура таблицы `e_content_relationship`
 --
 
-CREATE TABLE IF NOT EXISTS `content_relationship` (
+CREATE TABLE IF NOT EXISTS `e_content_relationship` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `content_id` int(10) unsigned NOT NULL,
   `categories_id` int(10) unsigned NOT NULL,
@@ -573,13 +581,13 @@ CREATE TABLE IF NOT EXISTS `content_relationship` (
   KEY `fk_content_relationship_content1_idx` (`content_id`),
   KEY `fk_content_relationship_content2_idx` (`categories_id`),
   KEY `is_main` (`is_main`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=77 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=90 ;
 
 --
--- Дамп данных таблицы `content_relationship`
+-- Дамп данных таблицы `e_content_relationship`
 --
 
-INSERT INTO `content_relationship` (`id`, `content_id`, `categories_id`, `is_main`) VALUES
+INSERT INTO `e_content_relationship` (`id`, `content_id`, `categories_id`, `is_main`) VALUES
 (1, 16, 13, 0),
 (2, 17, 13, 0),
 (3, 18, 13, 0),
@@ -594,15 +602,16 @@ INSERT INTO `content_relationship` (`id`, `content_id`, `categories_id`, `is_mai
 (29, 57, 41, 1),
 (30, 59, 41, 1),
 (74, 39, 41, 1),
-(76, 54, 41, 1);
+(76, 54, 41, 1),
+(89, 92, 44, 1);
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `content_tags`
+-- Структура таблицы `e_content_tags`
 --
 
-CREATE TABLE IF NOT EXISTS `content_tags` (
+CREATE TABLE IF NOT EXISTS `e_content_tags` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `content_id` int(11) unsigned NOT NULL,
   `tags_id` int(10) unsigned NOT NULL,
@@ -615,10 +624,10 @@ CREATE TABLE IF NOT EXISTS `content_tags` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=29 ;
 
 --
--- Дамп данных таблицы `content_tags`
+-- Дамп данных таблицы `e_content_tags`
 --
 
-INSERT INTO `content_tags` (`id`, `content_id`, `tags_id`, `languages_id`) VALUES
+INSERT INTO `e_content_tags` (`id`, `content_id`, `tags_id`, `languages_id`) VALUES
 (21, 16, 17, 1),
 (22, 16, 18, 1),
 (23, 16, 19, 1),
@@ -631,10 +640,10 @@ INSERT INTO `content_tags` (`id`, `content_id`, `tags_id`, `languages_id`) VALUE
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `content_types`
+-- Структура таблицы `e_content_types`
 --
 
-CREATE TABLE IF NOT EXISTS `content_types` (
+CREATE TABLE IF NOT EXISTS `e_content_types` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` tinyint(3) unsigned DEFAULT '0',
   `isfolder` tinyint(1) unsigned DEFAULT '0',
@@ -649,10 +658,10 @@ CREATE TABLE IF NOT EXISTS `content_types` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
 
 --
--- Дамп данных таблицы `content_types`
+-- Дамп данных таблицы `e_content_types`
 --
 
-INSERT INTO `content_types` (`id`, `parent_id`, `isfolder`, `type`, `name`, `is_main`, `settings`) VALUES
+INSERT INTO `e_content_types` (`id`, `parent_id`, `isfolder`, `type`, `name`, `is_main`, `settings`) VALUES
 (1, 0, 1, 'pages', 'Сторінки', NULL, 'a:3:{s:7:"ext_url";s:1:"0";s:9:"parent_id";s:1:"0";s:7:"modules";a:1:{i:0;s:10:"Nav::index";}}'),
 (2, 0, 0, 'post', 'Стаття', NULL, 'a:2:{s:9:"parent_id";s:0:"";s:7:"modules";a:3:{i:0;s:14:"Account::index";i:1;s:10:"Blog::post";i:2;s:8:"Nav::top";}}'),
 (3, 0, 0, 'posts_cat', 'Категорії статтей', NULL, 'a:2:{s:9:"parent_id";s:0:"";s:7:"modules";a:2:{i:0;s:11:"Blog::index";i:1;s:10:"Nav::index";}}'),
@@ -667,10 +676,10 @@ INSERT INTO `content_types` (`id`, `parent_id`, `isfolder`, `type`, `name`, `is_
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `content_types_images_sizes`
+-- Структура таблицы `e_content_types_images_sizes`
 --
 
-CREATE TABLE IF NOT EXISTS `content_types_images_sizes` (
+CREATE TABLE IF NOT EXISTS `e_content_types_images_sizes` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `types_id` tinyint(3) unsigned NOT NULL,
   `images_sizes_id` tinyint(3) unsigned NOT NULL,
@@ -680,10 +689,10 @@ CREATE TABLE IF NOT EXISTS `content_types_images_sizes` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=26 ;
 
 --
--- Дамп данных таблицы `content_types_images_sizes`
+-- Дамп данных таблицы `e_content_types_images_sizes`
 --
 
-INSERT INTO `content_types_images_sizes` (`id`, `types_id`, `images_sizes_id`) VALUES
+INSERT INTO `e_content_types_images_sizes` (`id`, `types_id`, `images_sizes_id`) VALUES
 (23, 1, 1),
 (24, 1, 2),
 (25, 2, 1),
@@ -692,10 +701,10 @@ INSERT INTO `content_types_images_sizes` (`id`, `types_id`, `images_sizes_id`) V
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `currency`
+-- Структура таблицы `e_currency`
 --
 
-CREATE TABLE IF NOT EXISTS `currency` (
+CREATE TABLE IF NOT EXISTS `e_currency` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
   `code` char(3) COLLATE utf8_unicode_ci DEFAULT NULL,
@@ -709,20 +718,20 @@ CREATE TABLE IF NOT EXISTS `currency` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
 
 --
--- Дамп данных таблицы `currency`
+-- Дамп данных таблицы `e_currency`
 --
 
-INSERT INTO `currency` (`id`, `name`, `code`, `symbol`, `rate`, `is_main`) VALUES
+INSERT INTO `e_currency` (`id`, `name`, `code`, `symbol`, `rate`, `is_main`) VALUES
 (1, 'Гривня', 'UAH', 'грн', 27.000, 0),
 (2, 'Долар', 'USD', '$', 1.000, 1);
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `delivery`
+-- Структура таблицы `e_delivery`
 --
 
-CREATE TABLE IF NOT EXISTS `delivery` (
+CREATE TABLE IF NOT EXISTS `e_delivery` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `free_from` decimal(10,2) unsigned NOT NULL DEFAULT '0.00',
   `price` decimal(10,2) NOT NULL DEFAULT '0.00',
@@ -733,20 +742,20 @@ CREATE TABLE IF NOT EXISTS `delivery` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
--- Дамп данных таблицы `delivery`
+-- Дамп данных таблицы `e_delivery`
 --
 
-INSERT INTO `delivery` (`id`, `free_from`, `price`, `module`, `settings`, `published`) VALUES
+INSERT INTO `e_delivery` (`id`, `free_from`, `price`, `module`, `settings`, `published`) VALUES
 (1, 500.00, 10.00, '', 'a:2:{s:3:"key";s:1:"1";s:8:"password";s:1:"2";}', 1),
 (2, 500.00, 30.00, 'NovaPoshta', 'a:2:{s:3:"key";s:1:"1";s:8:"password";s:1:"2";}', 1);
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `delivery_info`
+-- Структура таблицы `e_delivery_info`
 --
 
-CREATE TABLE IF NOT EXISTS `delivery_info` (
+CREATE TABLE IF NOT EXISTS `e_delivery_info` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `delivery_id` tinyint(3) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
@@ -758,20 +767,20 @@ CREATE TABLE IF NOT EXISTS `delivery_info` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
--- Дамп данных таблицы `delivery_info`
+-- Дамп данных таблицы `e_delivery_info`
 --
 
-INSERT INTO `delivery_info` (`id`, `delivery_id`, `languages_id`, `name`, `description`) VALUES
+INSERT INTO `e_delivery_info` (`id`, `delivery_id`, `languages_id`, `name`, `description`) VALUES
 (1, 1, 1, 'Самовиз', '12121fds sadsadsa'),
 (2, 2, 1, 'Нова пошта', 'Служба доставки нова пошта');
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `delivery_payment`
+-- Структура таблицы `e_delivery_payment`
 --
 
-CREATE TABLE IF NOT EXISTS `delivery_payment` (
+CREATE TABLE IF NOT EXISTS `e_delivery_payment` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `delivery_id` tinyint(3) unsigned NOT NULL,
   `payment_id` tinyint(3) unsigned NOT NULL,
@@ -782,10 +791,10 @@ CREATE TABLE IF NOT EXISTS `delivery_payment` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18 ;
 
 --
--- Дамп данных таблицы `delivery_payment`
+-- Дамп данных таблицы `e_delivery_payment`
 --
 
-INSERT INTO `delivery_payment` (`id`, `delivery_id`, `payment_id`) VALUES
+INSERT INTO `e_delivery_payment` (`id`, `delivery_id`, `payment_id`) VALUES
 (12, 1, 1),
 (14, 1, 4),
 (15, 1, 3),
@@ -795,10 +804,10 @@ INSERT INTO `delivery_payment` (`id`, `delivery_id`, `payment_id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `features`
+-- Структура таблицы `e_features`
 --
 
-CREATE TABLE IF NOT EXISTS `features` (
+CREATE TABLE IF NOT EXISTS `e_features` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int(10) unsigned DEFAULT NULL,
   `type` enum('text','textarea','select','file','folder','value','checkbox','number') DEFAULT NULL,
@@ -812,13 +821,13 @@ CREATE TABLE IF NOT EXISTS `features` (
   PRIMARY KEY (`id`,`owner_id`),
   UNIQUE KEY `code_UNIQUE` (`code`),
   KEY `fk_features_users1_idx` (`owner_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=95 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=106 ;
 
 --
--- Дамп данных таблицы `features`
+-- Дамп данных таблицы `e_features`
 --
 
-INSERT INTO `features` (`id`, `parent_id`, `type`, `code`, `multiple`, `on_filter`, `required`, `owner_id`, `created`, `status`) VALUES
+INSERT INTO `e_features` (`id`, `parent_id`, `type`, `code`, `multiple`, `on_filter`, `required`, `owner_id`, `created`, `status`) VALUES
 (84, 0, 'select', 'color', 0, 0, 0, 2, '2016-04-06 13:57:06', 'published'),
 (85, 0, 'select', 'display', 0, 0, 0, 2, '2016-04-06 13:57:29', 'published'),
 (86, 84, 'value', 'aba9acdf9cba0badd40268e929646147', NULL, NULL, 0, 2, '2016-04-06 13:57:42', 'published'),
@@ -829,15 +838,25 @@ INSERT INTO `features` (`id`, `parent_id`, `type`, `code`, `multiple`, `on_filte
 (91, 85, 'value', '2f65302d5f544bade318e467576bf23c', NULL, NULL, 0, 2, '2016-04-06 13:58:08', 'published'),
 (92, 0, 'select', 'weight', 1, 0, 0, 2, '2016-04-06 15:24:22', 'published'),
 (93, 92, 'value', '24c12d85bd040e9ecfc6eeceba608338', NULL, NULL, 0, 2, '2016-04-06 15:24:27', 'published'),
-(94, 92, 'value', '4424c73412c0e1f3db140971aabc015d', NULL, NULL, 0, 2, '2016-04-06 15:24:29', 'published');
+(94, 92, 'value', '4424c73412c0e1f3db140971aabc015d', NULL, NULL, 0, 2, '2016-04-06 15:24:29', 'published'),
+(96, 0, 'select', 'typ_matryci_ekranu', 0, 1, 1, 2, '2016-04-19 09:32:18', 'published'),
+(97, 96, 'value', '6405961c29760c08c597761645b095d7', NULL, NULL, 0, 2, '2016-04-19 09:32:26', 'published'),
+(98, 0, 'select', 'kil_kist_sim_kart', 0, 0, 1, 2, '2016-04-19 09:32:44', 'published'),
+(99, 98, 'value', 'b1bb573d0c305ea448029fa7fa835bce', NULL, NULL, 0, 2, '2016-04-19 09:32:48', 'published'),
+(100, 98, 'value', '32aa00e042a633f35d334d56d1086597', NULL, NULL, 0, 2, '2016-04-19 09:32:50', 'published'),
+(101, 0, 'select', 'yemnist_akumulyatora', 0, 0, 1, 2, '2016-04-19 09:33:05', 'published'),
+(102, 101, 'value', 'da90b1092dc3da6713d7b47cc6fe942c', NULL, NULL, 0, 2, '2016-04-19 09:33:15', 'published'),
+(103, 0, 'select', 'kolir', 0, 0, 1, 2, '2016-04-19 09:33:25', 'published'),
+(104, 103, 'value', '42c654a782adae0219f46d13ffe111b6', NULL, NULL, 0, 2, '2016-04-19 09:33:31', 'published'),
+(105, 103, 'value', '93cd32447aa3e8a20a2cf4f09c06a532', NULL, NULL, 0, 2, '2016-04-19 09:33:37', 'published');
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `features_content`
+-- Структура таблицы `e_features_content`
 --
 
-CREATE TABLE IF NOT EXISTS `features_content` (
+CREATE TABLE IF NOT EXISTS `e_features_content` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `features_id` int(10) unsigned NOT NULL,
   `content_types_id` tinyint(3) unsigned NOT NULL,
@@ -847,24 +866,28 @@ CREATE TABLE IF NOT EXISTS `features_content` (
   PRIMARY KEY (`id`,`features_id`,`content_types_id`,`content_subtypes_id`,`content_id`),
   UNIQUE KEY `features_id` (`features_id`,`content_types_id`,`content_subtypes_id`,`content_id`),
   KEY `fk_content_features_idx` (`features_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=46 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=50 ;
 
 --
--- Дамп данных таблицы `features_content`
+-- Дамп данных таблицы `e_features_content`
 --
 
-INSERT INTO `features_content` (`id`, `features_id`, `content_types_id`, `content_subtypes_id`, `content_id`, `position`) VALUES
+INSERT INTO `e_features_content` (`id`, `features_id`, `content_types_id`, `content_subtypes_id`, `content_id`, `position`) VALUES
 (43, 84, 11, 11, 41, NULL),
 (44, 85, 11, 11, 41, NULL),
-(45, 92, 11, 11, 41, NULL);
+(45, 92, 11, 11, 41, NULL),
+(46, 96, 11, 11, 44, NULL),
+(47, 98, 11, 11, 44, NULL),
+(48, 101, 11, 11, 44, NULL),
+(49, 103, 11, 11, 44, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `features_info`
+-- Структура таблицы `e_features_info`
 --
 
-CREATE TABLE IF NOT EXISTS `features_info` (
+CREATE TABLE IF NOT EXISTS `e_features_info` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `features_id` int(10) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
@@ -872,13 +895,13 @@ CREATE TABLE IF NOT EXISTS `features_info` (
   PRIMARY KEY (`id`,`features_id`,`languages_id`),
   KEY `fk_features_info_features1_idx` (`features_id`),
   KEY `fk_features_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=90 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=101 ;
 
 --
--- Дамп данных таблицы `features_info`
+-- Дамп данных таблицы `e_features_info`
 --
 
-INSERT INTO `features_info` (`id`, `features_id`, `languages_id`, `name`) VALUES
+INSERT INTO `e_features_info` (`id`, `features_id`, `languages_id`, `name`) VALUES
 (79, 84, 1, 'Color'),
 (80, 85, 1, 'Display'),
 (81, 86, 1, 'black'),
@@ -889,15 +912,25 @@ INSERT INTO `features_info` (`id`, `features_id`, `languages_id`, `name`) VALUES
 (86, 91, 1, '16'),
 (87, 92, 1, 'Weight'),
 (88, 93, 1, '1'),
-(89, 94, 1, '3');
+(89, 94, 1, '3'),
+(91, 96, 1, 'Тип матриці екрану'),
+(92, 97, 1, 'IPS'),
+(93, 98, 1, 'Кількість SIM-карт'),
+(94, 99, 1, '1'),
+(95, 100, 1, '2'),
+(96, 101, 1, 'Ємність акумулятора'),
+(97, 102, 1, '1000 мАг'),
+(98, 103, 1, 'Колір'),
+(99, 104, 1, 'Red'),
+(100, 105, 1, 'Black');
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `guides`
+-- Структура таблицы `e_guides`
 --
 
-CREATE TABLE IF NOT EXISTS `guides` (
+CREATE TABLE IF NOT EXISTS `e_guides` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) unsigned NOT NULL,
   `position` tinyint(3) unsigned NOT NULL,
@@ -908,10 +941,10 @@ CREATE TABLE IF NOT EXISTS `guides` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
--- Дамп данных таблицы `guides`
+-- Дамп данных таблицы `e_guides`
 --
 
-INSERT INTO `guides` (`id`, `parent_id`, `position`, `code`) VALUES
+INSERT INTO `e_guides` (`id`, `parent_id`, `position`, `code`) VALUES
 (1, 0, 0, 'units'),
 (2, 1, 0, ''),
 (3, 1, 0, ''),
@@ -922,10 +955,10 @@ INSERT INTO `guides` (`id`, `parent_id`, `position`, `code`) VALUES
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `guides_info`
+-- Структура таблицы `e_guides_info`
 --
 
-CREATE TABLE IF NOT EXISTS `guides_info` (
+CREATE TABLE IF NOT EXISTS `e_guides_info` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `guides_id` int(11) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
@@ -937,10 +970,10 @@ CREATE TABLE IF NOT EXISTS `guides_info` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
--- Дамп данных таблицы `guides_info`
+-- Дамп данных таблицы `e_guides_info`
 --
 
-INSERT INTO `guides_info` (`id`, `guides_id`, `languages_id`, `name`) VALUES
+INSERT INTO `e_guides_info` (`id`, `guides_id`, `languages_id`, `name`) VALUES
 (1, 1, 1, 'Кількість'),
 (2, 2, 1, 'шт.'),
 (3, 3, 1, 'уп.'),
@@ -951,10 +984,10 @@ INSERT INTO `guides_info` (`id`, `guides_id`, `languages_id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `languages`
+-- Структура таблицы `e_languages`
 --
 
-CREATE TABLE IF NOT EXISTS `languages` (
+CREATE TABLE IF NOT EXISTS `e_languages` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `code` char(2) NOT NULL,
   `name` varchar(30) NOT NULL,
@@ -965,19 +998,19 @@ CREATE TABLE IF NOT EXISTS `languages` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
--- Дамп данных таблицы `languages`
+-- Дамп данных таблицы `e_languages`
 --
 
-INSERT INTO `languages` (`id`, `code`, `name`, `is_main`) VALUES
+INSERT INTO `e_languages` (`id`, `code`, `name`, `is_main`) VALUES
 (1, 'uk', 'Українська', 1);
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `mail_templates`
+-- Структура таблицы `e_mail_templates`
 --
 
-CREATE TABLE IF NOT EXISTS `mail_templates` (
+CREATE TABLE IF NOT EXISTS `e_mail_templates` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(30) NOT NULL,
   `name` varchar(60) NOT NULL,
@@ -986,10 +1019,10 @@ CREATE TABLE IF NOT EXISTS `mail_templates` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
--- Дамп данных таблицы `mail_templates`
+-- Дамп данных таблицы `e_mail_templates`
 --
 
-INSERT INTO `mail_templates` (`id`, `code`, `name`) VALUES
+INSERT INTO `e_mail_templates` (`id`, `code`, `name`) VALUES
 (1, 'account_register', 'Реєстрація користувача'),
 (2, 'account_fp', 'Відновлення паролю'),
 (3, 'comment', 'Новий коментар'),
@@ -1000,10 +1033,10 @@ INSERT INTO `mail_templates` (`id`, `code`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `mail_templates_info`
+-- Структура таблицы `e_mail_templates_info`
 --
 
-CREATE TABLE IF NOT EXISTS `mail_templates_info` (
+CREATE TABLE IF NOT EXISTS `e_mail_templates_info` (
   `id` smallint(6) unsigned NOT NULL AUTO_INCREMENT,
   `templates_id` tinyint(3) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
@@ -1015,10 +1048,10 @@ CREATE TABLE IF NOT EXISTS `mail_templates_info` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
--- Дамп данных таблицы `mail_templates_info`
+-- Дамп данных таблицы `e_mail_templates_info`
 --
 
-INSERT INTO `mail_templates_info` (`id`, `templates_id`, `languages_id`, `subject`, `body`) VALUES
+INSERT INTO `e_mail_templates_info` (`id`, `templates_id`, `languages_id`, `subject`, `body`) VALUES
 (1, 1, 1, 'Вітаємо з реєстрацією', '<p>Вітаємо {$data.name}&nbsp;{$data.surname}. Ви успішно зареєстувались на нашому сайті.&nbsp;</p>\n\n<p>Ваш логін:&nbsp;{$data.email}</p>\n\n<p>Ваш пароль:&nbsp;{$data.password}</p>\n\n<p>Бажаєм хороших покупок</p>\n'),
 (2, 2, 1, 'Відновлення паролюцйуцйу', '<p>Вітаємо {$data.name}. Ви отримали це повідомлення, так як здійснили запит на відновлення паролю.</p>\n\n<p>Для цього вам необхідно перейти по <a href="{$data.fp_link}">цьому&nbsp;посиланню</a></p>\n'),
 (3, 3, 1, 'Новий коментар', '<p>Вітаємо.<br />\nНовий коментар до статі {$data.post_name}.<br />\nІм&#39;я: {$data.user.name}<br />\nEmail: {$data.user.email}<br />\nКоментар: {$data.message}<br />\n<br />\n----------------------------------<br />\nВи можете <a href="{$data.approve_url}">опублікувати коменар</a> або <a href="{$data.delete_url}">видалити</a> його.</p>\n'),
@@ -1029,10 +1062,10 @@ INSERT INTO `mail_templates_info` (`id`, `templates_id`, `languages_id`, `subjec
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `modules`
+-- Структура таблицы `e_modules`
 --
 
-CREATE TABLE IF NOT EXISTS `modules` (
+CREATE TABLE IF NOT EXISTS `e_modules` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `icon` varchar(30) DEFAULT NULL,
   `author` varchar(60) DEFAULT NULL,
@@ -1045,10 +1078,10 @@ CREATE TABLE IF NOT EXISTS `modules` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
 
 --
--- Дамп данных таблицы `modules`
+-- Дамп данных таблицы `e_modules`
 --
 
-INSERT INTO `modules` (`id`, `icon`, `author`, `version`, `controller`, `settings`, `created`) VALUES
+INSERT INTO `e_modules` (`id`, `icon`, `author`, `version`, `controller`, `settings`, `created`) VALUES
 (6, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'second', NULL, '2016-03-23 14:22:40'),
 (7, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'first', NULL, '2016-03-23 14:22:41'),
 (8, 'fa-nav', 'Volodymyr Hodiak', '1.0.0', 'nav', NULL, '2016-03-24 08:44:14'),
@@ -1059,10 +1092,10 @@ INSERT INTO `modules` (`id`, `icon`, `author`, `version`, `controller`, `setting
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `nav`
+-- Структура таблицы `e_nav`
 --
 
-CREATE TABLE IF NOT EXISTS `nav` (
+CREATE TABLE IF NOT EXISTS `e_nav` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `code` varchar(30) NOT NULL,
@@ -1071,19 +1104,19 @@ CREATE TABLE IF NOT EXISTS `nav` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
--- Дамп данных таблицы `nav`
+-- Дамп данных таблицы `e_nav`
 --
 
-INSERT INTO `nav` (`id`, `name`, `code`) VALUES
+INSERT INTO `e_nav` (`id`, `name`, `code`) VALUES
 (1, 'top', 'top');
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `nav_items`
+-- Структура таблицы `e_nav_items`
 --
 
-CREATE TABLE IF NOT EXISTS `nav_items` (
+CREATE TABLE IF NOT EXISTS `e_nav_items` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `nav_id` tinyint(3) unsigned NOT NULL,
   `content_id` int(11) unsigned NOT NULL,
@@ -1096,10 +1129,10 @@ CREATE TABLE IF NOT EXISTS `nav_items` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
--- Дамп данных таблицы `nav_items`
+-- Дамп данных таблицы `e_nav_items`
 --
 
-INSERT INTO `nav_items` (`id`, `nav_id`, `content_id`, `position`) VALUES
+INSERT INTO `e_nav_items` (`id`, `nav_id`, `content_id`, `position`) VALUES
 (1, 1, 2, 0),
 (2, 1, 3, 1),
 (3, 1, 4, 2),
@@ -1108,10 +1141,10 @@ INSERT INTO `nav_items` (`id`, `nav_id`, `content_id`, `position`) VALUES
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `orders_status`
+-- Структура таблицы `e_orders_status`
 --
 
-CREATE TABLE IF NOT EXISTS `orders_status` (
+CREATE TABLE IF NOT EXISTS `e_orders_status` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `bg_color` char(7) DEFAULT NULL,
   `txt_color` varchar(7) DEFAULT NULL,
@@ -1125,20 +1158,20 @@ CREATE TABLE IF NOT EXISTS `orders_status` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
--- Дамп данных таблицы `orders_status`
+-- Дамп данных таблицы `e_orders_status`
 --
 
-INSERT INTO `orders_status` (`id`, `bg_color`, `txt_color`, `on_site`, `external_id`, `is_main`) VALUES
+INSERT INTO `e_orders_status` (`id`, `bg_color`, `txt_color`, `on_site`, `external_id`, `is_main`) VALUES
 (3, '#099bfe', '#eaff00', 1, 'ффффф', 0),
 (4, '#fc0808', '#ffef00', 1, '111111', 1);
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `orders_status_info`
+-- Структура таблицы `e_orders_status_info`
 --
 
-CREATE TABLE IF NOT EXISTS `orders_status_info` (
+CREATE TABLE IF NOT EXISTS `e_orders_status_info` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `status_id` int(10) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
@@ -1149,20 +1182,20 @@ CREATE TABLE IF NOT EXISTS `orders_status_info` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 --
--- Дамп данных таблицы `orders_status_info`
+-- Дамп данных таблицы `e_orders_status_info`
 --
 
-INSERT INTO `orders_status_info` (`id`, `status_id`, `languages_id`, `status`) VALUES
+INSERT INTO `e_orders_status_info` (`id`, `status_id`, `languages_id`, `status`) VALUES
 (2, 3, 1, 'aaazzz'),
 (3, 4, 1, 'ффффф');
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `payment`
+-- Структура таблицы `e_payment`
 --
 
-CREATE TABLE IF NOT EXISTS `payment` (
+CREATE TABLE IF NOT EXISTS `e_payment` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `published` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `module` varchar(60) NOT NULL,
@@ -1173,10 +1206,10 @@ CREATE TABLE IF NOT EXISTS `payment` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
--- Дамп данных таблицы `payment`
+-- Дамп данных таблицы `e_payment`
 --
 
-INSERT INTO `payment` (`id`, `published`, `module`, `settings`, `position`) VALUES
+INSERT INTO `e_payment` (`id`, `published`, `module`, `settings`, `position`) VALUES
 (1, 1, 'YandexMoney', 'a:2:{s:9:"yandex_id";s:1:"1";s:13:"yandex_secret";s:1:"2";}', 0),
 (2, 1, '', NULL, 0),
 (3, 1, 'LiqPay', 'a:5:{s:10:"public_key";s:1:"1";s:11:"private_key";s:1:"2";s:10:"result_url";s:1:"3";s:9:"error_url";s:1:"4";s:7:"sandbox";s:1:"5";}', 0),
@@ -1186,10 +1219,10 @@ INSERT INTO `payment` (`id`, `published`, `module`, `settings`, `position`) VALU
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `payment_info`
+-- Структура таблицы `e_payment_info`
 --
 
-CREATE TABLE IF NOT EXISTS `payment_info` (
+CREATE TABLE IF NOT EXISTS `e_payment_info` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `payment_id` tinyint(3) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
@@ -1201,10 +1234,10 @@ CREATE TABLE IF NOT EXISTS `payment_info` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
--- Дамп данных таблицы `payment_info`
+-- Дамп данных таблицы `e_payment_info`
 --
 
-INSERT INTO `payment_info` (`id`, `payment_id`, `languages_id`, `name`, `description`) VALUES
+INSERT INTO `e_payment_info` (`id`, `payment_id`, `languages_id`, `name`, `description`) VALUES
 (1, 1, 1, 'При отриманні', ''),
 (2, 2, 1, 'Розрахунковий рахунок', ''),
 (3, 3, 1, 'Онлайн LiqPay', ''),
@@ -1214,10 +1247,10 @@ INSERT INTO `payment_info` (`id`, `payment_id`, `languages_id`, `name`, `descrip
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `plugins`
+-- Структура таблицы `e_plugins`
 --
 
-CREATE TABLE IF NOT EXISTS `plugins` (
+CREATE TABLE IF NOT EXISTS `e_plugins` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `icon` varchar(30) DEFAULT NULL,
   `author` varchar(60) DEFAULT NULL,
@@ -1234,10 +1267,10 @@ CREATE TABLE IF NOT EXISTS `plugins` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=36 ;
 
 --
--- Дамп данных таблицы `plugins`
+-- Дамп данных таблицы `e_plugins`
 --
 
-INSERT INTO `plugins` (`id`, `icon`, `author`, `version`, `controller`, `place`, `published`, `rang`, `settings`, `created`) VALUES
+INSERT INTO `e_plugins` (`id`, `icon`, `author`, `version`, `controller`, `place`, `published`, `rang`, `settings`, `created`) VALUES
 (14, 'fa-folder-o', 'Volodymyr Hodiak', '1.0.0', 'pagesTree', 'sidebar', 1, 300, NULL, '2016-03-03 14:58:57'),
 (16, 'fa-picture-o', 'Volodymyr Hodiak', '1.0.0', 'contentImages', 'after_params', 1, 300, NULL, '2016-03-09 11:26:40'),
 (17, 'fa-folder-o', 'Volodymyr Hodiak', '1.0.0', 'nav', 'sidebar', 1, 300, NULL, '2016-03-17 11:41:40'),
@@ -1259,10 +1292,10 @@ INSERT INTO `plugins` (`id`, `icon`, `author`, `version`, `controller`, `place`,
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `plugins_components`
+-- Структура таблицы `e_plugins_components`
 --
 
-CREATE TABLE IF NOT EXISTS `plugins_components` (
+CREATE TABLE IF NOT EXISTS `e_plugins_components` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `plugins_id` tinyint(3) unsigned NOT NULL,
   `components_id` tinyint(3) unsigned NOT NULL,
@@ -1274,10 +1307,10 @@ CREATE TABLE IF NOT EXISTS `plugins_components` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=26 ;
 
 --
--- Дамп данных таблицы `plugins_components`
+-- Дамп данных таблицы `e_plugins_components`
 --
 
-INSERT INTO `plugins_components` (`id`, `plugins_id`, `components_id`, `position`) VALUES
+INSERT INTO `e_plugins_components` (`id`, `plugins_id`, `components_id`, `position`) VALUES
 (1, 17, 43, 0),
 (2, 18, 51, 0),
 (5, 16, 43, 0),
@@ -1301,10 +1334,10 @@ INSERT INTO `plugins_components` (`id`, `plugins_id`, `components_id`, `position
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `products_accessories`
+-- Структура таблицы `e_products_accessories`
 --
 
-CREATE TABLE IF NOT EXISTS `products_accessories` (
+CREATE TABLE IF NOT EXISTS `e_products_accessories` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `products_id` int(10) unsigned NOT NULL,
   `accessories_id` int(10) unsigned NOT NULL,
@@ -1315,10 +1348,10 @@ CREATE TABLE IF NOT EXISTS `products_accessories` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
 
 --
--- Дамп данных таблицы `products_accessories`
+-- Дамп данных таблицы `e_products_accessories`
 --
 
-INSERT INTO `products_accessories` (`id`, `products_id`, `accessories_id`, `position`) VALUES
+INSERT INTO `e_products_accessories` (`id`, `products_id`, `accessories_id`, `position`) VALUES
 (14, 39, 54, 1),
 (15, 54, 55, 1),
 (16, 54, 59, 2);
@@ -1326,10 +1359,10 @@ INSERT INTO `products_accessories` (`id`, `products_id`, `accessories_id`, `posi
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `products_prices`
+-- Структура таблицы `e_products_prices`
 --
 
-CREATE TABLE IF NOT EXISTS `products_prices` (
+CREATE TABLE IF NOT EXISTS `e_products_prices` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `content_id` int(10) unsigned NOT NULL,
   `group_id` tinyint(3) unsigned NOT NULL,
@@ -1339,25 +1372,27 @@ CREATE TABLE IF NOT EXISTS `products_prices` (
   UNIQUE KEY `content_id` (`content_id`,`group_id`),
   KEY `fk_products_prices_content1_idx` (`content_id`),
   KEY `fk_products_prices_users_group1_idx` (`group_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=16 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18 ;
 
 --
--- Дамп данных таблицы `products_prices`
+-- Дамп данных таблицы `e_products_prices`
 --
 
-INSERT INTO `products_prices` (`id`, `content_id`, `group_id`, `price`, `price_old`) VALUES
+INSERT INTO `e_products_prices` (`id`, `content_id`, `group_id`, `price`, `price_old`) VALUES
 (7, 39, 5, 7.00, NULL),
 (13, 39, 12, 6.00, NULL),
 (14, 54, 12, 1.00, NULL),
-(15, 54, 5, 1.00, NULL);
+(15, 54, 5, 1.00, NULL),
+(16, 92, 5, 1649.00, NULL),
+(17, 92, 12, 1799.00, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `products_similar`
+-- Структура таблицы `e_products_similar`
 --
 
-CREATE TABLE IF NOT EXISTS `products_similar` (
+CREATE TABLE IF NOT EXISTS `e_products_similar` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `products_id` int(10) unsigned NOT NULL,
   `features_id` int(10) unsigned NOT NULL,
@@ -1367,45 +1402,47 @@ CREATE TABLE IF NOT EXISTS `products_similar` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
--- Дамп данных таблицы `products_similar`
+-- Дамп данных таблицы `e_products_similar`
 --
 
-INSERT INTO `products_similar` (`id`, `products_id`, `features_id`) VALUES
+INSERT INTO `e_products_similar` (`id`, `products_id`, `features_id`) VALUES
 (2, 41, 92);
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `products_variants`
+-- Структура таблицы `e_products_variants`
 --
 
-CREATE TABLE IF NOT EXISTS `products_variants` (
+CREATE TABLE IF NOT EXISTS `e_products_variants` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `content_id` int(10) unsigned NOT NULL,
   `in_stock` tinyint(1) DEFAULT '1',
   `img` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`,`content_id`),
   KEY `fk_products_variants_content1_idx` (`content_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=22 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=24 ;
 
 --
--- Дамп данных таблицы `products_variants`
+-- Дамп данных таблицы `e_products_variants`
 --
 
-INSERT INTO `products_variants` (`id`, `content_id`, `in_stock`, `img`) VALUES
+INSERT INTO `e_products_variants` (`id`, `content_id`, `in_stock`, `img`) VALUES
 (17, 39, 2, '/uploads/content/2016/04/07/variants/70efdf2ec9b086079795c442636b55fb.png'),
 (18, 39, 2, '/uploads/content/2016/04/07/variants/6f4922f45568161a8cdf4ad2299f6d23.png'),
 (19, 39, 2, '/uploads/content/2016/04/07/variants/1f0e3dad99908345f7439f8ffabdffc4.png'),
 (20, 39, 1, '/uploads/content/2016/04/07/variants/98f13708210194c475687be6106a3b84.png'),
-(21, 39, 0, '/uploads/content/2016/04/07/variants/3c59dc048e8850243be8079a5c74d079.png');
+(21, 39, 0, '/uploads/content/2016/04/07/variants/3c59dc048e8850243be8079a5c74d079.png'),
+(22, 92, 1, '/uploads/content/2016/04/19/variants/b6d767d2f8ed5d21a44b0e5886680cb9.png'),
+(23, 92, 1, '/uploads/content/2016/04/19/variants/37693cfc748049e45d87b8c7d8b9aacd.png');
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `products_variants_features`
+-- Структура таблицы `e_products_variants_features`
 --
 
-CREATE TABLE IF NOT EXISTS `products_variants_features` (
+CREATE TABLE IF NOT EXISTS `e_products_variants_features` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `variants_id` int(10) unsigned NOT NULL,
   `features_id` int(10) unsigned NOT NULL,
@@ -1415,27 +1452,29 @@ CREATE TABLE IF NOT EXISTS `products_variants_features` (
   KEY `fk_products_variants_features_features1_idx` (`features_id`),
   KEY `fk_products_variants_features_products_variants1_idx` (`variants_id`),
   KEY `fk_products_variants_features_features2_idx` (`values_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=27 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=29 ;
 
 --
--- Дамп данных таблицы `products_variants_features`
+-- Дамп данных таблицы `e_products_variants_features`
 --
 
-INSERT INTO `products_variants_features` (`id`, `variants_id`, `features_id`, `values_id`) VALUES
+INSERT INTO `e_products_variants_features` (`id`, `variants_id`, `features_id`, `values_id`) VALUES
 (21, 17, 84, 86),
 (22, 18, 84, 87),
 (23, 19, 84, 88),
 (25, 21, 84, 86),
 (24, 20, 85, 89),
-(26, 21, 85, 89);
+(26, 21, 85, 89),
+(27, 22, 103, 104),
+(28, 23, 103, 105);
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `products_variants_prices`
+-- Структура таблицы `e_products_variants_prices`
 --
 
-CREATE TABLE IF NOT EXISTS `products_variants_prices` (
+CREATE TABLE IF NOT EXISTS `e_products_variants_prices` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `variants_id` int(10) unsigned NOT NULL,
   `content_id` int(10) unsigned NOT NULL,
@@ -1448,10 +1487,10 @@ CREATE TABLE IF NOT EXISTS `products_variants_prices` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=37 ;
 
 --
--- Дамп данных таблицы `products_variants_prices`
+-- Дамп данных таблицы `e_products_variants_prices`
 --
 
-INSERT INTO `products_variants_prices` (`id`, `variants_id`, `content_id`, `group_id`, `price`) VALUES
+INSERT INTO `e_products_variants_prices` (`id`, `variants_id`, `content_id`, `group_id`, `price`) VALUES
 (27, 17, 39, 5, 7),
 (28, 17, 39, 12, 6),
 (29, 18, 39, 5, 7),
@@ -1466,10 +1505,10 @@ INSERT INTO `products_variants_prices` (`id`, `variants_id`, `content_id`, `grou
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `settings`
+-- Структура таблицы `e_settings`
 --
 
-CREATE TABLE IF NOT EXISTS `settings` (
+CREATE TABLE IF NOT EXISTS `e_settings` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   `value` text NOT NULL,
@@ -1478,13 +1517,13 @@ CREATE TABLE IF NOT EXISTS `settings` (
   `required` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `sname` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=50 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=51 ;
 
 --
--- Дамп данных таблицы `settings`
+-- Дамп данных таблицы `e_settings`
 --
 
-INSERT INTO `settings` (`id`, `name`, `value`, `block`, `type`, `required`) VALUES
+INSERT INTO `e_settings` (`id`, `name`, `value`, `block`, `type`, `required`) VALUES
 (1, 'autofil_title', '1', 'common', 'text', 1),
 (2, 'autofill_url', '1', 'common', 'text', 1),
 (4, 'editor_bodyId', 'cms_content', 'editor', 'text', 1),
@@ -1507,7 +1546,7 @@ INSERT INTO `settings` (`id`, `name`, `value`, `block`, `type`, `required`) VALU
 (25, 'site_index', '1', 'robots', 'text', 1),
 (26, 'robots_index_sample', '# цей файл створено автоматично. Не редагуйте його вручну. Змінити його ви можете в розділі налаштування\n\nUser-agent: *\nDisallow:\n\nUser-agent: Yandex\nDisallow:\nHost: {app}\n\nSitemap: {appurl}route/XmlSitemap/index', 'robots', 'textarea', 1),
 (28, 'robots_no_index_sample', '# цей файл створено автоматично. Не редагуйте його вручну. Змінити його ви можете в розділі налаштування\n\nUser-agent: *\nDisallow: /', 'robots', 'textarea', 1),
-(29, 'google_analytics_id', '', 'analitycs', 'text', 0),
+(29, 'google_analytics_id', 'UA-76235649-1', 'analitycs', 'text', 0),
 (30, 'google_webmaster', '', 'analitycs', 'text', 0),
 (31, 'yandex_webmaster', '', 'analitycs', 'text', 0),
 (32, 'yandex_metric', '', 'analitycs', 'text', 0),
@@ -1527,25 +1566,26 @@ INSERT INTO `settings` (`id`, `name`, `value`, `block`, `type`, `required`) VALU
 (46, 'mail_smtp_secure', 'tls', 'mail', 'text', 0),
 (47, 'company_name', 'CMA', 'company', 'text', 1),
 (48, 'company_phone', '111111', 'company', 'text', 1),
-(49, 'seo', 'a:5:{s:5:"pages";a:1:{i:1;a:4:{s:5:"title";s:34:"{title} {delimiter} {company_name}";s:8:"keywords";s:37:"{keywords} {delimiter} {company_name}";s:11:"description";s:40:"{description} {delimiter} {company_name}";s:2:"h1";s:31:"{h1} {delimiter} {company_name}";}}s:4:"post";a:1:{i:1;a:4:{s:5:"title";s:67:"{title} {delimiter}  {category} {delimiter} блог {company_name}";s:8:"keywords";s:46:"{keywords} {delimiter} блог {company_name}";s:11:"description";s:49:"{description} {delimiter} блог {company_name}";s:2:"h1";s:31:"{h1} {delimiter} {company_name}";}}s:9:"posts_cat";a:1:{i:1;a:4:{s:5:"title";s:44:"{title} {delimiter}  блог {company_name}";s:8:"keywords";s:37:"{keywords} {delimiter} {company_name}";s:11:"description";s:40:"{description} {delimiter} {company_name}";s:2:"h1";s:31:"{h1} {delimiter} {company_name}";}}s:8:"products";a:1:{i:1;a:4:{s:5:"title";s:51:"{title} {delimiter} купити в  {company_name}";s:8:"keywords";s:37:"{keywords} {delimiter} {company_name}";s:11:"description";s:40:"{description} {delimiter} {company_name}";s:2:"h1";s:31:"{h1} {delimiter} {company_name}";}}s:18:"productsCategories";a:1:{i:1;a:4:{s:5:"title";s:51:"{title} {delimiter} купити в  {company_name}";s:8:"keywords";s:37:"{keywords} {delimiter} {company_name}";s:11:"description";s:40:"{description} {delimiter} {company_name}";s:2:"h1";s:31:"{h1} {delimiter} {company_name}";}}}', '', '', 0);
+(49, 'seo', 'a:5:{s:5:"pages";a:1:{i:1;a:4:{s:5:"title";s:34:"{title} {delimiter} {company_name}";s:8:"keywords";s:37:"{keywords} {delimiter} {company_name}";s:11:"description";s:40:"{description} {delimiter} {company_name}";s:2:"h1";s:31:"{h1} {delimiter} {company_name}";}}s:4:"post";a:1:{i:1;a:4:{s:5:"title";s:67:"{title} {delimiter}  {category} {delimiter} блог {company_name}";s:8:"keywords";s:46:"{keywords} {delimiter} блог {company_name}";s:11:"description";s:49:"{description} {delimiter} блог {company_name}";s:2:"h1";s:31:"{h1} {delimiter} {company_name}";}}s:9:"posts_cat";a:1:{i:1;a:4:{s:5:"title";s:44:"{title} {delimiter}  блог {company_name}";s:8:"keywords";s:37:"{keywords} {delimiter} {company_name}";s:11:"description";s:40:"{description} {delimiter} {company_name}";s:2:"h1";s:31:"{h1} {delimiter} {company_name}";}}s:8:"products";a:1:{i:1;a:4:{s:5:"title";s:51:"{title} {delimiter} купити в  {company_name}";s:8:"keywords";s:37:"{keywords} {delimiter} {company_name}";s:11:"description";s:40:"{description} {delimiter} {company_name}";s:2:"h1";s:31:"{h1} {delimiter} {company_name}";}}s:18:"productsCategories";a:1:{i:1;a:4:{s:5:"title";s:51:"{title} {delimiter} купити в  {company_name}";s:8:"keywords";s:37:"{keywords} {delimiter} {company_name}";s:11:"description";s:40:"{description} {delimiter} {company_name}";s:2:"h1";s:31:"{h1} {delimiter} {company_name}";}}}', '', '', 0),
+(50, 'home_id', '1', 'common', 'text', 1);
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `tags`
+-- Структура таблицы `e_tags`
 --
 
-CREATE TABLE IF NOT EXISTS `tags` (
+CREATE TABLE IF NOT EXISTS `e_tags` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `tag` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=25 ;
 
 --
--- Дамп данных таблицы `tags`
+-- Дамп данных таблицы `e_tags`
 --
 
-INSERT INTO `tags` (`id`, `tag`) VALUES
+INSERT INTO `e_tags` (`id`, `tag`) VALUES
 (17, 'php'),
 (18, 'mysql'),
 (19, 'jquery'),
@@ -1558,10 +1598,10 @@ INSERT INTO `tags` (`id`, `tag`) VALUES
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `users`
+-- Структура таблицы `e_users`
 --
 
-CREATE TABLE IF NOT EXISTS `users` (
+CREATE TABLE IF NOT EXISTS `e_users` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `group_id` tinyint(3) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
@@ -1585,11 +1625,11 @@ CREATE TABLE IF NOT EXISTS `users` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=16 ;
 
 --
--- Дамп данных таблицы `users`
+-- Дамп данных таблицы `e_users`
 --
 
-INSERT INTO `users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `updated`, `lastlogin`, `status`) VALUES
-(2, 1, 0, '47kl40gulqnhni028ud8li6vj7', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-03-24 16:42:51', '2016-04-13 13:10:24', 'active'),
+INSERT INTO `e_users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `updated`, `lastlogin`, `status`) VALUES
+(2, 1, 0, 'r303r032h1utv6k3chsje3gnb4', 'Володимир', 'Годяк', '380676736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-03-24 16:42:51', '2016-04-19 10:18:00', 'active'),
 (3, 5, 0, 'cqib3aongupefr8grbuudirmm2', 'Жорік', 'Ревазов', '+35 (555) 5555555', 'z@otakoyi.com', 'MToUTd7.hmK2o', NULL, NULL, '2016-03-28 09:01:38', '2016-03-30 13:47:30', '2016-04-11 07:35:30', 'active'),
 (5, 2, 0, NULL, 'Жорік', '', '', 'otakoyi@gmail.com', 'MTGRXCzqBsZUI', NULL, NULL, '2016-03-29 12:21:29', '0000-00-00 00:00:00', NULL, 'active'),
 (6, 2, 0, NULL, 'Микола', '', '', 'm@otakoyi.com', 'MTTuFPm3y4m2o', NULL, NULL, '2016-03-29 13:18:45', '0000-00-00 00:00:00', NULL, 'active'),
@@ -1606,10 +1646,10 @@ INSERT INTO `users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surnam
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `users_group`
+-- Структура таблицы `e_users_group`
 --
 
-CREATE TABLE IF NOT EXISTS `users_group` (
+CREATE TABLE IF NOT EXISTS `e_users_group` (
   `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` tinyint(3) unsigned NOT NULL,
   `isfolder` tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -1622,10 +1662,10 @@ CREATE TABLE IF NOT EXISTS `users_group` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
 
 --
--- Дамп данных таблицы `users_group`
+-- Дамп данных таблицы `e_users_group`
 --
 
-INSERT INTO `users_group` (`id`, `parent_id`, `isfolder`, `rang`, `position`) VALUES
+INSERT INTO `e_users_group` (`id`, `parent_id`, `isfolder`, `rang`, `position`) VALUES
 (1, 0, 0, 500, 1),
 (2, 0, 0, 300, 0),
 (4, 0, 0, 300, 0),
@@ -1635,10 +1675,10 @@ INSERT INTO `users_group` (`id`, `parent_id`, `isfolder`, `rang`, `position`) VA
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `users_group_info`
+-- Структура таблицы `e_users_group_info`
 --
 
-CREATE TABLE IF NOT EXISTS `users_group_info` (
+CREATE TABLE IF NOT EXISTS `e_users_group_info` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `group_id` tinyint(3) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
@@ -1650,10 +1690,10 @@ CREATE TABLE IF NOT EXISTS `users_group_info` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=27 ;
 
 --
--- Дамп данных таблицы `users_group_info`
+-- Дамп данных таблицы `e_users_group_info`
 --
 
-INSERT INTO `users_group_info` (`id`, `group_id`, `languages_id`, `name`) VALUES
+INSERT INTO `e_users_group_info` (`id`, `group_id`, `languages_id`, `name`) VALUES
 (15, 1, 1, 'Адміністратори'),
 (16, 2, 1, 'Редактори'),
 (18, 4, 1, 'Модератори'),
@@ -1665,211 +1705,211 @@ INSERT INTO `users_group_info` (`id`, `group_id`, `languages_id`, `name`) VALUES
 --
 
 --
--- Ограничения внешнего ключа таблицы `banners`
+-- Ограничения внешнего ключа таблицы `e_banners`
 --
-ALTER TABLE `banners`
-  ADD CONSTRAINT `fk_banners_banners_places1` FOREIGN KEY (`banners_places_id`) REFERENCES `banners_places` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_banners_languages1` FOREIGN KEY (`languages_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `e_banners`
+  ADD CONSTRAINT `fk_banners_banners_places1` FOREIGN KEY (`banners_places_id`) REFERENCES `e_banners_places` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_banners_languages1` FOREIGN KEY (`languages_id`) REFERENCES `e_languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `banners_stat`
+-- Ограничения внешнего ключа таблицы `e_banners_stat`
 --
-ALTER TABLE `banners_stat`
-  ADD CONSTRAINT `fk_banners_stat_banners1` FOREIGN KEY (`banners_id`) REFERENCES `banners` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `e_banners_stat`
+  ADD CONSTRAINT `fk_banners_stat_banners1` FOREIGN KEY (`banners_id`) REFERENCES `e_banners` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `comments`
+-- Ограничения внешнего ключа таблицы `e_comments`
 --
-ALTER TABLE `comments`
-  ADD CONSTRAINT `fk_comments_content1` FOREIGN KEY (`content_id`) REFERENCES `content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_users_id` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `e_comments`
+  ADD CONSTRAINT `fk_comments_content1` FOREIGN KEY (`content_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_users_id` FOREIGN KEY (`users_id`) REFERENCES `e_users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `comments_subscribers`
+-- Ограничения внешнего ключа таблицы `e_comments_subscribers`
 --
-ALTER TABLE `comments_subscribers`
-  ADD CONSTRAINT `fk_comments_subscribers_content1` FOREIGN KEY (`content_id`) REFERENCES `content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_comments_subscribers_users1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `e_comments_subscribers`
+  ADD CONSTRAINT `fk_comments_subscribers_content1` FOREIGN KEY (`content_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_comments_subscribers_users1` FOREIGN KEY (`users_id`) REFERENCES `e_users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `content`
+-- Ограничения внешнего ключа таблицы `e_content`
 --
-ALTER TABLE `content`
-  ADD CONSTRAINT `fk_content_content_subtypes1` FOREIGN KEY (`subtypes_id`) REFERENCES `content_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_content_content_types1` FOREIGN KEY (`types_id`) REFERENCES `content_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_content_owner_id1` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `e_content`
+  ADD CONSTRAINT `fk_content_content_subtypes1` FOREIGN KEY (`subtypes_id`) REFERENCES `e_content_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_content_content_types1` FOREIGN KEY (`types_id`) REFERENCES `e_content_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_content_owner_id1` FOREIGN KEY (`owner_id`) REFERENCES `e_users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `content_features`
+-- Ограничения внешнего ключа таблицы `e_content_features`
 --
-ALTER TABLE `content_features`
-  ADD CONSTRAINT `fk_content_features_values_content1` FOREIGN KEY (`content_id`) REFERENCES `content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_content_features_values_features1` FOREIGN KEY (`features_id`) REFERENCES `features` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `e_content_features`
+  ADD CONSTRAINT `fk_content_features_values_content1` FOREIGN KEY (`content_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_content_features_values_features1` FOREIGN KEY (`features_id`) REFERENCES `e_features` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `content_images`
+-- Ограничения внешнего ключа таблицы `e_content_images`
 --
-ALTER TABLE `content_images`
-  ADD CONSTRAINT `fk_content_images_content1` FOREIGN KEY (`content_id`) REFERENCES `content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `e_content_images`
+  ADD CONSTRAINT `fk_content_images_content1` FOREIGN KEY (`content_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `content_info`
+-- Ограничения внешнего ключа таблицы `e_content_info`
 --
-ALTER TABLE `content_info`
-  ADD CONSTRAINT `fk_content_info_content1` FOREIGN KEY (`content_id`) REFERENCES `content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_content_info_languages1` FOREIGN KEY (`languages_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `e_content_info`
+  ADD CONSTRAINT `fk_content_info_content1` FOREIGN KEY (`content_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_content_info_languages1` FOREIGN KEY (`languages_id`) REFERENCES `e_languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `content_relationship`
+-- Ограничения внешнего ключа таблицы `e_content_relationship`
 --
-ALTER TABLE `content_relationship`
-  ADD CONSTRAINT `fk_content_relationship_content1` FOREIGN KEY (`content_id`) REFERENCES `content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_content_relationship_content2` FOREIGN KEY (`categories_id`) REFERENCES `content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `e_content_relationship`
+  ADD CONSTRAINT `fk_content_relationship_content1` FOREIGN KEY (`content_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_content_relationship_content2` FOREIGN KEY (`categories_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `content_tags`
+-- Ограничения внешнего ключа таблицы `e_content_tags`
 --
-ALTER TABLE `content_tags`
-  ADD CONSTRAINT `fk_content_tags_languages1` FOREIGN KEY (`languages_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_tags_content1` FOREIGN KEY (`content_id`) REFERENCES `content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_tags_content_tags1` FOREIGN KEY (`tags_id`) REFERENCES `tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `e_content_tags`
+  ADD CONSTRAINT `fk_content_tags_languages1` FOREIGN KEY (`languages_id`) REFERENCES `e_languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_tags_content1` FOREIGN KEY (`content_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_tags_content_tags1` FOREIGN KEY (`tags_id`) REFERENCES `e_tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `content_types_images_sizes`
+-- Ограничения внешнего ключа таблицы `e_content_types_images_sizes`
 --
-ALTER TABLE `content_types_images_sizes`
-  ADD CONSTRAINT `fk_content_types_images_sizes1` FOREIGN KEY (`types_id`) REFERENCES `content_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_content_types_images_sizes2` FOREIGN KEY (`images_sizes_id`) REFERENCES `content_images_sizes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `e_content_types_images_sizes`
+  ADD CONSTRAINT `fk_content_types_images_sizes1` FOREIGN KEY (`types_id`) REFERENCES `e_content_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_content_types_images_sizes2` FOREIGN KEY (`images_sizes_id`) REFERENCES `e_content_images_sizes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `delivery_info`
+-- Ограничения внешнего ключа таблицы `e_delivery_info`
 --
-ALTER TABLE `delivery_info`
-  ADD CONSTRAINT `fk_delivery_info_delivery1` FOREIGN KEY (`delivery_id`) REFERENCES `delivery` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_delivery_info_languages1` FOREIGN KEY (`languages_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `e_delivery_info`
+  ADD CONSTRAINT `fk_delivery_info_delivery1` FOREIGN KEY (`delivery_id`) REFERENCES `e_delivery` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_delivery_info_languages1` FOREIGN KEY (`languages_id`) REFERENCES `e_languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `delivery_payment`
+-- Ограничения внешнего ключа таблицы `e_delivery_payment`
 --
-ALTER TABLE `delivery_payment`
-  ADD CONSTRAINT `fk_delivery_payment_delivery1` FOREIGN KEY (`delivery_id`) REFERENCES `delivery` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_delivery_payment_payment1` FOREIGN KEY (`payment_id`) REFERENCES `payment` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `e_delivery_payment`
+  ADD CONSTRAINT `fk_delivery_payment_delivery1` FOREIGN KEY (`delivery_id`) REFERENCES `e_delivery` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_delivery_payment_payment1` FOREIGN KEY (`payment_id`) REFERENCES `e_payment` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `features`
+-- Ограничения внешнего ключа таблицы `e_features`
 --
-ALTER TABLE `features`
-  ADD CONSTRAINT `fk_features_users1` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `e_features`
+  ADD CONSTRAINT `fk_features_users1` FOREIGN KEY (`owner_id`) REFERENCES `e_users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `features_content`
+-- Ограничения внешнего ключа таблицы `e_features_content`
 --
-ALTER TABLE `features_content`
-  ADD CONSTRAINT `fk_content_features_idx` FOREIGN KEY (`features_id`) REFERENCES `features` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `e_features_content`
+  ADD CONSTRAINT `fk_content_features_idx` FOREIGN KEY (`features_id`) REFERENCES `e_features` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `features_info`
+-- Ограничения внешнего ключа таблицы `e_features_info`
 --
-ALTER TABLE `features_info`
-  ADD CONSTRAINT `fk_features_info_features1` FOREIGN KEY (`features_id`) REFERENCES `features` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_features_info_languages1` FOREIGN KEY (`languages_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `e_features_info`
+  ADD CONSTRAINT `fk_features_info_features1` FOREIGN KEY (`features_id`) REFERENCES `e_features` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_features_info_languages1` FOREIGN KEY (`languages_id`) REFERENCES `e_languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `guides_info`
+-- Ограничения внешнего ключа таблицы `e_guides_info`
 --
-ALTER TABLE `guides_info`
-  ADD CONSTRAINT `fk_guides_info_guides2` FOREIGN KEY (`guides_id`) REFERENCES `guides` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_guides_info_languages2` FOREIGN KEY (`languages_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `e_guides_info`
+  ADD CONSTRAINT `fk_guides_info_guides2` FOREIGN KEY (`guides_id`) REFERENCES `e_guides` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_guides_info_languages2` FOREIGN KEY (`languages_id`) REFERENCES `e_languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `mail_templates_info`
+-- Ограничения внешнего ключа таблицы `e_mail_templates_info`
 --
-ALTER TABLE `mail_templates_info`
-  ADD CONSTRAINT `fk_mail_templates_info_languages1` FOREIGN KEY (`languages_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_mail_templates_info_mail_templates1` FOREIGN KEY (`templates_id`) REFERENCES `mail_templates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `e_mail_templates_info`
+  ADD CONSTRAINT `fk_mail_templates_info_languages1` FOREIGN KEY (`languages_id`) REFERENCES `e_languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_mail_templates_info_mail_templates1` FOREIGN KEY (`templates_id`) REFERENCES `e_mail_templates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `nav_items`
+-- Ограничения внешнего ключа таблицы `e_nav_items`
 --
-ALTER TABLE `nav_items`
-  ADD CONSTRAINT `fk_nav_items_content1` FOREIGN KEY (`content_id`) REFERENCES `content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_nav_items_nav1` FOREIGN KEY (`nav_id`) REFERENCES `nav` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `e_nav_items`
+  ADD CONSTRAINT `fk_nav_items_content1` FOREIGN KEY (`content_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_nav_items_nav1` FOREIGN KEY (`nav_id`) REFERENCES `e_nav` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `orders_status_info`
+-- Ограничения внешнего ключа таблицы `e_orders_status_info`
 --
-ALTER TABLE `orders_status_info`
-  ADD CONSTRAINT `fk_orders_status_info_languages1` FOREIGN KEY (`languages_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_orders_status_info_orders_status1` FOREIGN KEY (`status_id`) REFERENCES `orders_status` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `e_orders_status_info`
+  ADD CONSTRAINT `fk_orders_status_info_languages1` FOREIGN KEY (`languages_id`) REFERENCES `e_languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_orders_status_info_orders_status1` FOREIGN KEY (`status_id`) REFERENCES `e_orders_status` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `payment_info`
+-- Ограничения внешнего ключа таблицы `e_payment_info`
 --
-ALTER TABLE `payment_info`
-  ADD CONSTRAINT `fk_payment_info_languages1` FOREIGN KEY (`languages_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_payment_info_payment1` FOREIGN KEY (`payment_id`) REFERENCES `payment` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `e_payment_info`
+  ADD CONSTRAINT `fk_payment_info_languages1` FOREIGN KEY (`languages_id`) REFERENCES `e_languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_payment_info_payment1` FOREIGN KEY (`payment_id`) REFERENCES `e_payment` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `plugins_components`
+-- Ограничения внешнего ключа таблицы `e_plugins_components`
 --
-ALTER TABLE `plugins_components`
-  ADD CONSTRAINT `fk_plugins_components_components1` FOREIGN KEY (`components_id`) REFERENCES `components` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_plugins_components_plugins1` FOREIGN KEY (`plugins_id`) REFERENCES `plugins` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `e_plugins_components`
+  ADD CONSTRAINT `fk_plugins_components_components1` FOREIGN KEY (`components_id`) REFERENCES `e_components` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_plugins_components_plugins1` FOREIGN KEY (`plugins_id`) REFERENCES `e_plugins` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `products_accessories`
+-- Ограничения внешнего ключа таблицы `e_products_accessories`
 --
-ALTER TABLE `products_accessories`
-  ADD CONSTRAINT `fk_products_accessories_content1` FOREIGN KEY (`products_id`) REFERENCES `content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_products_accessories_content2` FOREIGN KEY (`accessories_id`) REFERENCES `content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `e_products_accessories`
+  ADD CONSTRAINT `fk_products_accessories_content1` FOREIGN KEY (`products_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_products_accessories_content2` FOREIGN KEY (`accessories_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `products_prices`
+-- Ограничения внешнего ключа таблицы `e_products_prices`
 --
-ALTER TABLE `products_prices`
-  ADD CONSTRAINT `fk_products_prices_content1` FOREIGN KEY (`content_id`) REFERENCES `content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_products_prices_users_group1` FOREIGN KEY (`group_id`) REFERENCES `users_group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `e_products_prices`
+  ADD CONSTRAINT `fk_products_prices_content1` FOREIGN KEY (`content_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_products_prices_users_group1` FOREIGN KEY (`group_id`) REFERENCES `e_users_group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `products_similar`
+-- Ограничения внешнего ключа таблицы `e_products_similar`
 --
-ALTER TABLE `products_similar`
-  ADD CONSTRAINT `fk_products_similar_content1` FOREIGN KEY (`products_id`) REFERENCES `content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_products_similar_features1` FOREIGN KEY (`features_id`) REFERENCES `features` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `e_products_similar`
+  ADD CONSTRAINT `fk_products_similar_content1` FOREIGN KEY (`products_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_products_similar_features1` FOREIGN KEY (`features_id`) REFERENCES `e_features` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `products_variants`
+-- Ограничения внешнего ключа таблицы `e_products_variants`
 --
-ALTER TABLE `products_variants`
-  ADD CONSTRAINT `fk_products_variants_content1` FOREIGN KEY (`content_id`) REFERENCES `content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `e_products_variants`
+  ADD CONSTRAINT `fk_products_variants_content1` FOREIGN KEY (`content_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `products_variants_features`
+-- Ограничения внешнего ключа таблицы `e_products_variants_features`
 --
-ALTER TABLE `products_variants_features`
-  ADD CONSTRAINT `fk_products_variants_features_features1` FOREIGN KEY (`features_id`) REFERENCES `features` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_products_variants_features_features2` FOREIGN KEY (`values_id`) REFERENCES `features` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_products_variants_features_products_variants1` FOREIGN KEY (`variants_id`) REFERENCES `products_variants` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `e_products_variants_features`
+  ADD CONSTRAINT `fk_products_variants_features_features1` FOREIGN KEY (`features_id`) REFERENCES `e_features` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_products_variants_features_features2` FOREIGN KEY (`values_id`) REFERENCES `e_features` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_products_variants_features_products_variants1` FOREIGN KEY (`variants_id`) REFERENCES `e_products_variants` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `products_variants_prices`
+-- Ограничения внешнего ключа таблицы `e_products_variants_prices`
 --
-ALTER TABLE `products_variants_prices`
-  ADD CONSTRAINT `fk_products_variants_prices_products_variants1` FOREIGN KEY (`variants_id`, `content_id`) REFERENCES `products_variants` (`id`, `content_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_products_variants_prices_users_group1` FOREIGN KEY (`group_id`) REFERENCES `users_group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `e_products_variants_prices`
+  ADD CONSTRAINT `fk_products_variants_prices_products_variants1` FOREIGN KEY (`variants_id`, `content_id`) REFERENCES `e_products_variants` (`id`, `content_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_products_variants_prices_users_group1` FOREIGN KEY (`group_id`) REFERENCES `e_users_group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `users`
+-- Ограничения внешнего ключа таблицы `e_users`
 --
-ALTER TABLE `users`
-  ADD CONSTRAINT `fk_users_users_group1` FOREIGN KEY (`group_id`) REFERENCES `users_group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `e_users`
+  ADD CONSTRAINT `fk_users_users_group1` FOREIGN KEY (`group_id`) REFERENCES `e_users_group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `users_group_info`
+-- Ограничения внешнего ключа таблицы `e_users_group_info`
 --
-ALTER TABLE `users_group_info`
-  ADD CONSTRAINT `fk_users_group_info_languages1` FOREIGN KEY (`languages_id`) REFERENCES `languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_users_group_info_users_group1` FOREIGN KEY (`group_id`) REFERENCES `users_group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `e_users_group_info`
+  ADD CONSTRAINT `fk_users_group_info_languages1` FOREIGN KEY (`languages_id`) REFERENCES `e_languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_users_group_info_users_group1` FOREIGN KEY (`group_id`) REFERENCES `e_users_group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

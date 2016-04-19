@@ -65,8 +65,8 @@ class Mailer
         $template = DB::getInstance()
             ->select("
                 select i.subject, i.body
-                from mail_templates t
-                join mail_templates_info i on i.templates_id=t.id and i.languages_id='{$this->languages_id}'
+                from __mail_templates t
+                join __mail_templates_info i on i.templates_id=t.id and i.languages_id='{$this->languages_id}'
                 where t.code = '{$code}'
                 limit 1
               ")

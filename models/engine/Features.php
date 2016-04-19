@@ -27,19 +27,19 @@ class Features extends Engine
 
     public function getData($id, $key = '*')
     {
-        $data = self::$db->select("select {$key} from features where id={$id} limit 1")->row($key);
+        $data = self::$db->select("select {$key} from __features where id={$id} limit 1")->row($key);
 
         if ($key != '*') return $data;
 
         foreach ($this->languages as $language) {
             $data['info'][$language['id']] =
                 self::$db
-                    ->select("select * from features_info where features_id={$id} and languages_id={$language['id']} limit 1")
+                    ->select("select * from __features_info where features_id={$id} and languages_id={$language['id']} limit 1")
                     ->row();
         }
 
-        $data['statuses'] = self::$db->enumValues('features', 'status');
-        $data['types'] = self::$db->enumValues('features', 'type');
+        $data['statuses'] = self::$db->enumValues('__features', 'status');
+        $data['types'] = self::$db->enumValues('__features', 'type');
         $data['selected_content'] = $this->getSelectedContent($id);
 
         foreach ($data['types'] as $k => $type) {
@@ -57,7 +57,7 @@ class Features extends Engine
         $info = $this->request->post('info');
 
         $this->beginTransaction();
-        $this->updateRow('features', $id, $data);
+        $this->updateRow('__features', $id, $data);
 
         if($this->hasDBError()){
             $this->rollback();
@@ -66,14 +66,14 @@ class Features extends Engine
 
         foreach ($info as $languages_id=> $item) {
             $aid = self::$db
-                ->select("select id from features_info where features_id={$id} and languages_id={$languages_id} limit 1")
+                ->select("select id from __features_info where features_id={$id} and languages_id={$languages_id} limit 1")
                 ->row('id');
             if(empty($aid)){
                 $item['languages_id']    = $languages_id;
                 $item['features_id'] = $id;
                 $this->createRow('features_info', $item);
             } else {
-                $this->updateRow('features_info', $aid, $item);
+                $this->updateRow('__features_info', $aid, $item);
             }
         }
         if($this->hasDBError()){
@@ -82,7 +82,7 @@ class Features extends Engine
         }
 
         if(isset($data['parent_id']) && $data['parent_id'] > 0){
-            $this->updateRow('features', $data['parent_id'], ['type' => 'folder']);
+            $this->updateRow('__features', $data['parent_id'], ['type' => 'folder']);
         }
 
         if($this->hasDBError()){
@@ -99,7 +99,7 @@ class Features extends Engine
     {
         if($this->getData($id, 'type') == 'folder') return false;
 
-        return $this->deleteRow('features', $id);
+        return $this->deleteRow('__features', $id);
     }
 
     /**
@@ -108,7 +108,7 @@ class Features extends Engine
      */
     public function pub($id)
     {
-        return $this->updateRow('features', $id, ['status' => 'published']);
+        return $this->updateRow('__features', $id, ['status' => 'published']);
     }
 
     /**
@@ -117,7 +117,7 @@ class Features extends Engine
      */
     public function hide($id)
     {
-        return $this->updateRow('features', $id, ['status' => 'hidden']);
+        return $this->updateRow('__features', $id, ['status' => 'hidden']);
     }
 
     /*
@@ -166,7 +166,7 @@ class Features extends Engine
     public function getContentTypes($parent_id)
     {
         return self::$db
-            ->select("select id, name, isfolder from content_types where parent_id={$parent_id}")
+            ->select("select id, name, isfolder from __content_types where parent_id={$parent_id}")
             ->all();
     }
 
@@ -181,7 +181,7 @@ class Features extends Engine
         $r = self::$db
             ->select("
                 select c.id, c.isfolder, i.name
-                from content c, content_info i
+                from __content c, content_info i
                 where c.types_id={$types_id} and c.subtypes_id={$subtypes_id} and c.parent_id={$parent_id}
                  and i.content_id=c.id and i.languages_id={$this->languages_id}
                 limit 100 -- блок підвисання
@@ -228,7 +228,7 @@ class Features extends Engine
     public function getSelectedContent($features_id)
     {
         $res = [];
-        foreach (self::$db->select("select * from features_content where features_id = {$features_id}")->all() as $row) {
+        foreach (self::$db->select("select * from __features_content where features_id = {$features_id}")->all() as $row) {
             $row['type'] = $this->getTypeName($row['content_types_id']);
             $row['subtype'] = 'Всі';
             $row['content'] = 'Всі';
@@ -248,12 +248,12 @@ class Features extends Engine
     
     private function getTypeName($id)
     {
-        return self::$db->select("select name from content_types where id={$id} limit 1")->row('name');
+        return self::$db->select("select name from __content_types where id={$id} limit 1")->row('name');
     }
     private function getContentName($id)
     {
         return self::$db
-            ->select("select name from content_info where content_id={$id} and languages_id={$this->languages_id} limit 1")
+            ->select("select name from __content_info where content_id={$id} and languages_id={$this->languages_id} limit 1")
             ->row('name');
     }
 

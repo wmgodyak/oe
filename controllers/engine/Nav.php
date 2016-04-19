@@ -63,7 +63,7 @@ class Nav extends Engine
     public function items()
     {
         $t = new DataTables();
-        $t  -> table('nav')
+        $t  -> table('__nav')
             -> get('id, name, code')
             -> execute();
 

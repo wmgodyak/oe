@@ -27,7 +27,7 @@ class ContentImagesSizes extends Engine
      */
     public function getData($id, $key = '*')
     {
-        $data = self::$db->select("select {$key} from content_images_sizes where id={$id}")->row($key);
+        $data = self::$db->select("select {$key} from __content_images_sizes where id={$id}")->row($key);
 
         if($key != '*') return $data;
 
@@ -87,7 +87,7 @@ class ContentImagesSizes extends Engine
 
         $this->beginTransaction();
 
-        $this->updateRow('content_images_sizes', $id, $data);
+        $this->updateRow('__content_images_sizes', $id, $data);
 
         if($this->hasDBError()){
             return false;
@@ -136,10 +136,10 @@ class ContentImagesSizes extends Engine
             -> select
                 ("
                       select CONCAT(ci.path,cis.size, '/',ci.image) as img
-                      from content_types_images_sizes ctis
-                      join content_images_sizes cis on ctis.images_sizes_id=cis.id
-                      join content c on c.subtypes_id=ctis.types_id
-                      join content_images ci on ci.content_id=c.id
+                      from __content_types_images_sizes ctis
+                      join __content_images_sizes cis on ctis.images_sizes_id=cis.id
+                      join __content c on c.subtypes_id=ctis.types_id
+                      join __content_images ci on ci.content_id=c.id
                       where ctis.images_sizes_id={$id}
                 ")
             -> all('img');
@@ -154,7 +154,7 @@ class ContentImagesSizes extends Engine
     public function getContentTypes($parent_id)
     {
         $res = [];
-        foreach (self::$db->select("select id, name, isfolder from content_types where parent_id={$parent_id}")->all() as $item) {
+        foreach (self::$db->select("select id, name, isfolder from __content_types where parent_id={$parent_id}")->all() as $item) {
             if($item['isfolder']){
                 $item['items'] = $this->getContentTypes($item['id']);
             }
@@ -166,7 +166,7 @@ class ContentImagesSizes extends Engine
     public function getSelectedTypes($images_sizes_id)
     {
         $r = [];
-        foreach (self::$db->select("select types_id from content_types_images_sizes where images_sizes_id={$images_sizes_id}")->all() as $item) {
+        foreach (self::$db->select("select types_id from __content_types_images_sizes where images_sizes_id={$images_sizes_id}")->all() as $item) {
             $r[$item['types_id']] = $item['types_id'];
         }
         return $r;
@@ -178,10 +178,10 @@ class ContentImagesSizes extends Engine
             -> select
             ("
                   select count(ci.id) as t
-                  from content_types_images_sizes ctis
-                  join content c on c.subtypes_id=ctis.types_id and c.status='published'
-                  join content_images_sizes cis on cis.id=ctis.images_sizes_id
-                  join content_images ci on ci.content_id=c.id
+                  from __content_types_images_sizes ctis
+                  join __content c on c.subtypes_id=ctis.types_id and c.status='published'
+                  join __content_images_sizes cis on cis.id=ctis.images_sizes_id
+                  join __content_images ci on ci.content_id=c.id
                   where ctis.images_sizes_id={$sizes_id}
                 ")
             -> row('t');
@@ -199,10 +199,10 @@ class ContentImagesSizes extends Engine
             -> select
             ("
                   select ci.path, ci.image, cis.size, cis.width, cis.height, ci.content_id
-                  from content_types_images_sizes ctis
-                  join content c on c.subtypes_id=ctis.types_id and c.status='published'
-                  join content_images_sizes cis on cis.id=ctis.images_sizes_id
-                  join content_images ci on ci.content_id=c.id
+                  from __content_types_images_sizes ctis
+                  join __content c on c.subtypes_id=ctis.types_id and c.status='published'
+                  join __content_images_sizes cis on cis.id=ctis.images_sizes_id
+                  join __content_images ci on ci.content_id=c.id
                   where ctis.images_sizes_id={$sizes_id}
                   limit {$start}, {$num}
                 ")

@@ -20,14 +20,14 @@ class ContentFeatures extends Engine
 {
     public function getByCategoryId($category_id, $content_id)
     {
-        $page = self::$db->select("select types_id, subtypes_id from content where id={$category_id} limit 1")->row();
+        $page = self::$db->select("select types_id, subtypes_id from __content where id={$category_id} limit 1")->row();
         $res = self::$db
             ->select
             ("
                 select f.id, f.type, f.required, f.multiple, fi.name
-                from features_content fc
-                join features f on f.id=fc.features_id and f.status='published'
-                join features_info fi on fi.features_id=f.id and fi.languages_id={$this->languages_id}
+                from __features_content fc
+                join __features f on f.id=fc.features_id and f.status='published'
+                join __features_info fi on fi.features_id=f.id and fi.languages_id={$this->languages_id}
                 where
                   fc.content_types_id={$page['types_id']} and
                   fc.content_subtypes_id in (0, {$page['subtypes_id']}) and
@@ -67,12 +67,12 @@ class ContentFeatures extends Engine
 
             // get main category
             $cat_id = self::$db
-                ->select("select categories_id from content_relationship where content_id={$content_id} and is_main=1")
+                ->select("select categories_id from __content_relationship where content_id={$content_id} and is_main=1")
                 ->row('categories_id');
             if(!empty($cat_id)) $ex_content_id = $cat_id;
 
         } else {
-            $page = self::$db->select("select types_id, subtypes_id from content where id={$content_id} limit 1")->row();
+            $page = self::$db->select("select types_id, subtypes_id from __content where id={$content_id} limit 1")->row();
         }
 
         $languages_id = self::$language_id;
@@ -81,9 +81,9 @@ class ContentFeatures extends Engine
             ->select
             ("
                 select f.id, f.type, f.required, f.multiple, fi.name
-                from features_content fc
-                join features f on f.id=fc.features_id and f.status='published'
-                join features_info fi on fi.features_id=f.id and fi.languages_id={$languages_id}
+                from __features_content fc
+                join __features f on f.id=fc.features_id and f.status='published'
+                join __features_info fi on fi.features_id=f.id and fi.languages_id={$languages_id}
                 where
                   fc.content_types_id={$page['types_id']} and
                   fc.content_subtypes_id in (0, {$page['subtypes_id']}) and
@@ -118,8 +118,8 @@ class ContentFeatures extends Engine
             ->select
             ("
                 select f.id, f.type, f.multiple, fi.name
-                from features f
-                join features_info fi on fi.features_id=f.id and fi.languages_id={$languages_id}
+                from __features f
+                join __features_info fi on fi.features_id=f.id and fi.languages_id={$languages_id}
                 where f.parent_id={$parent_id} and f.status='published'
             ")
             ->all();
@@ -148,7 +148,7 @@ class ContentFeatures extends Engine
     {
         $res = [];
         $a = self::$db
-            ->select("select languages_id, value from content_features where content_id={$content_id} and features_id={$features_id}")
+            ->select("select languages_id, value from __content_features where content_id={$content_id} and features_id={$features_id}")
             ->all();
         foreach ($a as $item) {
             $res[$item['languages_id']] = $item['value'];
@@ -164,7 +164,7 @@ class ContentFeatures extends Engine
     private static function isSelectedValue($values_id, $content_id)
     {
         return self::$db
-            ->select("select id from content_features where content_id={$content_id} and values_id = {$values_id} limit 1")
+            ->select("select id from __content_features where content_id={$content_id} and values_id = {$values_id} limit 1")
             ->row('id') > 0;
     }
 
@@ -176,13 +176,13 @@ class ContentFeatures extends Engine
     private static function isChecked($features_id, $content_id)
     {
         return self::$db
-            ->select("select id from content_features where content_id={$content_id} and features_id = {$features_id} limit 1")
+            ->select("select id from __content_features where content_id={$content_id} and features_id = {$features_id} limit 1")
             ->row('id') > 0;
     }
 
     public function getFeaturesTypes($allowed = null)
     {
-        $data = self::$db->enumValues('features', 'type');
+        $data = self::$db->enumValues('__features', 'type');
 
         foreach ($data as $k => $type) {
             if ($type == 'value' || ($allowed && !in_array($type, $allowed))) {
@@ -195,7 +195,7 @@ class ContentFeatures extends Engine
 
     private function getTypeSettings($id)
     {
-        $s = self::$db->select("select settings from content_types where id={$id} limit 1")->row('settings');
+        $s = self::$db->select("select settings from __content_types where id={$id} limit 1")->row('settings');
         if(empty($s)) return null;
 
         return unserialize($s);
@@ -216,7 +216,7 @@ class ContentFeatures extends Engine
             $data['code'] = md5($this->admin['id'] . 'x' . microtime());
         }
 
-        $id = $this->createRow('features', $data);
+        $id = $this->createRow('__features', $data);
 
         if($this->hasDBError()){
             $this->rollback();
@@ -226,7 +226,7 @@ class ContentFeatures extends Engine
         foreach ($info as $languages_id=> $item) {
             $item['languages_id']    = $languages_id;
             $item['features_id']     = $id;
-            $this->createRow('features_info', $item);
+            $this->createRow('__features_info', $item);
         }
 
         if($this->hasDBError()){
@@ -234,7 +234,7 @@ class ContentFeatures extends Engine
             return false;
         }
 
-        $page = self::$db->select("select types_id, subtypes_id from content where id={$content_id} limit 1")->row();
+        $page = self::$db->select("select types_id, subtypes_id from __content where id={$content_id} limit 1")->row();
 
         $ts = $this->getTypeSettings($page['types_id']);
 
@@ -245,7 +245,7 @@ class ContentFeatures extends Engine
 
             // get main category
             $cat_id = self::$db
-                ->select("select categories_id from content_relationship where content_id={$content_id} and is_main=1")
+                ->select("select categories_id from __content_relationship where content_id={$content_id} and is_main=1")
                 ->row('categories_id');
 
             if(!empty($cat_id)){
@@ -256,7 +256,7 @@ class ContentFeatures extends Engine
 
         $this->createRow
         (
-            'features_content',
+            '__features_content',
             [
                 'features_id'          => $id,
                 'content_types_id'     => $page['types_id'],
@@ -288,7 +288,7 @@ class ContentFeatures extends Engine
             $data['code'] = md5($this->admin['id'] . 'x' . microtime());
         }
 
-        $id = $this->createRow('features', $data);
+        $id = $this->createRow('__features', $data);
 
         if($this->hasDBError()){
             $this->rollback();
@@ -298,7 +298,7 @@ class ContentFeatures extends Engine
         foreach ($info as $languages_id=> $item) {
             $item['languages_id']    = $languages_id;
             $item['features_id']     = $id;
-            $this->createRow('features_info', $item);
+            $this->createRow('__features_info', $item);
         }
 
         if($this->hasDBError()){
@@ -324,69 +324,69 @@ class ContentFeatures extends Engine
         if(!isset($_POST['content_features'])) return ;
 
         foreach ($_POST['content_features'] as $features_id => $a) {
-            $fdata = self::$db->select("select type, multiple from features where id={$features_id} limit 1")->row();
+            $fdata = self::$db->select("select type, multiple from __features where id={$features_id} limit 1")->row();
             switch($fdata['type']){
                 case 'text':
                 case 'textarea':
                     foreach ($a as $languages_id => $value) {
                         $aid = self::$db
-                            ->select("select id from content_features where content_id={$content_id} and features_id={$features_id} and languages_id={$languages_id} limit 1")
+                            ->select("select id from __content_features where content_id={$content_id} and features_id={$features_id} and languages_id={$languages_id} limit 1")
                             ->row('id');
                         if(empty($aid)){
-                            $this->createRow('content_features', ['content_id' => $content_id, 'features_id' => $features_id, 'languages_id' => $languages_id, 'value' =>$value]);
+                            $this->createRow('__content_features', ['content_id' => $content_id, 'features_id' => $features_id, 'languages_id' => $languages_id, 'value' =>$value]);
                         } else {
-                            $this->updateRow('content_features', $aid, ['value' => $value]);
+                            $this->updateRow('__content_features', $aid, ['value' => $value]);
                         }
                     }
                     break;
 
                 case 'file':
                     $aid = self::$db
-                        ->select("select id from content_features where content_id={$content_id} and features_id={$features_id} and languages_id = 0 limit 1")
+                        ->select("select id from __content_features where content_id={$content_id} and features_id={$features_id} and languages_id = 0 limit 1")
                         ->row('id');
                     if(empty($aid)){
-                        $this->createRow('content_features', ['content_id' => $content_id, 'features_id' => $features_id, 'value' => $a]);
+                        $this->createRow('__content_features', ['content_id' => $content_id, 'features_id' => $features_id, 'value' => $a]);
                     } else {
-                        $this->updateRow('content_features', $aid, ['value' => $a]);
+                        $this->updateRow('__content_features', $aid, ['value' => $a]);
                     }
                     break;
 
                 case 'number':
                     $aid = self::$db
-                        ->select("select id from content_features where content_id={$content_id} and features_id={$features_id} and languages_id = 0 limit 1")
+                        ->select("select id from __content_features where content_id={$content_id} and features_id={$features_id} and languages_id = 0 limit 1")
                         ->row('id');
                     if(empty($aid)){
-                        $this->createRow('content_features', ['content_id' => $content_id, 'features_id' => $features_id, 'value' => $a]);
+                        $this->createRow('__content_features', ['content_id' => $content_id, 'features_id' => $features_id, 'value' => $a]);
                     } else {
-                        $this->updateRow('content_features', $aid, ['value' => $a]);
+                        $this->updateRow('__content_features', $aid, ['value' => $a]);
                     }
                     break;
 
                 case 'checkbox':
                     $aid = self::$db
-                        ->select("select id from content_features where content_id={$content_id} and features_id={$features_id} and languages_id = 0 limit 1")
+                        ->select("select id from __content_features where content_id={$content_id} and features_id={$features_id} and languages_id = 0 limit 1")
                         ->row('id');
                     if(empty($aid) && $a == 1){
-                        $this->createRow('content_features', ['content_id' => $content_id, 'features_id' => $features_id, 'value' => 1]);
+                        $this->createRow('__content_features', ['content_id' => $content_id, 'features_id' => $features_id, 'value' => 1]);
                     } elseif($a == 0 && $aid > 0) {
-                        $this->deleteRow('content_features', $aid);
+                        $this->deleteRow('__content_features', $aid);
                     }
 
                     break;
                 case 'select':
                     $selected = self::$db
-                        ->select("select values_id from content_features where content_id={$content_id} and features_id={$features_id} ")
+                        ->select("select values_id from __content_features where content_id={$content_id} and features_id={$features_id} ")
                         ->all('values_id');
 
                     if($fdata['multiple']){
 
                         foreach ($a as $i => $values_id) {
                             $aid = self::$db
-                                ->select("select id from content_features where content_id={$content_id} and features_id={$features_id} and values_id={$values_id} limit 1")
+                                ->select("select id from __content_features where content_id={$content_id} and features_id={$features_id} and values_id={$values_id} limit 1")
                                 ->row('id');
 
                             if(empty($aid)){
-                                $this->createRow('content_features', ['content_id' => $content_id, 'features_id' => $features_id, 'values_id' => $values_id]);
+                                $this->createRow('__content_features', ['content_id' => $content_id, 'features_id' => $features_id, 'values_id' => $values_id]);
                             }
                             $c = array_search($values_id, $selected);
 
@@ -396,11 +396,11 @@ class ContentFeatures extends Engine
                         }
                     } else {
                         $aid = self::$db
-                            ->select("select id from content_features where content_id={$content_id} and features_id={$features_id} and values_id={$a} limit 1")
+                            ->select("select id from __content_features where content_id={$content_id} and features_id={$features_id} and values_id={$a} limit 1")
                             ->row('id');
 
                         if(empty($aid)){
-                            $this->createRow('content_features', ['content_id' => $content_id, 'features_id' => $features_id, 'values_id' => $a]);
+                            $this->createRow('__content_features', ['content_id' => $content_id, 'features_id' => $features_id, 'values_id' => $a]);
                         }
 
                         $c = array_search($a, $selected);

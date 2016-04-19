@@ -28,7 +28,7 @@ class ContentRelationship extends Engine
     {
         return $this->createRow
         (
-            'content_relationship',
+            '__content_relationship',
             ['content_id' => $content_id, 'categories_id' => $categories_id, 'is_main' => $is_main]
         );
     }
@@ -42,7 +42,7 @@ class ContentRelationship extends Engine
     {
         return self::$db->delete
         (
-            'content_relationship',
+            '__content_relationship',
             " content_id={$content_id} and categories_id={$categories_id} limit 1"
         );
     }
@@ -54,14 +54,14 @@ class ContentRelationship extends Engine
     public function getCategories($content_id)
     {
         return self::$db
-            ->select("select categories_id from content_relationship where content_id={$content_id} and is_main=0")
+            ->select("select categories_id from __content_relationship where content_id={$content_id} and is_main=0")
             ->all('categories_id');
     }
 
     public function getMainCategoryId($content_id)
     {
         return self::$db
-            ->select("select categories_id from content_relationship where content_id={$content_id} and is_main = 1 ")
+            ->select("select categories_id from __content_relationship where content_id={$content_id} and is_main = 1 ")
             ->row('categories_id');
     }
 
@@ -69,7 +69,7 @@ class ContentRelationship extends Engine
     {
         return self::$db->delete
         (
-            'content_relationship',
+            '__content_relationship',
             " content_id={$content_id} and is_main=1 limit 1"
         );
     }

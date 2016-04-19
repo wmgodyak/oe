@@ -27,7 +27,7 @@ class Parser extends Model
     private function getUrlById($id, $languages_id, $def_lang)
     {
         $url = self::$db
-            ->select("select url from content_info where content_id = '{$id}' and languages_id={$languages_id} limit 1")
+            ->select("select url from __content_info where content_id = '{$id}' and languages_id={$languages_id} limit 1")
             ->row('url');
 
         if($languages_id == $def_lang['id']){
@@ -124,7 +124,7 @@ class Parser extends Model
      */
     public function makeFriendlyUrl()
     {
-        $def_lang = self::$db->select("select id,code from languages where is_main=1 limit 1")->row();
+        $def_lang = self::$db->select("select id,code from __languages where is_main=1 limit 1")->row();
         $languages_id = $this->request->param('languages_id');
         $self = $this;
 //        $pattern = '@(href|action)="([^\"]*)"@siU'; // ok
@@ -200,7 +200,7 @@ class Parser extends Model
         $out = null;
 
         if($ga_id){
-            $out =  "
+            $out .=  "
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
                 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o)
                 ,

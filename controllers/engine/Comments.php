@@ -67,11 +67,11 @@ class Comments extends Engine {
     public function items($status)
     {
         $t = new DataTables();
-        $t  -> table('comments c')
+        $t  -> table('__comments c')
             -> get('c.id, u.surname, c.message, c.created, u.id as user_id, u.name,  u.email, ci.name as page_name,ci.url, c.skey
                 ,c.status')
-            -> join("users u on u.id = c.users_id")
-            -> join("content_info ci on ci.content_id=c.content_id and ci.languages_id={$this->languages_id}");
+            -> join("__users u on u.id = c.users_id")
+            -> join("__content_info ci on ci.content_id=c.content_id and ci.languages_id={$this->languages_id}");
 
             if($status != 'all'){
                 $t-> where(" c.status='{$status}'");

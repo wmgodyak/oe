@@ -26,7 +26,7 @@ class Images extends Model
     public function cover($content_id, $size = null)
     {
         $image = self::$db
-            ->select("select path, image from content_images where content_id={$content_id} order by abs(position) asc limit 1")
+            ->select("select path, image from __content_images where content_id={$content_id} order by abs(position) asc limit 1")
             ->row();
 
         if(empty($image)) return null;
@@ -48,7 +48,7 @@ class Images extends Model
         $items = self::$db
             ->select("
               select path, image
-              from content_images
+              from __content_images
               where content_id={$content_id}
               order by abs(position) asc limit {$start}, {$num}
               ")

@@ -18,7 +18,7 @@ class Settings
      */
     public function get()
     {
-        return DB::getInstance()->select("select name, value from settings order by id asc")->all();
+        return DB::getInstance()->select("select name, value from __settings order by id asc")->all();
     }
 
     /**

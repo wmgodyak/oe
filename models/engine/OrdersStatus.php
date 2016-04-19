@@ -25,13 +25,13 @@ class OrdersStatus extends Engine
      */
     public function getData($id, $key = '*')
     {
-        $data =  self::$db->select("select {$key} from orders_status where id={$id}")->row($key);
+        $data =  self::$db->select("select {$key} from __orders_status where id={$id}")->row($key);
 
         if($key != '*') return $data;
 
         foreach ($this->languages as $language) {
             $data['info'][$language['id']] = self::$db
-                ->select("select status from orders_status_info where status_id={$id} and languages_id={$language['id']} limit 1")
+                ->select("select status from __orders_status_info where status_id={$id} and languages_id={$language['id']} limit 1")
                 ->row();
         }
         return $data;
@@ -87,7 +87,7 @@ class OrdersStatus extends Engine
             $this->changeMain();
         }
 
-        $s = $this->updateRow('orders_status', $id, $data);
+        $s = $this->updateRow('__orders_status', $id, $data);
 
         if($this->hasDBError()){
             $this->rollback();
@@ -96,14 +96,14 @@ class OrdersStatus extends Engine
 
         foreach ($info as $languages_id=> $item) {
             $aid = self::$db
-                ->select("select id from orders_status_info where status_id={$id} and languages_id={$languages_id} limit 1")
+                ->select("select id from __orders_status_info where status_id={$id} and languages_id={$languages_id} limit 1")
                 ->row('id');
             if(empty($aid)){
                 $item['languages_id']    = $languages_id;
                 $item['status_id']       = $id;
                 $this->createRow('orders_status_info', $item);
             } else {
-                $this->updateRow('orders_status_info', $aid, $item);
+                $this->updateRow('__orders_status_info', $aid, $item);
             }
         }
 
@@ -124,7 +124,7 @@ class OrdersStatus extends Engine
 
     private function changeMain()
     {
-        self::$db->update('orders_status', ['is_main' => 0]);
+        self::$db->update('__orders_status', ['is_main' => 0]);
     }
 
 }

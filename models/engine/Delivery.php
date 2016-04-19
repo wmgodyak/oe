@@ -25,13 +25,13 @@ class Delivery extends Engine
      */
     public function getData($id, $key = '*')
     {
-        $data =  self::$db->select("select {$key} from delivery where id={$id}")->row($key);
+        $data =  self::$db->select("select {$key} from __delivery where id={$id}")->row($key);
 
         if($key != '*') return $data;
 
         foreach ($this->languages as $language) {
             $data['info'][$language['id']] = self::$db
-                ->select("select name, description from delivery_info where delivery_id={$id} and languages_id={$language['id']} limit 1")
+                ->select("select name, description from __delivery_info where delivery_id={$id} and languages_id={$language['id']} limit 1")
                 ->row();
         }
         return $data;
@@ -94,7 +94,7 @@ class Delivery extends Engine
 
         $this->beginTransaction();
 
-        $s = $this->updateRow('delivery', $id, $data);
+        $s = $this->updateRow('__delivery', $id, $data);
 
         if($this->hasDBError()){
             $this->rollback();
@@ -103,14 +103,14 @@ class Delivery extends Engine
 
         foreach ($info as $languages_id=> $item) {
             $aid = self::$db
-                ->select("select id from delivery_info where delivery_id={$id} and languages_id={$languages_id} limit 1")
+                ->select("select id from __delivery_info where delivery_id={$id} and languages_id={$languages_id} limit 1")
                 ->row('id');
             if(empty($aid)){
                 $item['languages_id']    = $languages_id;
                 $item['delivery_id']     = $id;
                 $this->createRow('delivery_info', $item);
             } else {
-                $this->updateRow('delivery_info', $aid, $item);
+                $this->updateRow('__delivery_info', $aid, $item);
             }
         }
 
@@ -151,17 +151,17 @@ class Delivery extends Engine
     }
     public function pub($id)
     {
-        return self::$db->update('delivery',['published' => 1], " id={$id} limit 1");
+        return self::$db->update('__delivery',['published' => 1], " id={$id} limit 1");
     }
 
     public function hide($id)
     {
-        return self::$db->update('delivery',['published' => 0], " id={$id} limit 1");
+        return self::$db->update('__delivery',['published' => 0], " id={$id} limit 1");
     }
 
     public function getSettings($module)
     {
-        $s = self::$db->select("select settings from delivery where module='{$module}' limit 1 ")->row('settings');
+        $s = self::$db->select("select settings from __delivery where module='{$module}' limit 1 ")->row('settings');
         if(empty($s)) return null;
 
         return unserialize($s);

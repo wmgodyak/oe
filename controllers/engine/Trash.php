@@ -54,17 +54,16 @@ class Trash extends Engine
     public function items()
     {
         $t = new DataTables();
-        $t  -> table('content c')
+        $t  -> table('__content c')
             -> get('c.id, ci.name, ci.url, c.created, c.updated, c.status, c.isfolder, CONCAT(u.name, \' \' , u.surname) as owner')
-            -> join("content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}")
-            -> join('users u on u.id=c.owner_id')
+            -> join("__content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}")
+            -> join('__users u on u.id=c.owner_id')
             -> where(" c.status = 'deleted' ")
             -> execute();
 
         $res = array();
         foreach ($t->getResults(false) as $i=>$row) {
             $icon = Icon::create(($row['isfolder'] ? 'fa-folder' : 'fa-file'));
-            $icon_link = Icon::create('fa-external-link');
             $status = $this->t('trash.status_' . $row['status']);
             $res[$i][] = $row['id'];
             $res[$i][] =

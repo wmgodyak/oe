@@ -75,12 +75,12 @@ class Blog extends Content
         }
 
         if($id <> $this->page_id){
-            $this->join("content_relationship cr on cr.content_id=c.id and cr.categories_id={$id} ");
+            $this->join("__content_relationship cr on cr.content_id=c.id and cr.categories_id={$id} ");
         }
 
         $items = $this
             -> where("c.types_id={$this->post_types_id}")
-            -> join("users u on u.id=c.owner_id")
+            -> join("__users u on u.id=c.owner_id")
             -> orderBy("c.published desc")
             -> limit($start, $num)
 //            -> debug()
@@ -104,7 +104,7 @@ class Blog extends Content
             -> where("c.types_id={$this->post_types_id}");
 
         if($id <> $this->page_id){
-            $this->join("content_relationship cr on cr.content_id=c.id and cr.categories_id={$id} ");
+            $this->join("__content_relationship cr on cr.content_id=c.id and cr.categories_id={$id} ");
         }
 
         return $this-> getTotal();
@@ -112,7 +112,7 @@ class Blog extends Content
 
     public function getPrevPost($post_id)
     {
-//        $pub = self::$db->select("select published from content where id = {$post_id} limit 1")->row('published');
+//        $pub = self::$db->select("select published from __content where id = {$post_id} limit 1")->row('published');
 
         $r = $this
             -> clearQuery()
@@ -129,7 +129,7 @@ class Blog extends Content
 
     public function getNextPost($post_id)
     {
-//        $pub = self::$db->select("select published from content where id = {$post_id} limit 1")->row('published');
+//        $pub = self::$db->select("select published from __content where id = {$post_id} limit 1")->row('published');
 
         $r = $this
             -> clearQuery()
@@ -149,8 +149,8 @@ class Blog extends Content
         return self::$db
             ->select("
               select ct.id, t.tag
-              from content_tags ct
-              join tags t on t.id=ct.tags_id
+              from __content_tags ct
+              join __tags t on t.id=ct.tags_id
               where ct.content_id={$post_id} and ct.languages_id = {$this->languages_id}
             ")
             ->all();

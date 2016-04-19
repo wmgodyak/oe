@@ -23,8 +23,8 @@ class ProductsSimilar extends Model
        return self::$db
            ->select("
                 select f.id, fi.name, f.type
-                from features f
-                join features_info fi on fi.features_id=f.id and fi.languages_id={$this->languages_id}
+                from __features f
+                join __features_info fi on fi.features_id=f.id and fi.languages_id={$this->languages_id}
                 where f.parent_id={$parent_id} and f.status='published'
                 order by f.id asc
                 ")
@@ -34,7 +34,7 @@ class ProductsSimilar extends Model
     public function getSelected($products_id)
     {
         return self::$db
-            ->select("select features_id from products_similar where products_id={$products_id}")
+            ->select("select features_id from __products_similar where products_id={$products_id}")
             ->all('features_id');
     }
 

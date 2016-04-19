@@ -60,7 +60,7 @@ class Currency extends Engine
     public function items()
     {
         $t = new DataTables();
-        $t  -> table('currency')
+        $t  -> table('__currency')
             -> get('id,name,code,rate,symbol,is_main');
         $t  -> execute();
 

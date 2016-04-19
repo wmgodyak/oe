@@ -65,7 +65,7 @@ class ContentImagesSizes extends Engine
     public function items()
     {
         $t = new DataTables();
-        $t  -> table('content_images_sizes')
+        $t  -> table('__content_images_sizes')
             -> get('id,size, width, height')
             -> execute();
 

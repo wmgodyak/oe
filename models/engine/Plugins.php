@@ -18,7 +18,7 @@ class Plugins extends Model
     public function create($data, $components)
     {
         $data['controller'] = lcfirst($data['controller']);
-        $plugins_id = self::$db->insert('plugins', $data);
+        $plugins_id = self::$db->insert('__plugins', $data);
         if($plugins_id > 0){
             foreach ($components as $k=>$components_id) {
                 PluginsComponents::create($plugins_id, $components_id);
@@ -34,7 +34,7 @@ class Plugins extends Model
     public function isInstalled($controller)
     {
         $controller = lcfirst($controller);
-        return self::$db->select("select id from plugins where controller = '{$controller}' limit 1")->row('id') > 0;
+        return self::$db->select("select id from __plugins where controller = '{$controller}' limit 1")->row('id') > 0;
     }
 
     /**
@@ -44,7 +44,7 @@ class Plugins extends Model
      */
     public function data($controller, $key = '*')
     {
-        return self::$db->select("select {$key} from plugins where controller = '{$controller}' limit 1")->row($key);
+        return self::$db->select("select {$key} from __plugins where controller = '{$controller}' limit 1")->row($key);
     }
 
 
@@ -55,12 +55,12 @@ class Plugins extends Model
      */
     public function getDataByID($id, $key = '*')
     {
-        $data = self::$db->select("select {$key} from plugins where id={$id} limit 1")->row($key);
+        $data = self::$db->select("select {$key} from __plugins where id={$id} limit 1")->row($key);
 
         if($key != '*') return $data;
 
         $c = self::$db
-            ->select("select components_id from plugins_components where plugins_id = {$id}")
+            ->select("select components_id from __plugins_components where plugins_id = {$id}")
             ->all();
 
         $data['components'] = [];
@@ -80,7 +80,7 @@ class Plugins extends Model
      */
     public function is($id)
     {
-        return self::$db->select("select id from plugins where id = '{$id}' limit 1")->row('id') > 0;
+        return self::$db->select("select id from __plugins where id = '{$id}' limit 1")->row('id') > 0;
     }
 
 
@@ -90,7 +90,7 @@ class Plugins extends Model
      */
     public function pub($id)
     {
-        return self::$db->update('plugins', ['published' => 1], "id= '{$id}' limit 1");
+        return self::$db->update('__plugins', ['published' => 1], "id= '{$id}' limit 1");
     }
 
     /**
@@ -99,7 +99,7 @@ class Plugins extends Model
      */
     public function hide($id)
     {
-        return self::$db->update('plugins', ['published' => 0], "id= '{$id}' limit 1");
+        return self::$db->update('__plugins', ['published' => 0], "id= '{$id}' limit 1");
     }
 
     /**
@@ -132,13 +132,13 @@ class Plugins extends Model
                 PluginsComponents::delete($id, $components_id);
             }
         }
-        return self::$db->update('plugins', $data, "id = '{$id}' limit 1");
+        return self::$db->update('__plugins', $data, "id = '{$id}' limit 1");
     }
 
     public function getComponents()
     {
         $res = [];
-        foreach (self::$db->select("select id, controller from components where published = 1")->all() as $item) {
+        foreach (self::$db->select("select id, controller from __components where published = 1")->all() as $item) {
             if(strpos($item['controller'], '/') === FALSE){
                 $item['controller'] = ucfirst($item['controller']);
             } else{
@@ -155,6 +155,6 @@ class Plugins extends Model
 
     public function getPlace()
     {
-        return self::$db->enumValues('plugins', 'place');
+        return self::$db->enumValues('__plugins', 'place');
     }
 }

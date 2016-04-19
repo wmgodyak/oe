@@ -29,7 +29,7 @@ class Content extends App
     public function getUrlById($id)
     {
         $url = self::$db
-            ->select("select url from content_info where content_id = '{$id}' and languages_id={$this->languages_id} limit 1")
+            ->select("select url from __content_info where content_id = '{$id}' and languages_id={$this->languages_id} limit 1")
             ->row('url');
 
         if($this->languages_id == $this->languages->getDefault('id')){
@@ -49,9 +49,9 @@ class Content extends App
 
         return self::$db->select("
           select {$key}
-          from content c
+          from __content c
           {$j}
-          join content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
+          join __content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
           where {$w}  c.status='published'
           {$this->q_order}
           {$this->q_group_by}
@@ -67,9 +67,9 @@ class Content extends App
 
         return self::$db->select("
           select count(c.id) as t
-          from content c
+          from __content c
           {$j}
-          join content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
+          join __content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
           where {$w}  c.status='published'
           ", $this->debug)->row('t');
     }
@@ -80,9 +80,9 @@ class Content extends App
 
         return self::$db->select("
           select {$key}
-          from content c
+          from __content c
           {$j}
-          join content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
+          join __content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
           where c.id={$id} and c.status='published'
           ", $this->debug)->row();
     }
@@ -90,7 +90,7 @@ class Content extends App
     protected function join($join)
     {
         if(strpos($join, 'join') === false){
-            $join = 'join '.$join;
+            $join= 'join __'.$join;
         }
 
         $this->q_join[] = $join;

@@ -31,7 +31,7 @@ class Account extends Users
 
     public function setOnline($user)
     {
-        return self::$db->update('users', ['sessid' => session_id(), 'lastlogin' => date('Y-m-d H:i:s')], " id = {$user['id']} limit 1");
+        return self::$db->update('__users', ['sessid' => session_id(), 'lastlogin' => date('Y-m-d H:i:s')], " id = {$user['id']} limit 1");
     }
 
     public function checkPass($password, $hash)

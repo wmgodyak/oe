@@ -46,7 +46,7 @@ class Engine extends Model
         $r = self::$db
         ->select("
                     select id, icon, isfolder, controller, rang
-                    from components
+                    from __components
                     where parent_id={$parent_id}
                     order by abs(position) asc
                 ")

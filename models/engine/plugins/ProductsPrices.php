@@ -21,20 +21,20 @@ class ProductsPrices extends Model
     public function update($content_id, $group_id, $price)
     {
         $old = self::$db
-            ->select("select id, price_old from products_prices where content_id={$content_id} and group_id={$group_id} limit 1")
+            ->select("select id, price_old from __products_prices where content_id={$content_id} and group_id={$group_id} limit 1")
             ->row();
 
         if(empty($old)){
             return $this->createRow
             (
-                "products_prices",
+                "__products_prices",
                 ['content_id' => $content_id, 'group_id' => $group_id, 'price' => $price, 'price_old' => $old['price_old']]
             );
         }
 
         return $this->updateRow
         (
-            'products_prices',
+            '__products_prices',
             $old['id'],
             ['price' => $price, 'price_old' => $old['price_old']]
         );
@@ -48,8 +48,8 @@ class ProductsPrices extends Model
     {
         return self::$db->select("
           select g.id, g.isfolder, name
-          from users_group g
-          join users_group_info i on i.group_id=g.id and i.languages_id = {$this->languages_id}
+          from __users_group g
+          join __users_group_info i on i.group_id=g.id and i.languages_id = {$this->languages_id}
           where g.parent_id={$parent_id} and g.rang < 100
           order by abs(g.position) asc
           ")->all();
@@ -61,7 +61,7 @@ class ProductsPrices extends Model
      */
     public function get($content_id)
     {
-        $r = self::$db->select("select group_id, price from products_prices where content_id={$content_id}")->all();
+        $r = self::$db->select("select group_id, price from __products_prices where content_id={$content_id}")->all();
         $res = [];
         foreach ($r as $item) {
             $res[$item['group_id']] = $item['price'];
@@ -71,6 +71,6 @@ class ProductsPrices extends Model
 
     public function getContentData($id)
     {
-        return self::$db->select("select * from content where id={$id} limit 1")->row();
+        return self::$db->select("select * from __content where id={$id} limit 1")->row();
     }
 }

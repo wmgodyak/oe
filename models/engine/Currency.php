@@ -25,7 +25,7 @@ class Currency extends Engine
      */
     public function getData($id, $key = '*')
     {
-        return self::$db->select("select {$key} from currency where id={$id}")->row($key);
+        return self::$db->select("select {$key} from __currency where id={$id}")->row($key);
     }
 
     /**
@@ -52,7 +52,7 @@ class Currency extends Engine
     public function update($id)
     {
         $data = $this->request->post('data');
-        $s = $this->updateRow('currency', $id, $data);
+        $s = $this->updateRow('__currency', $id, $data);
 
         if($data['is_main']) {
             $this->toggleMain($id);
@@ -68,12 +68,12 @@ class Currency extends Engine
 
     private function toggleMain($currency_id)
     {
-        self::$db->update('currency',['is_main' => 0]);
-        return $this->updateRow('currency', $currency_id, ['is_main' => 1]);
+        self::$db->update('__currency',['is_main' => 0]);
+        return $this->updateRow('__currency', $currency_id, ['is_main' => 1]);
     }
 
     public static function get()
     {
-        return self::$db->select("select id, name, code from currency order by is_main desc, id asc")->all();
+        return self::$db->select("select id, name, code from __currency order by is_main desc, id asc")->all();
     }
 }

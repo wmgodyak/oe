@@ -24,10 +24,10 @@ class MailTemplates extends Engine
      */
     public function getData($id)
     {
-        $data =  self::$db->select("select * from mail_templates where id={$id}")->row();
+        $data =  self::$db->select("select * from __mail_templates where id={$id}")->row();
         foreach ($this->languages as $language) {
             $data['info'][$language['id']] = self::$db
-                ->select("select subject, body from mail_templates_info where templates_id={$id} and languages_id={$language['id']} limit 1")
+                ->select("select subject, body from __mail_templates_info where templates_id={$id} and languages_id={$language['id']} limit 1")
                 ->row();
         }
         return $data;
@@ -76,7 +76,7 @@ class MailTemplates extends Engine
         $data = $this->request->post('data');
         $info = $this->request->post('info');
         $this->beginTransaction();
-        $this->updateRow('mail_templates', $id, $data);
+        $this->updateRow('__mail_templates', $id, $data);
 
         if($this->hasDBError()){
             $this->rollback();
@@ -85,14 +85,14 @@ class MailTemplates extends Engine
 
         foreach ($info as $languages_id=> $item) {
             $aid = self::$db
-                ->select("select id from mail_templates_info where templates_id={$id} and languages_id={$languages_id} limit 1")
+                ->select("select id from __mail_templates_info where templates_id={$id} and languages_id={$languages_id} limit 1")
                 ->row('id');
             if(empty($aid)){
                 $item['languages_id']    = $languages_id;
                 $item['templates_id'] = $id;
                 $this->createRow('mail_templates_info', $item);
             } else {
-                $this->updateRow('mail_templates_info', $aid, $item);
+                $this->updateRow('__mail_templates_info', $aid, $item);
             }
         }
         if($this->hasDBError()){
@@ -121,7 +121,7 @@ class MailTemplates extends Engine
         if($id){
             $w = " and id<>{$id}";
         }
-        return self::$db->select("select id from mail_templates where code = '{$code}' {$w} limit 1")->row('id') > 0;
+        return self::$db->select("select id from __mail_templates where code = '{$code}' {$w} limit 1")->row('id') > 0;
     }
 
 }

@@ -74,9 +74,9 @@ class Guides extends Engine
     public function items($parent_id=0)
     {
         $t = new DataTables();
-        $t  -> table('guides g')
+        $t  -> table('__guides g')
             -> get('g.id,gi.name, g.code')
-            -> join("guides_info gi on gi.guides_id=g.id and gi.languages_id={$this->languages_id}");
+            -> join("__guides_info gi on gi.guides_id=g.id and gi.languages_id={$this->languages_id}");
            if($parent_id>0){
                $t->where("g.parent_id = {$parent_id}");
            }

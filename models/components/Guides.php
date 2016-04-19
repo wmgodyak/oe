@@ -28,8 +28,8 @@ class Guides extends Model
         return self::$db
             ->select("
                   select g.id, i.name
-                  from guides g
-                  join guides_info i on i.guides_id=g.id and i.languages_id={$l}
+                  from __guides g
+                  join __guides_info i on i.guides_id=g.id and i.languages_id={$l}
                   where g.parent_id={$parent_id}
               ")
             ->all();
@@ -53,7 +53,7 @@ class Guides extends Model
      */
     public static function getIdByCode($code)
     {
-        return self::$db->select("select id from guides where code='$code' limit 1")->row('id');
+        return self::$db->select("select id from __guides where code='$code' limit 1")->row('id');
     }
 
 }

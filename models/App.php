@@ -85,32 +85,48 @@ class App extends Model
 
         // todo правила редиректів
 
-        // інформація про сторінку
-        $page = self::$db
-            ->select("
+        if(empty($url)){
+            $id = \controllers\core\Settings::getInstance()->get('home_id');
+            $page = self::$db
+                ->select("
                 select c.*,i.languages_id, i.name,i.title,i.url,i.keywords, i.description,i.content, l.code as languages_code
-                from content_info i
-                join content c on c.id=i.content_id
-                join languages l on l.id=i.languages_id
+                from __content_info i
+                join __content c on c.id=i.content_id
+                join __languages l on l.id=i.languages_id
+                where c.id={$id} and i.languages_id={$this->languages_id}
+                limit 1
+                ")
+                ->row();
+        } else {
+
+            // інформація про сторінку
+            $page = self::$db
+                ->select("
+                select c.*,i.languages_id, i.name,i.title,i.url,i.keywords, i.description,i.content, l.code as languages_code
+                from __content_info i
+                join __content c on c.id=i.content_id
+                join __languages l on l.id=i.languages_id
                 where i.url = '{$url}' and i.languages_id={$this->languages_id}
                 limit 1
                 ")
-            ->row();
+                ->row();
+
+        }
 
         if(empty($page)) return;
 
         // page template
         if($page['types_id'] == $page['subtypes_id']){
            $page['template'] = self::$db
-               ->select("select type from content_types where id={$page['subtypes_id']} limit 1")
+               ->select("select type from __content_types where id={$page['subtypes_id']} limit 1")
                ->row('type');
             $page['type'] =$page['template'];
         } else {
             $type = self::$db
-                ->select("select type from content_types where id={$page['types_id']} limit 1")
+                ->select("select type from __content_types where id={$page['types_id']} limit 1")
                 ->row('type');
             $subtype = self::$db
-                ->select("select type from content_types where id={$page['subtypes_id']} limit 1")
+                ->select("select type from __content_types where id={$page['subtypes_id']} limit 1")
                 ->row('type');
             $page['template'] = $type .'/'. $subtype;
 
@@ -126,7 +142,7 @@ class App extends Model
 
         // author
         $page['author'] = self::$db
-            ->select("select id,name,surname,email,phone,avatar from users where id={$page['owner_id']}")
+            ->select("select id,name,surname,email,phone,avatar from __users where id={$page['owner_id']}")
             ->row();
 
         // modules
@@ -168,7 +184,7 @@ class App extends Model
      */
     private function makeMeta($page)
     {
-//        $s = self::$db->select("select value from settings where name='seo' limit 1")->row('value');
+//        $s = self::$db->select("select value from __settings where name='seo' limit 1")->row('value');
         $settings = \controllers\core\Settings::getInstance()->get();
         $delimiter = $settings['delimiter'];
         $company_name  = $settings['company_name'];
@@ -229,7 +245,7 @@ class App extends Model
         return self::$db
             ->select("
                 select {$key}
-                from content_info
+                from __content_info
                 where content_id={$id} and languages_id={$this->languages_id}
                 limit 1
                 ")
@@ -239,23 +255,8 @@ class App extends Model
     private function getRelationshipCategoryId($content_id)
     {
         return self::$db
-            ->select("select categories_id from content_relationship where content_id={$content_id} order by is_main desc limit 1")
+            ->select("select categories_id from __content_relationship where content_id={$content_id} order by is_main desc limit 1")
             ->row('categories_id');
-    }
-
-    private function _getParentInfo($id)
-    {
-        $page = self::$db
-            ->select("
-                select c.id,c.types_id,c.isfolder,i.name, i.title, i.url, i.keywords, i.description
-                from content_info i
-                join content c on c.id = {$id}
-                where i.content_id={$id} and i.languages_id={$this->languages_id}
-                limit 1
-                ")
-            ->row();
-
-        return $page;
     }
 
     public function callModule($module)
@@ -287,7 +288,7 @@ class App extends Model
 
     private function getContentTypeSettings($types_id)
     {
-        $data = self::$db->select("select parent_id, settings from content_types where id={$types_id} limit 1")->row();
+        $data = self::$db->select("select parent_id, settings from __content_types where id={$types_id} limit 1")->row();
         if(empty($data['settings'])) return null;
         $s = unserialize($data['settings']);
         if( $data['parent_id'] > 0 && isset($s['modules_ext']) && $s['modules_ext'] == 1){

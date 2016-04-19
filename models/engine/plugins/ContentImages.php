@@ -21,7 +21,7 @@ class ContentImages extends Engine
     public function getMaxSort($content_id)
     {
         return self::$db
-            ->select("select MAX(position) as t from content_images where content_id={$content_id}")
+            ->select("select MAX(position) as t from __content_images where content_id={$content_id}")
             ->row('t');
     }
 
@@ -32,7 +32,7 @@ class ContentImages extends Engine
     public function getLastInsertID($content_id)
     {
         return self::$db
-            ->select("select MAX(id) as t from content_images where content_id={$content_id}")
+            ->select("select MAX(id) as t from __content_images where content_id={$content_id}")
             ->row('t');
     }
 
@@ -46,9 +46,9 @@ class ContentImages extends Engine
             ->select
             ("
                 select s.size, s.width, s.height
-                from content c
-                join content_types_images_sizes cs on cs.types_id=c.types_id
-                join content_images_sizes s on s.id=cs.images_sizes_id
+                from __content c
+                join __content_types_images_sizes cs on cs.types_id=c.types_id
+                join __content_images_sizes s on s.id=cs.images_sizes_id
                 where c.id = {$content_id}
             ")
             ->all();
@@ -56,7 +56,7 @@ class ContentImages extends Engine
 
     public function create($data)
     {
-        return $this->createRow('content_images', $data);
+        return $this->createRow('__content_images', $data);
     }
 
     /**
@@ -67,7 +67,7 @@ class ContentImages extends Engine
     {
         $thumb = \controllers\core\Settings::getInstance()->get('content_images_thumb_dir');
         return self::$db
-            ->select("select id, CONCAT('/',path, '{$thumb}', image) as src from content_images where content_id={$content_id} order by abs(position) asc")
+            ->select("select id, CONCAT('/',path, '{$thumb}', image) as src from __content_images where content_id={$content_id} order by abs(position) asc")
             ->all();
     }
 
@@ -78,7 +78,7 @@ class ContentImages extends Engine
      */
     public function getData($id, $key = '*')
     {
-        return parent::rowData('content_images', $id, $key);
+        return parent::rowData('__content_images', $id, $key);
     }
 
     public function delete($id)
@@ -87,10 +87,10 @@ class ContentImages extends Engine
         // визачити розміри
         $sizes = self::$db
             ->select("select cis.size
-                      from content_images ci
-                      join content c on c.id=ci.content_id
-                      join content_types_images_sizes ctis on ctis.types_id=c.subtypes_id
-                      join content_images_sizes cis on ctis.images_sizes_id=cis.id
+                      from __content_images ci
+                      join __content c on c.id=ci.content_id
+                      join __content_types_images_sizes ctis on ctis.types_id=c.subtypes_id
+                      join __content_images_sizes cis on ctis.images_sizes_id=cis.id
                       where ci.id = {$id}")
             ->all('size');
 
@@ -108,7 +108,7 @@ class ContentImages extends Engine
             @unlink($path);
         }
 
-        $this->deleteRow('content_images', $id);
+        $this->deleteRow('__content_images', $id);
 
         return true;
     }
@@ -116,7 +116,7 @@ class ContentImages extends Engine
     public function deleteContentImages($content_id)
     {
         $items  = self::$db
-            ->select("select path, image from content_images where content_id = {$content_id} ")
+            ->select("select path, image from __content_images where content_id = {$content_id} ")
             ->all();
 
         if(empty($items)) return ;
@@ -124,9 +124,9 @@ class ContentImages extends Engine
         // визачити розміри
         $sizes = self::$db
             ->select("select cis.size
-                      from content c
-                      join content_types_images_sizes ctis on ctis.types_id=c.subtypes_id
-                      join content_images_sizes cis on ctis.images_sizes_id=cis.id
+                      from __content c
+                      join __content_types_images_sizes ctis on ctis.types_id=c.subtypes_id
+                      join __content_images_sizes cis on ctis.images_sizes_id=cis.id
                       where c.id = {$content_id}")
             ->all('size');
 
@@ -150,7 +150,7 @@ class ContentImages extends Engine
         $a = explode(',', $order);
         foreach ($a as $position=>$images_id) {
             $images_id = str_replace('im-', '', $images_id);
-           $s+= $this->updateRow('content_images', $images_id, ['position' =>$position]);
+           $s+= $this->updateRow('__content_images', $images_id, ['position' =>$position]);
         }
 
         return $s;

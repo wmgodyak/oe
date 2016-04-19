@@ -19,17 +19,17 @@ class CustomersGroup extends Engine
     {
         $this->beginTransaction();
 
-        $group_id = self::$db->insert("users_group", $data);
+        $group_id = self::$db->insert("__users_group", $data);
         if($group_id > 0){
             foreach ($info as $languages_id => $in) {
                 $in['languages_id'] = $languages_id;
                 $in['group_id'] = $group_id;
-                self::$db->insert("users_group_info", $in);
+                self::$db->insert("__users_group_info", $in);
             }
 
             if(! $this->hasDBError()){
                 if($data['parent_id'] > 0){
-                    self::$db->update('users_group', ['isfolder' => 1], "id={$data['parent_id']} limit 1");
+                    self::$db->update('__users_group', ['isfolder' => 1], "id={$data['parent_id']} limit 1");
                 }
             }
         }
@@ -53,23 +53,23 @@ class CustomersGroup extends Engine
     {
         $this->beginTransaction();
 
-        self::$db->update("users_group", $data, "id={$id} limit 1");
+        self::$db->update("__users_group", $data, "id={$id} limit 1");
 
         if(! $this->hasDBError()) {
             foreach ($info as $languages_id => $in) {
-                $aid = self::$db->select("select id from users_group_info where group_id={$id} and languages_id={$languages_id} limit 1")->row('id');
+                $aid = self::$db->select("select id from __users_group_info where group_id={$id} and languages_id={$languages_id} limit 1")->row('id');
                 if($aid>0){
-                    self::$db->update("users_group_info", $in, " id={$aid} limit 1");
+                    self::$db->update("__users_group_info", $in, " id={$aid} limit 1");
                 } else {
                     $in['languages_id'] = $languages_id;
                     $in['group_id']     = $id;
-                    self::$db->insert("users_group_info", $in);
+                    self::$db->insert("__users_group_info", $in);
                 }
             }
         }
         if(! $this->hasDBError()){
             if($data['parent_id'] > 0){
-                self::$db->update('users_group', ['isfolder' => 1], "id={$data['parent_id']} limit 1");
+                self::$db->update('__users_group', ['isfolder' => 1], "id={$data['parent_id']} limit 1");
             }
         }
 
@@ -88,8 +88,8 @@ class CustomersGroup extends Engine
 
         return self::$db->select("
           select g.id, g.isfolder, CONCAT(i.name, ' #', g.id) as text
-          from users_group g
-          join users_group_info i on i.group_id=g.id and i.languages_id = {$this->languages_id}
+          from __users_group g
+          join __users_group_info i on i.group_id=g.id and i.languages_id = {$this->languages_id}
           where g.parent_id={$parent_id} and g.rang <= {$rang}
           order by abs(g.position) asc
           ")->all();
@@ -98,8 +98,8 @@ class CustomersGroup extends Engine
     public function getInfo($id)
     {
         $res = [];
-        foreach (self::$db->select("select id from languages")->all() as $item) {
-            $res[$item['id']] = self::$db->select("select name from users_group_info where group_id={$id} and languages_id={$item['id']} limit 1")->row();
+        foreach (self::$db->select("select id from __languages")->all() as $item) {
+            $res[$item['id']] = self::$db->select("select name from __users_group_info where group_id={$id} and languages_id={$item['id']} limit 1")->row();
         }
         return $res;
     }
@@ -110,16 +110,16 @@ class CustomersGroup extends Engine
      */
     public function getData($id)
     {
-        return self::$db->select("select * from users_group where id = {$id} limit 1")->row();
+        return self::$db->select("select * from __users_group where id = {$id} limit 1")->row();
     }
 
     public function delete($id)
     {
-        $parent_id = self::$db->select("select parent_id from users_group where id={$id} limit 1")->row('parent_id');
+        $parent_id = self::$db->select("select parent_id from __users_group where id={$id} limit 1")->row('parent_id');
         if($parent_id > 0){
-            $c = self::$db->select("select count(id) as t from users_group where parent_id={$parent_id}")->row('t');
+            $c = self::$db->select("select count(id) as t from __users_group where parent_id={$parent_id}")->row('t');
             if($c == 1){
-                self::$db->update('users_group', ['isfolder' => 0], "id={$parent_id} limit 1");
+                self::$db->update('__users_group', ['isfolder' => 0], "id={$parent_id} limit 1");
             }
         }
 
@@ -132,7 +132,7 @@ class CustomersGroup extends Engine
      */
     private function deleteChildren($parent_id)
     {
-        foreach (self::$db->select("select id, isfolder from users_group where parent_id={$parent_id}")->all() as $item) {
+        foreach (self::$db->select("select id, isfolder from __users_group where parent_id={$parent_id}")->all() as $item) {
             if($item['isfolder']){
                 $this->deleteChildren($item['id']);
             }
@@ -151,16 +151,16 @@ class CustomersGroup extends Engine
     {
         $this->beginTransaction();
 
-        $s = self::$db->update('users_group', ['parent_id' => $parent, 'position' => $position], "id={$id} limit 1");
+        $s = self::$db->update('__users_group', ['parent_id' => $parent, 'position' => $position], "id={$id} limit 1");
 
         if($s > 0){
-            self::$db->update('users_group', ['isfolder' => 1], "id={$parent} limit 1");
+            self::$db->update('__users_group', ['isfolder' => 1], "id={$parent} limit 1");
         }
 
         if($s > 0 && $old_parent > 0){
-            $c = self::$db->select("select count(id) as t from users_group where parent_id={$old_parent}")->row('t');
+            $c = self::$db->select("select count(id) as t from __users_group where parent_id={$old_parent}")->row('t');
             if($c == 0){
-                self::$db->update('users_group', ['isfolder' => 0], "id={$old_parent} limit 1");
+                self::$db->update('__users_group', ['isfolder' => 0], "id={$old_parent} limit 1");
             }
         }
 
@@ -181,7 +181,7 @@ class CustomersGroup extends Engine
         $res = self::$db
             -> select("
                   select g.id, i.name, g.isfolder
-                  from users_group g, users_group_info i
+                  from __users_group g, users_group_info i
                   where g.parent_id={$parent_id} and g.rang <= {$rang} and i.group_id=g.id and i.languages_id = {$this->languages_id}
               ")
             -> all();

@@ -8,6 +8,7 @@
 namespace models\core;
 
 use controllers\core\Config;
+use controllers\core\exceptions\Exception;
 
 if ( !defined('CPATH') )die();
 
@@ -24,12 +25,11 @@ class DB extends \PDO {
     private static $errorCode;
     private static $errorMessage;
     private static $count;
-
-    private $db_prefix;
     private $db_type;
     private $db_name;
     private $sql;
     private $result;
+    private $conf;
 
     /**
      * Construct this Database object, extending the PDO object
@@ -44,6 +44,8 @@ class DB extends \PDO {
          * @see http://www.php.net/manual/en/pdostatement.fetch.php
          */
         $conf = Config::getInstance()->get('db');
+        $this->conf = $conf;
+
         $this->db_name = $conf['db'];
 
         $options = array(
@@ -117,6 +119,7 @@ class DB extends \PDO {
 
     public function select($sql, $debug = false)
     {
+        $sql = str_replace('__', $this->conf['prefix'], $sql);
         if($debug) echo '<pre> '. $sql .' </pre>';
 
         try {
@@ -129,6 +132,9 @@ class DB extends \PDO {
             ++self::$count;
 
         } catch(\PDOException $e){
+            if($this->conf['debug']){
+                throw new Exception("$sql " . $e->getMessage());
+            }
             self::$errorMessage = "<pre>$sql" . $e->getMessage() .'</pre>';
             self::$errorCode = $e->getCode();
         }
@@ -137,7 +143,7 @@ class DB extends \PDO {
     }
 
     /**
-     * get row from query result
+     * get row from __query result
      * @param string $key
      * @return array|mixed
      */
@@ -181,10 +187,11 @@ class DB extends \PDO {
      */
     public function insert($table, $data, $debug = false)
     {
+        $table = str_replace('__', $this->conf['prefix'], $table);
         $fieldNames = implode('`, `', array_keys($data));
         $fieldValues = ':'.implode(', :', array_keys($data));
 
-        $sql = 'INSERT INTO `'.$this->db_prefix.$table.'` (`'.$fieldNames.'`) VALUES ('.$fieldValues.')';
+        $sql = 'INSERT INTO `'.$table.'` (`'.$fieldNames.'`) VALUES ('.$fieldValues.')';
         $sth = $this->prepare($sql);
 
         foreach($data as $key => $value){
@@ -217,6 +224,7 @@ class DB extends \PDO {
      */
     public function update($table, array $data, $where = 1, $debug = false)
     {
+        $table = str_replace('__', $this->conf['prefix'], $table);
 
         ksort($data);
 
@@ -226,7 +234,7 @@ class DB extends \PDO {
         }
         $fieldDetails = rtrim($fieldDetails, ',');
 
-        $sql = 'UPDATE `'.$this->db_prefix.$table.'` SET '.$fieldDetails.' WHERE '.$where;
+        $sql = 'UPDATE `'.$table.'` SET '.$fieldDetails.' WHERE '.$where;
         $sth = $this->prepare($sql);
 
         foreach($data as $key => $value){
@@ -259,8 +267,9 @@ class DB extends \PDO {
      */
     public function delete($table, $where = '', $debug = 0)
     {
+        $table = str_replace('__', $this->conf['prefix'], $table);
         $where_clause = (!empty($where) && !preg_match('/\bwhere\b/i', $where)) ? ' WHERE '.$where : $where;
-        $sql = 'DELETE FROM `'.$this->db_prefix.$table.'` '.$where_clause;
+        $sql = 'DELETE from `'.$table.'` '.$where_clause;
 
         $sth = $this->prepare($sql);
         if($debug){
@@ -287,6 +296,7 @@ class DB extends \PDO {
      */
     public function customExec($sql)
     {
+        $sql = str_replace('__', $this->conf['prefix'], $sql);
 
         try{
             $result = $this->exec($sql);
@@ -309,20 +319,20 @@ class DB extends \PDO {
         switch($this->db_type){
             case 'mssql';
             case 'sqlsrv':
-                $sql = 'SELECT * FROM sys.all_objects WHERE type = \'U\'';
+                $sql = 'SELECT * from sys.all_objects WHERE type = \'U\'';
                 break;
             case 'pgsql':
-                $sql = 'SELECT tablename FROM pg_tables WHERE tableowner = current_user';
+                $sql = 'SELECT tablename from pg_tables WHERE tableowner = current_user';
                 break;
             case 'sqlite':
-                $sql = 'SELECT * FROM sqlite_master WHERE type=\'table\'';
+                $sql = 'SELECT * from sqlite_master WHERE type=\'table\'';
                 break;
             case 'oci':
-                $sql = 'SELECT * FROM system.tab';
+                $sql = 'SELECT * from system.tab';
                 break;
             case 'ibm':
                 $schema = '';
-                $sql = 'SELECT TABLE_NAME FROM qsys2.systables'.
+                $sql = 'SELECT TABLE_NAME from qsys2.systables'.
                     (($schema != '') ? ' WHERE TABLE_SCHEMA = \''.$schema.'\'' : '');
                 break;
             case 'mysql':
@@ -353,14 +363,14 @@ class DB extends \PDO {
     {
         switch($this->db_type){
             case 'ibm':
-                $sql = "SELECT COLUMN_NAME FROM qsys2.syscolumns WHERE TABLE_NAME = '".$this->db_prefix.$table."'";
+                $sql = "SELECT COLUMN_NAME from qsys2.syscolumns WHERE TABLE_NAME = '".$table."'";
                 break;
             case 'mssql':
-                $sql = "SELECT COLUMN_NAME, data_type, character_maximum_length FROM ".
-                    $this->db_name.".information_schema.columns WHERE table_name = '".$this->db_prefix.$table."'";
+                $sql = "SELECT COLUMN_NAME, data_type, character_maximum_length from ".
+                    $this->db_name.".information_schema.columns WHERE table_name = '".$table."'";
                 break;
             default:
-                $sql = 'SHOW COLUMNS FROM `'.$this->db_prefix.$table.'`';
+                $sql = 'SHOW COLUMNS from `'.$table.'`';
                 break;
         }
 
@@ -514,8 +524,10 @@ class DB extends \PDO {
     }
 
     function enumValues( $table, $field ){
+
+        $table = str_replace('__', $this->conf['prefix'], $table);
         $enum = array();
-        $type = $this->select( "SHOW COLUMNS FROM {$table} WHERE Field = '{$field}'")->row();
+        $type = $this->select( "SHOW COLUMNS from {$table} WHERE Field = '{$field}'")->row();
         preg_match('/^enum\((.*)\)$/', $type['Type'], $matches);
         foreach( explode(',', $matches[1]) as $value )
         {
@@ -525,7 +537,9 @@ class DB extends \PDO {
     }
 
     function getColumns($table){
-        $sql = 'SHOW COLUMNS FROM ' . $table;
+
+        $table = str_replace('__', $this->conf['prefix'], $table);
+        $sql = 'SHOW COLUMNS from ' . $table;
         $names = array();
         $db = $this->prepare($sql);
 

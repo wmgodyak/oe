@@ -65,7 +65,7 @@ class Banners extends Engine
     public function items()
     {
         $t = new DataTables();
-        $t  -> table('banners_places')
+        $t  -> table('__banners_places')
             -> get('id, name, code, width, height');
         $t  -> execute();
 
@@ -98,7 +98,7 @@ class Banners extends Engine
     {
         if($this->request->isXhr()){
             $t = new DataTables();
-            $t  -> table('banners')
+            $t  -> table('__banners')
                 -> get('id, img, languages_id,  published, permanent, df, dt');
             $t  -> execute();
             $lang = $this->banners->getLanguages();

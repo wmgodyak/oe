@@ -74,11 +74,11 @@ class Pages extends Content
     public function items($parent_id = 0)
     {
         $t = new DataTables();
-        $t  -> table('content c')
+        $t  -> table('__content c')
             -> get('c.id, ci.name, ci.url, c.created, c.updated, c.status, c.isfolder, CONCAT(u.name, \' \' , u.surname) as owner')
-            -> join("content_types ct on ct.type = '{$this->type}' and ct.id=c.types_id")
-            -> join("content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}")
-            -> join('users u on u.id=c.owner_id')
+            -> join("__content_types ct on ct.type = '{$this->type}' and ct.id=c.types_id")
+            -> join("__content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}")
+            -> join('__users u on u.id=c.owner_id')
             -> where(" c.parent_id = {$parent_id} and c.status in ('published', 'hidden')")
             -> execute();
 

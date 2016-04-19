@@ -92,8 +92,8 @@ class Features extends Engine
     public function items($parent_id=0)
     {
         $t = new DataTables();
-        $t  -> table('features f')
-            -> join("features_info i on i.features_id=f.id and i.languages_id={$this->languages_id}")
+        $t  -> table('__features f')
+            -> join("__features_info i on i.features_id=f.id and i.languages_id={$this->languages_id}")
             -> get('f.id, i.name, f.code,f.type, f.status')
             -> where("f.parent_id = {$parent_id}")
             -> execute();

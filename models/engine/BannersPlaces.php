@@ -25,7 +25,7 @@ class BannersPlaces extends Engine
      */
     public function getData($id, $key = '*')
     {
-        return self::$db->select("select {$key} from banners_places where id={$id}")->row($key);
+        return self::$db->select("select {$key} from __banners_places where id={$id}")->row($key);
     }
 
     /**
@@ -48,7 +48,7 @@ class BannersPlaces extends Engine
     public function update($id)
     {
         $data = $this->request->post('data');
-        $s = $this->updateRow('banners_places', $id, $data);
+        $s = $this->updateRow('__banners_places', $id, $data);
         return $s;
     }
 
@@ -59,7 +59,7 @@ class BannersPlaces extends Engine
 
     public static function get()
     {
-        return self::$db->select("select id, name, code from banners_places order by is_main desc, id asc")->all();
+        return self::$db->select("select id, name, code from __banners_places order by is_main desc, id asc")->all();
     }
 
     /**
@@ -69,7 +69,7 @@ class BannersPlaces extends Engine
     public static function getTotalBanners($banners_places_id)
     {
         return self::$db
-            ->select("select count(id) as t from banners where banners_places_id={$banners_places_id}")
+            ->select("select count(id) as t from __banners where banners_places_id={$banners_places_id}")
             ->row('t');
     }
 }

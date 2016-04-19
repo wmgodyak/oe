@@ -33,11 +33,13 @@
 $(document).ready(function(){
 
     var ss = $("#selectAccessories"), sa = $('#selectedAccessories'), content_id = $('#content_id').val();
+    if(selected_accessories != null){
 
-    var tmpl = _.template($('#accessories').html());
-    var d = tmpl({items: selected_accessories});
-    sa.html(d);
+        var tmpl = _.template($('#accessories').html());
+        var d = tmpl({items: selected_accessories});
+        sa.html(d);
 
+    }
     function refreshAccessories(){
         engine.request.get('plugins/productsAccessories/get/'+content_id, function(res){
             var tmpl = _.template($('#accessories').html());

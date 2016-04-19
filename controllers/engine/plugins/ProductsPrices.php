@@ -53,7 +53,7 @@ class ProductsPrices extends Plugin
         $this->template->assign('units',  Guides::getByCode('units'));
         $this->template->assign('currency',  Currency::get());
         $this->template->assign('group_prices', $this->prices->get($id));
-//        $this->template->assign('content', $this->prices->getContentData($id));
+        $this->template->assign('content', $this->prices->getContentData($id));
         return $this->template->fetch('plugins/shop/products_prices');
     }
 

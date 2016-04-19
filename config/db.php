@@ -13,8 +13,10 @@ return array(
     'type'     => 'mysql',
     'host'     => 'localhost',
     'db'       => 'engine',
+    'prefix'   => 'e_',
     'user'     => 'root',
     'pass'     => 'dell',
     'port'     => 3306,
-    'charset'  => 'utf8'
+    'charset'  => 'utf8',
+    'debug'    => true
 );

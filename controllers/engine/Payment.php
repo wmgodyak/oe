@@ -60,8 +60,8 @@ class Payment extends Engine
     public function items()
     {
         $t = new DataTables();
-        $t  -> table('payment d')
-            -> join("payment_info i on i.payment_id=d.id and i.languages_id={$this->languages_id}")
+        $t  -> table('__payment d')
+            -> join("__payment_info i on i.payment_id=d.id and i.languages_id={$this->languages_id}")
             -> get('d.id,i.name,d.published')
 
             -> execute();

@@ -20,7 +20,7 @@ class Languages extends Model
      */
     public function getDefault($key = '*')
     {
-        return self::$db->select("select {$key} from languages where is_main = 1 limit 1 ")->row($key);
+        return self::$db->select("select {$key} from __languages where is_main = 1 limit 1 ")->row($key);
     }
 
     /**
@@ -28,7 +28,7 @@ class Languages extends Model
      */
     public function getAll()
     {
-        return self::$db->select("select * from languages")->all();
+        return self::$db->select("select * from __languages")->all();
     }
 
     /**
@@ -37,7 +37,7 @@ class Languages extends Model
      */
     public function getIdByCode($code)
     {
-        return self::$db->select("select id from languages where code = '{$code}' limit 1")->row('id');
+        return self::$db->select("select id from __languages where code = '{$code}' limit 1")->row('id');
     }
 
     /**
@@ -47,7 +47,7 @@ class Languages extends Model
      */
     public function getData($id, $key = '*')
     {
-        return self::$db->select("select {$key} from languages where id={$id} limit 1")->row($key);
+        return self::$db->select("select {$key} from __languages where id={$id} limit 1")->row($key);
     }
 
 

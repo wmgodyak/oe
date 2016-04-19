@@ -25,7 +25,7 @@ class Chunks extends Engine
      */
     public function getData($id, $key= '*')
     {
-        return self::$db->select("select {$key} from chunks where id={$id} limit 1")->row($key);
+        return self::$db->select("select {$key} from __chunks where id={$id} limit 1")->row($key);
     }
 
     /**
@@ -57,7 +57,7 @@ class Chunks extends Engine
     {
         return self::$db->select("
             select id
-            from chunks
+            from __chunks
             where name='{$name}' ". ($id ? " and id <> $id" : '') ." limit 1")
             ->row('id');
     }

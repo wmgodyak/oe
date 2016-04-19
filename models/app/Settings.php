@@ -20,7 +20,7 @@ class Settings
 
     private function __construct()
     {
-        $r = DB::getInstance()->select("select name, value from settings")->all();
+        $r = DB::getInstance()->select("select name, value from __settings")->all();
         foreach ($r as $item) {
             $this->data[$item['name']] = $item['value'];
         }

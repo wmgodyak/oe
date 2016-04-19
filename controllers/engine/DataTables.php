@@ -44,9 +44,9 @@ return $t->render();
  * JSON VS DB
  *
 $t = new DataTables();
-$t  -> table('content c')
+$t  -> table('__content c')
 -> get('c.id, i.name, c.published')
--> join("join content_info i on i.content_id=c.id and i.languages_id=1")
+-> join("__join content_info i on i.content_id=c.id and i.languages_id=1")
 -> execute();
 
 return $t->renderJSON($t->getResults(), $t->getTotal());
@@ -54,9 +54,9 @@ return $t->renderJSON($t->getResults(), $t->getTotal());
  * JSON VS DB CUSTOM FORMAT
 
 $t = new DataTables();
-$t  -> table('content c')
+$t  -> table('__content c')
 -> get('c.id, i.name, c.published')
--> join("join content_info i on i.content_id=c.id and i.languages_id=1")
+-> join("__join content_info i on i.content_id=c.id and i.languages_id=1")
 -> execute();
 
 $res = array();
@@ -258,6 +258,7 @@ class DataTables {
 
         $t = "SELECT COUNT(*) AS t FROM {$this->table} {$j} {$w}";
         $q = "SELECT {$this->rows} FROM {$this->table} {$j} {$w} {$this->order_by} {$this->limit}";
+//        echo $t,"\r\n";
 //        echo $q;
         $this->total   = $this->db->select($t, $this->debug)->row('t');
         $this->results = $this->db->select($q, $this->debug)->all();

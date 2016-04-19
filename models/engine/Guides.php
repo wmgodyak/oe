@@ -25,13 +25,13 @@ class Guides extends Engine
      */
     public function getData($id, $key = '*')
     {
-        $data =  self::$db->select("select {$key} from guides where id={$id}")->row($key);
+        $data =  self::$db->select("select {$key} from __guides where id={$id}")->row($key);
 
         if($key != '*') return $data;
 
         foreach ($this->languages as $language) {
             $data['info'][$language['id']] = self::$db
-                ->select("select * from guides_info where guides_id={$id} and languages_id={$language['id']} limit 1")
+                ->select("select * from __guides_info where guides_id={$id} and languages_id={$language['id']} limit 1")
                 ->row();
         }
         return $data;
@@ -81,7 +81,7 @@ class Guides extends Engine
         $guides_info = $this->request->post('guides_info');
 
         $this->beginTransaction();
-        $this->updateRow('guides', $id, $guides);
+        $this->updateRow('__guides', $id, $guides);
 
         if($this->hasDBError()){
             $this->rollback();
@@ -90,14 +90,14 @@ class Guides extends Engine
 
         foreach ($guides_info as $languages_id=> $item) {
             $aid = self::$db
-                ->select("select id from guides_info where guides_id={$id} and languages_id={$languages_id} limit 1")
+                ->select("select id from __guides_info where guides_id={$id} and languages_id={$languages_id} limit 1")
                 ->row('id');
             if(empty($aid)){
                 $item['languages_id']    = $languages_id;
                 $item['guides_id'] = $id;
                 $this->createRow('guides_info', $item);
             } else {
-                $this->updateRow('guides_info', $aid, $item);
+                $this->updateRow('__guides_info', $aid, $item);
             }
         }
         if($this->hasDBError()){

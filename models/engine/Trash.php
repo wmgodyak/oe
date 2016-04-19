@@ -16,7 +16,7 @@ class Trash extends Engine
 {
     private function getData($id, $key = '*')
     {
-        return self::$db->select("select {$key} from content where id={$id} limit 1")->row($key);
+        return self::$db->select("select {$key} from __content where id={$id} limit 1")->row($key);
     }
     public function remove($id)
     {

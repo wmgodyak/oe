@@ -20,7 +20,7 @@ class Nav extends Engine
 
     public function getData($id, $key = '*')
     {
-        $data = self::$db->select("select {$key} from nav where id={$id} limit 1")->row($key);
+        $data = self::$db->select("select {$key} from __nav where id={$id} limit 1")->row($key);
 
         if ($key != '*') return $data;
 
@@ -35,7 +35,7 @@ class Nav extends Engine
 
         $this->beginTransaction();
 
-        $this->updateRow('nav', $id, $data);
+        $this->updateRow('__nav', $id, $data);
 
         if($this->hasDBError()){
             $this->rollback();
@@ -57,11 +57,11 @@ class Nav extends Engine
 
     public function delete($id)
     {
-        return $this->deleteRow('nav', $id);
+        return $this->deleteRow('__nav', $id);
     }
     public function deleteItem($id)
     {
-        return $this->deleteRow('nav_items', $id);
+        return $this->deleteRow('__nav_items', $id);
     }
 
     public function getItems($parent_id, $level = 3)
@@ -70,8 +70,8 @@ class Nav extends Engine
         $res = [];
         $r = self::$db->select("
           select c.id, c.isfolder, c.status, ci.name
-          from content c
-          join content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
+          from __content c
+          join __content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
           where c.parent_id={$parent_id} and c.status = 'published'
           ")->all();
 
@@ -99,9 +99,9 @@ class Nav extends Engine
     {
         return self::$db->select("
           select ni.id,c.id as content_id, ci.name
-          from nav_items ni
-          join content c on c.id=ni.content_id and c.status = 'published'
-          join content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
+          from __nav_items ni
+          join __content c on c.id=ni.content_id and c.status = 'published'
+          join __content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
           where ni.nav_id={$nav_id}
           order by abs(ni.position) asc
           " )->all();

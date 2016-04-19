@@ -25,7 +25,7 @@ class ContentTypes extends Engine
      */
     public function getData($id, $key= '*')
     {
-        $d = self::$db->select("select {$key} from content_types where id={$id} limit 1")->row($key);
+        $d = self::$db->select("select {$key} from __content_types where id={$id} limit 1")->row($key);
 
         if($key != '*') return $d;
 
@@ -49,7 +49,7 @@ class ContentTypes extends Engine
     private function getSelectedImagesSizes($types_id)
     {
         return self::$db
-            ->select("select images_sizes_id from content_types_images_sizes where types_id={$types_id}")
+            ->select("select images_sizes_id from __content_types_images_sizes where types_id={$types_id}")
             ->all('images_sizes_id');
     }
 
@@ -61,7 +61,7 @@ class ContentTypes extends Engine
     {
         $s = parent::createRow('content_types', $data);
         if($s>0 && $data['parent_id'] > 0){
-            self::$db->update('content_types', ['isfolder'=>1], "id={$data['parent_id']} limit 1");
+            self::$db->update('__content_types', ['isfolder'=>1], "id={$data['parent_id']} limit 1");
         }
         if($s>0){
             // content_types_images_sizes
@@ -115,7 +115,7 @@ class ContentTypes extends Engine
     public function hasChildren($id)
     {
         return self::$db
-            ->select("select count(id) as t from content_types where parent_id={$id}")
+            ->select("select count(id) as t from __content_types where parent_id={$id}")
             ->row('t') > 0;
     }
 
@@ -124,7 +124,7 @@ class ContentTypes extends Engine
         $parent_id = (int)$parent_id;
         return self::$db->select("
             select id
-            from content_types
+            from __content_types
             where parent_id={$parent_id} and type='{$type}' ". ($id ? " and id <> $id" : '') ." limit 1")
             ->row('id');
     }
@@ -134,7 +134,7 @@ class ContentTypes extends Engine
         return self::$db
             ->select("
                 select f.id, i.name
-                from features f, features_info i
+                from __features f, features_info i
                 where f.status='published' and f.parent_id=0 and i.features_id=f.id and i.languages_id={$this->languages_id}
             ")
             ->all();
@@ -150,7 +150,7 @@ class ContentTypes extends Engine
     {
         $is = self::$db->select("
                 select id
-                from features_content
+                from __features_content
                 where
                 content_types_id    = {$types_id}    and
                 content_subtypes_id = {$subtypes_id} and
@@ -161,7 +161,7 @@ class ContentTypes extends Engine
 
         $pos = self::$db->select("
                 select MAX(position) as t
-                from features_content
+                from __features_content
                 where
                 content_types_id    = {$types_id} and
                 content_subtypes_id = {$subtypes_id}
@@ -189,9 +189,9 @@ class ContentTypes extends Engine
         return self::$db
             ->select("
                 select fc.features_id as id, f.type, i.name
-                from features_content fc
-                join features f on f.id=fc.features_id
-                join features_info i on i.features_id=f.id and i.languages_id={$this->languages_id}
+                from __features_content fc
+                join __features f on f.id=fc.features_id
+                join __features_info i on i.features_id=f.id and i.languages_id={$this->languages_id}
                 where
                 content_types_id    = {$types_id} and
                 content_subtypes_id = {$subtypes_id}
@@ -202,27 +202,27 @@ class ContentTypes extends Engine
 
     public function deleteFeatures($id)
     {
-        return $this->deleteRow('features_content', $id);
+        return $this->deleteRow('__features_content', $id);
     }
 
     public function getContentImagesSizes()
     {
-        return self::$db->select("select * from content_images_sizes order by id asc")->all();
+        return self::$db->select("select * from __content_images_sizes order by id asc")->all();
     }
 
 
     public function getModules()
     {
-        return self::$db->select("select controller from modules")->all();
+        return self::$db->select("select controller from __modules")->all();
     }
 
     public function getFeaturesTypes()
     {
-        return self::$db->enumValues('features', 'type');
+        return self::$db->enumValues('__features', 'type');
     }
 
     public function get($parent_id)
     {
-        return self::$db->select("select id, name from content_types where parent_id={$parent_id} order by id asc")->all();
+        return self::$db->select("select id, name from __content_types where parent_id={$parent_id} order by id asc")->all();
     }
 }

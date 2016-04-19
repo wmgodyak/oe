@@ -48,7 +48,7 @@ class Languages extends Engine
     public function items()
     {
         $t = new DataTables();
-        $t  -> table('languages')
+        $t  -> table('__languages')
             -> get('id,name,code,is_main')
             -> execute();
 

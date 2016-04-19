@@ -16,7 +16,7 @@ class Modules extends Model
 {
     public function create($data)
     {
-        $modules_id = self::$db->insert('modules', $data);
+        $modules_id = self::$db->insert('__modules', $data);
 
         return $modules_id;
     }
@@ -27,7 +27,7 @@ class Modules extends Model
     public function isInstalled($controller)
     {
         $controller = lcfirst($controller);
-        return self::$db->select("select id from modules where controller = '{$controller}' limit 1")->row('id') > 0;
+        return self::$db->select("select id from __modules where controller = '{$controller}' limit 1")->row('id') > 0;
     }
 
     /**
@@ -37,7 +37,7 @@ class Modules extends Model
      */
     public function data($controller, $key = '*')
     {
-        return self::$db->select("select {$key} from modules where controller = '{$controller}' limit 1")->row($key);
+        return self::$db->select("select {$key} from __modules where controller = '{$controller}' limit 1")->row($key);
     }
 
 
@@ -48,7 +48,7 @@ class Modules extends Model
      */
     public function getDataByID($id, $key = '*')
     {
-        $data = self::$db->select("select {$key} from modules where id={$id} limit 1")->row($key);
+        $data = self::$db->select("select {$key} from __modules where id={$id} limit 1")->row($key);
 
         if($key != '*') return $data;
 
@@ -63,7 +63,7 @@ class Modules extends Model
      */
     public function is($id)
     {
-        return self::$db->select("select id from modules where id = '{$id}' limit 1")->row('id') > 0;
+        return self::$db->select("select id from __modules where id = '{$id}' limit 1")->row('id') > 0;
     }
 
     /**
@@ -82,6 +82,6 @@ class Modules extends Model
     public function update($id)
     {
         $data = $this->request->post('data');
-        return self::$db->update('modules', $data, "id = '{$id}' limit 1");
+        return self::$db->update('__modules', $data, "id = '{$id}' limit 1");
     }
 }

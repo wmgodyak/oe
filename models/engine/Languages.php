@@ -24,7 +24,7 @@ class Languages extends Model
      */
     public function getData($id)
     {
-        return self::$db->select("select * from languages where id={$id}")->row();
+        return self::$db->select("select * from __languages where id={$id}")->row();
     }
 
     /**
@@ -33,7 +33,7 @@ class Languages extends Model
      */
     public function getDefault($key='*')
     {
-        return self::$db->select("select {$key} from languages where is_main=1")->row($key);
+        return self::$db->select("select {$key} from __languages where is_main=1")->row($key);
     }
 
     /**
@@ -43,9 +43,9 @@ class Languages extends Model
     public function create($data)
     {
         if($data['is_main'] == 1){
-            self::$db->update('languages', ['is_main' => 0]);
+            self::$db->update('__languages', ['is_main' => 0]);
         }
-        return self::$db->insert('languages', $data);
+        return self::$db->insert('__languages', $data);
     }
 
     /**
@@ -56,9 +56,9 @@ class Languages extends Model
     public function update($id, $data)
     {
         if($data['is_main'] == 1){
-            self::$db->update('languages', ['is_main' => 0]);
+            self::$db->update('__languages', ['is_main' => 0]);
         }
-        $s = self::$db->update('languages', $data, " id={$id} limit 1");
+        $s = self::$db->update('__languages', $data, " id={$id} limit 1");
         return $s;
     }
 
@@ -69,7 +69,7 @@ class Languages extends Model
 
     public function get()
     {
-        return self::$db->select("select * from languages order by is_main desc, name asc")->all();
+        return self::$db->select("select * from __languages order by is_main desc, name asc")->all();
     }
 
 }
