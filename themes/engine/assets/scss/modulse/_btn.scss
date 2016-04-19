@@ -41,10 +41,9 @@
   }
 }
 
-.btn{
-  border: none;
+button {
   cursor: pointer;
-  text-decoration: none;
+  text-decoration: none !important;
   display: inline-block;
   vertical-align: middle;
   white-space: nowrap;
@@ -54,50 +53,121 @@
   border-radius: 3px;
   font-family: $bold;
   transition: all 0.35s ease;
+  color: #1e3c50;
+  background: $btn-default;
+  border: 1px solid #a6b2c0;
+  &:hover{
+    background: #ebeef0;
+  }
+  &:disabled{
+    cursor: not-allowed;
+    background: lighten($btn-default, 20%);
+  }
+}
+
+.btn {
+  cursor: pointer;
+  text-decoration: none !important;
+  display: inline-block;
+  vertical-align: middle;
+  white-space: nowrap;
+  outline: none;
+  -moz-user-select: none;
+  user-select: none;
+  border-radius: 3px;
+  font-family: $bold;
+  transition: all 0.35s ease;
+  text-align: center;
+  //width: 32px;
+  //height: 32px;
+  padding: 0 10px;
+  margin: 1px;
+  line-height: 30px;
+
+  color: #1e3c50;
+  background: $btn-default;
+  border: 1px solid #a6b2c0;
+
   &.btn-lg{
     height: 60px;
-    line-height: 58px;
+    line-height: 60px;
     padding: 0 40px;
     font-size: 20px;
   }
   &.btn-md{
     height: 44px;
-    line-height: 42px;
+    line-height: 44px;
     padding: 0 20px;
     font-size: 16px;
   }
-  &.btn-info{
-    color: #fff;
-    background: $btn-info;
+
+  &.btn-link{
+    background: none;
+    color:#337ab7;
+    border: 1px solid #a6b2c0;
+  }
+
+  &.btn-primary{
+    color: #fff!important;
+    border: 1px solid #00c8f9;
+    background: #00c8f9;
     &:hover{
-      background: darken($btn-info, 20%);
+      background: darken(#00c8f9, 10%);
+      border: 1px solid  darken(#00c8f9, 10%);
     }
     &:disabled{
       cursor: not-allowed;
-      background: lighten($btn-info, 20%);
+      opacity: .6;
     }
   }
   &.btn-default{
-    color: $color-3;
+    color: #1e3c50;
     background: $btn-default;
-    border: 2px solid #D9DFE9;
+    border: 1px solid #a6b2c0;
     &:hover{
-      background: #D9DFE9;
+      background: #ebeef0;
     }
     &:disabled{
       cursor: not-allowed;
       background: lighten($btn-default, 20%);
     }
   }
-  &.btn-success{
+  &.btn-success, &.b-form-save{
     color: #fff;
-    background: $btn-success;
+    background: #79d4a7;
+    border: 1px solid #79d4a7;
     &:hover{
-      background: darken($btn-success, 20%);
+      background: darken(#79d4a7, 20%);
+      border: 1px solid darken(#79d4a7, 20%);
     }
     &:disabled{
       cursor: not-allowed;
-      background: lighten($btn-success, 20%);
+      background: lighten(#79d4a7, 20%);
     }
   }
+  &.btn-danger{
+    color: #fff;
+    background: #ff7163;
+    border: 1px solid #ff7163;
+    &:hover{
+      background: darken(#ff7163, 20%);
+      border: 1px solid #ff7163;
+    }
+    &:disabled{
+      cursor: not-allowed;
+      background: lighten(#ff7163, 20%);
+    }
+    &.no-border{ border:0; }
+  }
+ /* &.square{
+    text-align: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 3px;
+        margin: 1px;
+        color: #fff !important;
+        line-height: 30px;
+  }*/
 }
+
+.b-change-date{cursor: pointer}

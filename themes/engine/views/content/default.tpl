@@ -10,10 +10,10 @@
         <div class="col-md-8">
             {include "content/blocks/main.tpl"}
             {if isset($plugins.after_main)}{implode("\r\n", $plugins.after_main)}{/if}
-            {include "content/blocks/meta.tpl"}
-            {if isset($plugins.after_meta)}{implode("\r\n", $plugins.after_meta)}{/if}
             {include "content/blocks/content.tpl"}
             {if isset($plugins.after_content)}{implode("\r\n", $plugins.after_content)}{/if}
+            {include "content/blocks/meta.tpl"}
+            {if isset($plugins.after_meta)}{implode("\r\n", $plugins.after_meta)}{/if}
         </div>
         <div class="col-md-4">
             {include "content/blocks/params.tpl"}

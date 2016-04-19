@@ -103,6 +103,7 @@ class Content extends Engine
         $d['owners'] = $this->getOwners();
 
         $d['info']   = $this->getInfo($id);
+
         if($d['parent_id'] > 0){
             $d['parent_url'] = $this->getParentUrl($d['parent_id']);
         }
@@ -187,14 +188,26 @@ class Content extends Engine
 
         $info = $this->request->post('content_info');
 
-        FormValidation::setRule(['name', 'url'], FormValidation::REQUIRED);
+//        FormValidation::setRule(['name', 'url'], FormValidation::REQUIRED);
+//
+//        foreach($info as $languages_id => $data){
+//            FormValidation::run($data);
+//        }
+//
+//        if(FormValidation::hasErrors()){
+//            $this->error = FormValidation::getErrors();
+//            return false;
+//        }
 
-        foreach($info as $languages_id => $data){
-            FormValidation::run($data);
+        foreach ($info as $languages_id=> $item) {
+            if(empty($item['name'])){
+                $this->error[] = ["content_info[$languages_id][name]" => 'field_required'];
+            }
+            if(empty($item['url'])){
+                $this->error[] = ["content_info[$languages_id][url]" => 'field_required'];
+            }
         }
-
-        if(FormValidation::hasErrors()){
-            $this->error = FormValidation::getErrors();
+        if(!empty($this->error)) {
             return false;
         }
 

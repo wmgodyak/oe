@@ -42,7 +42,8 @@ class Pages extends Content
             $this->appendToPanel((string)Link::create
             (
                 $this->t('common.back'),
-                ['class' => 'btn-md', 'href'=> './content/pages/index' . ($data['parent_id']>0 ? '/' . $data['parent_id'] : '')]
+                ['class' => 'btn-md', 'href'=> './content/pages/index' . ($data['parent_id']>0 ? '/' . $data['parent_id'] : '')],
+                (string)Icon::create('fa-reply')
             )
             );
         }
@@ -52,7 +53,7 @@ class Pages extends Content
             (string)Link::create
             (
                 $this->t('common.button_create'),
-                ['class' => 'btn-md', 'href'=> './content/pages/create' . ($parent_id? "/$parent_id" : '')]
+                ['class' => 'btn-md btn-primary', 'href'=> './content/pages/create' . ($parent_id? "/$parent_id" : '')]
             )
         );
 
@@ -61,11 +62,11 @@ class Pages extends Content
         $t  -> setId('content')
             -> ajaxConfig('content/pages/items/' . $parent_id)
 //            -> setConfig('order', array(0, 'desc'))
-            -> th($this->t('common.id'))
+            -> th($this->t('common.id'), '', 'width: 100px')
             -> th($this->t('common.name'))
-            -> th($this->t('common.created'))
-            -> th($this->t('common.updated'))
-            -> th($this->t('common.tbl_func'), '', 'width: 160px')
+            -> th($this->t('common.created'), '', 'width: 200px')
+            -> th($this->t('common.updated'), '', 'width: 200px')
+            -> th($this->t('common.tbl_func'), '', 'width: 170px')
         ;
 
         $this->output($t->render());
@@ -90,7 +91,7 @@ class Pages extends Content
             $res[$i][] = $row['id'];
             $res[$i][] =
                            " <a class='status-{$row['status']}' title='{$status}' href='content/pages/index/{$row['id']}'>{$icon}  {$row['name']}</a>"
-                         . " <a href='/{$row['url']}' target='_blank'>{$icon_link}</a>"
+                         . "<a style='margin-left:10px' href='/{$row['url']}' target='_blank'>{$icon_link}</a>"
                          . "<br><small class='label label-info'>Автор:{$row['owner']} </small>"
                             ;
             $res[$i][] = date('d.m.Y H:i:s', strtotime($row['created']));
@@ -102,7 +103,7 @@ class Pages extends Content
                         (
                             Icon::create(Icon::TYPE_PUBLISHED),
                             [
-                                'class' => 'btn-primary b-pages-hide',
+                                'class' => 'b-pages-hide',
                                 'title' => $this->t('common.title_pub'),
                                 'data-id' => $row['id']
                             ]
@@ -112,7 +113,7 @@ class Pages extends Content
                         (
                             Icon::create(Icon::TYPE_HIDDEN),
                             [
-                                'class' => 'btn-primary b-pages-pub',
+                                'class' => ' b-pages-pub',
                                 'title' => $this->t('common.title_hide'),
                                 'data-id' => $row['id']
                             ]
@@ -126,7 +127,7 @@ class Pages extends Content
                 ($row['isfolder'] == 0 ? (string)Button::create
                 (
                     Icon::create(Icon::TYPE_DELETE),
-                    ['class' => 'b-pages-delete', 'data-id' => $row['id'], 'title' => $this->t('pages.delete_question')]
+                    ['class' => 'btn-danger b-pages-delete', 'data-id' => $row['id'], 'title' => $this->t('pages.delete_question')]
                 ) : "")
 
             ;
@@ -146,13 +147,28 @@ class Pages extends Content
     {
         $parent_id = $this->mContent->getData($id, 'parent_id');
 
-        $this->appendToPanel((string)Link::create
+        $this->appendToPanel
         (
-            $this->t('common.back'),
-            ['class' => 'btn-md', 'href'=> './content/'. $this->type . ($parent_id > 0 ? '/index/' . $parent_id : '')]
-        )
+            (string)Link::create
+            (
+                $this->t('common.back'),
+                ['class' => 'btn-md', 'href'=> './content/'. $this->type . ($parent_id > 0 ? '/index/' . $parent_id : '')],
+                (string)Icon::create('fa-reply')
+            )
         );
 
         parent::edit($id);
+    }
+
+    public function process($id)
+    {
+        $a = parent::process($id, false);
+
+        if($a['s']){
+            $content = $this->request->post('content');
+            $a['m'] = sprintf($this->t('pages.update_success'), "content/pages/index/{$content['parent_id']}", "content/pages/create/{$content['parent_id']}");
+        }
+
+        $this->response->body($a)->asJSON();
     }
 }

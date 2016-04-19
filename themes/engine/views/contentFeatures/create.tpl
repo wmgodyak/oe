@@ -1,21 +1,21 @@
 <form action="contentFeatures/process" method="post" id="formContentFeatures" class="form-horizontal" >
     {foreach $languages as $lang}
         <div class="form-group">
-            <label for="f_info_{$lang.id}" class="col-sm-3 control-label">{$t.features.name} ({$lang.code})</label>
-            <div class="col-sm-9">
+            <label for="f_info_{$lang.id}" class="col-md-2 control-label">{$t.features.name} ({$lang.code})</label>
+            <div class="col-md-10">
                 <input name="info[{$lang.id}][name]"  placeholder="{$lang.name}" required id="f_info_{$lang.id}"  class="form-control f-info-name" data-lang="{$lang.code}">
             </div>
         </div>
     {/foreach}
     <div class="form-group">
-        <label for="f_data_code" class="col-sm-3 control-label">{$t.features.code}</label>
-        <div class="col-sm-9">
+        <label for="f_data_code" class="col-md-2 control-label">{$t.features.code}</label>
+        <div class="col-md-10">
             <input name="data[code]" id="f_data_code"  class="form-control">
         </div>
     </div>
     <div class="form-group">
-        <label for="data_type" class="col-md-3 control-label">{$t.features.type}</label>
-        <div class="col-md-9">
+        <label for="data_type" class="col-md-2 control-label">{$t.features.type}</label>
+        <div class="col-md-10">
             <select name="data[type]" id="data_type" class="form-control">
                 {foreach $types as $i=>$item}
                     {assign var="item_name" value="type_$item"}
@@ -25,7 +25,7 @@
         </div>
     </div>
     <div class="form-group fg-multiple" style="display: none">
-        <div class="col-md-9 col-md-offset-3">
+        <div class="col-md-10 col-md-offset-2">
             <div class="checkbox">
                 <label>
                     <input type="hidden" name="data[multiple]" value="0">
@@ -35,7 +35,7 @@
         </div>
     </div>
     <div class="form-group fg-show-filter" style="display: none">
-        <div class="col-md-9 col-md-offset-3">
+        <div class="col-md-10 col-md-offset-2">
             <div class="checkbox">
                 <label>
                     <input type="hidden" name="data[on_filter]" value="0">
@@ -47,7 +47,7 @@
 
 
     <div class="form-group">
-        <div class="col-md-9 col-md-offset-3">
+        <div class="col-md-10 col-md-offset-2">
             <div class="checkbox">
                 <label>
                     <input type="hidden" name="data[required]" value="0">
@@ -58,7 +58,7 @@
     </div>
 
     <div class="form-group">
-        <div class="col-md-9 col-md-offset-3">
+        <div class="col-md-10 col-md-offset-2">
             <div class="checkbox">
                 <label>
                     <input type="hidden" name="page_only" value="0">

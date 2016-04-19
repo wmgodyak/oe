@@ -74,7 +74,6 @@ class Admin extends Engine {
     public function login($lang=null)
     {
         if($this->request->isPost()){
-            sleep(1);
             $status = 0; $inp = []; $data = $this->request->post('data');
             $ban_time = time()+3600;
             $secpic = $this->request->post('secpic');

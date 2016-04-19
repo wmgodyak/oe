@@ -14,13 +14,10 @@
     {/if}
 
     <div class="form-group">
-        <label for="content_status" class="col-md-3 control-label">{$t.common.status}</label>
+        <label for="content_status" class="col-md-3 control-label">{*$t.common.status*} Опубліковано</label>
         <div class="col-md-9">
-            <select name="content[status]" id="content_status" class="form-control">
-                {foreach $content.statuses as $i=>$item}
-                    <option {if $content.status==$item}selected{/if} value="{$item}">{$item}</option>
-                {/foreach}
-            </select>
+            <input type="hidden" name="content[status]" value="hidden">
+            <input class="switch" type="checkbox" name="content[status]" id="content_status" value="published" {if $content.status=='published'}checked{/if}>
         </div>
     </div>
     <div class="form-group">
@@ -42,8 +39,12 @@
     <div class="form-group">
         <label for="content_published" class="col-md-3 control-label">{$t.common.pub_date}</label>
         <div class="col-md-9">
-            <input name="content[published]" id="content_published" class="form-control datepicker" value="{$content.published}">
+            <div class="date-select">
+                <input name="content[published]" id="content_published" class="form-control datepicker" value="{$content.published}">
+                <i class="fa fa-calendar b-change-date"></i>
+            </div>
         </div>
     </div>
+
     {if isset($plugins.params)}{implode("\r\n", $plugins.params)}{/if}
 </fieldset>

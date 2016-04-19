@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-04-13 09:06:26
+<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-04-19 18:37:07
          compiled from "/var/www/engine.loc/themes/engine/views/heading_panel.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:12336200085696130d0b6045-76198499%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'f28238b68f8fe96871dd5acb247d3b535d87f16c' => 
     array (
       0 => '/var/www/engine.loc/themes/engine/views/heading_panel.tpl',
-      1 => 1460527545,
+      1 => 1461080227,
       2 => 'file',
     ),
   ),
@@ -19,18 +19,39 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   'unifunc' => 'content_5696130d0c6565_03315811',
   'variables' => 
   array (
-    'name' => 0,
+    'breadcrumb' => 0,
+    'b' => 0,
+    'k' => 0,
     'panel_nav' => 0,
     'item' => 0,
   ),
   'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_5696130d0c6565_03315811')) {function content_5696130d0c6565_03315811($_smarty_tpl) {?><!--heading-->
+<?php if ($_valid && !is_callable('content_5696130d0c6565_03315811')) {function content_5696130d0c6565_03315811($_smarty_tpl) {?>
+<!--heading-->
 <div class="dashboard-heading">
     <div class="dashboard-title">
-        <i class="fa fa-file-o"></i>
-        <h1><?php echo $_smarty_tpl->tpl_vars['name']->value;?>
-</h1>
+        
+        <h1 class="breadcrumb">
+            <a href="dashboard"><i class="fa fa-home"></i></a>
+            <?php  $_smarty_tpl->tpl_vars['b'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['b']->_loop = false;
+ $_smarty_tpl->tpl_vars['k'] = new Smarty_Variable;
+ $_from = $_smarty_tpl->tpl_vars['breadcrumb']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
+foreach ($_from as $_smarty_tpl->tpl_vars['b']->key => $_smarty_tpl->tpl_vars['b']->value) {
+$_smarty_tpl->tpl_vars['b']->_loop = true;
+ $_smarty_tpl->tpl_vars['k']->value = $_smarty_tpl->tpl_vars['b']->key;
+?>
+                <?php if ($_smarty_tpl->tpl_vars['b']->value['url']) {?>
+                   / <a href="<?php echo $_smarty_tpl->tpl_vars['b']->value['url'];?>
+"><?php echo $_smarty_tpl->tpl_vars['b']->value['name'];?>
+</a>
+                <?php } else { ?>
+                    <span class="item-<?php echo $_smarty_tpl->tpl_vars['k']->value;?>
+">/ <?php echo $_smarty_tpl->tpl_vars['b']->value['name'];?>
+</span>
+                <?php }?>
+            <?php } ?>
+        </h1>
     </div>
     <?php if (!empty($_smarty_tpl->tpl_vars['panel_nav']->value)) {?>
         <div class="btn-group">

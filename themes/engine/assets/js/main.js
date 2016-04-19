@@ -35,6 +35,7 @@ var engine = {
 
         $(myForm).validate({
             errorElement: 'span',
+            errorClass: "error",
             rules: rules,
             debug: true,
             submitHandler: function(form) {
@@ -68,7 +69,7 @@ var engine = {
 
                             if(typeof d.m != 'undefined'){
                                 d.e = typeof d.e == 'undefined' ? null : d.e;
-                                engine.notify(d.m, d.t, 'success');
+                                engine.notify(d.m, 'success');
                             }
 
                             if(typeof onSuccess == 'string'){
@@ -97,6 +98,7 @@ var engine = {
                 $(form).ajaxSubmit(settings);
             }
         });
+        engine.styleInputs();
     },
     closeDialog: function(){
       $(".ui-dialog-content").dialog("close");
@@ -122,8 +124,15 @@ var engine = {
             autoOpen: true,
             width: 500,
             modal: true,
-            buttons: {
-                "Так": success
+            buttons:  [
+                {
+                    text    : "Так",
+                    "class" : 'btn-success',
+                    click   : success
+                }
+            ],
+            close: function() {
+                console.log('dialog close ok.');
             }
         });
     },
@@ -140,14 +149,24 @@ var engine = {
             }
         });
     },
-    notify: function(msg, title, status)
+    notify: function(msg, status)
     {
-        var c = $('.inline-notifications');
-        title = typeof title   =='undefined' ?  'Інформація' : title;
+        var c = $('.inline-notifications'), icon;
+        switch (status){
+            case 'success':
+                icon = 'check-circle';
+                break;
+            case 'error':
+                icon = 'exclamation-triangle';
+                break;
+            default:
+                icon = 'check-circle';
+                break;
+        }
         status = typeof status =='undefined' ? 'info' : status;
         c.html("<div class='alert alert-"+status+" alert-dismissible' role='alert'>\
             <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\
-            <strong>"+title+"</strong>"+status+"\
+            <i class='fa fa-"+ icon +"'></i>"+msg+"\
         </div>");
         setTimeout(function(){c.html('');}, 7000)
      },
@@ -1070,6 +1089,15 @@ engine.content = {
             var code = $(this).data('code');
             $('.switch-lang:not(.lang-'+code+')').hide();
             $('.switch-lang.lang-' + code).show();
+        });
+
+        //$("#content_published").datepicker({
+        //    dateFormat: 'dd.mm.yy',
+        //    minDate: new Date()
+        //});
+
+        $(document).on('click','.b-change-date', function(){
+            $("#content_published").trigger('focus');
         });
 
         this.features.init();
@@ -2813,6 +2841,34 @@ engine.mailTemplates = {
         );
     }
 };
+engine.styleInputs = function()
+{
+    $("select").select2();
+    var $input = $('input');
+    if($input.length){
+        $input.each(function(i){
+            if($(this).hasClass('styled')) return ;
+
+            if($(this).hasClass('switch')){
+                $(this).wrap('<div class="switcher"><label></label></div>');
+                $(this).parent().append('<span class="sw-line">' +
+                    '<span class="sw-btn">'+
+                    '</span></span>');
+            }
+            if($(this).attr('type') == 'checkbox' && !$(this).hasClass('switch')){
+                $(this).wrap('<span class="check-btn"><label></label></span>');
+                $(this).parent().append('<span class="check-box">' +
+                    '<i class="fa fa-check">'+
+                    '</i></span>');
+            }
+            if($(this).attr('type') == 'radio'){
+                $(this).wrap('<div class="radio-btn"><label></label></div>');
+                $(this).parent().append('<span class="check-box"></span>');
+            }
+            $(this).addClass('styled');
+        })
+    }
+};
 
 $(document).ready(function(){
     engine.admins.init();
@@ -2834,6 +2890,10 @@ $(document).ready(function(){
     engine.trash.init();
     engine.settings.init();
     engine.seo.init();
+
+    //setTimeout(function(){
+    //    engine.styleInputs();
+    //},300)
 });
 
 function responsive_filemanager_callback(field_id){

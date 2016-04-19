@@ -190,6 +190,9 @@ class App extends Model
         $company_name  = $settings['company_name'];
         $company_phone = $settings['company_phone'];
 
+        if(empty($page['title'])) {
+            $page['title'] = $page['name'];
+        }
         if(empty($page['h1'])) {
             $page['h1'] = $page['name'];
         }

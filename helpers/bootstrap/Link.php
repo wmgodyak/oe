@@ -24,12 +24,14 @@ class Link extends ButtonBuilder
             $href = $args;
             $args = [];
             $args['href']  = $href;
-            $args['class'] = self::TYPE_LINK;
+//            $args['class'] = self::TYPE_LINK;
         }
 
-        if(!isset($args['class'])){
-            $args['class'] = self::TYPE_LINK;
-        }
+//        if(!isset($args['class'])){
+//            $args['class'] = self::TYPE_LINK;
+//        }
+
+        $args['class'] .= ' '. self::TYPE_LINK;
 
         return new $class($text,  $args, $icon, 'link');
     }

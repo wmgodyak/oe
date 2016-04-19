@@ -26,6 +26,7 @@ abstract class Controller {
     protected $error;
 
     protected $sys_name = '';
+    protected $version = 7.01;
 
     public function __construct()
     {

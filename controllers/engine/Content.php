@@ -77,7 +77,11 @@ class Content extends Engine
         $this->template->assign('form_success', $this->form_success);
 
         if(!empty($content['features'])){
-            $this->makeFeatures($content['features'], $content['settings']['type']['features']);
+            $this->makeFeatures
+            (
+                $content['features'],
+                isset($content['settings']['type']['features']) ? $content['settings']['type']['features'] : null
+            );
         }
         //$content.settings.type.features
 
@@ -108,15 +112,24 @@ class Content extends Engine
         $this->response->body(['s'=>$s,'m' => $m])->asJSON();
     }
 
-    public function process($id)
+    public function process($id, $response = true)
     {
         $i=[]; $m = $this->t('common.update_success');
+
         $s = $this->mContent->update($id);
+
         if(! $s){
             $i = $this->mContent->getDBError();
             $m = $this->mContent->getDBErrorMessage();
         }
-        $this->response->body(['s'=>$s, 'i' => $i, 'm' => $m])->asJSON();
+
+        $a = ['s'=>$s, 'i' => $i, 'm' => $m];
+
+        if($response){
+            $this->response->body($a)->asJSON();
+        }
+
+        return $a;
     }
 
     public function pub($id)

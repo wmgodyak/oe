@@ -66,6 +66,7 @@ abstract class Engine extends Controller
 
     protected $plugins;
     protected $admin = [];
+    protected $breadcrumb;
 
     public function __construct()
     {
@@ -105,9 +106,39 @@ abstract class Engine extends Controller
 
         if(!self::$initialized){
             $this->init();
+
+            $this->makeCrumbs();
         }
 
         $this->admin = Admin::data();
+    }
+
+    private function makeCrumbs()
+    {
+        $namespace   = $this->request->param('namespace');
+        $namespace = str_replace('controllers\engine','', $namespace);
+        $namespace = str_replace('\\','/',$namespace);
+
+        $controller  = $this->request->param('controller');
+        $controller = lcfirst($controller);
+
+        $this->breadcrumb = [
+            [
+                'url'  => $namespace . $controller,
+                'name' => $this->t($controller . '.action_index')
+            ],
+            [
+                'url'  => null,
+                'name' => "Про нас"
+            ]
+        ];
+
+        $this->template->assign('breadcrumb', $this->breadcrumb);
+    }
+
+    protected function addBreadCrumb($item)
+    {
+
     }
 
     private function init()
@@ -118,6 +149,7 @@ abstract class Engine extends Controller
         $action = $this->request->param('action');
         $controller = lcfirst($controller);
 
+        $this->template->assign('version',    $this->version);
         $this->template->assign('base_url',    APPURL . 'engine/');
         $this->template->assign('controller',  $controller);
         $this->template->assign('action',      $action);
@@ -280,7 +312,12 @@ abstract class Engine extends Controller
      */
     protected final function output($body)
     {
+//        echo '---- output ---';
         $this->renderHeadingPanel();
+
+//        $this->dump($this->breadcrumb);
+
+        $this->template->assign('breadcrumb', $this->breadcrumb);
         $this->response->body($body)->render();
     }
 
