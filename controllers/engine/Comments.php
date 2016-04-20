@@ -50,11 +50,11 @@ class Comments extends Engine {
         $t  -> setId('comments_' . $status)
             -> ajaxConfig('comments/items/'  .$status)
             -> setConfig('order', array(0, 'desc'))
-            -> th($this->t('common.id'))
+            -> th($this->t('common.id'), '', 'width: 60px')
             -> th($this->t('comments.pib'), '', 'width: 200px')
             -> th($this->t('comments.message'))
-            -> th($this->t('comments.created'), '', 'width: 100px')
-            -> th($this->t('common.tbl_func'), '', 'width: 120px')
+            -> th($this->t('comments.created'), '', 'width: 160px')
+            -> th($this->t('common.tbl_func'), '', 'width: 140px')
         ;
 
         $this->output($t->render());
