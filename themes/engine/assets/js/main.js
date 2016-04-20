@@ -2870,6 +2870,15 @@ engine.styleInputs = function()
     }
 };
 
+engine.breadcrumb = function()
+{
+    var currentItem = $(".breadcrumb > .current");
+    //console.log(currentItem.text());
+    $(document).on('change', '.info-name:first', function(){
+       currentItem.text(' / ' + this.value);
+    });
+};
+
 $(document).ready(function(){
     engine.admins.init();
     engine.components.init();
@@ -2890,6 +2899,7 @@ $(document).ready(function(){
     engine.trash.init();
     engine.settings.init();
     engine.seo.init();
+    engine.breadcrumb();
 
     //setTimeout(function(){
     //    engine.styleInputs();

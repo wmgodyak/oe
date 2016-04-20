@@ -1,5 +1,5 @@
-{*{assign var="name" value="title_`$a.name`"}*}
 <!--heading-->
+{*<pre>{print_r($breadcrumb)}</pre>*}
 <div class="dashboard-heading">
     <div class="dashboard-title">
         {*<h1><a href="dashboard"><i class="fa fa-home"></i></a> / <a href="content/{$controller}">{$t[$controller].action_index}</a> / Про нас</h1>*}
@@ -9,7 +9,7 @@
                 {if $b.url}
                    / <a href="{$b.url}">{$b.name}</a>
                 {else}
-                    <span class="item-{$k}">/ {$b.name}</span>
+                    <span class="item-{$k} current">/ {$b.name}</span>
                 {/if}
             {/foreach}
         </h1>

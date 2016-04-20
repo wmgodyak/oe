@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-04-19 18:37:07
+<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-04-20 11:02:29
          compiled from "/var/www/engine.loc/themes/engine/views/heading_panel.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:12336200085696130d0b6045-76198499%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'f28238b68f8fe96871dd5acb247d3b535d87f16c' => 
     array (
       0 => '/var/www/engine.loc/themes/engine/views/heading_panel.tpl',
-      1 => 1461080227,
+      1 => 1461139347,
       2 => 'file',
     ),
   ),
@@ -27,8 +27,8 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   ),
   'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_5696130d0c6565_03315811')) {function content_5696130d0c6565_03315811($_smarty_tpl) {?>
-<!--heading-->
+<?php if ($_valid && !is_callable('content_5696130d0c6565_03315811')) {function content_5696130d0c6565_03315811($_smarty_tpl) {?><!--heading-->
+
 <div class="dashboard-heading">
     <div class="dashboard-title">
         
@@ -47,7 +47,7 @@ $_smarty_tpl->tpl_vars['b']->_loop = true;
 </a>
                 <?php } else { ?>
                     <span class="item-<?php echo $_smarty_tpl->tpl_vars['k']->value;?>
-">/ <?php echo $_smarty_tpl->tpl_vars['b']->value['name'];?>
+ current">/ <?php echo $_smarty_tpl->tpl_vars['b']->value['name'];?>
 </span>
                 <?php }?>
             <?php } ?>

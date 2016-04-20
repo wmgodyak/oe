@@ -139,7 +139,6 @@ class Pages extends Content
     public function create($parent_id = 0)
     {
         $id = parent::create($parent_id);
-
         return $this->edit($id);
     }
 

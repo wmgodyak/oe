@@ -66,7 +66,6 @@ abstract class Engine extends Controller
 
     protected $plugins;
     protected $admin = [];
-    protected $breadcrumb;
 
     public function __construct()
     {
@@ -113,32 +112,39 @@ abstract class Engine extends Controller
         $this->admin = Admin::data();
     }
 
+    /**
+     *
+     */
     private function makeCrumbs()
     {
         $namespace   = $this->request->param('namespace');
-        $namespace = str_replace('controllers\engine','', $namespace);
+        $namespace = str_replace('controllers','', $namespace);
         $namespace = str_replace('\\','/',$namespace);
 
         $controller  = $this->request->param('controller');
         $controller = lcfirst($controller);
 
-        $this->breadcrumb = [
+        $breadcrumb = [
             [
                 'url'  => $namespace . $controller,
                 'name' => $this->t($controller . '.action_index')
-            ],
-            [
-                'url'  => null,
-                'name' => "Про нас"
             ]
         ];
 
-        $this->template->assign('breadcrumb', $this->breadcrumb);
+        $this->template->assign('breadcrumb', $breadcrumb);
     }
 
-    protected function addBreadCrumb($item)
+    /**
+     * @param $name
+     * @param null $url
+     */
+    protected function addBreadCrumb($name, $url=null)
     {
+        $items = $this->template->getVars('breadcrumb');
 
+        $items = array_merge($items, [['name' => $name, 'url' => $url]]);
+//        $this->dump($items);die;
+        $this->template->assign('breadcrumb', $items);
     }
 
     private function init()
@@ -312,13 +318,8 @@ abstract class Engine extends Controller
      */
     protected final function output($body)
     {
-//        echo '---- output ---';
         $this->renderHeadingPanel();
-
-//        $this->dump($this->breadcrumb);
-
-        $this->template->assign('breadcrumb', $this->breadcrumb);
-        $this->response->body($body)->render();
+        $this->response->body($body);//->render();
     }
 
     /**

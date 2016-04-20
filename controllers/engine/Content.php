@@ -32,6 +32,7 @@ class Content extends Engine
     protected $form_template = 'content/default';
     protected $form_action   = '';
     protected $form_success  = '';
+    protected $data = [];
 
     public function __construct()
     {
@@ -49,8 +50,15 @@ class Content extends Engine
 
     }
 
+    /**
+     * @param int $parent_id
+     * @return bool|string
+     */
     public function create($parent_id=0)
     {
+        $controller  = $this->request->param('controller');
+        $controller  = lcfirst($controller);
+        $this->addBreadCrumb($this->t($controller . '.action_create'));
         return $this->mContent->create($parent_id);
     }
 
@@ -83,7 +91,13 @@ class Content extends Engine
                 isset($content['settings']['type']['features']) ? $content['settings']['type']['features'] : null
             );
         }
-        //$content.settings.type.features
+
+        $this->data = $content;
+        $info = array_shift($this->data['info']);
+        if(!empty($info)){
+            $this->addBreadCrumb($info['name']);
+        }
+
 
         $form = $this->template->fetch($this->form_template);
 
