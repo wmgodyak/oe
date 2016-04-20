@@ -138,7 +138,7 @@ class Post extends Content
                 ($row['isfolder'] == 0 ? (string)Button::create
                 (
                     Icon::create(Icon::TYPE_DELETE),
-                    ['class' => 'b-'.$this->type.'-delete', 'data-id' => $row['id'], 'title' => $this->t($this->type.'.delete_question')]
+                    ['class' => 'b-'.$this->type.'-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t($this->type.'.delete_question')]
                 ) : "")
 
             ;

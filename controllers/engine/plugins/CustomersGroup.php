@@ -16,7 +16,7 @@ defined("CPATH") or die();
 
 /**
  * Class CustomersGroup
- * @name Групи користувачів
+ * @name Customers Group
  * @icon fa-users
  * @author Volodymyr Hodiak
  * @version 1.0.0
@@ -36,39 +36,61 @@ class CustomersGroup extends Plugin
         $this->customersGroup = new \models\engine\plugins\CustomersGroup();
     }
 
+    /**
+     * Customers Group list
+     */
     public function index()
     {
         $this->template->assign('customers_groups_icon', $this->meta['icon']);
         return $this->template->fetch('customers/groups/tree');
     }
 
+    /**
+     * Create Customers Group
+     * @param int $parent_id
+     * @return null
+     */
     public function create($parent_id=0)
     {
-        $this->template->assign('action', 'create');
-        $this->template->assign('data', ['parent_id' => $parent_id]);
-        $this->template->assign('groups', $this->customersGroup->getGroups());
+        $this->template->assign('action',    'create');
+        $this->template->assign('data',      ['parent_id' => $parent_id]);
+        $this->template->assign('groups',    $this->customersGroup->getGroups());
         $this->template->assign('languages', $this->languages->get());
+
         $this->response->body($this->template->fetch('customers/groups/form'))->asHtml();
     }
 
+    /**
+     * Edit Customers Group
+     * @param $id
+     * @return null
+     */
     public function edit($id)
     {
-        $this->template->assign('action', 'edit');
-        $this->template->assign('groups', $this->customersGroup->getGroups());
+        $this->template->assign('action',    'edit');
+        $this->template->assign('groups',    $this->customersGroup->getGroups());
         $this->template->assign('languages', $this->languages->get());
-        $this->template->assign('data', $this->customersGroup->getData($id));
-        $this->template->assign('info', $this->customersGroup->getInfo($id));
+        $this->template->assign('data',      $this->customersGroup->getData($id));
+        $this->template->assign('info',      $this->customersGroup->getInfo($id));
+
         $this->response->body($this->template->fetch('customers/groups/form'))->asHtml();
     }
 
+    /**
+     * Delete Customers Group
+     * @param $id
+     * @return int
+     */
     public function delete($id)
     {
         return $this->customersGroup->delete($id);
     }
 
     /**
+     * process form data
      * @param int $id
      * @throws \Exception
+     * @return null
      */
     public function process($id = 0)
     {
@@ -76,6 +98,7 @@ class CustomersGroup extends Plugin
 
         $data = $this->request->post('data');
         $info = $this->request->post('info');
+
         $s=0; $i=[];
 
         FormValidation::setRule(['rang'], FormValidation::REQUIRED);

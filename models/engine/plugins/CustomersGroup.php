@@ -124,7 +124,7 @@ class CustomersGroup extends Engine
         }
 
         $this->deleteChildren($id);
-        return self::$db->delete("users_group", "id={$id} limit 1");
+        return self::$db->delete("__users_group", "id={$id} limit 1");
     }
 
     /**
@@ -137,7 +137,7 @@ class CustomersGroup extends Engine
                 $this->deleteChildren($item['id']);
             }
         }
-        self::$db->delete("users_group", " parent_id={$parent_id}");
+        self::$db->delete("__users_group", " parent_id={$parent_id}");
     }
 
     /**
@@ -181,7 +181,7 @@ class CustomersGroup extends Engine
         $res = self::$db
             -> select("
                   select g.id, i.name, g.isfolder
-                  from __users_group g, users_group_info i
+                  from __users_group g, __users_group_info i
                   where g.parent_id={$parent_id} and g.rang <= {$rang} and i.group_id=g.id and i.languages_id = {$this->languages_id}
               ")
             -> all();

@@ -526,3 +526,6 @@ fieldset{
 .ui-dialog-content fieldset + fieldset{
   margin-top: 20px;
 }
+.ui-dialog-content .row + .row{
+  margin-top: 20px;
+}

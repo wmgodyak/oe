@@ -52,9 +52,9 @@ class Customers extends Engine {
             -> th($this->t('customers.group'))
             -> th($this->t('customers.email'))
             -> th($this->t('customers.phone'))
-            -> th($this->t('customers.created'))
-            -> th($this->t('customers.lastlogin'))
-            -> th($this->t('common.tbl_func'), '', 'width: 60px')
+            -> th($this->t('customers.created'), '', 'width: 200px')
+            -> th($this->t('customers.lastlogin'), '', 'width: 200px')
+            -> th($this->t('common.tbl_func'), '', 'width: 200px')
         ;
 
         $this->output($t->render());
@@ -90,13 +90,13 @@ class Customers extends Engine {
             $b[] = (string)Button::create
             (
                 Icon::create(Icon::TYPE_EDIT),
-                ['class' => 'b-customers-edit', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
+                ['class' => 'b-customers-edit btn-primary', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
             );
             if($row['status'] == 'active'){
                 $b[] =  (string)Button::create
                 (
                     Icon::create(Icon::TYPE_BAN),
-                    ['class' => 'b-customers-ban', 'data-id' => $row['id'], 'title' => $this->t('customers.title_ban')]
+                    ['class' => 'b-customers-ban btn-warning', 'data-id' => $row['id'], 'title' => $this->t('customers.title_ban')]
                 );
                 $b[] = (string)Button::create
                 (
@@ -114,7 +114,7 @@ class Customers extends Engine {
             $b[] = (string)Button::create
             (
                 Icon::create(Icon::TYPE_TRASH),
-                ['class' => 'b-customers-remove', 'data-id' => $row['id'], 'title' => $this->t('common.title_remove')]
+                ['class' => 'b-customers-remove btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_remove')]
             );
 
             $res[$i][] = implode('', $b);

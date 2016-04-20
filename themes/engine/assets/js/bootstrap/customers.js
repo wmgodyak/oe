@@ -74,11 +74,15 @@ engine.customers = {
     {
         engine.request.get('./customers/create', function(d)
         {
-            var bi = t.common.button_save;
-            var buttons = {};
-            buttons[bi] =  function(){
-                $('#form').submit();
-            };
+            var buttons = [
+                {
+                    text    : t.common.button_save,
+                    "class" : 'btn-success',
+                    click   : function(){
+                        $('#form').submit();
+                    }
+                }
+            ];
             var dialog = engine.dialog({
                 content: d,
                 title: t.customers.create_title,
@@ -116,11 +120,15 @@ engine.customers = {
             data: {id: id},
             success: function(d)
             {
-                var bi = t.common.button_save;
-                var buttons = {};
-                buttons[bi] =  function(){
-                    $('#form').submit();
-                };
+                var buttons = [
+                    {
+                        text    : t.common.button_save,
+                        "class" : 'btn-success',
+                        click   : function(){
+                            $('#form').submit();
+                        }
+                    }
+                ];
                 var dialog = engine.dialog({
                     content: d,
                     title: t.customers.edit_title,
@@ -227,11 +235,16 @@ engine.customers = {
                     data:{a:1},
                     success: function(d)
                     {
-                        var bi = t.common.button_save;
-                        var buttons = {};
-                        buttons[bi] =  function(){
-                            $('#customersGroupForm').submit();
-                        };
+                        var buttons = [
+                            {
+                                text    : t.common.button_save,
+                                "class" : 'btn-success',
+                                click   : function(){
+                                    $('#customersGroupForm').submit();
+                                }
+                            }
+                        ];
+
                         var dialog = engine.dialog({
                             content: d,
                             title: t.customers_group.create_title,
@@ -265,11 +278,16 @@ engine.customers = {
                 data: {id: id, a: 1},
                 success: function(d)
                 {
-                    var bi = t.common.button_save;
-                    var buttons = {};
-                    buttons[bi] =  function(){
-                        $('#customersGroupForm').submit();
-                    };
+                    var buttons = [
+                        {
+                            text    : t.common.button_save,
+                            "class" : 'btn-success',
+                            click   : function(){
+                                $('#customersGroupForm').submit();
+                            }
+                        }
+                    ];
+
                     var dialog = engine.dialog({
                         content: d,
                         title: t.customers_group.edit_title,

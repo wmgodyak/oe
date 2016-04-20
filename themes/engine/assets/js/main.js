@@ -44,7 +44,6 @@ var engine = {
                     dataType: 'json',
                     beforeSend: function()
                     {
-                        // console.log('OnBeforeSend >>');
                         bSubmit.attr('disabled', true);
 
                         if(typeof onBeforeSend == 'string'){
