@@ -43,7 +43,8 @@ class Post extends Content
             $this->appendToPanel((string)Link::create
             (
                 $this->t('common.back'),
-                ['class' => 'btn-md', 'href'=> './content/'.$this->type.'/index' . ($data['parent_id']>0 ? '/' . $data['parent_id'] : '')]
+                ['class' => 'btn-md', 'href'=> './content/'.$this->type.'/index' . ($data['parent_id']>0 ? '/' . $data['parent_id'] : '')],
+                (string)Icon::create('fa-reply')
             )
             );
         }
@@ -53,7 +54,7 @@ class Post extends Content
             (string)Link::create
             (
                 $this->t('common.button_create'),
-                ['class' => 'btn-md', 'href'=> './content/'.$this->type.'/create' . ($parent_id? "/$parent_id" : '')]
+                ['class' => 'btn-md btn-primary', 'href'=> './content/'.$this->type.'/create' . ($parent_id? "/$parent_id" : '')]
             )
         );
 
@@ -62,11 +63,11 @@ class Post extends Content
         $t  -> setId('content')
             -> ajaxConfig('content/'.$this->type.'/items/' . $parent_id)
 //            -> setConfig('order', array(0, 'desc'))
-            -> th($this->t('common.id'))
+            -> th($this->t('common.id'), '', 'width: 60px')
             -> th($this->t('common.name'))
-            -> th($this->t('common.created'))
-            -> th($this->t('common.updated'))
-            -> th($this->t('common.tbl_func'), '', 'width: 160px')
+            -> th($this->t('common.created'), '', 'width: 200px')
+            -> th($this->t('common.updated'), '', 'width: 200px')
+            -> th($this->t('common.tbl_func'), '', 'width: 180px')
         ;
 
         $this->output($t->render());
@@ -77,12 +78,12 @@ class Post extends Content
         $t = new DataTables();
         $t  -> table('__content c')
             -> get('c.id, ci.name, ci.url, c.created, c.updated, c.status, c.isfolder, CONCAT(u.name, \' \' , u.surname) as owner')
-            ->join("____content_types ct on ct.type = '{$this->type}' and ct.id=c.types_id")
+            ->join("__content_types ct on ct.type = '{$this->type}' and ct.id=c.types_id")
             -> join("__content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}")
             -> join('__users u on u.id=c.owner_id')
             -> where("c.status in ('published', 'hidden')");
          if($parent_id > 0){
-            $t->join("______content_relationship cr on cr.content_id=c.id and cr.categories_id={$parent_id}");
+            $t->join("__content_relationship cr on cr.content_id=c.id and cr.categories_id={$parent_id}");
          }
         $t-> execute();
 

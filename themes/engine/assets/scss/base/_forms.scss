@@ -520,32 +520,9 @@ fieldset{
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.ui-dialog-content fieldset{
+  margin:0;
+}
+.ui-dialog-content fieldset + fieldset{
+  margin-top: 20px;
+}

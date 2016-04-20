@@ -554,6 +554,12 @@ fieldset {
     border-left: 1px solid #00c8f9;
     transition: all .3s ease; }
 
+.ui-dialog-content fieldset {
+  margin: 0; }
+
+.ui-dialog-content fieldset + fieldset {
+  margin-top: 20px; }
+
 .log-in {
   width: 100%;
   height: 100vh;
