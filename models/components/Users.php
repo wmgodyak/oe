@@ -85,7 +85,7 @@ class Users extends Model
      */
     public function remove($id)
     {
-        return self::$db->delete('users', " id={$id} limit 1");
+        return self::$db->delete('__users', " id={$id} limit 1");
     }
 
     /**

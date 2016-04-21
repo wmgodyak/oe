@@ -41,7 +41,7 @@ class Admins extends Engine
      */
     public function index($group_id = null)
     {
-        $this->appendToPanel((string)Button::create($this->t('common.button_create'), ['class' => 'btn-md b-admins-create']));
+        $this->appendToPanel((string)Button::create($this->t('common.button_create'), ['class' => 'btn-md btn-primary b-admins-create']));
 
         $t = new DataTables();
 
@@ -55,7 +55,7 @@ class Admins extends Engine
             -> th($this->t('admins.phone'))
             -> th($this->t('admins.created'))
             -> th($this->t('admins.lastlogin'))
-            -> th($this->t('common.tbl_func'), '', 'width: 60px')
+            -> th($this->t('common.tbl_func'), '', 'width: 200px')
         ;
 
         $this->output($t->render());
@@ -91,7 +91,7 @@ class Admins extends Engine
             $b[] = (string)Button::create
             (
                 Icon::create(Icon::TYPE_EDIT),
-                ['class' => 'b-admins-edit', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
+                ['class' => 'b-admins-edit btn-primary', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
             );
             if($row['status'] == 'active'){
                 $b[] =  (string)Button::create
@@ -115,7 +115,7 @@ class Admins extends Engine
             $b[] = (string)Button::create
             (
                 Icon::create(Icon::TYPE_TRASH),
-                ['class' => 'b-admins-remove', 'data-id' => $row['id'], 'title' => $this->t('common.title_remove')]
+                ['class' => 'b-admins-remove btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_remove')]
             );
 
             $res[$i][] = implode('', $b);

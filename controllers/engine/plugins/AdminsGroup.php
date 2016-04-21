@@ -47,16 +47,16 @@ class AdminsGroup extends Plugin
     {
         $this->template->assign('action', 'create');
         $this->template->assign('data', ['parent_id' => $parent_id]);
-        $this->template->assign('groups', $this->usersGroup->get());
+        $this->template->assign('groups', $this->adminsGroup->getItems(0));
         $this->template->assign('languages', $this->languages->get());
+
         $this->response->body($this->template->fetch('plugins/admins/groups/form'))->asHtml();
-//        return $this->template->fetch('plugins/admins/groups/form');
     }
 
     public function edit($id)
     {
         $this->template->assign('action', 'edit');
-        $this->template->assign('groups', $this->usersGroup->get());
+        $this->template->assign('groups', $this->adminsGroup->getItems(0));
         $this->template->assign('languages', $this->languages->get());
         $this->template->assign('data', $this->adminsGroup->getData($id));
         $this->template->assign('info', $this->adminsGroup->getInfo($id));

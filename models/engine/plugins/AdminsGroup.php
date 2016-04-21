@@ -86,7 +86,7 @@ class AdminsGroup extends Engine
         $parent_id = (int) $parent_id;
 
         return self::$db->select("
-          select g.id, g.isfolder, CONCAT(i.name, ' #', g.id) as text
+          select g.id, g.isfolder, CONCAT(i.name, ' #', g.id) as text, i.name
           from __users_group g
           join __users_group_info i on i.group_id=g.id and i.languages_id = {$this->languages_id}
           where g.parent_id={$parent_id} and g.rang >= {$rang}
@@ -123,7 +123,7 @@ class AdminsGroup extends Engine
         }
 
         $this->deleteChildren($id);
-        return self::$db->delete("users_group", "id={$id} limit 1");
+        return self::$db->delete("__users_group", "id={$id} limit 1");
     }
 
     /**
