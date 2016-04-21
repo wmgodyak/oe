@@ -38,8 +38,7 @@ class Comments extends Engine {
 
     public function index()
     {
-        $this->appendToPanel((string)Button::create($this->t('common.button_create'), ['class' => 'btn-md b-comments-create']));
-
+//        $this->appendToPanel((string)Button::create($this->t('common.button_create'), ['class' => 'btn-md b-comments-create']));
        $this->output($this->template->fetch('comments/index'));
     }
 
@@ -121,7 +120,7 @@ class Comments extends Engine {
             $b[] = (string)Button::create
             (
                 Icon::create(Icon::TYPE_DELETE),
-                ['class' => 'b-comments-delete', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+                ['class' => 'b-comments-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
             );
 
             $res[$i][] = implode('', $b);

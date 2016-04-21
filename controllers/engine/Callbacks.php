@@ -52,7 +52,7 @@ class Callbacks extends Engine {
             -> th($this->t('callbacks.pib'), '', 'width: 200px')
             -> th($this->t('callbacks.message'))
             -> th($this->t('callbacks.created'), '', 'width: 100px')
-            -> th($this->t('common.tbl_func'), '', 'width: 160px')
+            -> th($this->t('common.tbl_func'), '', 'width: 180px')
         ;
 
         $this->output($t->render());
@@ -92,7 +92,7 @@ class Callbacks extends Engine {
             $b[] = (string)Button::create
             (
                 Icon::create(Icon::TYPE_EDIT),
-                ['class' => 'b-callbacks-reply', 'data-id' => $row['id'], 'title' => $this->t('common.title_reply')]
+                ['class' => 'b-callbacks-reply btn-primary', 'data-id' => $row['id'], 'title' => $this->t('common.title_reply')]
             );
             if($row['status'] == 'new'){
                 $b[] =  (string)Button::create
@@ -113,7 +113,7 @@ class Callbacks extends Engine {
             $b[] = (string)Button::create
             (
                 Icon::create(Icon::TYPE_DELETE),
-                ['class' => 'b-callbacks-delete', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+                ['class' => 'b-callbacks-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
             );
 
             $res[$i][] = implode('', $b);
