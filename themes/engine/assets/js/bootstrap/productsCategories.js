@@ -21,7 +21,7 @@ engine.productsCategories = {
             engine.content.hide(id);
         });
 
-        $(document).on('click', '.b-productsCategories-tree-create', function(){
+        $(document).on('click', '.b-products-categories-create', function(){
             self.location.href= "content/productsCategories/create";
         });
 

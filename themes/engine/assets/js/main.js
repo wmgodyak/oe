@@ -2842,7 +2842,7 @@ engine.mailTemplates = {
 };
 engine.styleInputs = function()
 {
-    $("select").select2();
+    $("select:not(.no-s2)").select2();
     var $input = $('input');
     if($input.length){
         $input.each(function(i){

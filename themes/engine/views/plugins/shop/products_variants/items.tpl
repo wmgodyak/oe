@@ -1,12 +1,12 @@
 <table class="table">
     <tr>
-        <th style="width: 50px;">Зображення</th>
+        <th style="width: 50px;">Фото</th>
         <th>Варіант</th>
         <th>Наявність</th>
         {foreach $customers_group as $group}
             <th> {$group.name}</th>
         {/foreach}
-        <th>Видалити</th>
+        <th style="width: 60px;">Видал.</th>
     </tr>
     {foreach $variants as $variant}
         <tr id="variant-{$variant.id}">
@@ -36,7 +36,7 @@
                 <td><input name="variants[{$variant.id}][prices][{$group.id}]" type="text" required class="form-control" value="{$group.price}"></td>
             {/foreach}
             <td>
-                <button class="btn btn-danger b-products-rm-variant " title="Видалити" data-id="{$variant.id}"><i class="fa fa-remove"></i></button>
+                <button type="button" class="btn btn-danger b-products-rm-variant " title="Видалити" data-id="{$variant.id}"><i class="fa fa-remove"></i></button>
             </td>
         </tr>
     {/foreach}

@@ -44,13 +44,13 @@
             <div class="col-md-8">
                 <table style="width: 100%" class="table">
                     <tr>
-                        <th>Ціна / Група</th>
+                        {*<th>Ціна / Група</th>*}
                         {foreach $groups as $g}
                             <th>{$g.name}</th>
                         {/foreach}
                     </tr>
                     <tr>
-                        <td>&nbsp;</td>
+                        {*<td>&nbsp;</td>*}
                         {foreach $groups as $g}
                             <td><input type="text" name="prices[{$g.id}]" class="form-control" required value="{if isset($group_prices[$g.id])}{$group_prices[$g.id]}{/if}"></td>
                         {/foreach}

@@ -1,9 +1,9 @@
 <fieldset>
     <legend>Аксесуари</legend>
     <div class="form-group">
-        <label for="" class="col-md-3 control-label">Виберіть товар</label>
-        <div class="col-md-9">
-            <select class="form-control" id="selectAccessories"></select>
+        <label for="" class="col-md-2 control-label">Виберіть товар</label>
+        <div class="col-md-10">
+            <select class="form-control no-s2" id="selectAccessories"></select>
         </div>
     </div>
     <div id="selectedAccessories"></div>
@@ -16,15 +16,15 @@
     <script type="text/template" id="accessories" >
         <table class="table table-bordered">
             <tr>
-                <th>Артикул</th>
+                <th style="width: 60px;">Артикул</th>
                 <th>Товар</th>
-                <th>Видалити</th>
+                <th style="width: 60px;">Видал.</th>
             </tr>
             <% for(var i=0;i < items.length; i++) { %>
             <tr id="cf-sf-<%- items[i].id %>">
                 <td><%- items[i].code %></td>
                 <td><img src="/<%- items[i].img %>" alt="<%- items[i].img %>" style="float: left; margin-right: 1em;max-width: 60px;"> <a href="content/<%- items[i].type %>/edit/<%- items[i].id %>"><%- items[i].name %></a></td>
-                <td><a class="b-accessories-delete" data-id="<%- items[i].acc_id %>" title="Видалити" href="javascript:;"><i class="fa fa-remove"></i></a></td>
+                <td style="text-align: center;"><a class="b-accessories-delete" data-id="<%- items[i].acc_id %>" title="Видалити" href="javascript:;"><i class="fa fa-remove"></i></a></td>
             </tr>
             <% } %>
         </table>

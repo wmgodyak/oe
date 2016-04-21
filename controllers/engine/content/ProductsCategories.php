@@ -42,7 +42,8 @@ class ProductsCategories extends Content
             $this->appendToPanel((string)Link::create
             (
                 $this->t('common.back'),
-                ['class' => 'btn-md', 'href'=> './content/'.$this->type.'/index' . ($data['parent_id']>0 ? '/' . $data['parent_id'] : '')]
+                ['class' => 'btn-md', 'href'=> './content/'.$this->type.'/index' . ($data['parent_id']>0 ? '/' . $data['parent_id'] : '')],
+                (string)Icon::create('fa-reply')
             )
             );
         }
@@ -61,11 +62,11 @@ class ProductsCategories extends Content
         $t  -> setId('content')
             -> ajaxConfig('content/'.$this->type.'/items/' . $parent_id)
 //            -> setConfig('order', array(0, 'desc'))
-            -> th($this->t('common.id'))
+            -> th($this->t('common.id'), '', 'width: 60px')
             -> th($this->t('common.name'))
-            -> th($this->t('common.created'))
-            -> th($this->t('common.updated'))
-            -> th($this->t('common.tbl_func'), '', 'width: 160px')
+            -> th($this->t('common.created'), '', 'width: 200px')
+            -> th($this->t('common.updated'), '', 'width: 200px')
+            -> th($this->t('common.tbl_func'), '', 'width: 180px')
         ;
 
         $this->output($t->render());
@@ -75,10 +76,10 @@ class ProductsCategories extends Content
     {
         $t = new DataTables();
         $t  -> table('__content c')
-            -> get('c.id, ci.name, ci.url, c.created, c.updated, c.status, c.isfolder, CONCAT(u.name, \' \' , u.surname) as owner')
+            -> get('c.id, ci.name, ci.url, c.created, c.updated, c.status, c.isfolder')//, CONCAT(u.name, ' ' , u.surname) as owner
             -> join("__content_types ct on ct.type = '{$this->type}' and ct.id=c.types_id")
             -> join("__content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}")
-            -> join('__users u on u.id=c.owner_id')
+//            -> join('__users u on u.id=c.owner_id')
             -> where(" c.parent_id = {$parent_id} and c.status in ('published', 'hidden')")
             -> execute();
 
@@ -91,7 +92,7 @@ class ProductsCategories extends Content
             $res[$i][] =
                            " <a class='status-{$row['status']}' title='{$status}' href='content/{$this->type}/index/{$row['id']}'>{$icon}  {$row['name']}</a>"
                          . " <a href='/{$row['url']}' target='_blank'>{$icon_link}</a>"
-                         . "<br><small class='label label-info'>Автор:{$row['owner']} </small>"
+//                         . "<br><small class='label label-info'>Автор:{$row['owner']} </small>"
                             ;
             $res[$i][] = date('d.m.Y H:i:s', strtotime($row['created']));
             $res[$i][] = $row['updated'] ? date('d.m.Y H:i:s', strtotime($row['updated'])) : '';
@@ -102,7 +103,7 @@ class ProductsCategories extends Content
                         (
                             Icon::create(Icon::TYPE_PUBLISHED),
                             [
-                                'class' => 'btn-primary b-'.$this->type.'-hide',
+                                'class' => 'b-'.$this->type.'-hide',
                                 'title' => $this->t('common.title_pub'),
                                 'data-id' => $row['id']
                             ]
@@ -112,7 +113,7 @@ class ProductsCategories extends Content
                         (
                             Icon::create(Icon::TYPE_HIDDEN),
                             [
-                                'class' => 'btn-primary b-'.$this->type.'-pub',
+                                'class' => 'b-'.$this->type.'-pub',
                                 'title' => $this->t('common.title_hide'),
                                 'data-id' => $row['id']
                             ]
@@ -126,7 +127,7 @@ class ProductsCategories extends Content
                 ($row['isfolder'] == 0 ? (string)Button::create
                 (
                     Icon::create(Icon::TYPE_DELETE),
-                    ['class' => 'b-'.$this->type.'-delete', 'data-id' => $row['id'], 'title' => $this->t($this->type.'.delete_question')]
+                    ['class' => 'btn-danger b-'.$this->type.'-delete', 'data-id' => $row['id'], 'title' => $this->t($this->type.'.delete_question')]
                 ) : "")
 
             ;

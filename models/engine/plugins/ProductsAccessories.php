@@ -52,7 +52,7 @@ class ProductsAccessories extends Engine
 
         self::$db->insert
         (
-            "products_accessories",
+            "__products_accessories",
             ['products_id' => $products_id, 'accessories_id' => $accessories_id, 'position' => ++$t]
         );
         return true;

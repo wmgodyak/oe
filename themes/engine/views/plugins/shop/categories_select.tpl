@@ -22,8 +22,8 @@
 {/function}
 
 <div class="form-group">
-    <label for="main_categories_id" class="col-md-3 control-label">{$t.products.main_category}</label>
-    <div class="col-md-9">
+    <label for="main_categories_id" class="col-md-2 control-label">{$t.products.main_category}</label>
+    <div class="col-md-10">
         <select name="main_categories_id" id="main_categories_id" class="form-control" required>
             {call renderMainSelect items=$categories selected=$main_categories_id}
         </select>
@@ -31,8 +31,8 @@
 </div>
 
 <div class="form-group">
-    <label for="categories" class="col-md-3 control-label">{$t.products.categories}</label>
-    <div class="col-md-9">
+    <label for="categories" class="col-md-2 control-label">{$t.products.categories}</label>
+    <div class="col-md-10">
         <select name="categories[]" multiple id="categories" class="form-control">
             {call renderSelect items=$categories selected=$selected_categories}
         </select>

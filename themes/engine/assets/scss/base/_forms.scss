@@ -61,6 +61,7 @@ select{
 fieldset{
   @include clear();
   margin: 20px 0;
+  padding:0 10px 10px 10px;
   background: #fff;
   box-shadow: 0 1px 4px 0 rgba(0, 55, 75, 0.2);
   legend{
@@ -530,6 +531,7 @@ fieldset{
   margin-top: 20px;
 }
 .bootstrap-tagsinput {
+  width:100%;
   background-color: #fff;
   border:1px solid #a6b2c0;
   display: inline-block;

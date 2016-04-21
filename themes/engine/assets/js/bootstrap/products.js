@@ -301,7 +301,7 @@ engine.products = {
 
                 var dialog = engine.dialog({
                     content: d,
-                    title: t.productsCategories.create_title,
+                    title: t.productsCategories.action_create,
                     autoOpen: true,
                     width: 750,
                     modal: true,
@@ -336,7 +336,7 @@ engine.products = {
 
                 var dialog = engine.dialog({
                     content: d,
-                    title: t.productsCategories.edit_title,
+                    title: t.productsCategories.action_edit,
                     autoOpen: true,
                     width: 750,
                     modal: true,

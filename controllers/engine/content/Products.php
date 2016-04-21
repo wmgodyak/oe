@@ -47,7 +47,8 @@ class Products extends Content
             $this->appendToPanel((string)Link::create
             (
                 $this->t('common.back'),
-                ['class' => 'btn-md', 'href'=> './content/'.$this->type.'/index' . ($data['parent_id']>0 ? '/' . $data['parent_id'] : '')]
+                ['class' => 'btn-md', 'href'=> './content/'.$this->type.'/index' . ($data['parent_id']>0 ? '/' . $data['parent_id'] : '')],
+                (string)Icon::create('fa-reply')
             )
             );
         }
@@ -102,7 +103,7 @@ class Products extends Content
             $status = $this->t($this->type .'.status_' . $row['status']);
             $res[$i][] = $row['id'];
             $res[$i][] =
-                           " <a class='status-{$row['status']}' title='{$status}' href='content/{$this->type}/edit/{$row['id']}'><img src='/{$img}' alt='' style='float: left;margin-right: 1em; max-width: 60px;'>  {$row['name']}</a>"
+                           " <a class='status-{$row['status']}' title='{$status}' href='content/{$this->type}/edit/{$row['id']}'><img src='/{$img}' alt='' style='float: left;margin-right: 1em; max-width: 42px;'>  {$row['name']}</a>"
                          . " <a href='/{$row['url']}' target='_blank'>{$icon_link}</a>"
                          . "<br><small class='label label-info'>Автор:{$row['owner']} </small>"
                          . "<br><small class='label label-info'>Коментарів: {$t_comments} </small>"
@@ -141,7 +142,7 @@ class Products extends Content
                 ($row['isfolder'] == 0 ? (string)Button::create
                 (
                     Icon::create(Icon::TYPE_DELETE),
-                    ['class' => 'b-'.$this->type.'-delete', 'data-id' => $row['id'], 'title' => $this->t($this->type.'.delete_question')]
+                    ['class' => 'b-'.$this->type.'-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t($this->type.'.delete_question')]
                 ) : "")
 
             ;

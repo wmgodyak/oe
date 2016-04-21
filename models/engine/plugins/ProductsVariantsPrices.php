@@ -26,7 +26,7 @@ class ProductsVariantsPrices extends Model
     {
         return self::$db->insert
         (
-            'products_variants_prices',
+            '__products_variants_prices',
             ['content_id' => $content_id, 'variants_id' => $variants_id, 'group_id' => $group_id, 'price'=> $price]
         );
     }
