@@ -46,7 +46,7 @@ class ContentImagesSizes extends Engine
         $types = $this->request->post('types');
         $this->beginTransaction();
 
-        $images_sizes_id = $this->createRow('content_images_sizes', $data);
+        $images_sizes_id = $this->createRow('__content_images_sizes', $data);
 
         if($this->hasDBError()){
             $this->rollback();
@@ -57,7 +57,7 @@ class ContentImagesSizes extends Engine
 
             foreach ($types as $k=>$types_id) {
                 $this->createRow(
-                    'content_types_images_sizes',
+                    '__content_types_images_sizes',
                     [
                         'types_id'        => $types_id,
                         'images_sizes_id' => $images_sizes_id
@@ -103,7 +103,7 @@ class ContentImagesSizes extends Engine
             }
 
             $this->createRow(
-                'content_types_images_sizes',
+                '__content_types_images_sizes',
                 [
                     'types_id'        => $types_id,
                     'images_sizes_id' => $id
@@ -117,7 +117,7 @@ class ContentImagesSizes extends Engine
         }
 
         if(!empty($selected)){
-            self::$db->delete('content_types_images_sizes', " images_sizes_id={$id} and types_id in (". implode(',', $selected) .")");
+            self::$db->delete('__content_types_images_sizes', " images_sizes_id={$id} and types_id in (". implode(',', $selected) .")");
         }
 
         if($this->hasDBError()){
@@ -148,7 +148,7 @@ class ContentImagesSizes extends Engine
             @unlink(DOCROOT. $src);
         }
 
-        return self::$db->delete('content_images_sizes', " id={$id} limit 1");
+        return self::$db->delete('__content_images_sizes', " id={$id} limit 1");
     }
 
     public function getContentTypes($parent_id)

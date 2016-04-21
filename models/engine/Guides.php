@@ -48,7 +48,7 @@ class Guides extends Engine
 
         $this->beginTransaction();
 
-        $id = $this->createRow('guides', $guides);
+        $id = $this->createRow('__guides', $guides);
 
         if($this->hasDBError()){
             $this->rollback();
@@ -58,7 +58,7 @@ class Guides extends Engine
         foreach ($guides_info as $languages_id=> $item) {
             $item['languages_id']    = $languages_id;
             $item['guides_id'] = $id;
-           $this->createRow('guides_info', $item);
+           $this->createRow('__guides_info', $item);
         }
 
         if($this->hasDBError()){
@@ -95,7 +95,7 @@ class Guides extends Engine
             if(empty($aid)){
                 $item['languages_id']    = $languages_id;
                 $item['guides_id'] = $id;
-                $this->createRow('guides_info', $item);
+                $this->createRow('__guides_info', $item);
             } else {
                 $this->updateRow('__guides_info', $aid, $item);
             }
@@ -112,6 +112,6 @@ class Guides extends Engine
 
     public function delete($id)
     {
-        return self::$db->delete('guides', " id={$id} limit 1");
+        return self::$db->delete('__guides', " id={$id} limit 1");
     }
 }

@@ -12,7 +12,6 @@ use controllers\Engine;
 use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
 use helpers\bootstrap\Link;
-use helpers\FormValidation;
 
 defined("CPATH") or die();
 
@@ -42,7 +41,7 @@ class Guides extends Engine
             $this->appendToPanel((string)Link::create
             (
                 $this->t('common.back'),
-                ['class' => 'btn-md', 'href'=> './guides/index' . ($_parent_id>0 ? '/' . $_parent_id : '')]
+                ['class' => 'btn-md', 'href'=> './guides/index/' . ($_parent_id > 0 ? '/' . $_parent_id : '')]
             )
             );
         }
@@ -52,7 +51,7 @@ class Guides extends Engine
             (
                 $this->t('common.button_create'),
                 [
-                    'class' => 'btn-md b-guides-create',
+                    'class' => 'btn-md b-guides-create btn-primary',
                     'data-parent_id' => $parent_id
                 ]
             )
@@ -61,11 +60,12 @@ class Guides extends Engine
         $t = new DataTables();
 
         $t  -> setId('guides')
-            -> ajaxConfig('guides/items' . ($parent_id > 0 ? "/{$parent_id}" : ''))
+            -> ajaxConfig('guides/items' . ($parent_id > 0 ? "/{$parent_id}" : 0))
 //            -> setConfig('order', array(0, 'desc'))
             -> th($this->t('common.id'), '', 'width: 20px')
             -> th($this->t('guides.name'))
-            -> th($this->t('common.tbl_func'), '', 'width: 60px')
+            -> th($this->t('guides.code'), '', 'width: 300px')
+            -> th($this->t('common.tbl_func'), '', 'width:160px')
         ;
 
         $this->output($t->render());
@@ -77,25 +77,25 @@ class Guides extends Engine
         $t  -> table('__guides g')
             -> get('g.id,gi.name, g.code')
             -> join("__guides_info gi on gi.guides_id=g.id and gi.languages_id={$this->languages_id}");
-           if($parent_id>0){
-               $t->where("g.parent_id = {$parent_id}");
-           }
+       $t->where("g.parent_id = {$parent_id}");
+
         $t  -> execute();
 
         $res = array();
         foreach ($t->getResults(false) as $i=>$row) {
             $res[$i][] = $row['id'];
             $res[$i][] = "<a href='guides/index/{$row['id']}'>{$row['name']}</a>";
+            $res[$i][] = "<input class='form-control' value='{$row['code']}' onfocus='select()'>";
             $res[$i][] =
                 (string)Button::create
                 (
                     Icon::create(Icon::TYPE_EDIT),
-                    ['class' => 'b-guides-edit', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
+                    ['class' => 'b-guides-edit btn-primary', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
                 ) .
                 (string)Button::create
                 (
                     Icon::create(Icon::TYPE_DELETE),
-                    ['class' => 'b-guides-delete', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+                    ['class' => 'b-guides-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
                 )
             ;
         }

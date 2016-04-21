@@ -20,10 +20,10 @@ class Trash extends Engine
     }
     public function remove($id)
     {
-        $s = self::$db->delete("content", "id={$id} limit 1");
+        $s = self::$db->delete("__content", "id={$id} limit 1");
         if($s){
-            self::$db->delete("content_features", "content_id={$id}");
-            self::$db->delete("features_content", "content_id={$id}");
+            self::$db->delete("__content_features", "content_id={$id}");
+            self::$db->delete("__features_content", "content_id={$id}");
         }
     }
 
@@ -31,10 +31,10 @@ class Trash extends Engine
     {
         $parent_id = $this->getData($id, 'parent_id');
 
-        $s = parent::updateRow('content', $id, ['status' => 'published']);
+        $s = parent::updateRow('__content', $id, ['status' => 'published']);
 
         if($s > 0 && $parent_id > 0){
-            parent::updateRow('content', $parent_id, ['isfolder' => 1]);
+            parent::updateRow('__content', $parent_id, ['isfolder' => 1]);
         }
     }
 }

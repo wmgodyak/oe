@@ -56,7 +56,7 @@ class ContentImagesSizes extends Engine
             -> th($this->t('contentImagesSizes.size'))
             -> th($this->t('contentImagesSizes.width'))
             -> th($this->t('contentImagesSizes.height'))
-            -> th($this->t('common.tbl_func'), '', 'width: 90px')
+            -> th($this->t('common.tbl_func'), '', 'width: 180px')
         ;
 
         $this->output('<div id="resizeBox" class="row" style="display: none"><div id="progress" class=\'progress progress-thin progress-striped active\'><div style=\'width: 0;\' class=\'progress-bar progress-bar-success\'></div></div></div>'. $t->render());
@@ -84,12 +84,12 @@ class ContentImagesSizes extends Engine
                 (string)Button::create
                 (
                     Icon::create(Icon::TYPE_EDIT),
-                    ['class' => 'b-contentImagesSizes-edit', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
+                    ['class' => 'b-contentImagesSizes-edit btn-primary', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
                 ) .
                 (string)Button::create
                 (
                     Icon::create(Icon::TYPE_DELETE),
-                    ['class' => 'b-contentImagesSizes-delete', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+                    ['class' => 'b-contentImagesSizes-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
                 )
             ;
         }
