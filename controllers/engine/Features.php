@@ -47,7 +47,7 @@ class Features extends Engine
                 (string)Link::create
                     (
                         $this->t('common.back'),
-                        ['class' => 'btn-md', 'href'=> './features/index' . ($data['parent_id']>0 ? '/' . $data['parent_id']     : '')]
+                        ['class' => 'btn-md ', 'href'=> './features/index' . ($data['parent_id']>0 ? '/' . $data['parent_id']     : '')]
                     )
             );
 
@@ -58,7 +58,7 @@ class Features extends Engine
                     (string)Button::create
                     (
                         $this->t('features.createValue'),
-                        ['class' => 'btn-md b-features-add-value', 'data-id'=> $parent_id]
+                        ['class' => 'btn-md btn-primary b-features-add-value', 'data-id'=> $parent_id]
                     )
                 );
             }
@@ -69,7 +69,7 @@ class Features extends Engine
                 (string)Link::create
                 (
                     $this->t('common.button_create'),
-                    ['class' => 'btn-md', 'href'=> 'features/create' . ($parent_id>0? "/{$parent_id}" : '')]
+                    ['class' => 'btn-md btn-primary', 'href'=> 'features/create' . ($parent_id>0? "/{$parent_id}" : '')]
                 )
             );
         }
@@ -79,9 +79,9 @@ class Features extends Engine
         $t  -> setId('features')
             -> ajaxConfig('features/items/'.$parent_id)
 //            -> setConfig('order', array(0, 'desc'))
-            -> th($this->t('common.id'))
+            -> th($this->t('common.id'), '', 'width: 60px')
             -> th($this->t('features.name'))
-            -> th($this->t('features.code'))
+            -> th($this->t('features.code'), '', 'width: 300px')
             -> th($this->t('features.type'))
             -> th($this->t('common.tbl_func'), '', 'width: 200px')
         ;
@@ -134,7 +134,7 @@ class Features extends Engine
 
             $res[$i][] = $row['id'];
             $res[$i][] = "<a href='{$a}'><i class='fa fa-{$it}'></i> {$row['name']}</a>";
-            $res[$i][] = $row['code'];
+            $res[$i][] = "<input class='form-control' onfocus='select()' value='{$row['code']}'>";
             $res[$i][] = $this->t('features.type_' . $row['type']);
             $res[$i][] =
                 (string)(
@@ -143,7 +143,7 @@ class Features extends Engine
                     (
                         Icon::create(Icon::TYPE_PUBLISHED),
                         [
-                            'class' => 'btn-primary b-features-hide',
+                            'class' => ' b-features-hide',
                             'title' => $this->t('common.title_pub'),
                             'data-id' => $row['id']
                         ]
@@ -153,7 +153,7 @@ class Features extends Engine
                     (
                         Icon::create(Icon::TYPE_HIDDEN),
                         [
-                            'class' => 'btn-primary b-features-pub',
+                            'class' => ' b-features-pub',
                             'title' => $this->t('common.title_hide'),
                             'data-id' => $row['id']
                         ]
@@ -172,7 +172,7 @@ class Features extends Engine
                 (string)Button::create
                 (
                     Icon::create(Icon::TYPE_DELETE),
-                    ['class' => 'b-features-delete', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+                    ['class' => 'b-features-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
                 )
             ;
         }

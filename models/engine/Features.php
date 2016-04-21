@@ -14,9 +14,9 @@ class Features extends Engine
 {
     public function createBlank($parent_id)
     {
-        self::$db->delete("features", " status='blank' and owner_id={$this->admin['id']}");
+        self::$db->delete("__features", " status='blank' and owner_id={$this->admin['id']}");
         return $this->createRow(
-            'features',
+            '__features',
             [
                 'parent_id' => $parent_id,
                 'owner_id'  => $this->admin['id'],
@@ -71,7 +71,7 @@ class Features extends Engine
             if(empty($aid)){
                 $item['languages_id']    = $languages_id;
                 $item['features_id'] = $id;
-                $this->createRow('features_info', $item);
+                $this->createRow('__features_info', $item);
             } else {
                 $this->updateRow('__features_info', $aid, $item);
             }
@@ -140,7 +140,7 @@ class Features extends Engine
         if(!isset($data['code']) || empty($data['code'])){
             $data['code'] = md5($this->admin['id'] . 'x' . microtime());
         }
-        $id = $this->createRow('features', $data);
+        $id = $this->createRow('__features', $data);
 
         if($this->hasDBError()){
             $this->rollback();
@@ -148,9 +148,9 @@ class Features extends Engine
         }
 
         foreach ($info as $languages_id=> $item) {
-            $item['languages_id']    = $languages_id;
-            $item['features_id'] = $id;
-            $this->createRow('features_info', $item);
+            $item['languages_id'] = $languages_id;
+            $item['features_id']  = $id;
+            $this->createRow('__features_info', $item);
         }
 
         if($this->hasDBError()){
@@ -181,7 +181,7 @@ class Features extends Engine
         $r = self::$db
             ->select("
                 select c.id, c.isfolder, i.name
-                from __content c, content_info i
+                from __content c, __content_info i
                 where c.types_id={$types_id} and c.subtypes_id={$subtypes_id} and c.parent_id={$parent_id}
                  and i.content_id=c.id and i.languages_id={$this->languages_id}
                 limit 100 -- блок підвисання
@@ -199,8 +199,8 @@ class Features extends Engine
     public function selectContent($features_id)
     {
         $data = [];
-        $data['features_id'] = $features_id;
-        $data['content_types_id'] = $this->request->post('content_types_id', 'i');
+        $data['features_id']         = $features_id;
+        $data['content_types_id']    = $this->request->post('content_types_id', 'i');
         $data['content_subtypes_id'] = $this->request->post('content_subtypes_id', 'i');
 
         $c = $this->request->post('content_id');
@@ -210,10 +210,10 @@ class Features extends Engine
                 if(empty($content_id)) continue;
 
                 $data['content_id'] = $content_id;
-                $this->createRow('features_content', $data);
+                $this->createRow('__features_content', $data);
             }
         } else {
-            $this->createRow('features_content', $data);
+            $this->createRow('__features_content', $data);
         }
         $data['content_id'] = $features_id;
 
@@ -259,6 +259,6 @@ class Features extends Engine
 
     public function deleteSelectedContent($id)
     {
-        return self::deleteRow('features_content', $id);
+        return self::deleteRow('__features_content', $id);
     }
 }

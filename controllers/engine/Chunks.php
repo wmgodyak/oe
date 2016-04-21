@@ -56,7 +56,7 @@ class Chunks extends Engine
             (string)Link::create
                 (
                     $this->t('common.button_create'),
-                    ['class' => 'btn-md', 'href'=> 'chunks/create']
+                    ['class' => 'btn-md btn-primary', 'href'=> 'chunks/create']
                 )
         );
 
@@ -65,10 +65,10 @@ class Chunks extends Engine
         $t  -> setId('chunks')
             -> ajaxConfig('chunks/items')
 //            -> setConfig('order', array(0, 'desc'))
-            -> th($this->t('common.id'))
+            -> th($this->t('common.id'), '', 'width: 60px')
             -> th($this->t('chunks.name'))
             -> th($this->t('chunks.template'))
-            -> th($this->t('common.tbl_func'), '', 'width: 60px')
+            -> th($this->t('common.tbl_func'), '', 'width: 160px')
         ;
 
         $this->output($t->render());
@@ -95,7 +95,7 @@ class Chunks extends Engine
                 (string)Button::create
                 (
                     Icon::create(Icon::TYPE_DELETE),
-                    ['class' => 'b-chunks-delete', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+                    ['class' => 'b-chunks-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
                 )
             ;
         }

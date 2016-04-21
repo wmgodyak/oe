@@ -34,7 +34,7 @@ class Chunks extends Engine
      */
     public function create($data)
     {
-        return parent::createRow('chunks', $data);
+        return parent::createRow('__chunks', $data);
     }
 
     /**
@@ -44,12 +44,12 @@ class Chunks extends Engine
      */
     public function update($id, $data)
     {
-        return parent::updateRow('chunks', $id, $data);
+        return parent::updateRow('__chunks', $id, $data);
     }
 
     public function delete($id)
     {
-        $s = parent::deleteRow('chunks', $id);
+        $s = parent::deleteRow('__chunks', $id);
         return $s;
     }
 
