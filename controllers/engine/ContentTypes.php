@@ -54,11 +54,13 @@ class ContentTypes extends Engine
     {
         if($parent_id > 0){
             $data = $this->contentTypes->getData($parent_id);
-            $this->appendToPanel((string)Link::create
+            $this->appendToPanel
             (
-                $this->t('common.back'),
-                ['class' => 'btn-md b-contentTypes-create', 'href'=> 'contentTypes/index' . ($data['parent_id']>0 ? '/' . $data['parent_id'] : '')]
-            )
+                (string)Link::create
+                (
+                    $this->t('common.back'),
+                    ['class' => 'btn-md b-contentTypes-create', 'href'=> 'contentTypes/index' . ($data['parent_id']>0 ? '/' . $data['parent_id'] : '')]
+                )
             );
         }
 
@@ -67,7 +69,7 @@ class ContentTypes extends Engine
             (string)Link::create
                 (
                     $this->t('common.button_create'),
-                    ['class' => 'btn-md b-contentTypes-create', 'href'=> 'contentTypes/create' . ($parent_id? "/$parent_id" : '')]
+                    ['class' => 'btn-md b-contentTypes-create btn-primary', 'href'=> 'contentTypes/create' . ($parent_id? "/$parent_id" : '')]
                 )
         );
 
@@ -80,7 +82,7 @@ class ContentTypes extends Engine
             -> th($this->t('contentTypes.name'))
             -> th($this->t('contentTypes.type'))
             -> th($this->t('contentTypes.template'))
-            -> th($this->t('common.tbl_func'), '', 'width: 60px')
+            -> th($this->t('common.tbl_func'), '', 'width: 130px')
         ;
 
         $this->output($t->render());
@@ -97,7 +99,7 @@ class ContentTypes extends Engine
         $res = array();
         foreach ($t->getResults(false) as $i=>$row) {
             $res[$i][] = $row['id'];
-            $res[$i][] = "<a href='ContentTypes/index/{$row['id']}'>{$row['name']}</a>";
+            $res[$i][] = "<a href='contentTypes/index/{$row['id']}'>{$row['name']}</a>";
             $res[$i][] = $row['type'];
             $res[$i][] = $this->getPath($row['id'], false);
             $res[$i][] =
@@ -109,7 +111,7 @@ class ContentTypes extends Engine
                 ($row['is_main'] == 0 && $row['isfolder'] == 0 ? (string)Button::create
                 (
                     Icon::create(Icon::TYPE_DELETE),
-                    ['class' => 'b-contentTypes-delete', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+                    ['class' => 'b-contentTypes-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
                 ) : "")
 
             ;
