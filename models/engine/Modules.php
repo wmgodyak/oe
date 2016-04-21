@@ -72,7 +72,7 @@ class Modules extends Model
      */
     public function delete($id)
     {
-        return self::$db->delete('modules', " id={$id} limit 1");
+        return self::$db->delete('__modules', " id={$id} limit 1");
     }
 
     /**

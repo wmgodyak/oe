@@ -36,7 +36,7 @@ class MailTemplates extends Engine
 
     public function index()
     {
-        $this->appendToPanel((string)Button::create($this->t('common.button_create'), ['class' => 'btn-md b-mailTemplates-create']));
+        $this->appendToPanel((string)Button::create($this->t('common.button_create'), ['class' => 'btn-md b-mailTemplates-create btn-primary']));
 
         $t = new DataTables();
 
@@ -46,7 +46,7 @@ class MailTemplates extends Engine
             -> th($this->t('common.id'))
             -> th($this->t('mailTemplates.name'))
             -> th($this->t('mailTemplates.code'))
-            -> th($this->t('common.tbl_func'), '', 'width: 120px')
+            -> th($this->t('common.tbl_func'), '', 'width: 150px')
         ;
 
         $this->output($t->render());
@@ -68,12 +68,12 @@ class MailTemplates extends Engine
                 (string)Button::create
                 (
                     Icon::create(Icon::TYPE_EDIT),
-                    ['class' => 'b-mailTemplates-edit', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
+                    ['class' => 'b-mailTemplates-edit btn-primary', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
                 ) .
                 (string)Button::create
                 (
                     Icon::create(Icon::TYPE_DELETE),
-                    ['class' => 'b-mailTemplates-delete', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+                    ['class' => 'b-mailTemplates-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
                 )
 
             ;

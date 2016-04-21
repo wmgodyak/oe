@@ -44,7 +44,7 @@ class MailTemplates extends Engine
 
         $this->beginTransaction();
 
-        $id = $this->createRow('mail_templates', $data);
+        $id = $this->createRow('__mail_templates', $data);
 
         if($this->hasDBError()){
             $this->rollback();
@@ -53,8 +53,8 @@ class MailTemplates extends Engine
 
         foreach ($info as $languages_id=> $item) {
             $item['languages_id']    = $languages_id;
-            $item['templates_id'] = $id;
-           $this->createRow('mail_templates_info', $item);
+            $item['templates_id']    = $id;
+           $this->createRow('__mail_templates_info', $item);
         }
 
         if($this->hasDBError()){
@@ -89,8 +89,8 @@ class MailTemplates extends Engine
                 ->row('id');
             if(empty($aid)){
                 $item['languages_id']    = $languages_id;
-                $item['templates_id'] = $id;
-                $this->createRow('mail_templates_info', $item);
+                $item['templates_id']    = $id;
+                $this->createRow('__mail_templates_info', $item);
             } else {
                 $this->updateRow('__mail_templates_info', $aid, $item);
             }
@@ -107,7 +107,7 @@ class MailTemplates extends Engine
 
     public function delete($id)
     {
-        return self::$db->delete('mail_templates', " id={$id} limit 1");
+        return self::$db->delete('__mail_templates', " id={$id} limit 1");
     }
 
     /**

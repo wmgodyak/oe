@@ -50,7 +50,7 @@ class Modules extends Engine
             -> th($this->t('modules.author'))
             -> th($this->t('modules.controller'))
             -> th($this->t('modules.version'))
-            -> th($this->t('common.tbl_func'))
+            -> th($this->t('common.tbl_func'), '', 'width:150px')
         ;
 
         $this->output($t->render());
@@ -100,7 +100,7 @@ class Modules extends Engine
                 (
                     Icon::create($icon),
                     [
-                        'class'     => Button::TYPE_PRIMARY  . " b-module-" . ($installed ? 'uninstall' : 'install'),
+                        'class'     => Button::TYPE_DANGER  . " b-module-" . ($installed ? 'uninstall' : 'install'),
                         'data-id'   => ($installed ? $data['id'] : $item['controller']),
                         'title'     => ($installed ? $this->t('modules.uninstall') : $this->t('modules.install'))
                     ]
