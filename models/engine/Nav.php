@@ -15,7 +15,7 @@ class Nav extends Engine
     public function create()
     {
         $data = $this->request->post('data');
-        return $this->createRow('nav', $data);
+        return $this->createRow('__nav', $data);
     }
 
     public function getData($id, $key = '*')
@@ -64,7 +64,7 @@ class Nav extends Engine
         return $this->deleteRow('__nav_items', $id);
     }
 
-    public function getItems($parent_id, $level = 3)
+    public function getItems($parent_id = 0, $level = 3)
     {
         $parent_id = (int) $parent_id;
         $res = [];
@@ -72,7 +72,7 @@ class Nav extends Engine
           select c.id, c.isfolder, c.status, ci.name
           from __content c
           join __content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
-          where c.parent_id={$parent_id} and c.status = 'published'
+          where c.parent_id={$parent_id} and c.types_id=1 and c.status = 'published'
           ")->all();
 
         foreach ($r as $item) {
@@ -92,7 +92,7 @@ class Nav extends Engine
      */
     public function addItem($nav_id, $item_id)
     {
-        return $this->createRow('nav_items', ['nav_id'=> $nav_id, 'content_id' => $item_id]);
+        return $this->createRow('__nav_items', ['nav_id'=> $nav_id, 'content_id' => $item_id]);
     }
 
     public function getSelectedItems($nav_id)
@@ -115,7 +115,7 @@ class Nav extends Engine
 
         $a = explode('x', $pos);
         foreach ($a as $position=>$item_id) {
-            self::$db->update("nav_items", ['position' => $position], " nav_id= {$nav_id} and content_id={$item_id} limit 1");
+            self::$db->update("__nav_items", ['position' => $position], " nav_id= {$nav_id} and content_id={$item_id} limit 1");
         }
     }
 

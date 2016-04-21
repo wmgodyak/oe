@@ -62,7 +62,7 @@
                     <th style="width: 20px;"><i class="fa fa-list"></i></th>
                     <th style="width: 20px;">#</th>
                     <th>Назва</th>
-                    <th style="width: 20px;">Видалити</th>
+                    <th style="width: 20px;">Вид.</th>
                 </tr>
             </thead>
             <tbody>
@@ -71,7 +71,7 @@
                     <td class="sort" style="cursor: move;"><i class="fa fa-list"></i></td>
                     <td><%- items[i].content_id %></td>
                     <td><%- items[i].name %></td>
-                    <td><a class="b-nav-item-delete" data-id="<%- items[i].id %>" title="Видалити" href="javascript:;"><i class="fa fa-remove"></i></a></td>
+                    <td style="text-align: center"><a class="b-nav-item-delete" data-id="<%- items[i].id %>" title="Видалити" href="javascript:;"><i class="fa fa-remove"></i></a></td>
                 </tr>
                 <% } %>
             </tbody>

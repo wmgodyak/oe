@@ -42,7 +42,7 @@ class Nav extends Engine
             (string)Link::create
             (
                 $this->t('common.button_create'),
-                ['class' => 'btn-md', 'href'=> 'nav/create']
+                ['class' => 'btn-md btn-primary', 'href'=> 'nav/create']
             )
         );
   
@@ -53,7 +53,7 @@ class Nav extends Engine
             -> ajaxConfig('nav/items')
             -> th($this->t('common.id'), '', 'width: 20px')
             -> th($this->t('nav.name'))
-            -> th($this->t('nav.code'), '', 'width: 200px')
+            -> th($this->t('nav.code'), '', 'width: 300px')
             -> th($this->t('common.tbl_func'), '', 'width: 200px')
         ;
 
@@ -86,7 +86,7 @@ class Nav extends Engine
                 (string)Button::create
                 (
                     Icon::create(Icon::TYPE_DELETE),
-                    ['class' => 'b-nav-delete', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+                    ['class' => 'b-nav-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
                 )
             ;
         }
