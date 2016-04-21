@@ -44,7 +44,7 @@ class Banners extends Engine
     {
         $this->appendToPanel
         (
-            (string)Button::create($this->t('common.button_create'), ['class' => 'btn-md b-banners-places-create'])
+            (string)Button::create($this->t('common.button_create'), ['class' => 'btn-md btn-primary b-banners-places-create'])
         );
 
         $t = new DataTables();
@@ -52,11 +52,11 @@ class Banners extends Engine
             -> ajaxConfig('banners/items')
             -> th($this->t('common.id'), '', 'width: 20px')
             -> th($this->t('banners_places.name'))
-            -> th($this->t('banners_places.code'))
-            -> th($this->t('banners_places.width'))
-            -> th($this->t('banners_places.height'))
-            -> th($this->t('banners_places.total'))
-            -> th($this->t('common.tbl_func'), '', 'width: 120px')
+            -> th($this->t('banners_places.code'), '', 'width: 160px')
+            -> th($this->t('banners_places.width'), '', 'width: 160px')
+            -> th($this->t('banners_places.height'), '', 'width: 160px')
+            -> th($this->t('banners_places.total'), '', 'width: 160px')
+            -> th($this->t('common.tbl_func'), '', 'width: 160px')
         ;
 
         $this->output($t->render());
@@ -81,12 +81,12 @@ class Banners extends Engine
                 (string)Button::create
                 (
                     Icon::create(Icon::TYPE_EDIT),
-                    ['class' => 'b-banners-places-edit', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
+                    ['class' => 'b-banners-places-edit btn-primary', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
                 ) .
                 (string)Button::create
                 (
                     Icon::create(Icon::TYPE_DELETE),
-                    ['class' => 'b-banners-places-delete', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+                    ['class' => 'b-banners-places-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
                 )
             ;
         }
@@ -99,14 +99,16 @@ class Banners extends Engine
         if($this->request->isXhr()){
             $t = new DataTables();
             $t  -> table('__banners')
-                -> get('id, img, languages_id,  published, permanent, df, dt');
+                -> get('id, img, url, languages_id,  published, permanent, df, dt');
             $t  -> execute();
             $lang = $this->banners->getLanguages();
-            $res = array();
+            $res = array(); $appurl = APPURL;
             foreach ($t->getResults(false) as $i=>$row) {
+
                 $row['img'] = empty($row['img']) ? "/themes/engine/assets/img/no-image.png" : $row['img'];
                 $res[$i][] = $row['id'];
                 $res[$i][] = "<img src='{$row['img']}' align='banner' style='max-height: 60px; max-width: 120px;'>";
+                $res[$i][] = "<a href='{$appurl}{$row['url']}' target='_blank'>{$row['url']}</a>";
                 $res[$i][] = $lang[$row['languages_id']];
                 if($row['permanent'] == 1){
                     $res[$i][] = $this->t('banners.permanent_y');
@@ -118,12 +120,12 @@ class Banners extends Engine
                     (string)Button::create
                     (
                         Icon::create(Icon::TYPE_EDIT),
-                        ['class' => 'b-banners-edit', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
+                        ['class' => 'b-banners-edit btn-primary', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
                     ) .
                     (string)Button::create
                     (
                         Icon::create(Icon::TYPE_DELETE),
-                        ['class' => 'b-banners-delete', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+                        ['class' => 'b-banners-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
                     )
                 ;
             }
@@ -139,7 +141,7 @@ class Banners extends Engine
         );
         $this->appendToPanel
         (
-            (string)Button::create($this->t('common.button_create'), ['class' => 'btn-md b-banners-create', 'data-id'=>$place_id])
+            (string)Button::create($this->t('common.button_create'), ['class' => 'btn-md btn-primary b-banners-create', 'data-id'=>$place_id])
         );
 
         $t = new DataTables();
@@ -147,9 +149,10 @@ class Banners extends Engine
             -> ajaxConfig('banners/bannersSlides/' . $place_id)
             -> th($this->t('common.id'), '', 'width: 20px')
             -> th($this->t('banners.img'))
+            -> th($this->t('banners.url'))
             -> th($this->t('banners.lang'))
             -> th($this->t('banners.active'))
-            -> th($this->t('common.tbl_func'), '', 'width: 120px')
+            -> th($this->t('common.tbl_func'), '', 'width: 160px')
         ;
 
         $this->output($t->render());

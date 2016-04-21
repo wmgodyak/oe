@@ -57,7 +57,7 @@ class Banners extends Engine
             $data['dt'] = date('Y-m-d', strtotime($data['dt']));
         }
 
-        $id   = $this->createRow('banners', $data);
+        $id   = $this->createRow('__banners', $data);
         if(isset($_FILES['image'])) {
             $size = $this->getSize($data['banners_places_id']);
             $this->uploadImage($id, $size);
@@ -138,7 +138,7 @@ class Banners extends Engine
 
     public function delete($id)
     {
-        return self::$db->delete('banners', " id={$id} limit 1");
+        return self::$db->delete('__banners', " id={$id} limit 1");
     }
 
     public function getLanguages()

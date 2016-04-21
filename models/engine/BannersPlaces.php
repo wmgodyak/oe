@@ -36,7 +36,7 @@ class BannersPlaces extends Engine
     {
         $data = $this->request->post('data');
 
-        $id = $this->createRow('banners_places', $data);
+        $id = $this->createRow('__banners_places', $data);
 
         return $id;
     }
@@ -54,7 +54,7 @@ class BannersPlaces extends Engine
 
     public function delete($id)
     {
-        return self::$db->delete('banners_places', " id={$id} limit 1");
+        return self::$db->delete('__banners_places', " id={$id} limit 1");
     }
 
     public static function get()
