@@ -51,7 +51,7 @@ class Components extends Engine
             -> th($this->t('components.controller'))
             -> th($this->t('components.version'))
             -> th($this->t('components.rang'))
-            -> th($this->t('common.tbl_func'))
+            -> th($this->t('common.tbl_func'), '', 'width:180px')
         ;
 
         $this->output($t->render());
@@ -93,7 +93,7 @@ class Components extends Engine
 
         $res = array();
         $t = new DataTables();
-        $t_installed = $this->t('components.installed');
+//        $t_installed = $this->t('components.installed');
         foreach ($items as $i=>$item) {
             $data = $this->mComponents->data($item['controller']);
             $installed = isset($data['id']);
@@ -114,7 +114,7 @@ class Components extends Engine
                 (
                     Icon::create($icon),
                     [
-                        'class'     => Button::TYPE_PRIMARY  . " b-component-" . ($installed ? 'uninstall' : 'install'),
+                        'class'     => " b-component-" . ($installed ? 'uninstall' : 'install'),
                         'data-id'   => ($installed ? $data['id'] : $item['controller']),
                         'data-type' => 'component',
                         'title'     => ($installed ? $this->t('components.uninstall') : $this->t('components.install'))
@@ -124,7 +124,7 @@ class Components extends Engine
                     (
                         Icon::create($icon_pub),
                         [
-                            'class' => Button::TYPE_PRIMARY  . " b-component-" . ($installed && $data['published'] == 1 ? 'hide' : 'pub'),
+                            'class' => " b-component-" . ($installed && $data['published'] == 1 ? 'hide' : 'pub'),
                             'data-id' => $data['id'],
                             'title'   => ($installed && $data['published'] == 1 ? $this->t('components.pub') : $this->t('components.hide'))
                         ]
@@ -230,7 +230,7 @@ class Components extends Engine
         return $this->template->fetch('components/install_component');
     }
 
-    private function installArchive()
+    private function _installArchive()
     {
         $data = $this->request->post('data'); $s=0; $i=[]; $m='';
         $file = $_FILES['file'];

@@ -119,7 +119,7 @@ class Components extends Engine
     public function delete($id)
     {
         $parent_id = self::$db->select("select parent_id from __components where id={$id} limit 1")->row('parent_id');
-        $s = self::$db->delete('components', " id={$id} limit 1");
+        $s = self::$db->delete('__components', " id={$id} limit 1");
         if($s){
             if($parent_id > 0){
                 $t = self::$db->select("select count(id) as t from __components where parent_id={$parent_id}")->row('t');
