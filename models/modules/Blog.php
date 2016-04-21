@@ -70,8 +70,8 @@ class Blog extends Content
 
         $tag = $this->request->param('tag');
         if($tag){
-            $this->join("tags t on t.tag = '{$tag}'");
-            $this->join("content_tags ct on ct.tags_id=t.id and ct.content_id=c.id");
+            $this->join("__tags t on t.tag = '{$tag}'");
+            $this->join("__content_tags ct on ct.tags_id=t.id and ct.content_id=c.id");
         }
 
         if($id <> $this->page_id){

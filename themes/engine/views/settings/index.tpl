@@ -32,7 +32,8 @@
     </div>
 
     <div class="col-md-8 col-md-offset-2">
-        <div class="alert">
+        <div class="alert alert-info alert-dismissible se-content" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h3>{$t.settings.sys_info}</h3>
             <ul>
                 {foreach $sys_info as $k=>$v}

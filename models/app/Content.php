@@ -90,7 +90,7 @@ class Content extends App
     protected function join($join)
     {
         if(strpos($join, 'join') === false){
-            $join= 'join __'.$join;
+            $join= 'join '.$join;
         }
 
         $this->q_join[] = $join;

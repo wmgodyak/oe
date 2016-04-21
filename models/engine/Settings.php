@@ -28,7 +28,7 @@ class Settings extends Engine
     {
         $settings = $this->request->post('settings');
         foreach ($settings as $name=>$value) {
-            self::$db->update("settings", ['value' => $value], "name='{$name}' limit 1");
+            self::$db->update("__settings", ['value' => $value], "name='{$name}' limit 1");
         }
 
         $this->updateRobotsTxt($settings);
