@@ -91,6 +91,13 @@ h1 {
   font-family: "RobotoLight";
   line-height: 42px; }
 
+.se-content {
+  font-family: "RobotoLight";
+  color: #1e3c50;
+  font-size: 14px; }
+  .se-content b {
+    font-weight: bold; }
+
 * {
   box-sizing: border-box;
   outline: none; }

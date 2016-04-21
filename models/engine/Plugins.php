@@ -108,7 +108,7 @@ class Plugins extends Model
      */
     public function delete($id)
     {
-        return self::$db->delete('plugins', " id={$id} limit 1");
+        return self::$db->delete('__plugins', " id={$id} limit 1");
     }
 
     /**

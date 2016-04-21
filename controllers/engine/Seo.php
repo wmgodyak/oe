@@ -69,6 +69,7 @@ class Seo extends Engine
     {
         $this->mSettings->update();
         $s = ! $this->mSettings->hasDBError();
-        $this->response->body(['s' => $s, 'm' => $this->mSettings->getDBErrorMessage()])->asJSON();
+        $m = $s ? $this->t('common.update_success') : $this->mSettings->getDBErrorMessage();
+        $this->response->body(['s' => $s, 'm' => $m])->asJSON();
     }
 }

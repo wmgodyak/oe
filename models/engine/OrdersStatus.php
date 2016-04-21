@@ -49,7 +49,7 @@ class OrdersStatus extends Engine
         if($data['is_main'] == 1){
             $this->changeMain();
         }
-        $id = $this->createRow('orders_status', $data);
+        $id = $this->createRow('__orders_status', $data);
 
         if($this->hasDBError()){
             $this->rollback();
@@ -59,7 +59,7 @@ class OrdersStatus extends Engine
         foreach ($info as $languages_id=> $item) {
             $item['languages_id']    = $languages_id;
             $item['status_id'] = $id;
-            $this->createRow('orders_status_info', $item);
+            $this->createRow('__orders_status_info', $item);
         }
 
         if($this->hasDBError()){
@@ -101,7 +101,7 @@ class OrdersStatus extends Engine
             if(empty($aid)){
                 $item['languages_id']    = $languages_id;
                 $item['status_id']       = $id;
-                $this->createRow('orders_status_info', $item);
+                $this->createRow('__orders_status_info', $item);
             } else {
                 $this->updateRow('__orders_status_info', $aid, $item);
             }
@@ -119,12 +119,11 @@ class OrdersStatus extends Engine
 
     public function delete($id)
     {
-        return self::$db->delete('orders_status', " id={$id} limit 1");
+        return self::$db->delete('__orders_status', " id={$id} limit 1");
     }
 
     private function changeMain()
     {
         self::$db->update('__orders_status', ['is_main' => 0]);
     }
-
 }

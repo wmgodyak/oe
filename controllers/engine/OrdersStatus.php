@@ -39,7 +39,7 @@ class OrdersStatus extends Engine
     {
         $this->appendToPanel
         (
-            (string)Button::create($this->t('common.button_create'), ['class' => 'btn-md b-ordersStatus-create'])
+            (string)Button::create($this->t('common.button_create'), ['class' => 'btn-md b-ordersStatus-create btn-primary'])
         );
         $t = new DataTables();
 
@@ -48,7 +48,8 @@ class OrdersStatus extends Engine
 //            -> setConfig('order', array(0, 'desc'))
             -> th($this->t('common.id'), '', 'width: 20px')
             -> th($this->t('ordersStatus.status'))
-            -> th($this->t('ordersStatus.on_site'))
+            -> th($this->t('ordersStatus.external_id'), '', 'width: 280px')
+            -> th($this->t('ordersStatus.on_site'), '', 'width: 280px')
             -> th($this->t('common.tbl_func'), '', 'width: 180px')
         ;
 
@@ -60,7 +61,7 @@ class OrdersStatus extends Engine
         $t = new DataTables();
         $t  -> table('__orders_status os')
             -> join("__orders_status_info i on i.status_id=os.id and i.languages_id={$this->languages_id}")
-            -> get('os.id, i.status, os.is_main, os.on_site, os.external_id, os.bg_color, os.txt_color')
+            -> get('os.id, i.status, os.external_id, os.is_main, os.on_site, os.bg_color, os.txt_color')
             -> execute();
 
         $res = array();
@@ -68,17 +69,18 @@ class OrdersStatus extends Engine
             $res[$i][] = $row['id'];
             $res[$i][] = "<span class='label' style='background: {$row['bg_color']}; color: {$row['txt_color']}'>{$row['status']}</span>"
                 . ($row['is_main'] ? ' <small class="label label-info">Основний</small>' : '');
+            $res[$i][] = "<input class='form-control' value='{$row['external_id']}' onfocus='select()'>";
             $res[$i][] = ($row['on_site'] == 1 ? 'Так' : '');
             $res[$i][] =
                 (string)Button::create
                 (
                     Icon::create(Icon::TYPE_EDIT),
-                    ['class' => 'b-ordersStatus-edit', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
+                    ['class' => 'b-ordersStatus-edit btn-primary', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
                 ) .
                 (string)Button::create
                 (
                     Icon::create(Icon::TYPE_DELETE),
-                    ['class' => 'b-ordersStatus-delete', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+                    ['class' => 'b-ordersStatus-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
                 )
             ;
         }

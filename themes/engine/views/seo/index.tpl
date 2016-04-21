@@ -1,19 +1,6 @@
 <form id="form" action="seo/process" method="post"  class="form-horizontal row">
     <div><br></div>
     <div class="col-md-8 col-md-offset-2">
-        {literal}
-            <pre>Ви можете використовувати наступні блоки:
-                {title} - заголовок сторінки,
-                {keywords} - ключові слова сторінки,
-                {h1} - заголовок першого рвіня сторінки,
-                {description} - опис сторінки,
-                {company_name} - Назва компанії,
-                {company_phone} - телефон,
-                {category} - категорія,
-                {delimiter} - розділювач, напр "/"
-            </pre>
-        {/literal}
-        {*<pre>{print_r($data)}</pre>*}
         <div id="tabs_seo">
             <ul>
                 {foreach $types as $type}
@@ -51,7 +38,23 @@
                 </div>
             {/foreach}
         </div>
-        <div class="clearfix"></div>
+        {literal}
+            <p>&nbsp;</p>
+            <div class="alert alert-info alert-dismissible se-content" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <p style="text-align: center">Ви можете використовувати наступні блоки</p>
+                <p>
+                    <b>{title}</b> - заголовок сторінки,<br>
+                    <b>{keywords}</b> - ключові слова сторінки,<br>
+                    <b>{h1}</b> - заголовок першого рвіня сторінки,<br>
+                    <b>{description}</b> - опис сторінки,<br>
+                    <b>{company_name}</b> - Назва компанії,<br>
+                    <b>{company_phone}</b> - телефон,<br>
+                    <b>{category}</b> - категорія,<br>
+                    <b>{delimiter}</b> - розділювач, напр "/"
+                </p>
+            </div>
+        {/literal}
     </div>
 
     <div class="col-md-8 col-md-offset-2">

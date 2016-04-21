@@ -53,7 +53,7 @@ class Plugins extends Engine
             -> th($this->t('plugins.controller'))
             -> th($this->t('plugins.version'))
             -> th($this->t('plugins.rang'))
-            -> th($this->t('common.tbl_func'))
+            -> th($this->t('common.tbl_func'),'','width:180px')
         ;
 
         $this->output($t->render());
@@ -84,7 +84,7 @@ class Plugins extends Engine
 
         $res = array();
         $t = new DataTables();
-        $t_installed = $this->t('plugins.installed');
+//        $t_installed = $this->t('plugins.installed');
         foreach ($items as $i=>$item) {
             $data = $this->mPlugins->data($item['controller']);
             $installed = isset($data['id']);
@@ -105,7 +105,7 @@ class Plugins extends Engine
                 (
                     Icon::create($icon),
                     [
-                        'class'     => Button::TYPE_PRIMARY  . " b-plugin-" . ($installed ? 'uninstall' : 'install'),
+                        'class'     => " b-plugin-" . ($installed ? 'uninstall' : 'install'),
                         'data-id'   => ($installed ? $data['id'] : $item['controller']),
                         'title'     => ($installed ? $this->t('plugins.uninstall') : $this->t('plugins.install'))
                     ]
@@ -114,7 +114,7 @@ class Plugins extends Engine
                     (
                         Icon::create($icon_pub),
                         [
-                            'class' => Button::TYPE_PRIMARY  . " b-plugin-" . ($installed && $data['published'] == 1 ? 'hide' : 'pub'),
+                            'class' => " b-plugin-" . ($installed && $data['published'] == 1 ? 'hide' : 'pub'),
                             'data-id' => $data['id'],
                             'title'   => ($installed && $data['published'] == 1 ? $this->t('plugins.pub') : $this->t('plugins.hide'))
                         ]
