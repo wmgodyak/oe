@@ -64,7 +64,7 @@ class Languages extends Model
 
     public function delete($id)
     {
-        return self::$db->delete('languages', " id={$id} limit 1");
+        return self::$db->delete('__languages', " id={$id} limit 1");
     }
 
     public function get()

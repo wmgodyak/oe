@@ -28,7 +28,7 @@ class Languages extends Engine
 {
     public function index()
     {
-        $this->appendToPanel((string)Button::create($this->t('common.button_create'), ['class' => 'btn-md b-languages-create']));
+        $this->appendToPanel((string)Button::create($this->t('common.button_create'), ['class' => 'btn-md btn-primary b-languages-create']));
 
         $t = new DataTables();
 
@@ -39,7 +39,7 @@ class Languages extends Engine
             -> th($this->t('languages.name'))
             -> th($this->t('languages.code'))
             -> th($this->t('languages.is_main'))
-            -> th($this->t('common.tbl_func'), '', 'width: 60px')
+            -> th($this->t('common.tbl_func'), '', 'width: 130px')
         ;
 
         $this->output($t->render());
@@ -62,12 +62,12 @@ class Languages extends Engine
                 (string)Button::create
                 (
                     Icon::create(Icon::TYPE_EDIT),
-                    ['class' => 'b-languages-edit', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
+                    ['class' => 'b-languages-edit  btn-primary', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
                 ) .
                 ($row['is_main'] == 0 ? (string)Button::create
                 (
                     Icon::create(Icon::TYPE_DELETE),
-                    ['class' => 'b-languages-delete', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+                    ['class' => 'b-languages-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
                 ) : "")
 
             ;
