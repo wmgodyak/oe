@@ -158,7 +158,7 @@ engine.post = {
 
                 var dialog = engine.dialog({
                     content: d,
-                    title: t.postsCategories.edit_title,
+                    title: t.postsCategories.action_edit,
                     autoOpen: true,
                     width: 750,
                     modal: true,

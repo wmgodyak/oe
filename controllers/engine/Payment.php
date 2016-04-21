@@ -42,7 +42,7 @@ class Payment extends Engine
     {
         $this->appendToPanel
         (
-            (string)Button::create($this->t('common.button_create'), ['class' => 'btn-md b-payment-create'])
+            (string)Button::create($this->t('common.button_create'), ['class' => 'btn-md btn-primary b-payment-create'])
         );
         $t = new DataTables();
 
@@ -77,7 +77,7 @@ class Payment extends Engine
                     (
                         Icon::create(Icon::TYPE_PUBLISHED),
                         [
-                            'class' => 'btn-primary b-payment-hide',
+                            'class' => 'b-payment-hide',
                             'title' => $this->t('common.title_pub'),
                             'data-id' => $row['id']
                         ]
@@ -87,7 +87,7 @@ class Payment extends Engine
                     (
                         Icon::create(Icon::TYPE_HIDDEN),
                         [
-                            'class' => 'btn-primary b-payment-pub',
+                            'class' => 'b-payment-pub',
                             'title' => $this->t('common.title_hide'),
                             'data-id' => $row['id']
                         ]
@@ -96,12 +96,12 @@ class Payment extends Engine
                 (string)Button::create
                 (
                     Icon::create(Icon::TYPE_EDIT),
-                    ['class' => 'b-payment-edit', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
+                    ['class' => 'b-payment-edit btn-primary', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
                 ) .
                 (string)Button::create
                 (
                     Icon::create(Icon::TYPE_DELETE),
-                    ['class' => 'b-payment-delete', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+                    ['class' => 'b-payment-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
                 )
             ;
         }

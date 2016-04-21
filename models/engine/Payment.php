@@ -49,7 +49,7 @@ class Payment extends Engine
 
         if(isset($data['settings']) && !empty($data['settings'])) $data['settings'] = serialize($data['settings']);
 
-        $id = $this->createRow('payment', $data);
+        $id = $this->createRow('__payment', $data);
 
         if($this->hasDBError()){
             $this->rollback();
@@ -59,7 +59,7 @@ class Payment extends Engine
         foreach ($info as $languages_id=> $item) {
             $item['languages_id']    = $languages_id;
             $item['payment_id'] = $id;
-            $this->createRow('payment_info', $item);
+            $this->createRow('__payment_info', $item);
         }
 
         if($this->hasDBError()){
@@ -107,7 +107,7 @@ class Payment extends Engine
             if(empty($aid)){
                 $item['languages_id']    = $languages_id;
                 $item['payment_id']     = $id;
-                $this->createRow('payment_info', $item);
+                $this->createRow('__payment_info', $item);
             } else {
                 $this->updateRow('__payment_info', $aid, $item);
             }
@@ -148,7 +148,7 @@ class Payment extends Engine
 
     public function delete($id)
     {
-        return self::$db->delete('payment', " id={$id} limit 1");
+        return self::$db->delete('__payment', " id={$id} limit 1");
     }
 
     public function pub($id)

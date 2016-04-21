@@ -16,11 +16,15 @@ engine.currency = {
     {
         engine.request.get('./currency/create', function(d)
         {
-            var bi = t.common.button_save;
-            var buttons = {};
-            buttons[bi] =  function(){
-                $('#form').submit();
-            };
+            var buttons = [
+                {
+                    text    : t.common.button_save,
+                    "class" : 'btn-success',
+                    click   : function(){
+                        $('#form').submit();
+                    }
+                }
+            ];
             var dialog = engine.dialog({
                 content: d,
                 title: t.currency.create_title,
@@ -48,14 +52,18 @@ engine.currency = {
             data: {id: id},
             success: function(d)
             {
-                var bi = t.common.button_save;
-                var buttons = {};
-                buttons[bi] =  function(){
-                    $('#form').submit();
-                };
+                var buttons = [
+                    {
+                        text    : t.common.button_save,
+                        "class" : 'btn-success',
+                        click   : function(){
+                            $('#form').submit();
+                        }
+                    }
+                ];
                 var dialog = engine.dialog({
                     content: d,
-                    title: t.currency.edit_title,
+                    title: t.currency.action_edit,
                     autoOpen: true,
                     width: 600,
                     modal: true,

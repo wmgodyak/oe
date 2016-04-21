@@ -38,7 +38,7 @@ class Currency extends Engine
     {
         $this->appendToPanel
         (
-            (string)Button::create($this->t('common.button_create'), ['class' => 'btn-md b-currency-create'])
+            (string)Button::create($this->t('common.button_create'), ['class' => 'btn-md btn-primary b-currency-create'])
         );
         $t = new DataTables();
 
@@ -51,7 +51,7 @@ class Currency extends Engine
             -> th($this->t('currency.rate'))
             -> th($this->t('currency.symbol'))
             -> th($this->t('currency.is_main'))
-            -> th($this->t('common.tbl_func'), '', 'width: 60px')
+            -> th($this->t('common.tbl_func'), '', 'width: 140px')
         ;
 
         $this->output($t->render());
@@ -76,12 +76,12 @@ class Currency extends Engine
                 (string)Button::create
                 (
                     Icon::create(Icon::TYPE_EDIT),
-                    ['class' => 'b-currency-edit', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
+                    ['class' => 'b-currency-edit btn-primary', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
                 ) .
                 (string)Button::create
                 (
                     Icon::create(Icon::TYPE_DELETE),
-                    ['class' => 'b-currency-delete', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+                    ['class' => 'b-currency-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
                 )
             ;
         }

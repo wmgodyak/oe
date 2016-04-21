@@ -48,7 +48,7 @@ class Delivery extends Engine
 
         $this->beginTransaction();
 
-        $id = $this->createRow('delivery', $data);
+        $id = $this->createRow('__delivery', $data);
 
         if($this->hasDBError()){
             $this->rollback();
@@ -58,7 +58,7 @@ class Delivery extends Engine
         foreach ($info as $languages_id=> $item) {
             $item['languages_id']    = $languages_id;
             $item['delivery_id'] = $id;
-            $this->createRow('delivery_info', $item);
+            $this->createRow('__delivery_info', $item);
         }
 
         if($this->hasDBError()){
@@ -108,7 +108,7 @@ class Delivery extends Engine
             if(empty($aid)){
                 $item['languages_id']    = $languages_id;
                 $item['delivery_id']     = $id;
-                $this->createRow('delivery_info', $item);
+                $this->createRow('__delivery_info', $item);
             } else {
                 $this->updateRow('__delivery_info', $aid, $item);
             }
@@ -147,7 +147,7 @@ class Delivery extends Engine
 
     public function delete($id)
     {
-        return self::$db->delete('delivery', " id={$id} limit 1");
+        return self::$db->delete('__delivery', " id={$id} limit 1");
     }
     public function pub($id)
     {

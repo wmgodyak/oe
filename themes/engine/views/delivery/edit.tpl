@@ -52,10 +52,13 @@
     </div>
     <div id="d_settings"></div>
     <div class="form-group">
-        <label for="data_published" class="col-sm-3 control-label">{$t.delivery.published}</label>
-        <div class="col-sm-9">
-            <input type="hidden"  name="data[published]"  class="form-control" value="0" >
-            <input type="checkbox" {if $data.published}checked{/if} name="data[published]" id="data_published" value="1" >
+        <div class="col-md-10 col-md-offset-2">
+            <div class="checkbox">
+                <label>
+                    <input type="hidden"  name="data[published]"  class="form-control" value="0" >
+                    <input type="checkbox" {if $data.published}checked{/if} name="data[published]" id="data_published" value="1" > {$t.delivery.published}
+                </label>
+            </div>
         </div>
     </div>
     <input type="hidden" name="token" value="{$token}">

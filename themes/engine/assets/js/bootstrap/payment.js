@@ -37,11 +37,15 @@ engine.payment = {
     {
         engine.request.get('./payment/create', function(d)
         {
-            var bi = t.common.button_save;
-            var buttons = {};
-            buttons[bi] =  function(){
-                $('#form').submit();
-            };
+            var buttons = [
+                {
+                    text    : t.common.button_save,
+                    "class" : 'btn-success',
+                    click   : function(){
+                        $('#form').submit();
+                    }
+                }
+            ];
             var dialog = engine.dialog({
                 content: d,
                 title: t.payment.create_title,
@@ -70,14 +74,18 @@ engine.payment = {
             data: {id: id},
             success: function(d)
             {
-                var bi = t.common.button_save;
-                var buttons = {};
-                buttons[bi] =  function(){
-                    $('#form').submit();
-                };
+                var buttons = [
+                    {
+                        text    : t.common.button_save,
+                        "class" : 'btn-success',
+                        click   : function(){
+                            $('#form').submit();
+                        }
+                    }
+                ];
                 var dialog = engine.dialog({
                     content: d,
-                    title: t.payment.edit_title,
+                    title: t.payment.action_edit,
                     autoOpen: true,
                     width: 600,
                     modal: true,

@@ -40,11 +40,15 @@ engine.delivery = {
     {
         engine.request.get('./delivery/create', function(d)
         {
-            var bi = t.common.button_save;
-            var buttons = {};
-            buttons[bi] =  function(){
-                $('#form').submit();
-            };
+            var buttons = [
+                {
+                    text    : t.common.button_save,
+                    "class" : 'btn-success',
+                    click   : function(){
+                        $('#form').submit();
+                    }
+                }
+            ];
             var dialog = engine.dialog({
                 content: d,
                 title: t.delivery.create_title,
@@ -73,14 +77,18 @@ engine.delivery = {
             data: {id: id},
             success: function(d)
             {
-                var bi = t.common.button_save;
-                var buttons = {};
-                buttons[bi] =  function(){
-                    $('#form').submit();
-                };
+                var buttons = [
+                    {
+                        text    : t.common.button_save,
+                        "class" : 'btn-success',
+                        click   : function(){
+                            $('#form').submit();
+                        }
+                    }
+                ];
                 var dialog = engine.dialog({
                     content: d,
-                    title: t.delivery.edit_title,
+                    title: t.delivery.action_edit,
                     autoOpen: true,
                     width: 600,
                     modal: true,

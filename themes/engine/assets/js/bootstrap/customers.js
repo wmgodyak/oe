@@ -131,7 +131,7 @@ engine.customers = {
                 ];
                 var dialog = engine.dialog({
                     content: d,
-                    title: t.customers.edit_title,
+                    title: t.customers.action_edit,
                     autoOpen: true,
                     width: 750,
                     modal: true,
@@ -290,7 +290,7 @@ engine.customers = {
 
                     var dialog = engine.dialog({
                         content: d,
-                        title: t.customers_group.edit_title,
+                        title: t.customers_group.action_edit,
                         autoOpen: true,
                         width: 750,
                         modal: true,

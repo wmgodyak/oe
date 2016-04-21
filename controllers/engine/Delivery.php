@@ -41,7 +41,7 @@ class Delivery extends Engine
     {
         $this->appendToPanel
         (
-            (string)Button::create($this->t('common.button_create'), ['class' => 'btn-md b-delivery-create'])
+            (string)Button::create($this->t('common.button_create'), ['class' => 'btn-md btn-primary b-delivery-create'])
         );
         $t = new DataTables();
 
@@ -50,8 +50,8 @@ class Delivery extends Engine
 //            -> setConfig('order', array(0, 'desc'))
             -> th($this->t('common.id'), '', 'width: 20px')
             -> th($this->t('delivery.name'))
-            -> th($this->t('delivery.price'))
-            -> th($this->t('delivery.free_from'))
+            -> th($this->t('delivery.price'), '', 'width: 200px')
+            -> th($this->t('delivery.free_from'), '', 'width: 200px')
             -> th($this->t('common.tbl_func'), '', 'width: 180px')
         ;
 
@@ -80,7 +80,7 @@ class Delivery extends Engine
                     (
                         Icon::create(Icon::TYPE_PUBLISHED),
                         [
-                            'class' => 'btn-primary b-delivery-hide',
+                            'class' => 'b-delivery-hide',
                             'title' => $this->t('common.title_pub'),
                             'data-id' => $row['id']
                         ]
@@ -90,7 +90,7 @@ class Delivery extends Engine
                     (
                         Icon::create(Icon::TYPE_HIDDEN),
                         [
-                            'class' => 'btn-primary b-delivery-pub',
+                            'class' => 'b-delivery-pub',
                             'title' => $this->t('common.title_hide'),
                             'data-id' => $row['id']
                         ]
@@ -99,12 +99,12 @@ class Delivery extends Engine
                 (string)Button::create
                 (
                     Icon::create(Icon::TYPE_EDIT),
-                    ['class' => 'b-delivery-edit', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
+                    ['class' => 'b-delivery-edit btn-primary', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
                 ) .
                 (string)Button::create
                 (
                     Icon::create(Icon::TYPE_DELETE),
-                    ['class' => 'b-delivery-delete', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+                    ['class' => 'b-delivery-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
                 )
             ;
         }

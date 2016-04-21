@@ -35,14 +35,14 @@ class DeliveryPayment extends Engine
      */
     public static function delete($delivery_id, $payment_id)
     {
-        return self::$db->delete('delivery_payment', " delivery_id={$delivery_id} and payment_id={$payment_id} limit 1");
+        return self::$db->delete('__delivery_payment', " delivery_id={$delivery_id} and payment_id={$payment_id} limit 1");
     }
 
     public static function getDelivery()
     {
         $languages_id = self::$language_id;
         return self::$db
-            ->select("select d.id, i.name from __delivery d, delivery_info i where i.delivery_id=d.id and i.languages_id={$languages_id}")
+            ->select("select d.id, i.name from __delivery d, __delivery_info i where i.delivery_id=d.id and i.languages_id={$languages_id}")
             ->all();
     }
 
@@ -50,7 +50,7 @@ class DeliveryPayment extends Engine
     {
         $languages_id = self::$language_id;
         return self::$db
-            ->select("select d.id, i.name from __payment d, payment_info i where i.payment_id=d.id and i.languages_id={$languages_id}")
+            ->select("select d.id, i.name from __payment d, __payment_info i where i.payment_id=d.id and i.languages_id={$languages_id}")
             ->all();
     }
 

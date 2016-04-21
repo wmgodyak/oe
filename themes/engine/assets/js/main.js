@@ -681,7 +681,7 @@ engine.components = {
                 };
                 var dialog = engine.dialog({
                     content: d,
-                    title: t.components.edit_title,
+                    title: t.components.action_edit,
                     autoOpen: true,
                     width: 750,
                     modal: true,
@@ -826,7 +826,7 @@ engine.admins = {
                 };
                 var dialog = engine.dialog({
                     content: d,
-                    title: t.admins.edit_title,
+                    title: t.admins.action_edit,
                     autoOpen: true,
                     width: 750,
                     modal: true,
@@ -975,7 +975,7 @@ engine.admins = {
                     };
                     var dialog = engine.dialog({
                         content: d,
-                        title: t.admins_group.edit_title,
+                        title: t.admins_group.action_edit,
                         autoOpen: true,
                         width: 750,
                         modal: true,
@@ -1600,7 +1600,7 @@ engine.contentImagesSizes = {
                 };
                 var dialog = engine.dialog({
                     content: d,
-                    title: t.contentImagesSizes.edit_title,
+                    title: t.contentImagesSizes.action_edit,
                     autoOpen: true,
                     width: 750,
                     modal: true,
@@ -2046,7 +2046,7 @@ engine.guides = {
                 };
                 var dialog = engine.dialog({
                     content: d,
-                    title: t.guides.edit_title,
+                    title: t.guides.action_edit,
                     autoOpen: true,
                     width: 750,
                     modal: true,
@@ -2137,7 +2137,7 @@ engine.languages = {
                 };
                 var dialog = engine.dialog({
                     content: d,
-                    title: t.languages.edit_title,
+                    title: t.languages.action_edit,
                     autoOpen: true,
                     width: 600,
                     modal: true,
@@ -2435,7 +2435,7 @@ engine.plugins = {
                 };
                 var dialog = engine.dialog({
                     content: d,
-                    title: t.plugins.edit_title,
+                    title: t.plugins.action_edit,
                     autoOpen: true,
                     width: 750,
                     modal: true,
@@ -2524,7 +2524,7 @@ engine.modules = {
                 };
                 var dialog = engine.dialog({
                     content: d,
-                    title: t.modules.edit_title,
+                    title: t.modules.action_edit,
                     autoOpen: true,
                     width: 750,
                     modal: true,
@@ -2646,7 +2646,7 @@ engine.translations = {
                 };
                 var dialog = engine.dialog({
                     content: d,
-                    title: t.translations.edit_title,
+                    title: t.translations.action_edit,
                     autoOpen: true,
                     width: 750,
                     modal: true,
@@ -2811,7 +2811,7 @@ engine.mailTemplates = {
 
                 var dialog = engine.dialog({
                     content: d,
-                    title: t.mailTemplates.edit_title,
+                    title: t.mailTemplates.action_edit,
                     autoOpen: true,
                     width: 900,
                     closeOnEscape: false,
