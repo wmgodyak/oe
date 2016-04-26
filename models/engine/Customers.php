@@ -33,7 +33,7 @@ class Customers extends Users
                 select ug.id, ugi.name, ug.isfolder
                 from __users_group ug
                 join __users_group_info ugi on ugi.group_id=ug.id and ugi.languages_id={$this->languages_id}
-                where ug.parent_id={$parent_id} and ug.rang < 100
+                where ug.parent_id={$parent_id} and ug.backend=0
                 ")
             ->all();
 

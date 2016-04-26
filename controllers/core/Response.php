@@ -164,6 +164,7 @@ class Response
      */
     public function sendError($code, $die = false)
     {
+        $text = '';
         if ($code !== NULL) {
 
             switch ($code) {
@@ -221,6 +222,8 @@ class Response
 
         }
 
-        echo $code; $die ? die() : null;
+        echo $code, ' ', $text; $die ? die() : null;
+
+        return $this;
     }
 } 

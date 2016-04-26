@@ -218,13 +218,17 @@ class Users extends Model
      */
     public function getUserByEmail($email)
     {
-        return self::$db->select("
-            select u.*, g.rang
+        $u = self::$db->select("
+            select u.*, g.backend,g.permissions
             from __users u
             join __users_group g on g.id=u.group_id
             where u.email = '{$email}'
             limit 1
           ")->row();
+        if(!empty($u['permissions'])){
+            $u['permissions'] = unserialize($u['permissions']);
+        }
+        return $u;
     }
 
     /**

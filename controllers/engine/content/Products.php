@@ -25,7 +25,7 @@ defined("CPATH") or die();
  * @icon fa-mobile
  * @author Volodymyr Hodiak
  * @version 1.0.0
- * @rang 300
+
  * @package controllers\engine\content_types
  */
 class Products extends Content

@@ -22,7 +22,6 @@ defined('CPATH') or die();
  * @author Volodymyr Hodiak
  * @version 1.0.0
  * @position 5
- * @rang 300
  * @package controllers\engine
  */
 class Callbacks extends Engine {

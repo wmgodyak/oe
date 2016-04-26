@@ -322,7 +322,7 @@ class Content extends Engine
     public function getOwners()
     {
         return self::$db
-            ->select("select u.id, u.name, u.surname from __users u, __users_group ug where u.group_id=ug.id and ug.rang > 100")
+            ->select("select u.id, u.name, u.surname from __users u, __users_group ug where u.group_id=ug.id and ug.backend=1")
             ->all();
     }
 

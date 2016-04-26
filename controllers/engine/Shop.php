@@ -18,7 +18,7 @@ defined("CPATH") or die();
  * @icon fa-shopping-cart
  * @author Volodymyr Hodiak
  * @version 1.0.0
- * @rang 300
+
  * @position 3
  * @package controllers\engine
  */

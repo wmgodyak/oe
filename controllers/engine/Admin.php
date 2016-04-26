@@ -94,7 +94,9 @@ class Admin extends Engine {
                 setcookie('fail', ++$fail, $ban_time);
 
             } else {
+
                 $user = $this->mAdmin->getUserByEmail($data['email']);
+                Permissions::set($user['permissions']);
 
                 if(empty($user)){
                     $inp[] = ['data[password]' => $this->t('admin.e_login_pass')];
@@ -108,7 +110,7 @@ class Admin extends Engine {
                     $inp[] = ['data[password]' => $this->t('admin.e_login_deleted')];
                     setcookie('fail', ++$fail, $ban_time);
                 } else if (\models\components\Users::checkPassword($data['password'], $user['password'])){
-                    if($user['rang'] <= 100) {
+                    if($user['backend'] == 0) {
                         $inp[] = ['data[password]' => $this->t('admin.e_rang')];
                         setcookie('fail', ++$fail, $ban_time);
                     } else {
@@ -178,9 +180,12 @@ class Admin extends Engine {
 
             } else {
                 $user = $this->mAdmin->getUserByEmail($data['email']);
-
+                Permissions::set($user['permissions']);
                 if(empty($user)){
                     $inp[] = ['data[email]' => $this->t('admin.e_email')];
+                    setcookie('fail', ++$fail, time()+60*15);
+                }elseif($user['backend'] == 0) {
+                    $inp[] = ['data[email]' => $this->t('admin.e_rang')];
                     setcookie('fail', ++$fail, time()+60*15);
                 } else {
                     // new password

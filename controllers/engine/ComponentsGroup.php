@@ -18,7 +18,7 @@ defined("CPATH") or die();
  * @icon fa-puzzle-piece
  * @author Volodymyr Hodiak
  * @version 1.0.0
- * @rang 300
+
  * @package controllers\engine
  */
 class ComponentsGroup extends Engine

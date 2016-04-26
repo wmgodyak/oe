@@ -922,6 +922,27 @@ engine.admins = {
     },
     group: {
         tree: null,
+        setPermissions: function()
+        {
+            $(document).on('click', '.gp-toggle-c-actions', function(){
+                var com = $(this).data('id');
+                $('input.'+com).each(function(){
+                   if($(this).is(':checked')){
+                        $(this).removeAttr('checked');
+                   } else {
+                       $(this).attr('checked', true);
+                   }
+                });
+            });
+
+            $(document).on('change', '#permissions_full_access', function(){
+                if($(this).is(':checked')){
+                    $('#custom_permissions').hide();
+                } else {
+                    $('#custom_permissions').show();
+                }
+            });
+        },
         create: function(parent_id)
         {
             engine.request.post(
@@ -945,7 +966,7 @@ engine.admins = {
                         });
 
                         $('#data_parent_id').select2();
-
+                        engine.admins.group.setPermissions();
                         engine.validateAjaxForm
                         (
                             '#adminsGroupForm',
@@ -983,7 +1004,7 @@ engine.admins = {
                     });
 
                     $('#data_group_id').select2();
-
+                    engine.admins.group.setPermissions();
                     engine.validateAjaxForm('#adminsGroupForm', function(d){
                         if(d.s){
                             engine.admins.group.tree.refresh();

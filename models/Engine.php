@@ -9,6 +9,7 @@
 namespace models;
 
 use controllers\core\Session;
+use controllers\engine\Permissions;
 use models\core\Model;
 use models\engine\Languages;
 
@@ -53,6 +54,20 @@ class Engine extends Model
         ->all();
 
         foreach ($r as $item) {
+
+            if(strpos($item['controller'], '/') === FALSE){
+                $controller = ucfirst($item['controller']);
+            } else {
+                $a = explode('/', $item['controller']);
+                $controller = ''; $c = count($a); $c --;
+                foreach ($a as $i=>$v) {
+                    if($i == $c) $v = ucfirst($v);
+                    $controller .=  ($i>0 ? '\\' : '') . "$v";
+                }
+            }
+            if(!Permissions::check($controller, 'index')){
+                continue;
+            }
 
             if($item['isfolder']) {
                 $item['items'] = $this->nav($item['id']);

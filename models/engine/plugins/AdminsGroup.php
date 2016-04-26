@@ -14,6 +14,11 @@ defined("CPATH") or die();
 
 class AdminsGroup extends Engine
 {
+    /**
+     * @param $data
+     * @param $info
+     * @return bool|string
+     */
     public function create($data, $info)
     {
         $this->beginTransaction();
@@ -31,6 +36,10 @@ class AdminsGroup extends Engine
                     self::$db->update('__users_group', ['isfolder' => 1], "id={$data['parent_id']} limit 1");
                 }
             }
+        }
+
+        if(! $this->hasDBError()){
+            $this->setPermissions($group_id);
         }
 
         if($this->hasDBError()){
@@ -72,6 +81,10 @@ class AdminsGroup extends Engine
             }
         }
 
+        if(! $this->hasDBError()){
+            $this->setPermissions($id);
+        }
+
         if($this->hasDBError()){
             $this->rollback();
         } else {
@@ -81,7 +94,21 @@ class AdminsGroup extends Engine
         return ! $this->hasDBError();
     }
 
-    public function getItems($parent_id, $rang = 101)
+    /**
+     * @param $group_id
+     * @return bool
+     */
+    private function setPermissions($group_id)
+    {
+        $permissions = $this->request->post('permissions');
+        $s = self::updateRow('__users_group', $group_id, ['permissions' => serialize($permissions)]);
+        if($s){
+            self::$db->update('__users', ['sessid'=> null], "group_id={$group_id}");
+        }
+        return $s;
+    }
+
+    public function getItems($parent_id)
     {
         $parent_id = (int) $parent_id;
 
@@ -89,7 +116,7 @@ class AdminsGroup extends Engine
           select g.id, g.isfolder, CONCAT(i.name, ' #', g.id) as text, i.name
           from __users_group g
           join __users_group_info i on i.group_id=g.id and i.languages_id = {$this->languages_id}
-          where g.parent_id={$parent_id} and g.rang >= {$rang}
+          where g.parent_id={$parent_id} and g.backend = 1
           order by abs(g.position) asc
           ")->all();
     }
@@ -109,7 +136,11 @@ class AdminsGroup extends Engine
      */
     public function getData($id)
     {
-        return self::$db->select("select * from __users_group where id = {$id} limit 1")->row();
+        $d = self::$db->select("select * from __users_group where id = {$id} limit 1")->row();
+        if(!empty($d['permissions'])){
+            $d['permissions'] = unserialize($d['permissions']);
+        }
+        return $d;
     }
 
     public function delete($id)
@@ -168,5 +199,14 @@ class AdminsGroup extends Engine
         } else {
             $this->commit();
         }
+    }
+
+    public function getComponents()
+    {
+        return self::$db->select("select controller from __components order by id asc, position asc")->all('controller');
+    }
+    public function getPlugins()
+    {
+        return self::$db->select("select controller from __plugins order by id asc")->all('controller');
     }
 }

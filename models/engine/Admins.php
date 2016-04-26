@@ -31,19 +31,19 @@ class Admins extends Users
      * @param int $rang
      * @return array
      */
-    public function getGroups($parent_id = 0, $rang = 101)
+    public function getGroups($parent_id = 0)
     {
         $res = self::$db
             -> select("
                   select g.id, i.name, g.isfolder
                   from __users_group g, __users_group_info i
-                  where g.parent_id={$parent_id} and g.rang >= {$rang} and i.group_id=g.id and i.languages_id = {$this->languages_id}
+                  where g.parent_id={$parent_id} and g.backend = 1 and i.group_id=g.id and i.languages_id = {$this->languages_id}
               ")
             -> all();
 
         foreach ($res as $k=>$r) {
             if($r['isfolder']){
-                $res[$k]['items'] = $this->getGroups($r['id'], $rang);
+                $res[$k]['items'] = $this->getGroups($r['id']);
             }
         }
 

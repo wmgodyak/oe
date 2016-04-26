@@ -23,7 +23,7 @@ defined("CPATH") or die();
  * @icon fa-file-text
  * @author Volodymyr Hodiak
  * @version 1.0.0
- * @rang 300
+
  * @position = 4
  * @package controllers\engine\content_types
  */

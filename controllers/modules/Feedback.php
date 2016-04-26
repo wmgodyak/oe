@@ -19,7 +19,7 @@ defined("CPATH") or die();
  * @icon fa-mail
  * @author Volodymyr Hodiak
  * @version 1.0.0
- * @rang 300
+
  * @package controllers\engine
  */
 class Feedback extends App

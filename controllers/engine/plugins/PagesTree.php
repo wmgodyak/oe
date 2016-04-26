@@ -19,7 +19,7 @@ defined("CPATH") or die();
  * @icon fa-folder-o
  * @author Volodymyr Hodiak
  * @version 1.0.0
- * @rang 300
+
  * @package controllers\engine\plugins
  */
 class PagesTree extends Plugin
@@ -37,32 +37,25 @@ class PagesTree extends Plugin
 
     public function index()
     {
-
         return $this->template->fetch('plugins/content/pages/tree');
     }
 
     public function create()
     {
-
         return $this->template->fetch('plugins/content/pages/tree');
     }
 
     public function edit($id)
     {
-
         return $this->template->fetch('plugins/content/pages/tree');
     }
 
     public function delete($id)
     {
-
-        return $this->template->fetch('plugins/content/pages/tree');
     }
 
     public function process($id)
     {
-
-        return $this->template->fetch('plugins/content/pages/tree');
     }
 
     public function tree()

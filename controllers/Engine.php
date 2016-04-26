@@ -15,6 +15,7 @@ use controllers\core\Settings;
 use controllers\core\Template;
 use controllers\engine\Admin;
 use controllers\engine\Lang;
+use controllers\engine\Permissions;
 use controllers\engine\Plugins;
 use models\engine\Languages;
 
@@ -76,6 +77,7 @@ abstract class Engine extends Controller
         $this->languages = new Languages();
         $this->languages_id = $this->languages->getDefault('id');
 
+        $namespace   = $this->request->param('namespace');
         $controller  = $this->request->param('controller');
         $action      = $this->request->param('action');
 
@@ -104,12 +106,34 @@ abstract class Engine extends Controller
         }
 
         if(!self::$initialized){
+            Permissions::set(engine\Admin::data('permissions'));
+
+            $namespace = str_replace('controllers\engine\\', '', $namespace);
+
+//            $this->dump(engine\Admin::data('permissions'));die;
+//            echo $controller, ' ', $action, '<br>';
+
+            if(!Permissions::check($namespace . $controller, $action, $namespace)){
+
+                $this->permissionDenied();
+            }
+
+
             $this->init();
 
             $this->makeCrumbs();
         }
 
         $this->admin = Admin::data();
+    }
+
+    private function permissionDenied()
+    {
+        $this->response->sendError(401);
+        if($this->request->isXhr()){
+            die;
+        }
+        echo $this->template->fetch('permission_denied'); die;
     }
 
     /**

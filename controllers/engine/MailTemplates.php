@@ -21,7 +21,7 @@ defined("CPATH") or die();
  * @icon fa-envelope-o
  * @author Volodymyr Hodiak
  * @version 1.0.0
- * @rang 300
+
  * @package controllers\engine
  */
 class MailTemplates extends Engine

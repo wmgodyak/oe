@@ -23,7 +23,7 @@ defined("CPATH") or die();
  * @icon fa-puzzle-piece
  * @author Volodymyr Hodiak
  * @version 1.0.0
- * @rang 300
+
  * @package controllers\engine
  */
 class Modules extends Engine
@@ -176,7 +176,6 @@ class Modules extends Engine
 
                 if(isset($meta['icon']))     $data['icon']     = $meta['icon'];
                 if(isset($meta['author']))   $data['author']   = $meta['author'];
-//                if(isset($meta['rang']))     $data['rang']     = $meta['rang'];
                 if(isset($meta['version']))  $data['version']  = $meta['version'];
 
                 $data['controller'] = lcfirst($data['controller']);

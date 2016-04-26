@@ -23,7 +23,7 @@ defined("CPATH") or die();
  * @icon fa-puzzle-piece
  * @author Volodymyr Hodiak
  * @version 1.0.0
- * @rang 300
+
  * @package controllers\engine
  */
 class Plugins extends Engine
@@ -256,7 +256,7 @@ class Plugins extends Engine
         $ns          = $request->param('namespace');
         $ns = str_replace('\\','/', $ns);
         $ns = str_replace('controllers/engine/', '', $ns);
-        $controller = $ns . $controller;
+        $controller  = $ns . $controller;
 
         $r = DB::getInstance()
             -> select("
@@ -272,7 +272,12 @@ class Plugins extends Engine
         foreach ($r as $item) {
             if(!empty($item['settings'])) $item['settings'] = unserialize($item['settings']);
 
+            if(! Permissions::check('plugins\\'. ucfirst($item['controller']), $action)){
+                continue;
+            }
+
             $p = self::getPlugin($item['controller'], $item);
+
             if(method_exists($p, $action) && !in_array($action, $p->disallow_actions)){ //  && $p->autoload == true
                 $ds = call_user_func_array(array($p, $action), $args);
 

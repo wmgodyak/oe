@@ -22,7 +22,7 @@ defined("CPATH") or die();
  * @icon fa-cubes
  * @author Volodymyr Hodiak
  * @version 1.0.0
- * @rang 300
+
  * @package controllers\engine
  */
 class ContentTypes extends Engine

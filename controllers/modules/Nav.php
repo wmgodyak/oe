@@ -17,7 +17,7 @@ defined("CPATH") or die();
  * @icon fa-nav
  * @author Volodymyr Hodiak
  * @version 1.0.0
- * @rang 300
+
  * @package controllers\engine
  */
 class Nav extends App

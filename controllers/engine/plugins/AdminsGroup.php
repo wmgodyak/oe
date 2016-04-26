@@ -21,7 +21,7 @@ defined("CPATH") or die();
  * @icon fa-users
  * @author Volodymyr Hodiak
  * @version 1.0.0
- * @rang 300
+
  * @package controllers\engine
  */
 class AdminsGroup extends Plugin
@@ -49,7 +49,9 @@ class AdminsGroup extends Plugin
         $this->template->assign('data', ['parent_id' => $parent_id]);
         $this->template->assign('groups', $this->adminsGroup->getItems(0));
         $this->template->assign('languages', $this->languages->get());
-
+        $items = $this->getComponents();
+        $items += $this->getPlugins();
+        $this->template->assign('components', $items);
         $this->response->body($this->template->fetch('plugins/admins/groups/form'))->asHtml();
     }
 
@@ -60,8 +62,12 @@ class AdminsGroup extends Plugin
         $this->template->assign('languages', $this->languages->get());
         $this->template->assign('data', $this->adminsGroup->getData($id));
         $this->template->assign('info', $this->adminsGroup->getInfo($id));
+
+        $items = $this->getComponents();
+        $items += $this->getPlugins();
+        $this->template->assign('components', $items);
+
         $this->response->body($this->template->fetch('plugins/admins/groups/form'))->asHtml();
-//        $this->template->fetch('plugins/admins/groups/form');
     }
 
     public function delete($id)
@@ -69,9 +75,115 @@ class AdminsGroup extends Plugin
         return $this->adminsGroup->delete($id);
     }
 
+    private function getComponents()
+    {
+        $hide_components = ['DataTables', 'Lang', 'Plugin', 'Content', 'Permissions'];
+        $hide_actions = ['__construct', 'e_404', 'before', 'e404', '__set', '__get', 'dump', 'dDump', 'redirect','process','delete'];
+        $ns = '\controllers\engine\\';
+
+        $items = [];
+        $co = $this->adminsGroup->getComponents();
+        foreach ($co as $k=>$controller) {
+            if(strpos($controller, '/') === FALSE){
+                $controller = ucfirst($controller);
+            } else {
+                $a = explode('/', $controller);
+                $controller = ''; $c = count($a); $c --;
+                foreach ($a as $i=>$v) {
+                    if($i == $c) $v = ucfirst($v);
+                    $controller .=  ($i>0 ? '\\' : '') . "$v";
+                }
+            }
+
+            if(in_array($controller, $hide_components)) continue;
+
+            $class = new \ReflectionClass($ns . $controller);
+            $methods = $class->getMethods(\ReflectionMethod::IS_PUBLIC);
+
+            foreach ($methods as $method) {
+                if(in_array($method->name, $hide_actions)) continue;
+
+                $items[$controller][] = $method->name;
+            }
+        }
+
+        return $items;
+    }
+
+    private function getPlugins()
+    {
+        $hide_components = [];
+        $hide_actions = ['__construct', 'e_404', 'before', 'e404', '__set', '__get', 'dump', 'dDump', 'redirect','process','delete'];
+        $ns = '\controllers\engine\plugins\\';
+
+        $items = [];
+        $co = $this->adminsGroup->getPlugins();
+        foreach ($co as $k=>$controller) {
+
+            $controller = ucfirst($controller);
+
+            if(in_array($controller, $hide_components)) continue;
+
+            $class = new \ReflectionClass($ns . $controller);
+            $methods = $class->getMethods(\ReflectionMethod::IS_PUBLIC);
+
+            foreach ($methods as $method) {
+                if(in_array($method->name, $hide_actions)) continue;
+
+                $items['plugins\\'.$controller][] = $method->name;
+            }
+        }
+
+        return $items;
+    }
+
+    /**
+     * @param $ns
+     * @param string $parent
+     * @return array
+     */
+//    private function scanComponents($ns, $parent = '')
+//    {
+//        $dir = str_replace('\\', '/', $ns);
+//        $hide_components = ['DataTables', 'Lang', 'Plugin', 'Content', 'Permissions'];
+//        $hide_actions = ['__construct', 'e_404', 'before', 'e404', '__set', '__get', 'dump', 'dDump', 'redirect','process','delete'];
+//        $items = [];
+//        foreach (scandir(DOCROOT . $dir) as $item) {
+//            if($item == '.' || $item == '..') continue;
+//
+//            $ext = substr($item, -3, 3);
+//
+//            if($ext != 'php' && is_dir(DOCROOT . $dir . $item)) {
+//                $items += $this->scanComponents($ns . $item . '\\', $item . '\\');
+//
+//                continue;
+//            }
+//
+//            $com = substr($item, 0, -4);
+//
+//            $controller = ucfirst($com);
+//
+//            if(in_array($controller, $hide_components)) continue;
+//
+//            $class = new \ReflectionClass($ns . $controller);
+//            $methods = $class->getMethods(\ReflectionMethod::IS_PUBLIC);
+//
+//            foreach ($methods as $method) {
+//                if(in_array($method->name, $hide_actions)) continue;
+//
+//                if(empty($parent)) {
+//                    $controller = lcfirst($controller);
+//                }
+//                $items[$parent . $controller][] = $method->name;
+//            }
+//        }
+//        return $items;
+//    }
+
     /**
      * @param int $id
      * @throws \Exception
+     * @return null
      */
     public function process($id = 0)
     {
@@ -81,31 +193,27 @@ class AdminsGroup extends Plugin
         $info = $this->request->post('info');
         $s=0; $i=[];
 
-        FormValidation::setRule(['rang'], FormValidation::REQUIRED);
-        FormValidation::run($data);
+        $data['backend'] = 1;
 
-        if(FormValidation::hasErrors()){
-            $i = FormValidation::getErrors();
-        } else {
-            switch($this->request->post('action')){
-                case 'create':
-                    $s = $this->adminsGroup->create($data, $info);
+        switch($this->request->post('action')){
+            case 'create':
+                $s = $this->adminsGroup->create($data, $info);
+                if(! $s){
+                    $i[] = ["data[rang]" => $this->adminsGroup->getDBErrorCode() .' '. $this->adminsGroup->getDBErrorMessage()];
+                }
+                break;
+            case 'edit':
+                if( $id > 0 ){
+                    $s = $this->adminsGroup->update($id, $data, $info);
                     if(! $s){
                         $i[] = ["data[rang]" => $this->adminsGroup->getDBErrorCode() .' '. $this->adminsGroup->getDBErrorMessage()];
                     }
-                    break;
-                case 'edit':
-                    if( $id > 0 ){
-                        $s = $this->adminsGroup->update($id, $data, $info);
-                        if(! $s){
-                            $i[] = ["data[rang]" => $this->adminsGroup->getDBErrorCode() .' '. $this->adminsGroup->getDBErrorMessage()];
-                        }
-                    }
-                    break;
-                default:
-                    break;
-            }
+                }
+                break;
+            default:
+                break;
         }
+
 
 
         if(!$s && $this->adminsGroup->hasDBError()){

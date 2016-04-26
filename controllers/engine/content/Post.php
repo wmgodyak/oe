@@ -24,7 +24,7 @@ defined("CPATH") or die();
  * @icon fa-pencil
  * @author Volodymyr Hodiak
  * @version 1.0.0
- * @rang 300
+
  * @package controllers\engine\content_types
  */
 class Post extends Content

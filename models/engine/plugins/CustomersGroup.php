@@ -82,7 +82,7 @@ class CustomersGroup extends Engine
         return ! $this->hasDBError();
     }
 
-    public function getItems($parent_id, $rang = 101)
+    public function getItems($parent_id)
     {
         $parent_id = (int) $parent_id;
 
@@ -90,7 +90,7 @@ class CustomersGroup extends Engine
           select g.id, g.isfolder, CONCAT(i.name, ' #', g.id) as text
           from __users_group g
           join __users_group_info i on i.group_id=g.id and i.languages_id = {$this->languages_id}
-          where g.parent_id={$parent_id} and g.rang <= {$rang}
+          where g.parent_id={$parent_id} and g.backend=0
           order by abs(g.position) asc
           ")->all();
     }
@@ -176,19 +176,19 @@ class CustomersGroup extends Engine
      * @param int $rang
      * @return array
      */
-    public function getGroups($parent_id = 0, $rang = 101)
+    public function getGroups($parent_id = 0)
     {
         $res = self::$db
             -> select("
                   select g.id, i.name, g.isfolder
                   from __users_group g, __users_group_info i
-                  where g.parent_id={$parent_id} and g.rang <= {$rang} and i.group_id=g.id and i.languages_id = {$this->languages_id}
+                  where g.parent_id={$parent_id} and g.backend = 0 and i.group_id=g.id and i.languages_id = {$this->languages_id}
               ")
             -> all();
 
         foreach ($res as $k=>$r) {
             if($r['isfolder']){
-                $res[$k]['items'] = $this->getGroups($r['id'], $rang);
+                $res[$k]['items'] = $this->getGroups($r['id']);
             }
         }
 

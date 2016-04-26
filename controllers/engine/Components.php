@@ -21,7 +21,7 @@ defined("CPATH") or die();
  * @icon fa-puzzle-piece
  * @author Volodymyr Hodiak
  * @version 1.0.0
- * @rang 300
+
  * @package controllers\engine
  */
 class Components extends Engine
@@ -74,23 +74,22 @@ class Components extends Engine
                     $row = PHPDocReader::getMeta($ns . ucfirst($module));
                     if(!isset($row['name'])) continue;
 
-                    $row['controller'] = str_replace('controllers/engine/','', $path . ucfirst($module));
-
-                    if(!isset($row['rang'])) $row['rang'] = 101;
+                    $row['controller'] = str_replace('controllers/engine/','', $path . $module);
+//                    $row['controller'] = str_replace('controllers/engine/','', $path . lcfirst($module));
 
                     $items[] = $row;
 
             }
             closedir($handle);
         }
-
+//        $this->dump($items);die;
         return $items;
     }
 
     public function items()
     {
         $items = $this->readComponents(self::PATH);
-
+//        $this->dump($items);die;
         $res = array();
         $t = new DataTables();
 //        $t_installed = $this->t('components.installed');
@@ -228,59 +227,6 @@ class Components extends Engine
         $this->template->assign('tree', $this->mComponents->tree());
         $this->template->assign('component', $component);
         return $this->template->fetch('components/install_component');
-    }
-
-    private function _installArchive()
-    {
-        $data = $this->request->post('data'); $s=0; $i=[]; $m='';
-        $file = $_FILES['file'];
-        // перевірка підтримки zip
-        if (! class_exists('ZipArchive')) {
-            $i[] = ["file" => $this->t('components.error_component_installed')];
-        } else {
-            $file_info = pathinfo($file['name']);
-            $file_extension = $file_info['extension'];
-            $file_content = file_get_contents($file['tmp_name']);
-
-            if(empty($file_content)){
-                $i[] = ["file" => 'failure php://input  return empty string'];
-            }
-            if(empty($i)){
-                if ($file_extension == 'zip' && class_exists('ZipArchive')) {
-
-                    $zip = new \ZipArchive();
-                    $res = $zip->open($file['tmp_name']);
-                    $files_exists = [];
-
-                    for ($c = 0; $c < $zip->numFiles; $c++) {
-                        if(
-                            !is_dir(DOCROOT . $zip->getNameIndex($c)) &&
-                            file_exists(DOCROOT . $zip->getNameIndex($c))
-                        )
-                        {
-                            $files_exists[] = $zip->getNameIndex($c);
-                        }
-                    }
-
-                    if(!empty($files_exists)){
-                        $i[] = ["file" =>  $this->t('components.error_file_exists') . implode('<br>', $files_exists)];
-                    }
-
-                    if ($res > 0 && $res != TRUE) {
-                        $i[] = ["file" => 'failure code:' . $res];
-                    }
-
-                    if(empty($i)){
-                        $zip->extractTo(DOCROOT);
-
-                        $s=1;
-                    }
-                    $zip->close();
-                }
-            }
-        }
-
-        $this->response->body(['s'=>$s, 'i' => $i, 'm' => $m])->asJSON();
     }
 
     public function uninstall()
