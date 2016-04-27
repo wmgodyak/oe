@@ -24,14 +24,14 @@
         {/if}
         <div class="row">
             <div class="col-md-10 post">
-                <div class="title">
-                    {$post.name}
+                <div class="title ce" data-id="h1">
+                    {$post.h1}
                 </div>
                 <div class="author">
                     <img src="{$post.author.avatar}" class="avatar" alt="author" />
                     By {$post.author.name} {$post.author.surname}, {$post.published}
                 </div>
-                <div class="content">
+                <div class="content ce" id="cms_content">
                    {$post.content}
                 </div>
                 <div class="share">

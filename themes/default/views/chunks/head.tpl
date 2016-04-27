@@ -41,6 +41,16 @@
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <script>
-        var TOKEN = '{$token}', LANG_ID={$page.languages_id * 1};
+        var TOKEN = '{$token}', LANG_ID={$page.languages_id * 1}, CONTENT_ID = {$page.id};
     </script>
+
+    {* Якщо авторизований адміністратор, то показуємо додаткові опції *}
+    {if $smarty.session.engine.admin}
+        <script src="{$theme_url}assets/js/admin.js" id="admPanelScr"></script>
+        {if $smarty.session.inline_editing}
+            <script src="/vendor/ckeditor/ckeditor.js"></script>
+        {/if}
+        <link rel="stylesheet" type="text/css" href="{$theme_url}assets/css/admin.css">
+    {/if}
+
 </head>

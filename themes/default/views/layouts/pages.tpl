@@ -16,10 +16,12 @@
     <div class="container">
         <div class="row header">
             <div class="col-md-12">
-                <h3>{$page.name}</h3>
-                <p>
-                    {$page.description}
-                </p>
+                <h3 class="ce" data-id="h1">{$page.h1}</h3>
+                <div class="ce" data-id="description">
+                    <p>
+                        {$page.description}
+                    </p>
+                </div>
             </div>
         </div>
         {include file="modules/slider.tpl"}
@@ -27,7 +29,7 @@
 </div>
 
 <div id="info">
-    <div class="container">
+    <div class="container ce" data-id="content" id="cms_content">
         {$page.content}
     </div>
 </div>

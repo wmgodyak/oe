@@ -76,6 +76,12 @@ class Session {
 
         return isset($_SESSION[$key]) ? $_SESSION[$key] : null;
     }
+    public static function delete($key)
+    {
+        if(!isset($_SESSION[$key])) return;
+
+        unset($_SESSION[$key]);
+    }
 
     /**
      * deletes the session
