@@ -106,18 +106,16 @@ abstract class Engine extends Controller
         }
 
         if(!self::$initialized){
+
             Permissions::set(engine\Admin::data('permissions'));
-
-            $namespace = str_replace('controllers\engine\\', '', $namespace);
-
-//            $this->dump(engine\Admin::data('permissions'));die;
-//            echo $controller, ' ', $action, '<br>';
-
-            if(!Permissions::check($namespace . $controller, $action, $namespace)){
-
-                $this->permissionDenied();
+            if( $controller != 'Admin' && $action != 'login' ) {
+                $namespace = str_replace('controllers\engine\\','', $namespace);
+//                $this->dump(engine\Admin::data('permissions'));die;
+                if (!Permissions::check($namespace . $controller, $action)) {
+//                    echo $namespace . $controller, '  ' , $action;
+                    $this->permissionDenied();
+                }
             }
-
 
             $this->init();
 

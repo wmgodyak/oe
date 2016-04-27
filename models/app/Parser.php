@@ -22,14 +22,20 @@ class Parser extends Model
         parent::__construct();
 
         $this->ds = $ds;
+
+        $this->makeFriendlyUrl();
+        $this->addAnalytics();
     }
 
-    private function getUrlById($id, $languages_id, $def_lang)
+    private function getUrlById($id, $languages_id, $def_lang, $home_id)
     {
-        $url = self::$db
-            ->select("select url from __content_info where content_id = '{$id}' and languages_id={$languages_id} limit 1")
-            ->row('url');
-
+        if($id == $home_id){
+            $url = '';
+        } else {
+            $url = self::$db
+                ->select("select url from __content_info where content_id = '{$id}' and languages_id={$languages_id} limit 1")
+                ->row('url');
+        }
         if($languages_id == $def_lang['id']){
             return $url;
         }
@@ -124,6 +130,7 @@ class Parser extends Model
      */
     public function makeFriendlyUrl()
     {
+        $home_id  = self::$db->select("select value from __settings where name='home_id' limit 1")->row('value');
         $def_lang = self::$db->select("select id,code from __languages where is_main=1 limit 1")->row();
         $languages_id = $this->request->param('languages_id');
         $self = $this;
@@ -134,7 +141,7 @@ class Parser extends Model
         $this->ds = preg_replace_callback
         (
             $pattern,
-            function($matches) use ($self, $languages_id, $def_lang)
+            function($matches) use ($self, $languages_id, $def_lang, $home_id)
             {
                 if(!isset($matches[1])) return $matches[0];
 
@@ -169,7 +176,7 @@ class Parser extends Model
                 if(!isset($matches[2])) return $matches[0];
 
                 $id = (int)$matches[2];
-                $url .= $self->getUrlById($id, $languages_id, $def_lang);
+                $url .= $self->getUrlById($id, $languages_id, $def_lang, $home_id);
 
                 foreach($matches as $k=>$v){
                     if($k > 2){
@@ -224,6 +231,7 @@ class Parser extends Model
             })(window, \"yandex_metrika_callbacks\");
             ";
         }
+
         if(!empty($out)){
             $out = "<script>{$out}</script>";
             $this->ds = str_replace('</head>', $out . '</head>',$this->ds);
