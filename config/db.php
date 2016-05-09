@@ -9,14 +9,30 @@
 /*
  * otakoyi_e7 та пароль для tnkjt27r
 */
-return array(
+
+$db = [
     'type'     => 'mysql',
-    'host'     => 'localhost',
-    'db'       => 'engine',
+    'host'     => 'otakoyi.mysql.ukraine.com.ua',
+    'db'       => 'otakoyi_e7',
     'prefix'   => 'e_',
-    'user'     => 'root',
-    'pass'     => 'dell',
+    'user'     => 'otakoyi_e7',
+    'pass'     => 'tnkjt27r',
     'port'     => 3306,
     'charset'  => 'utf8',
     'debug'    => true
-);
+];
+
+if($_SERVER['REMOTE_ADDR'] == '127.0.0.1'){
+    $db = [
+        'type'     => 'mysql',
+        'host'     => 'localhost',
+        'db'       => 'engine',
+        'prefix'   => 'e_',
+        'user'     => 'root',
+        'pass'     => 'dell',
+        'port'     => 3306,
+        'charset'  => 'utf8',
+        'debug'    => true
+    ];
+}
+return $db;
