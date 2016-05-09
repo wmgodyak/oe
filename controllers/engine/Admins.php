@@ -36,9 +36,52 @@ class Admins extends Engine
     }
 
     /**
-     *
+     * @param null $group_id
+     * @throws \controllers\core\exceptions\Exception
      */
     public function index($group_id = null)
+    {
+        $this->appendToPanel((string)Button::create($this->t('common.button_create'), ['class' => 'btn-md btn-primary b-admins-create']));
+
+        $t = new DataTables2('admins');
+
+        $t  -> th($this->t('common.id'),        'u.id')
+            -> th($this->t('admins.pib'),       'u.surname')
+            -> th($this->t('admins.group'),     'ugi.name as group_name', true, false)
+            -> th($this->t('admins.email'),     'u.email')
+            -> th($this->t('admins.phone'),     'u.phone')
+            -> th($this->t('admins.created') ,  'u.created', true, false)
+            -> th($this->t('admins.lastlogin'), 'u.lastlogin', true, false);
+//            -> th($this->t('common.func'), 'func', null, null, function($row){return '+' . $row['id']. '+';});
+
+        $t-> ajax('admins/index/'. $group_id);
+
+        if($this->request->isXhr()){
+//            $t->debug();
+//            $t->get(['g.name as group_name']);
+            $t  -> from('__users u')
+                -> join("__users_group ug on ug.backend = 1")
+                -> join("__users_group_info ugi on ugi.group_id=ug.id and ugi.languages_id={$this->languages_id}")
+                -> where(" u.group_id=ug.id")
+                -> execute();
+
+            if(! $t){
+                echo $t->getError();
+            }
+
+            $t->render();
+
+//            $this->dump($t);die;
+        }
+
+        $this->output($t->init());
+
+
+    }
+    /**
+     *
+     */
+    public function _index($group_id = null)
     {
         $this->appendToPanel((string)Button::create($this->t('common.button_create'), ['class' => 'btn-md btn-primary b-admins-create']));
 
@@ -64,7 +107,7 @@ class Admins extends Engine
      * @param int $group_id
      * @return string
      */
-    public function items($group_id = null)
+    public function _items($group_id = null)
     {
         $and = ($group_id > 0) ? " and ug.id={$group_id}" : '';
         $t = new DataTables();
