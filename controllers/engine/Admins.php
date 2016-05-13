@@ -46,19 +46,20 @@ class Admins extends Engine
         $t = new DataTables2('admins');
 
         $t  -> th($this->t('common.id'),        'u.id')
-            -> th($this->t('admins.pib'),       'u.surname')
-            -> th($this->t('admins.group'),     'ugi.name as group_name', true, false)
+            -> th($this->t('admins.pib'),       'CONCAT(u.surname , \' \', u.name) as username')
+            -> th($this->t('admins.group'),     'ugi.name as group_name', false, true)
             -> th($this->t('admins.email'),     'u.email')
             -> th($this->t('admins.phone'),     'u.phone')
             -> th($this->t('admins.created') ,  'u.created', true, false)
-            -> th($this->t('admins.lastlogin'), 'u.lastlogin', true, false);
-//            -> th($this->t('common.func'), 'func', null, null, function($row){return '+' . $row['id']. '+';});
+            -> th($this->t('admins.lastlogin'), 'u.lastlogin', true, false)
+            -> th($this->t('common.func'), null, false, false);
 
         $t-> ajax('admins/index/'. $group_id);
+        $this->output($t->init());
 
         if($this->request->isXhr()){
 //            $t->debug();
-//            $t->get(['g.name as group_name']);
+            $t->get('u.status');
             $t  -> from('__users u')
                 -> join("__users_group ug on ug.backend = 1")
                 -> join("__users_group_info ugi on ugi.group_id=ug.id and ugi.languages_id={$this->languages_id}")
@@ -67,16 +68,57 @@ class Admins extends Engine
 
             if(! $t){
                 echo $t->getError();
+                return null;
             }
 
-            $t->render();
+            $s = ['ban' => $this->t('admins.status_ban'), 'deleted' => $this->t('admins.status_deleted')];
+            $res = array();
+            foreach ($t->getResults(false) as $i=>$row) {
+                $res[$i][] = $row['id'];
+                $res[$i][] = $row['username'] .
+                    ($row['status'] != 'active' ? "<br><label class='label label-danger'>{$s[$row['status']]}</label>" : '');
+                $res[$i][] = $row['group_name'];
+                $res[$i][] = $row['email'];
+                $res[$i][] = $row['phone'];
+                $res[$i][] = $row['created'];
+                $res[$i][] = $row['lastlogin'] ? DateTime::ago(strtotime($row['lastlogin'])) : '';
 
-//            $this->dump($t);die;
+                $b = [];
+                $b[] = (string)Button::create
+                (
+                    Icon::create(Icon::TYPE_EDIT),
+                    ['class' => 'b-admins-edit btn-primary', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
+                );
+                if($row['status'] == 'active'){
+                    $b[] =  (string)Button::create
+                    (
+                        Icon::create(Icon::TYPE_BAN),
+                        ['class' => 'b-admins-ban', 'data-id' => $row['id'], 'title' => $this->t('admins.title_ban')]
+                    );
+                    $b[] = (string)Button::create
+                    (
+                        Icon::create(Icon::TYPE_DELETE),
+                        ['class' => 'b-admins-delete', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+                    );
+                } elseif($row['status'] == 'deleted' || $row['status'] == 'ban'){
+                    $b[] =  (string)Button::create
+                    (
+                        Icon::create(Icon::TYPE_RESTORE),
+                        ['class' => 'b-admins-restore', 'data-id' => $row['id'], 'title' => $this->t('admins.title_restore')]
+                    );
+                }
+
+                $b[] = (string)Button::create
+                (
+                    Icon::create(Icon::TYPE_TRASH),
+                    ['class' => 'b-admins-remove btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_remove')]
+                );
+
+                $res[$i][] = implode('', $b);
+            }
+
+            return $t->render($res, $t->getTotal());
         }
-
-        $this->output($t->init());
-
-
     }
     /**
      *

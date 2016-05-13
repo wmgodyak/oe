@@ -70,23 +70,21 @@ class DataTables2
      * @param $col
      * @param bool $orderable
      * @param bool $searchable
-     * @param null $format
      * @param null $style
      * @return $this
      * @throws Exception
      */
-    public function th($label, $col, $orderable = true, $searchable = true, $format = null, $style = null)
+    public function th($label, $col = null, $orderable = true, $searchable = true, $style = null)
     {
         if(is_array($label) && empty($col)){
             $this->th[] = $label;
 
-            if(!isset($label['col']))
-                throw new Exception("Fields label and col required");
-
             $label['orderable'] = isset($label['orderable']) ? $label['orderable'] : true;
             $label['orderable'] = isset($label['orderable']) ? $label['orderable'] : true;
 
-            $this->get($label['col'], $label['orderable'], $label['searchable']);
+//            if(isset($label['col'])){
+                $this->get($label['col'], $label['orderable'], $label['searchable']);
+//            }
 
             return $this;
         }
@@ -96,11 +94,12 @@ class DataTables2
           'col'        => $col,
           'orderable'  => $orderable,
           'searchable' => $searchable,
-          'format'     => $format,
           'style'      => $style
         ];
 
-        $this->get($col, $orderable, $searchable);
+//        if(isset($col)) {
+            $this->get($col, $orderable, $searchable);
+//        }
 
         return $this;
     }
@@ -168,7 +167,7 @@ class DataTables2
      * @param bool $searchable
      * @return $this
      */
-    public function get($col, $orderable = true, $searchable = true)
+    public function get($col, $orderable = false, $searchable = false)
     {
         $this->cols[] =  [
             'col'        => $col,
@@ -235,34 +234,6 @@ class DataTables2
         return $this;
     }
 
-
-//
-//    /**
-//     * @param array $data
-//     * @param int $recordsTotal
-//     * @param bool $encode
-//     * @return string
-//     */
-//    public function renderJSON(array $data, $recordsTotal=0, $encode = true)
-//    {
-//        $_data = array(); $draw= isset($_POST['draw']) ? (int)$_POST['draw'] : 1;  $recordsFiltered = $recordsTotal;
-//        if($recordsTotal == 0){
-//            $recordsTotal = $draw;
-//        }
-//        foreach ($data as $row) {
-//            $_data[] = array_values($row);
-//        }
-//
-//        $a = array(
-//            'draw'            => $draw,
-//            'data'            => $_data,
-//            'recordsTotal'    => (int) $recordsTotal,
-//            'recordsFiltered' => (int) $recordsFiltered
-//        );
-//
-//        return $encode ? json_encode($a) : $a;
-//    }
-//
     /**
      * render table body
      * @return string
@@ -309,6 +280,41 @@ class DataTables2
      */
     private function js()
     {
+        // definition to column search and ordering
+        $idx = []; $sidx = []; $defs = [];
+
+        foreach ($this->cols as $k=>$col) {
+           if(is_null($col['col'])){
+               $idx[] = $k;
+               $sidx[] = $k;
+
+               continue;
+           }
+
+           if($col['orderable'] == false){
+               $idx[] = $k;
+           }
+
+           if($col['searchable'] == false){
+               $sidx[] = $k;
+           }
+        }
+
+        // disable ordering
+        if(!empty($idx)){
+            $defs[] = ['orderable' => false, 'targets' => $idx];
+        }
+
+        // disable columns search
+        if(!empty($sidx)){
+            $defs[] = ['bSearchable' => false, 'targets' => $sidx];
+        }
+
+        // disable columns search
+        if(!empty($defs)){
+            $this->config('columnDefs', $defs);
+        }
+
         $this->config
         (
             'fnInitComplete',
@@ -367,7 +373,6 @@ class DataTables2
              $data['sign'] = md5(serialize($this->cols));
             */
 
-
             $cols = base64_decode($_POST['cols']);
 
             $a = explode(TOKEN, $cols);
@@ -382,27 +387,10 @@ class DataTables2
             $this->cols = unserialize($cols);
         }
 
-//        if( !empty($this->search_cols) && isset( $_POST['search']['value']) && strlen($_POST['search']['value']) > 2){
-//            $q = trim($_POST['search']['value']);
-//            if(!empty($q) && strlen($q) > 1){
-//                $w = array();
-//                foreach ($this->search_cols as $k => $row) {
-//                    $w[] = " {$row} like '%{$q}%'";
-//                }
-//
-//                $this->where("(". implode(' or ', $w) .")");
-//            }
-////            var_dump($_POST['search']['value']); die();
-//        }
-
-
-
         /**
          * Search
          */
         if(isset( $_POST['search']['value']) && strlen($_POST['search']['value']) > 2){
-
-//            echo '<pre>'; print_r($_POST);die;
 
             $q = trim($_POST['search']['value']);
 
@@ -424,8 +412,6 @@ class DataTables2
                     $this->where[] = " (". implode(' or ', $w) .")";
                 }
             }
-
-//            echo '<pre>'; print_r($_POST);die;
         }
 
         $order_by = "ORDER BY"; $ob = [];
@@ -433,7 +419,7 @@ class DataTables2
          * Sorting
          */
         if(isset($_POST['order'])){
-
+//            echo '<pre>'; print_r($_POST);die;
             foreach ($_POST['order'] as $k=>$col) {
 
                 $_col = $this->cols[$col['column']]['col'];
@@ -451,6 +437,7 @@ class DataTables2
 
         $a = [];
         foreach ($this->cols as $col) {
+            if(is_null($col['col'])) continue;
             $a[] = $col['col'];
         }
 
@@ -491,458 +478,74 @@ class DataTables2
     }
 
     /**
-     * @param array $data
-     * @return string
+     * @param bool $format
+     * @return array
      */
-    public function render(array $data = array())
+    public function getResults($format = true)
     {
-        if(empty($data)){
-            $data = $this->results;
+        if(! $format) {
+            return $this->results;
         }
 
-        $_data = [];
-        $draw= isset($_POST['draw']) ? (int)$_POST['draw'] : 1;
-        $recordsFiltered = $this->total;
+        $res = array();
+        foreach ($this->results as $item) {
+            $a = array();
 
-//        if($this->total == 0){
-//            $this->total = $draw;
-//        }
-//
+            foreach ($this->cols as $col) {
+                $c = explode(' as ', $col['col']);
+                if(isset($c[1])){
+                    $col['col'] = $c[0];
+                }
+
+                $a[] = isset($item[$col['col']]) ? $item[$col['col']] : $col['col'];
+            }
+
+            $res[] = $a;
+        }
+
+        return $res;
+    }
+
+    /**
+     * @param array $data
+     * @param int $recordsTotal
+     * @param bool $encode
+     * @return array|string
+     */
+    public function render(array $data, $recordsTotal=0, $encode = true)
+    {
+        $_data = array(); $draw= isset($_POST['draw']) ? (int)$_POST['draw'] : 1;  $recordsFiltered = $recordsTotal;
+        if($recordsTotal == 0){
+            $recordsTotal = $draw;
+        }
         foreach ($data as $row) {
             $_data[] = array_values($row);
         }
 
-        header('Content-Type: application/json');
-
-        echo  json_encode([
+        $a = array(
             'draw'            => $draw,
             'data'            => $_data,
-            'recordsTotal'    => (int) $this->total,
+            'recordsTotal'    => (int) $recordsTotal,
             'recordsFiltered' => (int) $recordsFiltered
-        ]);
+        );
 
-        die;
+        return $encode ? json_encode($a) : $a;
     }
 
-//    /**
-//     * @return int
-//     */
-//    public function getTotal()
-//    {
-//        return $this->total;
-//    }
-//
-//    /**
-//     * @param bool $format
-//     * @return array
-//     */
-//    public function getResults($format = true)
-//    {
-//        if(! $format) {
-//            return $this->results;
-//        }
-//        $rows = explode(',', $this->rows);
-//        foreach ($rows as $i=>$col) {
-//            if(strpos($col, '.') !== false){
-//                $a = explode('.', $col);
-//                $rows[$i] = $a[1];
-//            }elseif(strpos($col, 'as') !== false){
-//                $a = explode('as', $col);
-//                $rows[$i] = trim($a[1]);
-//            }
-//        }
-//
-//        $res = array();
-//        foreach ($this->results as $item) {
-//            $a = array();
-//
-//            foreach ($rows as $row) {
-//                $a[] = isset($item[$row]) ? $item[$row] : $row . ' issues';
-//            }
-//
-//            $res[] = $a;
-//        }
-//
-//        return $res;
-//    }
-//
+    /**
+     * @param $var
+     * @param bool|false $use_var_dump
+     */
+    final private function dump($var)
+    {
+        echo '<pre>'; print_r($var); echo '</pre>';
+    }
 
-//
-//    /**
-//     * @param array $cols
-//     * @return $this
-//     */
-//    public function search(array $cols)
-//    {
-//        $this->search_cols = array_merge($this->search_cols, $cols);
-//
-//        return $this;
-//    }
-
-
-
-//    /**
-//     * @param $rows
-//     * @return $this
-//     */
-//    public function searchCol($rows)
-//    {
-//
-//        if(is_array($rows)){
-//            $this->search_cols = $rows;
-//        } else {
-//            $this->search_cols = explode(',', $rows);
-//        }
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * @return $this
-//     */
-//    public function execute()
-//    {
-//        /**
-//         * limit
-//         */
-//        if(isset($_POST['start']) && isset($_POST['length'])){
-//            $start = (int)$_POST['start'];
-//            $num   = (int)$_POST['length'];
-//            $this->limit($start, $num);
-//        }
-//
-//        /**
-//         * sorting
-//         */
-//        if(isset($_POST['order'][0]['column'])){
-//            $col  = (int)$_POST['order'][0]['column'];
-//            $rows = explode(',', $this->rows);
-//            $dir = isset($_POST['order'][0]['dir']) && $_POST['order'][0]['dir'] == 'asc' ? 'ASC' : 'DESC';
-//            if(isset($rows[$col])){
-//                if(strpos($rows[$col], ' as ')){
-//                    $a = explode(' as ', $rows[$col]);
-//                    $rows[$col] = $a[1];
-//                }
-//                $this->order_by = " ORDER BY {$rows[$col]} {$dir}";
-//            }
-//        }
-//
-//        if( !empty($this->search_cols) && isset( $_POST['search']['value']) && strlen($_POST['search']['value']) > 2){
-//            $q = trim($_POST['search']['value']);
-//            if(!empty($q) && strlen($q) > 1){
-//                $w = array();
-//                foreach ($this->search_cols as $k => $row) {
-//                    $w[] = " {$row} like '%{$q}%'";
-//                }
-//
-//                $this->where("(". implode(' or ', $w) .")");
-//            }
-////            var_dump($_POST['search']['value']); die();
-//        }
-//
-//
-//        $w = empty($this->where) ? '' : 'WHERE ' . implode(' and ', $this->where);
-//        $j = implode(' ', $this->join);
-//
-//        $t = "SELECT COUNT(*) AS t FROM {$this->table} {$j} {$w}";
-//        $q = "SELECT {$this->rows} FROM {$this->table} {$j} {$w} {$this->order_by} {$this->limit}";
-////        echo $t,"\r\n";
-////        echo $q;
-//        $this->total   = $this->db->select($t, $this->debug)->row('t');
-//        $this->results = $this->db->select($q, $this->debug)->all();
-//        if($this->db->hasError()){
-//            die($this->db->getErrorMessage());
-//        }
-//        return $this;
-//    }
-//
-//    /**
-//     * @return int
-//     */
-//    public function getTotal()
-//    {
-//        return $this->total;
-//    }
-//
-//    /**
-//     * @param bool $format
-//     * @return array
-//     */
-//    public function getResults($format = true)
-//    {
-//        if(! $format) {
-//            return $this->results;
-//        }
-//        $rows = explode(',', $this->rows);
-//        foreach ($rows as $i=>$col) {
-//            if(strpos($col, '.') !== false){
-//                $a = explode('.', $col);
-//                $rows[$i] = $a[1];
-//            }elseif(strpos($col, 'as') !== false){
-//                $a = explode('as', $col);
-//                $rows[$i] = trim($a[1]);
-//            }
-//        }
-//
-//        $res = array();
-//        foreach ($this->results as $item) {
-//            $a = array();
-//
-//            foreach ($rows as $row) {
-//                $a[] = isset($item[$row]) ? $item[$row] : $row . ' issues';
-//            }
-//
-//            $res[] = $a;
-//        }
-//
-//        return $res;
-//    }
-//
-//    /**
-//     * @param bool $s
-//     * @return $this
-//     */
-//    public function debug($s = true)
-//    {
-//        $this->debug = $s;
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * @param $num
-//     * @return $this
-//     */
-//    public function setDisplayLength($num)
-//    {
-//        $this->iDisplayLength = $num;
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * @param $name
-//     * @param string $class
-//     * @param string $style
-//     * @return $this
-//     */
-//    public function th($name, $class = '', $style = '')
-//    {
-//        if(empty($this->th)) {
-//            if($this->getConfig('groupFunctions')){
-//                $this->config['ajax']['data']['groupFunction'] = true;
-//                $this->th[] = array(
-//                    'name' => "<input type='checkbox' class='check-all'>",
-//                    'class' => 'w-20'
-//                );
-//            }
-//            if($this->getConfig('sortable')){
-//                $this->config['ajax']['data']['sortable'] = true;
-//                $this->th[] = array(
-//                    'name' => "<i class='icon-reorder'></i>",
-//                    'class' => 'w-20'
-//                );
-//            }
-//        }
-//
-//        $this->th[] = array(
-//            'name'  => $name,
-//            'class' => $class,
-//            'style' => $style
-//        );
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * add row
-//     * @param $tr array
-//     * @return $this
-//     */
-//    public function tr($tr)
-//    {
-//        $_tr = array();
-//
-//        foreach ($tr as $k => $td) {
-//            $_tr[] = "<td>{$td}</td>\r\n";
-//        }
-//
-//        $this->tr[] = "<tr>". implode('', $_tr) ."</tr>\r\n";
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * @param $key
-//     * @param $val
-//     * @return $this
-//     */
-//    public function setConfig($key, $val)
-//    {
-//        $this->config = array_merge(
-//            $this->config,
-//            array( $key => $val )
-//        );
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * @param $key
-//     * @return mixed
-//     */
-//    public function getConfig($key)
-//    {
-//        if( ! isset($this->config[$key])) return false;
-//
-//        return $this->config[$key];
-//    }
-
-//
-//    /**
-//     * @param $title
-//     * @return $this
-//     */
-//    public function setTitle($title)
-//    {
-//        $this->title = "<div id='data-table' class='panel-heading datatable-heading'>
-//                            <h4 class='section-title'>{$title}</h4>
-//                        </div>";
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * @param $url
-//     * @param array $data
-//     * @return $this
-//     */
-//    public function ajaxConfig($url, $data = array())
-//    {
-//        $this ->setConfig('processing', true)
-//            ->setConfig('serverSide', true)
-//            ->setConfig(
-//                'ajax',
-//                array(
-//                    'url'  => $url,
-//                    'type' => 'POST',
-////                    'data' => $data
-//                )
-//            );
-//        $this->config['ajax']['data']['token'] = TOKEN;
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * @param array $data
-//     * @param int $recordsTotal
-//     * @param bool $encode
-//     * @return string
-//     */
-//    public function renderJSON(array $data, $recordsTotal=0, $encode = true)
-//    {
-//        $_data = array(); $draw= isset($_POST['draw']) ? (int)$_POST['draw'] : 1;  $recordsFiltered = $recordsTotal;
-//        if($recordsTotal == 0){
-//            $recordsTotal = $draw;
-//        }
-//        foreach ($data as $row) {
-//            $_data[] = array_values($row);
-//        }
-//
-//        $a = array(
-//            'draw'            => $draw,
-//            'data'            => $_data,
-//            'recordsTotal'    => (int) $recordsTotal,
-//            'recordsFiltered' => (int) $recordsFiltered
-//        );
-//
-//        return $encode ? json_encode($a) : $a;
-//    }
-//
-//    /**
-//     * render table body
-//     * @return string
-//     */
-//    private function body()
-//    {
-//        $c =0; // count th
-//        $html = '';
-//
-//        if(!empty($this->title)){
-//            $html .= "<div class='panel panel-default panel-block'>";
-//            $html .= $this->title;
-//        }
-//
-//        $html .= "<div class='table'>
-//                    <table class='display table' style='width: 100%; cellspacing: 0;' id='{$this->table_id}'>
-//                    <thead>
-//                    <tr>\r\n";
-//
-//        foreach ($this->th as $th) {
-//            $attr = empty($th['class']) ? '' : "class=\"{$th['class']}\"";
-//            $attr .= empty($th['style']) ? '' : "style=\"{$th['style']}\"";
-//            $html .= "<th {$attr}>{$th['name']}</th>\r\n";
-//            $c++;
-//        }
-//
-//        $html .= "
-//                    </tr>
-//                </thead>
-//                ";
-//        if(!empty($this->tr)) {
-//            $html .= "<tbody>\r\n". implode('', $this->tr) ."</tbody>";
-//        } else {
-//            $html .= "
-//                <tbody>
-//                    <tr>
-//                        <td colspan=\"{$c}\" class=\"dataTables_empty\">empty data</td>
-//                    </tr>
-//                </tbody>\r\n";
-//        }
-//        $html .= "</table></div>";
-//
-//        if(!empty($this->title)){
-//            $html .= "</div>"; // .panel
-//        }
-//        return $html;
-//    }
-//
-//    /**
-//     * @return string
-//     */
-//    private function js()
-//    {
-//        $this->setConfig(
-//            'fnInitComplete',
-//            'function(){
-//                $(\'.dataTables_wrapper\').find(\'input, select\').addClass(\'form-control\');
-//            }');
-//
-//        $this->setConfig('iDisplayLength', $this->iDisplayLength);
-////        $this->setConfig('fnInitComplete','function () {console.log(\'init complete\');}');
-//
-//        $config = json_encode($this->config);
-//        $config = str_replace('\n', '', $config);
-//        $config = str_replace('\r', '', $config);
-//        $config = str_replace('"function', 'function', $config);
-//        $config = str_replace('}"', '}', $config);
-//        $config = ltrim($config, '"');
-//        $config = rtrim($config, '"');
-//        $config = stripslashes($config);
-//        return "
-//        <script>
-//            $(document).ready(function() {
-//                $('#{$this->table_id}').dataTable($config);
-//            });
-//        </script>";
-//    }
-//
-//    /**
-//     * @return string
-//     */
-//    public function render()
-//    {
-//        return $this->body() . $this->js();
-//    }
+    /**
+     * @return int
+     */
+    public function getTotal()
+    {
+        return $this->total;
+    }
 }

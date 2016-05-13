@@ -283,11 +283,11 @@ var engine = {
 
         })();
 
-        (function(){
+       /* (function(){
             //$( "#dialog" ).dialog();
             $( "#datepicker" ).datepicker();
             $('#example').DataTable();
-        })();
+        })();*/
 
     },
     tree : function(id)
