@@ -45,16 +45,23 @@ class Admins extends Engine
 
         $t = new DataTables2('admins');
 
-        $t  -> th($this->t('common.id'),        'u.id')
-            -> th($this->t('admins.pib'),       'CONCAT(u.surname , \' \', u.name) as username')
+        $t
+//            -> th("<i class='fa fa-reorder'></i>", false, false)
+            -> th("<input class='chb check-all' type='checkbox' style='height: auto;'>", false, false)
+            -> th($this->t('common.id'),        'u.id', true, true)
+            -> th($this->t('admins.pib'),       'CONCAT(u.surname , \' \', u.name) as username', true, true )
             -> th($this->t('admins.group'),     'ugi.name as group_name', false, true)
-            -> th($this->t('admins.email'),     'u.email')
-            -> th($this->t('admins.phone'),     'u.phone')
+            -> th($this->t('admins.email'),     'u.email', true, true)
+            -> th($this->t('admins.phone'),     'u.phone', true, true)
             -> th($this->t('admins.created') ,  'u.created', true, false)
             -> th($this->t('admins.lastlogin'), 'u.lastlogin', true, false)
             -> th($this->t('common.func'), null, false, false);
 
         $t-> ajax('admins/index/'. $group_id);
+
+        $t->groupActions('Delete', 'b-group-action-delete');
+        $t->groupActions('Ban', 'b-group-action-ban');
+
         $this->output($t->init());
 
         if($this->request->isXhr()){
@@ -72,8 +79,11 @@ class Admins extends Engine
             }
 
             $s = ['ban' => $this->t('admins.status_ban'), 'deleted' => $this->t('admins.status_deleted')];
+
             $res = array();
             foreach ($t->getResults(false) as $i=>$row) {
+//                $res[$i][] = "<i class='fa fa-reorder' id='{$row['id']}'></i>";
+                $res[$i][] = "<input class='chb' type='checkbox' style='height: auto;' value='{$row['id']}'>";
                 $res[$i][] = $row['id'];
                 $res[$i][] = $row['username'] .
                     ($row['status'] != 'active' ? "<br><label class='label label-danger'>{$s[$row['status']]}</label>" : '');

@@ -74,7 +74,7 @@ class DataTables2
      * @return $this
      * @throws Exception
      */
-    public function th($label, $col = null, $orderable = true, $searchable = true, $style = null)
+    public function th($label, $col = null, $orderable = false, $searchable = false, $style = null)
     {
         if(is_array($label) && empty($col)){
             $this->th[] = $label;
@@ -248,16 +248,18 @@ class DataTables2
                     <thead>
                     <tr>\r\n";
 
+//        if(!empty($this->group_actions)){
+//            $html .= "<th style='width: 60px;'><input type='checkbox' class='check-all'></th>\r\n";
+//        }
+
         foreach ($this->th as $th) {
             $attr = empty($th['style']) ? '' : "style=\"{$th['style']}\"";
             $html .= "<th {$attr}>{$th['label']}</th>\r\n";
             $c++;
         }
 
-        $html .= "
-                    </tr>
-                </thead>
-                ";
+        $html .= "</tr>
+                </thead>\r\n";
 
 //        if(!empty($this->tr)) {
 //            $html .= "<tbody>\r\n". implode('', $this->tr) ."</tbody>";
@@ -315,11 +317,27 @@ class DataTables2
             $this->config('columnDefs', $defs);
         }
 
+        $group_actions = '';
+        if(!empty($this->group_actions)){
+//            $b = implode(' ', $this->group_actions);
+//            $group_actions = "$('<div id=\"group_actions\"></div>').insertBefore('.dataTables_info');";
+//            $group_actions .= "$('#group_actions').html('<label>Select option:</label> $b');";
+
+            $opt = '<label>Set action: <select id="tbl_group_actions" class="form-control" style="width: 300px;">';
+            $opt .= "<option value=\"\">no action</option>";
+            foreach ($this->group_actions as $group_action) {
+                $opt .= "<option value=\"{$group_action['action']}\">{$group_action['label']}</option>";
+            }
+            $opt .= "</select> <button class=\"btn\">Go</button></label>";
+            $group_actions = "$('<div id=\"group_actions\">$opt</div>').insertBefore('.dataTables_info');";
+        }
+
         $this->config
         (
             'fnInitComplete',
             'function(){
-                $(\'.dataTables_wrapper\').find(\'input, select\').addClass(\'form-control\');
+                $(\'.dataTables_wrapper\').find(\'input\').addClass(\'form-control\');
+                '. $group_actions .'
             }'
         );
 
@@ -414,7 +432,7 @@ class DataTables2
             }
         }
 
-        $order_by = "ORDER BY"; $ob = [];
+        $order_by = ''; $ob = [];
         /**
          * Sorting
          */
@@ -425,19 +443,24 @@ class DataTables2
                 $_col = $this->cols[$col['column']]['col'];
 
                 $a = explode(' as ', $_col);
+
                 if(isset($a[1])){
                     $_col = $a[1];
                 }
 
+                if(empty($_col)) continue;
+
                 $ob[] = " {$_col} {$col['dir']}";
             }
 
-            $order_by .= implode(', ', $ob);
+            if(!empty($ob)){
+                $order_by .= "ORDER BY" . implode(', ', $ob);
+            }
         }
 
         $a = [];
         foreach ($this->cols as $col) {
-            if(is_null($col['col'])) continue;
+            if(empty($col['col'])) continue;
             $a[] = $col['col'];
         }
 
@@ -547,5 +570,22 @@ class DataTables2
     public function getTotal()
     {
         return $this->total;
+    }
+
+    /**
+     * @var array
+     */
+    private $group_actions = [];
+
+    /**
+     * @param $label
+     * @param $action
+     * @return $this
+     */
+    public function groupActions($label, $action)
+    {
+        $this->group_actions[] = ['label' => $label, 'action' => $action];
+
+        return $this;
     }
 }

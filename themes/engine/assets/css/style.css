@@ -924,9 +924,7 @@ fieldset {
     float: left;
     padding: 10px 30px;
     width: 50%; }
-    .dataTables_wrapper .dataTables_info select,
     .dataTables_wrapper .dataTables_info .select2,
-    .dataTables_wrapper .dataTables_length select,
     .dataTables_wrapper .dataTables_length .select2 {
       margin: 0 10px;
       display: inline-block;

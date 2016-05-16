@@ -85,7 +85,7 @@ class Icon extends IconBuilder
     function __toString()
     {
         $white = $this->white ? 'icon-white' : '';
-        return "<i class='fa {$this->type}{$white}'></i>";
+        return "<i class=\"fa {$this->type}{$white}\"></i>";
     }
 
 }
