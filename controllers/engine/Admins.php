@@ -47,7 +47,7 @@ class Admins extends Engine
 
         $t
 //            -> th("<i class='fa fa-reorder'></i>", false, false)
-            -> th("<input class='chb check-all' type='checkbox' style='height: auto;'>", false, false)
+//            -> th("<input class='chb dt-check-all' type='checkbox' style='height: auto;'>", false, false)
             -> th($this->t('common.id'),        'u.id', true, true)
             -> th($this->t('admins.pib'),       'CONCAT(u.surname , \' \', u.name) as username', true, true )
             -> th($this->t('admins.group'),     'ugi.name as group_name', false, true)
@@ -59,8 +59,17 @@ class Admins extends Engine
 
         $t-> ajax('admins/index/'. $group_id);
 
-        $t->groupActions('Delete', 'b-group-action-delete');
-        $t->groupActions('Ban', 'b-group-action-ban');
+//        $t->addGroupAction('Delete', 'b-group-action-delete');
+//        $t->addGroupAction('Ban', 'b-group-action-ban');
+//        $t->addGroupAction('Export to Excell', 'Admins.exportExcell'); // t1odo заганяти в неї вибрані чекбокси
+        $t->addGroupAction('Export to Csv', 'Admins.exportCsv'); // t1odo заганяти в неї вибрані чекбокси
+//
+        // row sorting ui
+
+        $t->sortable('admins', 'id', 'position');
+
+        // default ordering  https://datatables.net/examples/basic_init/table_sorting.html
+        $t->orderDef(0, 'asc');
 
         $this->output($t->init());
 
@@ -83,7 +92,7 @@ class Admins extends Engine
             $res = array();
             foreach ($t->getResults(false) as $i=>$row) {
 //                $res[$i][] = "<i class='fa fa-reorder' id='{$row['id']}'></i>";
-                $res[$i][] = "<input class='chb' type='checkbox' style='height: auto;' value='{$row['id']}'>";
+//                $res[$i][] = "<input class='dt-chb' type='checkbox' style='height: auto;' value='{$row['id']}'>";
                 $res[$i][] = $row['id'];
                 $res[$i][] = $row['username'] .
                     ($row['status'] != 'active' ? "<br><label class='label label-danger'>{$s[$row['status']]}</label>" : '');

@@ -248,9 +248,13 @@ class DataTables2
                     <thead>
                     <tr>\r\n";
 
-//        if(!empty($this->group_actions)){
-//            $html .= "<th style='width: 60px;'><input type='checkbox' class='check-all'></th>\r\n";
-//        }
+        if(!empty($this->group_actions)){
+            $html .= "<th style='width: 60px;'><input type='checkbox' class='check-all'></th>\r\n";
+        }
+
+        if(!empty($this->sortable)){
+            $html .= "<th style='width: 60px;'><i class='fa fa-list'></i></th>\r\n";
+        }
 
         foreach ($this->th as $th) {
             $attr = empty($th['style']) ? '' : "style=\"{$th['style']}\"";
@@ -278,12 +282,39 @@ class DataTables2
     }
 
     /**
+     * ordering definitions
+     * @var array
+     */
+    private $order_defs = [];
+
+    /**
+     * @link https://datatables.net/examples/basic_init/table_sorting.html
+     * @param $index
+     * @param $order
+     * @return $this
+     */
+    public function orderDef($index, $order)
+    {
+        $this->order_defs = ['index' => $index, 'order' => $order];
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     private function js()
     {
         // definition to column search and ordering
         $idx = []; $sidx = []; $defs = [];
+
+        if($this->sortable){
+            array_unshift($this->cols, ['col' => null]);
+        }
+
+        if(!empty($this->group_actions)){
+            array_unshift($this->cols, ['col' => null]);
+        }
 
         foreach ($this->cols as $k=>$col) {
            if(is_null($col['col'])){
@@ -317,19 +348,41 @@ class DataTables2
             $this->config('columnDefs', $defs);
         }
 
+        // set default order
+
+        if($this->sortable && !empty($this->group_actions)){
+            if(empty($this->order_defs)){
+                $this->order_defs['index'] = 2;
+                $this->order_defs['order'] = 'asc';
+            } else {
+                $this->order_defs['index'] += 2;
+            }
+        } elseif(!$this->sortable && empty($this->group_actions)){
+            if(empty($this->order_defs)){
+                $this->order_defs['index'] = 0;
+                $this->order_defs['order'] = 'asc';
+            }
+        } else {
+            if(empty($this->order_defs)){
+                $this->order_defs['index'] = 1;
+                $this->order_defs['order'] = 'asc';
+            } else {
+                $this->order_defs['index'] ++;
+            }
+        }
+
+        $this->config('order', [$this->order_defs['index'], $this->order_defs['order']]);
+
         $group_actions = '';
         if(!empty($this->group_actions)){
-//            $b = implode(' ', $this->group_actions);
-//            $group_actions = "$('<div id=\"group_actions\"></div>').insertBefore('.dataTables_info');";
-//            $group_actions .= "$('#group_actions').html('<label>Select option:</label> $b');";
-
             $opt = '<label>Set action: <select id="tbl_group_actions" class="form-control" style="width: 300px;">';
             $opt .= "<option value=\"\">no action</option>";
             foreach ($this->group_actions as $group_action) {
                 $opt .= "<option value=\"{$group_action['action']}\">{$group_action['label']}</option>";
             }
             $opt .= "</select> <button class=\"btn\">Go</button></label>";
-            $group_actions = "$('<div id=\"group_actions\">$opt</div>').insertBefore('.dataTables_info');";
+
+            $group_actions = "$('<div id=\"group_actions\" style=\"width: 360px;float:right;\">$opt</div>').css('opacity',0).insertAfter('.dataTables_filter');";
         }
 
         $this->config
@@ -542,6 +595,15 @@ class DataTables2
             $recordsTotal = $draw;
         }
         foreach ($data as $row) {
+
+            if($this->sortable){
+                array_unshift($row, '<i class="fa fa-list"></i>');
+            }
+
+            if(!empty($this->group_actions)){
+                array_unshift($row, '<input class=\'dt-chb\' type=\'checkbox\' style=\'height: auto;\'>');
+            }
+
             $_data[] = array_values($row);
         }
 
@@ -577,14 +639,39 @@ class DataTables2
      */
     private $group_actions = [];
 
+    private $group_actions_pk = null;
+
     /**
      * @param $label
      * @param $action
      * @return $this
      */
-    public function groupActions($label, $action)
+    public function addGroupAction($label, $action)
     {
         $this->group_actions[] = ['label' => $label, 'action' => $action];
+
+        return $this;
+    }
+
+    /**
+     * set primary key to adding him to checkboxes
+     * @param $key
+     * @return $this
+     */
+    public function groupActionsPk($key)
+    {
+        $this->group_actions_pk = $key;
+
+        return $this;
+    }
+
+    private $sortable = false;
+    private $sortableParams = [];
+
+    public function sortable($action, $pk, $col)
+    {
+        $this->sortableParams = ['action' => $action, 'pk' => $pk, 'col' => $col];
+        $this->sortable = true;
 
         return $this;
     }
