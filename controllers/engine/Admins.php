@@ -62,7 +62,7 @@ class Admins extends Engine
 //        $t->addGroupAction('Delete', 'b-group-action-delete');
 //        $t->addGroupAction('Ban', 'b-group-action-ban');
 //        $t->addGroupAction('Export to Excell', 'Admins.exportExcell'); // t1odo заганяти в неї вибрані чекбокси
-        $t->addGroupAction('Export to Csv', 'Admins.exportCsv'); // t1odo заганяти в неї вибрані чекбокси
+        $t->addGroupAction('Ban', 'engine.admins.groupActions.ban'); // t1odo заганяти в неї вибрані чекбокси
 //
         // row sorting ui
 

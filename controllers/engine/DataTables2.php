@@ -249,7 +249,7 @@ class DataTables2
                     <tr>\r\n";
 
         if(!empty($this->group_actions)){
-            $html .= "<th style='width: 60px;'><input type='checkbox' class='check-all'></th>\r\n";
+            $html .= "<th style='width: 60px;'><input type='checkbox' class='dt-check-all''></th>\r\n";
         }
 
         if(!empty($this->sortable)){
@@ -380,7 +380,7 @@ class DataTables2
             foreach ($this->group_actions as $group_action) {
                 $opt .= "<option value=\"{$group_action['action']}\">{$group_action['label']}</option>";
             }
-            $opt .= "</select> <button class=\"btn\">Go</button></label>";
+            $opt .= "</select> <button class=\"btn\" id=\"tbl_group_actions_submit\">Go</button></label>";
 
             $group_actions = "$('<div id=\"group_actions\" style=\"width: 360px;float:right;\">$opt</div>').css('opacity',0).insertAfter('.dataTables_filter');";
         }
@@ -408,6 +408,68 @@ class DataTables2
         <script>
             $(document).ready(function() {
                 $('#{$this->id}').dataTable($config);
+
+                $(document).on('click', '#tbl_group_actions_submit', function(){
+                   var action = $('#tbl_group_actions').find('option:selected').val();
+                   if(action == '') return ;
+
+                    action += '(d)';
+
+                    console.log(action);
+
+                    var fn = new Function('d', action);
+                    fn(getSelectedChb());
+                });
+                $(document).on('change', '.dt-check-all', function(){
+                    var chb = $('.dataTable').find('.dt-chb');
+                    if($(this).is(':checked')){
+                        chb.attr('checked', true);
+                        showGroupActions();
+                    } else {
+                        chb.removeAttr('checked');
+                        hideGroupActions();
+                    }
+                });
+
+                $(document).on('change', '.dt-chb', function(){
+                    var checked = false;
+                    var chb = $('.dataTable').find('.dt-chb');
+                    chb.each(function(){
+                        if($(this).is(':checked')) {
+                            checked = true;
+                            return true;
+                        }
+                    });
+
+                    if(checked){
+                        showGroupActions();
+                    } else {
+                        hideGroupActions();
+                    }
+                });
+
+                function showGroupActions()
+                {
+                    $(\"#group_actions\").css('opacity', 1);
+                }
+
+                function hideGroupActions()
+                {
+                    $(\"#group_actions\").css('opacity', 0)
+                }
+
+                function getSelectedChb()
+                {
+                    var selected = [], chb = $('.dataTable').find('.dt-chb');
+
+                    chb.each(function(){
+                        if($(this).is(':checked')) {
+                            selected.push(parseInt($(this).val()));
+                        }
+                    });
+
+                    return selected;
+                }
             });
         </script>";
     }
@@ -595,13 +657,13 @@ class DataTables2
             $recordsTotal = $draw;
         }
         foreach ($data as $row) {
-
+            $id = $row[0];
             if($this->sortable){
-                array_unshift($row, '<i class="fa fa-list"></i>');
+                array_unshift($row, '<i class="fa fa-list" id="dt-'. $id .'"></i>');
             }
 
             if(!empty($this->group_actions)){
-                array_unshift($row, '<input class=\'dt-chb\' type=\'checkbox\' style=\'height: auto;\'>');
+                array_unshift($row, '<input class=\'dt-chb\' value=\''. $id .'\' type=\'checkbox\' style=\'height: auto;\'>');
             }
 
             $_data[] = array_values($row);

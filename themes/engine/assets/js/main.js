@@ -772,49 +772,12 @@ engine.admins = {
         }
 
         // table group functions and ordering
-
-        $(document).on('change', '.dt-check-all', function(){
-            var chb = $('.dataTable').find('.dt-chb');
-            if($(this).is(':checked')){
-                chb.attr('checked', true);
-                showGroupActions();
-            } else {
-                chb.removeAttr('checked');
-                hideGroupActions();
-            }
-            //console.log($(this).is(':checked'));
-        });
-
-        $(document).on('change', '.dt-chb', function(){
-            var checked = false;
-            var chb = $('.dataTable').find('.dt-chb');
-            chb.each(function(){
-                if($(this).is(':checked')) {
-                    checked = true;
-                    return true;
-                }
-            });
-
-            if(checked){
-                showGroupActions();
-            } else {
-                hideGroupActions();
-            }
-        });
-
-        function showGroupActions()
+    },
+    groupActions: {
+        ban: function(selected)
         {
-            $("#group_actions").css('opacity', 1);
+            console.log('Admins Ban: ', selected);
         }
-
-        function hideGroupActions()
-        {
-            $("#group_actions").css('opacity', 0)
-        }
-
-
-
-
     },
     create: function()
     {
