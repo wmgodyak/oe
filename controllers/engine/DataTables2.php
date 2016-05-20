@@ -8,6 +8,8 @@
 namespace controllers\engine;
 
 use controllers\core\exceptions\Exception;
+use controllers\core\Request;
+use controllers\core\Response;
 use models\core\DB;
 
 defined("CPATH") or die();
@@ -373,7 +375,7 @@ class DataTables2
 
         $this->config('order', [$this->order_defs['index'], $this->order_defs['order']]);
 
-        $group_actions = '';
+        $in_init_functions = '';
         if(!empty($this->group_actions)){
             $opt = '<label>Set action: <select id="tbl_group_actions" class="form-control" style="width: 300px;">';
             $opt .= "<option value=\"\">no action</option>";
@@ -382,7 +384,13 @@ class DataTables2
             }
             $opt .= "</select> <button class=\"btn\" id=\"tbl_group_actions_submit\">Go</button></label>";
 
-            $group_actions = "$('<div id=\"group_actions\" style=\"width: 360px;float:right;\">$opt</div>').css('opacity',0).insertAfter('.dataTables_filter');";
+            $in_init_functions .= "$('<div id=\"group_actions\" style=\"width: 360px;float:right;\">$opt</div>').css('opacity',0).insertAfter('.dataTables_filter');";
+        }
+
+        if($this->sortable){
+//            $this->config('rowReorder', true);
+//            $this->sortableParams $this->sortableParams = ['action' => $action, 'pk' => $pk, 'col' => $col];
+            $in_init_functions .= "$(\"#{$this->id} .dt-reorder-icon\").each(function(){ $(this).parents(\"tr\").attr(\"id\", $(this).attr(\"id\")).addClass(\"dt-reorder\"); $(this).removeAttr(\"id\"); });   $(\"#{$this->id} > tbody \").sortable({ /*handle: \".dt-reorder\",*/ update: function(event, ui) { var no = $(this).sortable('toArray').toString();   saveOrdering(\"{$this->sortableParams['table']}\", \"{$this->sortableParams['pk']}\", \"{$this->sortableParams['col']}\", no);     } });";
         }
 
         $this->config
@@ -390,7 +398,7 @@ class DataTables2
             'fnInitComplete',
             'function(){
                 $(\'.dataTables_wrapper\').find(\'input\').addClass(\'form-control\');
-                '. $group_actions .'
+                '. $in_init_functions .'
             }'
         );
 
@@ -407,7 +415,21 @@ class DataTables2
         return "
         <script>
             $(document).ready(function() {
-                $('#{$this->id}').dataTable($config);
+                function saveOrdering(table, pk, col, oData)
+                {
+                    engine.request.post({
+                        url: 'DataTables2/reorder',
+                        data: {
+                            table: table,
+                            pk   : pk,
+                            col  : col,
+                            order: oData
+                        },
+                        success: function(d){engine.notify(d.m, 'success');}
+                    });
+                }
+
+                var table = $('#{$this->id}').dataTable($config);
 
                 $(document).on('click', '#tbl_group_actions_submit', function(){
                    var action = $('#tbl_group_actions').find('option:selected').val();
@@ -415,11 +437,12 @@ class DataTables2
 
                     action += '(d)';
 
-                    console.log(action);
+//                    console.log(action);
 
                     var fn = new Function('d', action);
                     fn(getSelectedChb());
                 });
+
                 $(document).on('change', '.dt-check-all', function(){
                     var chb = $('.dataTable').find('.dt-chb');
                     if($(this).is(':checked')){
@@ -653,13 +676,15 @@ class DataTables2
     public function render(array $data, $recordsTotal=0, $encode = true)
     {
         $_data = array(); $draw= isset($_POST['draw']) ? (int)$_POST['draw'] : 1;  $recordsFiltered = $recordsTotal;
+
         if($recordsTotal == 0){
             $recordsTotal = $draw;
         }
+
         foreach ($data as $row) {
             $id = $row[0];
             if($this->sortable){
-                array_unshift($row, '<i class="fa fa-list" id="dt-'. $id .'"></i>');
+                array_unshift($row, '<i class="fa fa-list dt-reorder-icon" id="dt-'. $id .'"></i>');
             }
 
             if(!empty($this->group_actions)){
@@ -730,11 +755,47 @@ class DataTables2
     private $sortable = false;
     private $sortableParams = [];
 
-    public function sortable($action, $pk, $col)
+    /**
+     * @param $table
+     * @param $pk
+     * @param $col
+     * @return $this
+     */
+    public function sortable($table, $pk, $col)
     {
-        $this->sortableParams = ['action' => $action, 'pk' => $pk, 'col' => $col];
+        $this->sortableParams = ['table' => $table, 'pk' => $pk, 'col' => $col];
         $this->sortable = true;
 
         return $this;
     }
+
+    /**
+     * save order
+     */
+    public function reorder()
+    {
+        $m=null; $s = 0;
+
+        $request = Request::getInstance();
+        $table   = $request->post('table', 's');
+        $pk      = $request->post('pk', 's');
+        $col     = $request->post('col', 's');
+        $order   = $request->post('order');
+        $order   = str_replace('dt-','', $order);
+
+        if(empty($table) || empty($pk) || empty($col) || empty($order)) {$m = 'wrong params';}
+
+        $a = explode(',', $order);
+        foreach ($a as $k => $row_id) {
+           $s +=  $this->db->update($table, [$col => $k], " $pk = '$row_id' limit 1");
+        }
+
+        if($s > 0){
+            $m = "Сортування збережено";
+        }
+        Response::getInstance()->body(['m' => $m])->asJSON();
+    }
+
+    public function before(){}
+    public function after(){}
 }

@@ -62,14 +62,14 @@ class Admins extends Engine
 //        $t->addGroupAction('Delete', 'b-group-action-delete');
 //        $t->addGroupAction('Ban', 'b-group-action-ban');
 //        $t->addGroupAction('Export to Excell', 'Admins.exportExcell'); // t1odo заганяти в неї вибрані чекбокси
-        $t->addGroupAction('Ban', 'engine.admins.groupActions.ban'); // t1odo заганяти в неї вибрані чекбокси
+//        $t->addGroupAction('Ban', 'engine.admins.groupActions.ban'); // t1odo заганяти в неї вибрані чекбокси
 //
         // row sorting ui
 
-        $t->sortable('admins', 'id', 'position');
+//        $t->sortable('__users', 'id', 'position');
 
         // default ordering  https://datatables.net/examples/basic_init/table_sorting.html
-        $t->orderDef(0, 'asc');
+        $t->orderDef(1, 'desc');
 
         $this->output($t->init());
 

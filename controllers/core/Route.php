@@ -126,7 +126,7 @@ class Route
         $controller = new $c;
 
         if(!is_callable(array($controller, $action))){
-            die('Action '. $action .'is not callable: ' . DOCROOT . $path . '.php');
+            die('Action '. $action .' is not callable: ' . DOCROOT . $path . '.php');
         }
 
         Event::fire($c, 'before'.ucfirst($action), $params);
@@ -134,7 +134,7 @@ class Route
         if(!empty($params)){
             call_user_func_array(array($controller, 'before'), $params);
             $res = call_user_func_array(array($controller, $action), $params);
-        } else{
+        } else {
             call_user_func(array($controller, 'before'));
             $res = call_user_func(array($controller, $action));
         }

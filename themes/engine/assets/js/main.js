@@ -781,6 +781,7 @@ engine.admins = {
     },
     create: function()
     {
+
         engine.request.get('./admins/create', function(d)
         {
             var bi = t.common.button_save;
