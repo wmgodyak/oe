@@ -46,8 +46,6 @@ class Admins extends Engine
         $t = new DataTables2('admins');
 
         $t
-//            -> th("<i class='fa fa-reorder'></i>", false, false)
-//            -> th("<input class='chb dt-check-all' type='checkbox' style='height: auto;'>", false, false)
             -> th($this->t('common.id'),        'u.id', true, true)
             -> th($this->t('admins.pib'),       'CONCAT(u.surname , \' \', u.name) as username', true, true )
             -> th($this->t('admins.group'),     'ugi.name as group_name', false, true)
@@ -59,22 +57,9 @@ class Admins extends Engine
 
         $t-> ajax('admins/index/'. $group_id);
 
-//        $t->addGroupAction('Delete', 'b-group-action-delete');
-//        $t->addGroupAction('Ban', 'b-group-action-ban');
-//        $t->addGroupAction('Export to Excell', 'Admins.exportExcell'); // t1odo заганяти в неї вибрані чекбокси
-//        $t->addGroupAction('Ban', 'engine.admins.groupActions.ban'); // t1odo заганяти в неї вибрані чекбокси
-//
-        // row sorting ui
-
-//        $t->sortable('__users', 'id', 'position');
-
-        // default ordering  https://datatables.net/examples/basic_init/table_sorting.html
-        $t->orderDef(1, 'desc');
-
         $this->output($t->init());
 
         if($this->request->isXhr()){
-//            $t->debug();
             $t->get('u.status');
             $t  -> from('__users u')
                 -> join("__users_group ug on ug.backend = 1")
@@ -91,8 +76,6 @@ class Admins extends Engine
 
             $res = array();
             foreach ($t->getResults(false) as $i=>$row) {
-//                $res[$i][] = "<i class='fa fa-reorder' id='{$row['id']}'></i>";
-//                $res[$i][] = "<input class='dt-chb' type='checkbox' style='height: auto;' value='{$row['id']}'>";
                 $res[$i][] = $row['id'];
                 $res[$i][] = $row['username'] .
                     ($row['status'] != 'active' ? "<br><label class='label label-danger'>{$s[$row['status']]}</label>" : '');
@@ -138,95 +121,6 @@ class Admins extends Engine
 
             return $t->render($res, $t->getTotal());
         }
-    }
-    /**
-     *
-     */
-    public function _index($group_id = null)
-    {
-        $this->appendToPanel((string)Button::create($this->t('common.button_create'), ['class' => 'btn-md btn-primary b-admins-create']));
-
-        $t = new DataTables();
-
-        $t  -> setId('admins')
-            -> ajaxConfig('admins/items/'.$group_id)
-//            -> setConfig('order', array(0, 'desc'))
-            -> th($this->t('common.id'))
-            -> th($this->t('admins.pib'))
-            -> th($this->t('admins.group'))
-            -> th($this->t('admins.email'))
-            -> th($this->t('admins.phone'))
-            -> th($this->t('admins.created'))
-            -> th($this->t('admins.lastlogin'))
-            -> th($this->t('common.tbl_func'), '', 'width: 200px')
-        ;
-
-        $this->output($t->render());
-    }
-
-    /**
-     * @param int $group_id
-     * @return string
-     */
-    public function _items($group_id = null)
-    {
-        $and = ($group_id > 0) ? " and ug.id={$group_id}" : '';
-        $t = new DataTables();
-        $t  -> table('__users u')
-            -> get('u.id,u.name, u.surname, ugi.name as user_group, u.email, u.phone, u.created, u.lastlogin, u.status')
-            -> join("__users_group ug on ug.backend = 1 {$and}")
-            -> join("__users_group_info ugi on ugi.group_id=ug.id and ugi.languages_id={$this->languages_id}")
-            -> where(" u.group_id=ug.id")
-            -> execute();
-        $s = ['ban' => $this->t('admins.status_ban'), 'deleted' => $this->t('admins.status_deleted')];
-        $res = array();
-        foreach ($t->getResults(false) as $i=>$row) {
-            $res[$i][] = $row['id'];
-            $res[$i][] = $row['surname'] .' '. $row['name']  .
-                ($row['status'] != 'active' ? "<br><label class='label label-danger'>{$s[$row['status']]}</label>" : '');
-            $res[$i][] = $row['user_group'];
-            $res[$i][] = $row['email'];
-            $res[$i][] = $row['phone'];
-            $res[$i][] = $row['created'];
-            $res[$i][] = $row['lastlogin'] ? DateTime::ago(strtotime($row['lastlogin'])) : '';
-
-            $b = [];
-            $b[] = (string)Button::create
-            (
-                Icon::create(Icon::TYPE_EDIT),
-                ['class' => 'b-admins-edit btn-primary', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
-            );
-            if($row['status'] == 'active'){
-                $b[] =  (string)Button::create
-                (
-                    Icon::create(Icon::TYPE_BAN),
-                    ['class' => 'b-admins-ban', 'data-id' => $row['id'], 'title' => $this->t('admins.title_ban')]
-                );
-                $b[] = (string)Button::create
-                (
-                    Icon::create(Icon::TYPE_DELETE),
-                    ['class' => 'b-admins-delete', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
-                );
-            } elseif($row['status'] == 'deleted' || $row['status'] == 'ban'){
-                $b[] =  (string)Button::create
-                (
-                    Icon::create(Icon::TYPE_RESTORE),
-                    ['class' => 'b-admins-restore', 'data-id' => $row['id'], 'title' => $this->t('admins.title_restore')]
-                );
-            }
-
-            $b[] = (string)Button::create
-            (
-                Icon::create(Icon::TYPE_TRASH),
-                ['class' => 'b-admins-remove btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_remove')]
-            );
-
-            $res[$i][] = implode('', $b);
-        }
-
-        return $t->renderJSON($res, $t->getTotal());
-
-//        $this->response->body($t->renderJSON($res, count($res), false))->asJSON();
     }
 
     public function create()

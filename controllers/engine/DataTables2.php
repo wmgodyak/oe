@@ -14,6 +14,103 @@ use models\core\DB;
 
 defined("CPATH") or die();
 
+/**
+ * Example
+ *
+$t = new DataTables2('admins');
+
+$t
+-> th($this->t('common.id'),        'u.id', true, true)
+-> th($this->t('admins.pib'),       'CONCAT(u.surname , \' \', u.name) as username', true, true )
+-> th($this->t('admins.group'),     'ugi.name as group_name', false, true)
+-> th($this->t('admins.email'),     'u.email', true, true)
+-> th($this->t('admins.phone'),     'u.phone', true, true)
+-> th($this->t('admins.created') ,  'u.created', true, false)
+-> th($this->t('admins.lastlogin'), 'u.lastlogin', true, false)
+-> th($this->t('common.func'), null, false, false);
+
+$t-> ajax('admins/index/'. $group_id);
+
+//        $t->addGroupAction('Delete', 'b-group-action-delete');
+//        $t->addGroupAction('Ban', 'b-group-action-ban');
+//        $t->addGroupAction('Export to Excell', 'Admins.exportExcell'); // t1odo заганяти в неї вибрані чекбокси
+//        $t->addGroupAction('Ban', 'engine.admins.groupActions.ban'); // t1odo заганяти в неї вибрані чекбокси
+//
+
+// row sorting ui
+// $t->sortable('__users', 'id', 'position');
+
+$t->orderDef(1, 'desc');
+
+$this->output($t->init());
+
+Ajax response:
+    if($this->request->isXhr()){
+        //            $t->debug();
+        $t->get('u.status');
+        $t  -> from('__users u')
+        -> join("__users_group ug on ug.backend = 1")
+        -> join("__users_group_info ugi on ugi.group_id=ug.id and ugi.languages_id={$this->languages_id}")
+        -> where(" u.group_id=ug.id")
+        -> execute();
+
+        if(! $t){
+            echo $t->getError();
+            return null;
+        }
+
+        $s = ['ban' => $this->t('admins.status_ban'), 'deleted' => $this->t('admins.status_deleted')];
+
+        $res = array();
+        foreach ($t->getResults(false) as $i=>$row) {
+            $res[$i][] = $row['id'];
+            $res[$i][] = $row['username'] .
+            ($row['status'] != 'active' ? "<br><label class='label label-danger'>{$s[$row['status']]}</label>" : '');
+            $res[$i][] = $row['group_name'];
+            $res[$i][] = $row['email'];
+            $res[$i][] = $row['phone'];
+            $res[$i][] = $row['created'];
+            $res[$i][] = $row['lastlogin'] ? DateTime::ago(strtotime($row['lastlogin'])) : '';
+
+            $b = [];
+            $b[] = (string)Button::create
+            (
+            Icon::create(Icon::TYPE_EDIT),
+            ['class' => 'b-admins-edit btn-primary', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
+            );
+            if($row['status'] == 'active'){
+            $b[] =  (string)Button::create
+            (
+            Icon::create(Icon::TYPE_BAN),
+            ['class' => 'b-admins-ban', 'data-id' => $row['id'], 'title' => $this->t('admins.title_ban')]
+            );
+            $b[] = (string)Button::create
+            (
+            Icon::create(Icon::TYPE_DELETE),
+            ['class' => 'b-admins-delete', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+            );
+            } elseif($row['status'] == 'deleted' || $row['status'] == 'ban'){
+            $b[] =  (string)Button::create
+            (
+            Icon::create(Icon::TYPE_RESTORE),
+            ['class' => 'b-admins-restore', 'data-id' => $row['id'], 'title' => $this->t('admins.title_restore')]
+            );
+            }
+
+            $b[] = (string)Button::create
+            (
+            Icon::create(Icon::TYPE_TRASH),
+            ['class' => 'b-admins-remove btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_remove')]
+            );
+
+            $res[$i][] = implode('', $b);
+        }
+
+        return $t->render($res, $t->getTotal());
+    }
+ * Class DataTables2
+ * @package controllers\engine
+ */
 class DataTables2
 {
     /**
