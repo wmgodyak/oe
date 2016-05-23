@@ -41,52 +41,61 @@ class OrdersStatus extends Engine
         (
             (string)Button::create($this->t('common.button_create'), ['class' => 'btn-md b-ordersStatus-create btn-primary'])
         );
-        $t = new DataTables();
 
-        $t  -> setId('ordersStatus')
-            -> ajaxConfig('ordersStatus/items')
-//            -> setConfig('order', array(0, 'desc'))
-            -> th($this->t('common.id'), '', 'width: 20px')
-            -> th($this->t('ordersStatus.status'))
-            -> th($this->t('ordersStatus.external_id'), '', 'width: 280px')
-            -> th($this->t('ordersStatus.on_site'), '', 'width: 280px')
-            -> th($this->t('common.tbl_func'), '', 'width: 180px')
+        $t = new DataTables2('ordersStatus');
+
+        $t  -> ajax('ordersStatus/items')
+            -> th($this->t('common.id'), 'os.id', true, true, 'width: 20px')
+            -> th($this->t('ordersStatus.status'), 'i.status', true, true)
+            -> th($this->t('ordersStatus.external_id'), 'os.external_id', true, true, 'width: 280px')
+            -> th($this->t('ordersStatus.on_site'), 'os.on_site', true, true, 'width: 280px')
+            -> th($this->t('common.tbl_func'), null, false, false, 'width: 180px')
         ;
 
-        $this->output($t->render());
-    }
 
-    public function items()
-    {
-        $t = new DataTables();
-        $t  -> table('__orders_status os')
-            -> join("__orders_status_info i on i.status_id=os.id and i.languages_id={$this->languages_id}")
-            -> get('os.id, i.status, os.external_id, os.is_main, os.on_site, os.bg_color, os.txt_color')
-            -> execute();
 
-        $res = array();
-        foreach ($t->getResults(false) as $i=>$row) {
-            $res[$i][] = $row['id'];
-            $res[$i][] = "<span class='label' style='background: {$row['bg_color']}; color: {$row['txt_color']}'>{$row['status']}</span>"
-                . ($row['is_main'] ? ' <small class="label label-info">Основний</small>' : '');
-            $res[$i][] = "<input class='form-control' value='{$row['external_id']}' onfocus='select()'>";
-            $res[$i][] = ($row['on_site'] == 1 ? 'Так' : '');
-            $res[$i][] =
-                (string)Button::create
-                (
-                    Icon::create(Icon::TYPE_EDIT),
-                    ['class' => 'b-ordersStatus-edit btn-primary', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
-                ) .
-                (string)Button::create
-                (
-                    Icon::create(Icon::TYPE_DELETE),
-                    ['class' => 'b-ordersStatus-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
-                )
-            ;
+        if($this->request->isXhr()) {
+
+            $t  -> from('__orders_status os')
+                -> join("__orders_status_info i on i.status_id=os.id and i.languages_id={$this->languages_id}")
+//                -> get('os.id, i.status, os.external_id, os.is_main, os.on_site, os.bg_color, os.txt_color')
+                -> execute();
+
+            $t -> get('bg_color')
+               -> get('txt_color');
+
+            if (!$t) {
+                echo $t->getError();
+                return null;
+            }
+
+            $res = array();
+            foreach ($t->getResults(false) as $i=>$row) {
+
+                $res[$i][] = $row['id'];
+                $res[$i][] = "<span class='label' style='background: {$row['bg_color']}; color: {$row['txt_color']}'>{$row['status']}</span>"
+                    . ($row['is_main'] ? ' <small class="label label-info">Основний</small>' : '');
+                $res[$i][] = "<input class='form-control' value='{$row['external_id']}' onfocus='select()'>";
+                $res[$i][] = ($row['on_site'] == 1 ? 'Так' : '');
+                $res[$i][] =
+                    (string)Button::create
+                    (
+                        Icon::create(Icon::TYPE_EDIT),
+                        ['class' => 'b-ordersStatus-edit btn-primary', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
+                    ) .
+                    (string)Button::create
+                    (
+                        Icon::create(Icon::TYPE_DELETE),
+                        ['class' => 'b-ordersStatus-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+                    )
+                ;
+            }
+
+            return $t->render($res, $t->getTotal());
         }
 
-        return $t->renderJSON($res, $t->getTotal());
-   }
+        $this->output($t->init());
+    }
 
     public function create()
     {
