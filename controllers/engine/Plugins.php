@@ -41,100 +41,95 @@ class Plugins extends Engine
 
     public function index()
     {
-        //  $this->appendToPanel((string)Button::create($this->t('plugins.install'), ['class' => 'btn-md install-archive']));
+        $t = new DataTables2('plugins');
 
-        $t = new DataTables();
-
-        $t  -> setId('plugins')
-            -> ajaxConfig('plugins/items')
-//            -> setConfig('order', array(0, 'desc'))
+        $t
+            -> th($this->t('common.id'), null, false, false, 'width:30px')
             -> th($this->t('common.tbl_name'))
             -> th($this->t('plugins.author'))
             -> th($this->t('plugins.controller'))
             -> th($this->t('plugins.version'))
-            -> th($this->t('plugins.rang'))
-            -> th($this->t('common.tbl_func'),'','width:180px')
-        ;
+            -> th($this->t('common.tbl_func'), null, false, false, 'width:180px');
 
-        $this->output($t->render());
-    }
+        $t-> ajax('plugins/index');
 
-    public function items()
-    {
-        $items = array();
-        if ($handle = opendir(DOCROOT . self::PATH)) {
-            while (false !== ($entry = readdir($handle))) {
-                if ($entry != "." && $entry != ".." && !is_dir(DOCROOT . self::PATH . $entry)) {
+        if($this->request->isXhr()){
 
-                    $module = str_replace('.php', '', $entry);
-                    $ns = str_replace('/', '\\', self::PATH);
+            $items = array();
+            if ($handle = opendir(DOCROOT . self::PATH)) {
+                while (false !== ($entry = readdir($handle))) {
+                    if ($entry != "." && $entry != ".." && !is_dir(DOCROOT . self::PATH . $entry)) {
 
-                    $row = PHPDocReader::getMeta($ns . ucfirst($module));
-                    if(!isset($row['name'])) continue;
+                        $module = str_replace('.php', '', $entry);
+                        $ns = str_replace('/', '\\', self::PATH);
 
-                    $row['controller'] = ucfirst($module);
+                        $row = PHPDocReader::getMeta($ns . ucfirst($module));
+                        if(!isset($row['name'])) continue;
 
-                    if(!isset($row['rang'])) $row['rang'] = 101;
+                        $row['controller'] = ucfirst($module);
 
-                    $items[] = $row;
+                        $items[] = $row;
+                    }
                 }
+                closedir($handle);
             }
-            closedir($handle);
-        }
 
-        $res = array();
-        $t = new DataTables();
-//        $t_installed = $this->t('plugins.installed');
-        foreach ($items as $i=>$item) {
-            $data = $this->mPlugins->data($item['controller']);
-            $installed = isset($data['id']);
+            $res = array();
 
-            if($installed) $item = array_merge($item, $data);
+            foreach ($items as $i=>$item) {
 
-            $icon  = $installed ? (string) Icon::TYPE_UNINSTALL : (string) Icon::TYPE_INSTALL;
-            $icon_pub  = $installed && $data['published'] == 1 ? (string) Icon::TYPE_PUBLISHED : (string) Icon::TYPE_HIDDEN;
+                $data = $this->mPlugins->data($item['controller']);
+                $installed = isset($data['id']);
 
-            $res[$i][] = $item['name'];// . ($installed ? "<br><label class=\"label label-info\">{$t_installed}</label>" : '');
-            $res[$i][] = $item['author'];
-            $res[$i][] = (isset($item['package']) ? $item['package'] ."\\" : '') . $item['controller'] ;
-            $res[$i][] = $item['version'];
-            $res[$i][] = $item['rang'];
+                if($installed) $item = array_merge($item, $data);
 
-            $res[$i][] =
-                (string) Button::create
-                (
-                    Icon::create($icon),
-                    [
-                        'class'     => " b-plugin-" . ($installed ? 'uninstall' : 'install'),
-                        'data-id'   => ($installed ? $data['id'] : $item['controller']),
-                        'title'     => ($installed ? $this->t('plugins.uninstall') : $this->t('plugins.install'))
-                    ]
-                ) . ($installed ?
+                $icon      = $installed ? (string) Icon::TYPE_UNINSTALL : (string) Icon::TYPE_INSTALL;
+                $icon_pub  = $installed && $data['published'] == 1 ? (string) Icon::TYPE_PUBLISHED : (string) Icon::TYPE_HIDDEN;
+
+                $res[$i][] = $i;
+                $res[$i][] = $item['name'];// . ($installed ? "<br><label class=\"label label-info\">{$t_installed}</label>" : '');
+                $res[$i][] = $item['author'];
+                $res[$i][] = (isset($item['package']) ? $item['package'] ."\\" : '') . $item['controller'] ;
+                $res[$i][] = $item['version'];
+
+                $res[$i][] =
                     (string) Button::create
                     (
-                        Icon::create($icon_pub),
+                        Icon::create($icon),
                         [
-                            'class' => " b-plugin-" . ($installed && $data['published'] == 1 ? 'hide' : 'pub'),
-                            'data-id' => $data['id'],
-                            'title'   => ($installed && $data['published'] == 1 ? $this->t('plugins.pub') : $this->t('plugins.hide'))
+                            'class'     => " b-plugin-" . ($installed ? 'uninstall' : 'install'),
+                            'data-id'   => ($installed ? $data['id'] : $item['controller']),
+                            'title'     => ($installed ? $this->t('plugins.uninstall') : $this->t('plugins.install'))
                         ]
-                    ) : '').
-                ($installed ?
-                    (string) Button::create
-                    (
-                        Icon::create(Icon::TYPE_EDIT),
-                        [
-                            'class'   => Button::TYPE_PRIMARY  . " b-plugin-edit",
-                            'data-id' => $data['id'],
-                            'title'   => $this->t('plugins.edit')
-                        ]
-                    )
-                    : '')
+                    ) . ($installed ?
+                        (string) Button::create
+                        (
+                            Icon::create($icon_pub),
+                            [
+                                'class' => " b-plugin-" . ($installed && $data['published'] == 1 ? 'hide' : 'pub'),
+                                'data-id' => $data['id'],
+                                'title'   => ($installed && $data['published'] == 1 ? $this->t('plugins.pub') : $this->t('plugins.hide'))
+                            ]
+                        ) : '').
+                    ($installed ?
+                        (string) Button::create
+                        (
+                            Icon::create(Icon::TYPE_EDIT),
+                            [
+                                'class'   => Button::TYPE_PRIMARY  . " b-plugin-edit",
+                                'data-id' => $data['id'],
+                                'title'   => $this->t('plugins.edit')
+                            ]
+                        )
+                        : '')
 
-            ;
+                ;
+            }
+
+            $this->response->body($t->render($res, count($res), false))->asJSON();
         }
 
-        $this->response->body($t->renderJSON($res, count($res), false))->asJSON();
+        $this->output($t->init());
     }
 
     public function create()
