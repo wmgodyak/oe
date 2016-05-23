@@ -39,22 +39,19 @@ class Components extends Engine
 
     public function index()
     {
-        //  $this->appendToPanel((string)Button::create($this->t('components.install'), ['class' => 'btn-md install-archive']));
+        $t = new DataTables2('components');
 
-        $t = new DataTables();
-
-        $t  -> setId('components')
-            -> ajaxConfig('components/items')
-//            -> setConfig('order', array(0, 'desc'))
+        $t  -> ajax('components/items')
+            -> th($this->t('common.id'))
             -> th($this->t('common.tbl_name'))
             -> th($this->t('components.author'))
             -> th($this->t('components.controller'))
             -> th($this->t('components.version'))
             -> th($this->t('components.rang'))
-            -> th($this->t('common.tbl_func'), '', 'width:180px')
+            -> th($this->t('common.tbl_func'), null, false, false, 'width:180px')
         ;
 
-        $this->output($t->render());
+        $this->output($t->init());
     }
 
     private function readComponents($path)
@@ -91,8 +88,9 @@ class Components extends Engine
         $items = $this->readComponents(self::PATH);
 //        $this->dump($items);die;
         $res = array();
-        $t = new DataTables();
+        $t = new DataTables2();
 //        $t_installed = $this->t('components.installed');
+        $c=1;
         foreach ($items as $i=>$item) {
             $data = $this->mComponents->data($item['controller']);
             $installed = isset($data['id']);
@@ -102,6 +100,7 @@ class Components extends Engine
             $icon  = $installed ? (string) Icon::TYPE_UNINSTALL : (string) Icon::TYPE_INSTALL;
             $icon_pub  = $installed && $data['published'] == 1 ? (string) Icon::TYPE_PUBLISHED : (string) Icon::TYPE_HIDDEN;
 
+            $res[$i][] = $c;// . ($installed ? "<br><label class=\"label label-info\">{$t_installed}</label>" : '');
             $res[$i][] = $item['name'];// . ($installed ? "<br><label class=\"label label-info\">{$t_installed}</label>" : '');
             $res[$i][] = $item['author'];
             $res[$i][] = (isset($item['package']) ? $item['package'] ."\\" : '') . $item['controller'] ;
@@ -142,9 +141,10 @@ class Components extends Engine
                     : '')
 
             ;
+            $c++;
         }
 
-        $this->response->body($t->renderJSON($res, count($res), false))->asJSON();
+        $this->response->body($t->render($res, count($res), false))->asJSON();
     }
 
     public function create()
