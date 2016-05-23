@@ -173,7 +173,7 @@ class DataTables2
      * @return $this
      * @throws Exception
      */
-    public function th($label, $col = null, $orderable = false, $searchable = false, $style = null)
+    public function th($label, $col = null, $searchable = false, $orderable = false, $style = null)
     {
         if(is_array($label) && empty($col)){
             $this->th[] = $label;

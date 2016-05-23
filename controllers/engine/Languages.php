@@ -28,54 +28,58 @@ class Languages extends Engine
 {
     public function index()
     {
+
         $this->appendToPanel((string)Button::create($this->t('common.button_create'), ['class' => 'btn-md btn-primary b-languages-create']));
 
-        $t = new DataTables();
+        $t = new DataTables2('languages');
 
-        $t  -> setId('languages')
-            -> ajaxConfig('languages/items')
-//            -> setConfig('order', array(0, 'desc'))
-            -> th($this->t('common.id'))
-            -> th($this->t('languages.name'))
-            -> th($this->t('languages.code'))
-            -> th($this->t('languages.is_main'))
-            -> th($this->t('common.tbl_func'), '', 'width: 130px')
-        ;
+        $t
+            -> th($this->t('common.id'), 'id')
+            -> th($this->t('languages.name'), 'name', true, true)
+            -> th($this->t('languages.code'), 'code', true, true)
+            -> th($this->t('languages.is_main'), 'is_main')
+            -> th($this->t('common.tbl_func'), null, false, false, 'width:160px');
+//        ;
 
-        $this->output($t->render());
-    }
+        $t-> ajax('languages/index');
 
-    public function items()
-    {
-        $t = new DataTables();
-        $t  -> table('__languages')
-            -> get('id,name,code,is_main')
-            -> execute();
 
-        $res = array();
-        foreach ($t->getResults(false) as $i=>$row) {
-            $res[$i][] = $row['id'];
-            $res[$i][] = $row['name'];
-            $res[$i][] = $row['code'];
-            $res[$i][] = ($row['is_main'] == 1 ? "<label class='label'>ТАК</label>" : "");
-            $res[$i][] =
-                (string)Button::create
-                (
-                    Icon::create(Icon::TYPE_EDIT),
-                    ['class' => 'b-languages-edit  btn-primary', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
-                ) .
-                ($row['is_main'] == 0 ? (string)Button::create
-                (
-                    Icon::create(Icon::TYPE_DELETE),
-                    ['class' => 'b-languages-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
-                ) : "")
+        if($this->request->isXhr()){
 
-            ;
+            $t  -> from('__languages')
+                -> get('id,name,code,is_main')
+                -> execute();
+
+            if(! $t){
+                echo $t->getError();
+                return null;
+            }
+
+            $res = array();
+            foreach ($t->getResults(false) as $i=>$row) {
+                $res[$i][] = $row['id'];
+                $res[$i][] = $row['name'];
+                $res[$i][] = $row['code'];
+                $res[$i][] = ($row['is_main'] == 1 ? "<label class='label'>ТАК</label>" : "");
+                $res[$i][] =
+                    (string)Button::create
+                    (
+                        Icon::create(Icon::TYPE_EDIT),
+                        ['class' => 'b-languages-edit  btn-primary', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
+                    ) .
+                    ($row['is_main'] == 0 ? (string)Button::create
+                    (
+                        Icon::create(Icon::TYPE_DELETE),
+                        ['class' => 'b-languages-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+                    ) : "")
+
+                ;
+            }
+
+            return $t->render($res, $t->getTotal());
         }
 
-        return $t->renderJSON($res, $t->getTotal());
-
-//        $this->response->body($t->renderJSON($res, count($res), false))->asJSON();
+        $this->output($t->init());
     }
 
     public function create()
