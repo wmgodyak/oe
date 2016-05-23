@@ -674,6 +674,7 @@ class DataTables2
         if(isset($_POST['order'])){
 //            echo '<pre>'; print_r($_POST);die;
             foreach ($_POST['order'] as $k=>$col) {
+                if(!isset($this->cols[$col['column']]['col'])) continue;
 
                 $_col = $this->cols[$col['column']]['col'];
 
@@ -700,6 +701,8 @@ class DataTables2
         }
 
         $cols = implode(',', $a);
+
+        if(empty($cols)) $cols = '*';
 
         $w = empty($this->where) ? '' : "WHERE " . implode(' and ', $this->where);
         $j = implode(' ', $this->join);

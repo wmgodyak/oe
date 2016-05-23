@@ -47,24 +47,23 @@ class Nav extends Engine
         );
   
 
-        $t = new DataTables();
+        $t = new DataTables2('nav');
 
-        $t  -> setId('nav')
-            -> ajaxConfig('nav/items')
-            -> th($this->t('common.id'), '', 'width: 20px')
-            -> th($this->t('nav.name'))
-            -> th($this->t('nav.code'), '', 'width: 300px')
-            -> th($this->t('common.tbl_func'), '', 'width: 200px')
+        $t
+            -> ajax('nav/items')
+            -> th($this->t('common.id'), 'id', false, false, 'width: 40px')
+            -> th($this->t('nav.name'), 'name')
+            -> th($this->t('nav.code'), 'code', 0, 0, 'width: 300px')
+            -> th($this->t('common.tbl_func'), null, 0, 0, 'width: 200px')
         ;
 
-        $this->output($t->render());
+        $this->output($t->init());
     }
 
     public function items()
     {
-        $t = new DataTables();
-        $t  -> table('__nav')
-            -> get('id, name, code')
+        $t = new DataTables2();
+        $t  -> from('__nav')
             -> execute();
 
         $res = array();
@@ -91,7 +90,7 @@ class Nav extends Engine
             ;
         }
 
-        return $t->renderJSON($res, $t->getTotal());
+        return $t->render($res, $t->getTotal());
     }
 
     public function create()

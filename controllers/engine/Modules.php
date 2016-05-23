@@ -86,7 +86,6 @@ class Modules extends Engine
             if($installed) $item = array_merge($item, $data);
 
             $icon  = $installed ? (string) Icon::TYPE_UNINSTALL : (string) Icon::TYPE_INSTALL;
-//            $icon_pub  = $installed && $data['published'] == 1 ? (string) Icon::TYPE_PUBLISHED : (string) Icon::TYPE_HIDDEN;
 
             $res[$i][] = $item['name'];// . ($installed ? "<br><label class=\"label label-info\">{$t_installed}</label>" : '');
             $res[$i][] = $item['author'];
