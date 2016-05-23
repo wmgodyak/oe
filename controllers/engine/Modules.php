@@ -41,19 +41,17 @@ class Modules extends Engine
 
     public function index()
     {
-        $t = new DataTables();
+        $t = new DataTables2('modules');
 
-        $t  -> setId('modules')
-            -> ajaxConfig('modules/items')
-//            -> setConfig('order', array(0, 'desc'))
+        $t  -> ajax('modules/items')
             -> th($this->t('common.tbl_name'))
             -> th($this->t('modules.author'))
             -> th($this->t('modules.controller'))
             -> th($this->t('modules.version'))
-            -> th($this->t('common.tbl_func'), '', 'width:150px')
+            -> th($this->t('common.tbl_func'), null, false, false, 'width:150px')
         ;
 
-        $this->output($t->render());
+        $this->output($t->init());
     }
 
     public function items()
@@ -80,7 +78,7 @@ class Modules extends Engine
         }
 
         $res = array();
-        $t = new DataTables();
+        $t = new DataTables2();
         foreach ($items as $i=>$item) {
             $data = $this->mModules->data($item['controller']);
             $installed = isset($data['id']);
@@ -120,7 +118,7 @@ class Modules extends Engine
             ;
         }
 
-        $this->response->body($t->renderJSON($res, count($res), false))->asJSON();
+        $this->response->body($t->render($res, count($res), false))->asJSON();
     }
 
     public function create()
