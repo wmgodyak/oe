@@ -150,7 +150,10 @@ class DataTables2
     private $total    = 0;
     private $results  = [];
 
-    private $error = null;
+    private $error   = null;
+    private $ajaxUrl = null;
+    private $ajaxData = [];
+
 //    private $search_cols = [];
 
     public function __construct($id = null)
@@ -182,7 +185,7 @@ class DataTables2
             $label['orderable'] = isset($label['orderable']) ? $label['orderable'] : true;
 
 //            if(isset($label['col'])){
-                $this->get($label['col'], $label['orderable'], $label['searchable']);
+                $this->get($label['col'], $label['orderable'], $label['searchable'], 1);
 //            }
 
             return $this;
@@ -197,7 +200,7 @@ class DataTables2
         ];
 
 //        if(isset($col)) {
-            $this->get($col, $orderable, $searchable);
+            $this->get($col, $orderable, $searchable, 1);
 //        }
 
         return $this;
@@ -266,12 +269,13 @@ class DataTables2
      * @param bool $searchable
      * @return $this
      */
-    public function get($col, $orderable = false, $searchable = false)
+    public function get($col, $orderable = false, $searchable = false, $th = true)
     {
         $this->cols[] =  [
             'col'        => $col,
             'orderable'  => $orderable,
-            'searchable' => $searchable
+            'searchable' => $searchable,
+            'th'         => $th
         ];
 
         return $this;
@@ -313,22 +317,8 @@ class DataTables2
      */
     public function ajax($url, $data = [])
     {
-        $data['token'] = TOKEN;
-
-        $data['cols'] = base64_encode(TOKEN . serialize($this->cols) . TOKEN);
-        $data['sign'] = md5(serialize($this->cols));
-
-        $this ->config('processing', true)
-              ->config('serverSide', true)
-              ->config
-              (
-                  'ajax',
-                  [
-                      'url'  => $url,
-                      'type' => 'POST',
-                      'data' => $data
-                  ]
-              );
+        $this->ajaxUrl = $url;
+        $this->ajaxData = $data;
 
         return $this;
     }
@@ -356,6 +346,7 @@ class DataTables2
         }
 
         foreach ($this->th as $th) {
+
             $attr = empty($th['style']) ? '' : "style=\"{$th['style']}\"";
             $html .= "<th {$attr}>{$th['label']}</th>\r\n";
             $c++;
@@ -364,16 +355,12 @@ class DataTables2
         $html .= "</tr>
                 </thead>\r\n";
 
-//        if(!empty($this->tr)) {
-//            $html .= "<tbody>\r\n". implode('', $this->tr) ."</tbody>";
-//        } else {
-            $html .= "
-                <tbody>
-                    <tr>
-                        <td colspan=\"{$c}\" class=\"dataTables_empty\">Немає даних</td>
-                    </tr>
-                </tbody>\r\n";
-//        }
+        $html .= "
+            <tbody>
+                <tr>
+                    <td colspan=\"{$c}\" class=\"dataTables_empty\">Немає даних</td>
+                </tr>
+            </tbody>\r\n";
 
         $html .= "</table></div>";
 
@@ -404,6 +391,27 @@ class DataTables2
      */
     private function js()
     {
+        if($this->ajaxUrl){
+
+            $data = $this->ajaxData;
+            $data['token'] = TOKEN;
+
+            $data['cols'] = base64_encode(TOKEN . serialize($this->cols) . TOKEN);
+            $data['sign'] = md5(serialize($this->cols));
+
+            $this ->config('processing', true)
+                  ->config('serverSide', true)
+                  ->config
+                    (
+                        'ajax',
+                        [
+                            'url'  => $this->ajaxUrl,
+                            'type' => 'POST',
+                            'data' => $data
+                        ]
+                    );
+
+        }
         // definition to column search and ordering
         $idx = []; $sidx = []; $defs = [];
 
@@ -415,7 +423,12 @@ class DataTables2
             array_unshift($this->cols, ['col' => null]);
         }
 
+//        $this->dump($this->cols);
+
         foreach ($this->cols as $k=>$col) {
+
+           if($col['th'] == 0) continue;
+
            if(is_null($col['col'])){
                $idx[] = $k;
                $sidx[] = $k;
@@ -500,6 +513,8 @@ class DataTables2
         );
 
         $this->config('iDisplayLength', $this->iDisplayLength);
+
+//        $this->dump($this->config);die;
 
         $config = json_encode($this->config);
         $config = str_replace('\n', '', $config);
@@ -619,7 +634,7 @@ class DataTables2
             $this->limit($start, $num);
         }
 
-        if(empty($this->cols) && isset($_POST['cols'])){
+        if(isset($_POST['cols'])){//empty($this->cols) &&
 
             /*
              $data['cols'] = base64_encode(TOKEN . serialize($this->cols) . TOKEN);
@@ -638,6 +653,8 @@ class DataTables2
             }
 
             $this->cols = unserialize($cols);
+
+//            $this->dump($this->cols);die;
         }
 
         /**
@@ -702,7 +719,7 @@ class DataTables2
 
         $cols = implode(',', $a);
 
-        if(empty($cols)) $cols = '*';
+//        if(empty($cols)) $cols = '*';
 
         $w = empty($this->where) ? '' : "WHERE " . implode(' and ', $this->where);
         $j = implode(' ', $this->join);
@@ -753,6 +770,7 @@ class DataTables2
             $a = array();
 
             foreach ($this->cols as $col) {
+
                 $c = explode(' as ', $col['col']);
                 if(isset($c[1])){
                     $col['col'] = $c[0];
@@ -806,7 +824,6 @@ class DataTables2
 
     /**
      * @param $var
-     * @param bool|false $use_var_dump
      */
     final private function dump($var)
     {
