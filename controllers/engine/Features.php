@@ -42,6 +42,7 @@ class Features extends Engine
 
             $data = $this->features->getData($parent_id, 'parent_id,type');
             if(empty($data)) $this->redirect('/404');
+
             $this->appendToPanel
             (
                 (string)Link::create
@@ -74,32 +75,32 @@ class Features extends Engine
             );
         }
 
-        $t = new DataTables();
+        $t = new DataTables2('features');
 
-        $t  -> setId('features')
-            -> ajaxConfig('features/items/'.$parent_id)
-//            -> setConfig('order', array(0, 'desc'))
-            -> th($this->t('common.id'), '', 'width: 60px')
-            -> th($this->t('features.name'))
-            -> th($this->t('features.code'), '', 'width: 300px')
-            -> th($this->t('features.type'))
-            -> th($this->t('common.tbl_func'), '', 'width: 200px')
+        $t  -> ajax('features/items/'.$parent_id)
+            -> th($this->t('common.id'), 'f.id', 1, 1, 'width: 60px')
+            -> th($this->t('features.name'), 'i.name', 1, 1)
+            -> th($this->t('features.code'), 'f.code', 1, 1, 'width: 300px')
+            -> th($this->t('features.type'), 'f.type', 1, 1)
+            -> th($this->t('common.tbl_func'), null, 0, 0, 'width: 200px')
+            -> get('f.status', 0, 0, 0)
         ;
 
-        $this->output($t->render());
+        $this->output($t->init());
     }
 
     public function items($parent_id=0)
     {
-        $t = new DataTables();
-        $t  -> table('__features f')
+        $t = new DataTables2();
+        $t  -> from('__features f')
             -> join("__features_info i on i.features_id=f.id and i.languages_id={$this->languages_id}")
-            -> get('f.id, i.name, f.code,f.type, f.status')
             -> where("f.parent_id = {$parent_id}")
             -> execute();
 
         $res = array();
         foreach ($t->getResults(false) as $i=>$row) {
+
+//            $row['status'] = '';
 
             if($row['type'] == 'value'){
                 $a = 'javascript:;';
@@ -177,7 +178,7 @@ class Features extends Engine
             ;
         }
 
-        return $t->renderJSON($res, $t->getTotal());
+        return $t->render($res, $t->getTotal());
     }
 
     public function create($parent_id = 0)
