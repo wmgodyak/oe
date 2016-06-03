@@ -47,26 +47,28 @@ class ContentImagesSizes extends Engine
             )
         );
 
-        $t = new DataTables();
+        $t = new DataTables2('contentImagesSizesList');
 
-        $t  -> setId('contentImagesSizesList')
-            -> ajaxConfig('contentImagesSizes/items')
-//            -> setConfig('order', array(0, 'desc'))
-            -> th($this->t('common.id'), '', 'width: 20px')
-            -> th($this->t('contentImagesSizes.size'))
-            -> th($this->t('contentImagesSizes.width'))
-            -> th($this->t('contentImagesSizes.height'))
-            -> th($this->t('common.tbl_func'), '', 'width: 180px')
+        $t
+            -> th($this->t('common.id'), 'id', null, null, 'width: 20px')
+            -> th($this->t('contentImagesSizes.size'), 'size', 1, 1)
+            -> th($this->t('contentImagesSizes.width'), 'width', 1, 1)
+            -> th($this->t('contentImagesSizes.height'), 'height', 1, 1)
+            -> th($this->t('common.tbl_func'), null, null, null, 'width: 180px')
+            -> ajax('contentImagesSizes/items')
         ;
 
-        $this->output('<div id="resizeBox" class="row" style="display: none"><div id="progress" class=\'progress progress-thin progress-striped active\'><div style=\'width: 0;\' class=\'progress-bar progress-bar-success\'></div></div></div>'. $t->render());
+        $this->output
+        (
+            '<div id="resizeBox" class="row" style="display: none"><div id="progress" class=\'progress progress-thin progress-striped active\'><div style=\'width: 0;\' class=\'progress-bar progress-bar-success\'></div></div></div>'.
+            $t->init()
+        );
     }
 
     public function items()
     {
-        $t = new DataTables();
-        $t  -> table('__content_images_sizes')
-            -> get('id,size, width, height')
+        $t = new DataTables2();
+        $t  -> from('__content_images_sizes')
             -> execute();
 
         $res = array();
@@ -94,7 +96,7 @@ class ContentImagesSizes extends Engine
             ;
         }
 
-        return $t->renderJSON($res, $t->getTotal());
+        return $t->render($res, $t->getTotal());
     }
 
     public function create()

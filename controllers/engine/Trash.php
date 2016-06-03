@@ -57,10 +57,10 @@ class Trash extends Engine
             -> join("__content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}")
             -> join('__users u on u.id=c.owner_id')
             -> where(" c.status = 'deleted' ")
-            ->get('ci.url')
-            ->get('c.status')
-            ->get('c.isfolder')
-            ->get('CONCAT(u.name, \' \' , u.surname) as owner')
+            -> get('ci.url')
+            -> get('c.status')
+            -> get('c.isfolder')
+            -> get('CONCAT(u.name, \' \' , u.surname) as owner')
             -> execute();
 
 //            -> get('ci.url, c.status, c.isfolder, CONCAT(u.name, \' \' , u.surname) as owner')
