@@ -57,27 +57,29 @@ class Guides extends Engine
             )
         );
 
-        $t = new DataTables();
-
-        $t  -> setId('guides')
-            -> ajaxConfig('guides/items' . ($parent_id > 0 ? "/{$parent_id}" : 0))
-//            -> setConfig('order', array(0, 'desc'))
-            -> th($this->t('common.id'), '', 'width: 20px')
-            -> th($this->t('guides.name'))
-            -> th($this->t('guides.code'), '', 'width: 300px')
-            -> th($this->t('common.tbl_func'), '', 'width:160px')
+        $t = new DataTables2('guides');
+        $t
+            -> th($this->t('common.id'), 'g.id', 1,1, 'width: 20px')
+            -> th($this->t('guides.name'), 'gi.name', 1,1)
+            -> th($this->t('guides.code'), 'g.code', 1, 1,  'width: 300px')
+            -> th($this->t('common.tbl_func'), null, null, null,  'width:160px')
+            -> ajax('guides/items' . ($parent_id > 0 ? "/{$parent_id}" : null))
         ;
 
-        $this->output($t->render());
+        $this->output($t->init());
     }
 
-    public function items($parent_id=0)
+    /**
+     * @param int $parent_id
+     * @return string
+     */
+    public function items($parent_id = 0)
     {
-        $t = new DataTables();
-        $t  -> table('__guides g')
-            -> get('g.id,gi.name, g.code')
+        $t = new DataTables2();
+        $t  -> from('__guides g')
             -> join("__guides_info gi on gi.guides_id=g.id and gi.languages_id={$this->languages_id}");
-       $t->where("g.parent_id = {$parent_id}");
+
+        $t->where("g.parent_id = {$parent_id}");
 
         $t  -> execute();
 
@@ -100,7 +102,7 @@ class Guides extends Engine
             ;
         }
 
-        return $t->renderJSON($res, $t->getTotal());
+        return $t->render($res, $t->getTotal());
    }
 
     public function create($parent_id=0)
