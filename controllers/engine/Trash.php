@@ -36,31 +36,34 @@ class Trash extends Engine
 
     public function index()
     {
-        $t = new DataTables();
+        $t = new DataTables2('content');
 
-        $t  -> setId('content')
-            -> ajaxConfig('trash/items')
-            -> setConfig('order', array(0, 'desc'))
-            -> th($this->t('common.id'))
-            -> th($this->t('common.name'))
-            -> th($this->t('common.created'))
-            -> th($this->t('common.updated'))
-            -> th($this->t('common.tbl_func'), '', 'width: 160px')
+        $t  -> orderDef(0, 'desc')
+            -> th($this->t('common.id'), 'c.id', 1,1, 'width:60px')
+            -> th($this->t('common.name'), 'ci.name', 1,1)
+            -> th($this->t('common.created'), 'c.created', 1,1)
+            -> th($this->t('common.updated'), 'c.updated', 1,1)
+            -> th($this->t('common.tbl_func'), null, null, null, 'width: 160px')
+            -> ajax('trash/items')
         ;
 
-        $this->output($t->render());
+        $this->output($t->init());
     }
 
     public function items()
     {
-        $t = new DataTables();
-        $t  -> table('__content c')
-            -> get('c.id, ci.name, ci.url, c.created, c.updated, c.status, c.isfolder, CONCAT(u.name, \' \' , u.surname) as owner')
+        $t = new DataTables2();
+        $t  -> from('__content c')
             -> join("__content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}")
             -> join('__users u on u.id=c.owner_id')
             -> where(" c.status = 'deleted' ")
+            ->get('ci.url')
+            ->get('c.status')
+            ->get('c.isfolder')
+            ->get('CONCAT(u.name, \' \' , u.surname) as owner')
             -> execute();
 
+//            -> get('ci.url, c.status, c.isfolder, CONCAT(u.name, \' \' , u.surname) as owner')
         $res = array();
         foreach ($t->getResults(false) as $i=>$row) {
             $icon = Icon::create(($row['isfolder'] ? 'fa-folder' : 'fa-file'));
@@ -87,17 +90,17 @@ class Trash extends Engine
             ;
         }
 
-        return $t->renderJSON($res, $t->getTotal());
+        return $t->render($res, $t->getTotal());
     }
 
     public function remove($id)
     {
-        $this->response->body($this->trash->remove($id));
+        $this->trash->remove($id);
     }
 
     public function restore($id)
     {
-        $this->response->body($this->trash->restore($id));
+        $this->trash->restore($id);
     }
 
     public function create()
