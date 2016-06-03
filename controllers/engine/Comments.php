@@ -42,21 +42,31 @@ class Comments extends Engine {
        $this->output($this->template->fetch('comments/index'));
     }
 
+    /**
+     * @param $status
+     */
     public function tab($status)
     {
-        $t = new DataTables();
+        $t = new DataTables2('comments_' . $status);
 
-        $t  -> setId('comments_' . $status)
-            -> ajaxConfig('comments/items/'  .$status)
-            -> setConfig('order', array(0, 'desc'))
-            -> th($this->t('common.id'), '', 'width: 60px')
-            -> th($this->t('comments.pib'), '', 'width: 200px')
-            -> th($this->t('comments.message'))
-            -> th($this->t('comments.created'), '', 'width: 160px')
-            -> th($this->t('common.tbl_func'), '', 'width: 140px')
+        $t
+            -> th($this->t('common.id'), 'c.id', 1, 1, 'width: 60px')
+            -> th($this->t('comments.pib'), 'u.surname', 1, 1, 'width: 200px')
+            -> th($this->t('comments.message'), 'c.message')
+            -> th($this->t('comments.created'), 'c.created', 1, 1, 'width: 160px')
+            -> th($this->t('common.tbl_func'), null, 0, 0, 'width: 140px')
+            ->get('u.id as user_id')
+            ->get('u.name')
+            ->get('u.email')
+            ->get('ci.name as page_name')
+            ->get('ci.url')
+            ->get('c.skey')
+            ->get('c.status')
+            -> ajax('comments/items/'  .$status)
+            -> orderDef(1, 'desc')
         ;
 
-        $this->output($t->render());
+        $this->output($t->init());
     }
 
     /**
@@ -65,12 +75,11 @@ class Comments extends Engine {
      */
     public function items($status)
     {
-        $t = new DataTables();
-        $t  -> table('__comments c')
-            -> get('c.id, u.surname, c.message, c.created, u.id as user_id, u.name,  u.email, ci.name as page_name,ci.url, c.skey
-                ,c.status')
+        $t = new DataTables2();
+        $t  -> from('__comments c')
             -> join("__users u on u.id = c.users_id")
             -> join("__content_info ci on ci.content_id=c.content_id and ci.languages_id={$this->languages_id}");
+
 
             if($status != 'all'){
                 $t-> where(" c.status='{$status}'");
@@ -126,7 +135,7 @@ class Comments extends Engine {
             $res[$i][] = implode('', $b);
         }
 
-        return $t->renderJSON($res, $t->getTotal());
+        return $t->render($res, $t->getTotal());
     }
 
     public function create()
