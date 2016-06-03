@@ -11,6 +11,7 @@ namespace controllers\engine\content;
 use controllers\Engine;
 use controllers\engine\Content;
 use controllers\engine\DataTables;
+use controllers\engine\DataTables2;
 use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
 use helpers\bootstrap\Link;
@@ -58,33 +59,36 @@ class Post extends Content
             )
         );
 
-        $t = new DataTables();
+        $t = new DataTables2('content');
 
-        $t  -> setId('content')
-            -> ajaxConfig('content/'.$this->type.'/items/' . $parent_id)
-//            -> setConfig('order', array(0, 'desc'))
-            -> th($this->t('common.id'), '', 'width: 60px')
-            -> th($this->t('common.name'))
-            -> th($this->t('common.created'), '', 'width: 200px')
-            -> th($this->t('common.updated'), '', 'width: 200px')
-            -> th($this->t('common.tbl_func'), '', 'width: 180px')
+        $t  -> ajax('content/'.$this->type.'/items/' . $parent_id)
+            ->orderDef(0, 'desc')
+            -> th($this->t('common.id'), 'c.id', 1, 1, 'width: 60px')
+            -> th($this->t('common.name'), 'ci.name', 1, 1)
+            -> th($this->t('common.created'), 'c.created', 1,1, 'width: 200px')
+            -> th($this->t('common.updated'), 'c.updated', 1, 1, 'width: 200px')
+            -> th($this->t('common.tbl_func'), null, 0, 0, 'width: 180px')
         ;
-
-        $this->output($t->render());
+        $t->get('ci.url',0,0,0);
+        $t->get('c.status',0,0,0);
+        $t->get('c.isfolder',0,0,0);
+        $t->get('CONCAT(u.name, \' \' , u.surname) as owner',0,0,0);
+        $this->output($t->init());
     }
 
     public function items($parent_id = 0)
     {
-        $t = new DataTables();
-        $t  -> table('__content c')
-            -> get('c.id, ci.name, ci.url, c.created, c.updated, c.status, c.isfolder, CONCAT(u.name, \' \' , u.surname) as owner')
-            ->join("__content_types ct on ct.type = '{$this->type}' and ct.id=c.types_id")
+        $t = new DataTables2();
+        $t  -> from('__content c')
+            -> join("__content_types ct on ct.type = '{$this->type}' and ct.id=c.types_id")
             -> join("__content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}")
             -> join('__users u on u.id=c.owner_id')
             -> where("c.status in ('published', 'hidden')");
          if($parent_id > 0){
             $t->join("__content_relationship cr on cr.content_id=c.id and cr.categories_id={$parent_id}");
          }
+
+
         $t-> execute();
 
         $res = array();
@@ -144,7 +148,7 @@ class Post extends Content
             ;
         }
 
-        return $t->renderJSON($res, $t->getTotal());
+        return $t->render($res, $t->getTotal());
     }
 
     public function create()
