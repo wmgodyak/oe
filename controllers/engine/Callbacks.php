@@ -42,19 +42,18 @@ class Callbacks extends Engine {
 
     public function tab($status)
     {
-        $t = new DataTables();
+        $t = new DataTables2('callbacks_' . $status);
 
-        $t  -> setId('callbacks_' . $status)
-            -> ajaxConfig('callbacks/items/'  .$status)
-            -> setConfig('order', array(0, 'desc'))
-            -> th($this->t('common.id'))
-            -> th($this->t('callbacks.pib'), '', 'width: 200px')
-            -> th($this->t('callbacks.message'))
-            -> th($this->t('callbacks.created'), '', 'width: 100px')
-            -> th($this->t('common.tbl_func'), '', 'width: 180px')
+        $t  -> ajax('callbacks/items/'  .$status)
+            -> orderDef(0, 'desc')
+            -> th($this->t('common.id'), 'id', 1,1, 'width:60px')
+            -> th($this->t('callbacks.pib'), 'name', 1, 1, 'width: 200px')
+            -> th($this->t('callbacks.message'), 'message', 0, 0)
+            -> th($this->t('callbacks.created'), 'created', 0, 0, 'width: 100px')
+            -> th($this->t('common.tbl_func'), null, 0, 0, 'width: 180px')
         ;
 
-        $this->output($t->render());
+        $this->output($t->init());
     }
 
     /**
@@ -63,15 +62,22 @@ class Callbacks extends Engine {
      */
     public function items($status)
     {
-        $t = new DataTables();
-        $t  -> table('__callbacks')
-            -> get('id, name, message, created, status, phone, comment, manager_id, updated,ip');
+        $t = new DataTables2();
+        $t  -> from('__callbacks');
 
-            if($status != 'all'){
-                $t-> where(" status='{$status}'");
-            }
+        $t->get('status');
+        $t->get('phone');
+        $t->get('comment');
+        $t->get('manager_id');
+        $t->get('updated');
+        $t->get('ip');
 
-            $t-> execute();
+        if($status != 'all'){
+            $t-> where(" status='{$status}'");
+        }
+
+        $t-> execute();
+
         $res = array();
         foreach ($t->getResults(false) as $i=>$row) {
             $manager = '';
@@ -118,7 +124,7 @@ class Callbacks extends Engine {
             $res[$i][] = implode('', $b);
         }
 
-        return $t->renderJSON($res, $t->getTotal());
+        return $t->render($res, $t->getTotal());
     }
 
     public function create()
