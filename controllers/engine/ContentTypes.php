@@ -73,31 +73,41 @@ class ContentTypes extends Engine
                 )
         );
 
-        $t = new DataTables();
+        $t = new DataTables2('contentTypes');
 
-        $t  -> setId('contentTypes')
-            -> ajaxConfig('contentTypes/items/' . $parent_id)
-//            -> setConfig('order', array(0, 'desc'))
-            -> th($this->t('common.id'))
-            -> th($this->t('contentTypes.name'))
-            -> th($this->t('contentTypes.type'))
-            -> th($this->t('contentTypes.template'))
-            -> th($this->t('common.tbl_func'), '', 'width: 130px')
+        $t
+            -> th($this->t('common.id'), 'id', 1, 1, 'width:60px')
+            -> th($this->t('contentTypes.name'), 'name', 1, 1)
+            -> th($this->t('contentTypes.type'), 'type', 1, 1)
+            -> th($this->t('contentTypes.template'), null, 0 , 0)
+            -> th($this->t('common.tbl_func'), null, false, false, 'width: 130px')
+
+            -> get('isfolder', 0, 0, 0)
+            -> get('is_main', 0, 0, 0)
+            -> ajax('contentTypes/items/' . $parent_id)
         ;
 
-        $this->output($t->render());
+
+        $this->output($t->init());
     }
 
+    /**
+     * @param int $parent_id
+     * @return array|string
+     */
     public function items($parent_id = 0)
     {
-        $t = new DataTables();
-        $t  -> table('__content_types')
-            -> get('id, name, type, isfolder, is_main')
+        $t = new DataTables2();
+        $t  -> from('__content_types')
             -> where(" parent_id = {$parent_id}")
             -> execute();
 
         $res = array();
         foreach ($t->getResults(false) as $i=>$row) {
+
+            $row['isfolder'] = '';
+            $row['is_main']  = '';
+
             $res[$i][] = $row['id'];
             $res[$i][] = "<a href='contentTypes/index/{$row['id']}'>{$row['name']}</a>";
             $res[$i][] = $row['type'];
@@ -117,7 +127,7 @@ class ContentTypes extends Engine
             ;
         }
 
-        return $t->renderJSON($res, $t->getTotal());
+        return $t->render($res, $t->getTotal());
     }
 
     public function create($parent_id=null)
