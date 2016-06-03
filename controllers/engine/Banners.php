@@ -46,26 +46,27 @@ class Banners extends Engine
             (string)Button::create($this->t('common.button_create'), ['class' => 'btn-md btn-primary b-banners-places-create'])
         );
 
-        $t = new DataTables();
-        $t  -> setId('banners')
-            -> ajaxConfig('banners/items')
-            -> th($this->t('common.id'), '', 'width: 20px')
-            -> th($this->t('banners_places.name'))
-            -> th($this->t('banners_places.code'), '', 'width: 160px')
-            -> th($this->t('banners_places.width'), '', 'width: 160px')
-            -> th($this->t('banners_places.height'), '', 'width: 160px')
-            -> th($this->t('banners_places.total'), '', 'width: 160px')
-            -> th($this->t('common.tbl_func'), '', 'width: 160px')
+        $t = new DataTables2('banners');
+        $t  -> th($this->t('common.id'), 'id', 1, 1, 'width: 20px')
+            -> th($this->t('banners_places.name'), 'name', 1, 1)
+            -> th($this->t('banners_places.code'), 'code', 1, 1, 'width: 160px')
+            -> th($this->t('banners_places.width'), 'width', 1, 1, 'width: 160px')
+            -> th($this->t('banners_places.height'), 'height', 1, 1, 'width: 160px')
+            -> th($this->t('banners_places.total'), null, 1, 1, 'width: 160px')
+            -> th($this->t('common.tbl_func'), null, 0, 0, 'width: 160px')
+            -> ajax('banners/items')
         ;
 
-        $this->output($t->render());
+        $this->output($t->init());
     }
 
+    /**
+     * @return array|string
+     */
     public function items()
     {
-        $t = new DataTables();
-        $t  -> table('__banners_places')
-            -> get('id, name, code, width, height');
+        $t = new DataTables2();
+        $t  -> from('__banners_places');
         $t  -> execute();
 
         $res = array();
@@ -90,7 +91,7 @@ class Banners extends Engine
             ;
         }
 
-        return $t->renderJSON($res, $t->getTotal());
+        return $t->render($res, $t->getTotal());
     }
 
     public function bannersSlides($place_id)
