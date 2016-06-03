@@ -269,7 +269,7 @@ class DataTables2
      * @param bool $searchable
      * @return $this
      */
-    public function get($col, $orderable = false, $searchable = false, $th = true)
+    public function get($col, $orderable = 0, $searchable = 0, $th = 0)
     {
         $this->cols[] =  [
             'col'        => $col,

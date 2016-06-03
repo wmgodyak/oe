@@ -53,7 +53,9 @@ class Admins extends Engine
             -> th($this->t('admins.phone'),     'u.phone', true, true)
             -> th($this->t('admins.created') ,  'u.created', true, false)
             -> th($this->t('admins.lastlogin'), 'u.lastlogin', true, false)
-            -> th($this->t('common.func'), null, false, false);
+            -> th($this->t('common.func'), null, false, false)
+            -> get('u.status', 0, 0, 0 )
+        ;
 
         $t-> ajax('admins/index/'. $group_id);
 
