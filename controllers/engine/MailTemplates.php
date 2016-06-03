@@ -38,25 +38,24 @@ class MailTemplates extends Engine
     {
         $this->appendToPanel((string)Button::create($this->t('common.button_create'), ['class' => 'btn-md b-mailTemplates-create btn-primary']));
 
-        $t = new DataTables();
+        $t = new DataTables2('mailTemplates');
 
-        $t  -> setId('mailTemplates')
-            -> ajaxConfig('mailTemplates/items')
+        $t
 //            -> setConfig('order', array(0, 'desc'))
-            -> th($this->t('common.id'))
-            -> th($this->t('mailTemplates.name'))
-            -> th($this->t('mailTemplates.code'))
-            -> th($this->t('common.tbl_func'), '', 'width: 150px')
+            -> th($this->t('common.id'), 'id', 1,1, 'width:60px')
+            -> th($this->t('mailTemplates.name'), 'name', 1,1)
+            -> th($this->t('mailTemplates.code'), 'code', 1,1)
+            -> th($this->t('common.tbl_func'), null, 0, 0, 'width: 150px')
+            -> ajax('mailTemplates/items')
         ;
 
-        $this->output($t->render());
+        $this->output($t->init());
     }
 
     public function items()
     {
-        $t = new DataTables();
-        $t  -> table('__mail_templates t')
-            -> get('t.id, t.name, t.code')
+        $t = new DataTables2();
+        $t  -> from('__mail_templates')
             -> execute();
 
         $res = array();
@@ -79,7 +78,7 @@ class MailTemplates extends Engine
             ;
         }
 
-        return $t->renderJSON($res, $t->getTotal());
+        return $t->render($res, $t->getTotal());
 
 //        $this->response->body($t->renderJSON($res, count($res), false))->asJSON();
     }
@@ -101,7 +100,6 @@ class MailTemplates extends Engine
         if(! $this->request->isPost()) die;
 
         $data = $this->request->post('data');
-        $info = $this->request->post('info');
         $s=0; $i=[];
 
         FormValidation::setRule(['code', 'name'], FormValidation::REQUIRED);
