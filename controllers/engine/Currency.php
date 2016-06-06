@@ -40,28 +40,26 @@ class Currency extends Engine
         (
             (string)Button::create($this->t('common.button_create'), ['class' => 'btn-md btn-primary b-currency-create'])
         );
-        $t = new DataTables();
 
-        $t  -> setId('currency')
-            -> ajaxConfig('currency/items')
-//            -> setConfig('order', array(0, 'desc'))
-            -> th($this->t('common.id'), '', 'width: 20px')
-            -> th($this->t('currency.name'))
-            -> th($this->t('currency.code'))
-            -> th($this->t('currency.rate'))
-            -> th($this->t('currency.symbol'))
-            -> th($this->t('currency.is_main'))
-            -> th($this->t('common.tbl_func'), '', 'width: 140px')
+        $t = new DataTables2('currency');
+
+        $t  -> ajax('currency/items')
+            -> th($this->t('common.id'), 'id', 1, 1, 'width: 20px')
+            -> th($this->t('currency.name'), 'name', 1, 1)
+            -> th($this->t('currency.code'), 'code', 1, 1)
+            -> th($this->t('currency.rate'), 'rate', 1, 1)
+            -> th($this->t('currency.symbol'), 'symbol', 1, 1)
+            -> th($this->t('currency.is_main'), 'is_main', 1, 1)
+            -> th($this->t('common.tbl_func'), null, 0, 0, 'width: 140px')
         ;
 
-        $this->output($t->render());
+        $this->output($t->init());
     }
 
     public function items()
     {
-        $t = new DataTables();
-        $t  -> table('__currency')
-            -> get('id,name,code,rate,symbol,is_main');
+        $t = new DataTables2();
+        $t  -> from('__currency');
         $t  -> execute();
 
         $res = array();
@@ -86,7 +84,7 @@ class Currency extends Engine
             ;
         }
 
-        return $t->renderJSON($res, $t->getTotal());
+        return $t->render($res, $t->getTotal());
    }
 
     public function create()
