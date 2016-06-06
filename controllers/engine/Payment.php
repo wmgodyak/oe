@@ -44,26 +44,23 @@ class Payment extends Engine
         (
             (string)Button::create($this->t('common.button_create'), ['class' => 'btn-md btn-primary b-payment-create'])
         );
-        $t = new DataTables();
+        $t = new DataTables2('payment');
 
-        $t  -> setId('payment')
-            -> ajaxConfig('payment/items')
-//            -> setConfig('order', array(0, 'desc'))
-            -> th($this->t('common.id'), '', 'width: 20px')
-            -> th($this->t('payment.name'))
-            -> th($this->t('common.tbl_func'), '', 'width: 180px')
+        $t  -> ajax('payment/items')
+            -> th($this->t('common.id'), 'd.id', 1,1, 'width: 20px')
+            -> th($this->t('payment.name'), 'i.name', 1, 1)
+            -> th($this->t('common.tbl_func'), null, 0, 0, 'width: 180px')
+            -> get('d.published')
         ;
 
-        $this->output($t->render());
+        $this->output($t->init());
     }
 
     public function items()
     {
-        $t = new DataTables();
-        $t  -> table('__payment d')
+        $t = new DataTables2();
+        $t  -> from('__payment d')
             -> join("__payment_info i on i.payment_id=d.id and i.languages_id={$this->languages_id}")
-            -> get('d.id,i.name,d.published')
-
             -> execute();
 
         $res = array();
@@ -106,7 +103,7 @@ class Payment extends Engine
             ;
         }
 
-        return $t->renderJSON($res, $t->getTotal());
+        return $t->render($res, $t->getTotal());
    }
 
     public function create()
