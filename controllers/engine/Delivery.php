@@ -43,28 +43,24 @@ class Delivery extends Engine
         (
             (string)Button::create($this->t('common.button_create'), ['class' => 'btn-md btn-primary b-delivery-create'])
         );
-        $t = new DataTables();
+        $t = new DataTables2('delivery');
 
-        $t  -> setId('delivery')
-            -> ajaxConfig('delivery/items')
-//            -> setConfig('order', array(0, 'desc'))
-            -> th($this->t('common.id'), '', 'width: 20px')
-            -> th($this->t('delivery.name'))
-            -> th($this->t('delivery.price'), '', 'width: 200px')
-            -> th($this->t('delivery.free_from'), '', 'width: 200px')
-            -> th($this->t('common.tbl_func'), '', 'width: 180px')
+        $t  -> ajax('delivery/items')
+            -> th($this->t('common.id'), 'd.id',1,1, 'width: 20px')
+            -> th($this->t('delivery.name'), 'i.name', 1,1)
+            -> th($this->t('delivery.price'), 'd.price',1,1, 'width: 200px')
+            -> th($this->t('delivery.free_from'), 'd.free_from', 1, 1, 'width: 200px')
+            -> th($this->t('common.tbl_func'), null, 0, 0, 'width: 180px')
+            -> get('d.published')
         ;
-
-        $this->output($t->render());
+        $this->output($t->init());
     }
 
     public function items()
     {
-        $t = new DataTables();
-        $t  -> table('__delivery d')
+        $t = new DataTables2();
+        $t  -> from('__delivery d')
             -> join("__delivery_info i on i.delivery_id=d.id and i.languages_id={$this->languages_id}")
-            -> get('d.id,i.name,d.price,d.free_from,d.published')
-
             -> execute();
 
         $res = array();
@@ -109,7 +105,7 @@ class Delivery extends Engine
             ;
         }
 
-        return $t->renderJSON($res, $t->getTotal());
+        return $t->render($res, $t->getTotal());
    }
 
     public function create()
