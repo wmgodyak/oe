@@ -1,6 +1,6 @@
 <?php
     /**
-     * OYiEngine 7
+     * OYiEngine 7.2
      *
      * Швидка і потужна CMF для вирішення будь-яких завдань
      *
@@ -15,12 +15,12 @@
     if (version_compare(phpversion(), '5.3.0', '<') == true) { die ('PHP 5.3+ Only'); }
 
     if(!defined('DOCROOT')) define('DOCROOT', str_replace("\\", "/", $_SERVER['DOCUMENT_ROOT'] . '/'));
-    if(!defined('CPATH')) define('CPATH', DOCROOT . 'controllers/');
+    if(!defined('CPATH')) define('CPATH', DOCROOT . 'system/controllers/');
 
     // load startup file
     include_once "config/bootstrap.php";
 
     // Routing
-    \controllers\core\Route::run();
+    \system\core\Route::run();
 
-    \controllers\core\Response::getInstance()->render();
+    \system\core\Response::getInstance()->render();
