@@ -64,6 +64,9 @@ class Response
                 if(! Request::getInstance()->isXhr()){
                     Template::getInstance()->assign('body', $body);
 
+                    $scripts = Template::getInstance()->getScripts();
+                    Template::getInstance()->assign('components_scripts', $scripts);
+
                     $body = Template::getInstance()->fetch('index');
                 }
 
@@ -82,7 +85,7 @@ class Response
 
         $db = DB::getInstance();
 
-        if($debug && ! Request::getInstance()->isXhr()){
+        if($debug &&  $this->ct == 'text/html' && ! Request::getInstance()->isXhr()){
             $time = $_SERVER['REQUEST_TIME_FLOAT'];
             $q = $db->getQueryCount();
 
@@ -134,27 +137,27 @@ class Response
     {
         $this->ct = 'text/html';
 
-        $this->render();
+//        $this->render();
     }
     public function asPlainText()
     {
         $this->ct = 'text/plain';
 
-        $this->render();
+//        $this->render();
     }
 
     public function asJSON()
     {
         $this->ct = 'application/json';
 
-        $this->render();
+//        $this->render();
     }
 
     public function asXML()
     {
         $this->ct = 'application/xml';
 
-        $this->render();
+//        $this->render();
     }
 
     /**

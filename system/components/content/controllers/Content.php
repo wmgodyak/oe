@@ -37,7 +37,7 @@ class Content extends Engine
         $this->mContent = new \system\models\Content($this->type);
 
         if(empty($this->form_action)){
-            $this->form_action = 'content/' . $this->type . '/process/';
+            $this->form_action = $this->type . '/process/';
         }
     }
 
@@ -96,7 +96,7 @@ class Content extends Engine
 
         $form = $this->template->fetch($this->form_template);
 
-        $this->output($form);
+        return $this->output($form);
     }
 
     private function makeFeatures($features, $settings)

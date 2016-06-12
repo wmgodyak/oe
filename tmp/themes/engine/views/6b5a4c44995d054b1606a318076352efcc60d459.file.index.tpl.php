@@ -1,4 +1,4 @@
-<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-06-12 00:21:24
+<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-06-12 16:04:40
          compiled from "/var/www/engine.loc/themes/engine/views/index.tpl" */ ?>
 <?php /*%%SmartyHeaderCode:1202898852567be873c6fe20-51470877%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
@@ -7,7 +7,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '6b5a4c44995d054b1606a318076352efcc60d459' => 
     array (
       0 => '/var/www/engine.loc/themes/engine/views/index.tpl',
-      1 => 1465680083,
+      1 => 1465736680,
       2 => 'file',
     ),
   ),
@@ -32,6 +32,8 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     'sidebar' => 0,
     'heading_panel' => 0,
     'token' => 0,
+    'components_scripts' => 0,
+    'src' => 0,
   ),
   'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
@@ -195,11 +197,20 @@ assets/js/vendor/dropzone.min.js"><?php echo '</script'; ?>
 >
 <?php echo '<script'; ?>
  id="mainScript" src="<?php echo $_smarty_tpl->tpl_vars['theme_url']->value;?>
-assets/js/main.js?v=<?php echo $_smarty_tpl->tpl_vars['version']->value;?>
+assets/js/common.js?v=<?php echo $_smarty_tpl->tpl_vars['version']->value;?>
 "><?php echo '</script'; ?>
 >
-
-    
-
+<?php if ($_smarty_tpl->tpl_vars['components_scripts']->value) {?>
+    <?php  $_smarty_tpl->tpl_vars['src'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['src']->_loop = false;
+ $_from = $_smarty_tpl->tpl_vars['components_scripts']->value; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
+foreach ($_from as $_smarty_tpl->tpl_vars['src']->key => $_smarty_tpl->tpl_vars['src']->value) {
+$_smarty_tpl->tpl_vars['src']->_loop = true;
+?>
+        <?php echo '<script'; ?>
+ src="<?php echo $_smarty_tpl->tpl_vars['src']->value;?>
+"><?php echo '</script'; ?>
+>
+    <?php } ?>
+<?php }?>
 </body>
 </html><?php }} ?>

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: wg
- * Date: 12.06.16
- * Time: 0:33
- */
 
 namespace system\components\pages\controllers;
 
@@ -16,11 +10,17 @@ use system\core\DataTables2;
 
 if ( !defined("CPATH") ) die();
 
+/**
+ * Class Pages
+ * @package system\components\pages\controllers
+ */
 class Pages extends Content
 {
     public function __construct()
     {
         parent::__construct('pages');
+
+        $this->template->assignScript(dirname(__FILE__) . "/js/pages.js");
     }
 
     public function index($parent_id=0)
@@ -59,7 +59,7 @@ class Pages extends Content
         $t->get('c.status',0,0,0);
         $t->get('c.isfolder',0,0,0);
 
-        $this->output($t->init());
+        return $this->output($t->init());
     }
 
     public function items($parent_id = 0)
@@ -78,7 +78,7 @@ class Pages extends Content
             $status = $this->t('pages.status_' . $row['status']);
             $res[$i][] = $row['id'];
             $res[$i][] =
-                " <a class='status-{$row['status']}' title='{$status}' href='content/{$this->type}/index/{$row['id']}'>{$icon}  {$row['name']}</a>"
+                " <a class='status-{$row['status']}' title='{$status}' href='{$this->type}/index/{$row['id']}'>{$icon}  {$row['name']}</a>"
                 . "<a style='margin-left:10px' href='/{$row['url']}' target='_blank'>{$icon_link}</a>"
             ;
             $res[$i][] = date('d.m.Y H:i:s', strtotime($row['created']));
@@ -138,12 +138,12 @@ class Pages extends Content
             (string)Link::create
             (
                 $this->t('common.back'),
-                ['class' => 'btn-md', 'href'=> './content/'. $this->type . ($parent_id > 0 ? '/index/' . $parent_id : '')],
+                ['class' => 'btn-md', 'href'=> './'. $this->type . ($parent_id > 0 ? '/index/' . $parent_id : '')],
                 (string)Icon::create('fa-reply')
             )
         );
 
-        parent::edit($id);
+       return parent::edit($id);
     }
 
     public function process($id)

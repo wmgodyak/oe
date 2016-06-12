@@ -341,7 +341,8 @@ abstract class Engine extends Controller
     protected final function output($body)
     {
         $this->renderHeadingPanel();
-        return $body;
+        return  $body;
+//        return $this->response->body($body); // todo ???
     }
 
     /**

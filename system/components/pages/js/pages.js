@@ -4,25 +4,23 @@
 engine.pages = {
     init: function()
     {
-        engine.require('content');
-
         $(document).on('click', '.b-pages-delete', function(){
             var id = $(this).data('id');
-            engine.confirm('ДІйсно видалити сторінку?', function(){engine.content.delete(id);});
+            engine.confirm('ДІйсно видалити сторінку?', function(){engine.content.delete(id, 'pages');});
         });
 
         $(document).on('click', '.b-pages-pub', function(){
             var id = $(this).data('id');
-            engine.content.pub(id);
+            engine.content.pub(id, 'pages');
         });
 
         $(document).on('click', '.b-pages-hide', function(){
             var id = $(this).data('id');
-            engine.content.hide(id);
+            engine.content.hide(id, 'pages');
         });
 
         $(document).on('click', '.b-pages-tree-create', function(){
-            self.location.href= "content/pages/create";
+            self.location.href= "pages/create";
         });
 
         var $tree = new engine.tree('pagesTree');
@@ -30,12 +28,12 @@ engine.pages = {
             .setUrl('./plugins/pagesTree/tree')
             .setContextMenu('create', t.pages.tree_create, 'fa-file', function(o){
                     var node_id= o.reference[0].id;
-                    self.location.href='content/pages/create/' + node_id;
+                    self.location.href='pages/create/' + node_id;
                 }
             )
             .setContextMenu('edit', t.pages.tree_edit, 'fa-pencil', function(o){
                     var node_id= o.reference[0].id;
-                self.location.href='content/pages/edit/' + node_id;
+                self.location.href='pages/edit/' + node_id;
                 }
             )
             .setContextMenu('del', t.pages.tree_delete, 'fa-remove', function(o){
@@ -47,7 +45,7 @@ engine.pages = {
                         {
                             engine.content.delete(node_id, function(d){
                                 if(ACTION == 'create' || ACTION == 'edit'){
-                                    self.location.href = 'content/pages';
+                                    self.location.href = 'pages';
                                 }
                             });
                             $tree.refresh();

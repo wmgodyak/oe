@@ -72,9 +72,11 @@
         email: "{$t.common.e_email}"
     });
 </script>
-<script id="mainScript" src="{$theme_url}assets/js/main.js?v={$version}"></script>
-{*{if $component_script }*}
-    {*<script id="componentScript" src="{$component_script}"></script>*}
-{*{/if}*}
+<script id="mainScript" src="{$theme_url}assets/js/common.js?v={$version}"></script>
+{if $components_scripts}
+    {foreach $components_scripts as $src}
+        <script src="{$src}"></script>
+    {/foreach}
+{/if}
 </body>
 </html>

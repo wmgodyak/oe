@@ -1,6 +1,12 @@
 var engine = {
+    /**
+     * @deprecated
+     * @param src
+     * @param path
+     */
     require: function(src, path)
     {
+        alert('Method engine.required is deprecadet');
         path = typeof path == 'undefined' ? '/themes/engine/assets/js/bootstrap/' : path;
         var sc = document.createElement('script');
         sc.type = 'text/javascript';
@@ -407,7 +413,7 @@ var engine = {
             {
                 var $tree = $('#' + id);
                 if($tree.length == 0) {
-                    console.error('Tree #' + id + ' not found');
+                    console.info('Tree #' + id + ' not found');
                     return ;
                 }
 
@@ -1079,9 +1085,7 @@ engine.chunks = {
         );
     }
 };
-/**
- * Created by wg on 29.02.16.
- */
+
 engine.content = {
     init: function () {
         //// console.log('engine.content.init()');
@@ -1129,8 +1133,8 @@ engine.content = {
 
         this.features.init();
     },
-    delete: function (id, callback) {
-        engine.request.get('content/delete/' + id, function (d) {
+    delete: function (id, type, callback) {
+        engine.request.get(type + '/delete/' + id, function (d) {
             if (d.s) {
                 engine.refreshDataTable('content');
                 engine.closeDialog();
@@ -1142,15 +1146,15 @@ engine.content = {
             } else {
                 engine.alert(d.m);
             }
-        }, 'json')
+        }, 'json');
     },
-    pub: function (id) {
-        engine.request.get('content/pub/' + id, function (d) {
+    pub: function (id, type) {
+        engine.request.get(type+'/pub/' + id, function (d) {
             engine.refreshDataTable('content');
         });
     },
-    hide: function (id) {
-        engine.request.get('content/hide/' + id, function (d) {
+    hide: function (id, type) {
+        engine.request.get(type+'/hide/' + id, function (d) {
             engine.refreshDataTable('content');
         });
     },

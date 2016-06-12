@@ -7,7 +7,7 @@
 
 namespace system\core;
 
-use system\controllers\core\exceptions\Exception;
+use system\core\exceptions\Exception;
 
 defined("CPATH") or die();
 
@@ -25,6 +25,17 @@ class Template
     private $theme = null;
     private $theme_url;
     private $theme_path;
+
+    /**
+     * list of attached scripts
+     * @var array
+     */
+    private $scripts = [];
+    /**
+     * list of attached styles
+     * @var array
+     */
+    private $styles  = [];
 
     private function __construct($theme)
     {
@@ -78,7 +89,6 @@ class Template
 
         }
     }
-    
 
     /**
      * @param $theme
@@ -162,8 +172,6 @@ class Template
         return $this->smarty->fetch($template, $cache_id, $compile_id, $parent, $display, $merge_tpl_vars, $no_output_filter);
     }
 
-
-
     /**
      * @param null $string
      * @param null $cache_id
@@ -179,6 +187,68 @@ class Template
         return $this->smarty->fetch('string:' . $string, $cache_id, $compile_id, $parent, $display, $merge_tpl_vars, $no_output_filter);
     }
 
+    /**
+     * @param $src
+     * @param null $priority
+     * @return $this
+     * @throws Exception
+     */
+    public function assignStyle($src, $priority = null)
+    {
+        if(! $priority) {
+            $priority = count($this->styles);
+            $priority ++;
+        }
+
+        if( $priority && isset($this->styles[$priority]) ){
+          throw new Exception("In this position assigned {$this->styles[$priority]}. Change priority.");
+        }
+
+        $this->styles[$priority] = $src;
+
+        return $this;
+    }
+
+    /**
+     * @param $src
+     * @param null $priority
+     * @return $this
+     * @throws Exception
+     */
+    public function assignScript($src, $priority = null)
+    {
+        $src = '/'. str_replace(['controllers/', DOCROOT],[], $src);
+        if(! $priority) {
+            $priority = count($this->scripts);
+            $priority ++;
+        }
+
+        if( $priority && isset($this->scripts[$priority]) ){
+          throw new Exception("In this position assigned {$this->scripts[$priority]}. Change priority.");
+        }
+
+        $this->scripts[$priority] = $src;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getStyles()
+    {
+        return $this->styles;
+    }
+
+    /**
+     * @return array
+     */
+    public function getScripts()
+    {
+        return $this->scripts;
+    }
+
+    // todo а воно треба?
     public static function fatalErrorTemplateContent($array)
     {
         return '<!DOCTYPE html>
