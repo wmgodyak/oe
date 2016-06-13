@@ -15,11 +15,13 @@
                     <i class="fa {$item.icon}"></i>
                     <span>{$item.name}</span>
                 </a>
+                {if isset($item.items)}
                 <ul class="second-level">
                     {foreach $item.items as $subitem}
                         <li><a href="./{$subitem.controller}">{$subitem.name}</a></li>
                     {/foreach}
                 </ul>
+                {/if}
             </li>
             {/foreach}
             <li class="exit">
