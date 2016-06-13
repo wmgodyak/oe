@@ -1,22 +1,22 @@
-<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-06-11 23:58:32
+<?php /* Smarty version Smarty-3.1.21-dev, created on 2016-06-13 15:29:00
          compiled from "/var/www/engine.loc/themes/engine/views/nav.tpl" */ ?>
-<?php /*%%SmartyHeaderCode:13410207155694b4d83e02a2-92245890%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
+<?php /*%%SmartyHeaderCode:681911729575ea6a88dcc14-98449532%%*/if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
   array (
     'a9817aa026a955795bbed4cb79224eecbd69c043' => 
     array (
       0 => '/var/www/engine.loc/themes/engine/views/nav.tpl',
-      1 => 1458315448,
+      1 => 1465820939,
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '13410207155694b4d83e02a2-92245890',
+  'nocache_hash' => '681911729575ea6a88dcc14-98449532',
   'function' => 
   array (
   ),
   'version' => 'Smarty-3.1.21-dev',
-  'unifunc' => 'content_5694b4d848d819_82520054',
+  'unifunc' => 'content_575ea6a890d9d6_87149308',
   'variables' => 
   array (
     'nav_items' => 0,
@@ -26,7 +26,7 @@ $_valid = $_smarty_tpl->decodeProperties(array (
   ),
   'has_nocache_code' => false,
 ),false); /*/%%SmartyHeaderCode%%*/?>
-<?php if ($_valid && !is_callable('content_5694b4d848d819_82520054')) {function content_5694b4d848d819_82520054($_smarty_tpl) {?><!--side navigation-->
+<?php if ($_valid && !is_callable('content_575ea6a890d9d6_87149308')) {function content_575ea6a890d9d6_87149308($_smarty_tpl) {?><!--side navigation-->
 <div class="main-navigation">
     <nav class="side-nav">
         <ul class="first-level">
@@ -45,6 +45,7 @@ $_smarty_tpl->tpl_vars['item']->_loop = true;
                     <span><?php echo $_smarty_tpl->tpl_vars['item']->value['name'];?>
 </span>
                 </a>
+                <?php if (isset($_smarty_tpl->tpl_vars['item']->value['items'])) {?>
                 <ul class="second-level">
                     <?php  $_smarty_tpl->tpl_vars['subitem'] = new Smarty_Variable; $_smarty_tpl->tpl_vars['subitem']->_loop = false;
  $_from = $_smarty_tpl->tpl_vars['item']->value['items']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array');}
@@ -56,6 +57,7 @@ $_smarty_tpl->tpl_vars['subitem']->_loop = true;
 </a></li>
                     <?php } ?>
                 </ul>
+                <?php }?>
             </li>
             <?php } ?>
             <li class="exit">
