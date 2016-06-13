@@ -46,5 +46,5 @@
         </div>
     </div>
 
-    {if isset($plugins.params)}{implode("\r\n", $plugins.params)}{/if}
+    {*{if isset($plugins.params)}{implode("\r\n", $plugins.params)}{/if}*}
 </fieldset>
