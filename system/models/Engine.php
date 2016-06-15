@@ -46,7 +46,7 @@ class Engine extends Model
         ->select("
                     select id, icon, isfolder, controller
                     from __components
-                    where parent_id='{$parent_id}'
+                    where parent_id='{$parent_id}' and published = 1
                     order by abs(position) asc
                 ")
         ->all();
