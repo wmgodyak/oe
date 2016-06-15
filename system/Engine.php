@@ -55,9 +55,6 @@ abstract class Engine extends Controller
 
     private $panel_nav = [];
 
-    private $require_components = [];
-    private $required_components = [];
-
     private $engine;
 
     private static $initialized = false;
@@ -161,9 +158,6 @@ abstract class Engine extends Controller
 
             $this->template->assign('title', $this->t($controller . '.action_' . $action));
             $this->template->assign('name', $this->t($controller . '.action_' . $action));
-
-// todo змінити на підвантаження assignScript assignStyle
-//            $this->requireComponents();
         }
 /*
         $com = '/themes/engine/assets/js/bootstrap/' . lcfirst($controller) . '.js';
@@ -310,29 +304,6 @@ abstract class Engine extends Controller
     {
         $this->template->assign('panel_nav', $this->panel_nav);
         $this->template->assign('heading_panel', $this->template->fetch('heading_panel'));
-    }
-
-    protected function requireComponent($component)
-    {
-        $this->require_components[] = $component;
-
-        return $this;
-    }
-
-    private function requireComponents()
-    {
-        $components = [];
-        foreach ($this->require_components as $component) {
-            $component = mb_strtolower($component);
-            $path = 'assets/js/bootstrap/' . $component . '.js';
-            if(!file_exists($this->template->getThemePath() . $path)) continue;
-            $components[] = $this->template->getThemeUrl() . $path;
-            $this->required_components[] = $component;
-        }
-
-        if(!empty($components)){
-            $this->template->assign('required_components', $components);
-        }
     }
 
     /**
