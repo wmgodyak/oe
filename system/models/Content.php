@@ -221,9 +221,9 @@ class Content extends Model
         $content['updated'] = $this->now();
         $this->updateRow('__content', $id, $content);
 
-        if($this->hasDBError()){
+        if($this->hasError()){
             $this->rollback();
-            $this->error = $this->getDBErrorMessage();
+            $this->error = $this->getErrorMessage();
             return false;
         }
 
@@ -242,7 +242,7 @@ class Content extends Model
                 self::$db->insert('__content_info', $data);
             }
 
-            if($this->hasDBError()){
+            if($this->hasError()){
                 $this->rollback();
 
                 return false;
@@ -258,7 +258,7 @@ class Content extends Model
 //        $cf = new ContentFeatures();
 //        $cf->save($id);
 
-        if($this->hasDBError()){
+        if($this->hasError()){
             $this->rollback();
 
             return false;
@@ -349,7 +349,7 @@ class Content extends Model
             }
         }
 
-        if($this->hasDBError()){
+        if($this->hasError()){
             $this->rollback();
         } else {
             $this->commit();
@@ -362,5 +362,24 @@ class Content extends Model
         $r = self::$db->select("select id, name from __content_types where parent_id={$types_id}")->all();
         $res = array_merge($res, $r);
         return $res;
+    }
+
+    /**
+     * @param int $parent_id
+     * @param null $type
+     * @return mixed
+     * @throws Exception
+     */
+    public function tree($parent_id = 0, $type = null)
+    {
+        if(! $type) $type = $this->type;
+
+        return self::$db->select("
+          select c.id, c.isfolder, c.status, ci.name as text
+          from __content c
+          join __content_types ct on ct.type = '{$type}' and ct.id=c.types_id
+          join __content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
+          where c.parent_id={$parent_id} and c.status in ('published', 'hidden')
+          ")->all();
     }
 }

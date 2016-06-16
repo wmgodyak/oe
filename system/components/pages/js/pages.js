@@ -22,10 +22,10 @@ engine.pages = {
         $(document).on('click', '.b-pages-tree-create', function(){
             self.location.href= "pages/create";
         });
-
-        var $tree = new engine.tree('pagesTree');
+        //console.log($('#treecc').html());
+        var $tree = new engine.tree('treecc');
         $tree
-            .setUrl('./plugins/pagesTree/tree')
+            .setUrl('pages/tree')
             .setContextMenu('create', t.pages.tree_create, 'fa-file', function(o){
                     var node_id= o.reference[0].id;
                     self.location.href='pages/create/' + node_id;
@@ -56,7 +56,7 @@ engine.pages = {
                 console.log(data);
 
                 engine.request.post({
-                    url : './plugins/pagesTree/move',
+                    url : 'pages/moveTreeItem',
                     data: {
                         id: data.node.id,
                         'old_parent' : data.old_parent,

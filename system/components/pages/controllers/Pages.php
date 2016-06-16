@@ -59,6 +59,7 @@ class Pages extends Content
         $t->get('c.status',0,0,0);
         $t->get('c.isfolder',0,0,0);
 
+        $this->tree();
         return $this->output($t->init());
     }
 
@@ -143,6 +144,8 @@ class Pages extends Content
             )
         );
 
+        $this->tree();
+
        return parent::edit($id);
     }
 
@@ -156,5 +159,70 @@ class Pages extends Content
         }
 
         $this->response->body($a)->asJSON();
+    }
+
+
+    public function tree()
+    {
+        if($this->request->isXhr()){
+
+            $items = array();
+
+            $parent_id = $this->request->get('id','i');
+            $parent_id = (int)$parent_id;
+
+            foreach ($this->mContent->tree($parent_id) as $item) {
+
+                $item['children'] = $item['isfolder'] == 1;
+
+                if( $parent_id > 0 ){
+                    $item['parent'] = $parent_id;
+                }
+
+                $item['text'] .= " #{$item['id']}";
+
+                $item['a_attr'] = ['id'=> $item['id'], 'href' => 'pages/edit/' . $item['id']];
+
+                $item['li_attr'] =
+                    [
+                        'id'=> 'li_'.$item['id'],
+                        'class' => 'status-' . $item['status'],
+                        'title' => ($item['status'] == 'published' ? 'Опублікоавно' : 'Приховано')
+                    ];
+
+                $item['type'] = $item['isfolder'] ? 'folder': 'file';
+
+                $items[] = $item;
+            }
+
+            $this->response->asJSON();
+
+            return $items;
+        }
+
+        $this->template->assign('tree_icon', 'fa-file-text');
+        $sidebar = $this->template->fetch('pages/tree');
+        $this->template->assign('sidebar', $sidebar);
+    }
+
+    public function moveTreeItem()
+    {
+        if(! $this->request->isPost()) die(403);
+
+        $id            = $this->request->post('id', 'i');
+        $old_parent    = $this->request->post('old_parent', 'i');
+        $parent        = $this->request->post('parent', 'i');
+        $position      = $this->request->post('position', 'i');
+
+        if(empty($id)) return 0;
+
+        $this->mContent->move($id, $old_parent, $parent, $position);
+
+        if($this->mContent->hasError()){
+            echo $this->mContent->getDBError();
+            return 0;
+        }
+
+        return 1;
     }
 }

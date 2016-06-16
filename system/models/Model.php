@@ -16,7 +16,8 @@ defined("CPATH") or die();
  * Class Model
  * @package models
  */
-class Model {
+class Model
+{
     /**
      * default languages id
      * @var int
@@ -56,22 +57,22 @@ class Model {
         $this->error[] = $msg;
     }
 
-    public function getDBError()
+    public function getError()
     {
         return $this->error;
     }
 
-    public function getDBErrorCode()
+    public function getErrorCode()
     {
         return self::$db->getErrorCode();
     }
 
-    public function getDBErrorMessage()
+    public function getErrorMessage()
     {
         return self::$db->getErrorMessage();
     }
 
-    public function hasDBError()
+    public function hasError()
     {
         return !empty($this->error) || self::$db->hasError();
     }

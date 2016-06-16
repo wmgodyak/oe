@@ -70,8 +70,8 @@ class Content extends Engine
 
         $content = $this->mContent->getData($id);
 
-        if($this->mContent->hasDBError()){
-            throw new Exception($this->mContent->getDBErrorMessage());
+        if($this->mContent->hasError()){
+            throw new Exception($this->mContent->getErrorMessage());
         }
 //        $this->dump($content);die;
         $this->template->assign('content', $content);
@@ -129,7 +129,7 @@ class Content extends Engine
 
         if(! $s){
             $i = $this->mContent->getDBError();
-            $m = $this->mContent->getDBErrorMessage();
+            $m = $this->mContent->getErrorMessage();
         }
 
         $a = ['s'=>$s, 'i' => $i, 'm' => $m];

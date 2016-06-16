@@ -256,7 +256,7 @@ class Admin extends Engine {
                 $s = $this->mAdmin->updateProfile($user_id, $data);
 
                 if($s == 0){
-                    echo $this->mAdmin->getDBErrorMessage();
+                    echo $this->mAdmin->getErrorMessage();
                 } else {
                     if(isset($_FILES['avatar'])){
                         $a = $this->mAdmin->changeAvatar($user_id);

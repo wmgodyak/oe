@@ -412,6 +412,7 @@ var engine = {
             init: function()
             {
                 var $tree = $('#' + id);
+
                 if($tree.length == 0) {
                     console.info('Tree #' + id + ' not found');
                     return ;
