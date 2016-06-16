@@ -2,19 +2,19 @@
     <div class="form-group">
         <label for="data_size" class="col-sm-3 control-label">{$t.contentImagesSizes.size}</label>
         <div class="col-sm-9">
-            <input {if $action == 'edit'}readonly{/if} name="data[size]" id="data_size"  class="form-control" value="{$data.size}" required>
+            <input {if $action == 'edit'}readonly{/if} name="data[size]" id="data_size"  class="form-control" value="{if isset($data.size)}{$data.size}{/if}" required>
         </div>
     </div>
     <div class="form-group">
         <label for="data_width" class="col-sm-3 control-label">{$t.contentImagesSizes.width}</label>
         <div class="col-sm-9">
-            <input name="data[width]" id="data_width"  class="form-control" value="{$data.width}" required onchange="this.value = parseInt(this.value); if (this.value == 'NaN') this.value=0">
+            <input name="data[width]" id="data_width"  class="form-control" value="{if isset($data.width)}{$data.width}{/if}" required onchange="this.value = parseInt(this.value); if (this.value == 'NaN') this.value=0">
         </div>
     </div>
     <div class="form-group">
         <label for="data_height" class="col-sm-3 control-label">{$t.contentImagesSizes.height}</label>
         <div class="col-sm-9">
-            <input name="data[height]" id="data_height"  class="form-control" value="{$data.height}" required onchange="this.value = parseInt(this.value); if (this.value == 'NaN') this.value=0">
+            <input name="data[height]" id="data_height"  class="form-control" value="{if isset($data.height)}{$data.height}{/if}" required onchange="this.value = parseInt(this.value); if (this.value == 'NaN') this.value=0">
         </div>
     </div>
     <div class="form-group">
