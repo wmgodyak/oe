@@ -1,10 +1,10 @@
-{if $error}
+{if isset( $error)}
     <div class="alert alert-error">{$error}</div>
 {/if}
-{if $img}
+{if isset($img)}
     <div class="row col-md-8 col-md-offset-2"><img src="{$img}" style="max-width: 100%;" alt=""></div>
 {/if}
-{if $source}
+{if isset($source)}
 <form id="form" action="themes/updateSource" method="post"  class="form-horizontal">
     <div class="row">
         <div class="col-md-12">
