@@ -14,13 +14,13 @@
                 <div class="form-group">
                     <label for="data_name" class="col-md-3 control-label required">{$t.nav.name}</label>
                     <div class="col-md-9">
-                        <input type="text" class="form-control" name="data[name]" id="data_name" value="{$data.name}" required placeholder="[a-zA-Zа-яА-Я0-9]+">
+                        <input type="text" class="form-control" name="data[name]" id="data_name" value="{if isset($data.name)}{$data.name}{/if}" required placeholder="[a-zA-Zа-яА-Я0-9]+">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="data_code" class="col-md-3 control-label required">{$t.nav.code}</label>
                     <div class="col-md-9">
-                        <input type="text" class="form-control" name="data[code]" id="data_code" value="{$data.code}" required placeholder="[a-z]+">
+                        <input type="text" class="form-control" name="data[code]" id="data_code" value="{if isset($data.code)}{$data.code}{/if}" required placeholder="[a-z]+">
                     </div>
                 </div>
             </fieldset>
@@ -32,8 +32,8 @@
                     <div class="form-group">
                         <div class="col-md-12">
                             <select id="selItems" class="form-control" data-nav="{$data.id}">
-                                <option value="">{$i.common.select}</option>
-                                {call renderSelect items=$items}
+                                <option value="">{$t.common.select}</option>
+                                {call renderSelect items=$items parent=$item.name}
                             </select>
                         </div>
                     </div>
