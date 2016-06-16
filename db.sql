@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.0.10deb1
+-- version 4.4.13.1deb1
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Июн 10 2016 г., 11:10
--- Версия сервера: 5.6.30-0ubuntu0.14.04.1
--- Версия PHP: 5.5.9-1ubuntu4.17
+-- Время создания: Июн 16 2016 г., 21:44
+-- Версия сервера: 5.6.30-0ubuntu0.15.10.1
+-- Версия PHP: 5.6.11-1ubuntu3.3
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -14,7 +14,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- База данных: `engine`
@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `e_banners` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `banners_places_id` int(10) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
   `skey` varchar(32) NOT NULL,
@@ -38,12 +38,8 @@ CREATE TABLE IF NOT EXISTS `e_banners` (
   `df` date DEFAULT NULL,
   `dt` date DEFAULT NULL,
   `url` varchar(200) DEFAULT NULL,
-  `target` enum('_blank','_self') DEFAULT '_self',
-  PRIMARY KEY (`id`,`banners_places_id`,`languages_id`),
-  UNIQUE KEY `skey_UNIQUE` (`skey`),
-  KEY `fk_banners_banners_places1_idx` (`banners_places_id`),
-  KEY `fk_banners_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
+  `target` enum('_blank','_self') DEFAULT '_self'
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_banners`
@@ -63,14 +59,12 @@ INSERT INTO `e_banners` (`id`, `banners_places_id`, `languages_id`, `skey`, `img
 --
 
 CREATE TABLE IF NOT EXISTS `e_banners_places` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `code` varchar(45) DEFAULT NULL,
   `name` varchar(60) DEFAULT NULL,
   `width` int(11) DEFAULT NULL,
-  `height` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `code_UNIQUE` (`code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+  `height` int(11) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_banners_places`
@@ -86,14 +80,12 @@ INSERT INTO `e_banners_places` (`id`, `code`, `name`, `width`, `height`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `e_banners_stat` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `banners_id` int(10) unsigned NOT NULL,
   `shows` int(10) unsigned DEFAULT NULL,
   `clicks` int(10) unsigned DEFAULT NULL,
-  `date` date DEFAULT NULL,
-  PRIMARY KEY (`id`,`banners_id`),
-  KEY `fk_banners_stat_banners1_idx` (`banners_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `date` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -102,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `e_banners_stat` (
 --
 
 CREATE TABLE IF NOT EXISTS `e_callbacks` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `users_id` int(10) unsigned DEFAULT NULL,
   `phone` varchar(20) NOT NULL,
   `name` varchar(45) NOT NULL,
@@ -112,9 +104,8 @@ CREATE TABLE IF NOT EXISTS `e_callbacks` (
   `ip` char(16) NOT NULL,
   `status` enum('processed','spam','new') NOT NULL DEFAULT 'new',
   `manager_id` int(11) DEFAULT NULL,
-  `updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -123,7 +114,7 @@ CREATE TABLE IF NOT EXISTS `e_callbacks` (
 --
 
 CREATE TABLE IF NOT EXISTS `e_comments` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `parent_id` int(11) unsigned NOT NULL DEFAULT '0',
   `isfolder` tinyint(3) unsigned NOT NULL,
   `content_id` int(11) unsigned NOT NULL,
@@ -133,14 +124,8 @@ CREATE TABLE IF NOT EXISTS `e_comments` (
   `status` enum('approved','spam','new') NOT NULL DEFAULT 'new',
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ip` char(15) DEFAULT NULL,
-  `skey` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`id`,`content_id`),
-  KEY `fk_comments_content1_idx` (`content_id`),
-  KEY `approved` (`status`),
-  KEY `users_id` (`users_id`),
-  KEY `token` (`skey`),
-  KEY `isfolder` (`isfolder`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=28 ;
+  `skey` varchar(64) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_comments`
@@ -175,15 +160,11 @@ INSERT INTO `e_comments` (`id`, `parent_id`, `isfolder`, `content_id`, `users_id
 --
 
 CREATE TABLE IF NOT EXISTS `e_comments_subscribers` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `content_id` int(10) unsigned NOT NULL,
   `users_id` int(10) unsigned NOT NULL,
-  `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`,`content_id`,`users_id`),
-  UNIQUE KEY `content_id` (`content_id`,`users_id`),
-  KEY `fk_comments_subscribe_content1_idx` (`content_id`),
-  KEY `fk_comments_subscribe_users1_idx` (`users_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+  `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_comments_subscribers`
@@ -199,64 +180,55 @@ INSERT INTO `e_comments_subscribers` (`id`, `content_id`, `users_id`, `created`)
 --
 
 CREATE TABLE IF NOT EXISTS `e_components` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `id` tinyint(3) unsigned NOT NULL,
   `parent_id` tinyint(3) unsigned NOT NULL,
   `isfolder` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `icon` varchar(30) DEFAULT NULL,
-  `author` varchar(60) DEFAULT NULL,
-  `version` varchar(10) DEFAULT NULL,
   `controller` varchar(150) DEFAULT NULL,
   `position` tinyint(3) unsigned DEFAULT '0',
   `published` tinyint(1) NOT NULL DEFAULT '0',
-  `rang` int(4) unsigned DEFAULT NULL,
   `settings` text,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `parent_id` (`parent_id`),
-  KEY `isfolder` (`isfolder`),
-  KEY `position` (`position`),
-  KEY `published` (`published`),
-  KEY `module` (`controller`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=89 ;
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_components`
 --
 
-INSERT INTO `e_components` (`id`, `parent_id`, `isfolder`, `icon`, `author`, `version`, `controller`, `position`, `published`, `rang`, `settings`, `created`) VALUES
-(1, 0, 0, 'fa-home', 'Volodymyr Hodiak', '1.0.0', 'dashboard', 1, 1, 300, NULL, '2016-03-18 15:27:32'),
-(45, 0, 1, 'fa-cogs', 'Volodymyr Hodiak', '1.0.0', 'tools', 9, 1, 300, NULL, '2016-03-16 15:10:15'),
-(46, 45, 0, 'fa-bars', 'Volodymyr Hodiak', '1.0.0', 'nav', 46, 1, 300, NULL, '2016-03-16 15:18:30'),
-(47, 60, 1, 'fa-puzzle-piece', 'Volodymyr Hodiak', '1.0.0', 'components', 47, 1, 300, NULL, '2016-03-16 15:18:54'),
-(48, 60, 0, 'fa-puzzle-piece', 'Volodymyr Hodiak', '1.0.0', 'plugins', 48, 1, 300, NULL, '2016-03-16 15:19:05'),
-(49, 45, 0, 'fa-television', 'Volodymyr Hodiak', '1.0.0', 'themes', 49, 1, 300, NULL, '2016-03-16 15:21:51'),
-(51, 0, 0, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'admins', 8, 1, 300, NULL, '2016-03-16 15:22:03'),
-(52, 45, 0, 'fa-file-code-o', 'Volodymyr Hodiak', '1.0.0', 'features', 52, 1, 300, NULL, '2016-03-16 15:24:22'),
-(54, 45, 0, 'fa-book', 'Volodymyr Hodiak', '1.0.0', 'guides', 54, 1, 300, NULL, '2016-03-16 15:25:16'),
-(55, 45, 0, 'fa-trash', 'Volodymyr Hodiak', '1.0.0', 'trash', 55, 1, 300, NULL, '2016-03-16 15:25:45'),
-(56, 45, 0, 'fa-book', 'Volodymyr Hodiak', '1.0.0', 'contentImagesSizes', 56, 1, 300, NULL, '2016-03-16 15:25:52'),
-(57, 45, 0, 'fa-cubes', 'Volodymyr Hodiak', '1.0.0', 'contentTypes', 57, 1, 300, NULL, '2016-03-16 15:26:02'),
-(58, 65, 0, 'fa-flag', 'Volodymyr Hodiak', '1.0.0', 'languages', 58, 1, 300, NULL, '2016-03-16 15:26:13'),
-(59, 45, 0, 'fa-file-code-o', 'Volodymyr Hodiak', '1.0.0', 'backup', 59, 1, 300, NULL, '2016-03-16 15:26:21'),
-(60, 0, 1, 'fa-puzzle-piece', 'Volodymyr Hodiak', '1.0.0', 'componentsGroup', 11, 1, 300, NULL, '2016-03-17 07:52:27'),
-(61, 65, 0, 'fa-cogs', 'Volodymyr Hodiak', '1.0.0', 'settings', 61, 1, 300, NULL, '2016-03-17 07:54:17'),
-(64, 45, 0, 'fa-envelope-o', 'Volodymyr Hodiak', '1.0.0', 'mailTemplates', 64, 1, 300, NULL, '2016-03-18 10:14:32'),
-(65, 0, 1, 'fa-cogs', 'Volodymyr Hodiak', '1.0.0', 'settingsGroup', 12, 1, 300, NULL, '2016-03-18 11:41:11'),
-(66, 60, 0, 'fa-puzzle-piece', 'Volodymyr Hodiak', '1.0.0', 'modules', 0, 1, 300, NULL, '2016-03-23 13:50:46'),
-(67, 0, 0, 'fa-pencil', 'Volodymyr Hodiak', '1.0.0', 'content/Post', 3, 1, 300, NULL, '2016-03-25 10:43:43'),
-(68, 0, 0, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'customers', 5, 1, 300, NULL, '2016-03-28 07:56:25'),
-(69, 0, 0, 'fa-comments', 'Volodymyr Hodiak', '1.0.0', 'comments', 5, 1, 300, NULL, '2016-03-31 07:17:06'),
-(70, 0, 1, 'fa-shopping-cart', 'Volodymyr Hodiak', '1.0.0', 'shop', 3, 1, 300, NULL, '2016-04-01 06:30:35'),
-(72, 70, 0, 'fa-mobile', 'Volodymyr Hodiak', '1.0.0', 'content/Products', 0, 1, 300, NULL, '2016-04-01 06:38:03'),
-(76, 70, 0, 'fa-file-text', 'Volodymyr Hodiak', '1.0.0', 'content/ProductsCategories', 0, 1, 300, NULL, '2016-04-01 08:10:43'),
-(77, 70, 0, 'fa-money', 'Volodymyr Hodiak', '1.0.0', 'currency', 0, 1, 300, NULL, '2016-04-01 10:28:14'),
-(78, 70, 0, 'fa-bus', 'Volodymyr Hodiak', '1.0.0', 'delivery', 0, 1, 300, NULL, '2016-04-01 10:55:57'),
-(79, 70, 0, 'fa-credit-card', 'Volodymyr Hodiak', '1.0.0', 'payment', 0, 1, 300, NULL, '2016-04-01 11:16:34'),
-(81, 0, 0, 'fa-cogs', 'Volodymyr Hodiak', '1.0.0', 'banners', 6, 1, 300, NULL, '2016-04-07 12:06:56'),
-(82, 0, 0, 'fa-phone-square', 'Volodymyr Hodiak', '1.0.0', 'callbacks', 5, 1, 300, NULL, '2016-04-11 07:55:03'),
-(83, 65, 0, 'fa-bus', 'Volodymyr Hodiak', '1.0.0', 'ordersStatus', 3, 1, 300, NULL, '2016-04-11 11:53:42'),
-(84, 65, 0, 'fa-cogs', 'Volodymyr Hodiak', '1.0.0', 'seo', 0, 1, 300, NULL, '2016-04-13 13:10:56'),
-(88, 0, 0, 'fa-file-text', 'Volodymyr Hodiak', '1.0.0', 'content/Pages', 2, 1, 300, NULL, '2016-04-25 12:20:14');
+INSERT INTO `e_components` (`id`, `parent_id`, `isfolder`, `icon`, `controller`, `position`, `published`, `settings`, `created`) VALUES
+(1, 0, 0, 'fa-home', 'dashboard', 1, 1, NULL, '2016-03-18 15:27:32'),
+(2, 0, 0, 'fa-file-text', 'pages', 2, 1, NULL, '2016-04-25 12:20:14'),
+(3, 0, 1, 'fa-th-large', 'tools', 9, 1, NULL, '2016-03-16 15:10:15'),
+(4, 0, 1, 'fa-cogs', 'settingsGroup', 12, 1, NULL, '2016-03-18 11:41:11'),
+(5, 4, 0, 'fa-cogs', 'seo', 1, 1, NULL, '2016-04-13 13:10:56'),
+(6, 4, 0, 'fa-flag', 'languages', 58, 1, NULL, '2016-03-16 15:26:13'),
+(7, 3, 0, 'fa-bars', 'nav', 46, 1, NULL, '2016-03-16 15:18:30'),
+(8, 3, 0, 'fa-television', 'themes', 49, 1, NULL, '2016-03-16 15:21:51'),
+(9, 3, 0, 'fa-file-code-o', 'features', 52, 1, NULL, '2016-03-16 15:24:22'),
+(10, 3, 0, 'fa-trash', 'trash', 55, 1, NULL, '2016-03-16 15:25:45'),
+(11, 3, 0, 'fa-book', 'contentImagesSizes', 56, 1, NULL, '2016-03-16 15:25:52'),
+(12, 3, 0, 'fa-cubes', 'contentTypes', 57, 1, NULL, '2016-03-16 15:26:02'),
+(47, 60, 1, 'fa-puzzle-piece', 'components', 47, 0, NULL, '2016-03-16 15:18:54'),
+(48, 60, 0, 'fa-puzzle-piece', 'plugins', 48, 0, NULL, '2016-03-16 15:19:05'),
+(51, 0, 0, 'fa-users', 'admins', 8, 0, NULL, '2016-03-16 15:22:03'),
+(54, 45, 0, 'fa-book', 'guides', 54, 0, NULL, '2016-03-16 15:25:16'),
+(59, 45, 0, 'fa-file-code-o', 'backup', 59, 0, NULL, '2016-03-16 15:26:21'),
+(60, 0, 1, 'fa-puzzle-piece', 'componentsGroup', 11, 0, NULL, '2016-03-17 07:52:27'),
+(61, 4, 0, 'fa-cogs', 'settings', 61, 1, NULL, '2016-03-17 07:54:17'),
+(64, 45, 0, 'fa-envelope-o', 'mailTemplates', 64, 0, NULL, '2016-03-18 10:14:32'),
+(66, 60, 0, 'fa-puzzle-piece', 'modules', 0, 0, NULL, '2016-03-23 13:50:46'),
+(67, 0, 0, 'fa-pencil', 'content/Post', 3, 0, NULL, '2016-03-25 10:43:43'),
+(68, 0, 0, 'fa-users', 'customers', 5, 0, NULL, '2016-03-28 07:56:25'),
+(69, 0, 0, 'fa-comments', 'comments', 5, 0, NULL, '2016-03-31 07:17:06'),
+(70, 0, 1, 'fa-shopping-cart', 'shop', 3, 0, NULL, '2016-04-01 06:30:35'),
+(72, 70, 0, 'fa-mobile', 'cProducts', 0, 0, NULL, '2016-04-01 06:38:03'),
+(76, 70, 0, 'fa-file-text', 'ProductsCategories', 0, 0, NULL, '2016-04-01 08:10:43'),
+(77, 70, 0, 'fa-money', 'currency', 0, 0, NULL, '2016-04-01 10:28:14'),
+(78, 70, 0, 'fa-bus', 'delivery', 0, 0, NULL, '2016-04-01 10:55:57'),
+(79, 70, 0, 'fa-credit-card', 'payment', 0, 0, NULL, '2016-04-01 11:16:34'),
+(81, 0, 0, 'fa-cogs', 'banners', 6, 0, NULL, '2016-04-07 12:06:56'),
+(82, 0, 0, 'fa-phone-square', 'callbacks', 5, 0, NULL, '2016-04-11 07:55:03'),
+(83, 65, 0, 'fa-bus', 'ordersStatus', 3, 0, NULL, '2016-04-11 11:53:42');
 
 -- --------------------------------------------------------
 
@@ -265,7 +237,7 @@ INSERT INTO `e_components` (`id`, `parent_id`, `isfolder`, `icon`, `author`, `ve
 --
 
 CREATE TABLE IF NOT EXISTS `e_content` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `types_id` tinyint(3) unsigned NOT NULL,
   `subtypes_id` tinyint(3) unsigned NOT NULL,
   `owner_id` int(11) unsigned NOT NULL,
@@ -282,23 +254,16 @@ CREATE TABLE IF NOT EXISTS `e_content` (
   `unit_id` tinyint(3) unsigned DEFAULT NULL,
   `has_variants` tinyint(1) unsigned DEFAULT NULL,
   `in_stock` tinyint(1) unsigned DEFAULT NULL,
-  `external_id` char(32) DEFAULT NULL,
-  PRIMARY KEY (`id`,`types_id`,`subtypes_id`,`owner_id`),
-  KEY `fk_content_content_types1_idx` (`types_id`),
-  KEY `fk_content_content_subtypes1_idx` (`subtypes_id`),
-  KEY `fk_content_owner_idx` (`owner_id`),
-  KEY `status` (`status`),
-  KEY `published` (`published`),
-  KEY `code` (`code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=134 ;
+  `external_id` char(32) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=144 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_content`
 --
 
 INSERT INTO `e_content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id`, `isfolder`, `position`, `created`, `updated`, `published`, `settings`, `status`, `code`, `currency_id`, `unit_id`, `has_variants`, `in_stock`, `external_id`) VALUES
-(1, 1, 6, 2, 0, 1, 0, '2016-03-21 07:55:55', '2016-04-19 14:34:14', '2016-03-21', 'a:1:{s:7:"modules";a:1:{i:0;s:12:"First::index";}}', 'published', '1', NULL, NULL, NULL, NULL, NULL),
-(2, 1, 1, 2, 1, 0, 0, '2016-03-21 07:56:43', '2016-04-27 10:50:31', '2016-03-21', NULL, 'published', '2', NULL, NULL, NULL, NULL, NULL),
+(1, 1, 6, 2, 0, 1, 0, '2016-03-21 07:55:55', '2016-06-12 20:00:56', '2016-03-21', NULL, 'published', '1', NULL, NULL, NULL, NULL, NULL),
+(2, 1, 1, 2, 1, 0, 0, '2016-03-21 07:56:43', '2016-06-15 20:22:56', '2016-03-21', NULL, 'published', '2', NULL, NULL, NULL, NULL, NULL),
 (3, 1, 7, 2, 1, 0, 0, '2016-03-21 07:56:57', '2016-03-24 14:04:03', '2016-03-21', 'a:1:{s:7:"modules";a:1:{i:0;s:11:"Blog::index";}}', 'published', '3', NULL, NULL, NULL, NULL, NULL),
 (4, 1, 1, 2, 1, 0, 0, '2016-03-21 07:57:10', NULL, '2016-03-21', NULL, 'published', '4', NULL, NULL, NULL, NULL, NULL),
 (5, 1, 1, 2, 1, 0, 0, '2016-03-21 07:57:23', NULL, '2016-03-21', NULL, 'published', '5', NULL, NULL, NULL, NULL, NULL),
@@ -343,7 +308,7 @@ INSERT INTO `e_content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id
 (92, 10, 10, 2, 0, 0, 0, '2016-04-19 08:37:19', '2016-04-19 09:33:42', '2016-04-19', NULL, 'published', '96069', 2, 2, 1, 0, NULL),
 (130, 11, 11, 2, 48, 0, 0, '2016-04-20 13:36:07', '2016-04-20 13:36:07', '2016-04-20', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
 (132, 1, 1, 17, 2, 0, 0, '2016-04-25 10:55:14', NULL, NULL, NULL, 'blank', NULL, NULL, NULL, NULL, NULL, NULL),
-(133, 10, 10, 2, 0, 0, 0, '2016-05-24 08:29:07', NULL, NULL, NULL, 'blank', NULL, NULL, NULL, NULL, NULL, NULL);
+(143, 1, 1, 2, 1, 0, 0, '2016-06-16 06:50:29', NULL, NULL, NULL, 'blank', NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -352,17 +317,13 @@ INSERT INTO `e_content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id
 --
 
 CREATE TABLE IF NOT EXISTS `e_content_features` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `content_id` int(10) unsigned NOT NULL,
   `features_id` int(10) unsigned NOT NULL,
   `values_id` int(10) unsigned DEFAULT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `value` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`,`content_id`,`features_id`),
-  UNIQUE KEY `content_id` (`content_id`,`features_id`,`values_id`,`languages_id`),
-  KEY `fk_content_features_values_content1_idx` (`content_id`),
-  KEY `fk_content_features_values_features1_idx` (`features_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=33 ;
+  `value` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_content_features`
@@ -386,16 +347,13 @@ INSERT INTO `e_content_features` (`id`, `content_id`, `features_id`, `values_id`
 --
 
 CREATE TABLE IF NOT EXISTS `e_content_images` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL,
   `content_id` int(11) unsigned NOT NULL,
   `path` varchar(255) NOT NULL,
   `image` varchar(255) NOT NULL,
   `position` tinyint(5) unsigned NOT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `fk_content_images_content1_idx` (`content_id`),
-  KEY `position` (`position`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=28 ;
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_content_images`
@@ -433,20 +391,18 @@ INSERT INTO `e_content_images` (`id`, `content_id`, `path`, `image`, `position`,
 --
 
 CREATE TABLE IF NOT EXISTS `e_content_images_sizes` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `id` tinyint(3) unsigned NOT NULL,
   `size` varchar(16) NOT NULL,
   `width` int(5) unsigned NOT NULL,
-  `height` int(5) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `size` (`size`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+  `height` int(5) unsigned NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_content_images_sizes`
 --
 
 INSERT INTO `e_content_images_sizes` (`id`, `size`, `width`, `height`) VALUES
-(1, 'post', 635, 310),
+(1, 'post', 636, 311),
 (2, 'slider', 935, 450);
 
 -- --------------------------------------------------------
@@ -456,7 +412,7 @@ INSERT INTO `e_content_images_sizes` (`id`, `size`, `width`, `height`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `e_content_info` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `content_id` int(10) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
   `name` varchar(255) DEFAULT NULL,
@@ -465,63 +421,60 @@ CREATE TABLE IF NOT EXISTS `e_content_info` (
   `title` varchar(255) DEFAULT NULL,
   `keywords` varchar(255) DEFAULT NULL,
   `description` varchar(255) DEFAULT NULL,
-  `content` text,
-  PRIMARY KEY (`id`,`content_id`,`languages_id`),
-  UNIQUE KEY `languages_id` (`languages_id`,`url`),
-  KEY `fk_content_info_content1_idx` (`content_id`),
-  KEY `fk_content_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=55 ;
+  `intro` text,
+  `content` text
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_content_info`
 --
 
-INSERT INTO `e_content_info` (`id`, `content_id`, `languages_id`, `name`, `url`, `h1`, `title`, `keywords`, `description`, `content`) VALUES
-(1, 1, 1, 'Головна', 'home', '', 'Головна', '', '', '<p><img alt="" src="http://engine.loc/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png" style="width: 128px; height: 128px;" /></p>\n'),
-(3, 2, 1, 'Про нас', 'pro-nas', 'Про нас', 'Про нас', '', '<p>httpengine.locuploadsavatarscrtytry rtyrtyr&nbsp;Whether you want to fill this paragraph with some text like I&#39;m doing right now, this place is perfect to describe some features or anything you want - React has a complete solution f</p>\n\n<p>&nbsp;<', '<div class="row">\n<div class="col-md-12">\n<h1>We care about our work</h1>\n</div>\n</div>\n\n<div class="row">\n<div class="col-md-6">\n<p>Whether you want to fill this paragraph with some text like I&#39;m doing right now, this place is perfect to describe some features or anything you want - React has a complete solution for you.</p>\n\n<p><img alt="" src="http://engine.loc/uploads/avatars/c51ce410c124a10e0db5e4b97fc2af39.png" style="margin-left: 5px; margin-right: 5px; float: left; width: 208px; height: 120px;" />You have complete control over the look &amp; feel of your website, we offer the best quality so you take your site up and running in no time.</p>\n</div>\n\n<div class="col-md-6">\n<p>fhgfh fhgfh<img alt="" src="http://engine.loc/uploads/avatars/c51ce410c124a10e0db5e4b97fc2af39.png" style="width: 208px; height: 120px;" />fghfghfgh</p>\n\n<p>fgfghfghgfh</p>\n\n<p>React is a simple, developer-friendly way to get your site. Full of features, cool documentation ease of use, lots of pages. We want to help bringing cool stuff to people so they can get their projects faster.</p>\n<a class="join-team button button-small" href="#">Join our team</a></div>\n</div>\n\n<div class="row stats">\n<div class="col-sm-3"><strong>13</strong> employees</div>\n\n<div class="col-sm-3"><strong>10k</strong> customers</div>\n\n<div class="col-sm-3"><strong>9</strong> template pages</div>\n\n<div class="col-sm-3"><strong>13k</strong> products sold</div>\n</div>\n'),
-(4, 3, 1, 'Новини', 'novyny', '', 'Новини', '', '', ''),
-(5, 4, 1, 'Оплата та доставка', 'oplata-ta-dostavka', '', 'Оплата та доставка', '', '', ''),
-(6, 5, 1, 'Гарантія та сервіс', 'garantiya-ta-servis', '', 'Гарантія та сервіс', '', '', ''),
-(7, 6, 1, 'Діючі акції', 'diyuchi-akciї', '', 'Діючі акції', '', '', ''),
-(8, 7, 1, 'Ваканcії', 'vakanciї', '', 'Ваканcії', '', '', ''),
-(9, 8, 1, 'Контакти', 'kontakty', '', 'Контакти', '', '', ''),
-(10, 9, 1, '404', '404', '', '404', '', '', ''),
-(13, 13, 1, 'Новини', 'blog/novyny', '', 'Новини', '', '', NULL),
-(14, 14, 1, 'Акції', 'akcii', '', 'Акції', '', '', NULL),
-(15, 15, 1, 'Різне', 'rizne', '', 'Різне', '', '', NULL),
-(16, 16, 1, '50 відтінків логотипу. Частина 2', '50-vidtinkiv-logotypu-chastyna-2', '', '50 відтінків логотипу. Частина 2', '', 'Як придумати круте лого: продовжуємо говорити про техніки, які можна використати.\nНещодавно я опублікувала статтю, в якій перерахувала 25 технік генерації ідей для логотипу. Якщо ви її не читали — обов''язково прочитайте :) А потім повертайтеся сюди :)', '<p>Як придумати круте лого: продовжуємо говорити про техніки, які можна використати.<br />\nНещодавно я опублікувала статтю, в якій перерахувала 25 технік генерації ідей для логотипу. Якщо ви її не читали &mdash; обов&#39;язково прочитайте :) А потім повертайтеся сюди :)</p>\n'),
-(17, 17, 1, 'РЕКУРСИВНЕ ВИДАЛЕННЯ СТАРИХ АРХІВІВ В LINUX', 'rekursyvne-vydalennya-staryh-arhiviv-v-linux', '<p>РЕКУРСИВНЕ ВИДАЛЕННЯ СТАРИХ АРХІВІВ В LINUX</p>\n', 'РЕКУРСИВНЕ ВИДАЛЕННЯ СТАРИХ АРХІВІВ В LINUX', '', '', '<p>Виникла проблема &mdash; на одному з серверів для збереження бекапів переповнилося місце. Через це на іншому сервері також переповнилося місце. Тому що спочатку робиться архів локально, а потім переміщується на один із серверів бекапів.</p>\n\n<p><img alt="" src="http://engine.loc/uploads/avatars/office1.png" style="width: 932px; height: 450px;" />Але ми адміни ліниві, і вручну перегладати директорії і видаляти архіви понад кількі місяців точно не будемо. Особливо, коли проектів понад 200. Виручить простенький скрипт, який треба повішати на cron.&nbsp;</p>\n'),
-(18, 18, 1, '50 ВІДТІНКІВ ЛОГОТИПУ. ЧАСТИНА 1', '50-vidtinkiv-logotypu-chastyna-1', '<p>50 ВІДТІНКІВ ЛОГОТИПУ. ЧАСТИНА 1.2</p>\n', '50 ВІДТІНКІВ ЛОГОТИПУ. ЧАСТИНА 1', '', '', '<p><strong>Немає єдиного</strong> підходу до створення логотипів. Проте існує великий вибір технік та стилів, якими може скористатися дизайнер, щоб згенерувати справді круте лого.</p>\n\n<p>В цій статті я покажу <em>приклади логотипів</em>, що <strong>належать до різних категорій</strong>: по стилю, формі, глибині, кольорах, техніці виконання, використаних елементах тощо.</p>\n\n<p>Зазвичай логотип водночас належить до кількох категорій. Наприклад, логотип може бути з унікальним шрифтовим накресленням і мати різні кольорові літери, це може бути тривимірна графіка з <s><em>градієнтами</em></s> або ж персонаж чи тваринка, намальовані як імітація дитячого малюнка.</p>\n\n<p>Кажуть, що творчість полягає в здатності несподіваним чином об&#39;єднати добре відомі, звичні речі. Цю думку, принаймні щодо створення логотипів, я вважаю цілком справедливою.</p>\n\n<p>Хороший дизайнер логотипів створює унікальні логотипи за допомогою декількох інструментів, старається поєднати різні форми і техніки. Хороший дизайнер втілює дух і стиль компанії в знаці, який нестиме потрібні асоціації з діяльністю компанії.</p>\n\n<p>Коли замовник захоче спробувати зовсім іншу, кардинально нову концепцію, перегляньте ці 50 категорій &mdash; у вас неодмінно з&rsquo;явиться нове дихання та ідеї для створення ідеального логотипу.</p>\n\n<p>Осягнути всі 50 ідей за раз буває складно (або ж неефективно), тому в цій частині я покажу перші 25 технік, а решту залишу для другої частини статті ;) До речі, вона вже&nbsp;<a href="http://otakoyi.com/uk/blog/layfkhak-yak-pereviryty-adaptyvnist-vykorystovuyuchy-brauzer" target="_blank">тут</a>.&nbsp;</p>\n'),
-(19, 19, 1, 'БЕКАП САЙТУ С VPS НА ВІДДАЛЕНИЙ СЕРВЕР ПО FTP', 'bekap-sajtu-s-vps-na-viddalenyj-server-po-ftp', '', 'БЕКАП САЙТУ С VPS НА ВІДДАЛЕНИЙ СЕРВЕР ПО FTP', '', '', ''),
-(20, 20, 1, 'АВТОМАТИЧНИЙ ПЕРЕКЛАД В OYI.ENGINE НЕ ПРАЦЮЄ', 'avtomatychnyj-pereklad-v-oyi-engine-ne-pracyuє', '', 'АВТОМАТИЧНИЙ ПЕРЕКЛАД В OYI.ENGINE НЕ ПРАЦЮЄ', '', '', '<p>Ця стаття призначена для наших клієнтів, в яких &quot;... не зберігаються сторінки. Я вношу назву, натискаю &quot;Перекласти&quot;. Натискаю &quot;Зберегти&quot; і отримую &quot;Помилка валідації&quot;.&quot;<br />\nПояснення читайте в статті.<br />\nБільшість наших проектів мають кілька мовних версій (від 2 до 25).<br />\nВідповідно для кожної мовної версії потрібно ввести мінімум 3 обов&#39;язкові поля: назву, урл (alias), title. Помилка виникає, якщо ви не заповнюєте ці поля на всіх мовних версіях.<br />\nШвидкість створення 1 сторінки (статті, товару, категорії, ітп) напряму залежить від кількості мовних версій проекту. Щоб зекономити час роботи менеджера, і, відповідно, гроші замовника у нас стандартно<br />\nінтегрована опція автоматичного перекладу контенту на основі Google Translate API || Yandex Translate API. Yandex Translate краще перекладає контент з української на російську і навпаки, Google Translate API інші.</p>\n'),
-(21, 21, 1, '6 ПРАКТИЧНИХ ПОРАД ЯК ДИЗАЙНЕРАМ УНИКАТИ КОНФЛІКТІВ З КЛІЄНТАМИ', '6-praktychnyh-porad-yak-dyzajneram-unykaty-konfliktiv-z-kliєntamy', '', '6 ПРАКТИЧНИХ ПОРАД ЯК ДИЗАЙНЕРАМ УНИКАТИ КОНФЛІКТІВ З КЛІЄНТАМИ', '', '', '<p>Будь-який фрілансер або дизайнерська компанія, незалежно від свого напрямку (веб, графіка, архітектура, 3д-моделювання), рівня цін та професійності, рано чи пізно стикається з конфліктними клієнтами. Творчість взагалі дуже проблемна галузь, залежна від суб&#39;єктивної думки. Тому особливо важливо подбати про захист своїх тилів та уникати проблемних зон у стосунках з клієнтами.</p>\n\n<p>В цій статті ми підготували шість основних питань, про які треба подбати дизайнерській компанії (або фрілансеру) для того, щоб уникнути конфліктів з клієнтами або ж, якщо вони все-таки виникнуть, максимально захистити себе.&nbsp;</p>\n'),
-(22, 22, 1, 'ALLOWOVERRIDE ALL HTTPD OPTIONS ALL -INDEXES — ЗАБОРОНА ПЕРЕГЛЯДУ ПАПОК В ISPMANAGER', 'allowoverride-all-httpd-options-all-indexes-—-zaborona-pereglyadu-papok-v-ispmanager', '', 'ALLOWOVERRIDE ALL HTTPD OPTIONS ALL -INDEXES — ЗАБОРОНА ПЕРЕГЛЯДУ ПАПОК В ISPMANAGER', '', '', ''),
-(26, 23, 1, '20 ПРИКЛАДІВ ЦІКАВОГО ДИЗАЙНУ САЙТІВ (ЗА БЕРЕЗЕНЬ)', '20-prykladiv-cikavogo-dyzajnu-sajtiv-za-berezen', '', '20 ПРИКЛАДІВ ЦІКАВОГО ДИЗАЙНУ САЙТІВ (ЗА БЕРЕЗЕНЬ)', '', '', '<p>Впродовж місяця нам трапляється чимало сайтів, які варті уваги з точки зору дизайну, інформаційної архітектури, інтерактивності тощо. Ми вирішили зібрати їх докупи і поділитися з вами &mdash; тиждень добігає кінця, тож є час пошукати натхнення. Сюди потрапили і звичайні сайти, і портфоліо, і лендінги. Деякі з них здобули відзнаки від&nbsp;<a href="http://www.awwwards.com/" rel="nofollow" target="_blank">Awwwards</a>,&nbsp;<a href="http://www.cssdesignawards.com/" rel="nofollow" target="_blank">CSS Design Awards</a>&nbsp;тощо.</p>\n\n<p>До речі, на прикладі цих сайтів можна простежити за всіма&nbsp;<a href="http://otakoyi.com/blog/10-trendiv-veb-dyzaynu-v-2015-rotsi/">сучасними тенденціями</a>&nbsp;в сфері веб-дизайну.&nbsp;Доведеться трохи скролити, тож будьте терплячими! :)</p>\n'),
-(27, 24, 1, 'ЯКОГО БІСА ТИ СКИГЛИШ?', 'yakogo-bisa-ty-skyglysh', '<p>ЯКОГО БІСА ТИ СКИГЛИШ? ГА</p>\n', 'ЯКОГО БІСА ТИ СКИГЛИШ?', '', '', '<p>Минулого вересня на ми тестили онлайн редагування IT Weekend мені пощастило побувати на доповіді Слави Панкратова зі Школи менеджерів Стратоплан. На тлі інших доповідачів він вирізнявся своєю харизмою та вмінням захопити увагу аудиторії. З того часу мені в очі періодично впадала реклама у фейсбуці, яку я успішно ігнорував. Проте нещодавно, перебуваючи у вимушеній лікарняній відпустці та вкотре гортаючи стрічку новин, вирішив все ж таки залишити свій імейл для завантаження &laquo;Чорної книги менеджера&raquo;.</p>\n\n<p>Не знаю, чи це у мене настрій був такий, чи температура подіяла на мозок, але, на мою думку, ці 18 сторінок брутального тексту &mdash; це найбільш чесні та відверті рядки з усього, що я читав про керування персоналом та роботу в команді. Це чистий концентрат правди для всіх і кожного: починаючи від власників бізнесу, закінчуючи менеджерами всіх рівнів та їхніми підлеглими. Кожен знайде в ній щось для себе.&nbsp;<strong>Цю книгу треба прочитати обов&#39;язково!</strong></p>\n'),
-(28, 25, 1, 'Пошук', 'poshuk', '', 'Пошук', '', '', ''),
-(30, 27, 1, 'Всяка всячина', 'vsyaka-vsyachyna', '', 'Всяка всячина', '', '', NULL),
-(31, 28, 1, 'Аккаунт', 'account', '', 'Аккаунт', '', '', ''),
-(32, 29, 1, 'Вхід ', 'account/login', '', '', '', '', ''),
-(33, 30, 1, 'Реєстрація ', 'account/register', '', 'Реєстрація', '', '', ''),
-(34, 31, 1, 'Профіль', 'account/profile', '', 'Профіль', '', '', ''),
-(35, 34, 1, 'Нагадати пароль', 'account/fp', '', 'Нагадати пароль', '', '', ''),
-(37, 40, 1, 'Цифрове фото', 'cyfrove-foto', '', 'Цифрове фото, Планшетні ПК', '', '', '<p>retert</p>\n'),
-(38, 41, 1, 'Цифрові фотоапарати', 'cyfrovi-fotoaparaty', '', 'Цифрові фотоапарати', '', '', '<p>dgfdg</p>\n'),
-(39, 42, 1, 'Планшетні ПК', 'planshetni-pk', '', 'Планшетні ПК', '', '', NULL),
-(40, 43, 1, 'Комп''ютерна периферія', 'komp-yuterna-peryferiya', '', 'Комп''ютерна периферія', '', '', NULL),
-(41, 44, 1, 'Телефони ', 'telefony', '', 'Телефони ', '', '', NULL),
-(42, 45, 1, 'Аудіо, портативна техніка', 'audio-portatyvna-tehnika', '', 'Аудіо, портативна техніка', '', '', NULL),
-(43, 46, 1, 'Активний відпочинок, обігрівачі', 'aktyvnyj-vidpochynok-obigrivachi', '', 'Активний відпочинок, обігрівачі', '', '', NULL),
-(44, 47, 1, 'Чохли та супутні товари', 'chohly-ta-suputni-tovary', '', 'Чохли та супутні товари', '', '', NULL),
-(45, 48, 1, 'Годинники', 'godynnyky', '', 'Годинники', '', '', NULL),
-(46, 49, 1, 'Штативи', 'shtatyvy', '', 'Штативи', '', '', NULL),
-(47, 52, 1, 'ACER Iconia A1-840 FHD 8'''' 16 GB', 'acer-iconia-a1-840-fhd-8-16-gb', '', 'ACER Iconia A1-840 FHD 8'''' 16 GB', '', '', ''),
-(48, 54, 1, 'Смартфон Samsung J500H Galaxy J5', 'smartfon-samsung-j500h-galaxy-j5', '', 'Смартфон Samsung J500H Galaxy J5', '', '', ''),
-(49, 55, 1, 'Смартфон Keneksi Choice Dual Sim', 'smartfon-keneksi-choice-dual-sim', '', 'Смартфон Keneksi Choice Dual Sim', '', '', ''),
-(51, 57, 1, 'Смартфон Keneksi Choice Dual Sim2', 'smartfon-keneksi-choice-dual-sim2', '', 'Смартфон Keneksi Choice Dual Sim2', '', '', ''),
-(52, 59, 1, 'Смартфон Lenovo A1000 Dual Sim', 'smartfon-lenovo-a1000-dual-sim', '', 'Смартфон Lenovo A1000 Dual Sim', '', '', ''),
-(53, 92, 1, 'PHILIPS E320', 'philips-e320', '', 'PHILIPS E320', '', '', ''),
-(54, 130, 1, 'Іміджеві', 'imidzhevi', '', 'Іміджеві', '', '', NULL);
+INSERT INTO `e_content_info` (`id`, `content_id`, `languages_id`, `name`, `url`, `h1`, `title`, `keywords`, `description`, `intro`, `content`) VALUES
+(1, 1, 1, 'Головна', 'home', '', 'Головна', '', '', NULL, '<p><img alt="" src="http://engine.loc/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png" style="width: 128px; height: 128px;" /></p>\n'),
+(3, 2, 1, 'Про нас', 'pro-nas', 'Про нас', 'Про нас', '', '<p>httpengine.locuploadsavatarscrtytry rtyrtyr Whether you want to fill this paragraph with some text like I''m doing right now, this place is perfect to describe some features or anything you want - React has a complete solution f</p>\n\n<p> <', '', '<div class="row">\n<div class="col-md-12">\n<h1>We care about our work</h1>\n</div>\n</div>\n\n<div class="row">\n<div class="col-md-6">\n<p>Whether you want to fill this paragraph with some text like I&#39;m doing right now, this place is perfect to describe some features or anything you want - React has a complete solution for you.</p>\n\n<p><img alt="" src="http://engine.loc/uploads/avatars/c51ce410c124a10e0db5e4b97fc2af39.png" style="margin-left: 5px; margin-right: 5px; float: left; width: 208px; height: 120px;" />You have complete control over the look &amp; feel of your website, we offer the best quality so you take your site up and running in no time.</p>\n</div>\n\n<div class="col-md-6">\n<p>fhgfh fhgfh<img alt="" src="http://engine.loc/uploads/avatars/c51ce410c124a10e0db5e4b97fc2af39.png" style="width: 208px; height: 120px;" />fghfghfgh</p>\n\n<p>fgfghfghgfh</p>\n\n<p>React is a simple, developer-friendly way to get your site. Full of features, cool documentation ease of use, lots of pages. We want to help bringing cool stuff to people so they can get their projects faster.</p>\n<a class="join-team button button-small" href="#">Join our team</a></div>\n</div>\n\n<div class="row stats">\n<div class="col-sm-3"><strong>13</strong> employees</div>\n\n<div class="col-sm-3"><strong>10k</strong> customers</div>\n\n<div class="col-sm-3"><strong>9</strong> template pages</div>\n\n<div class="col-sm-3"><strong>13k</strong> products sold</div>\n</div>\n'),
+(4, 3, 1, 'Новини', 'novyny', '', 'Новини', '', '', NULL, ''),
+(5, 4, 1, 'Оплата та доставка', 'oplata-ta-dostavka', '', 'Оплата та доставка', '', '', NULL, ''),
+(6, 5, 1, 'Гарантія та сервіс', 'garantiya-ta-servis', '', 'Гарантія та сервіс', '', '', NULL, ''),
+(7, 6, 1, 'Діючі акції', 'diyuchi-akciї', '', 'Діючі акції', '', '', NULL, ''),
+(8, 7, 1, 'Ваканcії', 'vakanciї', '', 'Ваканcії', '', '', NULL, ''),
+(9, 8, 1, 'Контакти', 'kontakty', '', 'Контакти', '', '', NULL, ''),
+(10, 9, 1, '404', '404', '', '404', '', '', NULL, ''),
+(13, 13, 1, 'Новини', 'blog/novyny', '', 'Новини', '', '', NULL, NULL),
+(14, 14, 1, 'Акції', 'akcii', '', 'Акції', '', '', NULL, NULL),
+(15, 15, 1, 'Різне', 'rizne', '', 'Різне', '', '', NULL, NULL),
+(16, 16, 1, '50 відтінків логотипу. Частина 2', '50-vidtinkiv-logotypu-chastyna-2', '', '50 відтінків логотипу. Частина 2', '', 'Як придумати круте лого: продовжуємо говорити про техніки, які можна використати.\nНещодавно я опублікувала статтю, в якій перерахувала 25 технік генерації ідей для логотипу. Якщо ви її не читали — обов''язково прочитайте :) А потім повертайтеся сюди :)', NULL, '<p>Як придумати круте лого: продовжуємо говорити про техніки, які можна використати.<br />\nНещодавно я опублікувала статтю, в якій перерахувала 25 технік генерації ідей для логотипу. Якщо ви її не читали &mdash; обов&#39;язково прочитайте :) А потім повертайтеся сюди :)</p>\n'),
+(17, 17, 1, 'РЕКУРСИВНЕ ВИДАЛЕННЯ СТАРИХ АРХІВІВ В LINUX', 'rekursyvne-vydalennya-staryh-arhiviv-v-linux', '<p>РЕКУРСИВНЕ ВИДАЛЕННЯ СТАРИХ АРХІВІВ В LINUX</p>\n', 'РЕКУРСИВНЕ ВИДАЛЕННЯ СТАРИХ АРХІВІВ В LINUX', '', '', NULL, '<p>Виникла проблема &mdash; на одному з серверів для збереження бекапів переповнилося місце. Через це на іншому сервері також переповнилося місце. Тому що спочатку робиться архів локально, а потім переміщується на один із серверів бекапів.</p>\n\n<p><img alt="" src="http://engine.loc/uploads/avatars/office1.png" style="width: 932px; height: 450px;" />Але ми адміни ліниві, і вручну перегладати директорії і видаляти архіви понад кількі місяців точно не будемо. Особливо, коли проектів понад 200. Виручить простенький скрипт, який треба повішати на cron.&nbsp;</p>\n'),
+(18, 18, 1, '50 ВІДТІНКІВ ЛОГОТИПУ. ЧАСТИНА 1', '50-vidtinkiv-logotypu-chastyna-1', '<p>50 ВІДТІНКІВ ЛОГОТИПУ. ЧАСТИНА 1.2</p>\n', '50 ВІДТІНКІВ ЛОГОТИПУ. ЧАСТИНА 1', '', '', NULL, '<p><strong>Немає єдиного</strong> підходу до створення логотипів. Проте існує великий вибір технік та стилів, якими може скористатися дизайнер, щоб згенерувати справді круте лого.</p>\n\n<p>В цій статті я покажу <em>приклади логотипів</em>, що <strong>належать до різних категорій</strong>: по стилю, формі, глибині, кольорах, техніці виконання, використаних елементах тощо.</p>\n\n<p>Зазвичай логотип водночас належить до кількох категорій. Наприклад, логотип може бути з унікальним шрифтовим накресленням і мати різні кольорові літери, це може бути тривимірна графіка з <s><em>градієнтами</em></s> або ж персонаж чи тваринка, намальовані як імітація дитячого малюнка.</p>\n\n<p>Кажуть, що творчість полягає в здатності несподіваним чином об&#39;єднати добре відомі, звичні речі. Цю думку, принаймні щодо створення логотипів, я вважаю цілком справедливою.</p>\n\n<p>Хороший дизайнер логотипів створює унікальні логотипи за допомогою декількох інструментів, старається поєднати різні форми і техніки. Хороший дизайнер втілює дух і стиль компанії в знаці, який нестиме потрібні асоціації з діяльністю компанії.</p>\n\n<p>Коли замовник захоче спробувати зовсім іншу, кардинально нову концепцію, перегляньте ці 50 категорій &mdash; у вас неодмінно з&rsquo;явиться нове дихання та ідеї для створення ідеального логотипу.</p>\n\n<p>Осягнути всі 50 ідей за раз буває складно (або ж неефективно), тому в цій частині я покажу перші 25 технік, а решту залишу для другої частини статті ;) До речі, вона вже&nbsp;<a href="http://otakoyi.com/uk/blog/layfkhak-yak-pereviryty-adaptyvnist-vykorystovuyuchy-brauzer" target="_blank">тут</a>.&nbsp;</p>\n'),
+(19, 19, 1, 'БЕКАП САЙТУ С VPS НА ВІДДАЛЕНИЙ СЕРВЕР ПО FTP', 'bekap-sajtu-s-vps-na-viddalenyj-server-po-ftp', '', 'БЕКАП САЙТУ С VPS НА ВІДДАЛЕНИЙ СЕРВЕР ПО FTP', '', '', NULL, ''),
+(20, 20, 1, 'АВТОМАТИЧНИЙ ПЕРЕКЛАД В OYI.ENGINE НЕ ПРАЦЮЄ', 'avtomatychnyj-pereklad-v-oyi-engine-ne-pracyuє', '', 'АВТОМАТИЧНИЙ ПЕРЕКЛАД В OYI.ENGINE НЕ ПРАЦЮЄ', '', '', NULL, '<p>Ця стаття призначена для наших клієнтів, в яких &quot;... не зберігаються сторінки. Я вношу назву, натискаю &quot;Перекласти&quot;. Натискаю &quot;Зберегти&quot; і отримую &quot;Помилка валідації&quot;.&quot;<br />\nПояснення читайте в статті.<br />\nБільшість наших проектів мають кілька мовних версій (від 2 до 25).<br />\nВідповідно для кожної мовної версії потрібно ввести мінімум 3 обов&#39;язкові поля: назву, урл (alias), title. Помилка виникає, якщо ви не заповнюєте ці поля на всіх мовних версіях.<br />\nШвидкість створення 1 сторінки (статті, товару, категорії, ітп) напряму залежить від кількості мовних версій проекту. Щоб зекономити час роботи менеджера, і, відповідно, гроші замовника у нас стандартно<br />\nінтегрована опція автоматичного перекладу контенту на основі Google Translate API || Yandex Translate API. Yandex Translate краще перекладає контент з української на російську і навпаки, Google Translate API інші.</p>\n'),
+(21, 21, 1, '6 ПРАКТИЧНИХ ПОРАД ЯК ДИЗАЙНЕРАМ УНИКАТИ КОНФЛІКТІВ З КЛІЄНТАМИ', '6-praktychnyh-porad-yak-dyzajneram-unykaty-konfliktiv-z-kliєntamy', '', '6 ПРАКТИЧНИХ ПОРАД ЯК ДИЗАЙНЕРАМ УНИКАТИ КОНФЛІКТІВ З КЛІЄНТАМИ', '', '', NULL, '<p>Будь-який фрілансер або дизайнерська компанія, незалежно від свого напрямку (веб, графіка, архітектура, 3д-моделювання), рівня цін та професійності, рано чи пізно стикається з конфліктними клієнтами. Творчість взагалі дуже проблемна галузь, залежна від суб&#39;єктивної думки. Тому особливо важливо подбати про захист своїх тилів та уникати проблемних зон у стосунках з клієнтами.</p>\n\n<p>В цій статті ми підготували шість основних питань, про які треба подбати дизайнерській компанії (або фрілансеру) для того, щоб уникнути конфліктів з клієнтами або ж, якщо вони все-таки виникнуть, максимально захистити себе.&nbsp;</p>\n'),
+(22, 22, 1, 'ALLOWOVERRIDE ALL HTTPD OPTIONS ALL -INDEXES — ЗАБОРОНА ПЕРЕГЛЯДУ ПАПОК В ISPMANAGER', 'allowoverride-all-httpd-options-all-indexes-—-zaborona-pereglyadu-papok-v-ispmanager', '', 'ALLOWOVERRIDE ALL HTTPD OPTIONS ALL -INDEXES — ЗАБОРОНА ПЕРЕГЛЯДУ ПАПОК В ISPMANAGER', '', '', NULL, ''),
+(26, 23, 1, '20 ПРИКЛАДІВ ЦІКАВОГО ДИЗАЙНУ САЙТІВ (ЗА БЕРЕЗЕНЬ)', '20-prykladiv-cikavogo-dyzajnu-sajtiv-za-berezen', '', '20 ПРИКЛАДІВ ЦІКАВОГО ДИЗАЙНУ САЙТІВ (ЗА БЕРЕЗЕНЬ)', '', '', NULL, '<p>Впродовж місяця нам трапляється чимало сайтів, які варті уваги з точки зору дизайну, інформаційної архітектури, інтерактивності тощо. Ми вирішили зібрати їх докупи і поділитися з вами &mdash; тиждень добігає кінця, тож є час пошукати натхнення. Сюди потрапили і звичайні сайти, і портфоліо, і лендінги. Деякі з них здобули відзнаки від&nbsp;<a href="http://www.awwwards.com/" rel="nofollow" target="_blank">Awwwards</a>,&nbsp;<a href="http://www.cssdesignawards.com/" rel="nofollow" target="_blank">CSS Design Awards</a>&nbsp;тощо.</p>\n\n<p>До речі, на прикладі цих сайтів можна простежити за всіма&nbsp;<a href="http://otakoyi.com/blog/10-trendiv-veb-dyzaynu-v-2015-rotsi/">сучасними тенденціями</a>&nbsp;в сфері веб-дизайну.&nbsp;Доведеться трохи скролити, тож будьте терплячими! :)</p>\n'),
+(27, 24, 1, 'ЯКОГО БІСА ТИ СКИГЛИШ?', 'yakogo-bisa-ty-skyglysh', '<p>ЯКОГО БІСА ТИ СКИГЛИШ? ГА</p>\n', 'ЯКОГО БІСА ТИ СКИГЛИШ?', '', '', NULL, '<p>Минулого вересня на ми тестили онлайн редагування IT Weekend мені пощастило побувати на доповіді Слави Панкратова зі Школи менеджерів Стратоплан. На тлі інших доповідачів він вирізнявся своєю харизмою та вмінням захопити увагу аудиторії. З того часу мені в очі періодично впадала реклама у фейсбуці, яку я успішно ігнорував. Проте нещодавно, перебуваючи у вимушеній лікарняній відпустці та вкотре гортаючи стрічку новин, вирішив все ж таки залишити свій імейл для завантаження &laquo;Чорної книги менеджера&raquo;.</p>\n\n<p>Не знаю, чи це у мене настрій був такий, чи температура подіяла на мозок, але, на мою думку, ці 18 сторінок брутального тексту &mdash; це найбільш чесні та відверті рядки з усього, що я читав про керування персоналом та роботу в команді. Це чистий концентрат правди для всіх і кожного: починаючи від власників бізнесу, закінчуючи менеджерами всіх рівнів та їхніми підлеглими. Кожен знайде в ній щось для себе.&nbsp;<strong>Цю книгу треба прочитати обов&#39;язково!</strong></p>\n'),
+(28, 25, 1, 'Пошук', 'poshuk', '', 'Пошук', '', '', NULL, ''),
+(30, 27, 1, 'Всяка всячина', 'vsyaka-vsyachyna', '', 'Всяка всячина', '', '', NULL, NULL),
+(31, 28, 1, 'Аккаунт', 'account', '', 'Аккаунт', '', '', NULL, ''),
+(32, 29, 1, 'Вхід ', 'account/login', '', '', '', '', NULL, ''),
+(33, 30, 1, 'Реєстрація ', 'account/register', '', 'Реєстрація', '', '', NULL, ''),
+(34, 31, 1, 'Профіль', 'account/profile', '', 'Профіль', '', '', NULL, ''),
+(35, 34, 1, 'Нагадати пароль', 'account/fp', '', 'Нагадати пароль', '', '', NULL, ''),
+(37, 40, 1, 'Цифрове фото', 'cyfrove-foto', '', 'Цифрове фото, Планшетні ПК', '', '', NULL, '<p>retert</p>\n'),
+(38, 41, 1, 'Цифрові фотоапарати', 'cyfrovi-fotoaparaty', '', 'Цифрові фотоапарати', '', '', NULL, '<p>dgfdg</p>\n'),
+(39, 42, 1, 'Планшетні ПК', 'planshetni-pk', '', 'Планшетні ПК', '', '', NULL, NULL),
+(40, 43, 1, 'Комп''ютерна периферія', 'komp-yuterna-peryferiya', '', 'Комп''ютерна периферія', '', '', NULL, NULL),
+(41, 44, 1, 'Телефони ', 'telefony', '', 'Телефони ', '', '', NULL, NULL),
+(42, 45, 1, 'Аудіо, портативна техніка', 'audio-portatyvna-tehnika', '', 'Аудіо, портативна техніка', '', '', NULL, NULL),
+(43, 46, 1, 'Активний відпочинок, обігрівачі', 'aktyvnyj-vidpochynok-obigrivachi', '', 'Активний відпочинок, обігрівачі', '', '', NULL, NULL),
+(44, 47, 1, 'Чохли та супутні товари', 'chohly-ta-suputni-tovary', '', 'Чохли та супутні товари', '', '', NULL, NULL),
+(45, 48, 1, 'Годинники', 'godynnyky', '', 'Годинники', '', '', NULL, NULL),
+(46, 49, 1, 'Штативи', 'shtatyvy', '', 'Штативи', '', '', NULL, NULL),
+(47, 52, 1, 'ACER Iconia A1-840 FHD 8'''' 16 GB', 'acer-iconia-a1-840-fhd-8-16-gb', '', 'ACER Iconia A1-840 FHD 8'''' 16 GB', '', '', NULL, ''),
+(48, 54, 1, 'Смартфон Samsung J500H Galaxy J5', 'smartfon-samsung-j500h-galaxy-j5', '', 'Смартфон Samsung J500H Galaxy J5', '', '', NULL, ''),
+(49, 55, 1, 'Смартфон Keneksi Choice Dual Sim', 'smartfon-keneksi-choice-dual-sim', '', 'Смартфон Keneksi Choice Dual Sim', '', '', NULL, ''),
+(51, 57, 1, 'Смартфон Keneksi Choice Dual Sim2', 'smartfon-keneksi-choice-dual-sim2', '', 'Смартфон Keneksi Choice Dual Sim2', '', '', NULL, ''),
+(52, 59, 1, 'Смартфон Lenovo A1000 Dual Sim', 'smartfon-lenovo-a1000-dual-sim', '', 'Смартфон Lenovo A1000 Dual Sim', '', '', NULL, ''),
+(53, 92, 1, 'PHILIPS E320', 'philips-e320', '', 'PHILIPS E320', '', '', NULL, ''),
+(54, 130, 1, 'Іміджеві', 'imidzhevi', '', 'Іміджеві', '', '', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -530,16 +483,11 @@ INSERT INTO `e_content_info` (`id`, `content_id`, `languages_id`, `name`, `url`,
 --
 
 CREATE TABLE IF NOT EXISTS `e_content_relationship` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL,
   `content_id` int(10) unsigned NOT NULL,
   `categories_id` int(10) unsigned NOT NULL,
-  `is_main` tinyint(1) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`,`content_id`,`categories_id`),
-  UNIQUE KEY `content_id` (`content_id`,`categories_id`),
-  KEY `fk_content_relationship_content1_idx` (`content_id`),
-  KEY `fk_content_relationship_content2_idx` (`categories_id`),
-  KEY `is_main` (`is_main`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=93 ;
+  `is_main` tinyint(1) unsigned DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_content_relationship`
@@ -569,16 +517,11 @@ INSERT INTO `e_content_relationship` (`id`, `content_id`, `categories_id`, `is_m
 --
 
 CREATE TABLE IF NOT EXISTS `e_content_tags` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `content_id` int(11) unsigned NOT NULL,
   `tags_id` int(10) unsigned NOT NULL,
-  `languages_id` tinyint(3) unsigned NOT NULL,
-  PRIMARY KEY (`id`,`content_id`,`tags_id`,`languages_id`),
-  UNIQUE KEY `content_id` (`content_id`,`tags_id`),
-  KEY `fk_tags_content_content1_idx` (`content_id`),
-  KEY `fk_tags_content_tags1_idx` (`tags_id`),
-  KEY `fk_content_tags_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=29 ;
+  `languages_id` tinyint(3) unsigned NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_content_tags`
@@ -601,18 +544,14 @@ INSERT INTO `e_content_tags` (`id`, `content_id`, `tags_id`, `languages_id`) VAL
 --
 
 CREATE TABLE IF NOT EXISTS `e_content_types` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `id` tinyint(3) unsigned NOT NULL,
   `parent_id` tinyint(3) unsigned DEFAULT '0',
   `isfolder` tinyint(1) unsigned DEFAULT '0',
   `type` varchar(45) NOT NULL,
   `name` varchar(60) NOT NULL,
   `is_main` tinyint(1) unsigned DEFAULT NULL,
-  `settings` text,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `parent_id` (`parent_id`,`type`),
-  UNIQUE KEY `parent_id_2` (`parent_id`,`is_main`),
-  KEY `is_main` (`is_main`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
+  `settings` text
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_content_types`
@@ -622,13 +561,14 @@ INSERT INTO `e_content_types` (`id`, `parent_id`, `isfolder`, `type`, `name`, `i
 (1, 0, 1, 'pages', 'Сторінки', NULL, 'a:3:{s:7:"ext_url";s:1:"0";s:9:"parent_id";s:1:"0";s:7:"modules";a:1:{i:0;s:10:"Nav::index";}}'),
 (2, 0, 0, 'post', 'Стаття', NULL, 'a:2:{s:9:"parent_id";s:0:"";s:7:"modules";a:3:{i:0;s:14:"Account::index";i:1;s:10:"Blog::post";i:2;s:8:"Nav::top";}}'),
 (3, 0, 0, 'posts_cat', 'Категорії статтей', NULL, 'a:2:{s:9:"parent_id";s:0:"";s:7:"modules";a:2:{i:0;s:11:"Blog::index";i:1;s:10:"Nav::index";}}'),
-(4, 1, 0, '404', '404', NULL, 'a:2:{s:9:"parent_id";s:0:"";s:11:"modules_ext";s:1:"1";}'),
+(4, 1, 0, '404', '404', NULL, 'a:4:{s:7:"ext_url";s:1:"0";s:9:"parent_id";s:0:"";s:11:"modules_ext";s:1:"1";s:8:"features";a:3:{s:13:"allowed_types";a:2:{i:0;s:4:"file";i:1;s:6:"number";}s:14:"disable_values";s:1:"1";s:11:"ex_types_id";s:1:"3";}}'),
 (6, 1, 0, 'main', 'Головна', NULL, 'a:2:{s:9:"parent_id";s:0:"";s:7:"modules";a:1:{i:0;s:10:"Nav::index";}}'),
 (7, 1, 0, 'blog', 'Блог', NULL, 'a:2:{s:9:"parent_id";s:0:"";s:11:"modules_ext";s:1:"1";}'),
 (8, 1, 0, 'account', 'Аккаунт', NULL, 'a:1:{s:9:"parent_id";s:0:"";}'),
-(9, 1, 0, 'contacts', 'Контакти', NULL, 'a:1:{s:9:"parent_id";s:0:"";}'),
+(9, 1, 1, 'contacts', 'Контакти', NULL, 'a:1:{s:9:"parent_id";s:0:"";}'),
 (10, 0, 0, 'products', 'Товар', NULL, 'a:2:{s:9:"parent_id";s:0:"";s:8:"features";a:3:{s:13:"allowed_types";a:2:{i:0;s:6:"select";i:1;s:6:"folder";}s:14:"disable_values";s:1:"0";s:11:"ex_types_id";s:2:"11";}}'),
-(11, 0, 0, 'productsCategories', 'Категорії товарів', NULL, 'a:2:{s:9:"parent_id";s:0:"";s:8:"features";a:3:{s:13:"allowed_types";a:2:{i:0;s:6:"select";i:1;s:6:"folder";}s:14:"disable_values";s:1:"1";s:11:"ex_types_id";s:0:"";}}');
+(11, 0, 0, 'productsCategories', 'Категорії товарів', NULL, 'a:2:{s:9:"parent_id";s:0:"";s:8:"features";a:3:{s:13:"allowed_types";a:2:{i:0;s:6:"select";i:1;s:6:"folder";}s:14:"disable_values";s:1:"1";s:11:"ex_types_id";s:0:"";}}'),
+(12, 9, 0, 'aaaa', 'qqqa', NULL, 'a:2:{s:7:"ext_url";s:1:"0";s:9:"parent_id";s:0:"";}');
 
 -- --------------------------------------------------------
 
@@ -637,13 +577,10 @@ INSERT INTO `e_content_types` (`id`, `parent_id`, `isfolder`, `type`, `name`, `i
 --
 
 CREATE TABLE IF NOT EXISTS `e_content_types_images_sizes` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `types_id` tinyint(3) unsigned NOT NULL,
-  `images_sizes_id` tinyint(3) unsigned NOT NULL,
-  PRIMARY KEY (`id`,`types_id`,`images_sizes_id`),
-  KEY `fk_content_types_images_sizes1_idx` (`types_id`),
-  KEY `fk_content_types_images_sizes2_idx` (`images_sizes_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=26 ;
+  `images_sizes_id` tinyint(3) unsigned NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1;
 
 --
 -- Дамп данных таблицы `e_content_types_images_sizes`
@@ -653,6 +590,7 @@ INSERT INTO `e_content_types_images_sizes` (`id`, `types_id`, `images_sizes_id`)
 (23, 1, 1),
 (24, 1, 2),
 (25, 2, 1),
+(30, 4, 1),
 (11, 6, 2);
 
 -- --------------------------------------------------------
@@ -662,17 +600,13 @@ INSERT INTO `e_content_types_images_sizes` (`id`, `types_id`, `images_sizes_id`)
 --
 
 CREATE TABLE IF NOT EXISTS `e_currency` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `id` tinyint(3) unsigned NOT NULL,
   `name` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
   `code` char(3) COLLATE utf8_unicode_ci DEFAULT NULL,
   `symbol` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
   `rate` decimal(7,3) DEFAULT NULL,
-  `is_main` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`),
-  UNIQUE KEY `code` (`code`),
-  KEY `is_main` (`is_main`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+  `is_main` tinyint(1) unsigned NOT NULL DEFAULT '0'
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Дамп данных таблицы `e_currency`
@@ -689,14 +623,13 @@ INSERT INTO `e_currency` (`id`, `name`, `code`, `symbol`, `rate`, `is_main`) VAL
 --
 
 CREATE TABLE IF NOT EXISTS `e_delivery` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `id` tinyint(3) unsigned NOT NULL,
   `free_from` decimal(10,2) unsigned NOT NULL DEFAULT '0.00',
   `price` decimal(10,2) NOT NULL DEFAULT '0.00',
   `module` varchar(30) DEFAULT NULL,
   `settings` text,
-  `published` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+  `published` tinyint(1) unsigned NOT NULL DEFAULT '0'
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_delivery`
@@ -713,15 +646,12 @@ INSERT INTO `e_delivery` (`id`, `free_from`, `price`, `module`, `settings`, `pub
 --
 
 CREATE TABLE IF NOT EXISTS `e_delivery_info` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `id` tinyint(3) unsigned NOT NULL,
   `delivery_id` tinyint(3) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
   `name` varchar(255) DEFAULT NULL,
-  `description` text,
-  PRIMARY KEY (`id`,`delivery_id`,`languages_id`),
-  KEY `fk_delivery_info_delivery1_idx` (`delivery_id`),
-  KEY `fk_delivery_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+  `description` text
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_delivery_info`
@@ -738,14 +668,10 @@ INSERT INTO `e_delivery_info` (`id`, `delivery_id`, `languages_id`, `name`, `des
 --
 
 CREATE TABLE IF NOT EXISTS `e_delivery_payment` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `delivery_id` tinyint(3) unsigned NOT NULL,
-  `payment_id` tinyint(3) unsigned NOT NULL,
-  PRIMARY KEY (`id`,`delivery_id`,`payment_id`),
-  UNIQUE KEY `delivery_id` (`delivery_id`,`payment_id`),
-  KEY `fk_delivery_payment_delivery1_idx` (`delivery_id`),
-  KEY `fk_delivery_payment_payment1_idx` (`payment_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=19 ;
+  `payment_id` tinyint(3) unsigned NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_delivery_payment`
@@ -765,7 +691,7 @@ INSERT INTO `e_delivery_payment` (`id`, `delivery_id`, `payment_id`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `e_features` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `parent_id` int(10) unsigned DEFAULT NULL,
   `type` enum('text','textarea','select','file','folder','value','checkbox','number') DEFAULT NULL,
   `code` varchar(45) NOT NULL,
@@ -774,11 +700,8 @@ CREATE TABLE IF NOT EXISTS `e_features` (
   `required` tinyint(1) NOT NULL DEFAULT '0',
   `owner_id` int(11) unsigned NOT NULL,
   `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `status` enum('blank','published','hidden') DEFAULT 'blank',
-  PRIMARY KEY (`id`,`owner_id`),
-  UNIQUE KEY `code_UNIQUE` (`code`),
-  KEY `fk_features_users1_idx` (`owner_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=107 ;
+  `status` enum('blank','published','hidden') DEFAULT 'blank'
+) ENGINE=InnoDB AUTO_INCREMENT=108 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_features`
@@ -788,7 +711,6 @@ INSERT INTO `e_features` (`id`, `parent_id`, `type`, `code`, `multiple`, `on_fil
 (84, 0, 'select', 'color', 0, 0, 0, 2, '2016-04-06 13:57:06', 'published'),
 (85, 0, 'select', 'display', 0, 0, 0, 2, '2016-04-06 13:57:29', 'published'),
 (86, 84, 'value', 'aba9acdf9cba0badd40268e929646147', NULL, NULL, 0, 2, '2016-04-06 13:57:42', 'published'),
-(87, 84, 'value', 'ec49c725116679307ee05b409cc02d90', NULL, NULL, 0, 2, '2016-04-06 13:57:52', 'published'),
 (88, 84, 'value', '6d6e0b0e6f01aa5a9140f8994df32b0c', NULL, NULL, 0, 2, '2016-04-06 13:57:56', 'published'),
 (89, 85, 'value', 'db91b14683e24e9a405a0403dcbbd891', NULL, NULL, 0, 2, '2016-04-06 13:58:01', 'published'),
 (90, 85, 'value', 'e651937988b34eb1539007f50ab7957d', NULL, NULL, 0, 2, '2016-04-06 13:58:04', 'published'),
@@ -806,7 +728,8 @@ INSERT INTO `e_features` (`id`, `parent_id`, `type`, `code`, `multiple`, `on_fil
 (103, 0, 'select', 'kolir', 0, 0, 1, 2, '2016-04-19 09:33:25', 'published'),
 (104, 103, 'value', '42c654a782adae0219f46d13ffe111b6', NULL, NULL, 0, 2, '2016-04-19 09:33:31', 'published'),
 (105, 103, 'value', '93cd32447aa3e8a20a2cf4f09c06a532', NULL, NULL, 0, 2, '2016-04-19 09:33:37', 'published'),
-(106, 0, 'textarea', 'data', 0, 0, 1, 2, '2016-04-19 14:38:25', 'published');
+(106, 0, 'textarea', 'data', 0, 0, 1, 2, '2016-04-19 14:38:25', 'published'),
+(107, 0, NULL, 'feature_1466097020', NULL, NULL, 0, 2, '2016-06-16 17:10:20', 'blank');
 
 -- --------------------------------------------------------
 
@@ -815,16 +738,13 @@ INSERT INTO `e_features` (`id`, `parent_id`, `type`, `code`, `multiple`, `on_fil
 --
 
 CREATE TABLE IF NOT EXISTS `e_features_content` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `features_id` int(10) unsigned NOT NULL,
   `content_types_id` tinyint(3) unsigned NOT NULL,
   `content_subtypes_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `content_id` int(10) unsigned NOT NULL DEFAULT '0',
-  `position` tinyint(3) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`,`features_id`,`content_types_id`,`content_subtypes_id`,`content_id`),
-  UNIQUE KEY `features_id` (`features_id`,`content_types_id`,`content_subtypes_id`,`content_id`),
-  KEY `fk_content_features_idx` (`features_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=54 ;
+  `position` tinyint(3) unsigned DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_features_content`
@@ -841,7 +761,8 @@ INSERT INTO `e_features_content` (`id`, `features_id`, `content_types_id`, `cont
 (50, 106, 1, 1, 0, NULL),
 (51, 85, 12, 0, 0, 1),
 (52, 98, 12, 0, 0, 2),
-(53, 103, 12, 0, 0, 3);
+(53, 103, 12, 0, 0, 3),
+(54, 84, 1, 4, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -850,24 +771,20 @@ INSERT INTO `e_features_content` (`id`, `features_id`, `content_types_id`, `cont
 --
 
 CREATE TABLE IF NOT EXISTS `e_features_info` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `features_id` int(10) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`,`features_id`,`languages_id`),
-  KEY `fk_features_info_features1_idx` (`features_id`),
-  KEY `fk_features_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=102 ;
+  `name` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_features_info`
 --
 
 INSERT INTO `e_features_info` (`id`, `features_id`, `languages_id`, `name`) VALUES
-(79, 84, 1, 'Color'),
+(79, 84, 1, 'Color1'),
 (80, 85, 1, 'Display'),
 (81, 86, 1, 'black'),
-(82, 87, 1, 'red'),
 (83, 88, 1, 'white'),
 (84, 89, 1, '14'),
 (85, 90, 1, '15'),
@@ -894,14 +811,11 @@ INSERT INTO `e_features_info` (`id`, `features_id`, `languages_id`, `name`) VALU
 --
 
 CREATE TABLE IF NOT EXISTS `e_guides` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL,
   `parent_id` int(11) unsigned NOT NULL,
   `position` tinyint(3) unsigned NOT NULL,
-  `code` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `parent_id` (`parent_id`),
-  KEY `position` (`position`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+  `code` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_guides`
@@ -922,15 +836,11 @@ INSERT INTO `e_guides` (`id`, `parent_id`, `position`, `code`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `e_guides_info` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL,
   `guides_id` int(11) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
-  `name` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`,`guides_id`,`languages_id`),
-  UNIQUE KEY `guides_id` (`guides_id`,`languages_id`),
-  KEY `fk_guides_info_languages2_idx` (`languages_id`),
-  KEY `fk_guides_info_guides2_idx` (`guides_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+  `name` varchar(255) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_guides_info`
@@ -951,14 +861,11 @@ INSERT INTO `e_guides_info` (`id`, `guides_id`, `languages_id`, `name`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `e_languages` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `id` tinyint(3) unsigned NOT NULL,
   `code` char(2) NOT NULL,
   `name` varchar(30) NOT NULL,
-  `is_main` tinyint(1) unsigned DEFAULT '0',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`),
-  KEY `is_main` (`is_main`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+  `is_main` tinyint(1) unsigned DEFAULT '0'
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_languages`
@@ -974,12 +881,10 @@ INSERT INTO `e_languages` (`id`, `code`, `name`, `is_main`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `e_mail_templates` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `id` tinyint(3) unsigned NOT NULL,
   `code` varchar(30) NOT NULL,
-  `name` varchar(60) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `code_UNIQUE` (`code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+  `name` varchar(60) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_mail_templates`
@@ -1000,15 +905,12 @@ INSERT INTO `e_mail_templates` (`id`, `code`, `name`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `e_mail_templates_info` (
-  `id` smallint(6) unsigned NOT NULL AUTO_INCREMENT,
+  `id` smallint(6) unsigned NOT NULL,
   `templates_id` tinyint(3) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
   `subject` varchar(255) NOT NULL,
-  `body` text NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_mail_templates_info_idx` (`templates_id`),
-  KEY `fk_mail_templates_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+  `body` text NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_mail_templates_info`
@@ -1029,16 +931,14 @@ INSERT INTO `e_mail_templates_info` (`id`, `templates_id`, `languages_id`, `subj
 --
 
 CREATE TABLE IF NOT EXISTS `e_modules` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `id` tinyint(3) unsigned NOT NULL,
   `icon` varchar(30) DEFAULT NULL,
   `author` varchar(60) DEFAULT NULL,
   `version` varchar(10) DEFAULT NULL,
   `controller` varchar(150) DEFAULT NULL,
   `settings` text,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `controller` (`controller`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_modules`
@@ -1057,19 +957,18 @@ INSERT INTO `e_modules` (`id`, `icon`, `author`, `version`, `controller`, `setti
 --
 
 CREATE TABLE IF NOT EXISTS `e_nav` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `id` tinyint(3) unsigned NOT NULL,
   `name` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `code` varchar(30) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+  `code` varchar(30) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_nav`
 --
 
 INSERT INTO `e_nav` (`id`, `name`, `code`) VALUES
-(1, 'top', 'top');
+(1, 'top', 'top'),
+(2, 'aaa', 'qqqqqq');
 
 -- --------------------------------------------------------
 
@@ -1078,25 +977,24 @@ INSERT INTO `e_nav` (`id`, `name`, `code`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `e_nav_items` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `nav_id` tinyint(3) unsigned NOT NULL,
   `content_id` int(11) unsigned NOT NULL,
-  `position` tinyint(3) unsigned NOT NULL,
-  PRIMARY KEY (`id`,`nav_id`,`content_id`),
-  UNIQUE KEY `nav_id` (`nav_id`,`content_id`),
-  KEY `fk_nav_items_nav1_idx` (`nav_id`),
-  KEY `fk_nav_items_content1_idx` (`content_id`),
-  KEY `position` (`position`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+  `position` tinyint(3) unsigned NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_nav_items`
 --
 
 INSERT INTO `e_nav_items` (`id`, `nav_id`, `content_id`, `position`) VALUES
-(1, 1, 2, 1),
-(2, 1, 3, 2),
+(8, 2, 30, 0),
+(9, 2, 29, 0),
+(10, 2, 28, 0),
+(12, 2, 31, 0),
+(1, 1, 2, 2),
 (3, 1, 4, 2),
+(2, 1, 3, 3),
 (6, 1, 8, 5);
 
 -- --------------------------------------------------------
@@ -1106,17 +1004,13 @@ INSERT INTO `e_nav_items` (`id`, `nav_id`, `content_id`, `position`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `e_orders_status` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `bg_color` char(7) DEFAULT NULL,
   `txt_color` varchar(7) DEFAULT NULL,
   `on_site` tinyint(1) unsigned DEFAULT NULL,
   `external_id` varchar(64) DEFAULT NULL,
-  `is_main` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `external_id_2` (`external_id`),
-  KEY `on_site` (`on_site`),
-  KEY `external_id` (`external_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+  `is_main` tinyint(1) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_orders_status`
@@ -1132,14 +1026,11 @@ INSERT INTO `e_orders_status` (`id`, `bg_color`, `txt_color`, `on_site`, `extern
 --
 
 CREATE TABLE IF NOT EXISTS `e_orders_status_info` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `status_id` int(10) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
-  `status` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id`,`status_id`,`languages_id`),
-  KEY `fk_orders_status_info_languages1_idx` (`languages_id`),
-  KEY `fk_orders_status_info_orders_status1_idx` (`status_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+  `status` varchar(45) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_orders_status_info`
@@ -1155,14 +1046,12 @@ INSERT INTO `e_orders_status_info` (`id`, `status_id`, `languages_id`, `status`)
 --
 
 CREATE TABLE IF NOT EXISTS `e_payment` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `id` tinyint(3) unsigned NOT NULL,
   `published` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `module` varchar(60) NOT NULL,
   `settings` text,
-  `position` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  KEY `module` (`module`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+  `position` tinyint(3) unsigned NOT NULL DEFAULT '0'
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_payment`
@@ -1182,15 +1071,12 @@ INSERT INTO `e_payment` (`id`, `published`, `module`, `settings`, `position`) VA
 --
 
 CREATE TABLE IF NOT EXISTS `e_payment_info` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `id` tinyint(3) unsigned NOT NULL,
   `payment_id` tinyint(3) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
   `name` varchar(60) DEFAULT NULL,
-  `description` text,
-  PRIMARY KEY (`id`,`payment_id`,`languages_id`),
-  KEY `fk_payment_info_payment1_idx` (`payment_id`),
-  KEY `fk_payment_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+  `description` text
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_payment_info`
@@ -1210,7 +1096,7 @@ INSERT INTO `e_payment_info` (`id`, `payment_id`, `languages_id`, `name`, `descr
 --
 
 CREATE TABLE IF NOT EXISTS `e_plugins` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `id` tinyint(3) unsigned NOT NULL,
   `icon` varchar(30) DEFAULT NULL,
   `author` varchar(60) DEFAULT NULL,
   `version` varchar(10) DEFAULT NULL,
@@ -1219,11 +1105,8 @@ CREATE TABLE IF NOT EXISTS `e_plugins` (
   `published` tinyint(1) NOT NULL DEFAULT '0',
   `rang` int(4) unsigned DEFAULT NULL,
   `settings` text,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `published` (`published`),
-  KEY `module` (`controller`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=37 ;
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_plugins`
@@ -1254,15 +1137,11 @@ INSERT INTO `e_plugins` (`id`, `icon`, `author`, `version`, `controller`, `place
 --
 
 CREATE TABLE IF NOT EXISTS `e_plugins_components` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `plugins_id` tinyint(3) unsigned NOT NULL,
   `components_id` tinyint(3) unsigned NOT NULL,
-  `position` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`,`plugins_id`,`components_id`),
-  KEY `fk_plugins_components_plugins1_idx` (`plugins_id`),
-  KEY `fk_plugins_components_components1_idx` (`components_id`),
-  KEY `position` (`position`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=28 ;
+  `position` tinyint(3) unsigned NOT NULL DEFAULT '0'
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
 
 --
 -- Дамп данных таблицы `e_plugins_components`
@@ -1285,7 +1164,7 @@ INSERT INTO `e_plugins_components` (`id`, `plugins_id`, `components_id`, `positi
 (23, 33, 72, 0),
 (24, 34, 72, 0),
 (25, 35, 76, 0),
-(27, 36, 88, 0);
+(27, 36, 2, 0);
 
 -- --------------------------------------------------------
 
@@ -1294,14 +1173,11 @@ INSERT INTO `e_plugins_components` (`id`, `plugins_id`, `components_id`, `positi
 --
 
 CREATE TABLE IF NOT EXISTS `e_products_accessories` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL,
   `products_id` int(10) unsigned NOT NULL,
   `accessories_id` int(10) unsigned NOT NULL,
-  `position` tinyint(3) DEFAULT NULL,
-  PRIMARY KEY (`id`,`products_id`,`accessories_id`),
-  KEY `fk_products_accessories_content1_idx` (`products_id`),
-  KEY `fk_products_accessories_content2_idx` (`accessories_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18 ;
+  `position` tinyint(3) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_products_accessories`
@@ -1319,16 +1195,12 @@ INSERT INTO `e_products_accessories` (`id`, `products_id`, `accessories_id`, `po
 --
 
 CREATE TABLE IF NOT EXISTS `e_products_prices` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `content_id` int(10) unsigned NOT NULL,
   `group_id` tinyint(3) unsigned NOT NULL,
   `price` decimal(10,2) DEFAULT NULL,
-  `price_old` decimal(10,2) DEFAULT NULL,
-  PRIMARY KEY (`id`,`content_id`,`group_id`),
-  UNIQUE KEY `content_id` (`content_id`,`group_id`),
-  KEY `fk_products_prices_content1_idx` (`content_id`),
-  KEY `fk_products_prices_users_group1_idx` (`group_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=20 ;
+  `price_old` decimal(10,2) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_products_prices`
@@ -1349,13 +1221,10 @@ INSERT INTO `e_products_prices` (`id`, `content_id`, `group_id`, `price`, `price
 --
 
 CREATE TABLE IF NOT EXISTS `e_products_similar` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `products_id` int(10) unsigned NOT NULL,
-  `features_id` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`,`products_id`,`features_id`),
-  KEY `fk_products_similar_content1_idx` (`products_id`),
-  KEY `fk_products_similar_features1_idx` (`features_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+  `features_id` int(10) unsigned NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_products_similar`
@@ -1371,13 +1240,11 @@ INSERT INTO `e_products_similar` (`id`, `products_id`, `features_id`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `e_products_variants` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `content_id` int(10) unsigned NOT NULL,
   `in_stock` tinyint(1) DEFAULT '1',
-  `img` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`,`content_id`),
-  KEY `fk_products_variants_content1_idx` (`content_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=29 ;
+  `img` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_products_variants`
@@ -1396,16 +1263,11 @@ INSERT INTO `e_products_variants` (`id`, `content_id`, `in_stock`, `img`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `e_products_variants_features` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `variants_id` int(10) unsigned NOT NULL,
   `features_id` int(10) unsigned NOT NULL,
-  `values_id` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`,`variants_id`,`features_id`,`values_id`),
-  UNIQUE KEY `variants_id` (`variants_id`,`features_id`,`values_id`),
-  KEY `fk_products_variants_features_features1_idx` (`features_id`),
-  KEY `fk_products_variants_features_products_variants1_idx` (`variants_id`),
-  KEY `fk_products_variants_features_features2_idx` (`values_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=34 ;
+  `values_id` int(10) unsigned NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_products_variants_features`
@@ -1413,7 +1275,6 @@ CREATE TABLE IF NOT EXISTS `e_products_variants_features` (
 
 INSERT INTO `e_products_variants_features` (`id`, `variants_id`, `features_id`, `values_id`) VALUES
 (32, 27, 84, 86),
-(33, 28, 84, 87),
 (27, 22, 103, 104),
 (28, 23, 103, 105);
 
@@ -1424,16 +1285,12 @@ INSERT INTO `e_products_variants_features` (`id`, `variants_id`, `features_id`, 
 --
 
 CREATE TABLE IF NOT EXISTS `e_products_variants_prices` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `variants_id` int(10) unsigned NOT NULL,
   `content_id` int(10) unsigned NOT NULL,
   `group_id` tinyint(3) unsigned NOT NULL,
-  `price` decimal(10,0) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`,`variants_id`,`content_id`,`group_id`),
-  UNIQUE KEY `variants_id` (`variants_id`,`content_id`,`group_id`),
-  KEY `fk_products_variants_prices_products_variants1_idx` (`variants_id`,`content_id`),
-  KEY `fk_products_variants_prices_users_group1_idx` (`group_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=41 ;
+  `price` decimal(10,0) unsigned DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_products_variants_prices`
@@ -1452,15 +1309,13 @@ INSERT INTO `e_products_variants_prices` (`id`, `variants_id`, `content_id`, `gr
 --
 
 CREATE TABLE IF NOT EXISTS `e_settings` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `name` varchar(45) NOT NULL,
   `value` text NOT NULL,
   `block` enum('company','common','images','themes','editor','content','seo','analitycs','robots','mail') NOT NULL,
   `type` enum('text','textarea') NOT NULL,
-  `required` tinyint(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `sname` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=51 ;
+  `required` tinyint(1) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_settings`
@@ -1517,10 +1372,9 @@ INSERT INTO `e_settings` (`id`, `name`, `value`, `block`, `type`, `required`) VA
 --
 
 CREATE TABLE IF NOT EXISTS `e_tags` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `tag` varchar(60) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=25 ;
+  `id` int(10) unsigned NOT NULL,
+  `tag` varchar(60) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_tags`
@@ -1543,7 +1397,7 @@ INSERT INTO `e_tags` (`id`, `tag`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `e_users` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL,
   `group_id` tinyint(3) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
   `sessid` char(35) DEFAULT NULL,
@@ -1557,20 +1411,15 @@ CREATE TABLE IF NOT EXISTS `e_users` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated` datetime NOT NULL,
   `lastlogin` timestamp NULL DEFAULT NULL,
-  `status` enum('active','ban','deleted') NOT NULL DEFAULT 'active',
-  PRIMARY KEY (`id`,`group_id`,`languages_id`),
-  UNIQUE KEY `phone` (`phone`,`email`),
-  KEY `fk_users_group1_idx` (`group_id`),
-  KEY `status` (`status`),
-  KEY `skey` (`skey`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18 ;
+  `status` enum('active','ban','deleted') NOT NULL DEFAULT 'active'
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_users`
 --
 
 INSERT INTO `e_users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `updated`, `lastlogin`, `status`) VALUES
-(2, 1, 0, '59d0i686bbn2d4vmqpohhlkuf4', 'Володимир', 'Годяк', '+38 (067) 6736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-04-21 11:24:28', '2016-06-10 07:50:39', 'active'),
+(2, 1, 0, 'l716m34731obo7arvc4m7mf127', 'Володимир', 'Годяк', '+38 (067) 6736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-04-21 11:24:28', '2016-06-16 15:58:46', 'active'),
 (3, 5, 0, 'cqib3aongupefr8grbuudirmm2', 'Жорік', 'Ревазов', '+35 (555) 5555555', 'z@otakoyi.com', 'MToUTd7.hmK2o', NULL, NULL, '2016-03-28 09:01:38', '2016-04-20 12:24:56', '2016-04-11 07:35:30', 'active'),
 (17, 2, 0, 'fe42ukkmhp1tl2h5b902qlgfm2', 'Редаткор', 'перший', '+11 (111) 1111111', 'r@otakoyi.com', 'MT9AvrkvHvhx.', NULL, NULL, '2016-04-25 10:10:59', '0000-00-00 00:00:00', '2016-04-26 08:34:30', 'ban');
 
@@ -1581,18 +1430,13 @@ INSERT INTO `e_users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surn
 --
 
 CREATE TABLE IF NOT EXISTS `e_users_group` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `id` tinyint(3) unsigned NOT NULL,
   `parent_id` tinyint(3) unsigned NOT NULL,
   `isfolder` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `backend` tinyint(1) unsigned DEFAULT NULL,
   `permissions` text,
-  `position` tinyint(3) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `pid` (`parent_id`),
-  KEY `sort` (`position`),
-  KEY `isfolder` (`isfolder`),
-  KEY `backend` (`backend`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
+  `position` tinyint(3) unsigned NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_users_group`
@@ -1612,15 +1456,11 @@ INSERT INTO `e_users_group` (`id`, `parent_id`, `isfolder`, `backend`, `permissi
 --
 
 CREATE TABLE IF NOT EXISTS `e_users_group_info` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL,
   `group_id` tinyint(3) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
-  `name` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `group_id` (`group_id`,`languages_id`),
-  KEY `fk_users_group_info_users_group1_idx` (`group_id`),
-  KEY `fk_users_group_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=27 ;
+  `name` varchar(100) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_users_group_info`
@@ -1633,6 +1473,658 @@ INSERT INTO `e_users_group_info` (`id`, `group_id`, `languages_id`, `name`) VALU
 (19, 5, 1, 'Роздріб'),
 (26, 12, 1, 'Дрібний гурт');
 
+--
+-- Индексы сохранённых таблиц
+--
+
+--
+-- Индексы таблицы `e_banners`
+--
+ALTER TABLE `e_banners`
+  ADD PRIMARY KEY (`id`,`banners_places_id`,`languages_id`),
+  ADD UNIQUE KEY `skey_UNIQUE` (`skey`),
+  ADD KEY `fk_banners_banners_places1_idx` (`banners_places_id`),
+  ADD KEY `fk_banners_languages1_idx` (`languages_id`);
+
+--
+-- Индексы таблицы `e_banners_places`
+--
+ALTER TABLE `e_banners_places`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `code_UNIQUE` (`code`);
+
+--
+-- Индексы таблицы `e_banners_stat`
+--
+ALTER TABLE `e_banners_stat`
+  ADD PRIMARY KEY (`id`,`banners_id`),
+  ADD KEY `fk_banners_stat_banners1_idx` (`banners_id`);
+
+--
+-- Индексы таблицы `e_callbacks`
+--
+ALTER TABLE `e_callbacks`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `e_comments`
+--
+ALTER TABLE `e_comments`
+  ADD PRIMARY KEY (`id`,`content_id`),
+  ADD KEY `fk_comments_content1_idx` (`content_id`),
+  ADD KEY `approved` (`status`),
+  ADD KEY `users_id` (`users_id`),
+  ADD KEY `token` (`skey`),
+  ADD KEY `isfolder` (`isfolder`);
+
+--
+-- Индексы таблицы `e_comments_subscribers`
+--
+ALTER TABLE `e_comments_subscribers`
+  ADD PRIMARY KEY (`id`,`content_id`,`users_id`),
+  ADD UNIQUE KEY `content_id` (`content_id`,`users_id`),
+  ADD KEY `fk_comments_subscribe_content1_idx` (`content_id`),
+  ADD KEY `fk_comments_subscribe_users1_idx` (`users_id`);
+
+--
+-- Индексы таблицы `e_components`
+--
+ALTER TABLE `e_components`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `parent_id` (`parent_id`),
+  ADD KEY `isfolder` (`isfolder`),
+  ADD KEY `position` (`position`),
+  ADD KEY `published` (`published`),
+  ADD KEY `module` (`controller`);
+
+--
+-- Индексы таблицы `e_content`
+--
+ALTER TABLE `e_content`
+  ADD PRIMARY KEY (`id`,`types_id`,`subtypes_id`,`owner_id`),
+  ADD KEY `fk_content_content_types1_idx` (`types_id`),
+  ADD KEY `fk_content_content_subtypes1_idx` (`subtypes_id`),
+  ADD KEY `fk_content_owner_idx` (`owner_id`),
+  ADD KEY `status` (`status`),
+  ADD KEY `published` (`published`),
+  ADD KEY `code` (`code`);
+
+--
+-- Индексы таблицы `e_content_features`
+--
+ALTER TABLE `e_content_features`
+  ADD PRIMARY KEY (`id`,`content_id`,`features_id`),
+  ADD UNIQUE KEY `content_id` (`content_id`,`features_id`,`values_id`,`languages_id`),
+  ADD KEY `fk_content_features_values_content1_idx` (`content_id`),
+  ADD KEY `fk_content_features_values_features1_idx` (`features_id`);
+
+--
+-- Индексы таблицы `e_content_images`
+--
+ALTER TABLE `e_content_images`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_content_images_content1_idx` (`content_id`),
+  ADD KEY `position` (`position`);
+
+--
+-- Индексы таблицы `e_content_images_sizes`
+--
+ALTER TABLE `e_content_images_sizes`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `size` (`size`);
+
+--
+-- Индексы таблицы `e_content_info`
+--
+ALTER TABLE `e_content_info`
+  ADD PRIMARY KEY (`id`,`content_id`,`languages_id`),
+  ADD UNIQUE KEY `languages_id` (`languages_id`,`url`),
+  ADD KEY `fk_content_info_content1_idx` (`content_id`),
+  ADD KEY `fk_content_info_languages1_idx` (`languages_id`);
+
+--
+-- Индексы таблицы `e_content_relationship`
+--
+ALTER TABLE `e_content_relationship`
+  ADD PRIMARY KEY (`id`,`content_id`,`categories_id`),
+  ADD UNIQUE KEY `content_id` (`content_id`,`categories_id`),
+  ADD KEY `fk_content_relationship_content1_idx` (`content_id`),
+  ADD KEY `fk_content_relationship_content2_idx` (`categories_id`),
+  ADD KEY `is_main` (`is_main`);
+
+--
+-- Индексы таблицы `e_content_tags`
+--
+ALTER TABLE `e_content_tags`
+  ADD PRIMARY KEY (`id`,`content_id`,`tags_id`,`languages_id`),
+  ADD UNIQUE KEY `content_id` (`content_id`,`tags_id`),
+  ADD KEY `fk_tags_content_content1_idx` (`content_id`),
+  ADD KEY `fk_tags_content_tags1_idx` (`tags_id`),
+  ADD KEY `fk_content_tags_languages1_idx` (`languages_id`);
+
+--
+-- Индексы таблицы `e_content_types`
+--
+ALTER TABLE `e_content_types`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `parent_id` (`parent_id`,`type`),
+  ADD UNIQUE KEY `parent_id_2` (`parent_id`,`is_main`),
+  ADD KEY `is_main` (`is_main`);
+
+--
+-- Индексы таблицы `e_content_types_images_sizes`
+--
+ALTER TABLE `e_content_types_images_sizes`
+  ADD PRIMARY KEY (`id`,`types_id`,`images_sizes_id`),
+  ADD KEY `fk_content_types_images_sizes1_idx` (`types_id`),
+  ADD KEY `fk_content_types_images_sizes2_idx` (`images_sizes_id`);
+
+--
+-- Индексы таблицы `e_currency`
+--
+ALTER TABLE `e_currency`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `name` (`name`),
+  ADD UNIQUE KEY `code` (`code`),
+  ADD KEY `is_main` (`is_main`);
+
+--
+-- Индексы таблицы `e_delivery`
+--
+ALTER TABLE `e_delivery`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `e_delivery_info`
+--
+ALTER TABLE `e_delivery_info`
+  ADD PRIMARY KEY (`id`,`delivery_id`,`languages_id`),
+  ADD KEY `fk_delivery_info_delivery1_idx` (`delivery_id`),
+  ADD KEY `fk_delivery_info_languages1_idx` (`languages_id`);
+
+--
+-- Индексы таблицы `e_delivery_payment`
+--
+ALTER TABLE `e_delivery_payment`
+  ADD PRIMARY KEY (`id`,`delivery_id`,`payment_id`),
+  ADD UNIQUE KEY `delivery_id` (`delivery_id`,`payment_id`),
+  ADD KEY `fk_delivery_payment_delivery1_idx` (`delivery_id`),
+  ADD KEY `fk_delivery_payment_payment1_idx` (`payment_id`);
+
+--
+-- Индексы таблицы `e_features`
+--
+ALTER TABLE `e_features`
+  ADD PRIMARY KEY (`id`,`owner_id`),
+  ADD UNIQUE KEY `code_UNIQUE` (`code`),
+  ADD KEY `fk_features_users1_idx` (`owner_id`);
+
+--
+-- Индексы таблицы `e_features_content`
+--
+ALTER TABLE `e_features_content`
+  ADD PRIMARY KEY (`id`,`features_id`,`content_types_id`,`content_subtypes_id`,`content_id`),
+  ADD UNIQUE KEY `features_id` (`features_id`,`content_types_id`,`content_subtypes_id`,`content_id`),
+  ADD KEY `fk_content_features_idx` (`features_id`);
+
+--
+-- Индексы таблицы `e_features_info`
+--
+ALTER TABLE `e_features_info`
+  ADD PRIMARY KEY (`id`,`features_id`,`languages_id`),
+  ADD KEY `fk_features_info_features1_idx` (`features_id`),
+  ADD KEY `fk_features_info_languages1_idx` (`languages_id`);
+
+--
+-- Индексы таблицы `e_guides`
+--
+ALTER TABLE `e_guides`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `parent_id` (`parent_id`),
+  ADD KEY `position` (`position`);
+
+--
+-- Индексы таблицы `e_guides_info`
+--
+ALTER TABLE `e_guides_info`
+  ADD PRIMARY KEY (`id`,`guides_id`,`languages_id`),
+  ADD UNIQUE KEY `guides_id` (`guides_id`,`languages_id`),
+  ADD KEY `fk_guides_info_languages2_idx` (`languages_id`),
+  ADD KEY `fk_guides_info_guides2_idx` (`guides_id`);
+
+--
+-- Индексы таблицы `e_languages`
+--
+ALTER TABLE `e_languages`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `code` (`code`),
+  ADD KEY `is_main` (`is_main`);
+
+--
+-- Индексы таблицы `e_mail_templates`
+--
+ALTER TABLE `e_mail_templates`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `code_UNIQUE` (`code`);
+
+--
+-- Индексы таблицы `e_mail_templates_info`
+--
+ALTER TABLE `e_mail_templates_info`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_mail_templates_info_idx` (`templates_id`),
+  ADD KEY `fk_mail_templates_info_languages1_idx` (`languages_id`);
+
+--
+-- Индексы таблицы `e_modules`
+--
+ALTER TABLE `e_modules`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `controller` (`controller`);
+
+--
+-- Индексы таблицы `e_nav`
+--
+ALTER TABLE `e_nav`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `code` (`code`);
+
+--
+-- Индексы таблицы `e_nav_items`
+--
+ALTER TABLE `e_nav_items`
+  ADD PRIMARY KEY (`id`,`nav_id`,`content_id`),
+  ADD UNIQUE KEY `nav_id` (`nav_id`,`content_id`),
+  ADD KEY `fk_nav_items_nav1_idx` (`nav_id`),
+  ADD KEY `fk_nav_items_content1_idx` (`content_id`),
+  ADD KEY `position` (`position`);
+
+--
+-- Индексы таблицы `e_orders_status`
+--
+ALTER TABLE `e_orders_status`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `external_id_2` (`external_id`),
+  ADD KEY `on_site` (`on_site`),
+  ADD KEY `external_id` (`external_id`);
+
+--
+-- Индексы таблицы `e_orders_status_info`
+--
+ALTER TABLE `e_orders_status_info`
+  ADD PRIMARY KEY (`id`,`status_id`,`languages_id`),
+  ADD KEY `fk_orders_status_info_languages1_idx` (`languages_id`),
+  ADD KEY `fk_orders_status_info_orders_status1_idx` (`status_id`);
+
+--
+-- Индексы таблицы `e_payment`
+--
+ALTER TABLE `e_payment`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `module` (`module`);
+
+--
+-- Индексы таблицы `e_payment_info`
+--
+ALTER TABLE `e_payment_info`
+  ADD PRIMARY KEY (`id`,`payment_id`,`languages_id`),
+  ADD KEY `fk_payment_info_payment1_idx` (`payment_id`),
+  ADD KEY `fk_payment_info_languages1_idx` (`languages_id`);
+
+--
+-- Индексы таблицы `e_plugins`
+--
+ALTER TABLE `e_plugins`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `published` (`published`),
+  ADD KEY `module` (`controller`);
+
+--
+-- Индексы таблицы `e_plugins_components`
+--
+ALTER TABLE `e_plugins_components`
+  ADD PRIMARY KEY (`id`,`plugins_id`,`components_id`),
+  ADD KEY `fk_plugins_components_plugins1_idx` (`plugins_id`),
+  ADD KEY `fk_plugins_components_components1_idx` (`components_id`),
+  ADD KEY `position` (`position`);
+
+--
+-- Индексы таблицы `e_products_accessories`
+--
+ALTER TABLE `e_products_accessories`
+  ADD PRIMARY KEY (`id`,`products_id`,`accessories_id`),
+  ADD KEY `fk_products_accessories_content1_idx` (`products_id`),
+  ADD KEY `fk_products_accessories_content2_idx` (`accessories_id`);
+
+--
+-- Индексы таблицы `e_products_prices`
+--
+ALTER TABLE `e_products_prices`
+  ADD PRIMARY KEY (`id`,`content_id`,`group_id`),
+  ADD UNIQUE KEY `content_id` (`content_id`,`group_id`),
+  ADD KEY `fk_products_prices_content1_idx` (`content_id`),
+  ADD KEY `fk_products_prices_users_group1_idx` (`group_id`);
+
+--
+-- Индексы таблицы `e_products_similar`
+--
+ALTER TABLE `e_products_similar`
+  ADD PRIMARY KEY (`id`,`products_id`,`features_id`),
+  ADD KEY `fk_products_similar_content1_idx` (`products_id`),
+  ADD KEY `fk_products_similar_features1_idx` (`features_id`);
+
+--
+-- Индексы таблицы `e_products_variants`
+--
+ALTER TABLE `e_products_variants`
+  ADD PRIMARY KEY (`id`,`content_id`),
+  ADD KEY `fk_products_variants_content1_idx` (`content_id`);
+
+--
+-- Индексы таблицы `e_products_variants_features`
+--
+ALTER TABLE `e_products_variants_features`
+  ADD PRIMARY KEY (`id`,`variants_id`,`features_id`,`values_id`),
+  ADD UNIQUE KEY `variants_id` (`variants_id`,`features_id`,`values_id`),
+  ADD KEY `fk_products_variants_features_features1_idx` (`features_id`),
+  ADD KEY `fk_products_variants_features_products_variants1_idx` (`variants_id`),
+  ADD KEY `fk_products_variants_features_features2_idx` (`values_id`);
+
+--
+-- Индексы таблицы `e_products_variants_prices`
+--
+ALTER TABLE `e_products_variants_prices`
+  ADD PRIMARY KEY (`id`,`variants_id`,`content_id`,`group_id`),
+  ADD UNIQUE KEY `variants_id` (`variants_id`,`content_id`,`group_id`),
+  ADD KEY `fk_products_variants_prices_products_variants1_idx` (`variants_id`,`content_id`),
+  ADD KEY `fk_products_variants_prices_users_group1_idx` (`group_id`);
+
+--
+-- Индексы таблицы `e_settings`
+--
+ALTER TABLE `e_settings`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `sname` (`name`);
+
+--
+-- Индексы таблицы `e_tags`
+--
+ALTER TABLE `e_tags`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `e_users`
+--
+ALTER TABLE `e_users`
+  ADD PRIMARY KEY (`id`,`group_id`,`languages_id`),
+  ADD UNIQUE KEY `phone` (`phone`,`email`),
+  ADD KEY `fk_users_group1_idx` (`group_id`),
+  ADD KEY `status` (`status`),
+  ADD KEY `skey` (`skey`);
+
+--
+-- Индексы таблицы `e_users_group`
+--
+ALTER TABLE `e_users_group`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `pid` (`parent_id`),
+  ADD KEY `sort` (`position`),
+  ADD KEY `isfolder` (`isfolder`),
+  ADD KEY `backend` (`backend`);
+
+--
+-- Индексы таблицы `e_users_group_info`
+--
+ALTER TABLE `e_users_group_info`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `group_id` (`group_id`,`languages_id`),
+  ADD KEY `fk_users_group_info_users_group1_idx` (`group_id`),
+  ADD KEY `fk_users_group_info_languages1_idx` (`languages_id`);
+
+--
+-- AUTO_INCREMENT для сохранённых таблиц
+--
+
+--
+-- AUTO_INCREMENT для таблицы `e_banners`
+--
+ALTER TABLE `e_banners`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
+--
+-- AUTO_INCREMENT для таблицы `e_banners_places`
+--
+ALTER TABLE `e_banners_places`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT для таблицы `e_banners_stat`
+--
+ALTER TABLE `e_banners_stat`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблицы `e_callbacks`
+--
+ALTER TABLE `e_callbacks`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблицы `e_comments`
+--
+ALTER TABLE `e_comments`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=28;
+--
+-- AUTO_INCREMENT для таблицы `e_comments_subscribers`
+--
+ALTER TABLE `e_comments_subscribers`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT для таблицы `e_components`
+--
+ALTER TABLE `e_components`
+  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=89;
+--
+-- AUTO_INCREMENT для таблицы `e_content`
+--
+ALTER TABLE `e_content`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=144;
+--
+-- AUTO_INCREMENT для таблицы `e_content_features`
+--
+ALTER TABLE `e_content_features`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=33;
+--
+-- AUTO_INCREMENT для таблицы `e_content_images`
+--
+ALTER TABLE `e_content_images`
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=28;
+--
+-- AUTO_INCREMENT для таблицы `e_content_images_sizes`
+--
+ALTER TABLE `e_content_images_sizes`
+  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT для таблицы `e_content_info`
+--
+ALTER TABLE `e_content_info`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=56;
+--
+-- AUTO_INCREMENT для таблицы `e_content_relationship`
+--
+ALTER TABLE `e_content_relationship`
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=93;
+--
+-- AUTO_INCREMENT для таблицы `e_content_tags`
+--
+ALTER TABLE `e_content_tags`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=29;
+--
+-- AUTO_INCREMENT для таблицы `e_content_types`
+--
+ALTER TABLE `e_content_types`
+  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
+--
+-- AUTO_INCREMENT для таблицы `e_content_types_images_sizes`
+--
+ALTER TABLE `e_content_types_images_sizes`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=31;
+--
+-- AUTO_INCREMENT для таблицы `e_currency`
+--
+ALTER TABLE `e_currency`
+  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT для таблицы `e_delivery`
+--
+ALTER TABLE `e_delivery`
+  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT для таблицы `e_delivery_info`
+--
+ALTER TABLE `e_delivery_info`
+  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT для таблицы `e_delivery_payment`
+--
+ALTER TABLE `e_delivery_payment`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=19;
+--
+-- AUTO_INCREMENT для таблицы `e_features`
+--
+ALTER TABLE `e_features`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=108;
+--
+-- AUTO_INCREMENT для таблицы `e_features_content`
+--
+ALTER TABLE `e_features_content`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=55;
+--
+-- AUTO_INCREMENT для таблицы `e_features_info`
+--
+ALTER TABLE `e_features_info`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=102;
+--
+-- AUTO_INCREMENT для таблицы `e_guides`
+--
+ALTER TABLE `e_guides`
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT для таблицы `e_guides_info`
+--
+ALTER TABLE `e_guides_info`
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT для таблицы `e_languages`
+--
+ALTER TABLE `e_languages`
+  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT для таблицы `e_mail_templates`
+--
+ALTER TABLE `e_mail_templates`
+  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT для таблицы `e_mail_templates_info`
+--
+ALTER TABLE `e_mail_templates_info`
+  MODIFY `id` smallint(6) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT для таблицы `e_modules`
+--
+ALTER TABLE `e_modules`
+  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
+--
+-- AUTO_INCREMENT для таблицы `e_nav`
+--
+ALTER TABLE `e_nav`
+  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT для таблицы `e_nav_items`
+--
+ALTER TABLE `e_nav_items`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
+--
+-- AUTO_INCREMENT для таблицы `e_orders_status`
+--
+ALTER TABLE `e_orders_status`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+--
+-- AUTO_INCREMENT для таблицы `e_orders_status_info`
+--
+ALTER TABLE `e_orders_status_info`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+--
+-- AUTO_INCREMENT для таблицы `e_payment`
+--
+ALTER TABLE `e_payment`
+  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+--
+-- AUTO_INCREMENT для таблицы `e_payment_info`
+--
+ALTER TABLE `e_payment_info`
+  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+--
+-- AUTO_INCREMENT для таблицы `e_plugins`
+--
+ALTER TABLE `e_plugins`
+  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=37;
+--
+-- AUTO_INCREMENT для таблицы `e_plugins_components`
+--
+ALTER TABLE `e_plugins_components`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=28;
+--
+-- AUTO_INCREMENT для таблицы `e_products_accessories`
+--
+ALTER TABLE `e_products_accessories`
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
+--
+-- AUTO_INCREMENT для таблицы `e_products_prices`
+--
+ALTER TABLE `e_products_prices`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=20;
+--
+-- AUTO_INCREMENT для таблицы `e_products_similar`
+--
+ALTER TABLE `e_products_similar`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT для таблицы `e_products_variants`
+--
+ALTER TABLE `e_products_variants`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=29;
+--
+-- AUTO_INCREMENT для таблицы `e_products_variants_features`
+--
+ALTER TABLE `e_products_variants_features`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=34;
+--
+-- AUTO_INCREMENT для таблицы `e_products_variants_prices`
+--
+ALTER TABLE `e_products_variants_prices`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=41;
+--
+-- AUTO_INCREMENT для таблицы `e_settings`
+--
+ALTER TABLE `e_settings`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=51;
+--
+-- AUTO_INCREMENT для таблицы `e_tags`
+--
+ALTER TABLE `e_tags`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=25;
+--
+-- AUTO_INCREMENT для таблицы `e_users`
+--
+ALTER TABLE `e_users`
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
+--
+-- AUTO_INCREMENT для таблицы `e_users_group`
+--
+ALTER TABLE `e_users_group`
+  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
+--
+-- AUTO_INCREMENT для таблицы `e_users_group_info`
+--
+ALTER TABLE `e_users_group_info`
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=27;
 --
 -- Ограничения внешнего ключа сохраненных таблиц
 --
