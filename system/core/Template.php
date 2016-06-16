@@ -8,6 +8,7 @@
 namespace system\core;
 
 use system\core\exceptions\Exception;
+use system\models\Settings;
 
 defined("CPATH") or die();
 

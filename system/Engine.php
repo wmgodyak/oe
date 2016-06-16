@@ -14,10 +14,10 @@ use system\core\Lang;
 use system\core\Request;
 use system\core\Response;
 use system\core\Session;
-use system\core\Settings;
 use system\core\Template;
 use system\models\Languages;
 use system\models\Permissions;
+use system\models\Settings;
 
 if ( !defined("CPATH") ) die();
 
@@ -312,8 +312,8 @@ abstract class Engine extends Controller
     protected final function output($body)
     {
         $this->renderHeadingPanel();
-        return  $body;
-//        return $this->response->body($body); // todo ???
+//        return  $body;
+        return $this->response->body($body); // todo ???
     }
 
     /**
