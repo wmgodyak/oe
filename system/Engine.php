@@ -313,7 +313,7 @@ abstract class Engine extends Controller
     {
         $this->renderHeadingPanel();
 //        return  $body;
-        return $this->response->body($body); // todo ???
+      $this->response->body($body); // todo ???
     }
 
     /**
