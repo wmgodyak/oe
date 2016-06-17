@@ -140,6 +140,7 @@ class Admin extends Engine {
                 'i' => $inp,
                 'f' => $fail > 0
             ))->asJSON();
+            return;
         }
 
         // витягнути список доступних мовних версій

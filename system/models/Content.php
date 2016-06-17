@@ -8,6 +8,7 @@
 
 namespace system\models;
 
+use system\components\contentFeatures\models\ContentFeatures;
 use system\core\exceptions\Exception;
 
 if ( !defined("CPATH") ) die();
@@ -109,8 +110,8 @@ class Content extends Model
         $d['settings']['type'] = $this->getTypeSettings($d['types_id']);
 
         // todo тимчасово закоментував features
-//        $s = isset($d['settings']['type']['features']) ? $d['settings']['type']['features'] : null;
-//        $d['features'] = ContentFeatures::get($id, $s);
+        $s = isset($d['settings']['type']['features']) ? $d['settings']['type']['features'] : null;
+        $d['features'] = ContentFeatures::get($id, $s);
 
         return $d;
     }
