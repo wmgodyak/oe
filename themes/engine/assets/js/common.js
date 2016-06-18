@@ -741,11 +741,12 @@ engine.admins = {
                     $('#form').submit();
                 });
         });
+
         if($('#usersGroup').length){
 
             engine.admins.group.tree = new engine.tree('usersGroup');
             engine.admins.group.tree
-                .setUrl('./plugins/adminsGroup/tree')
+                .setUrl('admins/groups/tree')
                 .setContextMenu('create', t.admins_group.tree_create, 'fa-file', function(o){
                         var node_id= o.reference[0].id;
                         engine.admins.group.create(node_id);
@@ -765,7 +766,7 @@ engine.admins = {
                     // console.log(data);
 
                     engine.request.post({
-                        url : './plugins/adminsGroup/move',
+                        url : 'admins/groups/move',
                         data: {
                             id: data.node.id,
                             'old_parent' : data.old_parent,
@@ -777,8 +778,6 @@ engine.admins = {
                 })
                 .init();
         }
-
-        // table group functions and ordering
     },
     groupActions: {
         ban: function(selected)
@@ -961,7 +960,7 @@ engine.admins = {
         {
             engine.request.post(
                 {
-                    url: './plugins/adminsGroup/create/'+parent_id,
+                    url: 'admins/groups/create/'+parent_id,
                     data:{a:1},
                     success: function(d)
                     {
@@ -999,7 +998,7 @@ engine.admins = {
         edit: function(id)
         {
             engine.request.post({
-                url: './plugins/adminsGroup/edit/' + id,
+                url: 'admins/groups/edit/' + id,
                 data: {id: id, a: 1},
                 success: function(d)
                 {
@@ -1038,7 +1037,7 @@ engine.admins = {
                 {
                     engine.request.post(
                         {
-                            url:'./plugins/adminsGroup/delete/' + id,
+                            url:'admins/groups/delete/' + id,
                             data: {a: 1},
                             success: function(d){
                                 if(d > 0){

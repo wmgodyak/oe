@@ -1,4 +1,4 @@
-<form class="form-horizontal" action="admins/process/{$data.id}" enctype="multipart/form-data" method="post" id="form">
+<form class="form-horizontal" action="admins/process/{if isset($data.id)}{$data.id}{/if}" enctype="multipart/form-data" method="post" id="form">
     <div class="row">
         <div class="col-md-9">
             <fieldset>
@@ -6,25 +6,25 @@
                 <div class="form-group">
                     <label for="data_name" class="col-sm-3 control-label">{$t.admin_profile.name}</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control" name="data[name]" id="data_name" value="{$data.name}" required>
+                        <input type="text" class="form-control" name="data[name]" id="data_name" value="{if isset($data.name)}{$data.name}{/if}" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="data_surname" class="col-sm-3 control-label">{$t.admin_profile.surname}</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control" name="data[surname]" id="data_surname" value="{$data.surname}" required>
+                        <input type="text" class="form-control" name="data[surname]" id="data_surname" value="{if isset($data.surname)}{$data.surname}{/if}" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="data_email" class="col-sm-3 control-label">{$t.admin_profile.email}</label>
                     <div class="col-sm-9">
-                        <input type="email" class="form-control" name="data[email]" id="data_email" value="{$data.email}" required>
+                        <input type="email" class="form-control" name="data[email]" id="data_email" value="{if isset($data.email)}{$data.email}{/if}" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="data_phone" class="col-sm-3 control-label">{$t.admin_profile.phone}</label>
                     <div class="col-sm-9">
-                        <input type="tel" class="form-control" name="data[phone]" id="data_phone" value="{$data.phone}">
+                        <input type="tel" class="form-control" name="data[phone]" id="data_phone" value="{if isset($data.phone)}{$data.phone}{/if}">
                     </div>
                 </div>
                 <div class="form-group">
@@ -35,11 +35,11 @@
                                 {if $group.isfolder}
                                     <optgroup label="{$group.name}">
                                         {foreach $group.items as $item}
-                                            <option {if $data.group_id == $item.id}selected{/if} value="{$item.id}">{$item.name}</option>
+                                            <option {if isset($data.group_id) && $data.group_id == $item.id}selected{/if} value="{$item.id}">{$item.name}</option>
                                         {/foreach}
                                     </optgroup>
                                     {else}
-                                    <option {if $data.group_id == $group.id}selected{/if} value="{$group.id}">{$group.name}</option>
+                                    <option {if isset($data.group_id) && $data.group_id == $group.id}selected{/if} value="{$group.id}">{$group.name}</option>
                                 {/if}
                             {/foreach}
                         </select>
@@ -62,7 +62,7 @@
         </div>
         <div class="col-md-3">
             <fieldset style="height: 330px;">
-                <legend>{$t.admin.photo}</legend>
+                <legend>{$t.admin.avatar}</legend>
                 <div style="text-align: center; margin-bottom: 1em;"><img src="{$data.avatar}" alt="" class="edit-admin-avatar admin-avatar" style="max-width: 130px;"></div>
                 <div style="display: none">
                     <input type="file" name="avatar" id="adminAvatar">

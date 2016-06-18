@@ -20,7 +20,7 @@
         $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
         if (!file_exists($fileName)) {
             return;
-    //            throw new Exception("Try to load className: <b>{$className}</b> on line 32. Error, file: {$fileName} not found");
+    //      throw new Exception("Try to load className: <b>{$className}</b> on line 32. Error, file: {$fileName} not found");
         }
 
         require $fileName;
