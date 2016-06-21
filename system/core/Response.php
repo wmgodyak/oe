@@ -8,6 +8,7 @@
 namespace system\core;
 
 use system\core\exceptions\Exception;
+use system\models\Parser;
 
 defined("CPATH") or die();
 
@@ -72,9 +73,9 @@ class Response
 
                 break;
             case 'frontend':
-                throw new Exception("Треба тут поміняти підключення");
-//                $parser = new Parser($this->body);
-//                $body = $parser->getDocumentSource();
+//                throw new Exception("Треба тут поміняти підключення");
+                $parser = new Parser($this->body);
+                $body = $parser->getDocumentSource();
                 break;
             default:
                 throw new Exception("Wrong request mode");

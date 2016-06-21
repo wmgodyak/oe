@@ -7,6 +7,8 @@
  */
 namespace system;
 
+use system\core\exceptions\Exception;
+use system\core\Lang;
 use system\core\Request;
 use system\core\Response;
 use system\core\Session;
@@ -21,7 +23,7 @@ if ( !defined("CPATH") ) die();
  * Class App
  * @package controllers
  */
-class App extends core\Controller
+class Front extends core\Controller
 {
     /**
      * Request instance
@@ -60,11 +62,9 @@ class App extends core\Controller
 
     public function __construct()
     {
-        // todo апп має бути проміжним, а може й ні, просто прописати роут на нього і все
+        parent::__construct();
 
-       /* parent::__construct();
-
-        $this->request = Request::getInstance();
+        $this->request = Request::getInstance()->setMode('frontend');
 
         // response
         $this->response = Response::getInstance();
@@ -76,20 +76,22 @@ class App extends core\Controller
         $theme = $this->settings['app_theme_current'];
         $this->template = Template::getInstance($theme);
 
+        if(!self::$initialized){
+            $this->_init();
+        }
+
         $this->images   = new ContentImages();
 
         $this->languages_id   = Session::get('app.languages_id');
         $this->languages_code = Session::get('app.languages_code');
 
-        if(!self::$initialized){
-            $this->_init();
-        }
 
         // to access custom modules
         $this->page = $this->template->getVars('page');
 
-        $this->template->assign('user', Session::get('user'));*/
+        $this->template->assign('user', Session::get('user'));
     }
+
 
     private function _init()
     {
@@ -100,12 +102,13 @@ class App extends core\Controller
 
         // init page
         $args = $this->request->param();
-        $this->dump($args);
+
         if(
-            $this->request->isXhr() ||
-            (isset($args['controller']) && $args['namespace'] != 'controllers\App' && $args['controller'] != 'App')
+            $this->request->isXhr()
+            // || (isset($args['controller']) && $args['namespace'] != 'controllers\App' && $args['controller'] != 'App')
         ){
-            if( ! $this->languages_id){
+            echo 'Configure XHR or move it to model front ';
+            /*if( ! $this->languages_id){
                 $l = new Languages();
                 $lang = $l->getDefault();
                 $this->languages_id   = $lang['id'];
@@ -118,23 +121,25 @@ class App extends core\Controller
                 Session::set($a, $this->languages_id);
             }
 
-            $app = new \models\App(null, $this->languages_id);
+            new \models\App(null, $this->languages_id);
             Request::getInstance()->param('languages_id', $this->languages_id);
             Request::getInstance()->param('languages_code', $this->languages_code);
 
             // assign translations to template
             $this->template->assign('t', $this->t());
+            */
         } else {
 
             if($this->settings['active'] == 0){
                 $a = Session::get('engine.admin');
                 if( ! $a) {
-                    $this->eTechnicalWorks();
+                    $this->technicalWorks();
                 }
             }
 
                 // завантаження сторінки
-                $app  = new \models\App($args);
+                $app  = new \system\models\Front();
+
                 $page = $app->getPage();
 
                 Request::getInstance()->param('page', $page);
@@ -150,22 +155,18 @@ class App extends core\Controller
                     }
                 }
 
-                $this->languages_id = $page['languages_id'];
+                $this->languages_id   = $page['languages_id'];
                 $this->languages_code = $page['languages_code'];
                 $a = [];
-                $a['app']['languages_id'] = $this->languages_id;
+                $a['app']['languages_id']   = $this->languages_id;
                 $a['app']['languages_code'] = $this->languages_code;
+
                 Session::set($a, $this->languages_id);
                 Request::getInstance()->param('languages_id', $this->languages_id);
                 Request::getInstance()->param('languages_code', $this->languages_code);
+
                 //assign page to template
                 $this->template->assign('page', $page);
-
-                if (!empty($page['settings']['modules'])) {
-                    foreach ($page['settings']['modules'] as $k => $module) {
-                        $app->callModule($module);
-                    }
-                }
 
                 // assign translations to template
                 $this->template->assign('t', $this->t());
@@ -187,12 +188,14 @@ class App extends core\Controller
 
     protected function getUrl($id)
     {
+        throw new Exception('need to modify');
         $content = new Content();
         return $content->getUrlById($id);
     }
 
     public function e404()
     {
+        throw new Exception('need to modify');
         $id = $this->settings['page_404'];
         if(empty($id)){
             throw new Exception("Неможливо здійснити перенаправлення на 404 сторінку. Введіть ід сторінки в налаштуваннях");
@@ -205,7 +208,7 @@ class App extends core\Controller
         $this->redirect( $url, 404);
     }
 
-    private function eTechnicalWorks()
+    private function technicalWorks()
     {
         $template_path = $this->settings['themes_path']
             . $this->settings['app_theme_current'] .'/'
@@ -216,7 +219,6 @@ class App extends core\Controller
         $this->response->body($ds);
     }
 
-
     /**
      * get translation by key
      * @param $key
@@ -224,9 +226,13 @@ class App extends core\Controller
      */
     protected function t($key=null)
     {
-        return Lang::getInstance($this->languages_code)->get($key);
+        return Lang::getInstance($this->settings['app_theme_current'], $this->languages_code)->t($key);
     }
 
     public function init(){}
-    public function index(){}
+
+    public function index()
+    {
+        echo '__ OK __ ';
+    }
 }

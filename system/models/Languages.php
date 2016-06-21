@@ -30,6 +30,11 @@ class Languages extends Model
         return self::$db->select("select {$key} from __languages where is_main=1")->row($key);
     }
 
+    public function getDataByCode($code, $key= '*')
+    {
+        return self::$db->select("select * from __languages where code={$code}")->row($key);
+    }
+
     /**
      * @param $data
      * @return bool|string

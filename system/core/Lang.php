@@ -8,8 +8,6 @@
 
 namespace system\core;
 
-use controllers\core\Config;
-
 /**
  * Class Lang
  * @package system\core

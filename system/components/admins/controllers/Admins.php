@@ -242,6 +242,7 @@ class Admins extends Engine
     public function groups()
     {
         include "AdminsGroups.php";
+
         $params = func_get_args();
         $action = array_shift($params);
 
@@ -249,4 +250,5 @@ class Admins extends Engine
 
         call_user_func_array(array($controller, $action), $params);
     }
+
 }

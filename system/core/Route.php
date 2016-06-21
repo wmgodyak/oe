@@ -111,8 +111,6 @@ class Route
             ->param('controller', $controller)
             ->param('action',     $action);
 
-//        echo $controller, ' :: ', $action , ' :: ';
-
         Request::getInstance()->param('args', $params);
 
         foreach ($params as $k=>$v) {
@@ -124,15 +122,16 @@ class Route
         // change engine to system folder
         $c  = $namespace . $c_dir . $controller;
 
-        // 7.2 зміна на папку
-
-
-//        echo $c, '::', $controller, "<br>";die;
-
         $path = str_replace("\\", "/", $c);
 
         if(!file_exists(DOCROOT . $path . '.php')) {
-            die('Controller not found:' . DOCROOT . $path . '.php');
+
+            // try system/..
+            $c  = $namespace . $controller;
+            $path = str_replace("\\", "/", $c);
+
+            if(!file_exists(DOCROOT . $path . '.php'))
+                die('Controller not found:' . DOCROOT . $path . '.php');
         }
 
         $controller = new $c;

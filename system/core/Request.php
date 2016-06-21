@@ -48,6 +48,7 @@ class Request {
         if(!self::$instance instanceof self){
             self::$instance = new Request($mode);
         }
+
         return self::$instance;
     }
 
@@ -57,6 +58,13 @@ class Request {
     public function getMode()
     {
         return $this->mode;
+    }
+
+    public function setMode($mode)
+    {
+        $this->mode = $mode;
+
+        return $this;
     }
 
     public function get($name='', $type = null)

@@ -87,6 +87,6 @@ $routes = array();
 
     $routes[]  = array('/?', 'system\App');
 */
-$routes[]  = array('/?', 'system\App');
+$routes[]  = array('/?', 'system\Front');
 
 return $routes;
