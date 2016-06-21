@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Июн 16 2016 г., 21:44
+-- Время создания: Июн 21 2016 г., 15:01
 -- Версия сервера: 5.6.30-0ubuntu0.15.10.1
 -- Версия PHP: 5.6.11-1ubuntu3.3
 
@@ -189,7 +189,7 @@ CREATE TABLE IF NOT EXISTS `e_components` (
   `published` tinyint(1) NOT NULL DEFAULT '0',
   `settings` text,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_components`
@@ -208,9 +208,9 @@ INSERT INTO `e_components` (`id`, `parent_id`, `isfolder`, `icon`, `controller`,
 (10, 3, 0, 'fa-trash', 'trash', 55, 1, NULL, '2016-03-16 15:25:45'),
 (11, 3, 0, 'fa-book', 'contentImagesSizes', 56, 1, NULL, '2016-03-16 15:25:52'),
 (12, 3, 0, 'fa-cubes', 'contentTypes', 57, 1, NULL, '2016-03-16 15:26:02'),
+(13, 0, 0, 'fa-users', 'admins', 8, 1, NULL, '2016-03-16 15:22:03'),
 (47, 60, 1, 'fa-puzzle-piece', 'components', 47, 0, NULL, '2016-03-16 15:18:54'),
 (48, 60, 0, 'fa-puzzle-piece', 'plugins', 48, 0, NULL, '2016-03-16 15:19:05'),
-(51, 0, 0, 'fa-users', 'admins', 8, 0, NULL, '2016-03-16 15:22:03'),
 (54, 45, 0, 'fa-book', 'guides', 54, 0, NULL, '2016-03-16 15:25:16'),
 (59, 45, 0, 'fa-file-code-o', 'backup', 59, 0, NULL, '2016-03-16 15:26:21'),
 (60, 0, 1, 'fa-puzzle-piece', 'componentsGroup', 11, 0, NULL, '2016-03-17 07:52:27'),
@@ -255,15 +255,15 @@ CREATE TABLE IF NOT EXISTS `e_content` (
   `has_variants` tinyint(1) unsigned DEFAULT NULL,
   `in_stock` tinyint(1) unsigned DEFAULT NULL,
   `external_id` char(32) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=144 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=145 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_content`
 --
 
 INSERT INTO `e_content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id`, `isfolder`, `position`, `created`, `updated`, `published`, `settings`, `status`, `code`, `currency_id`, `unit_id`, `has_variants`, `in_stock`, `external_id`) VALUES
-(1, 1, 6, 2, 0, 1, 0, '2016-03-21 07:55:55', '2016-06-12 20:00:56', '2016-03-21', NULL, 'published', '1', NULL, NULL, NULL, NULL, NULL),
-(2, 1, 1, 2, 1, 0, 0, '2016-03-21 07:56:43', '2016-06-15 20:22:56', '2016-03-21', NULL, 'published', '2', NULL, NULL, NULL, NULL, NULL),
+(1, 1, 6, 2, 0, 1, 0, '2016-03-21 07:55:55', '2016-06-17 17:43:30', '2016-03-21', NULL, 'published', '1', NULL, NULL, NULL, NULL, NULL),
+(2, 1, 1, 2, 1, 0, 0, '2016-03-21 07:56:43', '2016-06-17 22:22:03', '2016-03-21', NULL, 'published', '2', NULL, NULL, NULL, NULL, NULL),
 (3, 1, 7, 2, 1, 0, 0, '2016-03-21 07:56:57', '2016-03-24 14:04:03', '2016-03-21', 'a:1:{s:7:"modules";a:1:{i:0;s:11:"Blog::index";}}', 'published', '3', NULL, NULL, NULL, NULL, NULL),
 (4, 1, 1, 2, 1, 0, 0, '2016-03-21 07:57:10', NULL, '2016-03-21', NULL, 'published', '4', NULL, NULL, NULL, NULL, NULL),
 (5, 1, 1, 2, 1, 0, 0, '2016-03-21 07:57:23', NULL, '2016-03-21', NULL, 'published', '5', NULL, NULL, NULL, NULL, NULL),
@@ -307,8 +307,7 @@ INSERT INTO `e_content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id
 (59, 10, 10, 2, 0, 0, 0, '2016-04-05 06:27:37', '2016-04-05 06:28:00', '2016-04-05', NULL, 'published', '59', NULL, NULL, NULL, NULL, NULL),
 (92, 10, 10, 2, 0, 0, 0, '2016-04-19 08:37:19', '2016-04-19 09:33:42', '2016-04-19', NULL, 'published', '96069', 2, 2, 1, 0, NULL),
 (130, 11, 11, 2, 48, 0, 0, '2016-04-20 13:36:07', '2016-04-20 13:36:07', '2016-04-20', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
-(132, 1, 1, 17, 2, 0, 0, '2016-04-25 10:55:14', NULL, NULL, NULL, 'blank', NULL, NULL, NULL, NULL, NULL, NULL),
-(143, 1, 1, 2, 1, 0, 0, '2016-06-16 06:50:29', NULL, NULL, NULL, 'blank', NULL, NULL, NULL, NULL, NULL, NULL);
+(144, 1, 1, 2, 0, 0, 0, '2016-06-17 17:42:27', NULL, NULL, NULL, 'blank', NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -395,7 +394,7 @@ CREATE TABLE IF NOT EXISTS `e_content_images_sizes` (
   `size` varchar(16) NOT NULL,
   `width` int(5) unsigned NOT NULL,
   `height` int(5) unsigned NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_content_images_sizes`
@@ -423,15 +422,15 @@ CREATE TABLE IF NOT EXISTS `e_content_info` (
   `description` varchar(255) DEFAULT NULL,
   `intro` text,
   `content` text
-) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_content_info`
 --
 
 INSERT INTO `e_content_info` (`id`, `content_id`, `languages_id`, `name`, `url`, `h1`, `title`, `keywords`, `description`, `intro`, `content`) VALUES
-(1, 1, 1, 'Головна', 'home', '', 'Головна', '', '', NULL, '<p><img alt="" src="http://engine.loc/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png" style="width: 128px; height: 128px;" /></p>\n'),
-(3, 2, 1, 'Про нас', 'pro-nas', 'Про нас', 'Про нас', '', '<p>httpengine.locuploadsavatarscrtytry rtyrtyr Whether you want to fill this paragraph with some text like I''m doing right now, this place is perfect to describe some features or anything you want - React has a complete solution f</p>\n\n<p> <', '', '<div class="row">\n<div class="col-md-12">\n<h1>We care about our work</h1>\n</div>\n</div>\n\n<div class="row">\n<div class="col-md-6">\n<p>Whether you want to fill this paragraph with some text like I&#39;m doing right now, this place is perfect to describe some features or anything you want - React has a complete solution for you.</p>\n\n<p><img alt="" src="http://engine.loc/uploads/avatars/c51ce410c124a10e0db5e4b97fc2af39.png" style="margin-left: 5px; margin-right: 5px; float: left; width: 208px; height: 120px;" />You have complete control over the look &amp; feel of your website, we offer the best quality so you take your site up and running in no time.</p>\n</div>\n\n<div class="col-md-6">\n<p>fhgfh fhgfh<img alt="" src="http://engine.loc/uploads/avatars/c51ce410c124a10e0db5e4b97fc2af39.png" style="width: 208px; height: 120px;" />fghfghfgh</p>\n\n<p>fgfghfghgfh</p>\n\n<p>React is a simple, developer-friendly way to get your site. Full of features, cool documentation ease of use, lots of pages. We want to help bringing cool stuff to people so they can get their projects faster.</p>\n<a class="join-team button button-small" href="#">Join our team</a></div>\n</div>\n\n<div class="row stats">\n<div class="col-sm-3"><strong>13</strong> employees</div>\n\n<div class="col-sm-3"><strong>10k</strong> customers</div>\n\n<div class="col-sm-3"><strong>9</strong> template pages</div>\n\n<div class="col-sm-3"><strong>13k</strong> products sold</div>\n</div>\n'),
+(1, 1, 1, 'Головна', 'home', '', 'Головна', '', '', '', '<p><img alt="" src="http://engine.loc/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png" style="width: 128px; height: 128px;" /></p>\n'),
+(3, 2, 1, 'Про нас', 'pro-nas', 'Про нас', 'Про нас', '', '<p>httpengine.locuploadsavatarscrtytry rtyrtyr Whether you want to fill this paragraph with some text like I''m doing right now, this place is perfect to describe some features or anything you want - React has a complete solution f</p>\n\n<p> <', '<p>sfd</p>\n', '<div class="row">\n<div class="col-md-12">\n<h1>We care about our work</h1>\n</div>\n</div>\n\n<div class="row">\n<div class="col-md-6">\n<p>Whether you want to fill this paragraph with some text like I&#39;m doing right now, this place is perfect to describe some features or anything you want - React has a complete solution for you.</p>\n\n<p><img alt="" src="http://engine.loc/uploads/avatars/c51ce410c124a10e0db5e4b97fc2af39.png" style="margin-left: 5px; margin-right: 5px; float: left; width: 208px; height: 120px;" />You have complete control over the look &amp; feel of your website, we offer the best quality so you take your site up and running in no time.</p>\n</div>\n\n<div class="col-md-6">\n<p>fhgfh fhgfh<img alt="" src="http://engine.loc/uploads/avatars/c51ce410c124a10e0db5e4b97fc2af39.png" style="width: 208px; height: 120px;" />fghfghfgh</p>\n\n<p>fgfghfghgfh</p>\n\n<p>React is a simple, developer-friendly way to get your site. Full of features, cool documentation ease of use, lots of pages. We want to help bringing cool stuff to people so they can get their projects faster.</p>\n<a class="join-team button button-small" href="#">Join our team</a></div>\n</div>\n\n<div class="row stats">\n<div class="col-sm-3"><strong>13</strong> employees</div>\n\n<div class="col-sm-3"><strong>10k</strong> customers</div>\n\n<div class="col-sm-3"><strong>9</strong> template pages</div>\n\n<div class="col-sm-3"><strong>13k</strong> products sold</div>\n</div>\n'),
 (4, 3, 1, 'Новини', 'novyny', '', 'Новини', '', '', NULL, ''),
 (5, 4, 1, 'Оплата та доставка', 'oplata-ta-dostavka', '', 'Оплата та доставка', '', '', NULL, ''),
 (6, 5, 1, 'Гарантія та сервіс', 'garantiya-ta-servis', '', 'Гарантія та сервіс', '', '', NULL, ''),
@@ -701,7 +700,7 @@ CREATE TABLE IF NOT EXISTS `e_features` (
   `owner_id` int(11) unsigned NOT NULL,
   `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `status` enum('blank','published','hidden') DEFAULT 'blank'
-) ENGINE=InnoDB AUTO_INCREMENT=108 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=116 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_features`
@@ -729,7 +728,15 @@ INSERT INTO `e_features` (`id`, `parent_id`, `type`, `code`, `multiple`, `on_fil
 (104, 103, 'value', '42c654a782adae0219f46d13ffe111b6', NULL, NULL, 0, 2, '2016-04-19 09:33:31', 'published'),
 (105, 103, 'value', '93cd32447aa3e8a20a2cf4f09c06a532', NULL, NULL, 0, 2, '2016-04-19 09:33:37', 'published'),
 (106, 0, 'textarea', 'data', 0, 0, 1, 2, '2016-04-19 14:38:25', 'published'),
-(107, 0, NULL, 'feature_1466097020', NULL, NULL, 0, 2, '2016-06-16 17:10:20', 'blank');
+(107, 0, NULL, 'feature_1466097020', NULL, NULL, 0, 2, '2016-06-16 17:10:20', 'blank'),
+(108, 0, 'text', 'aa', 0, 0, 0, 2, '2016-06-17 22:18:34', 'published'),
+(109, 0, 'text', 'aaaax', 0, 0, 0, 2, '2016-06-17 22:18:58', 'published'),
+(110, 0, 'textarea', 'vv', 0, 0, 0, 2, '2016-06-17 22:19:13', 'published'),
+(111, 0, 'select', 'z', 0, 0, 0, 2, '2016-06-17 22:19:21', 'published'),
+(112, 111, 'value', '65f7aafbee489c12472fb7f7d3539889', NULL, NULL, 0, 2, '2016-06-17 22:19:26', 'published'),
+(113, 111, 'value', 'ef93d71f6361bcce3873efafbf3f1de4', NULL, NULL, 0, 2, '2016-06-17 22:19:27', 'published'),
+(114, 111, 'value', '58cd25dfba0d9149d065230996e24ecc', NULL, NULL, 0, 2, '2016-06-17 22:19:31', 'published'),
+(115, 0, 'text', 'zzxx', 0, 0, 0, 2, '2016-06-17 22:20:12', 'published');
 
 -- --------------------------------------------------------
 
@@ -744,7 +751,7 @@ CREATE TABLE IF NOT EXISTS `e_features_content` (
   `content_subtypes_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `content_id` int(10) unsigned NOT NULL DEFAULT '0',
   `position` tinyint(3) unsigned DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_features_content`
@@ -762,7 +769,12 @@ INSERT INTO `e_features_content` (`id`, `features_id`, `content_types_id`, `cont
 (51, 85, 12, 0, 0, 1),
 (52, 98, 12, 0, 0, 2),
 (53, 103, 12, 0, 0, 3),
-(54, 84, 1, 4, 0, 1);
+(54, 84, 1, 4, 0, 1),
+(55, 108, 1, 1, 0, NULL),
+(56, 109, 1, 1, 0, NULL),
+(57, 110, 1, 1, 0, NULL),
+(58, 111, 1, 1, 0, NULL),
+(59, 115, 1, 1, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -775,7 +787,7 @@ CREATE TABLE IF NOT EXISTS `e_features_info` (
   `features_id` int(10) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
   `name` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=102 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=110 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_features_info`
@@ -802,7 +814,15 @@ INSERT INTO `e_features_info` (`id`, `features_id`, `languages_id`, `name`) VALU
 (98, 103, 1, 'Колір'),
 (99, 104, 1, 'Red'),
 (100, 105, 1, 'Black'),
-(101, 106, 1, 'Дата ');
+(101, 106, 1, 'Дата '),
+(102, 108, 1, 'aa'),
+(103, 109, 1, 'aaaax'),
+(104, 110, 1, 'vv'),
+(105, 111, 1, 'z'),
+(106, 112, 1, '1'),
+(107, 113, 1, '1'),
+(108, 114, 1, '1'),
+(109, 115, 1, 'zzxx');
 
 -- --------------------------------------------------------
 
@@ -1148,7 +1168,7 @@ CREATE TABLE IF NOT EXISTS `e_plugins_components` (
 --
 
 INSERT INTO `e_plugins_components` (`id`, `plugins_id`, `components_id`, `position`) VALUES
-(2, 18, 51, 0),
+(2, 18, 13, 0),
 (7, 21, 1, 0),
 (9, 24, 67, 0),
 (10, 25, 67, 0),
@@ -1267,7 +1287,7 @@ CREATE TABLE IF NOT EXISTS `e_products_variants_features` (
   `variants_id` int(10) unsigned NOT NULL,
   `features_id` int(10) unsigned NOT NULL,
   `values_id` int(10) unsigned NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_products_variants_features`
@@ -1412,16 +1432,16 @@ CREATE TABLE IF NOT EXISTS `e_users` (
   `updated` datetime NOT NULL,
   `lastlogin` timestamp NULL DEFAULT NULL,
   `status` enum('active','ban','deleted') NOT NULL DEFAULT 'active'
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_users`
 --
 
 INSERT INTO `e_users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `updated`, `lastlogin`, `status`) VALUES
-(2, 1, 0, 'l716m34731obo7arvc4m7mf127', 'Володимир', 'Годяк', '+38 (067) 6736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-04-21 11:24:28', '2016-06-16 15:58:46', 'active'),
+(2, 1, 0, '9fg2369ngmt4pfmi86ffd7aob6', 'Володимир', 'Годяк', '+38 (067) 6736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-04-21 11:24:28', '2016-06-18 12:18:01', 'active'),
 (3, 5, 0, 'cqib3aongupefr8grbuudirmm2', 'Жорік', 'Ревазов', '+35 (555) 5555555', 'z@otakoyi.com', 'MToUTd7.hmK2o', NULL, NULL, '2016-03-28 09:01:38', '2016-04-20 12:24:56', '2016-04-11 07:35:30', 'active'),
-(17, 2, 0, 'fe42ukkmhp1tl2h5b902qlgfm2', 'Редаткор', 'перший', '+11 (111) 1111111', 'r@otakoyi.com', 'MT9AvrkvHvhx.', NULL, NULL, '2016-04-25 10:10:59', '0000-00-00 00:00:00', '2016-04-26 08:34:30', 'ban');
+(19, 1, 0, NULL, 'Жорік', 'Васильович', '+77 (777) 7777777', 'otakoyi1@gmail.com', 'MTYFiZEAZZjt.', NULL, NULL, '2016-06-18 10:25:22', '0000-00-00 00:00:00', NULL, 'ban');
 
 -- --------------------------------------------------------
 
@@ -1436,7 +1456,7 @@ CREATE TABLE IF NOT EXISTS `e_users_group` (
   `backend` tinyint(1) unsigned DEFAULT NULL,
   `permissions` text,
   `position` tinyint(3) unsigned NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_users_group`
@@ -1460,7 +1480,7 @@ CREATE TABLE IF NOT EXISTS `e_users_group_info` (
   `group_id` tinyint(3) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
   `name` varchar(100) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_users_group_info`
@@ -1919,12 +1939,12 @@ ALTER TABLE `e_comments_subscribers`
 -- AUTO_INCREMENT для таблицы `e_components`
 --
 ALTER TABLE `e_components`
-  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=89;
+  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=84;
 --
 -- AUTO_INCREMENT для таблицы `e_content`
 --
 ALTER TABLE `e_content`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=144;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=145;
 --
 -- AUTO_INCREMENT для таблицы `e_content_features`
 --
@@ -1939,12 +1959,12 @@ ALTER TABLE `e_content_images`
 -- AUTO_INCREMENT для таблицы `e_content_images_sizes`
 --
 ALTER TABLE `e_content_images_sizes`
-  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT для таблицы `e_content_info`
 --
 ALTER TABLE `e_content_info`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=56;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=55;
 --
 -- AUTO_INCREMENT для таблицы `e_content_relationship`
 --
@@ -1989,17 +2009,17 @@ ALTER TABLE `e_delivery_payment`
 -- AUTO_INCREMENT для таблицы `e_features`
 --
 ALTER TABLE `e_features`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=108;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=116;
 --
 -- AUTO_INCREMENT для таблицы `e_features_content`
 --
 ALTER TABLE `e_features_content`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=55;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=60;
 --
 -- AUTO_INCREMENT для таблицы `e_features_info`
 --
 ALTER TABLE `e_features_info`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=102;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=110;
 --
 -- AUTO_INCREMENT для таблицы `e_guides`
 --
@@ -2094,7 +2114,7 @@ ALTER TABLE `e_products_variants`
 -- AUTO_INCREMENT для таблицы `e_products_variants_features`
 --
 ALTER TABLE `e_products_variants_features`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=34;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=33;
 --
 -- AUTO_INCREMENT для таблицы `e_products_variants_prices`
 --
@@ -2114,17 +2134,17 @@ ALTER TABLE `e_tags`
 -- AUTO_INCREMENT для таблицы `e_users`
 --
 ALTER TABLE `e_users`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=20;
 --
 -- AUTO_INCREMENT для таблицы `e_users_group`
 --
 ALTER TABLE `e_users_group`
-  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
+  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=14;
 --
 -- AUTO_INCREMENT для таблицы `e_users_group_info`
 --
 ALTER TABLE `e_users_group_info`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=27;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=28;
 --
 -- Ограничения внешнего ключа сохраненных таблиц
 --

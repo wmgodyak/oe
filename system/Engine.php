@@ -114,7 +114,7 @@ abstract class Engine extends Controller
                 }
             }
 
-            $this->init();
+            $this->_init();
 
             $this->makeCrumbs();
         }
@@ -122,7 +122,9 @@ abstract class Engine extends Controller
         $this->admin = Admin::data();
     }
 
-    private function init()
+    public function init(){}
+
+    private function _init()
     {
         self::$initialized = true;
 

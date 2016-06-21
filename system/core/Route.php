@@ -1,6 +1,6 @@
 <?php
 /**
- * OYiEngine 6.x
+ * OYiEngine 7.x
  * Company Otakoyi.com
  * Author wmgodyak mailto:wmgodyak@gmail.com
  * Date: 07.05.14 21:56
@@ -110,6 +110,8 @@ class Route
             ->param('namespace',  $namespace)
             ->param('controller', $controller)
             ->param('action',     $action);
+
+//        echo $controller, ' :: ', $action , ' :: ';
 
         Request::getInstance()->param('args', $params);
 

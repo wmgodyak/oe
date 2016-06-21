@@ -31,63 +31,62 @@ $routes = array();
 /*
 // коли чітко задано які змінні мають бути
     $routes[]  = array('/install/?', 'controllers\Install');
-    $routes[]  = array('/route/([a-zA-Z0-9-_]+)/([a-zA-Z0-9-_]+)/?(.*)', 'controllers\modules\:controller:action');
-    $routes[]  = array('/ajax/([a-zA-Z0-9-_]+)/([a-zA-Z0-9-_]+)/?(.*)', 'controllers\modules\:controller:action');
-
-//    $routes[]  = array('/ajax/([a-zA-Z0-9-_/]+)/([a-zA-Z0-9-_/]+)/?', 'controllers\modules\:controller:action');
+    $routes[]  = array('/route/([a-zA-Z0-9-_]+)/([a-zA-Z0-9-_]+)/?(.*)', 'modules\:controller:action');
+    $routes[]  = array('/ajax/([a-zA-Z0-9-_]+)/([a-zA-Z0-9-_]+)/?(.*)', 'modules\:controller:action');
 
     //http://engine.loc/uk/oplata-ta-dostavka/filter/vendor=acer;display=14;ram=ddr3;/page/4
-    $routes[]  = array('/([a-z]{2})/([a-z0-9-_/]+)/filter/([=,;a-z0-9а-яА-ЯіїЇІ_\-]+)/page/([0-9]+)', 'controllers\App', 'lang/url/filter/p');
-    $routes[]  = array('/([a-z0-9-_/]+)/filter/([=,;a-z0-9а-яА-ЯіїЇІ_\-]+)/page/([0-9]+)', 'controllers\App', 'url/filter/p');
+    $routes[]  = array('/([a-z]{2})/([a-z0-9-_/]+)/filter/([=,;a-z0-9а-яА-ЯіїЇІ_\-]+)/page/([0-9]+)', 'system\App', 'lang/url/filter/p');
+    $routes[]  = array('/([a-z0-9-_/]+)/filter/([=,;a-z0-9а-яА-ЯіїЇІ_\-]+)/page/([0-9]+)', 'system\App', 'url/filter/p');
     //http://engine.loc/uk/oplata-ta-dostavka/filter/vendor=acer,lenovo;display=14,15-16;ram=ddr3
-    $routes[]  = array('/([a-z]{2})/([a-z0-9-_/]+)/filter/([=,;a-z0-9а-яА-ЯіїЇІ_\-]+)', 'controllers\App', 'lang/url/filter');
-    $routes[]  = array('/([a-z0-9-_/]+)/filter/([=,;a-z0-9а-яА-ЯіїЇІ_\-]+)', 'controllers\App', 'url/filter');
+    $routes[]  = array('/([a-z]{2})/([a-z0-9-_/]+)/filter/([=,;a-z0-9а-яА-ЯіїЇІ_\-]+)', 'system\App', 'lang/url/filter');
+    $routes[]  = array('/([a-z0-9-_/]+)/filter/([=,;a-z0-9а-яА-ЯіїЇІ_\-]+)', 'system\App', 'url/filter');
 
 
     // http://engine.loc/oplata-ta-dostavka/author=wg
-    $routes[]  = array('/([a-z0-9-_/]+)/author=([a-z0-9а-яА-ЯіїЇІ_\-]+)/page/([0-9]+)', 'controllers\App', 'url/author/p');
+    $routes[]  = array('/([a-z0-9-_/]+)/author=([a-z0-9а-яА-ЯіїЇІ_\-]+)/page/([0-9]+)', 'system\App', 'url/author/p');
     // http://engine.loc/uk/oplata-ta-dostavka/author=wg
-    $routes[]  = array('/([a-z]{2})/([a-z0-9-_/]+)/author=([a-z0-9а-яА-ЯіїЇІ_\-]+)/page/([0-9]+)', 'controllers\App', 'lang/url/author/p');
+    $routes[]  = array('/([a-z]{2})/([a-z0-9-_/]+)/author=([a-z0-9а-яА-ЯіїЇІ_\-]+)/page/([0-9]+)', 'system\App', 'lang/url/author/p');
 
     // http://engine.loc/oplata-ta-dostavka/author=wg
-    $routes[]  = array('/([a-z0-9-_/]+)/author=([a-z0-9а-яА-ЯіїЇІ_\-]+)', 'controllers\App', 'url/author');
+    $routes[]  = array('/([a-z0-9-_/]+)/author=([a-z0-9а-яА-ЯіїЇІ_\-]+)', 'system\App', 'url/author');
     // http://engine.loc/uk/oplata-ta-dostavka/author=wg
-    $routes[]  = array('/([a-z]{2})/([a-z0-9-_/]+)/author=([a-z0-9а-яА-ЯіїЇІ_\-]+)', 'controllers\App', 'lang/url/author');
+    $routes[]  = array('/([a-z]{2})/([a-z0-9-_/]+)/author=([a-z0-9а-яА-ЯіїЇІ_\-]+)', 'system\App', 'lang/url/author');
 
     // http://engine.loc/uk/oplata-ta-dostavka/tag=seo/page/2
-    $routes[]  = array('/([a-z]{2})/([a-z0-9-_/]+)/tag=([a-z0-9а-яА-ЯіїЇІ_\-]+)/page/([0-9]+)', 'controllers\App', 'lang/url/tag/p');
-    $routes[]  = array('/([a-z0-9-_/]+)/tag=([a-z0-9а-яА-ЯіїЇІ_\-]+)/page/([0-9]+)', 'controllers\App', 'url/tag/p');
+    $routes[]  = array('/([a-z]{2})/([a-z0-9-_/]+)/tag=([a-z0-9а-яА-ЯіїЇІ_\-]+)/page/([0-9]+)', 'system\App', 'lang/url/tag/p');
+    $routes[]  = array('/([a-z0-9-_/]+)/tag=([a-z0-9а-яА-ЯіїЇІ_\-]+)/page/([0-9]+)', 'system\App', 'url/tag/p');
 
     // http://engine.loc/uk/oplata-ta-dostavka/tag=seo
-    $routes[]  = array('/([a-z]{2})/([a-z0-9-_/]+)/tag=([a-z0-9а-яА-ЯіїЇІ_\-]+)', 'controllers\App', 'lang/url/tag');
-    $routes[]  = array('/([a-z0-9-_/]+)/tag=([a-z0-9а-яА-ЯіїЇІ_\-]+)', 'controllers\App', 'url/tag');
+    $routes[]  = array('/([a-z]{2})/([a-z0-9-_/]+)/tag=([a-z0-9а-яА-ЯіїЇІ_\-]+)', 'system\App', 'lang/url/tag');
+    $routes[]  = array('/([a-z0-9-_/]+)/tag=([a-z0-9а-яА-ЯіїЇІ_\-]+)', 'system\App', 'url/tag');
 
     // http://engine.loc/uk/novyny/q=asdjkl%D1%84%D1%96%D0%B23/page/4
-    $routes[]  = array('/([a-z]{2})/([a-z0-9-_/]+)/q=([a-z0-9а-яА-ЯіїЇІ_\-]+)/page/([0-9]+)', 'controllers\App', 'lang/url/q/p');
+    $routes[]  = array('/([a-z]{2})/([a-z0-9-_/]+)/q=([a-z0-9а-яА-ЯіїЇІ_\-]+)/page/([0-9]+)', 'system\App', 'lang/url/q/p');
 
     // http://engine.loc/novyny/q=asdjkl%D1%84%D1%96%D0%B23/page/4
-    $routes[]  = array('/([a-z0-9-_/]+)/q=([a-z0-9а-яА-ЯіїЇІ_\-]+)/page/([0-9]+)', 'controllers\App', 'url/q/p');
+    $routes[]  = array('/([a-z0-9-_/]+)/q=([a-z0-9а-яА-ЯіїЇІ_\-]+)/page/([0-9]+)', 'system\App', 'url/q/p');
 
     //http://engine.loc/uk/novyny/q=asdjkl%D1%84%D1%96%D0%B23
-    $routes[]  = array('/([a-z]{2})/([a-z0-9-_/]+)/q=([a-z0-9а-яА-ЯіїЇІ_\-]+)', 'controllers\App', 'lang/url/q');
+    $routes[]  = array('/([a-z]{2})/([a-z0-9-_/]+)/q=([a-z0-9а-яА-ЯіїЇІ_\-]+)', 'system\App', 'lang/url/q');
     //http://engine.loc/novyny/q=asdjkl%D1%84%D1%96%D0%B23
-    $routes[]  = array('/([a-z0-9-_/]+)/q=([a-z0-9а-яА-ЯіїЇІ_\-]+)', 'controllers\App', 'url/q');
+    $routes[]  = array('/([a-z0-9-_/]+)/q=([a-z0-9а-яА-ЯіїЇІ_\-]+)', 'system\App', 'url/q');
 
 
     //http://engine.loc/uk/pro-nas/page/2
-    $routes[]  = array('/([a-z]{2})/([a-zA-Z0-9-_/]+)/page/([0-9]+)/?', 'controllers\App', 'lang/url/p');
+    $routes[]  = array('/([a-z]{2})/([a-zA-Z0-9-_/]+)/page/([0-9]+)/?', 'system\App', 'lang/url/p');
 
     //http://engine.loc/pro-nas/page/2
-    $routes[]  = array('/([a-zA-Z0-9-_/]+)/page/([0-9]+)/?', 'controllers\App', 'url/p');
+    $routes[]  = array('/([a-zA-Z0-9-_/]+)/page/([0-9]+)/?', 'system\App', 'url/p');
 
+    $routes[]  = array('/([a-z]{2})/([a-zA-Z0-9-_/]+)/?', 'system\App', 'lang/url');
+    $routes[]  = array('/([a-z]{2})/?', 'system\App', 'lang');
 
-    $routes[]  = array('/([a-z]{2})/([a-zA-Z0-9-_/]+)/?', 'controllers\App', 'lang/url');
-    $routes[]  = array('/([a-z]{2})/?', 'controllers\App', 'lang');
+    $routes[]  = array('/([a-zA-Z0-9-_/]*)/?', 'system\App', 'url');
 
-    $routes[]  = array('/([a-zA-Z0-9-_/]*)/?', 'controllers\App', 'url');
+    $routes[]  = array('/([^0-9A-Za-zА-Яа-яЁё]+)/?(.*)', 'system\App', 'url');
 
-    $routes[]  = array('/([^0-9A-Za-zА-Яа-яЁё]+)/?(.*)', 'controllers\App', 'url');
-
-    $routes[]  = array('/?', 'controllers\App');
+    $routes[]  = array('/?', 'system\App');
 */
+$routes[]  = array('/?', 'system\App');
+
 return $routes;

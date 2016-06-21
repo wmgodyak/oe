@@ -41,11 +41,12 @@ abstract class Controller {
             }
         }
     }
-    abstract public function before();
+
     /**
      * @return mixed
      */
     abstract public function index();
+    abstract public function init();
 
     /**
      *	Setter method
