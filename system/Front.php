@@ -13,6 +13,8 @@ use system\core\Request;
 use system\core\Response;
 use system\core\Session;
 use system\core\Template;
+use system\models\App;
+use system\models\Content;
 use system\models\ContentImages;
 use system\models\Languages;
 use system\models\Settings;
@@ -60,11 +62,14 @@ class Front extends core\Controller
 
     protected $page;
 
+    private $modules_dir = "modules";
+
     public function __construct()
     {
         parent::__construct();
 
-        $this->request = Request::getInstance()->setMode('frontend');
+        $this->request = Request::getInstance();
+        $this->request->setMode('frontend');
 
         // response
         $this->response = Response::getInstance();
@@ -77,7 +82,7 @@ class Front extends core\Controller
         $this->template = Template::getInstance($theme);
 
         if(!self::$initialized){
-            $this->_init();
+//            $this->_init();
         }
 
         $this->images   = new ContentImages();
@@ -88,12 +93,9 @@ class Front extends core\Controller
 
         // to access custom modules
         $this->page = $this->template->getVars('page');
-
-        $this->template->assign('user', Session::get('user'));
     }
 
-
-    private function _init()
+    public function index()
     {
 //        echo "App::init()\r\n"; $this->dump($_SESSION);
         self::$initialized = true;
@@ -101,7 +103,7 @@ class Front extends core\Controller
         $this->template->assign('base_url',    APPURL );
 
         // init page
-        $args = $this->request->param();
+//        $args = $this->request->param();
 
         if(
             $this->request->isXhr()
@@ -137,73 +139,123 @@ class Front extends core\Controller
                 }
             }
 
-                // завантаження сторінки
-                $app  = new \system\models\Front();
+            // завантаження сторінки
+            $app  = new \system\models\Front(true);
 
-                $page = $app->getPage();
+            $page = $app->getPage();
 
-                Request::getInstance()->param('page', $page);
+            Request::getInstance()->param('page', $page);
 
-                if (!$page) {
+            if (!$page) {
+                $this->e404();
+            }
+
+            if ($page['status'] != 'published') {
+                $a = Session::get('engine.admin');
+                if (!$a) {
                     $this->e404();
                 }
+            }
 
-                if ($page['status'] != 'published') {
-                    $a = Session::get('engine.admin');
-                    if (!$a) {
-                        $this->e404();
-                    }
+            $this->languages_id   = $page['languages_id'];
+            $this->languages_code = $page['languages_code'];
+            $a = [];
+            $a['app']['languages_id']   = $this->languages_id;
+            $a['app']['languages_code'] = $this->languages_code;
+
+            Session::set($a, $this->languages_id);
+            Request::getInstance()->param('languages_id', $this->languages_id);
+            Request::getInstance()->param('languages_code', $this->languages_code);
+
+            //assign page to template
+            $this->template->assign('page', $page);
+
+            // assign translations to template
+            $this->template->assign('t', $this->t());
+
+            // init modules
+            $this->initModules();
+
+
+            // assign app
+            $app = new App();
+//                echo '<pre>'; var_dump($app->languages->get());die;
+            $this->template->assign('app', $app);
+
+            $this->template->assign('settings', $this->settings);
+
+            $template_path = $this->settings['themes_path']
+                . $this->settings['app_theme_current'] . '/'
+                . $this->settings['app_views_path']
+                . 'layouts/';
+
+            $ds = $this->template->fetch($template_path . $page['template']);
+
+            $this->response->body($ds);
+
+            if ($page['id'] == $this->settings['page_404']) {
+                $this->response->sendError(404);
+            }
+        }
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function initModules()
+    {
+        if ($handle = opendir(DOCROOT . $this->modules_dir)) {
+            while (false !== ($module = readdir($handle))) {
+                if ($module == "." || $module == "..")  continue;
+
+                $c  = $this->modules_dir .'\\'. $module . '\controllers\\' . ucfirst($module);
+
+                $path = str_replace("\\", "/", $c);
+
+                if(!file_exists(DOCROOT . $path . '.php')) {
+                    throw new Exception("Module $module issue.");
                 }
 
-                $this->languages_id   = $page['languages_id'];
-                $this->languages_code = $page['languages_code'];
-                $a = [];
-                $a['app']['languages_id']   = $this->languages_id;
-                $a['app']['languages_code'] = $this->languages_code;
+                $this->assignModuleLang($module);
+                $controller = new $c;
+                call_user_func(array($controller, 'init'));
+            }
+            closedir($handle);
+        }
+    }
 
-                Session::set($a, $this->languages_id);
-                Request::getInstance()->param('languages_id', $this->languages_id);
-                Request::getInstance()->param('languages_code', $this->languages_code);
-
-                //assign page to template
-                $this->template->assign('page', $page);
-
-                // assign translations to template
-                $this->template->assign('t', $this->t());
-
-                $template_path = $this->settings['themes_path']
-                    . $this->settings['app_theme_current'] . '/'
-                    . $this->settings['app_views_path']
-                    . 'layouts/';
-
-                $ds = $this->template->fetch($template_path . $page['template']);
-
-                $this->response->body($ds);
-
-                if ($page['id'] == $this->settings['page_404']) {
-                    $this->response->sendError(404);
+    private function assignModuleLang($module)
+    {
+        $dir =  $this->modules_dir .'/'. $module . '/lang/';
+        if ($handle = opendir(DOCROOT . $dir)) {
+            while (false !== ($entry = readdir($handle))) {
+                if ($entry != "." && $entry != "..") {
+                    $path = $dir . $entry . '/';
+//                    die($path);
+                    Lang::getInstance()->setTranslations($path);
                 }
+            }
+            closedir($handle);
         }
     }
 
     protected function getUrl($id)
     {
-        throw new Exception('need to modify');
-        $content = new Content();
-        return $content->getUrlById($id);
+        $f = new \system\models\Front();
+        return $f->getUrlById($id);
     }
 
     public function e404()
     {
-        throw new Exception('need to modify');
         $id = $this->settings['page_404'];
+
         if(empty($id)){
             throw new Exception("Неможливо здійснити перенаправлення на 404 сторінку. Введіть ід сторінки в налаштуваннях");
         }
 
-        $content = new Content();
+        $f = new \system\models\Front();
 
-        $url = $content->getUrlById($id);
+        $url = $f->getUrlById($id);
 
         $this->redirect( $url, 404);
     }
@@ -230,9 +282,4 @@ class Front extends core\Controller
     }
 
     public function init(){}
-
-    public function index()
-    {
-        echo '__ OK __ ';
-    }
 }

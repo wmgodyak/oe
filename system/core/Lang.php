@@ -7,6 +7,7 @@
  */
 
 namespace system\core;
+use system\core\exceptions\Exception;
 
 /**
  * Class Lang
@@ -20,6 +21,7 @@ class Lang
 
     private $translations;
     private $dir;
+    private $lang = null;
 
     /**
      * Lang constructor.
@@ -28,7 +30,8 @@ class Lang
      */
     private function __construct($theme, $lang)
     {
-        $this->dir = DOCROOT . "themes/$theme/lang/";
+        $this->dir  = "themes/$theme/lang/";
+        $this->lang = $lang;
 
         if ($handle = opendir($this->dir)) {
             while (false !== ($entry = readdir($handle))) {
@@ -46,7 +49,7 @@ class Lang
             closedir($handle);
         }
 
-        $this->setTranslations($lang);
+        $this->setTranslations();
     }
 
     private function __clone(){}
@@ -75,14 +78,21 @@ class Lang
 
     /**
      * @param $lang
+     * @param null $dir
      */
-    private function setTranslations($lang)
+    public function setTranslations($dir = null)
     {
-        if ($handle = opendir($this->dir . $lang. '/')) {
+        $dir = !$dir ? $this->dir : $dir;
+
+        if(!is_dir(DOCROOT . $dir)) {
+            throw new Exception("Wrong lang dir: $dir");
+        }
+
+        if ($handle = opendir(DOCROOT . $dir . '/')) {
             while (false !== ($entry = readdir($handle))) {
                 if ($entry != "." && $entry != ".."){
 
-                    $fn = $this->dir . $lang .'/' . $entry;
+                    $fn = DOCROOT . $dir . $this->lang .'/' . $entry;
 
                     if(!file_exists($fn)) continue;
 

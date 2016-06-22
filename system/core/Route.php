@@ -37,9 +37,12 @@ class Route
 
     public static function run()
     {
+//        echo '<pre>';
+
         $namespace = ''; $controller = ''; $action = 'index'; $params = array();
 
         $uri = self::protect($_SERVER['REQUEST_URI']);
+//        echo $uri;
 
         $uri = urldecode($uri);
         if(strpos($uri, '?')){
@@ -50,9 +53,12 @@ class Route
         self::getRoutes();
 
         $found_route = false;
+
         foreach (self::$rules as $route) {
+//            print_r($route);
             if(preg_match("@^" . $route['regex'] . "$@siu", $uri, $matches)){
                 $found_route = true;
+
                 if(empty($route['params'])) {
                     // вирізаю з неймспейсу :controller :action
                     if(strpos($route['namespace'], ':controller') !== false) {
@@ -94,11 +100,12 @@ class Route
             }
         }
 
-//        if(!$found_route){
+        if(!$found_route){
+            die('Route not found :(');
 //            $namespace  = self::$ns;
 //            $controller = 'App';
 //            $action     = 'e404';
-//        }
+        }
 
         $controller = ucfirst($controller);
 

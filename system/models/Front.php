@@ -27,14 +27,16 @@ class Front extends Model
      */
     protected $images;
 
-    public function __construct()
+    public function __construct($init = false)
     {
         parent::__construct();
 
         $this->languages = new Languages();
         $this->images    = new ContentImages();
 
-        $this->init();
+        if($init){
+            $this->init();
+        }
     }
 
 
@@ -143,13 +145,33 @@ class Front extends Model
 
         if (!empty($page['settings']['modules'])) {
             foreach ($page['settings']['modules'] as $k => $module) {
-                $this->callModule($module);
+//                $this->callModule($module);
             }
         }
 
         // reformat meta
         $page = $this->makeMeta($page);
         $this->page = $page;
+    }
+
+    /**
+     * @param $id
+     * @return string
+     * @throws \system\core\exceptions\Exception
+     */
+    public function getUrlById($id)
+    {
+        $url = self::$db
+            ->select("select url from __content_info where content_id = '{$id}' and languages_id={$this->languages_id} limit 1")
+            ->row('url');
+
+        if($this->languages_id == $this->languages->getDefault('id')){
+            return APPURL . $url;
+        }
+
+        $code = $this->languages->getData($this->languages_id, 'code');
+
+        return APPURL. $code .'/'. $url;
     }
 
     /**
@@ -225,7 +247,7 @@ class Front extends Model
         return $page;
     }
 
-    private function getPageInfo($id, $key)
+    private function getPageInfo($id, $key = '*')
     {
         return self::$db
             ->select("
@@ -255,7 +277,7 @@ class Front extends Model
         $path = str_replace("\\", "/", $c);
 
         if(!file_exists(DOCROOT . $path . '.php')) {
-            die('Controller not found:' . DOCROOT . $path . '.php');
+            die('Front Controller not found:' . DOCROOT . $path . '.php');
         }
 
         $controller = new $c;
