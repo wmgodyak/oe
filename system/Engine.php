@@ -10,6 +10,7 @@ namespace system;
 use system\components\admin\controllers\Admin;
 use system\core\Config;
 use system\core\Controller;
+use system\core\exceptions\Exception;
 use system\core\Lang;
 use system\core\Request;
 use system\core\Response;
@@ -96,7 +97,7 @@ abstract class Engine extends Controller
 
         if(
             (
-                !\system\components\admin\models\Admin::isOnline(Admin::id(), Session::id())
+                ! \system\components\admin\models\Admin::isOnline(Admin::id(), Session::id())
             )
         ){
             if( $controller != 'Admin' && $action != 'login' ){
@@ -124,6 +125,18 @@ abstract class Engine extends Controller
 
     public function init(){}
 
+    private function getLang()
+    {
+        if(! isset($_COOKIE["$this->theme.lang"])){
+            $lang = Config::getInstance()->get('core.lang');
+            $_COOKIE["$this->theme.lang"] = $lang;
+        } else {
+            $lang = $_COOKIE["$this->theme.lang"];
+        }
+
+        return $lang;
+    }
+
     private function _init()
     {
         self::$initialized = true;
@@ -132,13 +145,8 @@ abstract class Engine extends Controller
         $action     = $this->request->param('action');
         $controller = lcfirst($controller);
 
+        $lang = $this->getLang();
 
-        if(! isset($_COOKIE["$this->theme.lang"])){
-            $lang = Config::getInstance()->get('core.lang');
-            $_COOKIE["$this->theme.lang"] = $lang;
-        } else {
-            $lang = $_COOKIE["$this->theme.lang"];
-        }
 
         $this->template->assign('version',    $this->version);
         $this->template->assign('base_url',   APPURL . 'engine/');
@@ -149,6 +157,8 @@ abstract class Engine extends Controller
 
         // admin structure
         if($this->request->isGet() && ! $this->request->isXhr()){
+
+            $this->initModules();
 
             $this->makeNav();
 
@@ -161,17 +171,8 @@ abstract class Engine extends Controller
             $this->template->assign('title', $this->t($controller . '.action_' . $action));
             $this->template->assign('name', $this->t($controller . '.action_' . $action));
         }
-/*
-        $com = '/themes/engine/assets/js/bootstrap/' . lcfirst($controller) . '.js';
 
-        if(file_exists(DOCROOT . $com)){
-            $this->template->assign('component_script',  $com);
-        }
-*/
         $this->template->assign('admin', Admin::data());
-
-//        $this->plugins = Plugins::get();
-//        $this->template->assign('plugins', $this->plugins);
 
     }
 
@@ -249,38 +250,6 @@ abstract class Engine extends Controller
         return $this;
     }
 
-    /**
-     *
-     */
-    private function makeNav()
-    {
-        $nav = $this->makeNavTranslations($this->engine->nav());
-
-        $this->template->assign('nav_items', $nav);
-        $s = $this->template->fetch('nav');
-        $this->template->assign('nav', $s);
-    }
-
-    private function makeNavTranslations($nav)
-    {
-        $res = [];
-        foreach ($nav as $item) {
-            if($item['isfolder']){
-                $item['items'] = $this->makeNavTranslations($item['items']);
-            }
-
-            $c = $item['controller'];
-            if(strpos($c, '/') !== false){
-                $a = explode('/', $c);
-                $c = end($a);
-                $c = lcfirst($c);
-            }
-            $item['name'] = $this->t($c . '.action_index');
-            $res[] = $item;
-        }
-
-        return $res;
-    }
 
     /**
      * translations
@@ -306,6 +275,105 @@ abstract class Engine extends Controller
     {
         $this->template->assign('panel_nav', $this->panel_nav);
         $this->template->assign('heading_panel', $this->template->fetch('heading_panel'));
+    }
+
+    /**
+     *
+     */
+    private function makeNav()
+    {
+        $nav = $this->makeNavTranslations($this->engine->nav());
+
+        $nav = array_merge($nav, self::$menu_nav);
+        $this->template->assign('nav_items', $nav);
+        $s = $this->template->fetch('nav');
+        $this->template->assign('nav', $s);
+    }
+
+    private function makeNavTranslations($nav)
+    {
+        $res = [];
+        foreach ($nav as $item) {
+            if($item['isfolder']){
+                $item['items'] = $this->makeNavTranslations($item['items']);
+            }
+
+            $c = $item['controller'];
+            if(strpos($c, '/') !== false){
+                $a = explode('/', $c);
+                $c = end($a);
+                $c = lcfirst($c);
+            }
+            $item['name'] = $this->t($c . '.action_index');
+            $item['url'] = $item['controller'];
+            $res[] = $item;
+        }
+
+        return $res;
+    }
+
+    private static $menu_nav = [];
+
+    /**
+     * @param $name
+     * @param $url
+     * @param $icon
+     * @param $parent
+     * @param $position
+     */
+    protected function assignToNav($name, $url, $icon = null, $parent = null, $position = 0)
+    {
+        while(isset(self::$menu_nav[$position])){
+            $position++;
+        }
+
+        self::$menu_nav[$position] = [
+            'name'     => $name,
+            'url'      => $url,
+            'icon'     => $icon,
+            'parent'   => $parent,
+            'isfolder' => 0
+        ];
+    }
+
+    private function initModules()
+    {
+        $modules_dir = 'modules';
+        $modules = new \stdClass();
+        if ($handle = opendir(DOCROOT . $modules_dir)) {
+            while (false !== ($module = readdir($handle))) {
+                if ($module == "." || $module == "..")  continue;
+
+                $c  = $modules_dir .'\\'. $module . '\controllers\admin\\' . ucfirst($module);
+
+                $path = str_replace("\\", "/", $c);
+
+                if(!file_exists(DOCROOT . $path . '.php')) {
+                    continue;
+                }
+
+                $this->assignModuleLang($module);
+                $controller = new $c;
+                $modules->{$module} = $controller;
+
+                call_user_func(array($controller, 'init'));
+            }
+            closedir($handle);
+        }
+
+        return $modules;
+    }
+
+    private function assignModuleLang($module)
+    {
+        $modules_dir = 'modules';
+        $dir  =  $modules_dir .'/'. $module . '/lang';
+
+        $lang = $this->getLang();
+
+        if(!is_dir(DOCROOT . $dir . '/' . $lang)) return ;
+
+        Lang::getInstance($this->theme, $lang)->setTranslations($dir);
     }
 
     /**

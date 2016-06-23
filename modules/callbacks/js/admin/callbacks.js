@@ -36,7 +36,7 @@ engine.callbacks = {
     },
     reply: function(id)
     {
-        engine.request.get('./callbacks/reply/' + id, function(d)
+        engine.request.get('module/run/callbacks/reply/' + id, function(d)
         {
             var bi = t.common.button_save;
             var buttons = {};
@@ -70,7 +70,7 @@ engine.callbacks = {
     },
     approve: function(id)
     {
-        engine.request.get('./callbacks/approve/' + id, function(d){
+        engine.request.get('module/run/callbacks/approve/' + id, function(d){
             if(d > 0){
                 var $tabs = $('#tabs').tabs();
                 var selected = $tabs.tabs('option', 'active');
@@ -81,7 +81,7 @@ engine.callbacks = {
     },
     restore: function(id)
     {
-        engine.request.get('./callbacks/restore/' + id, function(d){
+        engine.request.get('module/run/callbacks/restore/' + id, function(d){
             if(d > 0){
                 var $tabs = $('#tabs').tabs();
                 var selected = $tabs.tabs('option', 'active');
@@ -97,7 +97,7 @@ engine.callbacks = {
             t.callbacks.delete_question,
             function()
             {
-                engine.request.get('./callbacks/delete/' + id, function(d){
+                engine.request.get('module/run/callbacks/delete/' + id, function(d){
                     if(d > 0){
                         var $tabs = $('#tabs').tabs();
                         var selected = $tabs.tabs('option', 'active');
@@ -115,7 +115,7 @@ engine.callbacks = {
             t.callbacks.spam_question,
             function()
             {
-                engine.request.get('./callbacks/spam/' + id, function(d){
+                engine.request.get('module/run/callbacks/spam/' + id, function(d){
                     if(d > 0){
                         var $tabs = $('#tabs').tabs();
                         var selected = $tabs.tabs('option', 'active');
