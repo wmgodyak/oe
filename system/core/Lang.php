@@ -32,23 +32,6 @@ class Lang
     {
         $this->dir  = "themes/$theme/lang/";
         $this->lang = $lang;
-
-        if ($handle = opendir($this->dir)) {
-            while (false !== ($entry = readdir($handle))) {
-                if ($entry != "." && $entry != ".."){
-
-                    $fn = $this->dir. $entry . '/core.ini';
-
-                    if(!file_exists($fn)) continue;
-
-                    $a = parse_ini_file($fn, true);
-
-                    $this->langs[] = $a['lang'];
-                }
-            }
-            closedir($handle);
-        }
-
         $this->setTranslations();
     }
 
@@ -73,12 +56,28 @@ class Lang
      */
     public function getLangs()
     {
+        if ($handle = opendir($this->dir)) {
+            while (false !== ($entry = readdir($handle))) {
+                if ($entry != "." && $entry != ".."){
+
+                    $fn = $this->dir. $entry . '/core.ini';
+
+                    if(!file_exists($fn)) continue;
+
+                    $a = parse_ini_file($fn, true);
+
+                    $this->langs[] = $a['lang'];
+                }
+            }
+            closedir($handle);
+        }
+
         return $this->langs;
     }
 
     /**
-     * @param $lang
      * @param null $dir
+     * @throws Exception
      */
     public function setTranslations($dir = null)
     {
@@ -88,7 +87,8 @@ class Lang
             throw new Exception("Wrong lang dir: $dir");
         }
 
-        if ($handle = opendir(DOCROOT . $dir . '/')) {
+        if ($handle = opendir(DOCROOT . $dir . '/' . $this->lang)) {
+
             while (false !== ($entry = readdir($handle))) {
                 if ($entry != "." && $entry != ".."){
 
@@ -105,6 +105,8 @@ class Lang
             }
             closedir($handle);
         }
+
+//       echo '<pre>'; var_dump($this->translations);echo '</pre>';
     }
 
     /**

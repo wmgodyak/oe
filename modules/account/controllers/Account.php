@@ -22,13 +22,13 @@ class Account extends Front
         $this->reg_group_id = 2;
         $this->account = new \modules\account\models\Account();
 
-        $this->user = Session::get('user');
+        $this->user = ['id'=>1, 'name' => 'GoVi']; //Session::get('user');
     }
 
     public function init()
     {
         parent::init();
-        echo "Init " . __CLASS__ . "\r\n";
+//        echo "Init " . __CLASS__ . "\r\n";
         $this->template->assign('user', $this->user);
     }
 
@@ -74,7 +74,7 @@ class Account extends Front
             ))->asJSON();
         }
 
-        $this->template->assign('acc_content', $this->template->fetch('modules/account/login'));
+        return $this->template->fetch('modules/account/login');
     }
 
     public function logout()

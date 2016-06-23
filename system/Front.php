@@ -170,17 +170,22 @@ class Front extends core\Controller
             //assign page to template
             $this->template->assign('page', $page);
 
-            // assign translations to template
-            $this->template->assign('t', $this->t());
+            // load default translations
+//            Lang::getInstance($this->settings['app_theme_current'], $this->languages_code);
 
             // init modules
-            $this->initModules();
+            $modules = $this->initModules();
+//            $this->dump($modules);die;
+
+            // assign translations to template
+            $this->template->assign('t', $this->t());
 
 
             // assign app
             $app = new App();
 //                echo '<pre>'; var_dump($app->languages->get());die;
             $this->template->assign('app', $app);
+            $this->template->assign('mod', $modules);
 
             $this->template->assign('settings', $this->settings);
 
@@ -204,6 +209,7 @@ class Front extends core\Controller
      */
     private function initModules()
     {
+        $modules = new \stdClass();
         if ($handle = opendir(DOCROOT . $this->modules_dir)) {
             while (false !== ($module = readdir($handle))) {
                 if ($module == "." || $module == "..")  continue;
@@ -218,25 +224,20 @@ class Front extends core\Controller
 
                 $this->assignModuleLang($module);
                 $controller = new $c;
+                $modules->{$module} = $controller;
+
                 call_user_func(array($controller, 'init'));
             }
             closedir($handle);
         }
+
+        return $modules;
     }
 
     private function assignModuleLang($module)
     {
         $dir =  $this->modules_dir .'/'. $module . '/lang/';
-        if ($handle = opendir(DOCROOT . $dir)) {
-            while (false !== ($entry = readdir($handle))) {
-                if ($entry != "." && $entry != "..") {
-                    $path = $dir . $entry . '/';
-//                    die($path);
-                    Lang::getInstance()->setTranslations($path);
-                }
-            }
-            closedir($handle);
-        }
+        Lang::getInstance($this->settings['app_theme_current'], $this->languages_code)->setTranslations($dir);
     }
 
     protected function getUrl($id)

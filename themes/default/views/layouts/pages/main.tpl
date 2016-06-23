@@ -7,6 +7,6 @@
  *}
 {*<pre>{print_r($app->nav->get('top'))}</pre>*}
 {*<pre>{print_r($settings)}</pre>*}
-<pre>{print_r($t)}</pre>
+{*<pre>{print_r($t)}</pre>*}
 {*<pre>{print_r($page)}</pre>*}
-
+{*<pre>{print_r($mod->account->login())}</pre>*}
