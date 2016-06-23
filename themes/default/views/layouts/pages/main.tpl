@@ -10,3 +10,4 @@
 {*<pre>{print_r($t)}</pre>*}
 {*<pre>{print_r($page)}</pre>*}
 {*<pre>{print_r($mod->account->login())}</pre>*}
+It works!

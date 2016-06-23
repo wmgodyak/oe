@@ -141,7 +141,6 @@ class ContentTypes extends Engine
             )
         );
         $data = ['parent_id' => $parent_id,'images_sizes' => []];
-//        $data['controllers'] = $this->getContentTypes();
         $this->template->assign('data', $data);
         $this->template->assign('imagesSizes', $this->contentTypes->getContentImagesSizes());
         $this->template->assign('features_types', $this->contentTypes->getFeaturesTypes());
@@ -176,8 +175,6 @@ class ContentTypes extends Engine
             )
         );
 
-        $this->getModules();
-
         $data['template'] = $this->readTemplate($id);
 
         $this->template->assign('imagesSizes', $this->contentTypes->getContentImagesSizes());
@@ -188,30 +185,6 @@ class ContentTypes extends Engine
 
         $this->template->assign('action', 'edit');
         $this->output($this->template->fetch('contentTypes/form'));
-    }
-
-    private function getModules()
-    {
-        return [];
-        $hide_actions = ['__construct', 'e_404', 'before', 'e404', '__set', '__get', 'dump', 'dDump', 'redirect','process','delete'];
-        $path = 'controllers\modules\\';
-        $modules = [];
-        $r = $this->contentTypes->getModules();
-        foreach ($r as $k=>$module) {
-            $controller = ucfirst($module['controller']);
-            $class = new \ReflectionClass($path . $controller);
-            $methods = $class->getMethods(\ReflectionMethod::IS_PUBLIC);
-
-            foreach ($methods as $method) {
-                if(in_array($method->name, $hide_actions)) continue;
-
-                $modules[$controller][] = $controller .'::'. $method->name;
-
-            }
-        }
-//        $this->dump($modules);
-//        die;
-        $this->template->assign('modules', $modules);
     }
 
     /**

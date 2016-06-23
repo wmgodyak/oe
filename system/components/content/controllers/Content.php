@@ -96,7 +96,7 @@ class Content extends Engine
 
         $form = $this->template->fetch($this->form_template);
 
-        return $this->output($form);
+        $this->output($form);
     }
 
     private function makeFeatures($features, $settings)
@@ -116,7 +116,7 @@ class Content extends Engine
     public function delete($id)
     {
         $s = $this->mContent->delete($id);
-        $m = $this->mContent->getDBError();
+        $m = $this->mContent->getError();
 
         $this->response->body(['s'=>$s,'m' => $m])->asJSON();
     }
@@ -128,7 +128,7 @@ class Content extends Engine
         $s = $this->mContent->update($id);
 
         if(! $s){
-            $i = $this->mContent->getDBError();
+            $i = $this->mContent->getError();
             $m = $this->mContent->getErrorMessage();
         }
 
