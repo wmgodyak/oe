@@ -22,40 +22,45 @@ engine.blog = {
             engine.content.hide(id, 'module/run/blog');
         });
 
-        $(document).on('click', '.b-posts-categories-create', function(){
-            //self.location.href= "content/postsCategories/create";
-            engine.post.categories.create(0);
+        $(document).on('click', '.b-blog-categories-create', function(){
+            engine.blog.categories.create(0);
         });
 
         $('#categories').select2();
 
 
-        var $tree = new engine.tree('postsCategories');
+        var $tree = new engine.tree('blogCategories');
         $tree
-            .setUrl('./plugins/postsCategories/categories')
+            .setUrl('module/run/blog/categories/tree')
             .setContextMenu('create', t.blog.tree_create, 'fa-file', function(o){
                     var node_id= o.reference[0].id;
-                    engine.post.categories.create(node_id);
+                    engine.blog.categories.create(node_id);
                 }
             )
-            .setContextMenu('edit', t.postsCategories.tree_edit, 'fa-pencil', function(o){
+            .setContextMenu('edit', t.blogCategories.tree_edit, 'fa-pencil', function(o){
                 var node_id= o.reference[0].id;
-                engine.post.categories.edit(node_id);
+                engine.blog.categories.edit(node_id);
                 }
             )
-            .setContextMenu('del', t.postsCategories.tree_delete, 'fa-remove', function(o){
+            .setContextMenu('del', t.blogCategories.tree_delete, 'fa-remove', function(o){
                     var node_id= o.reference[0].id;
                     engine.confirm
                     (
-                        'ДІйсно видалити Категорію?',
+                        'Дійсно видалити Категорію?',
                         function()
                         {
-                            engine.content.delete(node_id, function(d){
-                                if(ACTION == 'create' || ACTION == 'edit'){
-                                    self.location.href = 'content/posts';
+                            engine.request.get('module/run/blog/categories/delete/'+node_id, function(res){
+                                if(res.s ){
+                                    if(ACTION == 'create' || ACTION == 'edit'){
+                                        self.location.href = 'module/run/blog';
+                                    }
+                                    $tree.refresh();
+                                    dialog.dialog('destroy').remove();
+                                    $tree.jstree('refresh');
+                                } else {
+                                    alert(res.m);
                                 }
-                            });
-                            $tree.refresh();
+                            }, 'json');
                         });
                 }
             )
@@ -63,7 +68,7 @@ engine.blog = {
                 console.log(data);
 
                 engine.request.post({
-                    url : './plugins/postsCategories/move',
+                    url : 'module/run/blog/categories/move',
                     data: {
                         id: data.node.id,
                         'old_parent' : data.old_parent,
@@ -78,15 +83,15 @@ engine.blog = {
     categories: {
         before: function()
         {
-            var infoName = $("#postCategoriesForm .info-name");
+            var infoName = $("#blogCategoriesForm .info-name");
             infoName.charCount({"counterText": "Залишилось:", "allowed": 200, "warning": 25});
 
-            $("#postCategoriesForm .info-url").charCount({"counterText": "Залишилось:", "allowed": 160, "warning": 25});
-            $("#postCategoriesForm .info-title, #postCategoriesForm .into-h1, #postCategoriesForm .info-keywords, #postCategoriesForm .info-description")
+            $("#blogCategoriesForm .info-url").charCount({"counterText": "Залишилось:", "allowed": 160, "warning": 25});
+            $("#blogCategoriesForm .info-title, #blogCategoriesForm .into-h1, #blogCategoriesForm .info-keywords, #blogCategoriesForm .info-description")
                 .charCount({"counterText": "Залишилось:", "allowed": 255, "warning": 50});
 
             infoName.each(function(i,e){
-                var inp = $('#postCategoriesForm .info-url:eq('+i+')'), title = $('#postCategoriesForm .info-title:eq('+i+')'), lang = $(this).data('lang');
+                var inp = $('#blogCategoriesForm .info-url:eq('+i+')'), title = $('#blogCategoriesForm .info-title:eq('+i+')'), lang = $(this).data('lang');
                 var te = title.val() == '';
                 $(this).keyup(function(){
                     var text = this.value;
@@ -100,42 +105,42 @@ engine.blog = {
                 });
             });
 
-            $('#postCategoriesForm #switchLanguages').find('button').click(function(){
+            $('#blogCategoriesForm #switchLanguages').find('button').click(function(){
                 $(this).addClass('btn-primary').siblings().removeClass('btn-primary');
                 var code = $(this).data('code');
-                $('#postCategoriesForm .switch-lang:not(.lang-'+code+')').hide();
-                $('#postCategoriesForm .switch-lang.lang-' + code).show();
+                $('#blogCategoriesForm .switch-lang:not(.lang-'+code+')').hide();
+                $('#blogCategoriesForm .switch-lang.lang-' + code).show();
             });
 
         },
         create: function(parent_id)
         {
             var $this = this;
-            var $tree = $('#postsCategories');
-            engine.request.get('./plugins/postsCategories/createCategories/' + parent_id, function(d)
+            var $tree = $('#blogCategories');
+            engine.request.get('module/run/blog/categories/create/' + parent_id, function(d)
             {
                 var bi = t.common.button_save;
                 var buttons = {};
 
                 buttons[bi] =  function(){
-                    $('#postCategoriesForm').submit();
+                    $('#blogCategoriesForm').submit();
                 };
 
                 var dialog = engine.dialog({
                     content: d,
-                    title: t.postsCategories.create_title,
+                    title: t.blogCategories.create_title,
                     autoOpen: true,
                     width: 750,
                     modal: true,
                     buttons: buttons
                 });
 
-                engine.validateAjaxForm('#postCategoriesForm', function(d){
+                engine.validateAjaxForm('#blogCategoriesForm', function(d){
                     if(d.s){
                         dialog.dialog('destroy').remove();
                         $tree.jstree('refresh');
                     } else {
-                        engine.showFormErrors('#postCategoriesForm', d.i);
+                        engine.showFormErrors('#blogCategoriesForm', d.i);
                     }
                 });
 
@@ -146,31 +151,31 @@ engine.blog = {
         edit: function(id)
         {
             var $this = this;
-            var $tree = $('#postsCategories');
-            engine.request.get('./plugins/postsCategories/editCategories/' + id, function(d)
+            var $tree = $('#blogCategories');
+            engine.request.get('module/run/blog/categories/edit/' + id, function(d)
             {
                 var bi = t.common.button_save;
                 var buttons = {};
 
                 buttons[bi] =  function(){
-                    $('#postCategoriesForm').submit();
+                    $('#blogCategoriesForm').submit();
                 };
 
                 var dialog = engine.dialog({
                     content: d,
-                    title: t.postsCategories.action_edit,
+                    title: t.blogCategories.action_edit,
                     autoOpen: true,
                     width: 750,
                     modal: true,
                     buttons: buttons
                 });
 
-                engine.validateAjaxForm('#postCategoriesForm', function(d){
+                engine.validateAjaxForm('#blogCategoriesForm', function(d){
                     if(d.s){
                         dialog.dialog('destroy').remove();
                         $tree.jstree('refresh');
                     } else {
-                        engine.showFormErrors('#postCategoriesForm', d.i);
+                        engine.showFormErrors('#blogCategoriesForm', d.i);
                     }
                 });
 

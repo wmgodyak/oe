@@ -274,13 +274,12 @@ class Content extends Model
     {
         $isfolder  = $this->getData($id, 'isfolder');
         if($isfolder) {
-            $this->error = "Item is folder. Cannot delete.";
+            $this->setError("Item is folder. Cannot delete.");
             return false;
         }
 
         $parent_id = $this->getData($id, 'parent_id');
 
-//
         $s = parent::updateRow('__content', $id, ['status' => 'deleted']);
 //
         if($s > 0 && $parent_id > 0){
@@ -289,7 +288,7 @@ class Content extends Model
                 ->row('t');
 
             if($t == 0){
-                parent::updateRow('content', $parent_id, ['isfolder' => 0]);
+                parent::updateRow('__content', $parent_id, ['isfolder' => 0]);
             }
         }
 
@@ -380,7 +379,7 @@ class Content extends Model
           from __content c
           join __content_types ct on ct.type = '{$type}' and ct.id=c.types_id
           join __content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
-          where c.parent_id={$parent_id} and c.status in ('published', 'hidden')
+          where c.parent_id='{$parent_id}' and c.status in ('published', 'hidden')
           ")->all();
     }
 }

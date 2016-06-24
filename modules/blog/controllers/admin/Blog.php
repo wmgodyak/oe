@@ -142,6 +142,8 @@ class Blog extends Content
             echo $t->render($res, $t->getTotal());//$this->response->body($t->render($res, $t->getTotal()))->asJSON();
             return;
         }
+
+        $this->template->assign('sidebar', $this->template->fetch('blog/categories/tree'));
         $this->output($t->init());
     }
 
@@ -163,10 +165,32 @@ class Blog extends Content
         )
         );
 
+        $this->template->assign('sidebar', $this->template->fetch('blog/categories/tree'));
         parent::edit($id);
     }
 
-    public function __get()
+    public function categories()
+    {
+        include "Categories.php";
+
+        $params = func_get_args();
+
+        $action = 'index';
+        if(!empty($params)){
+            $action = array_shift($params);
+        }
+
+        $controller  = new Categories();
+
+        call_user_func_array(array($controller, $action), $params);
+    }
+
+    /**
+     * todo блокується виклик категорій в Module як магічний метод
+     * @param $class
+     * @throws Exception
+     */
+    public function __get($class)
     {
         $params     = func_get_args();
         if(empty($params)){

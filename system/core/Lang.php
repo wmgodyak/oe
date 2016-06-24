@@ -83,7 +83,7 @@ class Lang
     {
         $dir = !$dir ? $this->dir : $dir;
 
-        if(!is_dir(DOCROOT . $dir)) {
+        if(!is_dir(DOCROOT . $dir . '/' . $this->lang)) {
 //            throw new Exception("Wrong lang dir: $dir");
             return;
         }

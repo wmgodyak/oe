@@ -1,4 +1,4 @@
-<form action="./plugins/postsCategories/process/{$content.id}" method="post" id="postCategoriesForm" class="form-horizontal">
+<form action="module/run/blog/categories/process/{if isset($content.id)}{$content.id}{/if}" method="post" id="blogCategoriesForm" class="form-horizontal">
 
     {include "content/blocks/main.tpl"}
     {include "content/blocks/meta.tpl"}

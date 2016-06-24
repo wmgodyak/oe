@@ -150,6 +150,7 @@ class Response
 
     public function asJSON()
     {
+        header('Content-Type: application/json');
         $this->ct = 'application/json';
 
 //        $this->render();

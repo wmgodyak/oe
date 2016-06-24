@@ -28,7 +28,7 @@ class Module extends Engine
         $controller = new $c;
 
         if(!is_callable(array($controller, $action))){
-            $this->redirect('dashboard', 404);
+            $this->redirect('/404', 404);
         }
 
         $this->makeCrumbs($this->t($module . '.action_index'), "module/run/callbacks");

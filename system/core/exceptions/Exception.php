@@ -48,6 +48,7 @@ class Exception extends \Exception
             }
         </style>
         <pre>';
+
         return parent::__toString();
     }
 }

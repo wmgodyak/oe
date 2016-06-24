@@ -42,7 +42,7 @@ class DB extends \PDO {
          * For example, fetch mode FETCH_ASSOC would return results like this: $result["user_name] !
          * @see http://www.php.net/manual/en/pdostatement.fetch.php
          */
-        $conf = Config::getInstance()->get('db');
+        $conf = Config::getInstance()->get('db'); // todo переробити
         $this->conf = $conf;
 
         $this->db_name = $conf['db'];
@@ -51,7 +51,7 @@ class DB extends \PDO {
             \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
             \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION // ERRMODE_EXCEPTION
         );
-
+        try {
         /**
          * Generate a database connection, using the PDO connector
          * @see http://net.tutsplus.com/tutorials/php/why-you-should-be-using-phps-pdo-for-database-access/
@@ -60,36 +60,54 @@ class DB extends \PDO {
          * "Adding the charset to the DSN is very important for security reasons,
          * most examples you'll see around leave it out. MAKE SURE TO INCLUDE THE CHARSET!"
          */
-        try{
-            parent::__construct(
-                $conf['type'] . ':host=' . $conf['host'] . ';dbname=' . $conf['db'] . ';charset=' . $conf['charset'],
-                $conf['user'], $conf['pass'],
-                $options
-            );
-            $this->exec("SET NAMES utf8");
-        } catch (Exception $e){
-
-            header('HTTP/1.1 503 Service Temporarily Unavailable');
-            header('Status: 503 Service Temporarily Unavailable');
-            $output = self::fatalErrorPageContent();
-            $output = str_ireplace(
-                '{DESCRIPTION}',
-                '<p>This application is currently experiencing some database difficulties</p>',
-                $output
-            );
-            $output = str_ireplace(
-                '{CODE}',
-                '<b>Description:</b> '.$e->getMessage().'<br>
-                    <b>File:</b> '.$e->getFile().'<br>
-                    <b>Line:</b> '.$e->getLine(),
-                $output
-            );
-
-            echo $output;
-
-            exit(1);
-
+        parent::__construct
+        (
+            $conf['type'] . ':host=' . $conf['host'] . ';dbname=' . $conf['db'] . ';charset=' . $conf['charset'],
+            $conf['user'],
+            $conf['pass'],
+            $options
+        );
         }
+        catch(\PDOException $e) {
+           echo '<!DOCTYPE html>
+        <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
+        <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Database Fatal Error</title>
+        <style type="text/css">
+                html{background:#f9f9f9}
+                body{
+                    background:#fff;
+                    color:#333;
+                    font-family:sans-serif;
+                margin:2em auto;
+                padding:1em 2em 2em;
+                -webkit-border-radius:3px;
+                border-radius:3px;
+                border:1px solid #dfdfdf;
+                max-width:750px;
+                text-align:left;
+            }
+            #error-page{margin-top:50px}
+            #error-page h2{border-bottom:1px dotted #ccc;}
+            #error-page p{font-size:16px; line-height:1.5; margin:2px 0 15px}
+            #error-page .code-wrapper{color:#400; background-color:#f1f2f3; padding:5px; border:1px dashed #ddd}
+            #error-page code{font-size:15px; font-family:Consolas,Monaco,monospace;}
+            a{color:#21759B; text-decoration:none}
+                    a:hover{color:#D54E21}
+                        </style>
+        </head>
+        <body id="error-page">
+            <h2>Отакої! Виникла помилка.</h2>
+            <div class="code-wrapper">
+                <code>'. $e->getMessage() .'</code>
+            </div>
+        </body>
+        </html>';
+            die();
+        }
+
+        $this->exec("SET NAMES utf8");
     }
 
 
@@ -431,49 +449,6 @@ class DB extends \PDO {
         return self::$errorCode != '';
     }
 
-    /**
-     * Returns fata error page content
-     * @return html code
-     */
-    private static function fatalErrorPageContent()
-    {
-        return '<!DOCTYPE html>
-        <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
-        <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>Database Fatal Error</title>
-        <style type="text/css">
-            html{background:#f9f9f9}
-            body{
-                background:#fff;
-                color:#333;
-                font-family:sans-serif;
-                margin:2em auto;
-                padding:1em 2em 2em;
-                -webkit-border-radius:3px;
-                border-radius:3px;
-                border:1px solid #dfdfdf;
-                max-width:750px;
-                text-align:left;
-            }
-            #error-page{margin-top:50px}
-            #error-page h2{border-bottom:1px dotted #ccc;}
-            #error-page p{font-size:16px; line-height:1.5; margin:2px 0 15px}
-            #error-page .code-wrapper{color:#400; background-color:#f1f2f3; padding:5px; border:1px dashed #ddd}
-            #error-page code{font-size:15px; font-family:Consolas,Monaco,monospace;}
-            a{color:#21759B; text-decoration:none}
-            a:hover{color:#D54E21}
-        </style>
-        </head>
-        <body id="error-page">
-            <h2>Database connection error!</h2>
-            {DESCRIPTION}
-            <div class="code-wrapper">
-            <code>{CODE}</code>
-            </div>
-        </body>
-        </html>';
-    }
 
     /**
      * Prepares/changes keys and parameters
