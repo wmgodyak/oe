@@ -136,21 +136,9 @@ class Front extends Model
             $page['settings']['modules'] = [];
         }
 
-        $s = $this->getContentTypeSettings($page['subtypes_id']);
-
-        if(!empty($s['modules'])){
-            $page['settings']['modules'] = array_merge($s['modules'], $page['settings']['modules']);
-        }
-
-
-        if (!empty($page['settings']['modules'])) {
-            foreach ($page['settings']['modules'] as $k => $module) {
-//                $this->callModule($module);
-            }
-        }
-
         // reformat meta
         $page = $this->makeMeta($page);
+
         $this->page = $page;
     }
 
