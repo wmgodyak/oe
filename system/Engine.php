@@ -117,7 +117,10 @@ abstract class Engine extends Controller
 
             $this->_init();
 
-            $this->makeCrumbs();
+            $controller = $this->request->param('controller');
+            $controller = lcfirst($controller);
+
+            $this->makeCrumbs($this->t($controller . '.action_index'), $controller);
         }
 
         $this->admin = Admin::data();
@@ -147,18 +150,16 @@ abstract class Engine extends Controller
 
         $lang = $this->getLang();
 
-
         $this->template->assign('version',    $this->version);
         $this->template->assign('base_url',   APPURL . 'engine/');
         $this->template->assign('controller', $controller);
         $this->template->assign('action',     $action);
-        $this->template->assign('t',          Lang::getInstance($this->theme, $lang)->t());
-        $this->template->assign('languages',  $this->languages->get());
 
+        $this->initModules();
+
+        $this->template->assign('t',          Lang::getInstance($this->theme, $lang)->t());
         // admin structure
         if($this->request->isGet() && ! $this->request->isXhr()){
-
-            $this->initModules();
 
             $this->makeNav();
 
@@ -169,8 +170,10 @@ abstract class Engine extends Controller
             }
 
             $this->template->assign('title', $this->t($controller . '.action_' . $action));
-            $this->template->assign('name', $this->t($controller . '.action_' . $action));
+            $this->template->assign('name',  $this->t($controller . '.action_' . $action));
         }
+
+        $this->template->assign('languages',  $this->languages->get());
 
         $this->template->assign('admin', Admin::data());
 
@@ -186,18 +189,16 @@ abstract class Engine extends Controller
     }
 
     /**
-     *
+     * @param $name
+     * @param $url
      */
-    private function makeCrumbs()
+    protected function makeCrumbs($name, $url)
     {
-        $controller = $this->request->param('controller');
-        $controller = lcfirst($controller);
-
         $breadcrumb =
             [
                 [
-                    'url'  => $controller,
-                    'name' => $this->t($controller . '.action_index')
+                    'url'  => $url,
+                    'name' => $name
                 ]
             ];
 
@@ -348,15 +349,15 @@ abstract class Engine extends Controller
 
                 $path = str_replace("\\", "/", $c);
 
-                if(!file_exists(DOCROOT . $path . '.php')) {
-                    continue;
+                if(file_exists(DOCROOT . $path . '.php')) {
+
+                    $this->assignModuleLang($module);
+                    $controller = new $c;
+                    $modules->{$module} = $controller;
+
+                    call_user_func(array($controller, 'init'));
                 }
 
-                $this->assignModuleLang($module);
-                $controller = new $c;
-                $modules->{$module} = $controller;
-
-                call_user_func(array($controller, 'init'));
             }
             closedir($handle);
         }
@@ -371,7 +372,10 @@ abstract class Engine extends Controller
 
         $lang = $this->getLang();
 
-        if(!is_dir(DOCROOT . $dir . '/' . $lang)) return ;
+        if(!is_dir(DOCROOT . $dir . '/' . $lang)) {
+//            echo('Missing modules lang ' . $dir . '/' . $lang . '<br>');
+            return ;
+        }
 
         Lang::getInstance($this->theme, $lang)->setTranslations($dir);
     }
@@ -381,6 +385,8 @@ abstract class Engine extends Controller
      */
     protected final function output($body)
     {
+//        $this->dump($this->t('callbacks'));
+//        die;
         $this->renderHeadingPanel();
 //        return  $body;
       $this->response->body($body); // todo ???

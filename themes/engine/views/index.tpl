@@ -27,7 +27,6 @@
                     <div class="sidebar-heading">
                         <img src="{$theme_url}assets/img/logo/logo-black.png">
                     </div>
-                    {if isset($plugins.sidebar)}{implode("\r\n", $plugins.sidebar)}{/if}
                     {if isset($sidebar)}{$sidebar}{/if}
                 </div>
                 {/if}
@@ -35,9 +34,7 @@
                     <div class="content-wrapper"> <!--dashboard-->
                         {$heading_panel}
                         <div class="inline-notifications"></div>
-                        {if $action == 'index' && isset($plugins.top)}{implode("\r\n", $plugins.top)}{/if}
                         {$body}
-                        {if $action == 'index' && isset($plugins.bottom)}{implode("\r\n", $plugins.bottom)}{/if}
                     </div> <!--end-->
                     <footer>
                         <div class="copyright">

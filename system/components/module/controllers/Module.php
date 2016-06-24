@@ -31,6 +31,11 @@ class Module extends Engine
             $this->redirect('dashboard', 404);
         }
 
+        $this->makeCrumbs($this->t($module . '.action_index'), "module/run/callbacks");
+
+        $this->template->assign('title', $this->t($module . '.action_' . $action));
+        $this->template->assign('name',  $this->t($module . '.action_' . $action));
+
         call_user_func_array(array($controller, $action), $params);
     }
 

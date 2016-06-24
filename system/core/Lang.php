@@ -84,15 +84,15 @@ class Lang
         $dir = !$dir ? $this->dir : $dir;
 
         if(!is_dir(DOCROOT . $dir)) {
-            throw new Exception("Wrong lang dir: $dir");
+//            throw new Exception("Wrong lang dir: $dir");
+            return;
         }
 
         if ($handle = opendir(DOCROOT . $dir . '/' . $this->lang)) {
-
             while (false !== ($entry = readdir($handle))) {
                 if ($entry != "." && $entry != ".."){
 
-                    $fn = DOCROOT . $dir . $this->lang .'/' . $entry;
+                    $fn = DOCROOT . $dir . '/' . $this->lang .'/' . $entry;
 
                     if(!file_exists($fn)) continue;
 
@@ -106,7 +106,7 @@ class Lang
             closedir($handle);
         }
 
-//       echo '<pre>'; var_dump($this->translations);echo '</pre>';
+//       echo '<pre>'; print_r($this->translations);echo '</pre>';
     }
 
     /**
