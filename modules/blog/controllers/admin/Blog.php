@@ -59,8 +59,8 @@ class Blog extends Content
 //            ->orderDef(0, 'desc')
             -> th($this->t('common.id'), 'c.id', 1, 1, 'width: 60px')
             -> th($this->t('common.name'), 'ci.name', 1, 1)
-            -> th($this->t('common.created'), 'c.created', 1,1, 'width: 200px')
-            -> th($this->t('common.updated'), 'c.updated', 1, 1, 'width: 200px')
+            -> th($this->t('common.created'), 'c.created', 0,1, 'width: 200px')
+            -> th($this->t('common.updated'), 'c.updated', 0, 1, 'width: 200px')
             -> th($this->t('common.tbl_func'), null, 0, 0, 'width: 180px')
         ;
         $t->get('ci.url',null,null,null);

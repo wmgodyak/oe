@@ -10,6 +10,7 @@ namespace modules\blog\controllers;
 
 use modules\blog\models\Categories;
 use modules\blog\models\Posts;
+use modules\blog\models\Tags;
 use system\Front;
 
 /**
@@ -20,6 +21,7 @@ class Blog extends Front
 {
     private $posts;
     private $categories;
+    private $tags;
 
     public function __construct()
     {
@@ -27,6 +29,7 @@ class Blog extends Front
 
         $this->posts = new Posts('post');
         $this->categories = new Categories('posts_categories');
+        $this->tags = new Tags();
     }
 
     public function index()
@@ -41,11 +44,17 @@ class Blog extends Front
 
     public function posts()
     {
-        return $this->posts->get();
+        $posts = $this->posts->get();
+
+        foreach ($posts as $k=>$post) {
+            $posts[$k]['tags'] = $this->tags->get($post['id']);
+        }
+
+        return $posts;
     }
 
-    public function tags()
+    public function tags($post_id)
     {
-        return 'In progress';
+        return $this->tags->get($post_id);
     }
 }
