@@ -63,10 +63,10 @@ abstract class Controller {
      *	@param string $index
      *  @return array
      */
-    final public function __get($index)
-    {
-        return isset($this->storage[$index]) ? $this->storage[$index] : null;
-    }
+//    final public function __get($index)
+//    {
+//        return isset($this->storage[$index]) ? $this->storage[$index] : null;
+//    }
 
     /**
      * @param $var

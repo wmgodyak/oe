@@ -1,25 +1,25 @@
 /**
  * Created by wg on 29.02.16.
  */
-engine.post = {
+engine.blog = {
     init: function()
     {
         //engine.require('content');
-        engine.require('bootstrap-tagsinput.min', '/themes/engine/assets/js/vendor/');
+        //engine.require('bootstrap-tagsinput.min', '/themes/engine/assets/js/vendor/');
 
         $(document).on('click', '.b-post-delete', function(){
             var id = $(this).data('id');
-            engine.confirm('ДІйсно видалити сторінку?', function(){engine.content.delete(id);});
+            engine.confirm('ДІйсно видалити сторінку?', function(){engine.content.delete(id, 'module/run/blog');});
         });
 
         $(document).on('click', '.b-post-pub', function(){
             var id = $(this).data('id');
-            engine.content.pub(id);
+            engine.content.pub(id, 'module/run/blog');
         });
 
         $(document).on('click', '.b-post-hide', function(){
             var id = $(this).data('id');
-            engine.content.hide(id);
+            engine.content.hide(id, 'module/run/blog');
         });
 
         $(document).on('click', '.b-posts-categories-create', function(){
@@ -33,7 +33,7 @@ engine.post = {
         var $tree = new engine.tree('postsCategories');
         $tree
             .setUrl('./plugins/postsCategories/categories')
-            .setContextMenu('create', t.post.tree_create, 'fa-file', function(o){
+            .setContextMenu('create', t.blog.tree_create, 'fa-file', function(o){
                     var node_id= o.reference[0].id;
                     engine.post.categories.create(node_id);
                 }
@@ -182,5 +182,5 @@ engine.post = {
 };
 
 $(document).ready(function(){
-   engine.post.init();
+   engine.blog.init();
 });

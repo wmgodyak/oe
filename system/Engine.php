@@ -156,8 +156,9 @@ abstract class Engine extends Controller
         $this->template->assign('action',     $action);
 
         $this->initModules();
+//        $this->dump(Lang::getInstance($this->theme, $lang)->t());die;
+        $this->template->assign('t', Lang::getInstance($this->theme, $lang)->t());
 
-        $this->template->assign('t',          Lang::getInstance($this->theme, $lang)->t());
         // admin structure
         if($this->request->isGet() && ! $this->request->isXhr()){
 

@@ -88,8 +88,6 @@ class Features extends Engine
         $res = array();
         foreach ($t->getResults(false) as $i=>$row) {
 
-//            $row['status'] = '';
-
             if($row['type'] == 'value'){
                 $a = 'javascript:;';
             } elseif($row['type'] == 'folder' || $row['type'] == 'select'){
@@ -154,7 +152,7 @@ class Features extends Engine
                     [
                         'class' => 'btn-primary' . ($row['type'] == 'value' ? ' b-features-edit-value' : ''),
                         'data-id' => $row['id'],
-                        'href' => "features/edit/{$row['id']}",
+                        'href'  => "features/edit/{$row['id']}",
                         'title' => $this->t('common.title_edit')
                     ]
                 ) .

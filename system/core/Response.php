@@ -53,7 +53,8 @@ class Response
         header('Content-Type: ' . $this->ct);
 
         if($this->ct == 'application/json'){
-            echo json_encode($this->body);die;
+            echo json_encode($this->body);
+            return;
         }
 
         $body = $this->body;
