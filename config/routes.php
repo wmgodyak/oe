@@ -87,7 +87,7 @@ $routes = array();
 
     $routes[]  = array('/?', 'system\App');
 */
-$routes[]  = array('/([^0-9A-Za-zА-Яа-яЁё]+)/?(.*)', 'system\Front', 'url');
-$routes[]  = array('/(.*)', 'system\Front');
+//$routes[]  = array('/([^0-9A-Za-zА-Яа-яЁё]+)/?(.*)', 'system\Front', 'url');
+$routes[]  = array('/(.*)', 'system\Front', 'url');
 
 return $routes;
