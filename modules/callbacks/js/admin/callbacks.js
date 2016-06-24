@@ -15,9 +15,9 @@ engine.callbacks = {
             }
         });
 
-        $(document).on('click', '.b-callbacks-reply', function(){
+        $(document).on('click', '.b-callbacks-edit', function(){
             var id = $(this).data('id');
-            engine.callbacks.reply(id);
+            engine.callbacks.edit(id);
         });
 
         $(document).on('click', '.b-callbacks-approve', function(){
@@ -34,9 +34,9 @@ engine.callbacks = {
             engine.callbacks.restore($(this).data('id'));
         });
     },
-    reply: function(id)
+    edit: function(id)
     {
-        engine.request.get('module/run/callbacks/reply/' + id, function(d)
+        engine.request.get('module/run/callbacks/edit/' + id, function(d)
         {
             var bi = t.common.button_save;
             var buttons = {};
@@ -45,7 +45,7 @@ engine.callbacks = {
             };
             var dialog = engine.dialog({
                 content: d,
-                title: t.callbacks.action_reply,
+                title: t.callbacks.action_edit,
                 autoOpen: true,
                 width: 750,
                 modal: true,
@@ -57,9 +57,11 @@ engine.callbacks = {
                 '#form',
                 function(d){
                     if(d.s){
-                        var $tabs = $('#tabs').tabs();
-                        var selected = $tabs.tabs('option', 'active');
-                        $("#tabs").tabs('load',selected);
+
+                        engine.refreshDataTable('callbacks');
+                        //var $tabs = $('#tabs').tabs();
+                        //var selected = $tabs.tabs('option', 'active');
+                        //$("#tabs").tabs('load',selected);
                         //engine.refreshDataTable('callbacks');
                         dialog.dialog('close');
                         dialog.dialog('destroy').remove()
@@ -67,17 +69,6 @@ engine.callbacks = {
                 }
             );
         });
-    },
-    approve: function(id)
-    {
-        engine.request.get('module/run/callbacks/approve/' + id, function(d){
-            if(d > 0){
-                var $tabs = $('#tabs').tabs();
-                var selected = $tabs.tabs('option', 'active');
-                $("#tabs").tabs('load',selected);
-            }
-        });
-        $(this).dialog('close').dialog('destroy').remove();
     },
     restore: function(id)
     {

@@ -42,6 +42,11 @@ class Callbacks extends Model
         return $data;
     }
 
+    public function getStatuses()
+    {
+        return self::$db->enumValues('__callbacks', 'status');
+    }
+
     public function getManagerData($id)
     {
         return self::$db
