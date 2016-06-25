@@ -20,6 +20,11 @@ engine.comments = {
             engine.comments.reply(id);
         });
 
+        $(document).on('click', '.b-comments-edit', function(){
+            var id = $(this).data('id');
+            engine.comments.edit(id);
+        });
+
         $(document).on('click', '.b-comments-approve', function(){
             engine.comments.approve($(this).data('id'));
         });
@@ -36,7 +41,7 @@ engine.comments = {
     },
     reply: function(id)
     {
-        engine.request.get('./comments/reply/' + id, function(d)
+        engine.request.get('module/run/comments/reply/' + id, function(d)
         {
             var bi = t.common.button_save;
             var buttons = {};
@@ -68,9 +73,43 @@ engine.comments = {
             );
         });
     },
+    edit: function(id)
+    {
+        engine.request.get('module/run/comments/edit/' + id, function(d)
+        {
+            var bi = t.common.button_save;
+            var buttons = {};
+            buttons[bi] =  function(){
+                $('#form').submit();
+            };
+            var dialog = engine.dialog({
+                content: d,
+                title: t.comments.action_edit,
+                autoOpen: true,
+                width: 750,
+                modal: true,
+                buttons: buttons
+            });
+
+            engine.validateAjaxForm
+            (
+                '#form',
+                function(d){
+                    if(d.s){
+                        var $tabs = $('#tabs').tabs();
+                        var selected = $tabs.tabs('option', 'active');
+                        $("#tabs").tabs('load',selected);
+                        //engine.refreshDataTable('comments');
+                        dialog.dialog('close');
+                        dialog.dialog('destroy').remove()
+                    }
+                }
+            );
+        });
+    },
     approve: function(id)
     {
-        engine.request.get('./comments/approve/' + id, function(d){
+        engine.request.get('./module/run/comments/approve/' + id, function(d){
             if(d > 0){
                 var $tabs = $('#tabs').tabs();
                 var selected = $tabs.tabs('option', 'active');
@@ -81,7 +120,7 @@ engine.comments = {
     },
     restore: function(id)
     {
-        engine.request.get('./comments/restore/' + id, function(d){
+        engine.request.get('./module/run/comments/restore/' + id, function(d){
             if(d > 0){
                 var $tabs = $('#tabs').tabs();
                 var selected = $tabs.tabs('option', 'active');
@@ -97,7 +136,7 @@ engine.comments = {
             t.comments.delete_question,
             function()
             {
-                engine.request.get('./comments/delete/' + id, function(d){
+                engine.request.get('./module/run/comments/delete/' + id, function(d){
                     if(d > 0){
                         var $tabs = $('#tabs').tabs();
                         var selected = $tabs.tabs('option', 'active');
@@ -115,7 +154,7 @@ engine.comments = {
             t.comments.spam_question,
             function()
             {
-                engine.request.get('./comments/spam/' + id, function(d){
+                engine.request.get('./module/run/comments/spam/' + id, function(d){
                     if(d > 0){
                         var $tabs = $('#tabs').tabs();
                         var selected = $tabs.tabs('option', 'active');
