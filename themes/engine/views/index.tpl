@@ -19,7 +19,7 @@
         <div class="dashboard">
             {$nav}
             <div class="page">
-                {if !empty($plugins.sidebar) != '' || isset($sidebar)}
+                {if isset($sidebar)}
                 <div class="sidebar sidebar-open">
                     <div class="toggle-btn">
                         <i class="fa fa-chevron-left"></i>
@@ -30,11 +30,13 @@
                     {if isset($sidebar)}{$sidebar}{/if}
                 </div>
                 {/if}
-                <div class="dashboard-content {if !empty($plugins.sidebar)  || isset($sidebar)} sidebar-open{/if}">
+                <div class="dashboard-content {if isset($sidebar)} sidebar-open{/if}">
                     <div class="content-wrapper"> <!--dashboard-->
                         {$heading_panel}
-                        <div class="inline-notifications"></div>
+                        <div class="inline-notifications">{if isset($global_notifications)}{$global_notifications}{/if}</div>
+                        {$events->call('global.top')}
                         {$body}
+                        {$events->call('global.bottom')}
                     </div> <!--end-->
                     <footer>
                         <div class="copyright">
