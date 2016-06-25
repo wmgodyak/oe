@@ -13,4 +13,10 @@
    + Callback
    - Comments
    + Feedback
-   - blog
+   + blog
+
+   - треба зареєструвати майданчики (platforms)
+   - Треба зробити можливість вибору платворми (assignToPlatform or assignPlugin('place', array($this, 'actionName')))
+
+   можна задіяти логіку засунути в шаблонізатор клас який буде викликатись з шаблонів
+   nht,f

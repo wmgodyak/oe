@@ -29,6 +29,16 @@ class Content extends Engine
     protected $form_success  = '';
     protected $data = [];
 
+    protected $form_display_blocks =
+        [
+            'content'  => true,
+            'features' => true,
+            'intro'    => true,
+            'main'     => true,
+            'meta'     => true,
+            'params'   => true
+        ];
+
     public function __construct($type)
     {
         parent::__construct();
@@ -79,6 +89,7 @@ class Content extends Engine
         $this->template->assign('subtypes', $this->mContent->getSubtypes($content['types_id']));
         $this->template->assign('form_action', $this->form_action . $id);
         $this->template->assign('form_success', $this->form_success);
+        $this->template->assign('form_display_blocks', $this->form_display_blocks);
 
         if(!empty($content['features'])){
             $this->makeFeatures

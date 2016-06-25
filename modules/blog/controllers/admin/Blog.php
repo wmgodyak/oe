@@ -28,6 +28,9 @@ class Blog extends Content
         $this->form_action = "module/run/blog/process/";
         $this->categories = new \modules\blog\models\Categories('posts_categories');
         $this->relations  = new ContentRelationship();
+
+        // hide custom block
+//        $this->form_display_blocks['content'] = false;
     }
 
 
