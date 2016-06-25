@@ -12,15 +12,22 @@ use helpers\bootstrap\Icon;
 use helpers\bootstrap\Link;
 use system\components\content\controllers\Content;
 use system\core\DataTables2;
+use system\core\Event;
 use system\core\exceptions\Exception;
+use system\models\ContentRelationship;
 
 class Blog extends Content
 {
+    private $categories;
+    private $relations;
+
     public function __construct()
     {
         parent::__construct('post');
 
         $this->form_action = "module/run/blog/process/";
+        $this->categories = new \modules\blog\models\Categories('posts_categories');
+        $this->relations  = new ContentRelationship();
     }
 
 
@@ -28,6 +35,29 @@ class Blog extends Content
     {
         $this->assignToNav('Блог', 'module/run/blog', 'fa-pencil');
         $this->template->assignScript("modules/blog/js/admin/blog.js");
+
+        Event::getInstance()->add('content.params', [$this, 'contentParams']);
+        Event::getInstance()->add('content.process', [$this, 'contentProcess']);
+    }
+
+    /**
+     * @param $content
+     * @return string
+     */
+    public function contentParams($content)
+    {
+        $this->template->assign('selected_categories', $this->relations->getCategories($content['id']));
+        $this->template->assign('categories', $this->categories->get());
+
+        return $this->template->fetch('blog/select_categories');
+    }
+
+    /**
+     * @param $id
+     */
+    public function contentProcess($id)
+    {
+        $this->relations->saveContentCategories($id);
     }
 
 
