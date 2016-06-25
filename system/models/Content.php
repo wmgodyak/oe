@@ -215,7 +215,7 @@ class Content extends Model
 
         if(!empty($content['published'])){
             $content['published'] = date('Y-m-d', strtotime($content['published']));
-        } else{
+        } else {
             $content['published'] = date('Y-m-d');
         }
 
@@ -250,7 +250,7 @@ class Content extends Model
             }
         }
 
-        if($content['parent_id'] > 0){
+        if(isset($content['parent_id']) && $content['parent_id'] > 0){
             $this->updateRow('__content', $content['parent_id'], ['isfolder' => 1]);
         }
 
