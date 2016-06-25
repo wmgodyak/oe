@@ -10,81 +10,91 @@ namespace system\core;
 
 /**
  * Class Event
- * Events like
- * on
- * before
- * @package controllers\core
+ * @description EventHandler
+ * To add event just add this code in init() your in module Event::getInstance()->add('content.main.info', [$this, 'mainInfoBottom']);
+ * To run event in template just call {$events->call('content.main.info')}
+ * To run event in module just call Event::getInstance()->call('content.main.info')
+ * It`s simply!!!
+ * @package system\core
  */
 class Event
 {
-    private static $events = array();
+    /**
+     * @var
+     */
+    private static $instance;
+
+    /**
+     * events
+     * @var array
+     */
+    private static $events = [];
+
+    private $debug;
 
     private function __construct(){}
 
     private function __clone(){}
 
+
+    public static function getInstance()
+    {
+        if(!self::$instance instanceof self){
+            self::$instance = new Event();
+        }
+
+        return self::$instance;
+    }
+
     /**
-     * @param $event string example auth.login, user.*
+     * @param $action
      * @param $callback
      * @param int $priority
      */
-    public static function listen($event, $callback, $priority = 10)
+    public function add($action, $callback, $priority = 10)
     {
-        foreach (self::$events as $e) {
-            if($e['event'] == $event) return;
-        }
+       while(isset(self::$events[$action][$priority])){
+           $priority += 5;
+       }
 
-        self::$events[] = array(
-            'event'    => $event,
-            'callback' => $callback,
-            'priority' => $priority
-        );
-    }
-
-    public static function get()
-    {
-        return self::$events;
+       self::$events[$action][$priority] = $callback;
     }
 
     /**
-     * @param $controller
      * @param $action
-     * @param array $args
-     * @return bool
+     * @param array $params
      */
-    public static function fire($controller, $action, $args = array())
+    public function call($action, $params = [])
     {
-//        echo $controller, '::', $action, "\r\n";
+        if($this->debug) echo "<code>".$action . "</code>\r\n";
 
-        foreach (self::$events as $event) {
-            if($event['event'] != $controller . '::' . $action) continue;
+        if(!isset(self::$events[$action])) return;
 
-            $a = explode('::', $event['callback']);
-            $_controller = $a[0]; $_action = isset($a[1]) ? $a[1] : 'index';
+        foreach (self::$events[$action] as $callback) {
+            if(is_array($callback) && isset($callback[1])){
+                if(is_callable($callback, true, $callable_name)){
+                    if($this->debug)  echo $callable_name;
 
-            $c = new $_controller;
-            if(!is_callable(array($c, $_action))) return true;
-
-            if(!empty($args)){
-                call_user_func_array(array($c, $_action), $args);
-            } else{
-                call_user_func(array($c, $_action));
+                    echo call_user_func_array($callback, $params);
+                }
             }
         }
     }
 
-    public static function flush($controller, $action, $args = array())
+    /**
+     * @param int $status
+     */
+    public function debug($status = 1)
     {
-        if(empty(self::$events)) return true;
-
-        $s = $controller  . '.' . $action;
-
-        foreach (self::$events as $event) {
-            if($event['event'] != $s) continue;
-
-            $a = explode('.', $event['event']);
-
-            if(isset($a[1])) self::fire($a[0], $a[1], $args);
-        }
+        $this->debug = $status;
     }
+
+    /**
+     * display all events
+     */
+    public function display()
+    {
+        echo '<pre>'; print_r(self::$events);
+    }
+
 }

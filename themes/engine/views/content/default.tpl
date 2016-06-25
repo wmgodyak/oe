@@ -1,35 +1,24 @@
 <form action="{$form_action}" method="post" id="form" class="form-horizontal" {if $form_success}data-success = '{$form_success}'{/if}>
-    {* if isset($plugins.top)}
-        <div class="row">
-            <div class="col-md-12">
-                {implode("\r\n", $plugins.top)}
-            </div>
-        </div>
-    {/if *}
+    {$events->call('form.top', array($content))}
     <div class="row">
         <div class="col-md-8">
             {include "content/blocks/main.tpl"}
-            {*{if isset($plugins.after_main)}{implode("\r\n", $plugins.after_main)}{/if}*}
+            {$events->call('content.main.after', array($content))}
             {include "content/blocks/content.tpl"}
-            {*{if isset($plugins.after_content)}{implode("\r\n", $plugins.after_content)}{/if}*}
+            {$events->call('content.content.after', array($content))}
             {include "content/blocks/intro.tpl"}
+            {$events->call('content.intro.after', array($content))}
             {include "content/blocks/meta.tpl"}
-            {*{if isset($plugins.after_meta)}{implode("\r\n", $plugins.after_meta)}{/if}*}
+            {$events->call('content.meta.after', array($content))}
         </div>
         <div class="col-md-4">
             {include "content/blocks/params.tpl"}
-            {*{if isset($plugins.after_params)}{implode("\r\n", $plugins.after_params)}{/if}*}
+            {$events->call('content.params.after', array($content))}
             {include "content/blocks/features.tpl"}
-            {*{if isset($plugins.after_features)}{implode("\r\n", $plugins.after_features)}{/if}*}
+            {$events->call('content.features.after', array($content))}
         </div>
     </div>
-    {* if isset($plugins.bottom)}
-        <div class="row">
-            <div class="col-md-12">
-                {implode("\r\n", $plugins.bottom)}
-            </div>
-        </div>
-    {/if *}
+    {$events->call('form.bottom', array($content))}
     <input type="hidden" name="token" value="{$token}">
     <input type="hidden" id="content_id" value="{$content.id}">
 </form>

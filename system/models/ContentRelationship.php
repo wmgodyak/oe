@@ -65,4 +65,31 @@ class ContentRelationship extends Model
             " content_id={$content_id} and is_main=1"
         );
     }
+
+    /**
+     * @param $content_id
+     */
+    public function saveContentCategories($content_id)
+    {
+        $categories = $this->request->post('categories');
+        $selected = $this->getCategories($content_id);
+
+        foreach ($categories as $k=>$categories_id) {
+
+            $c = array_search($categories_id, $selected);
+
+            if($c !== FALSE){
+                unset($selected[$c]);
+                continue;
+            }
+
+            $this->create($content_id, $categories_id);
+        }
+
+        if(!empty($selected)){
+            foreach ($selected as $k=>$categories_id) {
+                $this->delete($content_id, $categories_id);
+            }
+        }
+    }
 }

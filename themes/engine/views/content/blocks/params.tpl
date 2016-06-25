@@ -46,5 +46,5 @@
         </div>
     </div>
 
-    {*{if isset($plugins.params)}{implode("\r\n", $plugins.params)}{/if}*}
+    {$events->call('content.params', array($content))}
 </fieldset>

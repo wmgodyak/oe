@@ -25,5 +25,5 @@
         </div>
     </div>
     {/foreach}
-    {if isset($plugins.main)}{implode("\r\n", $plugins.main)}{/if}
+    {$events->call('content.main', array($content))}
 </fieldset>

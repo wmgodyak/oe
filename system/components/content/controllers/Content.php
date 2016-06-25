@@ -10,6 +10,7 @@ namespace system\components\content\controllers;
 
 use controllers\core\exceptions\Exception;
 use helpers\bootstrap\Button;
+use system\core\Event;
 use system\Engine;
 
 defined("CPATH") or die();
@@ -126,6 +127,9 @@ class Content extends Engine
         $i=[]; $m = $this->t('common.update_success');
 
         $s = $this->mContent->update($id);
+        if($s){
+            Event::getInstance()->call('content.process', ['id' => $id]);
+        }
 
         if(! $s){
             $i = $this->mContent->getError();

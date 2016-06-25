@@ -7,5 +7,5 @@
             </div>
         </div>
     {/foreach}
-    {*{if isset($plugins.content)}{implode("\r\n", $plugins.content)}{/if}*}
+    {$events->call('content.intro', array($content))}
 </fieldset>

@@ -9,4 +9,5 @@
     <div id="content_features_0">
         {if isset($content_features)}{$content_features}{/if}
     </div>
+    {$events->call('content.features', array($content))}
 </fieldset>

@@ -10,6 +10,7 @@ namespace system;
 use system\components\admin\controllers\Admin;
 use system\core\Config;
 use system\core\Controller;
+use system\core\Event;
 use system\core\exceptions\Exception;
 use system\core\Lang;
 use system\core\Request;
@@ -156,6 +157,12 @@ abstract class Engine extends Controller
         $this->template->assign('action',     $action);
 
         $this->initModules();
+
+        // assign events
+        $events = Event::getInstance();
+
+        $this->template->assign('events', $events);
+
 //        $this->dump(Lang::getInstance($this->theme, $lang)->t());die;
         $this->template->assign('t', Lang::getInstance($this->theme, $lang)->t());
 
@@ -390,7 +397,7 @@ abstract class Engine extends Controller
 //        die;
         $this->renderHeadingPanel();
 //        return  $body;
-      $this->response->body($body); // todo ???
+      $this->response->body($body)->asHtml(); // todo ???
     }
 
     /**
