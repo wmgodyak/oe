@@ -16,6 +16,10 @@ use system\core\Event;
 use system\core\exceptions\Exception;
 use system\models\ContentRelationship;
 
+/**
+ * Class Blog
+ * @package modules\blog\controllers\admin
+ */
 class Blog extends Content
 {
     private $categories;
@@ -31,6 +35,7 @@ class Blog extends Content
 
         // hide custom block
 //        $this->form_display_blocks['content'] = false;
+        $this->form_display_params['parent'] = false;
     }
 
 

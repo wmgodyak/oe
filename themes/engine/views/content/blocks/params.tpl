@@ -20,6 +20,7 @@
             <input class="switch" type="checkbox" name="content[status]" id="content_status" value="published" {if $content.status=='published'}checked{/if}>
         </div>
     </div>
+    {if $form_display_params.owner}
     <div class="form-group">
         <label for="content_owner_id" class="col-md-3 control-label">{$t.common.owner}</label>
         <div class="col-md-9">
@@ -30,12 +31,16 @@
             </select>
         </div>
     </div>
+    {/if}
+    {if $form_display_params.parent}
     <div class="form-group">
         <label for="content_parent_id" class="col-md-3 control-label">{$t.common.parent_id}</label>
         <div class="col-md-9">
             <input name="content[parent_id]" id="content_parent_id" class="form-control" value="{$content.parent_id}">
         </div>
     </div>
+    {/if}
+    {if $form_display_params.pub_date}
     <div class="form-group">
         <label for="content_published" class="col-md-3 control-label">{$t.common.pub_date}</label>
         <div class="col-md-9">
@@ -45,6 +50,6 @@
             </div>
         </div>
     </div>
-
+    {/if}
     {$events->call('content.params', array($content))}
 </fieldset>
