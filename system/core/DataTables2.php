@@ -151,6 +151,8 @@ class DataTables2
     private $ajaxUrl = null;
     private $ajaxData = [];
 
+    private $title;
+
 //    private $search_cols = [];
 
     public function __construct($id = null)
@@ -161,6 +163,12 @@ class DataTables2
             $this->id = $id;
         }
 
+        return $this;
+    }
+
+    public function title($title)
+    {
+        $this->title = $title;
         return $this;
     }
 
@@ -328,8 +336,9 @@ class DataTables2
     {
         $c =0; // count th
         $html = '';
-
+        $title = $this->title ? "<fieldset style='padding-bottom: 0; margin-bottom: 0;'><legend>{$this->title}</legend></fieldset>" : '';
         $html .= "<div class='table'>
+                    {$title}
                     <table class='display table' style='width: 100%; cellspacing: 0;' id='{$this->id}'>
                     <thead>
                     <tr>\r\n";

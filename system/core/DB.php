@@ -225,7 +225,8 @@ class DB extends \PDO {
             $result = $this->lastInsertId();
         } catch(\PDOException $e){
             if($this->conf['debug']){
-                throw new Exception("$sql <br>" . $e->getMessage());
+//                throw new Exception("$sql <br>" . $e->getMessage());
+                die($e->getMessage());
             }
             self::$errorMessage = "<pre>$sql" . $e->getMessage() .'</pre>';
             self::$errorCode = $e->getCode();

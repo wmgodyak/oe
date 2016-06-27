@@ -36,6 +36,8 @@ abstract class Widget
      */
     private $options = [];
 
+//    protected $template;
+
     /**
      * Widget constructor.
      * @param string $id widget ID
@@ -49,24 +51,17 @@ abstract class Widget
         $this->name        = $name;
         $this->description = $description;
         $this->options     = $options;
+
+//        $this->template = Template::getInstance();
     }
 
     /**
      * @param array $data
      * @return string
      */
-    public function form(array $data = [])
+    public function form($data = [])
     {
-        // todo підключити тут вюшку форми або результат цієї функціїї апихати в форму
         return "<span class='empty'>This widget do not have options.</span>";
-    }
-
-    /**
-     * update form data
-     */
-    public final function update()
-    {
-
     }
 
     /**
@@ -77,9 +72,9 @@ abstract class Widget
     public final function getFieldName($name)
     {
         if ($pos = strpos( $name, '[' ) === false){
-            return 'widget_' . $this->id . '[' . $name . ']';
-        } else{
-            return 'widget_' . $this->id . '[' . substr_replace( $name, '][', $pos, strlen( '[' ) );
+            return 'data[' . $name . ']';
+        } else {
+            return 'data[' . substr_replace( $name, '][', $pos, strlen( '[' ) );
         }
     }
 
@@ -90,7 +85,7 @@ abstract class Widget
      */
     public final function getFieldID($name)
     {
-        return 'widget_' . $this->id . '_' . $name;
+        return 'data_' . $name;
     }
 
     /**
@@ -98,5 +93,27 @@ abstract class Widget
      * @param array $data
      * @return mixed
      */
-    abstract public function display(array $args = [], array $data = []);
+    abstract public function display($args, $data);
+
+    public function __toString()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMeta()
+    {
+        return [
+            'id'          => $this->id,
+            'name'        => $this->name,
+            'description' => $this->description
+        ];
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
 }

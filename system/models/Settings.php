@@ -37,18 +37,24 @@ class Settings
      */
     public function get($key=null)
     {
-        return $key ? $this->data[$key] : $this->data;
+        if(!$key)
+            return $this->data;
+
+        if($key && !isset($this->data[$key])) {
+            return null;
+        }
+
+        return $this->data[$key];
     }
 
     /**
      * @param $name
      * @param $value
-     * @param null $title
-     * @param null $description
-     * @return bool|string
+     * @param null $block
+     * @param null $type
      * @throws \system\core\exceptions\Exception
      */
-    public function set($name, $value, $title = null, $description = null)
+    public function set($name, $value, $block=null, $type=null)
     {
         if(is_array($value)) $value = serialize($value);
 
@@ -57,7 +63,7 @@ class Settings
         if($a > 0){
             $this->update($name, $value);
         } else {
-            $this->create($name, $value, $title, $description);
+            $this->create($name, $value, $block, $type);
         }
 
         if(! DB::getInstance()->hasError()){
@@ -68,20 +74,20 @@ class Settings
     /**
      * @param $name
      * @param $value
-     * @param $title
-     * @param $description
+     * @param $block
+     * @param $type
      * @return bool|string
      */
-    private function create($name, $value, $title, $description)
+    private function create($name, $value, $block, $type)
     {
         return DB::getInstance()->insert
             (
                 '__settings',
                 [
-                    'name'        => $name,
-                    'value'       => $value,
-                    'title'       => $title,
-                    'description' => $description
+                    'name'  => $name,
+                    'value' => $value,
+                    'block' => $block ? $block : 'common',
+                    'type'  => $type ? $type : 'text'
                 ]
             );
     }

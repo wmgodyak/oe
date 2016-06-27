@@ -21,11 +21,10 @@ require_once DOCROOT. "vendor/smarty/Smarty.class.php";
 class Template
 {
     private static $instance;
-    private $settings;
-    private $smarty;
     private $theme = null;
     private $theme_url;
     private $theme_path;
+    private $smarty;
 
     /**
      * list of attached scripts
@@ -46,7 +45,7 @@ class Template
 
         // load config
         $config = Config::getInstance()->get('smarty');
-        $this->settings = Settings::getInstance()->get();
+        $settings = Settings::getInstance()->get();
 
         // init smarty
         $this->smarty = new \Smarty();
@@ -58,10 +57,10 @@ class Template
         $this->smarty->error_reporting = E_ALL & ~E_NOTICE;
 
         // get theme
-        $theme = $this->settings['themes_path'] . $theme . '/';
+        $theme = $settings['themes_path'] . $theme . '/';
 
-        $this->smarty->setCompileDir(DOCROOT . '/tmp/' . $theme . $this->settings['app_views_path'] .'/');
-        $this->smarty->setTemplateDir(DOCROOT . $theme. $this->settings['app_views_path'] .'/');
+        $this->smarty->setCompileDir(DOCROOT . '/tmp/' . $theme . $settings['app_views_path'] .'/');
+        $this->smarty->setTemplateDir(DOCROOT . $theme. $settings['app_views_path'] .'/');
 
         if(!is_dir($this->smarty->getCompileDir()))
             mkdir($this->smarty->getCompileDir(), 0777, true);

@@ -66,14 +66,14 @@ class Event
      */
     public function call($action, $params = [])
     {
-        if($this->debug) echo "<code>".$action . "</code>\r\n";
+        if($this->debug) echo "<code>".$action . "</code><br>";
 
         if(!isset(self::$events[$action])) return;
 
         foreach (self::$events[$action] as $callback) {
             if(is_array($callback) && isset($callback[1])){
                 if(is_callable($callback, true, $callable_name)){
-                    if($this->debug)  echo $callable_name;
+                    if($this->debug)  echo $callable_name, '<br>';
 
                     echo call_user_func_array($callback, $params);
                 }
