@@ -10,7 +10,7 @@ namespace system;
 use system\components\admin\controllers\Admin;
 use system\core\Config;
 use system\core\Controller;
-use system\core\Event;
+use system\core\EventsHandler;
 use system\core\exceptions\Exception;
 use system\core\Lang;
 use system\core\Request;
@@ -159,7 +159,7 @@ abstract class Engine extends Controller
         $this->initModules();
 
         // assign events
-        $events = Event::getInstance();
+        $events = EventsHandler::getInstance();
 
         $this->template->assign('events', $events);
 

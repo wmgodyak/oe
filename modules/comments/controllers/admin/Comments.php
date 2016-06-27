@@ -13,7 +13,7 @@ use helpers\bootstrap\Icon;
 use helpers\DateTime;
 use helpers\FormValidation;
 use system\core\DataTables2;
-use system\core\Event;
+use system\core\EventsHandler;
 use system\Engine;
 
 class Comments extends Engine
@@ -33,13 +33,14 @@ class Comments extends Engine
         $this->assignToNav('Коментарі', 'module/run/comments', 'fa-comment', null, 20);
         $this->template->assignScript("modules/comments/js/admin/comments.js");
 
-        Event::getInstance()->add('content.meta.after', [$this, 'postComments']);
+        EventsHandler::getInstance()->add('content.meta.after', [$this, 'postComments']);
 //        Event::getInstance()->add('content.process', [$this, 'contentProcess']);
     }
 
     public function postComments($post)
     {
         if(!in_array($post['types_id'], $this->allowed_types)) return '';
+
         $this->template->assign('comments_total', $this->comments->getTotal($post['id']));
         $this->template->assign('comments', $this->comments->get($post['id']));
         return $this->template->fetch('comments/post');

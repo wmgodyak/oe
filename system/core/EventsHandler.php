@@ -17,7 +17,7 @@ namespace system\core;
  * It`s simply!!!
  * @package system\core
  */
-class Event
+class EventsHandler
 {
     /**
      * @var
