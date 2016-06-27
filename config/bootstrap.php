@@ -42,6 +42,11 @@
         $_REQUEST = clearGpc($_REQUEST);
     }
 
+    function d($var)
+    {
+        echo '<pre>'; print_r($var); echo '</pre>';
+    }
+
     if(!defined('MPATH')) define('MPATH', 'models\\');
 
     $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? "https://" : "http://";

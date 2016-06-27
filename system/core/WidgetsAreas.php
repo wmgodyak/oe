@@ -8,7 +8,7 @@
 
 namespace system\core;
 
-class WidgetsArea
+class WidgetsAreas
 {
     private static $areas;
 
