@@ -25,6 +25,8 @@ class Blog extends Content
     private $categories;
     private $relations;
 
+    private $allowed_types = [2];
+
     public function __construct()
     {
         parent::__construct('post');
@@ -54,6 +56,8 @@ class Blog extends Content
      */
     public function contentParams($content)
     {
+        if(!in_array($content['types_id'], $this->allowed_types)) return '';
+
         $this->template->assign('selected_categories', $this->relations->getCategories($content['id']));
         $this->template->assign('categories', $this->categories->get());
 

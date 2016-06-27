@@ -8,14 +8,5 @@
  - реалізувати віджети та майданчики за прикладом WP
  - змінити роботу Event хендлера. Обєднати результат функцій before and after з результатом основного контроллера
  - відповідно поміняти this->response->body()
-
- - модулі
-   + Callback
-   - Comments
-   + Feedback
-   + blog
-
-   - треба зареєструвати майданчики (platforms)
-   - Треба зробити можливість вибору платворми (assignToPlatform or assignPlugin('place', array($this, 'actionName')))
-
+ - widgets
   - коментарі зробити як на тостері

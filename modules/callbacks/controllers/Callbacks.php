@@ -11,6 +11,7 @@ namespace modules\callbacks\controllers;
 defined("CPATH") or die();
 
 use helpers\FormValidation;
+use system\core\WidgetsArea;
 use system\Front;
 use system\models\Mailer;
 
@@ -31,7 +32,7 @@ class Callbacks extends Front
 
     public function init()
     {
-
+        WidgetsArea::register('callbacks.form', 'Форма callbacks', 'Форма callbacks');
     }
 
     public function process()

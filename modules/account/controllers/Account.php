@@ -4,6 +4,7 @@ namespace modules\account\controllers;
 
 use helpers\FormValidation;
 use system\core\Session;
+use system\core\WidgetsArea;
 use system\Front;
 use system\models\Mailer;
 
@@ -30,6 +31,7 @@ class Account extends Front
         parent::init();
 //        echo "Init " . __CLASS__ . "\r\n";
         $this->template->assign('user', $this->user);
+        WidgetsArea::register('account.subscribe', 'Підписка в Account', 'Опис підписки в account');
     }
 
     public function login()
