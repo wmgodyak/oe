@@ -11,7 +11,6 @@ namespace modules\blog\controllers;
 use modules\blog\models\Categories;
 use modules\blog\models\Posts;
 use modules\blog\models\Tags;
-use system\core\WidgetsArea;
 use system\Front;
 
 /**
@@ -39,7 +38,6 @@ class Blog extends Front
 
     public function init()
     {
-        WidgetsArea::register('blog.subscribe', 'Підписка в Блозі', 'Опис підписки в блозі');
     }
 
     public function categories()

@@ -10,9 +10,10 @@ namespace modules\blog\controllers\admin;
 use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
 use helpers\bootstrap\Link;
+use modules\blog\models\Posts;
 use system\components\content\controllers\Content;
 use system\core\DataTables2;
-use system\core\Event;
+use system\core\EventsHandler;
 use system\core\exceptions\Exception;
 use system\models\ContentRelationship;
 
@@ -24,6 +25,7 @@ class Blog extends Content
 {
     private $categories;
     private $relations;
+    private $posts;
 
     private $allowed_types = [2];
 
@@ -32,8 +34,9 @@ class Blog extends Content
         parent::__construct('post');
 
         $this->form_action = "module/run/blog/process/";
-        $this->categories = new \modules\blog\models\Categories('posts_categories');
-        $this->relations  = new ContentRelationship();
+        $this->posts       = new Posts('post');
+        $this->categories  = new \modules\blog\models\Categories('posts_categories');
+        $this->relations   = new ContentRelationship();
 
         // hide custom block
 //        $this->form_display_blocks['content'] = false;
@@ -45,9 +48,16 @@ class Blog extends Content
     {
         $this->assignToNav('Блог', 'module/run/blog', 'fa-pencil');
         $this->template->assignScript("modules/blog/js/admin/blog.js");
+//        EventsHandler::getInstance()->debug();
+        EventsHandler::getInstance()->add('content.params', [$this, 'contentParams']);
+        EventsHandler::getInstance()->add('content.process', [$this, 'contentProcess']);
+        EventsHandler::getInstance()->add('dashboard', [$this, 'dashboard']);
+    }
 
-        Event::getInstance()->add('content.params', [$this, 'contentParams']);
-        Event::getInstance()->add('content.process', [$this, 'contentProcess']);
+    public function dashboard()
+    {
+        $this->template->assign('items', $this->posts->get(0, 0, 3));
+        return $this->template->fetch('blog/dashboard');
     }
 
     /**

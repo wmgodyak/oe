@@ -17,7 +17,7 @@ class Posts extends Content
      * @return mixed
      * @throws \system\core\exceptions\Exception
      */
-    public function get($categories_id = 0)
+    public function get($categories_id = 0, $start = 0, $num = 5)
     {
         $w = ''; $j = '';
 
@@ -27,12 +27,15 @@ class Posts extends Content
 
         return self::$db
             ->select("
-                  select c.id, c.isfolder, c.status, ci.name, ci.title, ci.intro
+                  select c.id, c.isfolder, c.status, ci.name, ci.title, ci.intro, c.created, u.id as author_id, concat(u.name, ' ', u.surname) as author
                   from __content c
                   {$j}
                   join __content_types ct on ct.type = '{$this->type}' and ct.id=c.types_id
                   join __content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
+                  join __users u on u.id = c.owner_id
                   where {$w} c.status in ('published', 'hidden')
+                  order by c.published desc
+                  limit {$start}, {$num}
             ")
             ->all();
     }
