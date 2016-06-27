@@ -34,7 +34,14 @@ class Comments extends Engine
         $this->template->assignScript("modules/comments/js/admin/comments.js");
 
         EventsHandler::getInstance()->add('content.meta.after', [$this, 'postComments']);
+        EventsHandler::getInstance()->add('dashboard', [$this, 'dashboard']);
 //        Event::getInstance()->add('content.process', [$this, 'contentProcess']);
+    }
+
+    public function dashboard()
+    {
+        $this->template->assign('items', $this->comments->getLatest());
+        return $this->template->fetch('comments/dashboard');
     }
 
     public function postComments($post)

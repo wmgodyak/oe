@@ -14,6 +14,30 @@ namespace modules\comments\models\admin;
 class Comments extends \modules\comments\models\Comments
 {
     /**
+     * @param int $limit
+     * @return array
+     * @throws \system\core\exceptions\Exception
+     */
+    public function getLatest($limit = 5 )
+    {
+        $res = array();
+
+        $r = self::$db->select("
+            select *
+            from __comments
+            where status in ('approved', 'new')
+            order by abs(id) desc
+            limit {$limit}
+        ")->all();
+
+        foreach ( $r as $row) {
+            $row['user'] = self::$db->select("select id, name, surname from __users where id={$row['users_id']} limit 1")->row();
+            $res[] = $row;
+        }
+
+        return $res;
+    }
+    /**
      * @param $id
      * @param string $key
      * @return array|mixed
