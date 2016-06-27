@@ -8,12 +8,26 @@
 
 namespace modules\banners\controllers\admin;
 
+use helpers\FormValidation;
 use system\Engine;
 
 defined("CPATH") or die();
 
+/**
+ * Class Places
+ * @package modules\banners\controllers\admin
+ */
 class Places extends Engine
 {
+    private $places;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->places = new \modules\banners\models\admin\Places();
+    }
+
+
     public function index()
     {
         // TODO: Implement index() method.
@@ -30,10 +44,39 @@ class Places extends Engine
     }
     public function delete($id)
     {
-        // TODO: Implement delete() method.
+        echo $this->places->delete($id);
     }
-    public function process($id)
+
+    public function process($id = null)
     {
-        // TODO: Implement process() method.
+        if(! $this->request->isPost()) die;
+
+        $data = $this->request->post('data');
+        $s=0; $i=[];
+
+        FormValidation::setRule(['name', 'code', 'width', 'height'], FormValidation::REQUIRED);
+
+        FormValidation::run($data);
+
+        if(FormValidation::hasErrors()){
+            $i = FormValidation::getErrors();
+        } else {
+            switch($this->request->post('action')){
+                case 'create':
+                    $s = $this->places->create();
+                    break;
+                case 'edit':
+                    if( $id > 0 ){
+                        $s = $this->places->update($id);
+                    }
+                    break;
+            }
+            if(! $s){
+                echo $this->places->getErrorMessage();
+            }
+
+        }
+
+        $this->response->body(['s'=>$s, 'i' => $i])->asJSON();
     }
 }

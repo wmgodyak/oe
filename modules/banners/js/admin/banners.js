@@ -14,9 +14,9 @@ engine.banners = {
         $(document).on('click', '.b-banners-places-create', function(){
             engine.banners.places.create();
         });
-        $(document).on('click', '.b-banners-places-edit', function(){
-            engine.banners.places.edit($(this).data('id'));
-        });
+        //$(document).on('click', '.b-banners-places-edit', function(){
+        //    engine.banners.places.edit($(this).data('id'));
+        //});
         $(document).on('click', '.b-banners-places-delete', function(){
             engine.banners.places.delete($(this).data('id'));
         });
@@ -38,6 +38,23 @@ engine.banners = {
                $('#permanent_period').show();
            }
         });
+        $(document).on('click', '#bSubmitPlaceForm', function(){
+            engine.validateAjaxForm('#placeForm', function(d){
+                if(d.s){
+                    location.reload(true);
+                }
+            });
+            $("#placeForm").submit();
+        });
+        //$(document).on('submit', '#placeForm', function(){
+
+            //
+            //engine.validateAjaxForm('#placeForm', function(d){
+            //    if(d.s){
+            //        location.reload(true);
+            //    }
+            //});
+        //});
     },
     places: {
         create: function()
@@ -105,9 +122,10 @@ engine.banners = {
                 t.banners_places.delete_question,
                 function()
                 {
-                    engine.request.get('./banners/plDelete/' + id, function(d){
+                    engine.request.get('module/run/banners/places/delete/' + id, function(d){
                         if(d > 0){
-                            engine.refreshDataTable('banners');
+                            //engine.refreshDataTable('banners');
+                            location.reload(true);
                         }
                     });
                     $(this).dialog('close').dialog('destroy').remove();
@@ -142,7 +160,7 @@ engine.banners = {
     },
     create: function(id)
     {
-        engine.request.get('./banners/create/'+id, function(d)
+        engine.request.get('module/run/banners/create/'+id, function(d)
         {
             var bi = t.common.button_save;
             var buttons = {};
@@ -165,7 +183,11 @@ engine.banners = {
 
             engine.validateAjaxForm('#form', function(d){
                 if(d.s){
-                    engine.refreshDataTable('banners');
+
+                    var $tabs = $('#places').tabs();
+                    var selected = $tabs.tabs('option', 'active');
+                    $("#places").tabs('load',selected);
+                    //engine.refreshDataTable('banners');
                     dialog.dialog('close');
                     dialog.dialog('destroy').remove()
                 }
@@ -175,7 +197,7 @@ engine.banners = {
     edit: function(id)
     {
         engine.request.post({
-            url: './banners/edit/' + id,
+            url: 'module/run/banners/edit/' + id,
             data: {id: id},
             success: function(d)
             {
@@ -201,7 +223,9 @@ engine.banners = {
 
                 engine.validateAjaxForm('#form', function(d){
                     if(d.s){
-                        engine.refreshDataTable('banners');
+                        var $tabs = $('#places').tabs();
+                        var selected = $tabs.tabs('option', 'active');
+                        $("#places").tabs('load',selected);
                         dialog.dialog('close');
                         dialog.dialog('destroy').remove()
                     }
@@ -216,7 +240,7 @@ engine.banners = {
             t.banners.delete_question,
             function()
             {
-                engine.request.get('./banners/delete/' + id, function(d){
+                engine.request.get('module/run/banners/delete/' + id, function(d){
                     if(d > 0){
                         engine.refreshDataTable('banners');
                     }

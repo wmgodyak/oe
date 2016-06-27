@@ -10,6 +10,8 @@ namespace modules\banners\controllers\admin;
 
 use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
+use helpers\bootstrap\Link;
+use helpers\FormValidation;
 use system\core\DataTables2;
 use system\Engine;
 
@@ -39,32 +41,52 @@ class Banners extends Engine
 
     public function place($id, $results = null)
     {
+
+        $this->appendToPanel((string)Link::create
+        (
+            $this->t('common.back'),
+            ['class' => 'btn-md', 'href'=> 'banners']
+        )
+        );
+        $this->appendToPanel
+        (
+            (string)Button::create
+            (
+                $this->t('common.button_create'),
+                ['class' => 'btn-md btn-primary b-banners-create', 'data-id'=>$id])
+        );
+
         $t = new DataTables2('banners_' . $id);
-        $t  -> th($this->t('common.id'), '', 'width: 20px')
-            -> th($this->t('banners.img'))
-            -> th($this->t('banners.url'))
-            -> th($this->t('banners.lang'))
-            -> th($this->t('banners.active'))
-            -> th($this->t('common.tbl_func'), '', 'width: 160px')
+        $t  -> ajax('module/run/banners/place/' . $id . '/1')
+            -> th($this->t('common.id'), 'id', 0, 1, 'width: 20px')
+            -> th($this->t('banners.img'), 'img', 0, 0)
+            -> th($this->t('banners.name'), 'name', 1, 0)
+            -> th($this->t('banners.url'), 'url', 1, 0)
+            -> th($this->t('banners.lang'), 'languages_id', 0, 0)
+            -> th($this->t('banners.active'), 'published', 0, 1)
+            -> th($this->t('common.tbl_func'), null, 0, 0, 'width: 160px')
+            -> get('permanent', 0 , 0)
         ;
 
         if($results){
-
             $t  -> from('__banners')
-                -> get('id, img, url, languages_id,  published, permanent, df, dt');
+                -> get('id, img, url, languages_id,  published, permanent, df, dt')
+                -> where(" places_id={$id}");
+
             $t  -> execute();
-//            $lang = $this->banners->getLanguages();
+            $lang = $this->banners->getLanguages();
             $res = array(); $appurl = APPURL;
             foreach ($t->getResults(false) as $i=>$row) {
 
                 $row['img'] = empty($row['img']) ? "/themes/engine/assets/img/no-image.png" : $row['img'];
                 $res[$i][] = $row['id'];
                 $res[$i][] = "<img src='{$row['img']}' align='banner' style='max-height: 60px; max-width: 120px;'>";
+                $res[$i][] = $row['name'];
                 $res[$i][] = "<a href='{$appurl}{$row['url']}' target='_blank'>{$row['url']}</a>";
-                $res[$i][] = $row['languages_id'];
+                $res[$i][] = $lang[$row['languages_id']];
                 if($row['permanent'] == 1){
                     $res[$i][] = $this->t('banners.permanent_y');
-                } else{
+                } else {
                     $res[$i][] = $this->t('banners.permanent_n');
                 }
 
@@ -81,31 +103,75 @@ class Banners extends Engine
                     )
                 ;
             }
-
-            echo $t->render($res, $t->getTotal());die;
+            echo $t->render($res, $t->getTotal()); die;
+//            $this->response->body($t->render($res, $t->getTotal()))->asJSON();
+            return;
         }
 
-        $this->output($t->init());
+        $button = Button::create($this->t('banners.create') , ['data-id' => $id, 'class' => 'btn-primary b-banners-create']);
+        $button = "<div style='background: #fff;padding: 5px 10px;'>{$button}</div>";
+        $this->output
+        (
+            $button . $t->init()
+        );
+
     }
 
-    public function create()
+    public function create($id = 0)
     {
-        // TODO: Implement create() method.
+        $this->template->assign('action', 'create');
+        $this->template->assign('place_id', $id);
+        $this->template->assign('sizes', $this->banners->getPlaceSizes($id));
+        $this->response->body($this->template->fetch('banners/banner'))->asHtml();
     }
 
     public function edit($id)
     {
-        // TODO: Implement edit() method.
+        $data =$this->banners->getData($id);
+        $this->template->assign('data', $data);
+        $this->template->assign('sizes', $this->banners->getPlaceSizes($data['places_id']));
+        $this->template->assign('action', 'edit');
+        $this->response->body($this->template->fetch('banners/banner'))->asHtml();
     }
 
     public function delete($id)
     {
-        // TODO: Implement delete() method.
+        return $this->banners->delete($id);
     }
 
-    public function process($id)
+    public function process($id = 0)
     {
-        // TODO: Implement process() method.
+        if(! $this->request->isPost()) die;
+
+        $data = $this->request->post('data');
+        $s=0; $i=[];
+
+        FormValidation::setRule(['url'], FormValidation::REQUIRED);
+
+        FormValidation::run($data);
+
+        if(FormValidation::hasErrors()){
+            $i = FormValidation::getErrors();
+        } elseif($data['permanent'] == 0  && (empty($data['df']) || empty($data['dt']))){
+            $i[] = ["data[df]" => $this->t('banners.df_dt_error')];
+        } else {
+            switch($this->request->post('action')){
+                case 'create':
+                    $s = $this->banners->create();
+                    break;
+                case 'edit':
+                    if( $id > 0 ){
+                        $s = $this->banners->update($id);
+                    }
+                    break;
+            }
+            if(! $s){
+                echo $this->banners->getErrorMessage();
+            }
+
+        }
+
+        $this->response->body(['s'=>$s, 'i' => $i])->asJSON();
     }
 
     public function places()
