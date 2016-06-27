@@ -14,6 +14,13 @@ use system\models\Mailer;
 
 class Feedback extends Front
 {
+    private $feedback;
+    public function __construct()
+    {
+        parent::__construct();
+        $this->feedback = new \modules\feedback\models\Feedback();
+    }
+
     public function send()
     {
         if(! $this->request->isPost()) die;
@@ -31,6 +38,7 @@ class Feedback extends Front
             $i = FormValidation::getErrors();
         } else {
 
+            $this->feedback->create($data);
             $mailer = new Mailer('feedback', $data);
 
             if(!$mailer->send()) {
