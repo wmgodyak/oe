@@ -1,40 +1,29 @@
-{function name=renderSelect}
+{function name=renderOptions}
     {foreach $items as $item}
-        <option value="{$item.id}">{if $parent}{$parent} / {/if}{$item.name}</option>
+        <option {if $selected == $item.id}selected{/if} value="{$item.id}">{if isset($parent)}{$parent} / {/if}{$item.name}</option>
         {if $item.isfolder}
-            {call renderSelect items=$item.items parent=$item.name}
+            {call renderOptions items=$item.items selected=$selected parent=$item.name}
         {/if}
     {/foreach}
 {/function}
-<form class="form-horizontal" action="plugins/customersGroup/process/{$data.id}" method="post" id="customersGroupForm">
-    <div class="form-group">
-        <label for="data_parent_id" class="col-sm-3 control-label">{$t.customers_group.parent}</label>
-        <div class="col-sm-9">
-            <select class="form-control" name="data[parent_id]" id="data_parent_id">
-                <option value="0">--</option>
-                {foreach $groups as $group}
-                    <option {if $data.id == $group.id}disabled{/if} {if $data.parent_id == $group.id}selected{/if} value="{$group.id}">{$group.name}</option>
-                    {if $group.isfolder}
-                        {call renderSelect items=$items}
-                    {/if}
-                {/foreach}
-            </select>
+<form class="form-horizontal" action="module/run/customers/groups/process/{if isset($data.id)}{$data.id}{/if}" method="post" id="customersGroupForm">
+        <div class="form-group">
+            <label for="data_parent_id" class="col-md-3 control-label">{$t.customers_group.parent}</label>
+            <div class="col-md-9">
+                <select class="form-control" name="data[parent_id]" id="data_parent_id">
+                    <option value="0">--</option>
+                    {call renderOptions items=$groups selected=$data.parent_id parent=''}
+                </select>
+            </div>
         </div>
-    </div>
-    {foreach $languages as $lang}
-    <div class="form-group">
-        <label for="info_name_{$lang.id}" class="col-sm-3 control-label">{$t.customers_group.name} ({$lang.name})</label>
-        <div class="col-sm-9">
-            <input type="tel" class="form-control" name="info[{$lang.id}][name]" id="info_name_{$lang.id}" value="{$info[$lang.id].name}" required>
-        </div>
-    </div>
-    {/foreach}
-    <div class="form-group">
-        <label for="data_phone" class="col-sm-3 control-label">{$t.customers_group.rang}</label>
-        <div class="col-sm-9">
-            <input type="tel" class="form-control" name="data[rang]" id="data_rang" value="{$data.rang}" required placeholder="101 - 999">
-        </div>
-    </div>
+        {foreach $languages as $lang}
+            <div class="form-group">
+                <label for="info_name_{$lang.id}" class="col-md-3 control-label">{$t.customers_group.name} ({$lang.name})</label>
+                <div class="col-md-9">
+                    <input type="tel" class="form-control" name="info[{$lang.id}][name]" id="info_name_{$lang.id}" value="{if isset($info[$lang.id].name)}{$info[$lang.id].name}{/if}" required>
+                </div>
+            </div>
+        {/foreach}
 
     <input type="hidden" name="action" value="{$action}">
     <input type="hidden" name="token" value="{$token}">

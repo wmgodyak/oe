@@ -1,42 +1,45 @@
-<form class="form-horizontal" action="customers/process/{$data.id}" enctype="multipart/form-data" method="post" id="form">
+<form class="form-horizontal" action="module/run/customers/process/{if isset($data.id)}{$data.id}{/if}" enctype="multipart/form-data" method="post" id="form">
     <div class="row">
         <div class="col-md-9">
             <fieldset>
                 <legend>{$t.common.legend_main}</legend>
                 <div class="form-group">
-                    <label for="data_name" class="col-sm-3 control-label">{$t.admin_profile.name}</label>
+                    <label for="data_name" class="col-sm-3 control-label">{$t.customers.name}</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control" name="data[name]" id="data_name" value="{$data.name}" required>
+                        <input type="text" class="form-control" name="data[name]" id="data_name" value="{if isset($data.name)}{$data.name}{/if}" required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="data_surname" class="col-sm-3 control-label">{$t.admin_profile.surname}</label>
+                    <label for="data_surname" class="col-sm-3 control-label">{$t.customers.surname}</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control" name="data[surname]" id="data_surname" value="{$data.surname}" required>
+                        <input type="text" class="form-control" name="data[surname]" id="data_surname" value="{if isset($data.surname)}{$data.surname}{/if}" required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="data_email" class="col-sm-3 control-label">{$t.admin_profile.email}</label>
+                    <label for="data_email" class="col-sm-3 control-label">{$t.customers.email}</label>
                     <div class="col-sm-9">
-                        <input type="email" class="form-control" name="data[email]" id="data_email" value="{$data.email}" required>
+                        <input type="email" class="form-control" name="data[email]" id="data_email" value="{if isset($data.email)}{$data.email}{/if}" required>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="data_phone" class="col-sm-3 control-label">{$t.admin_profile.phone}</label>
+                    <label for="data_phone" class="col-sm-3 control-label">{$t.customers.phone}</label>
                     <div class="col-sm-9">
-                        <input type="tel" class="form-control" name="data[phone]" id="data_phone" value="{$data.phone}">
+                        <input type="tel" class="form-control" name="data[phone]" id="data_phone" value="{if isset($data.phone)}{$data.phone}{/if}">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="data_group_id" class="col-sm-3 control-label">{$t.customers.group}</label>
                     <div class="col-sm-9">
-                        <select class="form-control" name="data[group_id]" id="data_group_id" required>
+                        <select class="form-control" name="data[group_id]" id="data_group_id">
                             {foreach $groups as $group}
-                                <option {if $data.group_id == $group.id}selected{/if} value="{$group.id}">{$group.name}</option>
                                 {if $group.isfolder}
-                                    {foreach $group.items as $item}
-                                        <option {if $data.group_id == $item.id}selected{/if} value="{$item.id}">{$group.name} / {$item.name}</option>
-                                    {/foreach}
+                                    <optgroup label="{$group.name}">
+                                        {foreach $group.items as $item}
+                                            <option {if isset($data.group_id) && $data.group_id == $item.id}selected{/if} value="{$item.id}">{$item.name}</option>
+                                        {/foreach}
+                                    </optgroup>
+                                    {else}
+                                    <option {if isset($data.group_id) && $data.group_id == $group.id}selected{/if} value="{$group.id}">{$group.name}</option>
                                 {/if}
                             {/foreach}
                         </select>
@@ -59,13 +62,17 @@
         </div>
         <div class="col-md-3">
             <fieldset style="height: 330px;">
-                <legend>{$t.admin.photo}</legend>
-                <div style="text-align: center; margin-bottom: 1em;"><img src="{$data.avatar}" alt="" class="edit-admin-avatar admin-avatar" style="max-width: 130px;"></div>
+                <legend>{$t.customers.avatar}</legend>
+                <div style="text-align: center; margin-bottom: 1em;">
+                    <img src="{if isset($data.avatar)}{$data.avatar}{/if}" alt="" class="edit-customer-avatar customer-avatar" style="max-width: 130px;">
+                </div>
                 <div style="display: none">
-                    <input type="file" name="avatar" id="customersAvatar">
+                    <input type="file" name="avatar" id="customerAvatar">
                 </div>
                 {if $action == 'edit' }
-                <div style="text-align: center"><button type="button" id="changeAdminAvatar" class="btn btn-default">{$t.common.btn_change}</button></div>
+                    <div style="text-align: center">
+                        <button type="button" id="changeCustomerAvatar" class="btn btn-default">{$t.customers.btn_change}</button>
+                    </div>
                 {/if}
             </fieldset>
         </div>
@@ -73,15 +80,15 @@
     <div class="row">
         <div class="col-md-12">
             <fieldset>
-                <legend>{$t.admin.legend_passowrd}</legend>
+                <legend>{$t.customers.legend_password}</legend>
                 <div class="form-group">
-                    <label for="data_password" class="col-sm-3 control-label">{$t.admin_profile.password}</label>
+                    <label for="data_password" class="col-sm-3 control-label">{$t.customers.password}</label>
                     <div class="col-sm-9">
                         <input type="password" class="form-control" name="data[password]" id="data_password" placeholder="{$t.customers.passw_gen_auto}">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="data_password_c" class="col-sm-3 control-label">{$t.admin_profile.password_c}</label>
+                    <label for="data_password_c" class="col-sm-3 control-label">{$t.customers.password_c}</label>
                     <div class="col-sm-9">
                         <input type="password" class="form-control" name="data[password_c]" id="data_password_c" >
                     </div>
@@ -89,6 +96,7 @@
             </fieldset>
         </div>
     </div>
+
     <input type="hidden" name="action" value="{$action}">
     <input type="hidden" name="token" value="{$token}">
 </form>

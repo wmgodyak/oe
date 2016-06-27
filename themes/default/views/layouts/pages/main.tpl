@@ -11,7 +11,9 @@
 {*<pre>{print_r($page)}</pre>*}
 {*<pre>{print_r($mod->account->login())}</pre>*}
 {*<pre>{print_r($mod->banners->get('home-top'))}</pre>*}
+{*
 {foreach $mod->banners->get('home-top') as $banner}
     <p><a target="{$banner.target}" href="route/banners/click/{$banner.skey}"><img src="{$banner.img}" alt="{$banner.img}"></a></p>
 {/foreach}
+*}
 It works!

@@ -34,9 +34,9 @@ engine.customers = {
                 });
         });
 
-        engine.customers.group.tree = new engine.tree('customersGroup');
+        engine.customers.group.tree = new engine.tree('customersGroups');
         engine.customers.group.tree
-            .setUrl('./plugins/customersGroup/tree')
+            .setUrl('module/run/customers/groups/tree')
             .setContextMenu('create', t.customers_group.tree_create, 'fa-file', function(o){
                     var node_id= o.reference[0].id;
                     engine.customers.group.create(node_id);
@@ -56,7 +56,7 @@ engine.customers = {
                 console.log(data);
 
                 engine.request.post({
-                    url : './plugins/customersGroup/move',
+                    url : 'module/run/customers/group/move',
                     data: {
                         id: data.node.id,
                         'old_parent' : data.old_parent,
@@ -72,7 +72,7 @@ engine.customers = {
     },
     create: function()
     {
-        engine.request.get('./customers/create', function(d)
+        engine.request.get('module/run/customers/create', function(d)
         {
             var buttons = [
                 {
@@ -116,7 +116,7 @@ engine.customers = {
     edit: function(id)
     {
         engine.request.post({
-            url: './customers/edit/' + id,
+            url: 'module/run/customers/edit/' + id,
             data: {id: id},
             success: function(d)
             {
@@ -168,7 +168,7 @@ engine.customers = {
             t.customers.delete_question,
             function()
             {
-                engine.request.get('./customers/delete/' + id, function(d){
+                engine.request.get('module/run/customers/delete/' + id, function(d){
                     if(d > 0){
                         engine.refreshDataTable('customers');
                     }
@@ -184,7 +184,7 @@ engine.customers = {
             t.customers.ban_question,
             function()
             {
-                engine.request.get('./customers/ban/' + id, function(d){
+                engine.request.get('module/run/customers/ban/' + id, function(d){
                     if(d > 0){
                         engine.refreshDataTable('customers');
                     }
@@ -200,7 +200,7 @@ engine.customers = {
             t.customers.remove_question,
             function()
             {
-                engine.request.get('./customers/remove/' + id, function(d){
+                engine.request.get('module/run/customers/remove/' + id, function(d){
                     if(d > 0){
                         engine.refreshDataTable('customers');
                     }
@@ -216,7 +216,7 @@ engine.customers = {
             t.customers.restore_question,
             function()
             {
-                engine.request.get('./customers/restore/' + id, function(d){
+                engine.request.get('module/run/customers/restore/' + id, function(d){
                     if(d > 0){
                         engine.refreshDataTable('customers');
                     }
@@ -231,7 +231,7 @@ engine.customers = {
         {
             engine.request.post(
                 {
-                    url: './plugins/customersGroup/create/'+parent_id,
+                    url: 'module/run/customers/groups/create/'+parent_id,
                     data:{a:1},
                     success: function(d)
                     {
@@ -274,7 +274,7 @@ engine.customers = {
         edit: function(id)
         {
             engine.request.post({
-                url: './plugins/customersGroup/edit/' + id,
+                url: 'module/run/customers/groups/edit/' + id,
                 data: {id: id, a: 1},
                 success: function(d)
                 {
@@ -318,7 +318,7 @@ engine.customers = {
                 {
                     engine.request.post(
                         {
-                            url:'./plugins/customersGroup/delete/' + id,
+                            url:'module/run/customers/groups/delete/' + id,
                             data: {a: 1},
                             success: function(d){
                                 if(d > 0){
