@@ -9,4 +9,59 @@
  - змінити роботу Event хендлера. Обєднати результат функцій before and after з результатом основного контроллера
  - відповідно поміняти this->response->body()
  - widgets
-  - коментарі зробити як на тостері
+ - коментарі зробити як на тостері
+ - профайлер з кодеігнітера
+
+/******************** widgets examples  ***********************/
+
+        WidgetsAreas::register('blog.sidebar', 'Підписка в Блозі', 'Опис підписки в блозі');
+        WidgetsAreas::register('blog.sidebarRight', 'Підписка в Блозі', 'Опис підписки в блозі');
+
+        WidgetsFactory::register(new Sample());
+        WidgetsFactory::register(new Sample2());
+
+SAmple Class
+
+
+namespace modules\blog\widgets;
+
+use system\core\Widget;
+
+defined("CPATH") or die();
+
+/**
+ * Class Sample
+ * @package modules\blog\widgets
+ */
+class Sample extends Widget
+{
+    public function __construct()
+    {
+        parent::__construct('blog.sample', 'Sample One', 'Sample description');
+    }
+
+    /**
+     * @param array $data
+     * @return string
+     */
+    public function form($data = [])
+    {
+        $data['name'] = isset($data['name']) ? $data['name'] : null;
+        return "
+            <div class=\"form-group\">
+                <label for=\"name\" class=\"col-sm-3 control-label\">Назва</label>
+                <div class=\"col-sm-9\">
+                    <input name=\"{$this->getFieldName('name')}\" id=\"{$this->getFieldID('name')}\" class=\"form-control\" value=\"{$data['name']}\" required>
+                </div>
+            </div>
+        ";
+
+    }
+
+    public function display($args, $data)
+    {
+        echo 'Sample::display()';
+    }
+}
+
+/*******************************************/
