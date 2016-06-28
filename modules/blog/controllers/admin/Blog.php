@@ -48,10 +48,12 @@ class Blog extends Content
     {
         $this->assignToNav('Блог', 'module/run/blog', 'fa-pencil');
         $this->template->assignScript("modules/blog/js/admin/blog.js");
+        $this->template->assignScript("modules/blog/js/admin/bootstrap-tagsinput.min.js");
 //        EventsHandler::getInstance()->debug();
         EventsHandler::getInstance()->add('content.params', [$this, 'contentParams']);
         EventsHandler::getInstance()->add('content.process', [$this, 'contentProcess']);
         EventsHandler::getInstance()->add('dashboard', [$this, 'dashboard']);
+        EventsHandler::getInstance()->add('content.process', [new Tags(), 'process']);
     }
 
     public function dashboard()
@@ -217,6 +219,9 @@ class Blog extends Content
         )
         );
 
+        $tags = new Tags();
+        EventsHandler::getInstance()->add('content.params.after', [$tags, 'index']);
+
         $this->template->assign('sidebar', $this->template->fetch('blog/categories/tree'));
         parent::edit($id);
     }
@@ -224,6 +229,22 @@ class Blog extends Content
     public function categories()
     {
         include "Categories.php";
+
+        $params = func_get_args();
+
+        $action = 'index';
+        if(!empty($params)){
+            $action = array_shift($params);
+        }
+
+        $controller  = new Categories();
+
+        call_user_func_array(array($controller, $action), $params);
+    }
+
+    public function tags()
+    {
+        include "Tags.php";
 
         $params = func_get_args();
 

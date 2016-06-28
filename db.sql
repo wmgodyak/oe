@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Июн 27 2016 г., 22:34
+-- Время создания: Июн 28 2016 г., 21:53
 -- Версия сервера: 5.6.30-0ubuntu0.15.10.1
 -- Версия PHP: 5.6.11-1ubuntu3.4
 
@@ -46,12 +46,12 @@ CREATE TABLE IF NOT EXISTS `e_banners` (
 --
 
 INSERT INTO `e_banners` (`id`, `places_id`, `languages_id`, `skey`, `img`, `name`, `published`, `permanent`, `df`, `dt`, `url`, `target`) VALUES
-(18, 7, 1, 'dfb62995840bd01c4065469e055f6d43', '/uploads/content/2016/06/27/6f4922f45568161a8cdf4ad2299f6d23.jpg', '121', 1, 1, '0000-00-00', '0000-00-00', '1', '_blank'),
+(18, 7, 1, 'dfb62995840bd01c4065469e055f6d43', '/uploads/content/2016/06/27/6f4922f45568161a8cdf4ad2299f6d23.jpg', '121', 1, 1, '0000-00-00', '0000-00-00', 'http://google.com', '_blank'),
 (19, 8, 1, 'e0e118f164839036284c48eb8620fd85', '/uploads/content/2016/06/27/1f0e3dad99908345f7439f8ffabdffc4.jpg', '1', 1, 1, '0000-00-00', '0000-00-00', '1', '_self'),
 (20, 8, 1, 'beffc185e3ccca00d4a392d3e75bdfc2', '/uploads/content/2016/06/27/98f13708210194c475687be6106a3b84.jpg', '2', 1, 1, '0000-00-00', '0000-00-00', '2', '_blank'),
-(21, 7, 1, '50412b56b8a7d526a8570056d021ad2e', '/uploads/content/2016/06/27/3c59dc048e8850243be8079a5c74d079.jpg', '2', 1, 1, '0000-00-00', '0000-00-00', '2', '_self'),
-(22, 7, 1, 'e3987704a441c4ba12edf29dd0bee622', '/uploads/content/2016/06/27/b6d767d2f8ed5d21a44b0e5886680cb9.jpg', '3', 1, 1, '0000-00-00', '0000-00-00', '3', '_self'),
-(23, 7, 1, 'cb8d1658e818735aae8c3f3b5dc258ec', '/uploads/content/2016/06/27/37693cfc748049e45d87b8c7d8b9aacd.jpg', '22', 1, 1, '0000-00-00', '0000-00-00', '22', '_self');
+(21, 7, 1, '50412b56b8a7d526a8570056d021ad2e', '/uploads/content/2016/06/27/3c59dc048e8850243be8079a5c74d079.jpg', '2', 1, 1, '0000-00-00', '0000-00-00', 'http://yandex.com', '_self'),
+(22, 7, 1, 'e3987704a441c4ba12edf29dd0bee622', '/uploads/content/2016/06/27/b6d767d2f8ed5d21a44b0e5886680cb9.jpg', '3', 1, 1, '0000-00-00', '0000-00-00', 'http://otakoyi.com', '_self'),
+(23, 7, 1, 'cb8d1658e818735aae8c3f3b5dc258ec', '/uploads/content/2016/06/27/37693cfc748049e45d87b8c7d8b9aacd.jpg', '22', 1, 1, '0000-00-00', '0000-00-00', 'http://ukraine.com', '_self');
 
 -- --------------------------------------------------------
 
@@ -142,15 +142,6 @@ CREATE TABLE IF NOT EXISTS `e_comments` (
 --
 
 INSERT INTO `e_comments` (`id`, `parent_id`, `isfolder`, `content_id`, `users_id`, `message`, `rate`, `status`, `created`, `ip`, `skey`) VALUES
-(4, 0, 1, 16, 3, ' я опублікувала статтю, в якій перерахувала 25 технік генерації ідей для логотипу. Якщо ви її не читали — обов''язково прочитайте :) А потім повертайтеся сюди :)\n', 1.0, 'approved', '2016-03-30 14:34:39', '127.0.0.1', 'c213bd663062279e03ba6adbf164f4c9'),
-(5, 0, 1, 16, 3, 'Як придумати круте лого: продовжуємо говорити про техніки, які можна використати.\nНещодавно я опублікувала статтю, в якій перерахувала 25 технік генерації ідей для логотипу. Якщо ви її не читали — обов''язково прочитайте :) А потім повертайтеся сюди :)', 1.0, 'approved', '2016-03-30 14:36:08', '127.0.0.1', '340eefb5d284b21ba9fdfcf9cdc58c58'),
-(6, 4, 1, 16, 3, 'Нещодавно я опублікувала статтю, в якій перерахувала 25 технік генерації ідей для логотипу. Якщо ви її не читали — обов''язково прочитайте :) А потім повертайтеся сюди :)', 1.0, 'approved', '2016-03-30 15:10:43', '127.0.0.1', 'a9a636cb5bab3cd034f6312e6387a828'),
-(7, 5, 0, 16, 3, 'Нещодавно я опублікувала статтю, в якій перерахувала 25 технік генерації ідей для логотипу. Якщо ви її не читали — обов''язково прочитайте :) А потім повертайтеся сюди :)', 1.0, 'approved', '2016-03-30 15:10:48', '127.0.0.1', 'a460cca9058c56bdd8152e9f0842b530'),
-(8, 7, 0, 16, 3, 'я опублікувала статтю, в якій перерахувала 25 технік генерації ідей для логотипу. Якщо ви її не читали — обов''язково прочитайте :) А потім по', 1.0, 'approved', '2016-03-30 15:19:05', '127.0.0.1', 'a2ad7b0b5608a88752fcd1d55b423df1'),
-(9, 7, 0, 16, 3, 'ewrwer', 1.0, 'approved', '2016-03-30 15:19:43', '127.0.0.1', 'da28c000d5ca20ff3a01ef73e8890d01'),
-(10, 0, 0, 16, 3, 'dsfdsf sdf sdf ', 1.0, 'approved', '2016-03-31 06:17:22', '127.0.0.1', '4c1abdd31bef2c7da87763d22a68de40'),
-(12, 11, 1, 16, 3, '345435345 ggdfgdfg', 1.0, 'approved', '2016-03-31 06:54:37', '127.0.0.1', '17cd3a66cfc46e9def2aa961a9e49a58'),
-(14, 6, 0, 16, 3, 'Жорік Ревазов\nя опублікувала статтю, в якій перерахувала 25 технік генерації ідей для логотипу. Якщо ви її не читали — обов''язково прочитайте :) А потім повертайтеся сюди :)', 1.0, 'approved', '2016-03-31 06:57:53', '127.0.0.1', 'de5a5df31ef353e979860181e96432fc'),
 (15, 14, 0, 16, 2, 'в якій перерахувала 25 технік генерації ідей для логотипу. Якщо ви її не читали — обов''язково прочитайте :) А потім повертайтеся сюди :)', 1.0, 'approved', '2016-03-31 08:46:30', '127.0.0.1', NULL),
 (16, 14, 0, 16, 2, 'обов''язково прочитайте :) А потім повертайтеся сюди :)', 1.0, 'approved', '2016-03-31 08:48:38', '127.0.0.1', NULL),
 (17, 13, 0, 16, 2, 'ertertert', 1.0, 'approved', '2016-03-31 08:49:52', '127.0.0.1', NULL),
@@ -158,9 +149,6 @@ INSERT INTO `e_comments` (`id`, `parent_id`, `isfolder`, `content_id`, `users_id
 (19, 13, 0, 16, 2, 'werwerwer', 1.0, 'approved', '2016-03-31 08:50:04', '127.0.0.1', NULL),
 (21, 19, 0, 16, 2, 'dfdsfsd', 1.0, 'approved', '2016-03-31 09:11:27', '127.0.0.1', NULL),
 (23, 21, 0, 16, 2, 'rtyr', 1.0, 'approved', '2016-03-31 09:15:54', '127.0.0.1', NULL),
-(24, 12, 0, 16, 3, ' Ревазов\nя опублікувала статтю, в якій перерахувала 25 технік генерації ідей для логотипу. Якщо ви її не читали — обов''язково прочитайте :) А потім повертайтеся сюди :)', 1.0, 'approved', '2016-03-31 09:15:58', '127.0.0.1', '94ade8080aa05c1632fc0831d354c220'),
-(25, 0, 0, 16, 3, 'xxzzxczsadf', 1.0, 'approved', '2016-03-31 13:33:43', '127.0.0.1', 'cbf59fc5c2a997a249d3c38fd52edeea'),
-(26, 0, 0, 16, 3, 'xxzzxczsadfas', 1.0, 'approved', '2016-03-31 13:34:04', '127.0.0.1', 'cbf59fc5c2a997a249d3c38fd52edeea'),
 (27, 26, 0, 16, 2, 'a', 1.0, 'approved', '2016-04-13 07:03:34', '127.0.0.1', NULL);
 
 -- --------------------------------------------------------
@@ -174,14 +162,7 @@ CREATE TABLE IF NOT EXISTS `e_comments_subscribers` (
   `content_id` int(10) unsigned NOT NULL,
   `users_id` int(10) unsigned NOT NULL,
   `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
-
---
--- Дамп данных таблицы `e_comments_subscribers`
---
-
-INSERT INTO `e_comments_subscribers` (`id`, `content_id`, `users_id`, `created`) VALUES
-(3, 16, 3, '2016-03-31 13:33:39');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -284,7 +265,7 @@ INSERT INTO `e_content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id
 (13, 3, 3, 2, 0, 0, 0, '2016-03-24 13:23:43', '2016-03-25 09:56:19', '2016-03-25', NULL, 'published', '13', NULL, NULL, NULL, NULL, NULL),
 (14, 3, 3, 2, 0, 0, 0, '2016-03-24 13:24:00', '2016-03-25 09:56:29', '2016-03-25', NULL, 'published', '14', NULL, NULL, NULL, NULL, NULL),
 (15, 3, 3, 2, 0, 0, 0, '2016-03-24 13:24:10', '2016-03-24 13:24:10', '2016-03-24', NULL, 'published', '15', NULL, NULL, NULL, NULL, NULL),
-(16, 2, 2, 2, 0, 0, 0, '2016-03-24 13:24:14', '2016-06-24 15:02:44', '2016-03-24', NULL, 'published', '16', NULL, NULL, NULL, NULL, NULL),
+(16, 2, 2, 2, 0, 0, 0, '2016-03-24 13:24:14', '2016-06-28 18:52:07', '2016-03-24', NULL, 'published', '16', NULL, NULL, NULL, NULL, NULL),
 (17, 2, 2, 2, 0, 0, 0, '2016-03-24 13:30:28', '2016-03-24 13:31:01', '2016-03-24', NULL, 'published', '17', NULL, NULL, NULL, NULL, NULL),
 (18, 2, 2, 2, 0, 0, 0, '2016-03-24 13:31:04', '2016-03-25 15:53:18', '2016-03-24', NULL, 'published', '18', NULL, NULL, NULL, NULL, NULL),
 (19, 2, 2, 2, 0, 0, 0, '2016-03-24 13:31:33', '2016-03-24 13:32:11', '2016-03-24', NULL, 'published', '19', NULL, NULL, NULL, NULL, NULL),
@@ -518,33 +499,6 @@ INSERT INTO `e_content_relationship` (`id`, `content_id`, `categories_id`, `is_m
 (76, 54, 41, 1),
 (89, 92, 44, 1),
 (92, 52, 41, 1);
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `e_content_tags`
---
-
-CREATE TABLE IF NOT EXISTS `e_content_tags` (
-  `id` int(10) unsigned NOT NULL,
-  `content_id` int(11) unsigned NOT NULL,
-  `tags_id` int(10) unsigned NOT NULL,
-  `languages_id` tinyint(3) unsigned NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
-
---
--- Дамп данных таблицы `e_content_tags`
---
-
-INSERT INTO `e_content_tags` (`id`, `content_id`, `tags_id`, `languages_id`) VALUES
-(21, 16, 17, 1),
-(22, 16, 18, 1),
-(23, 16, 19, 1),
-(24, 18, 20, 1),
-(25, 18, 21, 1),
-(26, 18, 22, 1),
-(27, 18, 23, 1),
-(28, 18, 24, 1);
 
 -- --------------------------------------------------------
 
@@ -1217,6 +1171,27 @@ INSERT INTO `e_plugins_components` (`id`, `plugins_id`, `components_id`, `positi
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `e_posts_tags`
+--
+
+CREATE TABLE IF NOT EXISTS `e_posts_tags` (
+  `id` int(10) unsigned NOT NULL,
+  `posts_id` int(11) unsigned NOT NULL,
+  `tags_id` int(10) unsigned NOT NULL,
+  `languages_id` tinyint(3) unsigned NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `e_posts_tags`
+--
+
+INSERT INTO `e_posts_tags` (`id`, `posts_id`, `tags_id`, `languages_id`) VALUES
+(3, 16, 29, 1),
+(4, 16, 30, 1);
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `e_products_accessories`
 --
 
@@ -1248,19 +1223,7 @@ CREATE TABLE IF NOT EXISTS `e_products_prices` (
   `group_id` tinyint(3) unsigned NOT NULL,
   `price` decimal(10,2) DEFAULT NULL,
   `price_old` decimal(10,2) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
-
---
--- Дамп данных таблицы `e_products_prices`
---
-
-INSERT INTO `e_products_prices` (`id`, `content_id`, `group_id`, `price`, `price_old`) VALUES
-(14, 54, 12, 1.00, NULL),
-(15, 54, 5, 1.00, NULL),
-(16, 92, 5, 1649.00, NULL),
-(17, 92, 12, 1799.00, NULL),
-(18, 52, 5, 599.00, NULL),
-(19, 52, 12, 459.00, NULL);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1338,17 +1301,7 @@ CREATE TABLE IF NOT EXISTS `e_products_variants_prices` (
   `content_id` int(10) unsigned NOT NULL,
   `group_id` tinyint(3) unsigned NOT NULL,
   `price` decimal(10,0) unsigned DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
-
---
--- Дамп данных таблицы `e_products_variants_prices`
---
-
-INSERT INTO `e_products_variants_prices` (`id`, `variants_id`, `content_id`, `group_id`, `price`) VALUES
-(37, 27, 52, 5, 599),
-(38, 27, 52, 12, 459),
-(39, 28, 52, 5, 599),
-(40, 28, 52, 12, 459);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1423,7 +1376,7 @@ INSERT INTO `e_settings` (`id`, `name`, `value`, `block`, `type`, `required`) VA
 CREATE TABLE IF NOT EXISTS `e_tags` (
   `id` int(10) unsigned NOT NULL,
   `tag` varchar(60) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_tags`
@@ -1437,7 +1390,11 @@ INSERT INTO `e_tags` (`id`, `tag`) VALUES
 (21, 'sdf'),
 (22, 'sd'),
 (23, 'f'),
-(24, 'dsf');
+(24, 'dsf'),
+(26, 'v'),
+(27, 'b'),
+(29, 'd'),
+(30, 'cc');
 
 -- --------------------------------------------------------
 
@@ -1461,16 +1418,16 @@ CREATE TABLE IF NOT EXISTS `e_users` (
   `updated` datetime NOT NULL,
   `lastlogin` timestamp NULL DEFAULT NULL,
   `status` enum('active','ban','deleted') NOT NULL DEFAULT 'active'
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_users`
 --
 
 INSERT INTO `e_users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `updated`, `lastlogin`, `status`) VALUES
-(2, 1, 0, 'm4m5m1gkejbu6kofrvpv84mgl1', 'Володимир', 'Годяк', '+38 (067) 6736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-04-21 11:24:28', '2016-06-27 16:44:18', 'active'),
-(3, 5, 0, 'cqib3aongupefr8grbuudirmm2', 'Жорік', 'Ревазов', '+35 (555) 5555555', 'z@otakoyi.com', 'MToUTd7.hmK2o', NULL, NULL, '2016-03-28 09:01:38', '2016-04-20 12:24:56', '2016-04-11 07:35:30', 'active'),
-(19, 1, 0, NULL, 'Жорік', 'Васильович', '+77 (777) 7777777', 'otakoyi1@gmail.com', 'MTYFiZEAZZjt.', NULL, NULL, '2016-06-18 10:25:22', '0000-00-00 00:00:00', NULL, 'ban');
+(2, 1, 0, 'qtt3ma62i3ea02o6bhs6999mj5', 'Володимир', 'Годяк', '+38 (067) 6736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-04-21 11:24:28', '2016-06-28 18:43:31', 'active'),
+(19, 1, 0, NULL, 'Жорік', 'Васильович', '+77 (777) 7777777', 'otakoyi1@gmail.com', 'MTYFiZEAZZjt.', NULL, NULL, '2016-06-18 10:25:22', '0000-00-00 00:00:00', NULL, 'ban'),
+(21, 20, 0, NULL, 'Жорік', 'Абрамович', '+99 (999) 9999999', 'sz@otakoyi.com', 'OT55OBip4.nJU', NULL, NULL, '2016-06-28 06:21:16', '0000-00-00 00:00:00', NULL, 'active');
 
 -- --------------------------------------------------------
 
@@ -1485,7 +1442,7 @@ CREATE TABLE IF NOT EXISTS `e_users_group` (
   `backend` tinyint(1) unsigned DEFAULT NULL,
   `permissions` text,
   `position` tinyint(3) unsigned NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_users_group`
@@ -1495,8 +1452,7 @@ INSERT INTO `e_users_group` (`id`, `parent_id`, `isfolder`, `backend`, `permissi
 (1, 0, 0, 1, 'a:1:{s:11:"full_access";s:1:"1";}', 1),
 (2, 0, 0, 1, 'a:15:{s:11:"full_access";s:1:"0";s:9:"Dashboard";a:3:{i:0;s:5:"index";i:1;s:6:"create";i:2;s:4:"edit";}s:12:"content\\Post";a:6:{i:0;s:5:"index";i:1;s:5:"items";i:2;s:6:"create";i:3;s:4:"edit";i:4;s:3:"pub";i:5;s:4:"hide";}s:9:"Customers";a:7:{i:0;s:5:"index";i:1;s:5:"items";i:2;s:6:"create";i:3;s:4:"edit";i:4;s:6:"remove";i:5;s:3:"ban";i:6;s:7:"restore";}s:8:"Comments";a:9:{i:0;s:5:"index";i:1;s:3:"tab";i:2;s:5:"items";i:3;s:6:"create";i:4;s:4:"edit";i:5;s:5:"reply";i:6;s:7:"approve";i:7;s:4:"spam";i:8;s:7:"restore";}s:4:"Shop";a:3:{i:0;s:5:"index";i:1;s:6:"create";i:2;s:4:"edit";}s:16:"content\\Products";a:6:{i:0;s:5:"index";i:1;s:5:"items";i:2;s:6:"create";i:3;s:4:"edit";i:4;s:3:"pub";i:5;s:4:"hide";}s:26:"content\\ProductsCategories";a:6:{i:0;s:5:"index";i:1;s:5:"items";i:2;s:6:"create";i:3;s:4:"edit";i:4;s:3:"pub";i:5;s:4:"hide";}s:8:"Currency";a:4:{i:0;s:5:"index";i:1;s:5:"items";i:2;s:6:"create";i:3;s:4:"edit";}s:8:"Delivery";a:7:{i:0;s:5:"index";i:1;s:5:"items";i:2;s:6:"create";i:3;s:4:"edit";i:4;s:17:"getModuleSettings";i:5;s:3:"pub";i:6;s:4:"hide";}s:9:"Callbacks";a:8:{i:0;s:5:"index";i:1;s:3:"tab";i:2;s:5:"items";i:3;s:6:"create";i:4;s:4:"edit";i:5;s:5:"reply";i:6;s:4:"spam";i:7;s:7:"restore";}s:13:"content\\Pages";a:6:{i:0;s:5:"index";i:1;s:5:"items";i:2;s:6:"create";i:3;s:4:"edit";i:4;s:3:"pub";i:5;s:4:"hide";}s:32:"plugins\\ProductsCategoriesSelect";a:4:{i:0;s:5:"index";i:1;s:6:"create";i:2;s:4:"edit";i:3;s:7:"setMeta";}s:26:"plugins\\ProductsCategories";a:8:{i:0;s:5:"index";i:1;s:6:"create";i:2;s:4:"edit";i:3;s:4:"tree";i:4;s:4:"move";i:5;s:16:"createCategories";i:6;s:14:"editCategories";i:7;s:7:"setMeta";}s:17:"plugins\\PagesTree";a:6:{i:0;s:5:"index";i:1;s:6:"create";i:2;s:4:"edit";i:3;s:4:"tree";i:4;s:4:"move";i:5;s:7:"setMeta";}}', 0),
 (4, 0, 0, 1, 'a:2:{s:11:"full_access";s:1:"0";s:5:"Admin";a:9:{i:0;s:4:"data";i:1;s:2:"id";i:2;s:5:"login";i:3;s:2:"fp";i:4;s:6:"logout";i:5;s:7:"profile";i:6;s:5:"index";i:7;s:6:"create";i:8;s:4:"edit";}}', 0),
-(5, 0, 0, 20, NULL, 0),
-(12, 0, 0, 10, NULL, 0);
+(20, 0, 0, 0, 'N;', 0);
 
 -- --------------------------------------------------------
 
@@ -1509,7 +1465,7 @@ CREATE TABLE IF NOT EXISTS `e_users_group_info` (
   `group_id` tinyint(3) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
   `name` varchar(100) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
 
 --
 -- Дамп данных таблицы `e_users_group_info`
@@ -1519,8 +1475,7 @@ INSERT INTO `e_users_group_info` (`id`, `group_id`, `languages_id`, `name`) VALU
 (15, 1, 1, 'Адміністратори'),
 (16, 2, 1, 'Редактори'),
 (18, 4, 1, 'Модератори'),
-(19, 5, 1, 'Роздріб'),
-(26, 12, 1, 'Дрібний гурт');
+(34, 20, 1, 'Гості');
 
 --
 -- Индексы сохранённых таблиц
@@ -1633,16 +1588,6 @@ ALTER TABLE `e_content_relationship`
   ADD KEY `fk_content_relationship_content1_idx` (`content_id`),
   ADD KEY `fk_content_relationship_content2_idx` (`categories_id`),
   ADD KEY `is_main` (`is_main`);
-
---
--- Индексы таблицы `e_content_tags`
---
-ALTER TABLE `e_content_tags`
-  ADD PRIMARY KEY (`id`,`content_id`,`tags_id`,`languages_id`),
-  ADD UNIQUE KEY `content_id` (`content_id`,`tags_id`),
-  ADD KEY `fk_tags_content_content1_idx` (`content_id`),
-  ADD KEY `fk_tags_content_tags1_idx` (`tags_id`),
-  ADD KEY `fk_content_tags_languages1_idx` (`languages_id`);
 
 --
 -- Индексы таблицы `e_content_types`
@@ -1837,6 +1782,16 @@ ALTER TABLE `e_plugins_components`
   ADD KEY `position` (`position`);
 
 --
+-- Индексы таблицы `e_posts_tags`
+--
+ALTER TABLE `e_posts_tags`
+  ADD PRIMARY KEY (`id`,`posts_id`,`tags_id`,`languages_id`),
+  ADD UNIQUE KEY `posts_id` (`posts_id`,`tags_id`),
+  ADD KEY `fk_tags_content_content1_idx` (`posts_id`),
+  ADD KEY `fk_tags_posts_tags1_idx` (`tags_id`),
+  ADD KEY `fk_posts_tags_languages1_idx` (`languages_id`);
+
+--
 -- Индексы таблицы `e_products_accessories`
 --
 ALTER TABLE `e_products_accessories`
@@ -1957,7 +1912,7 @@ ALTER TABLE `e_comments`
 -- AUTO_INCREMENT для таблицы `e_comments_subscribers`
 --
 ALTER TABLE `e_comments_subscribers`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT для таблицы `e_components`
 --
@@ -1993,11 +1948,6 @@ ALTER TABLE `e_content_info`
 --
 ALTER TABLE `e_content_relationship`
   MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=93;
---
--- AUTO_INCREMENT для таблицы `e_content_tags`
---
-ALTER TABLE `e_content_tags`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=29;
 --
 -- AUTO_INCREMENT для таблицы `e_content_types`
 --
@@ -2119,6 +2069,11 @@ ALTER TABLE `e_plugins`
 ALTER TABLE `e_plugins_components`
   MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=28;
 --
+-- AUTO_INCREMENT для таблицы `e_posts_tags`
+--
+ALTER TABLE `e_posts_tags`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+--
 -- AUTO_INCREMENT для таблицы `e_products_accessories`
 --
 ALTER TABLE `e_products_accessories`
@@ -2127,7 +2082,7 @@ ALTER TABLE `e_products_accessories`
 -- AUTO_INCREMENT для таблицы `e_products_prices`
 --
 ALTER TABLE `e_products_prices`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=20;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT для таблицы `e_products_similar`
 --
@@ -2147,7 +2102,7 @@ ALTER TABLE `e_products_variants_features`
 -- AUTO_INCREMENT для таблицы `e_products_variants_prices`
 --
 ALTER TABLE `e_products_variants_prices`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=41;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT для таблицы `e_settings`
 --
@@ -2157,22 +2112,22 @@ ALTER TABLE `e_settings`
 -- AUTO_INCREMENT для таблицы `e_tags`
 --
 ALTER TABLE `e_tags`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=25;
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=31;
 --
 -- AUTO_INCREMENT для таблицы `e_users`
 --
 ALTER TABLE `e_users`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=20;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=22;
 --
 -- AUTO_INCREMENT для таблицы `e_users_group`
 --
 ALTER TABLE `e_users_group`
-  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
+  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=21;
 --
 -- AUTO_INCREMENT для таблицы `e_users_group_info`
 --
 ALTER TABLE `e_users_group_info`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=27;
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=35;
 --
 -- Ограничения внешнего ключа сохраненных таблиц
 --
@@ -2232,14 +2187,6 @@ ALTER TABLE `e_content_info`
 ALTER TABLE `e_content_relationship`
   ADD CONSTRAINT `fk_content_relationship_content1` FOREIGN KEY (`content_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_content_relationship_content2` FOREIGN KEY (`categories_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Ограничения внешнего ключа таблицы `e_content_tags`
---
-ALTER TABLE `e_content_tags`
-  ADD CONSTRAINT `fk_content_tags_languages1` FOREIGN KEY (`languages_id`) REFERENCES `e_languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_tags_content1` FOREIGN KEY (`content_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_tags_content_tags1` FOREIGN KEY (`tags_id`) REFERENCES `e_tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `e_content_types_images_sizes`
@@ -2322,6 +2269,14 @@ ALTER TABLE `e_payment_info`
 ALTER TABLE `e_plugins_components`
   ADD CONSTRAINT `fk_plugins_components_components1` FOREIGN KEY (`components_id`) REFERENCES `e_components` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_plugins_components_plugins1` FOREIGN KEY (`plugins_id`) REFERENCES `e_plugins` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `e_posts_tags`
+--
+ALTER TABLE `e_posts_tags`
+  ADD CONSTRAINT `fk_posts_tags_languages1` FOREIGN KEY (`languages_id`) REFERENCES `e_languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_tags_content1` FOREIGN KEY (`posts_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_tags_posts_tags1` FOREIGN KEY (`tags_id`) REFERENCES `e_tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `e_products_accessories`

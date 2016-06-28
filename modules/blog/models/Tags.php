@@ -17,6 +17,14 @@ use system\models\Model;
 class Tags extends Model
 {
     /**
+     * @param $tag
+     * @return array|bool|mixed|string
+     */
+    public function create($tag)
+    {
+        return $this->createRow('__tags', ['tag' => $tag]);
+    }
+    /**
      * @param $post_id
      * @return mixed
      * @throws \system\core\exceptions\Exception
@@ -31,5 +39,21 @@ class Tags extends Model
               where ct.content_id={$post_id} and ct.languages_id = {$this->languages_id}
             ")
             ->all();
+    }
+
+    /**
+     * @param $tag
+     * @return array|mixed
+     */
+    public function getId($tag)
+    {
+        return self::$db
+            ->select("select id from __tags where tag = '{$tag}' limit 1")
+            ->row('id');
+    }
+
+    public function delete($id)
+    {
+        return $this->deleteRow('__tags', $id);
     }
 }
