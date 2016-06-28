@@ -291,6 +291,7 @@ abstract class Engine extends Controller
      */
     private function makeNav()
     {
+//        d(self::$menu_nav);die;
         $nav = $this->makeNavTranslations($this->engine->nav());
 
         $nav = array_merge($nav, self::$menu_nav);
@@ -332,8 +333,32 @@ abstract class Engine extends Controller
      */
     protected function assignToNav($name, $url, $icon = null, $parent = null, $position = 0)
     {
+        if($parent != null){
+            foreach (self::$menu_nav as $k=>$item) {
+                if($item['url'] == $parent){
+
+                    if(!isset(self::$menu_nav[$k]['items'])) self::$menu_nav[$k]['items'] = [];
+
+                    while(isset(self::$menu_nav[$k]['items'][$position])){
+                        $position += 5;
+                    }
+                    self::$menu_nav[$k]['isfolder'] = 1;
+                    self::$menu_nav[$k]['items'][$position] = [
+                        'name'     => $name,
+                        'url'      => $url,
+                        'icon'     => $icon,
+                        'parent'   => $parent,
+                        'isfolder' => 0
+                    ];
+                    return ;
+                }
+            }
+
+            throw new Exception("Wrong parent url");
+        }
+
         while(isset(self::$menu_nav[$position])){
-            $position++;
+            $position += 5;
         }
 
         self::$menu_nav[$position] = [
