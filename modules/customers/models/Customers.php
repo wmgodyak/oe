@@ -12,5 +12,8 @@ use system\models\Users;
 
 class Customers extends Users
 {
-
+    public function setOnline($user)
+    {
+        return self::$db->update('__users', ['sessid' => session_id(), 'lastlogin' => date('Y-m-d H:i:s')], " id = {$user['id']} limit 1");
+    }
 }
