@@ -40,7 +40,8 @@ class Blog extends Content
 
         // hide custom block
 //        $this->form_display_blocks['content'] = false;
-        $this->form_display_params['parent'] = false;
+        $this->form_display_params['parent']   = false;
+        $this->form_display_blocks['features'] = false;
     }
 
 

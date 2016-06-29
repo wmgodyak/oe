@@ -32,7 +32,7 @@ class Comments extends Engine
 
         $this->assignToNav('Коментарі', 'module/run/comments', 'fa-comment', null, 20);
         $this->template->assignScript("modules/comments/js/admin/comments.js");
-
+//        EventsHandler::getInstance()->debug();
         EventsHandler::getInstance()->add('content.meta.after', [$this, 'postComments']);
         EventsHandler::getInstance()->add('dashboard', [$this, 'dashboard']);
 //        Event::getInstance()->add('content.process', [$this, 'contentProcess']);

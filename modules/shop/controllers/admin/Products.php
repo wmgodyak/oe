@@ -30,7 +30,7 @@ class Products extends Content
     {
         parent::__construct('product');
 
-        $this->form_action = "module/run/shop/process/";
+        $this->form_action = "module/run/shop/products/process/";
 //        $this->products       = new \modules\shop\models\admin\Products('product');
 //        $this->categories  = new \modules\shop\models\Categories('products_categories');
         $this->relations   = new ContentRelationship();
@@ -48,7 +48,7 @@ class Products extends Content
             $this->appendToPanel((string)Link::create
             (
                 $this->t('common.back'),
-                ['class' => 'btn-md', 'href'=> 'module/run/shop/index' . ($data['parent_id']>0 ? '/' . $data['parent_id'] : '')],
+                ['class' => 'btn-md', 'href'=> 'module/run/shop/products/index' . ($data['parent_id']>0 ? '/' . $data['parent_id'] : '')],
                 (string)Icon::create('fa-reply')
             )
             );
@@ -59,13 +59,13 @@ class Products extends Content
             (string)Link::create
             (
                 $this->t('common.button_create'),
-                ['class' => 'btn-md btn-primary', 'href'=> 'module/run/shop/create' . ($parent_id? "/$parent_id" : '')]
+                ['class' => 'btn-md btn-primary', 'href'=> 'module/run/shop/products/create' . ($parent_id? "/$parent_id" : '')]
             )
         );
 
         $t = new DataTables2('content');
 
-        $t  -> ajax('module/run/shop/index/' . $parent_id)
+        $t  -> ajax('module/run/shop/products/index/' . $parent_id)
 //            ->orderDef(0, 'desc')
             -> th($this->t('common.id'), 'c.id', 1, 1, 'width: 60px')
             -> th($this->t('common.name'), 'ci.name', 1, 1)
@@ -102,7 +102,7 @@ class Products extends Content
                 $status = $this->t($this->type .'.status_' . $row['status']);
                 $res[$i][] = $row['id'];
                 $res[$i][] =
-                    " <a class='status-{$row['status']}' title='{$status}' href='module/run/shop/edit/{$row['id']}'>{$icon}  {$row['name']}</a>"
+                    " <a class='status-{$row['status']}' title='{$status}' href='module/run/shop/products/edit/{$row['id']}'>{$icon}  {$row['name']}</a>"
                     . " <a href='/{$row['url']}' target='_blank'>{$icon_link}</a>"
                     . "<br><small class='label label-info'>Автор:{$row['owner']} </small>"
                     . "<br><small class='label label-info'>Коментарів: {$t_comments} </small>"
@@ -136,7 +136,7 @@ class Products extends Content
                     (string)Link::create
                     (
                         Icon::create(Icon::TYPE_EDIT),
-                        ['class' => 'btn-primary', 'href' => "module/run/shop/edit/" . $row['id'], 'title' => $this->t('common.title_edit')]
+                        ['class' => 'btn-primary', 'href' => "module/run/shop/products/edit/" . $row['id'], 'title' => $this->t('common.title_edit')]
                     ) .
                     ($row['isfolder'] == 0 ? (string)Button::create
                     (
@@ -169,7 +169,7 @@ class Products extends Content
         $this->appendToPanel((string)Link::create
         (
             $this->t('common.back'),
-            ['class' => 'btn-md', 'href'=> 'module/run/shop' . ($parent_id > 0 ? '/index/' . $parent_id : '')]
+            ['class' => 'btn-md', 'href'=> 'module/run/shop/products' . ($parent_id > 0 ? '/index/' . $parent_id : '')]
         )
         );
 

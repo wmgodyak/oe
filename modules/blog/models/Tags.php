@@ -56,4 +56,17 @@ class Tags extends Model
     {
         return $this->deleteRow('__tags', $id);
     }
+
+    public function getContentType($content_id)
+    {
+        return self::$db
+            ->select("
+                select ct.type
+                from __content c
+                join __content_types ct on ct.id=c.types_id
+                where c.id={$content_id}
+                limit 1
+                ")
+            ->row();
+    }
 }

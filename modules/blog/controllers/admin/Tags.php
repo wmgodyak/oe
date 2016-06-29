@@ -37,39 +37,44 @@ class Tags extends Engine
 
     public function process($posts_id)
     {
+        $ct = $this->tags->getContentType($posts_id);
+        if($ct != 'post') return;
+
         $tags  = $this->request->post('tags');
         $_tags = $this->posts_tags->get($posts_id);
+        if($tags){
 
-        foreach ($tags as $languages_id => $str) {
-            $tc = isset($_tags[$languages_id]) ? $_tags[$languages_id] : [];
-            $a  = explode(',', $str);
-            foreach ($a as $k=>$tag) {
+            foreach ($tags as $languages_id => $str) {
+                $tc = isset($_tags[$languages_id]) ? $_tags[$languages_id] : [];
+                $a  = explode(',', $str);
+                foreach ($a as $k=>$tag) {
 
-                $tag = strip_tags($tag);
-                $tag = trim($tag);
+                    $tag = strip_tags($tag);
+                    $tag = trim($tag);
 
-                if(empty($tag)) continue;
+                    if(empty($tag)) continue;
 
-                $tags_id = $this->tags->getId($tag);
+                    $tags_id = $this->tags->getId($tag);
 
-                if(empty($tags_id)){
-                    $tags_id = $this->tags->create($tag);
+                    if(empty($tags_id)){
+                        $tags_id = $this->tags->create($tag);
+                    }
+
+                    $this->posts_tags->create($tags_id, $posts_id, $languages_id);
+
+                    if(isset($tc[$tags_id])) {
+                        unset($tc[$tags_id]);
+                    }
                 }
 
-                $this->posts_tags->create($tags_id, $posts_id, $languages_id);
-
-                if(isset($tc[$tags_id])) {
-                    unset($tc[$tags_id]);
-                }
-            }
-//            d($tc);die; // todo переробити
-            // видалю непотрібні
-            if(! empty($tc)){
-                foreach ($tc as $tags_id=>$tag) {
-                    $this->posts_tags->delete($tags_id, $posts_id);
-                    $t = $this->posts_tags->getTotal($tags_id);
-                    if($t == 0){
-                        $this->tags->delete($tags_id);
+                // видалю непотрібні
+                if(! empty($tc)){
+                    foreach ($tc as $tags_id=>$tag) {
+                        $this->posts_tags->delete($tags_id, $posts_id);
+                        $t = $this->posts_tags->getTotal($tags_id);
+                        if($t == 0){
+                            $this->tags->delete($tags_id);
+                        }
                     }
                 }
             }

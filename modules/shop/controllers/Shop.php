@@ -8,8 +8,6 @@
 
 namespace modules\shop\controllers;
 
-use modules\shop\models\Categories;
-use modules\shop\models\products;
 use system\Front;
 
 /**
@@ -25,8 +23,8 @@ class Shop extends Front
     {
         parent::__construct();
 
-        $this->products   = new Products('product');
-        $this->categories = new Categories('products_categories');
+//        $this->products   = new Products('product');
+//        $this->categories = new Categories('products_categories');
     }
 
     public function index()

@@ -73,17 +73,18 @@ class ContentRelationship extends Model
     {
         $categories = $this->request->post('categories');
         $selected = $this->getCategories($content_id);
+        if($categories){
+            foreach ($categories as $k=>$categories_id) {
 
-        foreach ($categories as $k=>$categories_id) {
+                $c = array_search($categories_id, $selected);
 
-            $c = array_search($categories_id, $selected);
+                if($c !== FALSE){
+                    unset($selected[$c]);
+                    continue;
+                }
 
-            if($c !== FALSE){
-                unset($selected[$c]);
-                continue;
+                $this->create($content_id, $categories_id);
             }
-
-            $this->create($content_id, $categories_id);
         }
 
         if(!empty($selected)){
