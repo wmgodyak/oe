@@ -27,7 +27,7 @@ engine.delivery = {
             ps.html('');
             if(module == '') return;
             engine.request.post({
-                url: 'delivery/getModuleSettings',
+                url: 'module/run/delivery/getModuleSettings',
                 data: {module: module},
                 success: function(res){
                     ps.html(tmpl({items: res.s}));
@@ -38,7 +38,7 @@ engine.delivery = {
     },
     create: function()
     {
-        engine.request.get('./delivery/create', function(d)
+        engine.request.get('module/run/delivery/create', function(d)
         {
             var buttons = [
                 {
@@ -73,7 +73,7 @@ engine.delivery = {
     edit: function(id)
     {
         engine.request.post({
-            url: './delivery/edit/' + id,
+            url: 'module/run/delivery/edit/' + id,
             data: {id: id},
             success: function(d)
             {
@@ -116,7 +116,7 @@ engine.delivery = {
             t.delivery.delete_question,
             function()
             {
-                engine.request.get('./delivery/delete/' + id, function(d){
+                engine.request.get('module/run/delivery/delete/' + id, function(d){
                     if(d > 0){
                         engine.refreshDataTable('delivery');
                     }
@@ -127,7 +127,7 @@ engine.delivery = {
     },
     pub: function(id)
     {
-        engine.request.get('./delivery/pub/' + id, function(d){
+        engine.request.get('module/run/delivery/pub/' + id, function(d){
             if(d > 0){
                 engine.refreshDataTable('delivery');
             }
@@ -135,7 +135,7 @@ engine.delivery = {
     },
     hide: function(id)
     {
-        engine.request.get('./delivery/hide/' + id, function(d){
+        engine.request.get('module/run/delivery/hide/' + id, function(d){
             if(d > 0){
                 engine.refreshDataTable('delivery');
             }
