@@ -7,6 +7,8 @@ use helpers\bootstrap\Icon;
 use helpers\bootstrap\Link;
 use system\components\content\controllers\Content;
 use system\core\DataTables2;
+use system\core\EventsHandler;
+use system\models\ContentTypes;
 
 if ( !defined("CPATH") ) die();
 
@@ -26,6 +28,17 @@ class Guides extends Content
     {
         $this->assignToNav('Довідкники', 'guides', 'fa-book');
         $this->template->assignScript(dirname(__FILE__) . "/js/guides.js");
+        EventsHandler::getInstance()->add('content.main', [$this, 'main']);
+    }
+
+    public function main($guide)
+    {
+        $ct = new ContentTypes();
+        $a = $ct->getData($guide['types_id'], 'type');
+
+        if($this->type != $a) return '';
+
+        return $this->template->fetch('guides/main');
     }
 
     public function index($parent_id=0)
@@ -58,6 +71,7 @@ class Guides extends Content
             -> th($this->t('common.updated'), 'c.updated', 1, 1, 'width: 200px')
             -> th($this->t('common.tbl_func'), null, 0, 0, 'width: 180px')
         ;
+        $t->get('c.external_id',0,0,0);
         $t->get('c.status',0,0,0);
         $t->get('c.isfolder',0,0,0);
 
@@ -77,7 +91,7 @@ class Guides extends Content
         $res = array();
         foreach ($t->getResults(false) as $i=>$row) {
             $res[$i][] = $row['id'];
-            $res[$i][] = "<a href='guides/index/{$row['id']}'>{$row['name']}</a>";
+            $res[$i][] = "<a href='guides/index/{$row['id']}'>{$row['name']}</a>" . ($row['external_id'] ? " ({$row['external_id']})" : '');
             $res[$i][] = date('d.m.Y H:i:s', strtotime($row['created']));
             $res[$i][] = $row['updated'] ? date('d.m.Y H:i:s', strtotime($row['updated'])) : '';
             $res[$i][] =
