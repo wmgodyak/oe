@@ -2,7 +2,7 @@
     <legend>Ціни та наявність</legend>
 
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="form-group">
                 <label for="content_code" class="col-md-4 control-label">Артикул</label>
                 <div class="col-md-8">
@@ -10,7 +10,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="form-group">
                 <label for="content_units" class="col-md-4 control-label">Од.виміру</label>
                 <div class="col-md-8">
@@ -22,19 +22,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="form-group">
-                <label for="content_currency" class="col-md-4 control-label">Валюта</label>
-                <div class="col-md-8">
-                    <select name="content[currency_id]" id="content_currency" class="form-control">
-                        {foreach $currency as $c}
-                            <option {if $content.currency_id==$c.id}selected{/if} value="{$c.id}">{$c.code}</option>
-                        {/foreach}
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <div class="form-group">
                 <label for="content_in_stock" class="col-md-4 control-label">Наявність</label>
                 <div class="col-md-8">
@@ -56,12 +44,21 @@
                     {foreach $groups as $g}
                         <th>{$g.name}</th>
                     {/foreach}
+                    <th>Валюта</th>
                 </tr>
                 <tr>
                     <td>Ціна</td>
                     {foreach $groups as $g}
                         <td><input type="text" name="prices[{$g.id}]" class="form-control" onchange="this.value = parseFloat(this.value); if(this.value == 'NaN') this.value = '';" required value="{if isset($prices[$g.id])}{$prices[$g.id]}{/if}"></td>
                     {/foreach}
+                    <td>
+
+                        <select name="content[currency_id]" id="content_currency" class="form-control">
+                            {foreach $currency as $c}
+                                <option {if $content.currency_id==$c.id}selected{/if} value="{$c.id}">{$c.code}</option>
+                            {/foreach}
+                        </select>
+                    </td>
                 </tr>
             </table>
         </div>
