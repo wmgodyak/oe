@@ -62,7 +62,7 @@ class Categories extends Engine
     public function process($id=0)
     {
         $i=[]; $m = $this->t('common.update_success'); $s = 0;
-        switch($this->request->product('action')){
+        switch($this->request->post('action')){
             case 'create':
                 $id = $this->categories->create($id, $this->admin['id']);
                 if($id){
@@ -112,12 +112,12 @@ class Categories extends Engine
 
     public function move()
     {
-        if(! $this->request->isproduct()) die(403);
+        if(! $this->request->isPost()) die(403);
 
-        $id            = $this->request->product('id', 'i');
-        $old_parent    = $this->request->product('old_parent', 'i');
-        $parent        = $this->request->product('parent', 'i');
-        $position      = $this->request->product('position', 'i');
+        $id            = $this->request->post('id', 'i');
+        $old_parent    = $this->request->post('old_parent', 'i');
+        $parent        = $this->request->post('parent', 'i');
+        $position      = $this->request->post('position', 'i');
 
         if(empty($id)) return 0;
 

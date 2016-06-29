@@ -10,8 +10,10 @@ namespace modules\shop\controllers\admin;
 use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
 use helpers\bootstrap\Link;
+use modules\shop\models\Categories;
 use system\components\content\controllers\Content;
 use system\core\DataTables2;
+use system\core\EventsHandler;
 use system\models\ContentRelationship;
 
 /**
@@ -22,27 +24,33 @@ class Products extends Content
 {
     private $categories;
     private $relations;
-    private $products;
-
-    private $allowed_types = [2];
+    private $contentTypes;
+    private $allowed_types = ['product'];
 
     public function __construct()
     {
         parent::__construct('product');
 
         $this->form_action = "module/run/shop/products/process/";
-//        $this->products       = new \modules\shop\models\admin\Products('product');
-//        $this->categories  = new \modules\shop\models\Categories('products_categories');
-        $this->relations   = new ContentRelationship();
-
         // hide custom block
 //        $this->form_display_blocks['content'] = false;
         $this->form_display_params['parent'] = false;
+
+        $this->relations = new ContentRelationship();
+        $this->categories = new Categories('products_categories');
+        $this->contentTypes = new \system\models\ContentTypes();
+
+
+
+        EventsHandler::getInstance()->add('content.params', [$this, 'contentParams']);
+        EventsHandler::getInstance()->add('content.process', [$this, 'contentProcess']);
     }
 
 
     public function index($parent_id=0)
     {
+        $this->addBreadCrumb('Товари', 'module/run/shop/products');
+
         if($parent_id > 0){
             $data = $this->mContent->getData($parent_id);
             $this->appendToPanel((string)Link::create
@@ -176,5 +184,31 @@ class Products extends Content
         $this->template->assign('sidebar', $this->template->fetch('shop/categories/tree'));
 
         parent::edit($id);
+    }
+
+
+    /**
+     * @param $content
+     * @return string
+     */
+    public function contentParams($content)
+    {
+        $ct = $this->contentTypes->getData($content['types_id'], 'type');
+        if(!in_array($ct, $this->allowed_types)) return '';
+
+        $this->template->assign('selected_categories', $this->relations->getCategories($content['id']));
+        $this->template->assign('main_categories_id', $this->relations->getMainCategoriesId($content['id']));
+        $this->template->assign('categories', $this->categories->get(0,1));
+
+        return $this->template->fetch('shop/select_categories');
+    }
+
+    /**
+     * @param $id
+     */
+    public function contentProcess($id)
+    {
+        $this->relations->saveContentCategories($id);
+        $this->relations->saveMainCategory($id);
     }
 }

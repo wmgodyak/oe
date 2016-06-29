@@ -18,6 +18,7 @@ class Shop extends Front
 {
     private $products;
     private $categories;
+    private $allowed_types = ['product'];
 
     public function __construct()
     {

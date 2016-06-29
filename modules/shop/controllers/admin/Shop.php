@@ -15,37 +15,16 @@ use system\Engine;
  */
 class Shop extends Engine
 {
-    public function __construct()
-    {
-        parent::__construct();
-        
-//        $this->form_action = "module/run/shop/process/";
-//        $this->products       = new Products('product');
-//        $this->categories  = new \modules\shop\models\Categories('products_categories');
-//        $this->relations   = new ContentRelationship();
-
-        // hide custom block
-//        $this->form_display_blocks['content'] = false;
-//        $this->form_display_params['parent'] = false;
-    }
-
-
     public function init()
     {
         $this->assignToNav('Магазин', 'module/run/shop', 'fa-shopping-cart');
-        // add support sub nav
-        $this->assignToNav('Товари', 'module/run/shop/products', 'fa-shopping-cart', 'module/run/shop');
+
         $this->assignToNav('Категорії', 'module/run/shop/categories', 'fa-shopping-cart', 'module/run/shop');
+        $this->assignToNav('Товари', 'module/run/shop/products', 'fa-shopping-cart', 'module/run/shop');
 
-//        $this->template->assignScript("modules/shop/js/admin/shop.js");
-//        $this->template->assignScript("modules/shop/js/admin/bootstrap-tagsinput.min.js");
-//        EventsHandler::getInstance()->debug();
-//        EventsHandler::getInstance()->add('content.params', [$this, 'contentParams']);
-//        EventsHandler::getInstance()->add('content.process', [$this, 'contentProcess']);
-//        EventsHandler::getInstance()->add('dashboard', [$this, 'dashboard']);
-//        EventsHandler::getInstance()->add('content.process', [new Tags(), 'process']);
+        $this->template->assignScript("modules/shop/js/admin/shop.js");
+
     }
-
 
     public function index($parent_id=0)
     {

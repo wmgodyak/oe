@@ -66,6 +66,21 @@ class ContentRelationship extends Model
         );
     }
 
+    public function saveMainCategory($content_id)
+    {
+        self::$db->delete
+        (
+            '__content_relationship',
+            " content_id={$content_id} and is_main = 1 limit 1"
+        );
+
+        $categories_id = $this->request->post('main_categories_id', 'i');
+
+        if($categories_id){
+            $this->create($content_id, $categories_id, 1);
+        }
+    }
+
     /**
      * @param $content_id
      */

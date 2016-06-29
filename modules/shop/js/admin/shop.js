@@ -32,7 +32,7 @@ engine.shop = {
         var $tree = new engine.tree('shopCategories');
         $tree
             .setUrl('module/run/shop/categories/tree')
-            .setContextMenu('create', t.shop.tree_create, 'fa-file', function(o){
+            .setContextMenu('create', t.shopCategories.tree_create, 'fa-file', function(o){
                     var node_id= o.reference[0].id;
                     engine.shop.categories.create(node_id);
                 }
@@ -50,16 +50,7 @@ engine.shop = {
                         function()
                         {
                             engine.request.get('module/run/shop/categories/delete/'+node_id, function(res){
-                                if(res.s ){
-                                    if(ACTION == 'create' || ACTION == 'edit'){
-                                        self.location.href = 'module/run/shop';
-                                    }
-                                    $tree.refresh();
-                                    dialog.dialog('destroy').remove();
-                                    $tree.jstree('refresh');
-                                } else {
-                                    alert(res.m);
-                                }
+                                self.location.href = 'module/run/shop';
                             }, 'json');
                         });
                 }

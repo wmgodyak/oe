@@ -14,14 +14,14 @@
     <div class="form-group lang-{$lang.code} switch-lang" {if $i>0}style="display:none"{/if}>
         <label for="info_{$lang.id}_name" class="col-md-2 control-label">{$t.content.name}</label>
         <div class="col-md-10">
-            <input type="text" class="form-control info-name" name="content_info[{$lang.id}][name]" id="content_info_{$lang.id}_name" required="" placeholder="[a-zA-Zа-яА-Я0-9]+" value="{$content.info[$lang.id].name}" data-lang="{$lang.code}">
+            <input type="text" class="form-control info-name" name="content_info[{$lang.id}][name]" id="content_info_{$lang.id}_name" required="" placeholder="[a-zA-Zа-яА-Я0-9]+" value="{if isset($content.info[$lang.id].name)}{$content.info[$lang.id].name}{/if}" data-lang="{$lang.code}">
         </div>
     </div>
 
     <div class="form-group lang-{$lang.code} switch-lang" {if $i>0}style="display:none"{/if}>
         <label for="info_{$lang.id}_url" class="col-md-2 control-label">{$t.content.url}</label>
         <div class="col-md-10">
-            <input type="text" data-parent-url="{$content.parent_url[$lang.id]}" class="form-control info-url" name="content_info[{$lang.id}][url]" id="content_info_{$lang.id}_url" placeholder="[a-z0-9]+ max:160" value="{$content.info[$lang.id].url}" required>
+            <input type="text" data-parent-url="{if isset($content.parent_url[$lang.id])}{$content.parent_url[$lang.id]}{/if}" class="form-control info-url" name="content_info[{$lang.id}][url]" id="content_info_{$lang.id}_url" placeholder="[a-z0-9]+ max:160" value="{if isset($content.info[$lang.id].url)}{$content.info[$lang.id].url}{/if}" required>
         </div>
     </div>
     {/foreach}

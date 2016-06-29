@@ -354,7 +354,7 @@ abstract class Engine extends Controller
                 }
             }
 
-            throw new Exception("Wrong parent url");
+            throw new Exception("Wrong parent url.");
         }
 
         while(isset(self::$menu_nav[$position])){
