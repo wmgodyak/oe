@@ -69,6 +69,7 @@ abstract class Engine extends Controller
 
     private $theme = null;
 
+
     public function __construct()
     {
         parent::__construct();
@@ -156,8 +157,8 @@ abstract class Engine extends Controller
         $this->template->assign('controller', $controller);
         $this->template->assign('action',     $action);
 
+        $this->initSystemComponents();
         $this->initModules();
-
         // assign events
         $events = EventsHandler::getInstance();
 
@@ -396,6 +397,36 @@ abstract class Engine extends Controller
         }
 
         return $modules;
+    }
+
+    private function initSystemComponents()
+    {
+        $ns = 'system\components';
+        $root = str_replace('\\','/', $ns);
+
+        $components = new \stdClass();
+        if ($handle = opendir(DOCROOT . $root)) {
+            while (false !== ($module = readdir($handle))) {
+                if ($module == "." || $module == ".." || $module == 'content')  continue;
+
+                $c  = $ns .'\\'. $module . '\controllers\\' . ucfirst($module);
+
+                $path = str_replace("\\", "/", $c);
+
+                if(file_exists(DOCROOT . $path . '.php')) {
+
+//                    $this->assignModuleLang($module);
+                    $controller = new $c;
+                    $components->{$module} = $controller;
+
+                    call_user_func(array($controller, 'init'));
+                }
+
+            }
+            closedir($handle);
+        }
+
+        return $components;
     }
 
     private function assignModuleLang($module)

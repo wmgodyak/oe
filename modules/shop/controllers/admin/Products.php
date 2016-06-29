@@ -33,16 +33,17 @@ class Products extends Content
 
         $this->form_action = "module/run/shop/products/process/";
         // hide custom block
-//        $this->form_display_blocks['content'] = false;
-        $this->form_display_params['parent'] = false;
+        $this->form_display_blocks['intro']    = false;
+        $this->form_display_params['parent']   = false;
+        $this->form_display_params['owner']    = false;
+        $this->form_display_params['pub_date'] = false;
 
         $this->relations = new ContentRelationship();
         $this->categories = new Categories('products_categories');
         $this->contentTypes = new \system\models\ContentTypes();
 
 
-
-        EventsHandler::getInstance()->add('content.params', [$this, 'contentParams']);
+        EventsHandler::getInstance()->add('content.main', [$this, 'contentParams']);
         EventsHandler::getInstance()->add('content.process', [$this, 'contentProcess']);
     }
 

@@ -79,4 +79,20 @@ class Shop extends Engine
 
         return call_user_func_array(array($controller, $action), $params);
     }
+
+    public function prices()
+    {
+        include "Prices.php";
+
+        $params = func_get_args();
+
+        $action = 'index';
+        if(!empty($params)){
+            $action = array_shift($params);
+        }
+
+        $controller  = new Products();
+
+        return call_user_func_array(array($controller, $action), $params);
+    }
 }

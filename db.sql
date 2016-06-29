@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.4.13.1deb1
+-- version 4.0.10deb1
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Июн 28 2016 г., 21:53
--- Версия сервера: 5.6.30-0ubuntu0.15.10.1
--- Версия PHP: 5.6.11-1ubuntu3.4
+-- Время создания: Июн 29 2016 г., 16:28
+-- Версия сервера: 5.6.30-0ubuntu0.14.04.1-log
+-- Версия PHP: 5.5.9-1ubuntu4.17
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -14,7 +14,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
 
 --
 -- База данных: `engine`
@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `e_banners` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `places_id` int(10) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
   `skey` varchar(32) NOT NULL,
@@ -38,8 +38,12 @@ CREATE TABLE IF NOT EXISTS `e_banners` (
   `df` date DEFAULT NULL,
   `dt` date DEFAULT NULL,
   `url` varchar(200) DEFAULT NULL,
-  `target` enum('_blank','_self') DEFAULT '_self'
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
+  `target` enum('_blank','_self') DEFAULT '_self',
+  PRIMARY KEY (`id`,`places_id`,`languages_id`),
+  UNIQUE KEY `skey_UNIQUE` (`skey`),
+  KEY `fk_banners_banners_places1_idx` (`places_id`),
+  KEY `fk_banners_languages1_idx` (`languages_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=24 ;
 
 --
 -- Дамп данных таблицы `e_banners`
@@ -60,12 +64,14 @@ INSERT INTO `e_banners` (`id`, `places_id`, `languages_id`, `skey`, `img`, `name
 --
 
 CREATE TABLE IF NOT EXISTS `e_banners_places` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(45) DEFAULT NULL,
   `name` varchar(60) DEFAULT NULL,
   `width` int(11) DEFAULT NULL,
-  `height` int(11) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+  `height` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code_UNIQUE` (`code`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
 --
 -- Дамп данных таблицы `e_banners_places`
@@ -82,7 +88,7 @@ INSERT INTO `e_banners_places` (`id`, `code`, `name`, `width`, `height`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `e_callbacks` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `users_id` int(10) unsigned DEFAULT NULL,
   `phone` varchar(20) NOT NULL,
   `name` varchar(45) NOT NULL,
@@ -92,8 +98,9 @@ CREATE TABLE IF NOT EXISTS `e_callbacks` (
   `ip` char(16) NOT NULL,
   `status` enum('processed','spam','new') NOT NULL DEFAULT 'new',
   `manager_id` int(11) DEFAULT NULL,
-  `updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+  `updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
 
 --
 -- Дамп данных таблицы `e_callbacks`
@@ -124,7 +131,7 @@ INSERT INTO `e_callbacks` (`id`, `users_id`, `phone`, `name`, `message`, `commen
 --
 
 CREATE TABLE IF NOT EXISTS `e_comments` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) unsigned NOT NULL DEFAULT '0',
   `isfolder` tinyint(3) unsigned NOT NULL,
   `content_id` int(11) unsigned NOT NULL,
@@ -134,8 +141,14 @@ CREATE TABLE IF NOT EXISTS `e_comments` (
   `status` enum('approved','spam','new') NOT NULL DEFAULT 'new',
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ip` char(15) DEFAULT NULL,
-  `skey` varchar(64) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+  `skey` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`id`,`content_id`),
+  KEY `fk_comments_content1_idx` (`content_id`),
+  KEY `approved` (`status`),
+  KEY `users_id` (`users_id`),
+  KEY `token` (`skey`),
+  KEY `isfolder` (`isfolder`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=28 ;
 
 --
 -- Дамп данных таблицы `e_comments`
@@ -158,11 +171,15 @@ INSERT INTO `e_comments` (`id`, `parent_id`, `isfolder`, `content_id`, `users_id
 --
 
 CREATE TABLE IF NOT EXISTS `e_comments_subscribers` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `content_id` int(10) unsigned NOT NULL,
   `users_id` int(10) unsigned NOT NULL,
-  `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`,`content_id`,`users_id`),
+  UNIQUE KEY `content_id` (`content_id`,`users_id`),
+  KEY `fk_comments_subscribe_content1_idx` (`content_id`),
+  KEY `fk_comments_subscribe_users1_idx` (`users_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -171,7 +188,7 @@ CREATE TABLE IF NOT EXISTS `e_comments_subscribers` (
 --
 
 CREATE TABLE IF NOT EXISTS `e_components` (
-  `id` tinyint(3) unsigned NOT NULL,
+  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` tinyint(3) unsigned NOT NULL,
   `isfolder` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `icon` varchar(30) DEFAULT NULL,
@@ -179,8 +196,14 @@ CREATE TABLE IF NOT EXISTS `e_components` (
   `position` tinyint(3) unsigned DEFAULT '0',
   `published` tinyint(1) NOT NULL DEFAULT '0',
   `settings` text,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=utf8;
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `parent_id` (`parent_id`),
+  KEY `isfolder` (`isfolder`),
+  KEY `position` (`position`),
+  KEY `published` (`published`),
+  KEY `module` (`controller`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=84 ;
 
 --
 -- Дамп данных таблицы `e_components`
@@ -228,7 +251,7 @@ INSERT INTO `e_components` (`id`, `parent_id`, `isfolder`, `icon`, `controller`,
 --
 
 CREATE TABLE IF NOT EXISTS `e_content` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `types_id` tinyint(3) unsigned NOT NULL,
   `subtypes_id` tinyint(3) unsigned NOT NULL,
   `owner_id` int(11) unsigned NOT NULL,
@@ -245,8 +268,15 @@ CREATE TABLE IF NOT EXISTS `e_content` (
   `unit_id` tinyint(3) unsigned DEFAULT NULL,
   `has_variants` tinyint(1) unsigned DEFAULT NULL,
   `in_stock` tinyint(1) unsigned DEFAULT NULL,
-  `external_id` char(32) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=146 DEFAULT CHARSET=utf8;
+  `external_id` char(32) DEFAULT NULL,
+  PRIMARY KEY (`id`,`types_id`,`subtypes_id`,`owner_id`),
+  KEY `fk_content_content_types1_idx` (`types_id`),
+  KEY `fk_content_content_subtypes1_idx` (`subtypes_id`),
+  KEY `fk_content_owner_idx` (`owner_id`),
+  KEY `status` (`status`),
+  KEY `published` (`published`),
+  KEY `code` (`code`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=162 ;
 
 --
 -- Дамп данных таблицы `e_content`
@@ -281,24 +311,37 @@ INSERT INTO `e_content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id
 (30, 1, 8, 2, 28, 0, 0, '2016-03-28 07:19:28', '2016-03-28 12:41:33', '2016-03-28', NULL, 'published', '30', NULL, NULL, NULL, NULL, NULL),
 (31, 1, 8, 2, 28, 0, 0, '2016-03-28 12:50:28', '2016-03-28 12:50:49', '2016-03-28', NULL, 'published', '31', NULL, NULL, NULL, NULL, NULL),
 (34, 1, 8, 2, 28, 0, 0, '2016-03-30 07:40:52', '2016-03-30 07:41:43', '2016-03-30', NULL, 'published', '34', NULL, NULL, NULL, NULL, NULL),
-(40, 11, 11, 2, 0, 1, 0, '2016-04-01 07:08:53', '2016-04-01 07:56:46', '2016-04-01', NULL, 'published', '40', NULL, NULL, NULL, NULL, NULL),
-(41, 11, 11, 2, 40, 0, 0, '2016-04-01 07:09:00', '2016-04-12 14:32:36', '2016-04-01', NULL, 'published', '41', NULL, NULL, NULL, NULL, NULL),
-(42, 11, 11, 2, 0, 0, 0, '2016-04-01 07:10:09', '2016-04-01 07:10:08', '2016-04-01', NULL, 'published', '42', NULL, NULL, NULL, NULL, NULL),
+(40, 11, 11, 2, 0, 1, 0, '2016-04-01 07:08:53', '2016-06-29 07:42:55', '2016-06-29', NULL, 'published', '40', NULL, NULL, NULL, NULL, NULL),
+(41, 11, 11, 2, 40, 0, 0, '2016-04-01 07:09:00', '2016-06-29 11:03:41', '2016-04-01', NULL, 'published', '41', NULL, NULL, NULL, NULL, NULL),
+(42, 11, 11, 2, 0, 0, 0, '2016-04-01 07:10:09', '2016-06-29 07:43:01', '2016-06-29', NULL, 'deleted', '42', NULL, NULL, NULL, NULL, NULL),
 (43, 11, 11, 2, 0, 0, 0, '2016-04-01 07:10:40', '2016-04-01 08:26:37', '2016-04-01', NULL, 'published', '43', NULL, NULL, NULL, NULL, NULL),
-(44, 11, 11, 2, 0, 0, 0, '2016-04-01 07:10:45', '2016-04-01 07:10:45', '2016-04-01', NULL, 'published', '44', NULL, NULL, NULL, NULL, NULL),
+(44, 11, 11, 2, 0, 0, 0, '2016-04-01 07:10:45', '2016-06-29 11:03:49', '2016-06-29', NULL, 'published', '44', NULL, NULL, NULL, NULL, NULL),
 (45, 11, 11, 2, 0, 0, 0, '2016-04-01 07:10:50', '2016-04-01 07:10:50', '2016-04-01', NULL, 'published', '45', NULL, NULL, NULL, NULL, NULL),
-(46, 11, 11, 2, 0, 0, 0, '2016-04-01 07:11:00', '2016-04-01 07:11:00', '2016-04-01', NULL, 'published', '46', NULL, NULL, NULL, NULL, NULL),
-(47, 11, 11, 2, 0, 0, 0, '2016-04-01 07:11:07', '2016-04-01 07:11:07', '2016-04-01', NULL, 'published', '47', NULL, NULL, NULL, NULL, NULL),
+(46, 11, 11, 2, 0, 0, 0, '2016-04-01 07:11:00', '2016-04-01 07:11:00', '2016-04-01', NULL, 'deleted', '46', NULL, NULL, NULL, NULL, NULL),
+(47, 11, 11, 2, 0, 0, 0, '2016-04-01 07:11:07', '2016-04-01 07:11:07', '2016-04-01', NULL, 'deleted', '47', NULL, NULL, NULL, NULL, NULL),
 (48, 11, 11, 2, 0, 1, 0, '2016-04-01 07:11:12', '2016-04-01 07:11:12', '2016-04-01', NULL, 'published', '48', NULL, NULL, NULL, NULL, NULL),
-(49, 11, 11, 2, 40, 0, 0, '2016-04-01 08:26:25', '2016-04-01 08:26:25', '2016-04-01', NULL, 'published', '49', NULL, NULL, NULL, NULL, NULL),
-(52, 10, 10, 2, 0, 0, 0, '2016-04-04 14:41:04', '2016-04-21 06:22:27', '2016-04-04', NULL, 'published', '52', 2, 2, 1, 0, NULL),
+(49, 11, 11, 2, 40, 0, 0, '2016-04-01 08:26:25', '2016-04-01 08:26:25', '2016-04-01', NULL, 'deleted', '49', NULL, NULL, NULL, NULL, NULL),
+(52, 10, 10, 2, 0, 0, 0, '2016-04-04 14:41:04', '2016-06-29 10:42:18', '2016-04-04', NULL, 'published', '52', 2, 2, 1, 0, NULL),
 (54, 10, 10, 2, 0, 0, 0, '2016-04-04 16:21:23', '2016-04-12 10:57:51', '2016-04-04', NULL, 'published', '54', 2, 2, 0, 0, NULL),
 (55, 10, 10, 2, 0, 0, 0, '2016-04-04 16:22:23', '2016-04-04 16:22:41', '2016-04-04', NULL, 'published', '55', NULL, NULL, NULL, NULL, NULL),
 (57, 10, 10, 2, 0, 0, 0, '2016-04-05 06:12:57', '2016-04-05 06:13:34', '2016-04-05', NULL, 'published', '57', NULL, NULL, NULL, NULL, NULL),
 (59, 10, 10, 2, 0, 0, 0, '2016-04-05 06:27:37', '2016-04-05 06:28:00', '2016-04-05', NULL, 'published', '59', NULL, NULL, NULL, NULL, NULL),
 (92, 10, 10, 2, 0, 0, 0, '2016-04-19 08:37:19', '2016-04-19 09:33:42', '2016-04-19', NULL, 'published', '96069', 2, 2, 1, 0, NULL),
 (130, 11, 11, 2, 48, 0, 0, '2016-04-20 13:36:07', '2016-04-20 13:36:07', '2016-04-20', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
-(145, 2, 2, 2, 0, 0, 0, '2016-06-24 14:31:13', NULL, NULL, NULL, 'blank', NULL, NULL, NULL, NULL, NULL, NULL);
+(146, 11, 11, 2, 0, 0, 0, '2016-06-29 07:48:27', '2016-06-29 07:48:27', '2016-06-29', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
+(147, 10, 10, 2, 0, 0, 0, '2016-06-29 11:54:43', '2016-06-29 11:56:31', '2016-06-29', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
+(150, 13, 13, 2, 0, 0, 0, '2016-06-29 13:14:24', '2016-06-29 13:14:24', '2016-06-29', NULL, 'deleted', NULL, NULL, NULL, NULL, NULL, NULL),
+(151, 13, 13, 2, 0, 0, 0, '2016-06-29 13:15:56', '2016-06-29 13:19:47', '2016-06-29', NULL, 'deleted', NULL, NULL, NULL, NULL, NULL, NULL),
+(152, 13, 13, 2, 0, 0, 0, '2016-06-29 13:16:56', '2016-06-29 13:16:56', '2016-06-29', NULL, 'deleted', NULL, NULL, NULL, NULL, NULL, NULL),
+(153, 13, 13, 2, 0, 0, 0, '2016-06-29 13:17:23', '2016-06-29 13:17:23', '2016-06-29', NULL, 'deleted', NULL, NULL, NULL, NULL, NULL, NULL),
+(154, 13, 13, 2, 0, 0, 0, '2016-06-29 13:17:31', '2016-06-29 13:17:31', '2016-06-29', NULL, 'deleted', NULL, NULL, NULL, NULL, NULL, NULL),
+(155, 13, 13, 2, 0, 0, 0, '2016-06-29 13:18:21', '2016-06-29 13:18:21', '2016-06-29', NULL, 'deleted', NULL, NULL, NULL, NULL, NULL, NULL),
+(156, 13, 13, 2, 0, 1, 0, '2016-06-29 13:24:09', '2016-06-29 13:24:09', '2016-06-29', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
+(157, 13, 13, 2, 156, 0, 0, '2016-06-29 13:26:32', '2016-06-29 13:26:32', '2016-06-29', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
+(158, 13, 13, 2, 156, 0, 0, '2016-06-29 13:26:55', '2016-06-29 13:26:55', '2016-06-29', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
+(159, 13, 13, 2, 156, 0, 0, '2016-06-29 13:27:09', '2016-06-29 13:27:09', '2016-06-29', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
+(160, 13, 13, 2, 156, 0, 0, '2016-06-29 13:27:17', '2016-06-29 13:27:17', '2016-06-29', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
+(161, 13, 13, 2, 156, 0, 0, '2016-06-29 13:27:27', '2016-06-29 13:27:27', '2016-06-29', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -307,13 +350,17 @@ INSERT INTO `e_content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id
 --
 
 CREATE TABLE IF NOT EXISTS `e_content_features` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `content_id` int(10) unsigned NOT NULL,
   `features_id` int(10) unsigned NOT NULL,
   `values_id` int(10) unsigned DEFAULT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `value` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
+  `value` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`,`content_id`,`features_id`),
+  UNIQUE KEY `content_id` (`content_id`,`features_id`,`values_id`,`languages_id`),
+  KEY `fk_content_features_values_content1_idx` (`content_id`),
+  KEY `fk_content_features_values_features1_idx` (`features_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=33 ;
 
 --
 -- Дамп данных таблицы `e_content_features`
@@ -337,13 +384,16 @@ INSERT INTO `e_content_features` (`id`, `content_id`, `features_id`, `values_id`
 --
 
 CREATE TABLE IF NOT EXISTS `e_content_images` (
-  `id` int(11) unsigned NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `content_id` int(11) unsigned NOT NULL,
   `path` varchar(255) NOT NULL,
   `image` varchar(255) NOT NULL,
   `position` tinyint(5) unsigned NOT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `fk_content_images_content1_idx` (`content_id`),
+  KEY `position` (`position`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=28 ;
 
 --
 -- Дамп данных таблицы `e_content_images`
@@ -381,11 +431,13 @@ INSERT INTO `e_content_images` (`id`, `content_id`, `path`, `image`, `position`,
 --
 
 CREATE TABLE IF NOT EXISTS `e_content_images_sizes` (
-  `id` tinyint(3) unsigned NOT NULL,
+  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `size` varchar(16) NOT NULL,
   `width` int(5) unsigned NOT NULL,
-  `height` int(5) unsigned NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+  `height` int(5) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `size` (`size`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Дамп данных таблицы `e_content_images_sizes`
@@ -402,7 +454,7 @@ INSERT INTO `e_content_images_sizes` (`id`, `size`, `width`, `height`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `e_content_info` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `content_id` int(10) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
   `name` varchar(255) DEFAULT NULL,
@@ -412,8 +464,12 @@ CREATE TABLE IF NOT EXISTS `e_content_info` (
   `keywords` varchar(255) DEFAULT NULL,
   `description` varchar(255) DEFAULT NULL,
   `intro` text,
-  `content` text
-) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
+  `content` text,
+  PRIMARY KEY (`id`,`content_id`,`languages_id`),
+  UNIQUE KEY `languages_id` (`languages_id`,`url`),
+  KEY `fk_content_info_content1_idx` (`content_id`),
+  KEY `fk_content_info_languages1_idx` (`languages_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=73 ;
 
 --
 -- Дамп данных таблицы `e_content_info`
@@ -449,22 +505,36 @@ INSERT INTO `e_content_info` (`id`, `content_id`, `languages_id`, `name`, `url`,
 (34, 31, 1, 'Профіль', 'account/profile', '', 'Профіль', '', '', NULL, ''),
 (35, 34, 1, 'Нагадати пароль', 'account/fp', '', 'Нагадати пароль', '', '', NULL, ''),
 (37, 40, 1, 'Цифрове фото', 'cyfrove-foto', '', 'Цифрове фото, Планшетні ПК', '', '', NULL, '<p>retert</p>\n'),
-(38, 41, 1, 'Цифрові фотоапарати', 'cyfrovi-fotoaparaty', '', 'Цифрові фотоапарати', '', '', NULL, '<p>dgfdg</p>\n'),
-(39, 42, 1, 'Планшетні ПК', 'planshetni-pk', '', 'Планшетні ПК', '', '', NULL, NULL),
+(38, 41, 1, 'Цифрові фотоапарати', 'cyfrovi-fotoaparaty', '', 'Цифрові фотоапарати', '', '', '', '<p>dgfdg</p>\n'),
+(39, 42, 1, 'Планшетні ПК111', 'planshetni-pk111', '', 'Планшетні ПК', '', '', NULL, NULL),
 (40, 43, 1, 'Комп''ютерна периферія', 'komp-yuterna-peryferiya', '', 'Комп''ютерна периферія', '', '', NULL, NULL),
-(41, 44, 1, 'Телефони ', 'telefony', '', 'Телефони ', '', '', NULL, NULL),
+(41, 44, 1, 'Телефони  aa', 'telefony-aa', '', 'Телефони ', '', '', NULL, NULL),
 (42, 45, 1, 'Аудіо, портативна техніка', 'audio-portatyvna-tehnika', '', 'Аудіо, портативна техніка', '', '', NULL, NULL),
 (43, 46, 1, 'Активний відпочинок, обігрівачі', 'aktyvnyj-vidpochynok-obigrivachi', '', 'Активний відпочинок, обігрівачі', '', '', NULL, NULL),
 (44, 47, 1, 'Чохли та супутні товари', 'chohly-ta-suputni-tovary', '', 'Чохли та супутні товари', '', '', NULL, NULL),
 (45, 48, 1, 'Годинники', 'godynnyky', '', 'Годинники', '', '', NULL, NULL),
 (46, 49, 1, 'Штативи', 'shtatyvy', '', 'Штативи', '', '', NULL, NULL),
-(47, 52, 1, 'ACER Iconia A1-840 FHD 8'''' 16 GB', 'acer-iconia-a1-840-fhd-8-16-gb', '', 'ACER Iconia A1-840 FHD 8'''' 16 GB', '', '', NULL, ''),
+(47, 52, 1, 'ACER Iconia A1-840 FHD 8'''' 16 GBrtertertr', 'acer-iconia-a1-840-fhd-8-16-gbrtertertr', '', 'ACER Iconia A1-840 FHD 8'''' 16 GB', '', '', '', ''),
 (48, 54, 1, 'Смартфон Samsung J500H Galaxy J5', 'smartfon-samsung-j500h-galaxy-j5', '', 'Смартфон Samsung J500H Galaxy J5', '', '', NULL, ''),
 (49, 55, 1, 'Смартфон Keneksi Choice Dual Sim', 'smartfon-keneksi-choice-dual-sim', '', 'Смартфон Keneksi Choice Dual Sim', '', '', NULL, ''),
 (51, 57, 1, 'Смартфон Keneksi Choice Dual Sim2', 'smartfon-keneksi-choice-dual-sim2', '', 'Смартфон Keneksi Choice Dual Sim2', '', '', NULL, ''),
 (52, 59, 1, 'Смартфон Lenovo A1000 Dual Sim', 'smartfon-lenovo-a1000-dual-sim', '', 'Смартфон Lenovo A1000 Dual Sim', '', '', NULL, ''),
 (53, 92, 1, 'PHILIPS E320', 'philips-e320', '', 'PHILIPS E320', '', '', NULL, ''),
-(54, 130, 1, 'Іміджеві', 'imidzhevi', '', 'Іміджеві', '', '', NULL, NULL);
+(54, 130, 1, 'Іміджеві', 'imidzhevi', '', 'Іміджеві', '', '', NULL, NULL),
+(55, 146, 1, 'Аксесуари', 'aksesuary', '', 'Аксесуари', '', '', NULL, NULL),
+(56, 147, 1, 'DL2133NMWH BK', 'dl2133nmwh-bk', '', 'DL2133NMWH BK', '', '', '', ''),
+(61, 150, 1, 'sdffsdfsdf', 'sdffsdfsdf', '', 'sdffsdfsdf', '', '', NULL, NULL),
+(62, 151, 1, 'wБуfsdfdsfsdf', 'wbufsdfdsfsdf', '', 'Буfsdfdsfsdf', '', '', NULL, NULL),
+(63, 152, 1, 'retretretert', 'retretretert', '', 'retretretert', '', '', NULL, NULL),
+(64, 153, 1, 'werwerewrewr', 'werwerewrewr', '', 'werwerewrewr', '', '', NULL, NULL),
+(65, 154, 1, 'aaaaaaaaaaaasssssssss', 'aaaaaaaaaaaasssssssss', '', 'aaaaaaaaaaaasssssssss', '', '', NULL, NULL),
+(66, 155, 1, 'dsfsdfdsqaaaaaaaaaa', 'dsfsdfdsqaaaaaaaaaa', '', 'dsfsdfdsqaaaaaaaaaa', '', '', NULL, NULL),
+(67, 156, 1, 'Кількість', 'kil-kist', '', 'Кількість', '', '', NULL, NULL),
+(68, 157, 1, 'шт.', 'sht', '', 'шт.', '', '', NULL, NULL),
+(69, 158, 1, 'уп.', 'up', '', 'уп.', '', '', NULL, NULL),
+(70, 159, 1, 'г.', 'g', '', 'г.', '', '', NULL, NULL),
+(71, 160, 1, 'кг.', 'kg', '', 'кг.', '', '', NULL, NULL),
+(72, 161, 1, 'т.', 't', '', 'т.', '', '', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -473,11 +543,16 @@ INSERT INTO `e_content_info` (`id`, `content_id`, `languages_id`, `name`, `url`,
 --
 
 CREATE TABLE IF NOT EXISTS `e_content_relationship` (
-  `id` int(11) unsigned NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `content_id` int(10) unsigned NOT NULL,
   `categories_id` int(10) unsigned NOT NULL,
-  `is_main` tinyint(1) unsigned DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=93 DEFAULT CHARSET=utf8;
+  `is_main` tinyint(1) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`,`content_id`,`categories_id`),
+  UNIQUE KEY `content_id` (`content_id`,`categories_id`),
+  KEY `fk_content_relationship_content1_idx` (`content_id`),
+  KEY `fk_content_relationship_content2_idx` (`categories_id`),
+  KEY `is_main` (`is_main`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=97 ;
 
 --
 -- Дамп данных таблицы `e_content_relationship`
@@ -494,11 +569,14 @@ INSERT INTO `e_content_relationship` (`id`, `content_id`, `categories_id`, `is_m
 (8, 23, 13, 0),
 (9, 24, 13, 0),
 (10, 16, 15, 0),
+(93, 52, 49, 0),
+(94, 52, 44, 0),
 (29, 57, 41, 1),
 (30, 59, 41, 1),
 (76, 54, 41, 1),
 (89, 92, 44, 1),
-(92, 52, 41, 1);
+(95, 52, 43, 1),
+(96, 147, 130, 1);
 
 -- --------------------------------------------------------
 
@@ -507,14 +585,18 @@ INSERT INTO `e_content_relationship` (`id`, `content_id`, `categories_id`, `is_m
 --
 
 CREATE TABLE IF NOT EXISTS `e_content_types` (
-  `id` tinyint(3) unsigned NOT NULL,
+  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` tinyint(3) unsigned DEFAULT '0',
   `isfolder` tinyint(1) unsigned DEFAULT '0',
   `type` varchar(45) NOT NULL,
   `name` varchar(60) NOT NULL,
   `is_main` tinyint(1) unsigned DEFAULT NULL,
-  `settings` text
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+  `settings` text,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `parent_id` (`parent_id`,`type`),
+  UNIQUE KEY `parent_id_2` (`parent_id`,`is_main`),
+  KEY `is_main` (`is_main`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
 
 --
 -- Дамп данных таблицы `e_content_types`
@@ -529,9 +611,10 @@ INSERT INTO `e_content_types` (`id`, `parent_id`, `isfolder`, `type`, `name`, `i
 (7, 1, 0, 'blog', 'Блог', NULL, NULL),
 (8, 1, 0, 'account', 'Аккаунт', NULL, NULL),
 (9, 1, 1, 'contacts', 'Контакти', NULL, NULL),
-(10, 0, 0, 'products', 'Товар', NULL, NULL),
-(11, 0, 0, 'productsCategories', 'Категорії товарів', NULL, NULL),
-(12, 9, 0, 'aaaa', 'qqqa', NULL, NULL);
+(10, 0, 0, 'product', 'Товар', NULL, NULL),
+(11, 0, 0, 'products_categories', 'Категорії товарів', NULL, NULL),
+(12, 9, 0, 'aaaa', 'qqqa', NULL, NULL),
+(13, 0, 0, 'guide', 'guide', NULL, 'a:2:{s:7:"ext_url";s:1:"0";s:9:"parent_id";s:0:"";}');
 
 -- --------------------------------------------------------
 
@@ -540,10 +623,13 @@ INSERT INTO `e_content_types` (`id`, `parent_id`, `isfolder`, `type`, `name`, `i
 --
 
 CREATE TABLE IF NOT EXISTS `e_content_types_images_sizes` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `types_id` tinyint(3) unsigned NOT NULL,
-  `images_sizes_id` tinyint(3) unsigned NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
+  `images_sizes_id` tinyint(3) unsigned NOT NULL,
+  PRIMARY KEY (`id`,`types_id`,`images_sizes_id`),
+  KEY `fk_content_types_images_sizes1_idx` (`types_id`),
+  KEY `fk_content_types_images_sizes2_idx` (`images_sizes_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=33 ;
 
 --
 -- Дамп данных таблицы `e_content_types_images_sizes`
@@ -563,13 +649,17 @@ INSERT INTO `e_content_types_images_sizes` (`id`, `types_id`, `images_sizes_id`)
 --
 
 CREATE TABLE IF NOT EXISTS `e_currency` (
-  `id` tinyint(3) unsigned NOT NULL,
+  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
   `code` char(3) COLLATE utf8_unicode_ci DEFAULT NULL,
   `symbol` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
   `rate` decimal(7,3) DEFAULT NULL,
-  `is_main` tinyint(1) unsigned NOT NULL DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `is_main` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `code` (`code`),
+  KEY `is_main` (`is_main`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
 
 --
 -- Дамп данных таблицы `e_currency`
@@ -586,13 +676,14 @@ INSERT INTO `e_currency` (`id`, `name`, `code`, `symbol`, `rate`, `is_main`) VAL
 --
 
 CREATE TABLE IF NOT EXISTS `e_delivery` (
-  `id` tinyint(3) unsigned NOT NULL,
+  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `free_from` decimal(10,2) unsigned NOT NULL DEFAULT '0.00',
   `price` decimal(10,2) NOT NULL DEFAULT '0.00',
   `module` varchar(30) DEFAULT NULL,
   `settings` text,
-  `published` tinyint(1) unsigned NOT NULL DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+  `published` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Дамп данных таблицы `e_delivery`
@@ -609,12 +700,15 @@ INSERT INTO `e_delivery` (`id`, `free_from`, `price`, `module`, `settings`, `pub
 --
 
 CREATE TABLE IF NOT EXISTS `e_delivery_info` (
-  `id` tinyint(3) unsigned NOT NULL,
+  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `delivery_id` tinyint(3) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
   `name` varchar(255) DEFAULT NULL,
-  `description` text
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+  `description` text,
+  PRIMARY KEY (`id`,`delivery_id`,`languages_id`),
+  KEY `fk_delivery_info_delivery1_idx` (`delivery_id`),
+  KEY `fk_delivery_info_languages1_idx` (`languages_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Дамп данных таблицы `e_delivery_info`
@@ -631,10 +725,14 @@ INSERT INTO `e_delivery_info` (`id`, `delivery_id`, `languages_id`, `name`, `des
 --
 
 CREATE TABLE IF NOT EXISTS `e_delivery_payment` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `delivery_id` tinyint(3) unsigned NOT NULL,
-  `payment_id` tinyint(3) unsigned NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+  `payment_id` tinyint(3) unsigned NOT NULL,
+  PRIMARY KEY (`id`,`delivery_id`,`payment_id`),
+  UNIQUE KEY `delivery_id` (`delivery_id`,`payment_id`),
+  KEY `fk_delivery_payment_delivery1_idx` (`delivery_id`),
+  KEY `fk_delivery_payment_payment1_idx` (`payment_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=19 ;
 
 --
 -- Дамп данных таблицы `e_delivery_payment`
@@ -654,7 +752,7 @@ INSERT INTO `e_delivery_payment` (`id`, `delivery_id`, `payment_id`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `e_features` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int(10) unsigned DEFAULT NULL,
   `type` enum('text','textarea','select','file','folder','value','checkbox','number') DEFAULT NULL,
   `code` varchar(45) NOT NULL,
@@ -663,8 +761,11 @@ CREATE TABLE IF NOT EXISTS `e_features` (
   `required` tinyint(1) NOT NULL DEFAULT '0',
   `owner_id` int(11) unsigned NOT NULL,
   `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `status` enum('blank','published','hidden') DEFAULT 'blank'
-) ENGINE=InnoDB AUTO_INCREMENT=116 DEFAULT CHARSET=utf8;
+  `status` enum('blank','published','hidden') DEFAULT 'blank',
+  PRIMARY KEY (`id`,`owner_id`),
+  UNIQUE KEY `code_UNIQUE` (`code`),
+  KEY `fk_features_users1_idx` (`owner_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=116 ;
 
 --
 -- Дамп данных таблицы `e_features`
@@ -709,13 +810,16 @@ INSERT INTO `e_features` (`id`, `parent_id`, `type`, `code`, `multiple`, `on_fil
 --
 
 CREATE TABLE IF NOT EXISTS `e_features_content` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `features_id` int(10) unsigned NOT NULL,
   `content_types_id` tinyint(3) unsigned NOT NULL,
   `content_subtypes_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `content_id` int(10) unsigned NOT NULL DEFAULT '0',
-  `position` tinyint(3) unsigned DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8;
+  `position` tinyint(3) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`,`features_id`,`content_types_id`,`content_subtypes_id`,`content_id`),
+  UNIQUE KEY `features_id` (`features_id`,`content_types_id`,`content_subtypes_id`,`content_id`),
+  KEY `fk_content_features_idx` (`features_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=61 ;
 
 --
 -- Дамп данных таблицы `e_features_content`
@@ -748,11 +852,14 @@ INSERT INTO `e_features_content` (`id`, `features_id`, `content_types_id`, `cont
 --
 
 CREATE TABLE IF NOT EXISTS `e_features_info` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `features_id` int(10) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
-  `name` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=110 DEFAULT CHARSET=utf8;
+  `name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`,`features_id`,`languages_id`),
+  KEY `fk_features_info_features1_idx` (`features_id`),
+  KEY `fk_features_info_languages1_idx` (`languages_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=110 ;
 
 --
 -- Дамп данных таблицы `e_features_info`
@@ -796,15 +903,16 @@ INSERT INTO `e_features_info` (`id`, `features_id`, `languages_id`, `name`) VALU
 --
 
 CREATE TABLE IF NOT EXISTS `e_feedbacks` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(60) NOT NULL,
   `email` varchar(60) NOT NULL,
   `phone` varchar(20) NOT NULL,
   `message` text NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `status` enum('new','processed') CHARACTER SET utf8 NOT NULL DEFAULT 'new',
-  `ip` char(15) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `ip` char(15) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -813,11 +921,14 @@ CREATE TABLE IF NOT EXISTS `e_feedbacks` (
 --
 
 CREATE TABLE IF NOT EXISTS `e_guides` (
-  `id` int(11) unsigned NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) unsigned NOT NULL,
   `position` tinyint(3) unsigned NOT NULL,
-  `code` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+  `code` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `parent_id` (`parent_id`),
+  KEY `position` (`position`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
 -- Дамп данных таблицы `e_guides`
@@ -838,11 +949,15 @@ INSERT INTO `e_guides` (`id`, `parent_id`, `position`, `code`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `e_guides_info` (
-  `id` int(11) unsigned NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `guides_id` int(11) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
-  `name` varchar(255) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`,`guides_id`,`languages_id`),
+  UNIQUE KEY `guides_id` (`guides_id`,`languages_id`),
+  KEY `fk_guides_info_languages2_idx` (`languages_id`),
+  KEY `fk_guides_info_guides2_idx` (`guides_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
 -- Дамп данных таблицы `e_guides_info`
@@ -863,11 +978,14 @@ INSERT INTO `e_guides_info` (`id`, `guides_id`, `languages_id`, `name`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `e_languages` (
-  `id` tinyint(3) unsigned NOT NULL,
+  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `code` char(2) NOT NULL,
   `name` varchar(30) NOT NULL,
-  `is_main` tinyint(1) unsigned DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+  `is_main` tinyint(1) unsigned DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code` (`code`),
+  KEY `is_main` (`is_main`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 --
 -- Дамп данных таблицы `e_languages`
@@ -883,10 +1001,12 @@ INSERT INTO `e_languages` (`id`, `code`, `name`, `is_main`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `e_mail_templates` (
-  `id` tinyint(3) unsigned NOT NULL,
+  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `code` varchar(30) NOT NULL,
-  `name` varchar(60) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+  `name` varchar(60) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code_UNIQUE` (`code`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
 -- Дамп данных таблицы `e_mail_templates`
@@ -907,12 +1027,15 @@ INSERT INTO `e_mail_templates` (`id`, `code`, `name`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `e_mail_templates_info` (
-  `id` smallint(6) unsigned NOT NULL,
+  `id` smallint(6) unsigned NOT NULL AUTO_INCREMENT,
   `templates_id` tinyint(3) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
   `subject` varchar(255) NOT NULL,
-  `body` text NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+  `body` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_mail_templates_info_idx` (`templates_id`),
+  KEY `fk_mail_templates_info_languages1_idx` (`languages_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 --
 -- Дамп данных таблицы `e_mail_templates_info`
@@ -933,14 +1056,16 @@ INSERT INTO `e_mail_templates_info` (`id`, `templates_id`, `languages_id`, `subj
 --
 
 CREATE TABLE IF NOT EXISTS `e_modules` (
-  `id` tinyint(3) unsigned NOT NULL,
+  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `icon` varchar(30) DEFAULT NULL,
   `author` varchar(60) DEFAULT NULL,
   `version` varchar(10) DEFAULT NULL,
   `controller` varchar(150) DEFAULT NULL,
   `settings` text,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `controller` (`controller`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
 
 --
 -- Дамп данных таблицы `e_modules`
@@ -959,10 +1084,12 @@ INSERT INTO `e_modules` (`id`, `icon`, `author`, `version`, `controller`, `setti
 --
 
 CREATE TABLE IF NOT EXISTS `e_nav` (
-  `id` tinyint(3) unsigned NOT NULL,
+  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `code` varchar(30) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+  `code` varchar(30) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code` (`code`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Дамп данных таблицы `e_nav`
@@ -979,11 +1106,16 @@ INSERT INTO `e_nav` (`id`, `name`, `code`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `e_nav_items` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `nav_id` tinyint(3) unsigned NOT NULL,
   `content_id` int(11) unsigned NOT NULL,
-  `position` tinyint(3) unsigned NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+  `position` tinyint(3) unsigned NOT NULL,
+  PRIMARY KEY (`id`,`nav_id`,`content_id`),
+  UNIQUE KEY `nav_id` (`nav_id`,`content_id`),
+  KEY `fk_nav_items_nav1_idx` (`nav_id`),
+  KEY `fk_nav_items_content1_idx` (`content_id`),
+  KEY `position` (`position`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
 
 --
 -- Дамп данных таблицы `e_nav_items`
@@ -1006,13 +1138,17 @@ INSERT INTO `e_nav_items` (`id`, `nav_id`, `content_id`, `position`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `e_orders_status` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `bg_color` char(7) DEFAULT NULL,
   `txt_color` varchar(7) DEFAULT NULL,
   `on_site` tinyint(1) unsigned DEFAULT NULL,
   `external_id` varchar(64) DEFAULT NULL,
-  `is_main` tinyint(1) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+  `is_main` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `external_id_2` (`external_id`),
+  KEY `on_site` (`on_site`),
+  KEY `external_id` (`external_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- Дамп данных таблицы `e_orders_status`
@@ -1028,11 +1164,14 @@ INSERT INTO `e_orders_status` (`id`, `bg_color`, `txt_color`, `on_site`, `extern
 --
 
 CREATE TABLE IF NOT EXISTS `e_orders_status_info` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `status_id` int(10) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
-  `status` varchar(45) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+  `status` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`,`status_id`,`languages_id`),
+  KEY `fk_orders_status_info_languages1_idx` (`languages_id`),
+  KEY `fk_orders_status_info_orders_status1_idx` (`status_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- Дамп данных таблицы `e_orders_status_info`
@@ -1048,12 +1187,14 @@ INSERT INTO `e_orders_status_info` (`id`, `status_id`, `languages_id`, `status`)
 --
 
 CREATE TABLE IF NOT EXISTS `e_payment` (
-  `id` tinyint(3) unsigned NOT NULL,
+  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `published` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `module` varchar(60) NOT NULL,
   `settings` text,
-  `position` tinyint(3) unsigned NOT NULL DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+  `position` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `module` (`module`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- Дамп данных таблицы `e_payment`
@@ -1073,12 +1214,15 @@ INSERT INTO `e_payment` (`id`, `published`, `module`, `settings`, `position`) VA
 --
 
 CREATE TABLE IF NOT EXISTS `e_payment_info` (
-  `id` tinyint(3) unsigned NOT NULL,
+  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `payment_id` tinyint(3) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
   `name` varchar(60) DEFAULT NULL,
-  `description` text
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+  `description` text,
+  PRIMARY KEY (`id`,`payment_id`,`languages_id`),
+  KEY `fk_payment_info_payment1_idx` (`payment_id`),
+  KEY `fk_payment_info_languages1_idx` (`languages_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
 --
 -- Дамп данных таблицы `e_payment_info`
@@ -1098,7 +1242,7 @@ INSERT INTO `e_payment_info` (`id`, `payment_id`, `languages_id`, `name`, `descr
 --
 
 CREATE TABLE IF NOT EXISTS `e_plugins` (
-  `id` tinyint(3) unsigned NOT NULL,
+  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `icon` varchar(30) DEFAULT NULL,
   `author` varchar(60) DEFAULT NULL,
   `version` varchar(10) DEFAULT NULL,
@@ -1107,8 +1251,11 @@ CREATE TABLE IF NOT EXISTS `e_plugins` (
   `published` tinyint(1) NOT NULL DEFAULT '0',
   `rang` int(4) unsigned DEFAULT NULL,
   `settings` text,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `published` (`published`),
+  KEY `module` (`controller`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=37 ;
 
 --
 -- Дамп данных таблицы `e_plugins`
@@ -1139,11 +1286,15 @@ INSERT INTO `e_plugins` (`id`, `icon`, `author`, `version`, `controller`, `place
 --
 
 CREATE TABLE IF NOT EXISTS `e_plugins_components` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `plugins_id` tinyint(3) unsigned NOT NULL,
   `components_id` tinyint(3) unsigned NOT NULL,
-  `position` tinyint(3) unsigned NOT NULL DEFAULT '0'
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
+  `position` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`,`plugins_id`,`components_id`),
+  KEY `fk_plugins_components_plugins1_idx` (`plugins_id`),
+  KEY `fk_plugins_components_components1_idx` (`components_id`),
+  KEY `position` (`position`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=28 ;
 
 --
 -- Дамп данных таблицы `e_plugins_components`
@@ -1175,11 +1326,16 @@ INSERT INTO `e_plugins_components` (`id`, `plugins_id`, `components_id`, `positi
 --
 
 CREATE TABLE IF NOT EXISTS `e_posts_tags` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `posts_id` int(11) unsigned NOT NULL,
   `tags_id` int(10) unsigned NOT NULL,
-  `languages_id` tinyint(3) unsigned NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+  `languages_id` tinyint(3) unsigned NOT NULL,
+  PRIMARY KEY (`id`,`posts_id`,`tags_id`,`languages_id`),
+  UNIQUE KEY `posts_id` (`posts_id`,`tags_id`),
+  KEY `fk_tags_content_content1_idx` (`posts_id`),
+  KEY `fk_tags_posts_tags1_idx` (`tags_id`),
+  KEY `fk_posts_tags_languages1_idx` (`languages_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
 
 --
 -- Дамп данных таблицы `e_posts_tags`
@@ -1196,11 +1352,14 @@ INSERT INTO `e_posts_tags` (`id`, `posts_id`, `tags_id`, `languages_id`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `e_products_accessories` (
-  `id` int(11) unsigned NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `products_id` int(10) unsigned NOT NULL,
   `accessories_id` int(10) unsigned NOT NULL,
-  `position` tinyint(3) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+  `position` tinyint(3) DEFAULT NULL,
+  PRIMARY KEY (`id`,`products_id`,`accessories_id`),
+  KEY `fk_products_accessories_content1_idx` (`products_id`),
+  KEY `fk_products_accessories_content2_idx` (`accessories_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18 ;
 
 --
 -- Дамп данных таблицы `e_products_accessories`
@@ -1218,12 +1377,16 @@ INSERT INTO `e_products_accessories` (`id`, `products_id`, `accessories_id`, `po
 --
 
 CREATE TABLE IF NOT EXISTS `e_products_prices` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `content_id` int(10) unsigned NOT NULL,
   `group_id` tinyint(3) unsigned NOT NULL,
   `price` decimal(10,2) DEFAULT NULL,
-  `price_old` decimal(10,2) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `price_old` decimal(10,2) DEFAULT NULL,
+  PRIMARY KEY (`id`,`content_id`,`group_id`),
+  UNIQUE KEY `content_id` (`content_id`,`group_id`),
+  KEY `fk_products_prices_content1_idx` (`content_id`),
+  KEY `fk_products_prices_users_group1_idx` (`group_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1232,10 +1395,13 @@ CREATE TABLE IF NOT EXISTS `e_products_prices` (
 --
 
 CREATE TABLE IF NOT EXISTS `e_products_similar` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `products_id` int(10) unsigned NOT NULL,
-  `features_id` int(10) unsigned NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+  `features_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`,`products_id`,`features_id`),
+  KEY `fk_products_similar_content1_idx` (`products_id`),
+  KEY `fk_products_similar_features1_idx` (`features_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 --
 -- Дамп данных таблицы `e_products_similar`
@@ -1251,11 +1417,13 @@ INSERT INTO `e_products_similar` (`id`, `products_id`, `features_id`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `e_products_variants` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `content_id` int(10) unsigned NOT NULL,
   `in_stock` tinyint(1) DEFAULT '1',
-  `img` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
+  `img` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`,`content_id`),
+  KEY `fk_products_variants_content1_idx` (`content_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=29 ;
 
 --
 -- Дамп данных таблицы `e_products_variants`
@@ -1274,11 +1442,16 @@ INSERT INTO `e_products_variants` (`id`, `content_id`, `in_stock`, `img`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `e_products_variants_features` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `variants_id` int(10) unsigned NOT NULL,
   `features_id` int(10) unsigned NOT NULL,
-  `values_id` int(10) unsigned NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
+  `values_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`,`variants_id`,`features_id`,`values_id`),
+  UNIQUE KEY `variants_id` (`variants_id`,`features_id`,`values_id`),
+  KEY `fk_products_variants_features_features1_idx` (`features_id`),
+  KEY `fk_products_variants_features_products_variants1_idx` (`variants_id`),
+  KEY `fk_products_variants_features_features2_idx` (`values_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=33 ;
 
 --
 -- Дамп данных таблицы `e_products_variants_features`
@@ -1296,12 +1469,16 @@ INSERT INTO `e_products_variants_features` (`id`, `variants_id`, `features_id`, 
 --
 
 CREATE TABLE IF NOT EXISTS `e_products_variants_prices` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `variants_id` int(10) unsigned NOT NULL,
   `content_id` int(10) unsigned NOT NULL,
   `group_id` tinyint(3) unsigned NOT NULL,
-  `price` decimal(10,0) unsigned DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `price` decimal(10,0) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`,`variants_id`,`content_id`,`group_id`),
+  UNIQUE KEY `variants_id` (`variants_id`,`content_id`,`group_id`),
+  KEY `fk_products_variants_prices_products_variants1_idx` (`variants_id`,`content_id`),
+  KEY `fk_products_variants_prices_users_group1_idx` (`group_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1310,13 +1487,15 @@ CREATE TABLE IF NOT EXISTS `e_products_variants_prices` (
 --
 
 CREATE TABLE IF NOT EXISTS `e_settings` (
-  `id` int(10) unsigned NOT NULL,
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   `value` text NOT NULL,
   `block` enum('company','common','images','themes','editor','content','seo','analitycs','robots','mail') NOT NULL,
   `type` enum('text','textarea') NOT NULL,
-  `required` tinyint(1) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8;
+  `required` tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `sname` (`name`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=52 ;
 
 --
 -- Дамп данных таблицы `e_settings`
@@ -1374,9 +1553,10 @@ INSERT INTO `e_settings` (`id`, `name`, `value`, `block`, `type`, `required`) VA
 --
 
 CREATE TABLE IF NOT EXISTS `e_tags` (
-  `id` int(10) unsigned NOT NULL,
-  `tag` varchar(60) DEFAULT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `tag` varchar(60) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=31 ;
 
 --
 -- Дамп данных таблицы `e_tags`
@@ -1403,7 +1583,7 @@ INSERT INTO `e_tags` (`id`, `tag`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `e_users` (
-  `id` int(11) unsigned NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `group_id` tinyint(3) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
   `sessid` char(35) DEFAULT NULL,
@@ -1417,15 +1597,20 @@ CREATE TABLE IF NOT EXISTS `e_users` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated` datetime NOT NULL,
   `lastlogin` timestamp NULL DEFAULT NULL,
-  `status` enum('active','ban','deleted') NOT NULL DEFAULT 'active'
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+  `status` enum('active','ban','deleted') NOT NULL DEFAULT 'active',
+  PRIMARY KEY (`id`,`group_id`,`languages_id`),
+  UNIQUE KEY `phone` (`phone`,`email`),
+  KEY `fk_users_group1_idx` (`group_id`),
+  KEY `status` (`status`),
+  KEY `skey` (`skey`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=22 ;
 
 --
 -- Дамп данных таблицы `e_users`
 --
 
 INSERT INTO `e_users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `updated`, `lastlogin`, `status`) VALUES
-(2, 1, 0, 'qtt3ma62i3ea02o6bhs6999mj5', 'Володимир', 'Годяк', '+38 (067) 6736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-04-21 11:24:28', '2016-06-28 18:43:31', 'active'),
+(2, 1, 0, 'tvb4qeg4o36k991vsqpev1hi87', 'Володимир', 'Годяк', '+38 (067) 6736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-04-21 11:24:28', '2016-06-29 10:23:47', 'active'),
 (19, 1, 0, NULL, 'Жорік', 'Васильович', '+77 (777) 7777777', 'otakoyi1@gmail.com', 'MTYFiZEAZZjt.', NULL, NULL, '2016-06-18 10:25:22', '0000-00-00 00:00:00', NULL, 'ban'),
 (21, 20, 0, NULL, 'Жорік', 'Абрамович', '+99 (999) 9999999', 'sz@otakoyi.com', 'OT55OBip4.nJU', NULL, NULL, '2016-06-28 06:21:16', '0000-00-00 00:00:00', NULL, 'active');
 
@@ -1436,13 +1621,18 @@ INSERT INTO `e_users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surn
 --
 
 CREATE TABLE IF NOT EXISTS `e_users_group` (
-  `id` tinyint(3) unsigned NOT NULL,
+  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` tinyint(3) unsigned NOT NULL,
   `isfolder` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `backend` tinyint(1) unsigned DEFAULT NULL,
   `permissions` text,
-  `position` tinyint(3) unsigned NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+  `position` tinyint(3) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `pid` (`parent_id`),
+  KEY `sort` (`position`),
+  KEY `isfolder` (`isfolder`),
+  KEY `backend` (`backend`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
 
 --
 -- Дамп данных таблицы `e_users_group`
@@ -1461,11 +1651,15 @@ INSERT INTO `e_users_group` (`id`, `parent_id`, `isfolder`, `backend`, `permissi
 --
 
 CREATE TABLE IF NOT EXISTS `e_users_group_info` (
-  `id` int(11) unsigned NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `group_id` tinyint(3) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
-  `name` varchar(100) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
+  `name` varchar(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `group_id` (`group_id`,`languages_id`),
+  KEY `fk_users_group_info_users_group1_idx` (`group_id`),
+  KEY `fk_users_group_info_languages1_idx` (`languages_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=35 ;
 
 --
 -- Дамп данных таблицы `e_users_group_info`
@@ -1477,657 +1671,6 @@ INSERT INTO `e_users_group_info` (`id`, `group_id`, `languages_id`, `name`) VALU
 (18, 4, 1, 'Модератори'),
 (34, 20, 1, 'Гості');
 
---
--- Индексы сохранённых таблиц
---
-
---
--- Индексы таблицы `e_banners`
---
-ALTER TABLE `e_banners`
-  ADD PRIMARY KEY (`id`,`places_id`,`languages_id`),
-  ADD UNIQUE KEY `skey_UNIQUE` (`skey`),
-  ADD KEY `fk_banners_banners_places1_idx` (`places_id`),
-  ADD KEY `fk_banners_languages1_idx` (`languages_id`);
-
---
--- Индексы таблицы `e_banners_places`
---
-ALTER TABLE `e_banners_places`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `code_UNIQUE` (`code`);
-
---
--- Индексы таблицы `e_callbacks`
---
-ALTER TABLE `e_callbacks`
-  ADD PRIMARY KEY (`id`);
-
---
--- Индексы таблицы `e_comments`
---
-ALTER TABLE `e_comments`
-  ADD PRIMARY KEY (`id`,`content_id`),
-  ADD KEY `fk_comments_content1_idx` (`content_id`),
-  ADD KEY `approved` (`status`),
-  ADD KEY `users_id` (`users_id`),
-  ADD KEY `token` (`skey`),
-  ADD KEY `isfolder` (`isfolder`);
-
---
--- Индексы таблицы `e_comments_subscribers`
---
-ALTER TABLE `e_comments_subscribers`
-  ADD PRIMARY KEY (`id`,`content_id`,`users_id`),
-  ADD UNIQUE KEY `content_id` (`content_id`,`users_id`),
-  ADD KEY `fk_comments_subscribe_content1_idx` (`content_id`),
-  ADD KEY `fk_comments_subscribe_users1_idx` (`users_id`);
-
---
--- Индексы таблицы `e_components`
---
-ALTER TABLE `e_components`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `parent_id` (`parent_id`),
-  ADD KEY `isfolder` (`isfolder`),
-  ADD KEY `position` (`position`),
-  ADD KEY `published` (`published`),
-  ADD KEY `module` (`controller`);
-
---
--- Индексы таблицы `e_content`
---
-ALTER TABLE `e_content`
-  ADD PRIMARY KEY (`id`,`types_id`,`subtypes_id`,`owner_id`),
-  ADD KEY `fk_content_content_types1_idx` (`types_id`),
-  ADD KEY `fk_content_content_subtypes1_idx` (`subtypes_id`),
-  ADD KEY `fk_content_owner_idx` (`owner_id`),
-  ADD KEY `status` (`status`),
-  ADD KEY `published` (`published`),
-  ADD KEY `code` (`code`);
-
---
--- Индексы таблицы `e_content_features`
---
-ALTER TABLE `e_content_features`
-  ADD PRIMARY KEY (`id`,`content_id`,`features_id`),
-  ADD UNIQUE KEY `content_id` (`content_id`,`features_id`,`values_id`,`languages_id`),
-  ADD KEY `fk_content_features_values_content1_idx` (`content_id`),
-  ADD KEY `fk_content_features_values_features1_idx` (`features_id`);
-
---
--- Индексы таблицы `e_content_images`
---
-ALTER TABLE `e_content_images`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_content_images_content1_idx` (`content_id`),
-  ADD KEY `position` (`position`);
-
---
--- Индексы таблицы `e_content_images_sizes`
---
-ALTER TABLE `e_content_images_sizes`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `size` (`size`);
-
---
--- Индексы таблицы `e_content_info`
---
-ALTER TABLE `e_content_info`
-  ADD PRIMARY KEY (`id`,`content_id`,`languages_id`),
-  ADD UNIQUE KEY `languages_id` (`languages_id`,`url`),
-  ADD KEY `fk_content_info_content1_idx` (`content_id`),
-  ADD KEY `fk_content_info_languages1_idx` (`languages_id`);
-
---
--- Индексы таблицы `e_content_relationship`
---
-ALTER TABLE `e_content_relationship`
-  ADD PRIMARY KEY (`id`,`content_id`,`categories_id`),
-  ADD UNIQUE KEY `content_id` (`content_id`,`categories_id`),
-  ADD KEY `fk_content_relationship_content1_idx` (`content_id`),
-  ADD KEY `fk_content_relationship_content2_idx` (`categories_id`),
-  ADD KEY `is_main` (`is_main`);
-
---
--- Индексы таблицы `e_content_types`
---
-ALTER TABLE `e_content_types`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `parent_id` (`parent_id`,`type`),
-  ADD UNIQUE KEY `parent_id_2` (`parent_id`,`is_main`),
-  ADD KEY `is_main` (`is_main`);
-
---
--- Индексы таблицы `e_content_types_images_sizes`
---
-ALTER TABLE `e_content_types_images_sizes`
-  ADD PRIMARY KEY (`id`,`types_id`,`images_sizes_id`),
-  ADD KEY `fk_content_types_images_sizes1_idx` (`types_id`),
-  ADD KEY `fk_content_types_images_sizes2_idx` (`images_sizes_id`);
-
---
--- Индексы таблицы `e_currency`
---
-ALTER TABLE `e_currency`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `name` (`name`),
-  ADD UNIQUE KEY `code` (`code`),
-  ADD KEY `is_main` (`is_main`);
-
---
--- Индексы таблицы `e_delivery`
---
-ALTER TABLE `e_delivery`
-  ADD PRIMARY KEY (`id`);
-
---
--- Индексы таблицы `e_delivery_info`
---
-ALTER TABLE `e_delivery_info`
-  ADD PRIMARY KEY (`id`,`delivery_id`,`languages_id`),
-  ADD KEY `fk_delivery_info_delivery1_idx` (`delivery_id`),
-  ADD KEY `fk_delivery_info_languages1_idx` (`languages_id`);
-
---
--- Индексы таблицы `e_delivery_payment`
---
-ALTER TABLE `e_delivery_payment`
-  ADD PRIMARY KEY (`id`,`delivery_id`,`payment_id`),
-  ADD UNIQUE KEY `delivery_id` (`delivery_id`,`payment_id`),
-  ADD KEY `fk_delivery_payment_delivery1_idx` (`delivery_id`),
-  ADD KEY `fk_delivery_payment_payment1_idx` (`payment_id`);
-
---
--- Индексы таблицы `e_features`
---
-ALTER TABLE `e_features`
-  ADD PRIMARY KEY (`id`,`owner_id`),
-  ADD UNIQUE KEY `code_UNIQUE` (`code`),
-  ADD KEY `fk_features_users1_idx` (`owner_id`);
-
---
--- Индексы таблицы `e_features_content`
---
-ALTER TABLE `e_features_content`
-  ADD PRIMARY KEY (`id`,`features_id`,`content_types_id`,`content_subtypes_id`,`content_id`),
-  ADD UNIQUE KEY `features_id` (`features_id`,`content_types_id`,`content_subtypes_id`,`content_id`),
-  ADD KEY `fk_content_features_idx` (`features_id`);
-
---
--- Индексы таблицы `e_features_info`
---
-ALTER TABLE `e_features_info`
-  ADD PRIMARY KEY (`id`,`features_id`,`languages_id`),
-  ADD KEY `fk_features_info_features1_idx` (`features_id`),
-  ADD KEY `fk_features_info_languages1_idx` (`languages_id`);
-
---
--- Индексы таблицы `e_feedbacks`
---
-ALTER TABLE `e_feedbacks`
-  ADD PRIMARY KEY (`id`);
-
---
--- Индексы таблицы `e_guides`
---
-ALTER TABLE `e_guides`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `parent_id` (`parent_id`),
-  ADD KEY `position` (`position`);
-
---
--- Индексы таблицы `e_guides_info`
---
-ALTER TABLE `e_guides_info`
-  ADD PRIMARY KEY (`id`,`guides_id`,`languages_id`),
-  ADD UNIQUE KEY `guides_id` (`guides_id`,`languages_id`),
-  ADD KEY `fk_guides_info_languages2_idx` (`languages_id`),
-  ADD KEY `fk_guides_info_guides2_idx` (`guides_id`);
-
---
--- Индексы таблицы `e_languages`
---
-ALTER TABLE `e_languages`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `code` (`code`),
-  ADD KEY `is_main` (`is_main`);
-
---
--- Индексы таблицы `e_mail_templates`
---
-ALTER TABLE `e_mail_templates`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `code_UNIQUE` (`code`);
-
---
--- Индексы таблицы `e_mail_templates_info`
---
-ALTER TABLE `e_mail_templates_info`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_mail_templates_info_idx` (`templates_id`),
-  ADD KEY `fk_mail_templates_info_languages1_idx` (`languages_id`);
-
---
--- Индексы таблицы `e_modules`
---
-ALTER TABLE `e_modules`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `controller` (`controller`);
-
---
--- Индексы таблицы `e_nav`
---
-ALTER TABLE `e_nav`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `code` (`code`);
-
---
--- Индексы таблицы `e_nav_items`
---
-ALTER TABLE `e_nav_items`
-  ADD PRIMARY KEY (`id`,`nav_id`,`content_id`),
-  ADD UNIQUE KEY `nav_id` (`nav_id`,`content_id`),
-  ADD KEY `fk_nav_items_nav1_idx` (`nav_id`),
-  ADD KEY `fk_nav_items_content1_idx` (`content_id`),
-  ADD KEY `position` (`position`);
-
---
--- Индексы таблицы `e_orders_status`
---
-ALTER TABLE `e_orders_status`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `external_id_2` (`external_id`),
-  ADD KEY `on_site` (`on_site`),
-  ADD KEY `external_id` (`external_id`);
-
---
--- Индексы таблицы `e_orders_status_info`
---
-ALTER TABLE `e_orders_status_info`
-  ADD PRIMARY KEY (`id`,`status_id`,`languages_id`),
-  ADD KEY `fk_orders_status_info_languages1_idx` (`languages_id`),
-  ADD KEY `fk_orders_status_info_orders_status1_idx` (`status_id`);
-
---
--- Индексы таблицы `e_payment`
---
-ALTER TABLE `e_payment`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `module` (`module`);
-
---
--- Индексы таблицы `e_payment_info`
---
-ALTER TABLE `e_payment_info`
-  ADD PRIMARY KEY (`id`,`payment_id`,`languages_id`),
-  ADD KEY `fk_payment_info_payment1_idx` (`payment_id`),
-  ADD KEY `fk_payment_info_languages1_idx` (`languages_id`);
-
---
--- Индексы таблицы `e_plugins`
---
-ALTER TABLE `e_plugins`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `published` (`published`),
-  ADD KEY `module` (`controller`);
-
---
--- Индексы таблицы `e_plugins_components`
---
-ALTER TABLE `e_plugins_components`
-  ADD PRIMARY KEY (`id`,`plugins_id`,`components_id`),
-  ADD KEY `fk_plugins_components_plugins1_idx` (`plugins_id`),
-  ADD KEY `fk_plugins_components_components1_idx` (`components_id`),
-  ADD KEY `position` (`position`);
-
---
--- Индексы таблицы `e_posts_tags`
---
-ALTER TABLE `e_posts_tags`
-  ADD PRIMARY KEY (`id`,`posts_id`,`tags_id`,`languages_id`),
-  ADD UNIQUE KEY `posts_id` (`posts_id`,`tags_id`),
-  ADD KEY `fk_tags_content_content1_idx` (`posts_id`),
-  ADD KEY `fk_tags_posts_tags1_idx` (`tags_id`),
-  ADD KEY `fk_posts_tags_languages1_idx` (`languages_id`);
-
---
--- Индексы таблицы `e_products_accessories`
---
-ALTER TABLE `e_products_accessories`
-  ADD PRIMARY KEY (`id`,`products_id`,`accessories_id`),
-  ADD KEY `fk_products_accessories_content1_idx` (`products_id`),
-  ADD KEY `fk_products_accessories_content2_idx` (`accessories_id`);
-
---
--- Индексы таблицы `e_products_prices`
---
-ALTER TABLE `e_products_prices`
-  ADD PRIMARY KEY (`id`,`content_id`,`group_id`),
-  ADD UNIQUE KEY `content_id` (`content_id`,`group_id`),
-  ADD KEY `fk_products_prices_content1_idx` (`content_id`),
-  ADD KEY `fk_products_prices_users_group1_idx` (`group_id`);
-
---
--- Индексы таблицы `e_products_similar`
---
-ALTER TABLE `e_products_similar`
-  ADD PRIMARY KEY (`id`,`products_id`,`features_id`),
-  ADD KEY `fk_products_similar_content1_idx` (`products_id`),
-  ADD KEY `fk_products_similar_features1_idx` (`features_id`);
-
---
--- Индексы таблицы `e_products_variants`
---
-ALTER TABLE `e_products_variants`
-  ADD PRIMARY KEY (`id`,`content_id`),
-  ADD KEY `fk_products_variants_content1_idx` (`content_id`);
-
---
--- Индексы таблицы `e_products_variants_features`
---
-ALTER TABLE `e_products_variants_features`
-  ADD PRIMARY KEY (`id`,`variants_id`,`features_id`,`values_id`),
-  ADD UNIQUE KEY `variants_id` (`variants_id`,`features_id`,`values_id`),
-  ADD KEY `fk_products_variants_features_features1_idx` (`features_id`),
-  ADD KEY `fk_products_variants_features_products_variants1_idx` (`variants_id`),
-  ADD KEY `fk_products_variants_features_features2_idx` (`values_id`);
-
---
--- Индексы таблицы `e_products_variants_prices`
---
-ALTER TABLE `e_products_variants_prices`
-  ADD PRIMARY KEY (`id`,`variants_id`,`content_id`,`group_id`),
-  ADD UNIQUE KEY `variants_id` (`variants_id`,`content_id`,`group_id`),
-  ADD KEY `fk_products_variants_prices_products_variants1_idx` (`variants_id`,`content_id`),
-  ADD KEY `fk_products_variants_prices_users_group1_idx` (`group_id`);
-
---
--- Индексы таблицы `e_settings`
---
-ALTER TABLE `e_settings`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `sname` (`name`);
-
---
--- Индексы таблицы `e_tags`
---
-ALTER TABLE `e_tags`
-  ADD PRIMARY KEY (`id`);
-
---
--- Индексы таблицы `e_users`
---
-ALTER TABLE `e_users`
-  ADD PRIMARY KEY (`id`,`group_id`,`languages_id`),
-  ADD UNIQUE KEY `phone` (`phone`,`email`),
-  ADD KEY `fk_users_group1_idx` (`group_id`),
-  ADD KEY `status` (`status`),
-  ADD KEY `skey` (`skey`);
-
---
--- Индексы таблицы `e_users_group`
---
-ALTER TABLE `e_users_group`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `pid` (`parent_id`),
-  ADD KEY `sort` (`position`),
-  ADD KEY `isfolder` (`isfolder`),
-  ADD KEY `backend` (`backend`);
-
---
--- Индексы таблицы `e_users_group_info`
---
-ALTER TABLE `e_users_group_info`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `group_id` (`group_id`,`languages_id`),
-  ADD KEY `fk_users_group_info_users_group1_idx` (`group_id`),
-  ADD KEY `fk_users_group_info_languages1_idx` (`languages_id`);
-
---
--- AUTO_INCREMENT для сохранённых таблиц
---
-
---
--- AUTO_INCREMENT для таблицы `e_banners`
---
-ALTER TABLE `e_banners`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=24;
---
--- AUTO_INCREMENT для таблицы `e_banners_places`
---
-ALTER TABLE `e_banners_places`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
---
--- AUTO_INCREMENT для таблицы `e_callbacks`
---
-ALTER TABLE `e_callbacks`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=17;
---
--- AUTO_INCREMENT для таблицы `e_comments`
---
-ALTER TABLE `e_comments`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=28;
---
--- AUTO_INCREMENT для таблицы `e_comments_subscribers`
---
-ALTER TABLE `e_comments_subscribers`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT для таблицы `e_components`
---
-ALTER TABLE `e_components`
-  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=84;
---
--- AUTO_INCREMENT для таблицы `e_content`
---
-ALTER TABLE `e_content`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=146;
---
--- AUTO_INCREMENT для таблицы `e_content_features`
---
-ALTER TABLE `e_content_features`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=33;
---
--- AUTO_INCREMENT для таблицы `e_content_images`
---
-ALTER TABLE `e_content_images`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=28;
---
--- AUTO_INCREMENT для таблицы `e_content_images_sizes`
---
-ALTER TABLE `e_content_images_sizes`
-  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT для таблицы `e_content_info`
---
-ALTER TABLE `e_content_info`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=55;
---
--- AUTO_INCREMENT для таблицы `e_content_relationship`
---
-ALTER TABLE `e_content_relationship`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=93;
---
--- AUTO_INCREMENT для таблицы `e_content_types`
---
-ALTER TABLE `e_content_types`
-  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
---
--- AUTO_INCREMENT для таблицы `e_content_types_images_sizes`
---
-ALTER TABLE `e_content_types_images_sizes`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=33;
---
--- AUTO_INCREMENT для таблицы `e_currency`
---
-ALTER TABLE `e_currency`
-  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT для таблицы `e_delivery`
---
-ALTER TABLE `e_delivery`
-  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT для таблицы `e_delivery_info`
---
-ALTER TABLE `e_delivery_info`
-  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT для таблицы `e_delivery_payment`
---
-ALTER TABLE `e_delivery_payment`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=19;
---
--- AUTO_INCREMENT для таблицы `e_features`
---
-ALTER TABLE `e_features`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=116;
---
--- AUTO_INCREMENT для таблицы `e_features_content`
---
-ALTER TABLE `e_features_content`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=61;
---
--- AUTO_INCREMENT для таблицы `e_features_info`
---
-ALTER TABLE `e_features_info`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=110;
---
--- AUTO_INCREMENT для таблицы `e_feedbacks`
---
-ALTER TABLE `e_feedbacks`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT для таблицы `e_guides`
---
-ALTER TABLE `e_guides`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
---
--- AUTO_INCREMENT для таблицы `e_guides_info`
---
-ALTER TABLE `e_guides_info`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
---
--- AUTO_INCREMENT для таблицы `e_languages`
---
-ALTER TABLE `e_languages`
-  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
---
--- AUTO_INCREMENT для таблицы `e_mail_templates`
---
-ALTER TABLE `e_mail_templates`
-  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
---
--- AUTO_INCREMENT для таблицы `e_mail_templates_info`
---
-ALTER TABLE `e_mail_templates_info`
-  MODIFY `id` smallint(6) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
---
--- AUTO_INCREMENT для таблицы `e_modules`
---
-ALTER TABLE `e_modules`
-  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
---
--- AUTO_INCREMENT для таблицы `e_nav`
---
-ALTER TABLE `e_nav`
-  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT для таблицы `e_nav_items`
---
-ALTER TABLE `e_nav_items`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
---
--- AUTO_INCREMENT для таблицы `e_orders_status`
---
-ALTER TABLE `e_orders_status`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
---
--- AUTO_INCREMENT для таблицы `e_orders_status_info`
---
-ALTER TABLE `e_orders_status_info`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
---
--- AUTO_INCREMENT для таблицы `e_payment`
---
-ALTER TABLE `e_payment`
-  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
---
--- AUTO_INCREMENT для таблицы `e_payment_info`
---
-ALTER TABLE `e_payment_info`
-  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
---
--- AUTO_INCREMENT для таблицы `e_plugins`
---
-ALTER TABLE `e_plugins`
-  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=37;
---
--- AUTO_INCREMENT для таблицы `e_plugins_components`
---
-ALTER TABLE `e_plugins_components`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=28;
---
--- AUTO_INCREMENT для таблицы `e_posts_tags`
---
-ALTER TABLE `e_posts_tags`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
---
--- AUTO_INCREMENT для таблицы `e_products_accessories`
---
-ALTER TABLE `e_products_accessories`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
---
--- AUTO_INCREMENT для таблицы `e_products_prices`
---
-ALTER TABLE `e_products_prices`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT для таблицы `e_products_similar`
---
-ALTER TABLE `e_products_similar`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT для таблицы `e_products_variants`
---
-ALTER TABLE `e_products_variants`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=29;
---
--- AUTO_INCREMENT для таблицы `e_products_variants_features`
---
-ALTER TABLE `e_products_variants_features`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=33;
---
--- AUTO_INCREMENT для таблицы `e_products_variants_prices`
---
-ALTER TABLE `e_products_variants_prices`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT для таблицы `e_settings`
---
-ALTER TABLE `e_settings`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=52;
---
--- AUTO_INCREMENT для таблицы `e_tags`
---
-ALTER TABLE `e_tags`
-  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=31;
---
--- AUTO_INCREMENT для таблицы `e_users`
---
-ALTER TABLE `e_users`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=22;
---
--- AUTO_INCREMENT для таблицы `e_users_group`
---
-ALTER TABLE `e_users_group`
-  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=21;
---
--- AUTO_INCREMENT для таблицы `e_users_group_info`
---
-ALTER TABLE `e_users_group_info`
-  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=35;
 --
 -- Ограничения внешнего ключа сохраненных таблиц
 --
