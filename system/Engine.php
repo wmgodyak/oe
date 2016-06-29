@@ -17,6 +17,7 @@ use system\core\Request;
 use system\core\Response;
 use system\core\Session;
 use system\core\Template;
+use system\models\ContentImages;
 use system\models\Languages;
 use system\models\Permissions;
 use system\models\Settings;
@@ -78,6 +79,8 @@ abstract class Engine extends Controller
 
         $this->languages = new Languages();
         $this->languages_id = $this->languages->getDefault('id');
+
+        $this->images = new ContentImages();
 
         $namespace   = $this->request->param('namespace');
         $controller  = $this->request->param('controller');

@@ -6,7 +6,7 @@ var engine = {
      */
     require: function(src, path)
     {
-        alert('Method engine.required is deprecadet');
+        alert('Method engine.required is deprecated');
         path = typeof path == 'undefined' ? '/themes/engine/assets/js/bootstrap/' : path;
         var sc = document.createElement('script');
         sc.type = 'text/javascript';

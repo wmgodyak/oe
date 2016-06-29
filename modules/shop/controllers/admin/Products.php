@@ -85,15 +85,12 @@ class Products extends Content
         ;
         $t->get('ci.url',null,null,null);
         $t->get('c.status',null,null,null);
-        $t->get('c.isfolder',null,null,null);
-        $t->get('CONCAT(u.name, \' \' , u.surname) as owner',null,null,null);
-
 
         if($this->request->isXhr()){
+
             $t  -> from('__content c')
                 -> join("__content_types ct on ct.type = '{$this->type}' and ct.id=c.types_id")
                 -> join("__content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}")
-                -> join('__users u on u.id=c.owner_id')
                 -> where("c.status in ('published', 'hidden')");
 
             if($parent_id > 0){
@@ -104,19 +101,16 @@ class Products extends Content
 
             $res = array();
             foreach ($t->getResults(false) as $i=>$row) {
-                $t_comments = 0;// $comments->getTotal($row['id']);
-                $t_comments_new = 0;//$comments->getTotalNew($row['id']);
+                $img = $this->images->cover($row['id'], 'thumbs');
 
-                $icon = Icon::create(($row['isfolder'] ? 'fa-folder' : 'fa-file'));
+                $img = $img ? "<img style='max-width:30px; max-height: 30px; float:left; margin-right: 1em;' src='/{$img}'>" : "<i class='fa fa-file-image-o'></i>";
                 $icon_link = Icon::create('fa-external-link');
                 $status = $this->t($this->type .'.status_' . $row['status']);
                 $res[$i][] = $row['id'];
                 $res[$i][] =
-                    " <a class='status-{$row['status']}' title='{$status}' href='module/run/shop/products/edit/{$row['id']}'>{$icon}  {$row['name']}</a>"
+                    $img .
+                    " <a class='status-{$row['status']}' title='{$status}' href='module/run/shop/products/edit/{$row['id']}'>{$row['name']}</a>"
                     . " <a href='/{$row['url']}' target='_blank'>{$icon_link}</a>"
-                    . "<br><small class='label label-info'>Автор:{$row['owner']} </small>"
-                    . "<br><small class='label label-info'>Коментарів: {$t_comments} </small>"
-                    . ($t_comments_new > 0 ? ", <small class='label label-info'>{$t_comments_new} новий</small>" : "")
                 ;
                 $res[$i][] = date('d.m.Y H:i:s', strtotime($row['created']));
                 $res[$i][] = $row['updated'] ? date('d.m.Y H:i:s', strtotime($row['updated'])) : '';
@@ -127,7 +121,7 @@ class Products extends Content
                         (
                             Icon::create(Icon::TYPE_PUBLISHED),
                             [
-                                'class' => 'btn-primary b-'.$this->type.'-hide',
+                                'class' => 'b-'.$this->type.'-hide',
                                 'title' => $this->t('common.title_pub'),
                                 'data-id' => $row['id']
                             ]
@@ -137,7 +131,7 @@ class Products extends Content
                         (
                             Icon::create(Icon::TYPE_HIDDEN),
                             [
-                                'class' => 'btn-primary b-'.$this->type.'-pub',
+                                'class' => 'b-'.$this->type.'-pub',
                                 'title' => $this->t('common.title_hide'),
                                 'data-id' => $row['id']
                             ]
@@ -147,13 +141,7 @@ class Products extends Content
                     (
                         Icon::create(Icon::TYPE_EDIT),
                         ['class' => 'btn-primary', 'href' => "module/run/shop/products/edit/" . $row['id'], 'title' => $this->t('common.title_edit')]
-                    ) .
-                    ($row['isfolder'] == 0 ? (string)Button::create
-                    (
-                        Icon::create(Icon::TYPE_DELETE),
-                        ['class' => 'b-'.$this->type.'-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t($this->type.'.delete_question')]
-                    ) : "")
-
+                    )
                 ;
             }
 
