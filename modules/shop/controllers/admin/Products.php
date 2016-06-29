@@ -45,6 +45,11 @@ class Products extends Content
 
         EventsHandler::getInstance()->add('content.main', [$this, 'contentParams']);
         EventsHandler::getInstance()->add('content.process', [$this, 'contentProcess']);
+
+
+        $prices = new Prices();
+        EventsHandler::getInstance()->add('content.main.after', [$prices, 'index']);
+        EventsHandler::getInstance()->add('content.process', [$prices, 'process']);
     }
 
 
@@ -182,7 +187,6 @@ class Products extends Content
 
         parent::edit($id);
     }
-
 
     /**
      * @param $content

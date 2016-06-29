@@ -45,21 +45,6 @@ class Prices extends Model
     }
 
     /**
-     * @param int $parent_id
-     * @return mixed
-     */
-    public function getUsersGroup($parent_id = 0)
-    {
-        return self::$db->select("
-          select g.id, g.isfolder, name
-          from __users_group g
-          join __users_group_info i on i.group_id=g.id and i.languages_id = {$this->languages_id}
-          where g.parent_id={$parent_id} and g.backend = 0
-          order by abs(g.position) asc
-          ")->all();
-    }
-
-    /**
      * @param $content_id
      * @return array
      */

@@ -10,39 +10,45 @@
 namespace modules\shop\controllers\admin;
 
 use system\Engine;
+use system\models\Currency;
+use system\models\Guides;
+use system\models\UsersGroup;
 
 defined("CPATH") or die();
 
 class Prices extends Engine
 {
     private $prices;
+    private $currency;
+    private $guides;
+    private $usersGroup;
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->prices = new \models\engine\plugins\ProductsPrices();
+        $this->usersGroup = new UsersGroup();
+        $this->guides     = new Guides();
+        $this->currency   = new Currency();
+        $this->prices = new \modules\shop\models\admin\Prices();
     }
 
-    public function index(){}
+    public function index($content = null)
+    {
+        $this->template->assign('groups', $this->usersGroup->getItems(0, 0));
+        $this->template->assign('units',  $this->guides->get('units'));
+        $this->template->assign('currency', $this->currency->get());
+        $this->template->assign('prices', $this->prices->get($content['id']));
+        return $this->template->fetch('shop/prices');
+    }
 
 
     public function create()
     {
-        $this->template->assign('groups', $this->prices->getUsersGroup(0));
-        $this->template->assign('units',  Guides::getByCode('units'));
-        $this->template->assign('currency',  Currency::get());
-        return $this->template->fetch('plugins/shop/products_prices');
     }
 
     public function edit($id)
     {
-        $this->template->assign('groups', $this->prices->getUsersGroup(0));
-        $this->template->assign('units',  Guides::getByCode('units'));
-        $this->template->assign('currency',  Currency::get());
-        $this->template->assign('group_prices', $this->prices->get($id));
-        $this->template->assign('content', $this->prices->getContentData($id));
-        return $this->template->fetch('plugins/shop/products_prices');
     }
 
     public function delete($id){}

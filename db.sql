@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Июн 29 2016 г., 16:28
+-- Время создания: Июн 29 2016 г., 18:19
 -- Версия сервера: 5.6.30-0ubuntu0.14.04.1-log
 -- Версия PHP: 5.5.9-1ubuntu4.17
 
@@ -276,7 +276,7 @@ CREATE TABLE IF NOT EXISTS `e_content` (
   KEY `status` (`status`),
   KEY `published` (`published`),
   KEY `code` (`code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=162 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=164 ;
 
 --
 -- Дамп данных таблицы `e_content`
@@ -321,7 +321,7 @@ INSERT INTO `e_content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id
 (47, 11, 11, 2, 0, 0, 0, '2016-04-01 07:11:07', '2016-04-01 07:11:07', '2016-04-01', NULL, 'deleted', '47', NULL, NULL, NULL, NULL, NULL),
 (48, 11, 11, 2, 0, 1, 0, '2016-04-01 07:11:12', '2016-04-01 07:11:12', '2016-04-01', NULL, 'published', '48', NULL, NULL, NULL, NULL, NULL),
 (49, 11, 11, 2, 40, 0, 0, '2016-04-01 08:26:25', '2016-04-01 08:26:25', '2016-04-01', NULL, 'deleted', '49', NULL, NULL, NULL, NULL, NULL),
-(52, 10, 10, 2, 0, 0, 0, '2016-04-04 14:41:04', '2016-06-29 10:42:18', '2016-04-04', NULL, 'published', '52', 2, 2, 1, 0, NULL),
+(52, 10, 10, 2, 0, 0, 0, '2016-04-04 14:41:04', '2016-06-29 14:37:17', '2016-06-29', NULL, 'published', '52', 2, 157, 1, 0, NULL),
 (54, 10, 10, 2, 0, 0, 0, '2016-04-04 16:21:23', '2016-04-12 10:57:51', '2016-04-04', NULL, 'published', '54', 2, 2, 0, 0, NULL),
 (55, 10, 10, 2, 0, 0, 0, '2016-04-04 16:22:23', '2016-04-04 16:22:41', '2016-04-04', NULL, 'published', '55', NULL, NULL, NULL, NULL, NULL),
 (57, 10, 10, 2, 0, 0, 0, '2016-04-05 06:12:57', '2016-04-05 06:13:34', '2016-04-05', NULL, 'published', '57', NULL, NULL, NULL, NULL, NULL),
@@ -336,12 +336,13 @@ INSERT INTO `e_content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id
 (153, 13, 13, 2, 0, 0, 0, '2016-06-29 13:17:23', '2016-06-29 13:17:23', '2016-06-29', NULL, 'deleted', NULL, NULL, NULL, NULL, NULL, NULL),
 (154, 13, 13, 2, 0, 0, 0, '2016-06-29 13:17:31', '2016-06-29 13:17:31', '2016-06-29', NULL, 'deleted', NULL, NULL, NULL, NULL, NULL, NULL),
 (155, 13, 13, 2, 0, 0, 0, '2016-06-29 13:18:21', '2016-06-29 13:18:21', '2016-06-29', NULL, 'deleted', NULL, NULL, NULL, NULL, NULL, NULL),
-(156, 13, 13, 2, 0, 1, 0, '2016-06-29 13:24:09', '2016-06-29 13:24:09', '2016-06-29', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
+(156, 13, 13, 2, 0, 1, 0, '2016-06-29 13:24:09', '2016-06-29 13:45:53', '2016-06-29', NULL, 'published', NULL, NULL, NULL, NULL, NULL, 'units'),
 (157, 13, 13, 2, 156, 0, 0, '2016-06-29 13:26:32', '2016-06-29 13:26:32', '2016-06-29', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
-(158, 13, 13, 2, 156, 0, 0, '2016-06-29 13:26:55', '2016-06-29 13:26:55', '2016-06-29', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
+(158, 13, 13, 2, 156, 0, 0, '2016-06-29 13:26:55', '2016-06-29 13:29:48', '2016-06-29', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
 (159, 13, 13, 2, 156, 0, 0, '2016-06-29 13:27:09', '2016-06-29 13:27:09', '2016-06-29', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
 (160, 13, 13, 2, 156, 0, 0, '2016-06-29 13:27:17', '2016-06-29 13:27:17', '2016-06-29', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
-(161, 13, 13, 2, 156, 0, 0, '2016-06-29 13:27:27', '2016-06-29 13:27:27', '2016-06-29', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL);
+(161, 13, 13, 2, 156, 0, 0, '2016-06-29 13:27:27', '2016-06-29 13:27:27', '2016-06-29', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
+(163, 13, 13, 2, 0, 0, 0, '2016-06-29 13:36:28', NULL, NULL, NULL, 'blank', NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -552,7 +553,7 @@ CREATE TABLE IF NOT EXISTS `e_content_relationship` (
   KEY `fk_content_relationship_content1_idx` (`content_id`),
   KEY `fk_content_relationship_content2_idx` (`categories_id`),
   KEY `is_main` (`is_main`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=97 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=101 ;
 
 --
 -- Дамп данных таблицы `e_content_relationship`
@@ -569,14 +570,13 @@ INSERT INTO `e_content_relationship` (`id`, `content_id`, `categories_id`, `is_m
 (8, 23, 13, 0),
 (9, 24, 13, 0),
 (10, 16, 15, 0),
-(93, 52, 49, 0),
 (94, 52, 44, 0),
 (29, 57, 41, 1),
 (30, 59, 41, 1),
 (76, 54, 41, 1),
 (89, 92, 44, 1),
-(95, 52, 43, 1),
-(96, 147, 130, 1);
+(96, 147, 130, 1),
+(100, 52, 43, 1);
 
 -- --------------------------------------------------------
 
@@ -1386,7 +1386,16 @@ CREATE TABLE IF NOT EXISTS `e_products_prices` (
   UNIQUE KEY `content_id` (`content_id`,`group_id`),
   KEY `fk_products_prices_content1_idx` (`content_id`),
   KEY `fk_products_prices_users_group1_idx` (`group_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+
+--
+-- Дамп данных таблицы `e_products_prices`
+--
+
+INSERT INTO `e_products_prices` (`id`, `content_id`, `group_id`, `price`, `price_old`) VALUES
+(1, 52, 20, 11.00, NULL),
+(2, 52, 21, 22.00, NULL),
+(3, 52, 22, 32.00, NULL);
 
 -- --------------------------------------------------------
 
@@ -1632,7 +1641,7 @@ CREATE TABLE IF NOT EXISTS `e_users_group` (
   KEY `sort` (`position`),
   KEY `isfolder` (`isfolder`),
   KEY `backend` (`backend`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=23 ;
 
 --
 -- Дамп данных таблицы `e_users_group`
@@ -1642,7 +1651,9 @@ INSERT INTO `e_users_group` (`id`, `parent_id`, `isfolder`, `backend`, `permissi
 (1, 0, 0, 1, 'a:1:{s:11:"full_access";s:1:"1";}', 1),
 (2, 0, 0, 1, 'a:15:{s:11:"full_access";s:1:"0";s:9:"Dashboard";a:3:{i:0;s:5:"index";i:1;s:6:"create";i:2;s:4:"edit";}s:12:"content\\Post";a:6:{i:0;s:5:"index";i:1;s:5:"items";i:2;s:6:"create";i:3;s:4:"edit";i:4;s:3:"pub";i:5;s:4:"hide";}s:9:"Customers";a:7:{i:0;s:5:"index";i:1;s:5:"items";i:2;s:6:"create";i:3;s:4:"edit";i:4;s:6:"remove";i:5;s:3:"ban";i:6;s:7:"restore";}s:8:"Comments";a:9:{i:0;s:5:"index";i:1;s:3:"tab";i:2;s:5:"items";i:3;s:6:"create";i:4;s:4:"edit";i:5;s:5:"reply";i:6;s:7:"approve";i:7;s:4:"spam";i:8;s:7:"restore";}s:4:"Shop";a:3:{i:0;s:5:"index";i:1;s:6:"create";i:2;s:4:"edit";}s:16:"content\\Products";a:6:{i:0;s:5:"index";i:1;s:5:"items";i:2;s:6:"create";i:3;s:4:"edit";i:4;s:3:"pub";i:5;s:4:"hide";}s:26:"content\\ProductsCategories";a:6:{i:0;s:5:"index";i:1;s:5:"items";i:2;s:6:"create";i:3;s:4:"edit";i:4;s:3:"pub";i:5;s:4:"hide";}s:8:"Currency";a:4:{i:0;s:5:"index";i:1;s:5:"items";i:2;s:6:"create";i:3;s:4:"edit";}s:8:"Delivery";a:7:{i:0;s:5:"index";i:1;s:5:"items";i:2;s:6:"create";i:3;s:4:"edit";i:4;s:17:"getModuleSettings";i:5;s:3:"pub";i:6;s:4:"hide";}s:9:"Callbacks";a:8:{i:0;s:5:"index";i:1;s:3:"tab";i:2;s:5:"items";i:3;s:6:"create";i:4;s:4:"edit";i:5;s:5:"reply";i:6;s:4:"spam";i:7;s:7:"restore";}s:13:"content\\Pages";a:6:{i:0;s:5:"index";i:1;s:5:"items";i:2;s:6:"create";i:3;s:4:"edit";i:4;s:3:"pub";i:5;s:4:"hide";}s:32:"plugins\\ProductsCategoriesSelect";a:4:{i:0;s:5:"index";i:1;s:6:"create";i:2;s:4:"edit";i:3;s:7:"setMeta";}s:26:"plugins\\ProductsCategories";a:8:{i:0;s:5:"index";i:1;s:6:"create";i:2;s:4:"edit";i:3;s:4:"tree";i:4;s:4:"move";i:5;s:16:"createCategories";i:6;s:14:"editCategories";i:7;s:7:"setMeta";}s:17:"plugins\\PagesTree";a:6:{i:0;s:5:"index";i:1;s:6:"create";i:2;s:4:"edit";i:3;s:4:"tree";i:4;s:4:"move";i:5;s:7:"setMeta";}}', 0),
 (4, 0, 0, 1, 'a:2:{s:11:"full_access";s:1:"0";s:5:"Admin";a:9:{i:0;s:4:"data";i:1;s:2:"id";i:2;s:5:"login";i:3;s:2:"fp";i:4;s:6:"logout";i:5;s:7:"profile";i:6;s:5:"index";i:7;s:6:"create";i:8;s:4:"edit";}}', 0),
-(20, 0, 0, 0, 'N;', 0);
+(20, 0, 0, 0, 'N;', 0),
+(21, 0, 0, 0, 'N;', 0),
+(22, 0, 0, 0, 'N;', 0);
 
 -- --------------------------------------------------------
 
@@ -1659,7 +1670,7 @@ CREATE TABLE IF NOT EXISTS `e_users_group_info` (
   UNIQUE KEY `group_id` (`group_id`,`languages_id`),
   KEY `fk_users_group_info_users_group1_idx` (`group_id`),
   KEY `fk_users_group_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=35 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=37 ;
 
 --
 -- Дамп данных таблицы `e_users_group_info`
@@ -1669,7 +1680,9 @@ INSERT INTO `e_users_group_info` (`id`, `group_id`, `languages_id`, `name`) VALU
 (15, 1, 1, 'Адміністратори'),
 (16, 2, 1, 'Редактори'),
 (18, 4, 1, 'Модератори'),
-(34, 20, 1, 'Гості');
+(34, 20, 1, 'Роздріб'),
+(35, 21, 1, 'Гурт'),
+(36, 22, 1, 'Дрібний гурт');
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц
