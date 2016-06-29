@@ -14,7 +14,7 @@ engine.currency = {
     },
     create: function()
     {
-        engine.request.get('./currency/create', function(d)
+        engine.request.get('module/run/currency/create', function(d)
         {
             var buttons = [
                 {
@@ -48,7 +48,7 @@ engine.currency = {
     edit: function(id)
     {
         engine.request.post({
-            url: './currency/edit/' + id,
+            url: 'module/run/currency/edit/' + id,
             data: {id: id},
             success: function(d)
             {
@@ -89,7 +89,7 @@ engine.currency = {
             t.currency.delete_question,
             function()
             {
-                engine.request.get('./currency/delete/' + id, function(d){
+                engine.request.get('module/run/currency/delete/' + id, function(d){
                     if(d > 0){
                         engine.refreshDataTable('currency');
                     }
