@@ -25,15 +25,14 @@ class Pages extends Content
 
     public function index($parent_id=0)
     {
+
         if($parent_id > 0){
-            $data = $this->mContent->getData($parent_id);
-            $this->appendToPanel((string)Link::create
-            (
-                $this->t('common.back'),
-                ['class' => 'btn-md', 'href'=> './pages/index' . ($data['parent_id']>0 ? '/' . $data['parent_id'] : '')],
-                (string)Icon::create('fa-reply')
-            )
-            );
+            $parents = $this->mContent->getParents($parent_id);// d($parents);die;
+
+            $c = count($parents)-1;
+            foreach ($parents as $k=>$parent) {
+                $this->addBreadCrumb($parent['name'], $k<$c ? 'pages/index/' . $parent['id'] : '' );
+            }
         }
 
         $this->appendToPanel

@@ -49,17 +49,13 @@ class Products extends Content
 
     public function index($parent_id=0)
     {
-        $this->addBreadCrumb('Товари', 'module/run/shop/products');
-
         if($parent_id > 0){
-            $data = $this->mContent->getData($parent_id);
-            $this->appendToPanel((string)Link::create
-            (
-                $this->t('common.back'),
-                ['class' => 'btn-md', 'href'=> 'module/run/shop/products/index' . ($data['parent_id']>0 ? '/' . $data['parent_id'] : '')],
-                (string)Icon::create('fa-reply')
-            )
-            );
+            $parents = $this->mContent->getParents($parent_id);// d($parents);die;
+
+            $c = count($parents)-1;
+            foreach ($parents as $k=>$parent) {
+                $this->addBreadCrumb($parent['name'], $k<$c ? 'module/run/shop/products/index/' . $parent['id'] : '' );
+            }
         }
 
         $this->appendToPanel

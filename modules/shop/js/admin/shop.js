@@ -14,12 +14,39 @@ engine.shop = {
 
         $(document).on('click', '.b-product-pub', function(){
             var id = $(this).data('id');
-            engine.content.pub(id, 'module/run/shop');
+            engine.content.pub(id, 'module/run/shop/products');
         });
 
         $(document).on('click', '.b-product-hide', function(){
             var id = $(this).data('id');
-            engine.content.hide(id, 'module/run/shop');
+            engine.content.hide(id, 'module/run/shop/products');
+        });
+
+
+        $(document).on('click', '.b-products_categories-delete', function(){
+            var id = $(this).data('id');
+            //engine.confirm('ДІйсно видалити категорію?', function(){engine.content.delete(id, 'module/run/shop');});
+            engine.confirm
+            (
+                'Дійсно видалити Категорію?',
+                function()
+                {
+                    engine.request.get('module/run/shop/categories/delete/'+id, function(res){
+                        dialog.dialog('destroy').remove();
+                        $tree.jstree('refresh');
+                        engine.refreshDataTable('content');
+                    }, 'json');
+                });
+        });
+
+        $(document).on('click', '.b-products_categories-pub', function(){
+            var id = $(this).data('id');
+            engine.content.pub(id, 'module/run/shop/categories');
+        });
+
+        $(document).on('click', '.b-products_categories-hide', function(){
+            var id = $(this).data('id');
+            engine.content.hide(id, 'module/run/shop/categories');
         });
 
         $(document).on('click', '.b-shop-categories-create', function(){
@@ -53,6 +80,16 @@ engine.shop = {
                                 self.location.href = 'module/run/shop';
                             }, 'json');
                         });
+                }
+            )
+            .setContextMenu('children', t.shopCategories.tree_children, 'fa-list', function(o){
+                    var node_id= o.reference[0].id;
+                    self.location.href='module/run/shop/categories/index/'+node_id;
+                }
+            )
+            .setContextMenu('children', t.shopCategories.tree_products, 'fa-list', function(o){
+                    var node_id= o.reference[0].id;
+                    self.location.href='module/run/shop/products/index/'+node_id;
                 }
             )
             .move(function(e, data){

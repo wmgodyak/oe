@@ -8,5 +8,6 @@
     <input type="hidden" name="content[owner_id]" value="{$admin.id}">
     <input type="hidden" name="content[parent_id]" value="{$content.parent_id}">
     <input type="hidden" name="action" value="{$action}">
+    <input type="hidden" name="modal" value="1">
 
 </form>

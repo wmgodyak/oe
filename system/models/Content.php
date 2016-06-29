@@ -116,6 +116,27 @@ class Content extends Model
         return $d;
     }
 
+    public function getParents($id)
+    {
+        $res = [];
+        $cat = self::$db
+            ->select("
+                select c.id, i.name, c.parent_id
+                from __content c
+                join __content_info i on i.content_id=c.id
+                where c.id={$id} limit 1
+            ")
+            ->row();
+
+        if($cat['parent_id'] > 0){
+            $res = array_merge($res, $this->getParents($cat['parent_id']));
+        }
+
+        $res[] = $cat;
+
+        return $res;
+    }
+
     private function getTypeSettings($id)
     {
         $s = self::$db->select("select settings from __content_types where id={$id} limit 1")->row('settings');

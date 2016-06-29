@@ -10,6 +10,8 @@ namespace system\components\content\controllers;
 
 use controllers\core\exceptions\Exception;
 use helpers\bootstrap\Button;
+use helpers\bootstrap\Icon;
+use helpers\bootstrap\Link;
 use system\core\EventsHandler;
 use system\Engine;
 
@@ -59,7 +61,10 @@ class Content extends Engine
         }
     }
 
-    public function index(){}
+    public function index($parent_id = 0)
+    {
+
+    }
 
     /**
      * @param int $parent_id
