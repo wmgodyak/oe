@@ -7,9 +7,23 @@
  */
 
 namespace system\models;
-
+/**
+ * Class Features
+ * @package system\models
+ */
 class Features extends Model
 {
+    private $languages;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->languages = new Languages();
+
+        $this->languages_id = $this->languages->getDefault('id');
+    }
+
     public function createBlank($parent_id, $owner_id)
     {
         self::$db->delete("__features", " status='blank' and owner_id={$owner_id}");
@@ -29,7 +43,7 @@ class Features extends Model
 
         if ($key != '*') return $data;
 
-        foreach ($this->languages as $language) {
+        foreach ($this->languages->get() as $language) {
             $data['info'][$language['id']] =
                 self::$db
                     ->select("select * from __features_info where features_id={$id} and languages_id={$language['id']} limit 1")
@@ -38,7 +52,6 @@ class Features extends Model
 
         $data['statuses'] = self::$db->enumValues('__features', 'status');
         $data['types'] = self::$db->enumValues('__features', 'type');
-//        $data['selected_content'] = $this->getSelectedContent($id);
 
         foreach ($data['types'] as $k => $type) {
             if ($type == 'value') {
@@ -47,6 +60,13 @@ class Features extends Model
         }
 
         return $data;
+    }
+
+    public function getName($id)
+    {
+        return self::$db
+            ->select("select name from __features_info where features_id={$id} and languages_id = {$this->languages_id} limit 1")
+            ->row('name');
     }
 
     /**

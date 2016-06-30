@@ -1250,6 +1250,10 @@ engine.content = {
                 engine.content.features.fileBrowse(target);
             });
 
+            $(document).on('click', '.b-features-edit', function(){
+                var id = $(this).data('id');
+            });
+
             $('.cf-feature-select').select2();
 
             $(document).on('change', '#main_categories_id', function(){
@@ -1718,8 +1722,6 @@ engine.contentTypes = {
             });
 
         });
-
-        this.features.init();
     },
     onCreateSuccess: function(d)
     {
@@ -1740,66 +1742,6 @@ engine.contentTypes = {
                 $(this).dialog('close').dialog('destroy').remove();
             }
         );
-    },
-    features : {
-        init: function()
-        {
-            var typesID = $('#typesID').val(),
-                subTypesID = $('#subTypesID').val();
-
-            //// console.log('contentTypes.features.init()');
-
-            $(document).on('change', '#features', function()
-            {
-                if(typesID == ''){
-                    engine.alert('Опція доступна тільки для редагування');
-                    return ;
-                }
-                var features_id = this.value;
-                engine.request.get
-                (
-                    'contentTypes/selectFeatures/'+typesID+'/'+subTypesID + '/' + features_id,
-                    function(d)
-                    {
-                        if(d.s){
-                            engine.contentTypes.features.refresh(d.sf);
-                        }
-                    },
-                    'json'
-                );
-
-            });
-
-            $(document).on('click', '.b-ct-delete-features', function(){
-                var id = $(this).data('id');
-                var w = engine.confirm('Дійсно видалити?', function(){
-                    engine.request.get
-                    (
-                        'contentTypes/deleteFeatures/'+id,
-                        function(d)
-                        {
-                            if(d){
-                                $("#cf-sf-" + id).remove();
-                                w.dialog('destroy').remove();
-                            }
-                        }
-                    );
-                });
-            });
-            var selected_features = selected_features || [];
-            engine.contentTypes.features.refresh(selected_features);
-
-
-            // features settings
-            $("#settings_features_allowed_types,#settings_features_ex_types_id").select2();
-
-        },
-        refresh: function(data)
-        {
-            if(data.length == 0) return ;
-            var tmpl = _.template($('#ftList').html());
-            $("#content_features").html(tmpl({items: data}));
-        }
     }
 };
 engine.dashboard = {};
@@ -1810,6 +1752,16 @@ engine.features = {
     init: function()
     {
         // console.log('engine.features.init() -> OK');
+        $(document).on('click', '.b-features-create', function(e){
+            e.preventDefault();
+            var parent = $(this).data('parent');
+            engine.features.create(parent);
+        });
+        $(document).on('click', '.b-features-edit', function(e){
+            e.preventDefault();
+            var id = $(this).data('id');
+            engine.features.edit(id);
+        });
         $(document).on('click', '.b-features-delete', function(e){
             e.preventDefault();
             var id = $(this).data('id');
@@ -1825,27 +1777,8 @@ engine.features = {
             var id = $(this).data('id');
             engine.features.hide(id);
         });
-        $(document).on('click', '.b-features-add-value', function(e){
-            e.preventDefault();
-            var id = $(this).data('id');
-            engine.features.addValue(id);
-        });
 
-        $(document).on('click', '.b-features-edit-value', function(e){
-            e.preventDefault();
-            var id = $(this).data('id');
-            engine.features.editValue(id);
-        });
-
-        $('#data_type')
-            .change(function(){
-                if(this.value == 'select'){
-                    $('.fg-show-filter, .fg-multiple').show();
-                } else {
-                    $('.fg-show-filter, .fg-multiple').hide();
-                }
-            })
-            .trigger('change');
+        engine.features.values.init();
 
         $(document).on('click', '.b-features-select-ct', function(){
             var id = $(this).data('id');
@@ -1855,95 +1788,78 @@ engine.features = {
             var id = $(this).data('id');
             engine.features.content.del(id);
         });
-
-        // selected content
-        var sc = typeof selected_content == 'undefined' ? [] : selected_content;
-        engine.features.content.refresh(sc);
     },
-    content: {
-        select : function(features_id)
-        {
-            engine.request.get('features/selectContent/' + features_id, function (d) {
-                var pw = engine.dialog({
-                    content: d,
-                    title: 'Прикріпити до ...',
-                    autoOpen: true,
-                    width: 500,
-                    modal: true,
-                    buttons: {
-                        "Зберегти": function(){
-                            $('#formFeaturesContent').submit();
-                        }
+
+    create: function(parent){
+        engine.request.get('features/create/' + parent, function (d) {
+            var pw = engine.dialog({
+                content: d,
+                title: 'Створення властивості',
+                autoOpen: true,
+                width: 900,
+                modal: true,
+                buttons: {
+                    "Зберегти": function(){
+                        $('#form').submit();
                     }
-                });
-
-                $('#data_content_id, #data_types_id, #data_subtypes_id').select2();
-
-                $('#data_types_id')
-                    .change(function(){
-                        $("#data_subtypes_id,#data_content_id").html('').attr('disabled', true);
-                        var parent_id = parseInt(this.value);
-                        engine.request.get('features/getTypes/'+parent_id, function(d){
-                            //if(d.o.length == 0){
-                            //    return ;
-                            //}
-                            var out = '<option value="">Всі</option>';
-                            $(d.o).each(function(i,e){
-                                out += '<option value="'+ e.id +'">'+ e.name +'</option>';
-                            });
-                            $("#data_subtypes_id").html(out).removeAttr('disabled').trigger('change');
-                        });
-                    })
-                    .trigger('change');
-
-                $("#data_subtypes_id").change(function(){
-                    $("#data_content_id").html('').attr('disabled', true);
-                    var type_id    = $('#data_types_id').find('option:selected').attr('value');
-                    var subtype_id = this.value;
-                    engine.request.get('features/getContent/'+type_id + '/' + subtype_id, function(d){
-                        //if(d.o.length == 0){
-                        //    return ;
-                        //}
-                        var out = '<option value="">Всі</option>';
-                        $(d.o).each(function(i,e){
-                            out += '<option value="'+ e.id +'">'+ e.name +'</option>';
-                        });
-                        $("#data_content_id").html(out).removeAttr('disabled');
-                    });
-                });
-
-
-                engine.validateAjaxForm('#formFeaturesContent', function(d){
-                    if(d.s){
-                        pw.dialog('destroy').remove();
-                        engine.features.content.refresh(d.sc);
-                    }
-                });
+                }
             });
-        },
-        del: function(id)
-        {
-            var w = engine.confirm("Дійсно видалити вибраний запис?", function(){
-                engine.request.get('features/deleteSelectedContent/'+id, function(d)
-                {
-                    if(d.s){
 
-                        w.dialog('destroy').remove();
-                        $("#f-sc-"+id).remove();
+            $('#data_type')
+                .change(function(){
+                    if(this.value == 'select'){
+                        $('.fg-show-filter, .fg-multiple').show();
+                    } else {
+                        $('.fg-show-filter, .fg-multiple').hide();
                     }
-                },'json');
+                })
+                .trigger('change');
+
+            engine.validateAjaxForm('#form', function(d){
+                if(d.s){
+                    pw.dialog('destroy').remove();
+                    engine.refreshDataTable('features');
+                }
             });
-        },
-        refresh: function(data)
-        {
-            if(data.length == 0) return ;
-            var tmpl = _.template($('#ctList').html());
-            $("#content_types").html(tmpl({items: data}));
-        }
+        });
     },
-    onCreateSuccess: function(d)
-    {
-        location.href = "./features";
+    edit: function(id){
+        engine.request.get('features/edit/' + id, function (d) {
+            var pw = engine.dialog({
+                content: d,
+                title: 'Редагування властивості',
+                autoOpen: true,
+                width: 900,
+                modal: true,
+                buttons: {
+                    "Зберегти": function(){
+                        $('#form').submit();
+                    }
+                }
+            });
+
+            $('#data_type')
+                .change(function(){
+                    if(this.value == 'select'){
+                        $('.fg-show-filter, .fg-multiple').show();
+                    } else {
+                        $('.fg-show-filter, .fg-multiple').hide();
+                    }
+                })
+                .trigger('change');
+
+            engine.validateAjaxForm('#form', function(d){
+                if(d.s){
+                    pw.dialog('destroy').remove();
+                    engine.refreshDataTable('features');
+                }
+            });
+
+
+            var sc = typeof selected_content == 'undefined' ? [] : selected_content;
+            console.log(sc);
+            engine.features.content.refresh(sc);
+        });
     },
     delete: function(id)
     {
@@ -1971,51 +1887,190 @@ engine.features = {
             engine.refreshDataTable('features');
         });
     },
-    addValue: function (id) {
-        engine.request.get('features/addValue/' + id, function (d) {
-            var pw = engine.dialog({
-                content: d,
-                title: 'Створення властивості',
-                autoOpen: true,
-                width: 500,
-                modal: true,
-                buttons: {
-                    "Зберегти": function(){
-                        $('#formFeaturesValue').submit();
-                    }
-                }
+    values: {
+        init: function()
+        {
+            $(document).on('click', '.b-features-values-create', function(e){
+                e.preventDefault();
+                var features_id = $(this).data('features_id');
+                engine.features.values.create(features_id);
             });
 
-            engine.validateAjaxForm('#formFeaturesValue', function(d){
-                if(d.s){
-                    pw.dialog('destroy').remove();
-                    engine.refreshDataTable('features');
-                }
+            $(document).on('click', '.b-features-values-edit', function(e){
+                e.preventDefault();
+                var id = $(this).data('id');
+                engine.features.values.edit(id);
             });
-        });
+
+            $(document).on('click', '.b-features-values-delete', function(e){
+                e.preventDefault();
+                var id = $(this).data('id');
+                engine.features.values.delete(id);
+            });
+            $(document).on('click', '.b-features-values-pub', function(e){
+                e.preventDefault();
+                var id = $(this).data('id');
+                engine.features.values.pub(id);
+            });
+            $(document).on('click', '.b-features-values-hide', function(e){
+                e.preventDefault();
+                var id = $(this).data('id');
+                engine.features.values.hide(id);
+            });
+        },
+        create: function (id) {
+            engine.request.get('features/values/create/' + id, function (d) {
+                var pw = engine.dialog({
+                    content: d,
+                    title: 'Створення властивості',
+                    autoOpen: true,
+                    width: 500,
+                    modal: true,
+                    buttons: {
+                        "Зберегти": function(){
+                            $('#formFeaturesValue').submit();
+                        }
+                    }
+                });
+
+                engine.validateAjaxForm('#formFeaturesValue', function(d){
+                    if(d.s){
+                        pw.dialog('destroy').remove();
+                        engine.refreshDataTable('features_values');
+                    }
+                });
+            });
+        },
+        edit: function (id) {
+            engine.request.get('features/values/edit/' + id, function (d) {
+                var pw = engine.dialog({
+                    content: d,
+                    title: 'Редагування значення',
+                    autoOpen: true,
+                    width: 500,
+                    modal: true,
+                    buttons: {
+                        "Зберегти": function(){
+                            $('#formFeaturesValue').submit();
+                        }
+                    }
+                });
+
+                engine.validateAjaxForm('#formFeaturesValue', function(d){
+                    if(d.s){
+                        pw.dialog('destroy').remove();
+                        engine.refreshDataTable('features_values');
+                    }
+                });
+            });
+        },
+        delete: function(id)
+        {
+            engine.confirm
+            (
+                t.features.delete_confirm,
+                function()
+                {
+                    engine.request.get('./features/delete/' + id, function(d){
+                        if(d > 0){
+                            engine.refreshDataTable('features_values');
+                        }
+                    });
+                    $(this).dialog('close').dialog('destroy').remove();
+                }
+            );
+        },
+        pub: function (id) {
+            engine.request.get('features/pub/' + id, function (d) {
+                engine.refreshDataTable('features_values');
+            });
+        },
+        hide: function (id) {
+            engine.request.get('features/hide/' + id, function (d) {
+                engine.refreshDataTable('features_values');
+            });
+        },
     },
-    editValue: function (id) {
-        engine.request.get('features/editValue/' + id, function (d) {
-            var pw = engine.dialog({
-                content: d,
-                title: 'Редагування властивості',
-                autoOpen: true,
-                width: 500,
-                modal: true,
-                buttons: {
-                    "Зберегти": function(){
-                        $('#formFeaturesValue').submit();
+    content: {
+        select : function(features_id)
+        {
+            engine.request.get('features/content/index/' + features_id, function (d) {
+                var pw = engine.dialog({
+                    content: d,
+                    title: 'Прикріпити до ...',
+                    autoOpen: true,
+                    width: 500,
+                    modal: true,
+                    buttons: {
+                        "Зберегти": function(){
+                            $('#formFeaturesContent').submit();
+                        }
                     }
-                }
-            });
+                });
 
-            engine.validateAjaxForm('#formFeaturesValue', function(d){
-                if(d.s){
-                    pw.dialog('destroy').remove();
-                    engine.refreshDataTable('features');
-                }
+                $('#data_content_id, #data_types_id, #data_subtypes_id').select2();
+
+                $('#data_types_id')
+                    .change(function(){
+                        $("#data_subtypes_id,#data_content_id").html('').attr('disabled', true);
+                        var parent_id = parseInt(this.value);
+                        engine.request.get('features/content/getTypes/'+parent_id, function(d){
+                            //if(d.o.length == 0){
+                            //    return ;
+                            //}
+                            var out = '<option value="">Всі</option>';
+                            $(d.o).each(function(i,e){
+                                out += '<option value="'+ e.id +'">'+ e.name +'</option>';
+                            });
+                            $("#data_subtypes_id").html(out).removeAttr('disabled').trigger('change');
+                        });
+                    })
+                    .trigger('change');
+
+                $("#data_subtypes_id").change(function(){
+                    $("#data_content_id").html('').attr('disabled', true);
+                    var type_id    = $('#data_types_id').find('option:selected').attr('value');
+                    var subtype_id = this.value;
+                    engine.request.get('features/content/getContent/'+type_id + '/' + subtype_id, function(d){
+                        //if(d.o.length == 0){
+                        //    return ;
+                        //}
+                        var out = '<option value="">Всі</option>';
+                        $(d.o).each(function(i,e){
+                            out += '<option value="'+ e.id +'">'+ e.name +'</option>';
+                        });
+                        $("#data_content_id").html(out).removeAttr('disabled');
+                    });
+                });
+
+                engine.validateAjaxForm('#formFeaturesContent', function(d){
+                    if(d.s){
+                        pw.dialog('destroy').remove();
+                        engine.features.content.refresh(d.sc);
+                    }
+                });
             });
-        });
+        },
+        del: function(id)
+        {
+            var w = engine.confirm("Дійсно видалити вибраний запис?", function(){
+                engine.request.get('features/content/delete/'+id, function(d)
+                {
+                    if(d.s){
+
+                        w.dialog('destroy').remove();
+                        $("#f-sc-"+id).remove();
+                    }
+                },'json');
+            });
+        },
+        refresh: function(data)
+        {
+            if(data.length == 0) return ;
+
+            var tmpl = _.template($('#ctList').html());
+            $("#content_types").html(tmpl({items: data}));
+        }
     }
 };
 engine.languages = {

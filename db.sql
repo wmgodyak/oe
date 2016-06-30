@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Июн 29 2016 г., 18:19
+-- Время создания: Июн 30 2016 г., 18:21
 -- Версия сервера: 5.6.30-0ubuntu0.14.04.1-log
 -- Версия PHP: 5.5.9-1ubuntu4.17
 
@@ -362,21 +362,6 @@ CREATE TABLE IF NOT EXISTS `e_content_features` (
   KEY `fk_content_features_values_content1_idx` (`content_id`),
   KEY `fk_content_features_values_features1_idx` (`features_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=33 ;
-
---
--- Дамп данных таблицы `e_content_features`
---
-
-INSERT INTO `e_content_features` (`id`, `content_id`, `features_id`, `values_id`, `languages_id`, `value`) VALUES
-(24, 54, 84, 86, 0, NULL),
-(25, 54, 85, 89, 0, NULL),
-(26, 92, 96, 97, 0, NULL),
-(27, 92, 98, 100, 0, NULL),
-(28, 92, 101, 102, 0, NULL),
-(29, 92, 103, 105, 0, NULL),
-(30, 2, 106, NULL, 1, '3'),
-(31, 52, 84, 86, 0, NULL),
-(32, 52, 85, 89, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -739,10 +724,6 @@ CREATE TABLE IF NOT EXISTS `e_delivery_payment` (
 --
 
 INSERT INTO `e_delivery_payment` (`id`, `delivery_id`, `payment_id`) VALUES
-(12, 1, 1),
-(15, 1, 3),
-(16, 1, 5),
-(18, 1, 4),
 (17, 2, 1);
 
 -- --------------------------------------------------------
@@ -762,46 +743,32 @@ CREATE TABLE IF NOT EXISTS `e_features` (
   `owner_id` int(11) unsigned NOT NULL,
   `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `status` enum('blank','published','hidden') DEFAULT 'blank',
+  `position` tinyint(3) unsigned NOT NULL,
   PRIMARY KEY (`id`,`owner_id`),
   UNIQUE KEY `code_UNIQUE` (`code`),
-  KEY `fk_features_users1_idx` (`owner_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=116 ;
+  KEY `fk_features_users1_idx` (`owner_id`),
+  KEY `position` (`position`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=151 ;
 
 --
 -- Дамп данных таблицы `e_features`
 --
 
-INSERT INTO `e_features` (`id`, `parent_id`, `type`, `code`, `multiple`, `on_filter`, `required`, `owner_id`, `created`, `status`) VALUES
-(84, 0, 'select', 'color', 0, 0, 0, 2, '2016-04-06 13:57:06', 'published'),
-(85, 0, 'select', 'display', 0, 0, 0, 2, '2016-04-06 13:57:29', 'published'),
-(86, 84, 'value', 'aba9acdf9cba0badd40268e929646147', NULL, NULL, 0, 2, '2016-04-06 13:57:42', 'published'),
-(88, 84, 'value', '6d6e0b0e6f01aa5a9140f8994df32b0c', NULL, NULL, 0, 2, '2016-04-06 13:57:56', 'published'),
-(89, 85, 'value', 'db91b14683e24e9a405a0403dcbbd891', NULL, NULL, 0, 2, '2016-04-06 13:58:01', 'published'),
-(90, 85, 'value', 'e651937988b34eb1539007f50ab7957d', NULL, NULL, 0, 2, '2016-04-06 13:58:04', 'published'),
-(91, 85, 'value', '2f65302d5f544bade318e467576bf23c', NULL, NULL, 0, 2, '2016-04-06 13:58:08', 'published'),
-(92, 0, 'select', 'weight', 1, 0, 0, 2, '2016-04-06 15:24:22', 'published'),
-(93, 92, 'value', '24c12d85bd040e9ecfc6eeceba608338', NULL, NULL, 0, 2, '2016-04-06 15:24:27', 'published'),
-(94, 92, 'value', '4424c73412c0e1f3db140971aabc015d', NULL, NULL, 0, 2, '2016-04-06 15:24:29', 'published'),
-(96, 0, 'select', 'typ_matryci_ekranu', 0, 1, 1, 2, '2016-04-19 09:32:18', 'published'),
-(97, 96, 'value', '6405961c29760c08c597761645b095d7', NULL, NULL, 0, 2, '2016-04-19 09:32:26', 'published'),
-(98, 0, 'select', 'kil_kist_sim_kart', 0, 0, 1, 2, '2016-04-19 09:32:44', 'published'),
-(99, 98, 'value', 'b1bb573d0c305ea448029fa7fa835bce', NULL, NULL, 0, 2, '2016-04-19 09:32:48', 'published'),
-(100, 98, 'value', '32aa00e042a633f35d334d56d1086597', NULL, NULL, 0, 2, '2016-04-19 09:32:50', 'published'),
-(101, 0, 'select', 'yemnist_akumulyatora', 0, 0, 1, 2, '2016-04-19 09:33:05', 'published'),
-(102, 101, 'value', 'da90b1092dc3da6713d7b47cc6fe942c', NULL, NULL, 0, 2, '2016-04-19 09:33:15', 'published'),
-(103, 0, 'select', 'kolir', 0, 0, 1, 2, '2016-04-19 09:33:25', 'published'),
-(104, 103, 'value', '42c654a782adae0219f46d13ffe111b6', NULL, NULL, 0, 2, '2016-04-19 09:33:31', 'published'),
-(105, 103, 'value', '93cd32447aa3e8a20a2cf4f09c06a532', NULL, NULL, 0, 2, '2016-04-19 09:33:37', 'published'),
-(106, 0, 'textarea', 'data', 0, 0, 1, 2, '2016-04-19 14:38:25', 'published'),
-(107, 0, NULL, 'feature_1466097020', NULL, NULL, 0, 2, '2016-06-16 17:10:20', 'blank'),
-(108, 0, 'text', 'aa', 0, 0, 0, 2, '2016-06-17 22:18:34', 'published'),
-(109, 0, 'text', 'aaaax', 0, 0, 0, 2, '2016-06-17 22:18:58', 'published'),
-(110, 0, 'textarea', 'vv', 0, 0, 0, 2, '2016-06-17 22:19:13', 'published'),
-(111, 0, 'select', 'z', 0, 0, 0, 2, '2016-06-17 22:19:21', 'published'),
-(112, 111, 'value', '65f7aafbee489c12472fb7f7d3539889', NULL, NULL, 0, 2, '2016-06-17 22:19:26', 'published'),
-(113, 111, 'value', 'ef93d71f6361bcce3873efafbf3f1de4', NULL, NULL, 0, 2, '2016-06-17 22:19:27', 'published'),
-(114, 111, 'value', '58cd25dfba0d9149d065230996e24ecc', NULL, NULL, 0, 2, '2016-06-17 22:19:31', 'published'),
-(115, 0, 'text', 'zzxx', 0, 0, 0, 2, '2016-06-17 22:20:12', 'published');
+INSERT INTO `e_features` (`id`, `parent_id`, `type`, `code`, `multiple`, `on_filter`, `required`, `owner_id`, `created`, `status`, `position`) VALUES
+(130, 0, 'text', 'feature_1467286045', 0, NULL, 0, 2, '2016-06-30 11:27:25', 'published', 0),
+(136, 130, 'value', 'f934824a7991aca9ae3ee2ab3b337c11', NULL, NULL, 0, 2, '2016-06-30 13:20:06', 'published', 0),
+(137, 130, 'value', '667fbe19b3dee74da02135dc54581193', NULL, NULL, 0, 2, '2016-06-30 13:20:09', 'published', 1),
+(138, 130, 'value', '084ec8fe4c1d26482baff1d4a50e6117', NULL, NULL, 0, 2, '2016-06-30 13:20:11', 'published', 2),
+(139, 130, 'value', '1abb56ce9d5159022510c875c3d0062c', NULL, NULL, 0, 2, '2016-06-30 13:20:13', 'published', 4),
+(140, 130, 'value', '3d74bee3e5bb6fee5ebeca7c3054dbaa', NULL, NULL, 0, 2, '2016-06-30 13:20:15', 'published', 3),
+(141, 130, 'value', '1578256c092e6fad80feeac7896aa9b0', NULL, NULL, 0, 2, '2016-06-30 13:20:18', 'published', 5),
+(142, 0, 'folder', 'feature_1467294383', 0, NULL, 0, 2, '2016-06-30 13:46:23', 'published', 0),
+(143, 0, 'text', 'feature_1467294501', 0, NULL, 0, 2, '2016-06-30 13:48:21', 'published', 0),
+(146, 142, 'text', 'feature_1467294715', 0, NULL, 0, 2, '2016-06-30 13:51:55', 'published', 0),
+(147, 142, 'select', 'feature_1467294725', 0, NULL, 0, 2, '2016-06-30 13:52:05', 'published', 0),
+(148, 147, 'value', 'a0acf86e13d85f7d4e66f9c6a3c31e94', NULL, NULL, 0, 2, '2016-06-30 13:52:25', 'published', 0),
+(149, 147, 'value', '1147f44e853b5a096cad368a7ea4c117', NULL, NULL, 0, 2, '2016-06-30 13:52:27', 'published', 0),
+(150, 147, 'value', '370b6d59588b8b92b60a9d50059c03ad', NULL, NULL, 0, 2, '2016-06-30 13:52:30', 'published', 0);
 
 -- --------------------------------------------------------
 
@@ -819,31 +786,16 @@ CREATE TABLE IF NOT EXISTS `e_features_content` (
   PRIMARY KEY (`id`,`features_id`,`content_types_id`,`content_subtypes_id`,`content_id`),
   UNIQUE KEY `features_id` (`features_id`,`content_types_id`,`content_subtypes_id`,`content_id`),
   KEY `fk_content_features_idx` (`features_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=61 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=70 ;
 
 --
 -- Дамп данных таблицы `e_features_content`
 --
 
 INSERT INTO `e_features_content` (`id`, `features_id`, `content_types_id`, `content_subtypes_id`, `content_id`, `position`) VALUES
-(43, 84, 11, 11, 41, NULL),
-(44, 85, 11, 11, 41, NULL),
-(45, 92, 11, 11, 41, NULL),
-(46, 96, 11, 11, 44, NULL),
-(47, 98, 11, 11, 44, NULL),
-(48, 101, 11, 11, 44, NULL),
-(49, 103, 11, 11, 44, NULL),
-(50, 106, 1, 1, 0, NULL),
-(51, 85, 12, 0, 0, 1),
-(52, 98, 12, 0, 0, 2),
-(53, 103, 12, 0, 0, 3),
-(54, 84, 1, 4, 0, 1),
-(55, 108, 1, 1, 0, NULL),
-(56, 109, 1, 1, 0, NULL),
-(57, 110, 1, 1, 0, NULL),
-(58, 111, 1, 1, 0, NULL),
-(59, 115, 1, 1, 0, NULL),
-(60, 106, 1, 7, 0, 1);
+(66, 130, 3, 0, 0, NULL),
+(67, 130, 10, 0, 0, NULL),
+(69, 130, 1, 8, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -859,42 +811,27 @@ CREATE TABLE IF NOT EXISTS `e_features_info` (
   PRIMARY KEY (`id`,`features_id`,`languages_id`),
   KEY `fk_features_info_features1_idx` (`features_id`),
   KEY `fk_features_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=110 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=134 ;
 
 --
 -- Дамп данных таблицы `e_features_info`
 --
 
 INSERT INTO `e_features_info` (`id`, `features_id`, `languages_id`, `name`) VALUES
-(79, 84, 1, 'Color1'),
-(80, 85, 1, 'Display'),
-(81, 86, 1, 'black'),
-(83, 88, 1, 'white'),
-(84, 89, 1, '14'),
-(85, 90, 1, '15'),
-(86, 91, 1, '16'),
-(87, 92, 1, 'Weight'),
-(88, 93, 1, '1'),
-(89, 94, 1, '3'),
-(91, 96, 1, 'Тип матриці екрану'),
-(92, 97, 1, 'IPS'),
-(93, 98, 1, 'Кількість SIM-карт'),
-(94, 99, 1, '1'),
-(95, 100, 1, '2'),
-(96, 101, 1, 'Ємність акумулятора'),
-(97, 102, 1, '1000 мАг'),
-(98, 103, 1, 'Колір'),
-(99, 104, 1, 'Red'),
-(100, 105, 1, 'Black'),
-(101, 106, 1, 'Дата '),
-(102, 108, 1, 'aa'),
-(103, 109, 1, 'aaaax'),
-(104, 110, 1, 'vv'),
-(105, 111, 1, 'z'),
-(106, 112, 1, '1'),
-(107, 113, 1, '1'),
-(108, 114, 1, '1'),
-(109, 115, 1, 'zzxx');
+(115, 130, 1, 'иииии'),
+(121, 136, 1, 'a'),
+(122, 137, 1, 'b'),
+(123, 138, 1, 'c'),
+(124, 139, 1, 'd'),
+(125, 140, 1, 'e'),
+(126, 141, 1, 'r'),
+(127, 142, 1, 'folder'),
+(128, 143, 1, 'fd'),
+(129, 146, 1, 'asasas'),
+(130, 147, 1, 'asasas'),
+(131, 148, 1, 'asas'),
+(132, 149, 1, 'a'),
+(133, 150, 1, 'a');
 
 -- --------------------------------------------------------
 
@@ -1201,7 +1138,7 @@ CREATE TABLE IF NOT EXISTS `e_payment` (
 --
 
 INSERT INTO `e_payment` (`id`, `published`, `module`, `settings`, `position`) VALUES
-(1, 1, 'YandexMoney', 'a:2:{s:9:"yandex_id";s:1:"1";s:13:"yandex_secret";s:1:"2";}', 0),
+(1, 1, '', 'a:2:{s:9:"yandex_id";s:1:"1";s:13:"yandex_secret";s:1:"2";}', 0),
 (2, 1, '', NULL, 0),
 (3, 1, 'LiqPay', 'a:5:{s:10:"public_key";s:1:"1";s:11:"private_key";s:1:"2";s:10:"result_url";s:1:"3";s:9:"error_url";s:1:"4";s:7:"sandbox";s:1:"5";}', 0),
 (4, 1, 'YandexMoney', 'a:2:{s:9:"yandex_id";s:1:"1";s:13:"yandex_secret";s:1:"2";}', 0),
@@ -1412,13 +1349,6 @@ CREATE TABLE IF NOT EXISTS `e_products_similar` (
   KEY `fk_products_similar_features1_idx` (`features_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
---
--- Дамп данных таблицы `e_products_similar`
---
-
-INSERT INTO `e_products_similar` (`id`, `products_id`, `features_id`) VALUES
-(2, 41, 92);
-
 -- --------------------------------------------------------
 
 --
@@ -1461,15 +1391,6 @@ CREATE TABLE IF NOT EXISTS `e_products_variants_features` (
   KEY `fk_products_variants_features_products_variants1_idx` (`variants_id`),
   KEY `fk_products_variants_features_features2_idx` (`values_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=33 ;
-
---
--- Дамп данных таблицы `e_products_variants_features`
---
-
-INSERT INTO `e_products_variants_features` (`id`, `variants_id`, `features_id`, `values_id`) VALUES
-(32, 27, 84, 86),
-(27, 22, 103, 104),
-(28, 23, 103, 105);
 
 -- --------------------------------------------------------
 
@@ -1619,7 +1540,7 @@ CREATE TABLE IF NOT EXISTS `e_users` (
 --
 
 INSERT INTO `e_users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `updated`, `lastlogin`, `status`) VALUES
-(2, 1, 0, 'tvb4qeg4o36k991vsqpev1hi87', 'Володимир', 'Годяк', '+38 (067) 6736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-04-21 11:24:28', '2016-06-29 10:23:47', 'active'),
+(2, 1, 0, 'v6vh2t1lnfn97ko9ss3mofj1b0', 'Володимир', 'Годяк', '+38 (067) 6736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-04-21 11:24:28', '2016-06-30 12:48:23', 'active'),
 (19, 1, 0, NULL, 'Жорік', 'Васильович', '+77 (777) 7777777', 'otakoyi1@gmail.com', 'MTYFiZEAZZjt.', NULL, NULL, '2016-06-18 10:25:22', '0000-00-00 00:00:00', NULL, 'ban'),
 (21, 20, 0, NULL, 'Жорік', 'Абрамович', '+99 (999) 9999999', 'sz@otakoyi.com', 'OT55OBip4.nJU', NULL, NULL, '2016-06-28 06:21:16', '0000-00-00 00:00:00', NULL, 'active');
 

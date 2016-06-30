@@ -1,9 +1,9 @@
-<form action="features/processValue" method="post" id="formFeaturesValue" class="form-horizontal">
+<form action="features/values/process" method="post" id="formFeaturesValue" class="form-horizontal">
     {foreach $languages as $lang}
         <div class="form-group">
             <label for="name_{$lang.id}" class="col-sm-3 control-label">{$t.features.name} ({$lang.code})</label>
             <div class="col-sm-9">
-                <input name="info[{$lang.id}][name]"  placeholder="{$lang.name}" required id="info_{$lang.id}"  class="form-control info-name" value="{$data.info[$lang.id].name}">
+                <input name="info[{$lang.id}][name]"  placeholder="{$lang.name}" required id="info_{$lang.id}"  class="form-control info-name" value="{if isset($data.info[$lang.id].name)}{$data.info[$lang.id].name}{/if}">
             </div>
         </div>
     {/foreach}

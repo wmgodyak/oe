@@ -1,11 +1,4 @@
 <form action="features/process/{$data.id}" method="post" id="form" class="form-horizontal" >
-    {if isset($plugins.top)}
-        <div class="row">
-            <div class="col-md-12">
-                {implode("\r\n", $plugins.top)}
-            </div>
-        </div>
-    {/if}
     <div class="row">
         <div class="col-md-8">
             <fieldset>
@@ -35,7 +28,6 @@
                         </select>
                     </div>
                 </div>
-                {if isset($plugins.main)}{implode("\r\n", $plugins.main)}{/if}
             </fieldset>
         </div>
         <div class="col-md-4">
@@ -64,16 +56,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group fg-show-filter" style="display: none">
-                    <div class="col-md-9 col-md-offset-3">
-                        <div class="checkbox">
-                            <label>
-                                <input type="hidden" name="data[on_filter]" value="0">
-                                <input {if $data.on_filter == 1}checked{/if} type="checkbox" name="data[on_filter]" id="data_on_filter" value="1"> {$t.features.on_filter}
-                            </label>
-                        </div>
-                    </div>
-                </div>
                 <div class="form-group fg-multiple" style="display: none">
                     <div class="col-md-9 col-md-offset-3">
                         <div class="checkbox">
@@ -84,27 +66,22 @@
                         </div>
                     </div>
                 </div>
-
-                {if isset($plugins.params)}{implode("\r\n", $plugins.params)}{/if}
             </fieldset>
-
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
             <fieldset>
-                <legend>{$t.features.show_on} <a href="javascript:;" data-id="{$data.id}" class="b-features-select-ct"><i class="fa fa-list"></i></a></legend>
+                <legend style="text-align: left">{$t.features.show_on} <a href="javascript:;" data-id="{$data.id}" class="b-features-select-ct"><i class="fa fa-list"></i></a></legend>
                 <div id="content_types"></div>
             </fieldset>
         </div>
     </div>
-    {if isset($plugins.bottom)}
-        <div class="row">
-            <div class="col-md-12">
-                {implode("\r\n", $plugins.bottom)}
-            </div>
-        </div>
-    {/if}
     <input type="hidden" name="token" value="{$token}">
     <input type="hidden" name="data[parent_id]" value="{$data.parent_id}">
 </form>
-<script>var selected_content = {json_encode($data.selected_content)}</script>
+
+<script>{if isset($selected_content)}var selected_content = {json_encode($selected_content)}{/if}</script>
 
 {literal}
     <script type="text/template" id="ctList" >
