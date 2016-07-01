@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Июн 30 2016 г., 18:21
+-- Время создания: Июл 01 2016 г., 17:57
 -- Версия сервера: 5.6.30-0ubuntu0.14.04.1-log
 -- Версия PHP: 5.5.9-1ubuntu4.17
 
@@ -361,7 +361,7 @@ CREATE TABLE IF NOT EXISTS `e_content_features` (
   UNIQUE KEY `content_id` (`content_id`,`features_id`,`values_id`,`languages_id`),
   KEY `fk_content_features_values_content1_idx` (`content_id`),
   KEY `fk_content_features_values_features1_idx` (`features_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=33 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -717,7 +717,7 @@ CREATE TABLE IF NOT EXISTS `e_delivery_payment` (
   UNIQUE KEY `delivery_id` (`delivery_id`,`payment_id`),
   KEY `fk_delivery_payment_delivery1_idx` (`delivery_id`),
   KEY `fk_delivery_payment_payment1_idx` (`payment_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=19 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18 ;
 
 --
 -- Дамп данных таблицы `e_delivery_payment`
@@ -748,27 +748,24 @@ CREATE TABLE IF NOT EXISTS `e_features` (
   UNIQUE KEY `code_UNIQUE` (`code`),
   KEY `fk_features_users1_idx` (`owner_id`),
   KEY `position` (`position`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=151 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=165 ;
 
 --
 -- Дамп данных таблицы `e_features`
 --
 
 INSERT INTO `e_features` (`id`, `parent_id`, `type`, `code`, `multiple`, `on_filter`, `required`, `owner_id`, `created`, `status`, `position`) VALUES
-(130, 0, 'text', 'feature_1467286045', 0, NULL, 0, 2, '2016-06-30 11:27:25', 'published', 0),
-(136, 130, 'value', 'f934824a7991aca9ae3ee2ab3b337c11', NULL, NULL, 0, 2, '2016-06-30 13:20:06', 'published', 0),
-(137, 130, 'value', '667fbe19b3dee74da02135dc54581193', NULL, NULL, 0, 2, '2016-06-30 13:20:09', 'published', 1),
-(138, 130, 'value', '084ec8fe4c1d26482baff1d4a50e6117', NULL, NULL, 0, 2, '2016-06-30 13:20:11', 'published', 2),
-(139, 130, 'value', '1abb56ce9d5159022510c875c3d0062c', NULL, NULL, 0, 2, '2016-06-30 13:20:13', 'published', 4),
-(140, 130, 'value', '3d74bee3e5bb6fee5ebeca7c3054dbaa', NULL, NULL, 0, 2, '2016-06-30 13:20:15', 'published', 3),
-(141, 130, 'value', '1578256c092e6fad80feeac7896aa9b0', NULL, NULL, 0, 2, '2016-06-30 13:20:18', 'published', 5),
-(142, 0, 'folder', 'feature_1467294383', 0, NULL, 0, 2, '2016-06-30 13:46:23', 'published', 0),
-(143, 0, 'text', 'feature_1467294501', 0, NULL, 0, 2, '2016-06-30 13:48:21', 'published', 0),
-(146, 142, 'text', 'feature_1467294715', 0, NULL, 0, 2, '2016-06-30 13:51:55', 'published', 0),
-(147, 142, 'select', 'feature_1467294725', 0, NULL, 0, 2, '2016-06-30 13:52:05', 'published', 0),
-(148, 147, 'value', 'a0acf86e13d85f7d4e66f9c6a3c31e94', NULL, NULL, 0, 2, '2016-06-30 13:52:25', 'published', 0),
-(149, 147, 'value', '1147f44e853b5a096cad368a7ea4c117', NULL, NULL, 0, 2, '2016-06-30 13:52:27', 'published', 0),
-(150, 147, 'value', '370b6d59588b8b92b60a9d50059c03ad', NULL, NULL, 0, 2, '2016-06-30 13:52:30', 'published', 0);
+(151, 0, 'select', 'feature_1467373010', 0, NULL, 0, 2, '2016-07-01 11:36:50', 'published', 0),
+(152, 0, 'select', 'feature_1467374072', 0, NULL, 0, 2, '2016-07-01 11:54:32', 'published', 0),
+(153, 0, 'select', 'feature_1467374080', 0, NULL, 0, 2, '2016-07-01 11:54:40', 'published', 0),
+(154, 0, 'text', 'feature_1467374090', 0, NULL, 0, 2, '2016-07-01 11:54:50', 'published', 0),
+(155, 0, 'select', 'feature_1467374098', 0, NULL, 0, 2, '2016-07-01 11:54:58', 'published', 0),
+(156, 0, 'select', 'feature_1467374136', 0, NULL, 0, 2, '2016-07-01 11:55:36', 'published', 0),
+(157, 0, 'select', 'balans_bilogo', 0, 0, 0, 2, '2016-07-01 14:13:57', 'published', 0),
+(158, 0, 'select', 'serijna_zjomka_kadriv_sek', 0, 0, 0, 2, '2016-07-01 14:16:00', 'published', 0),
+(159, 0, 'select', 'maks_rozmir_kadru_kadriv_sek', 0, 0, 0, 2, '2016-07-01 14:16:12', 'published', 0),
+(160, 0, 'select', 'lcd_ekran', 0, 1, 1, 2, '2016-07-01 14:20:55', 'published', 0),
+(161, 0, 'select', 'sf', 0, 0, 0, 2, '2016-07-01 14:39:19', 'published', 0);
 
 -- --------------------------------------------------------
 
@@ -786,16 +783,18 @@ CREATE TABLE IF NOT EXISTS `e_features_content` (
   PRIMARY KEY (`id`,`features_id`,`content_types_id`,`content_subtypes_id`,`content_id`),
   UNIQUE KEY `features_id` (`features_id`,`content_types_id`,`content_subtypes_id`,`content_id`),
   KEY `fk_content_features_idx` (`features_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=70 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=90 ;
 
 --
 -- Дамп данных таблицы `e_features_content`
 --
 
 INSERT INTO `e_features_content` (`id`, `features_id`, `content_types_id`, `content_subtypes_id`, `content_id`, `position`) VALUES
-(66, 130, 3, 0, 0, NULL),
-(67, 130, 10, 0, 0, NULL),
-(69, 130, 1, 8, 0, NULL);
+(81, 157, 11, 11, 41, 1),
+(82, 159, 11, 11, 41, 2),
+(83, 152, 11, 11, 41, 3),
+(84, 153, 11, 11, 41, 4),
+(85, 160, 11, 11, 41, 0);
 
 -- --------------------------------------------------------
 
@@ -811,27 +810,24 @@ CREATE TABLE IF NOT EXISTS `e_features_info` (
   PRIMARY KEY (`id`,`features_id`,`languages_id`),
   KEY `fk_features_info_features1_idx` (`features_id`),
   KEY `fk_features_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=134 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=148 ;
 
 --
 -- Дамп данных таблицы `e_features_info`
 --
 
 INSERT INTO `e_features_info` (`id`, `features_id`, `languages_id`, `name`) VALUES
-(115, 130, 1, 'иииии'),
-(121, 136, 1, 'a'),
-(122, 137, 1, 'b'),
-(123, 138, 1, 'c'),
-(124, 139, 1, 'd'),
-(125, 140, 1, 'e'),
-(126, 141, 1, 'r'),
-(127, 142, 1, 'folder'),
-(128, 143, 1, 'fd'),
-(129, 146, 1, 'asasas'),
-(130, 147, 1, 'asasas'),
-(131, 148, 1, 'asas'),
-(132, 149, 1, 'a'),
-(133, 150, 1, 'a');
+(134, 151, 1, 'Кількість мегапікселів'),
+(135, 152, 1, 'Максимальний розмір кадру'),
+(136, 153, 1, 'Фокусна відстань, 35-мм еквівалент '),
+(137, 154, 1, 'Оптичний зум'),
+(138, 155, 1, 'Чутливість ISO   авто'),
+(139, 156, 1, 'Діапазон витримок, сек '),
+(140, 157, 1, 'Баланс білого'),
+(141, 158, 1, 'Серійна зйомка, кадрів/сек'),
+(142, 159, 1, 'Макс. розмір кадру; кадрів/сек'),
+(143, 160, 1, 'LCD-екран'),
+(144, 161, 1, 'sf');
 
 -- --------------------------------------------------------
 
@@ -1347,7 +1343,7 @@ CREATE TABLE IF NOT EXISTS `e_products_similar` (
   PRIMARY KEY (`id`,`products_id`,`features_id`),
   KEY `fk_products_similar_content1_idx` (`products_id`),
   KEY `fk_products_similar_features1_idx` (`features_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1390,7 +1386,7 @@ CREATE TABLE IF NOT EXISTS `e_products_variants_features` (
   KEY `fk_products_variants_features_features1_idx` (`features_id`),
   KEY `fk_products_variants_features_products_variants1_idx` (`variants_id`),
   KEY `fk_products_variants_features_features2_idx` (`values_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=33 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -1540,7 +1536,7 @@ CREATE TABLE IF NOT EXISTS `e_users` (
 --
 
 INSERT INTO `e_users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `updated`, `lastlogin`, `status`) VALUES
-(2, 1, 0, 'v6vh2t1lnfn97ko9ss3mofj1b0', 'Володимир', 'Годяк', '+38 (067) 6736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-04-21 11:24:28', '2016-06-30 12:48:23', 'active'),
+(2, 1, 0, 'kc7uphjmss68v9al9aels3pf42', 'Володимир', 'Годяк', '+38 (067) 6736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-04-21 11:24:28', '2016-07-01 11:06:19', 'active'),
 (19, 1, 0, NULL, 'Жорік', 'Васильович', '+77 (777) 7777777', 'otakoyi1@gmail.com', 'MTYFiZEAZZjt.', NULL, NULL, '2016-06-18 10:25:22', '0000-00-00 00:00:00', NULL, 'ban'),
 (21, 20, 0, NULL, 'Жорік', 'Абрамович', '+99 (999) 9999999', 'sz@otakoyi.com', 'OT55OBip4.nJU', NULL, NULL, '2016-06-28 06:21:16', '0000-00-00 00:00:00', NULL, 'active');
 

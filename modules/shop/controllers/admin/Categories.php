@@ -13,6 +13,7 @@ use helpers\bootstrap\Icon;
 use helpers\bootstrap\Link;
 use system\core\DataTables2;
 use system\components\content\controllers\Content;
+use system\core\EventsHandler;
 use system\models\ContentRelationship;
 
 /**
@@ -32,6 +33,10 @@ class Categories extends Content
 
         $this->content_relationship = new ContentRelationship();
         $this->categories = new \modules\shop\models\Categories('products_categories');
+
+        // disable default features block
+        $this->form_display_blocks['features'] = false;
+
     }
 
     public function index($parent_id=0)
@@ -185,6 +190,9 @@ class Categories extends Content
 
         $this->template->assign('sidebar', $this->template->fetch('shop/categories/tree'));
 
+        $cf = new categories\Features();
+        EventsHandler::getInstance()->add('content.params.after', [$cf, 'index']);
+
         parent::edit($id);
     }
 
@@ -271,5 +279,21 @@ class Categories extends Content
         }
 
         return 1;
+    }
+
+    public function features()
+    {
+        include "categories/Features.php";
+
+        $params = func_get_args();
+
+        $action = 'index';
+        if(!empty($params)){
+            $action = array_shift($params);
+        }
+
+        $controller  = new categories\Features();
+
+        return call_user_func_array(array($controller, $action), $params);
     }
 }

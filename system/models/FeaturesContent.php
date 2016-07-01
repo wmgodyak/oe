@@ -89,4 +89,10 @@ class FeaturesContent extends Model
         return $res;
     }
 
+    public function reorder($el)
+    {
+        foreach ($el as $position => $id) {
+            $this->updateRow('__features_content', $id, ['position' => $position]);
+        }
+    }
 }

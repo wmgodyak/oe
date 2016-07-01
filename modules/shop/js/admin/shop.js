@@ -107,6 +107,7 @@ engine.shop = {
             })
             .init();
 
+        engine.shop.categories.features.init();
     },
     categories: {
         before: function()
@@ -210,26 +211,177 @@ engine.shop = {
                 $this.before();
 
             });
+        },
+        // engine.shop.categories.features
+        features : {
+            init: function()
+            {
+                var $features = this;
+
+                /*$(document).on('click', '.b-shop-categories-features-add', function(){
+                    var parent_id = $(this).data('parent');
+                    var content_id = $('#shopCategoriesFeatures').data('id');
+                    $features.create(content_id, parent_id);
+                });
+                */
+                $(document).on('click', '.b-shop-categories-features-select', function(){
+                    var parent_id = $(this).data('parent');
+                    var content_id = $('#shopCategoriesFeatures').data('id');
+                    $features.select(content_id, parent_id);
+                });
+
+                $(document).on('click', '.scf-remove', function(){
+                    var id = $(this).data('id');
+                    $features.delete(id);
+                });
+
+                $(document).on('click', '.scf-drop', function(){
+                    var id = $(this).data('id');
+                    var fc_id = $(this).data('fcid');
+                    $features.drop(id, fc_id);
+                });
+
+                $features.initSorting();
+            },
+            initSorting: function(){
+                $('#categories_features')
+                    .nestable()
+                    .on('change', function(e)
+                    {
+                        var list   = e.length ? e : $(e.target),
+                            output = list.data('output');
+                            var a = list.nestable('serialize'),
+                            sData = [];
+
+
+                        $(a).each(function(i, o){
+                           sData.push(o.id);
+                        });
+
+                        engine.request.post({
+                            url: 'module/run/shop/categories/features/reorder',
+                            data: {o: sData},
+                            success: function(){
+                                engine.notify('Відсортовано!', 'success');
+                            }
+                        });
+                    });
+
+            },
+            select: function(content_id, parent_id){
+                engine.request.get('module/run/shop/categories/features/select/'+ content_id, function(d){
+                    var pw = engine.dialog({
+                        content: d,
+                        title: 'Вибір властивості',
+                        autoOpen: true,
+                        width: 750,
+                        modal: true,
+                        buttons: {
+                            "Створити нову": function(){
+                                pw.dialog('close').remove();
+                                engine.shop.categories.features.create(content_id, parent_id);
+                            },
+                            "Зберегти": function(){
+                                $('#formContentFeatures').submit();
+                            }
+                        }
+                    });
+                    engine.validateAjaxForm('#formContentFeatures', function(res){
+                        if(res.s > 0){
+                            pw.dialog('close').remove();
+                            engine.shop.categories.features.getSelected(content_id);
+                        }
+                    });
+
+                    $('.cf-features-select').select2();
+                });
+            },
+            getSelected: function(content_id)
+            {
+                engine.request.get('module/run/shop/categories/features/getSelected/'+ content_id, function(d){
+                    $("#content_features_0").html(d);
+                    engine.shop.categories.features.initSorting();
+                });
+            },
+            create: function(content_id, parent_id)
+            {
+                engine.request.post({
+                    url: 'module/run/shop/categories/features/create',
+                    data: {
+                        content_id     : content_id,
+                        parent_id      : parent_id
+                    },
+                    success: function(res){
+                        var pw = engine.dialog({
+                            content: res,
+                            title: 'Створення властивості',
+                            autoOpen: true,
+                            width: 750,
+                            modal: true,
+                            buttons: {
+                                "Зберегти": function(){
+                                    $('#formContentFeatures').submit();
+                                }
+                            }
+                        });
+                        engine.validateAjaxForm('#formContentFeatures', function(res){
+                            if(res.s > 0){
+                                pw.dialog('close').remove();
+                                engine.shop.categories.features.getSelected(content_id);
+                            }
+                        });
+
+                        $('.cf-feature-select').select2();
+
+                        $('#data_folder')
+                            .change(function(){
+                                if($(this).is(':checked')){
+                                    $('.fg-show-filter, .fg-multiple, .fg-required').removeAttr('checked').hide();
+                                } else{
+                                    $('.fg-show-filter, .fg-multiple, .fg-required').show();
+                                }
+                            });
+
+                        var inp = $('.f-info-name:first'), lang = inp.data('lang'), code = $('#f_data_code');
+                        var ce = code.val() == '';
+                        inp.keyup(function(){
+                            var text = this.value;
+                            if(ce) {
+                                text = engine.content.translit(text, lang);
+                                text = text.replace(/-/g, '_');
+                                code.val(text);
+                            }
+                        });
+                    }
+                });
+            },
+            delete: function(id)
+            {
+                engine.confirm
+                (
+                    'Видалити звязок властивості з цією категорією?',
+                    function()
+                    {
+                        engine.request.get('module/run/shop/categories/features/delete/'+id, function(res){
+                            $('#scf-'+id).remove();
+                            engine.closeDialog();
+                        });
+                    });
+            },
+            drop: function(id, fc_id)
+            {
+                engine.confirm
+                (
+                    'Видалити властивість назавжди?',
+                    function()
+                    {
+                        engine.request.get('module/run/shop/categories/features/drop/'+id, function(res){
+                            $('#scf-'+fc_id).remove();
+                            engine.closeDialog();
+                        });
+                    });
+            }
         }
-    },
-    tags : function()
-    {
-        //var tags =$(".tags-input"), id=tags.data('category'), lang_id = tags.data('lang');
-//        tags.on('itemRemoved', function(event) {
-////            console.log('item removed : '+event.item, id);
-//            $.ajax({
-//                type: "product",
-//                url:'plugins/tags/remove',
-//                data: {
-//                    name: event.item,
-//                    id: id,
-//                    lang_id: lang_id
-//                },
-//                dataType: 'html'
-//            });
-//
-//            return true;
-//        });
     }
 };
 

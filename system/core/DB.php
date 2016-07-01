@@ -150,6 +150,7 @@ class DB extends \PDO {
 
         } catch(\PDOException $e){
             if($this->conf['debug']){
+                http_response_code(500);
                 throw new Exception("$sql <br>" . $e->getMessage());
             }
             self::$errorMessage = "<pre>$sql" . $e->getMessage() .'</pre>';
@@ -225,6 +226,7 @@ class DB extends \PDO {
             $result = $this->lastInsertId();
         } catch(\PDOException $e){
             if($this->conf['debug']){
+                http_response_code(500);
 //                throw new Exception("$sql <br>" . $e->getMessage());
                 die($e->getMessage());
             }
@@ -273,6 +275,7 @@ class DB extends \PDO {
             $result = true;
         }catch(\PDOException $e){
             if($this->conf['debug']){
+                http_response_code(500);
                 throw new Exception("$sql <br>" . $e->getMessage());
             }
 
@@ -308,6 +311,7 @@ class DB extends \PDO {
             $result = true;
         }catch(\PDOException $e){
             if($this->conf['debug']){
+                http_response_code(500);
                 throw new Exception("$sql <br>" . $e->getMessage());
             }
             self::$errorMessage = $e->getMessage() . $this->interpolateQuery($sql);
