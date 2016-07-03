@@ -1256,13 +1256,15 @@ engine.content = {
 
             $('.cf-feature-select').select2();
 
-            $(document).on('change', '#main_categories_id', function(){
+            /*$(document).on('change', '#main_categories_id', function(){
                 var id= this.value;
                 engine.content.features.get(id);
             });
+
             if($('html').data('action') == 'create'){
                 $("#main_categories_id").trigger('change');
             }
+            */
         },
         get: function(categories_id)
         {

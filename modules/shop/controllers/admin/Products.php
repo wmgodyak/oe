@@ -7,9 +7,9 @@
  */
 
 namespace modules\shop\controllers\admin;
-use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
 use helpers\bootstrap\Link;
+use modules\shop\controllers\admin\products\Features;
 use modules\shop\models\Categories;
 use system\components\content\controllers\Content;
 use system\core\DataTables2;
@@ -27,6 +27,7 @@ class Products extends Content
     private $contentTypes;
     private $allowed_types = ['product'];
 
+
     public function __construct()
     {
         parent::__construct('product');
@@ -37,6 +38,7 @@ class Products extends Content
         $this->form_display_params['parent']   = false;
         $this->form_display_params['owner']    = false;
         $this->form_display_params['pub_date'] = false;
+        $this->form_display_blocks['features'] = false;
 
         $this->relations = new ContentRelationship();
         $this->categories = new Categories('products_categories');
@@ -45,7 +47,6 @@ class Products extends Content
 
         EventsHandler::getInstance()->add('content.main', [$this, 'contentParams']);
         EventsHandler::getInstance()->add('content.process', [$this, 'contentProcess']);
-
 
         $prices = new Prices();
         EventsHandler::getInstance()->add('content.main.after', [$prices, 'index']);
@@ -171,6 +172,9 @@ class Products extends Content
         )
         );
 
+        $features = new Features();
+        EventsHandler::getInstance()->add('content.main.after', [$features, 'index']);
+
         $this->template->assign('sidebar', $this->template->fetch('shop/categories/tree'));
 
         parent::edit($id);
@@ -199,5 +203,23 @@ class Products extends Content
     {
         $this->relations->saveContentCategories($id);
         $this->relations->saveMainCategory($id);
+
+        return $this->features('contentProcess', $id);
+    }
+
+
+    public function features($action = 'index')
+    {
+        include "products/Features.php";
+
+        $params = func_get_args();
+
+        if(!empty($params)){
+            $action = array_shift($params);
+        }
+
+        $controller  = new products\Features();
+
+        return call_user_func_array(array($controller, $action), $params);
     }
 }

@@ -95,4 +95,27 @@ class FeaturesContent extends Model
             $this->updateRow('__features_content', $id, ['position' => $position]);
         }
     }
+
+
+    public function getContentData($content_id)
+    {
+        return self::$db->select("select * from __content where id={$content_id} limit 1")->row();
+    }
+
+    public function getSelectedFeatures($content_id)
+    {
+        return self::$db->select("select features_id from __features_content where content_id={$content_id}")->all('features_id');
+    }
+
+    /**
+     * @param $content_id
+     * @param $features
+     * @return int
+     * @throws \system\core\exceptions\Exception
+     */
+    public function deleteSelectedFeatures($content_id, $features)
+    {
+        $in = implode(',', $features);
+        return self::$db->delete('__features_content', " content_id={$content_id} and features_id in ({$in})");
+    }
 }

@@ -108,6 +108,7 @@ engine.shop = {
             .init();
 
         engine.shop.categories.features.init();
+        engine.shop.products.features.init();
     },
     categories: {
         before: function()
@@ -380,6 +381,179 @@ engine.shop = {
                             engine.closeDialog();
                         });
                     });
+            }
+        }
+    },
+    products:{
+        // engine.shop.products.features
+        features : {
+            init: function()
+            {
+                var $features = this, products_id = $("#productsFeatures").data('id')
+                $(document).on('change', '#main_categories_id', function(){
+                    var id= this.value;
+                    engine.shop.products.features.get(products_id, id);
+                });
+
+                $(document).on('click', '.spf-values-add', function(){
+                    var features_id = $(this).data('id');
+                    $features.values.add(features_id, products_id);
+                });
+
+                $(document).on('click', '.b-spf-select', function(){
+                    var parent_id = $(this).data('parent'), categories_id = $('#main_categories_id').find('option:selected').val();
+                    $features.select(categories_id, products_id, parent_id);
+                });
+
+/** ************************/
+                /*$(document).on('click', '.b-shop-categories-features-add', function(){
+                 var parent_id = $(this).data('parent');
+                 var content_id = $('#shopCategoriesFeatures').data('id');
+                 $features.create(content_id, parent_id);
+                 });
+                 */
+
+                $(document).on('click', '.scf-remove', function(){
+                    var id = $(this).data('id');
+                    $features.delete(id);
+                });
+
+                $(document).on('click', '.scf-drop', function(){
+                    var id = $(this).data('id');
+                    var fc_id = $(this).data('fcid');
+                    $features.drop(id, fc_id);
+                });
+
+                $features.initSorting();
+            },
+            get: function(products_id, categories_id){
+                engine.request.post({
+                    url: 'module/run/shop/products/features/index/',
+                    data:{categories_id : categories_id, products_id: products_id},
+                    success: function(d)
+                    {
+                        $('#content_features_0').html(d);
+                    }
+                });
+            },
+            values: {
+                add: function(features_id, products_id)
+                {
+                    engine.request.get('module/run/shop/products/features/addValue/'+ features_id + '/'+ products_id, function(d){
+                        var pw = engine.dialog({
+                            content: d,
+                            title: 'Додати значення',
+                            autoOpen: true,
+                            width: 750,
+                            modal: true,
+                            buttons: {
+                                "Зберегти": function(){
+                                    $('#formProductsFeaturesValues').submit();
+                                }
+                            }
+                        });
+                        engine.validateAjaxForm('#formProductsFeaturesValues', function(res){
+                            if(res.s > 0){
+                                pw.dialog('close').remove();
+                                if(res.v){
+                                    var opt = '';
+                                    $(res.v).each(function(i, e){
+                                        opt += "<option selected value='"+ e.id +"'>"+ e.name +"</option>";
+                                    });
+
+                                    $('#products_features_' + features_id).html(opt).select2();
+                                }
+                            }
+                        });
+                    });
+                }
+            },
+            /** ***************************************************/
+            select: function(categories_id,products_id, parent_id){
+                engine.request.get('module/run/shop/products/features/select/'+ categories_id, function(d){
+                    var pw = engine.dialog({
+                        content: d,
+                        title: 'Вибір властивості',
+                        autoOpen: true,
+                        width: 750,
+                        modal: true,
+                        buttons: {
+                            "Створити нову": function(){
+                                pw.dialog('close').remove();
+                                engine.shop.products.features.create(categories_id, products_id, parent_id);
+                            },
+                            "Зберегти": function(){
+                                $('#formContentFeatures').submit();
+                            }
+                        }
+                    });
+                    engine.validateAjaxForm('#formContentFeatures', function(res){
+                        if(res.s > 0){
+                            pw.dialog('close').remove();
+                            engine.shop.products.features.getSelected(categories_id, products_id);
+                        }
+                    });
+
+                    $('.cf-features-select').select2();
+                });
+            },
+            getSelected: function(categories_id, products_id)
+            {
+                engine.request.get('module/run/shop/products/features/getSelected/'+ categories_id + '/' + products_id, function(d){
+                    $("#content_features_0").html(d);
+                });
+            },
+            create: function(categories_id, products_id, parent_id)
+            {
+                engine.request.post({
+                    url: 'module/run/shop/categories/features/create',
+                    data: {
+                        content_id     : categories_id,
+                        parent_id      : parent_id
+                    },
+                    success: function(res){
+                        var pw = engine.dialog({
+                            content: res,
+                            title: 'Створення властивості',
+                            autoOpen: true,
+                            width: 750,
+                            modal: true,
+                            buttons: {
+                                "Зберегти": function(){
+                                    $('#formContentFeatures').submit();
+                                }
+                            }
+                        });
+                        engine.validateAjaxForm('#formContentFeatures', function(res){
+                            if(res.s > 0){
+                                pw.dialog('close').remove();
+                                engine.shop.products.features.getSelected(categories_id, products_id);
+                            }
+                        });
+
+                        $('.cf-feature-select').select2();
+
+                        $('#data_folder')
+                            .change(function(){
+                                if($(this).is(':checked')){
+                                    $('.fg-show-filter, .fg-multiple, .fg-required').removeAttr('checked').hide();
+                                } else{
+                                    $('.fg-show-filter, .fg-multiple, .fg-required').show();
+                                }
+                            });
+
+                        var inp = $('.f-info-name:first'), lang = inp.data('lang'), code = $('#f_data_code');
+                        var ce = code.val() == '';
+                        inp.keyup(function(){
+                            var text = this.value;
+                            if(ce) {
+                                text = engine.content.translit(text, lang);
+                                text = text.replace(/-/g, '_');
+                                code.val(text);
+                            }
+                        });
+                    }
+                });
             }
         }
     }
