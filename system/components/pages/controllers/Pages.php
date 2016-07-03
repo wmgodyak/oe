@@ -59,7 +59,7 @@ class Pages extends Content
         $t->get('c.isfolder',0,0,0);
 
         $this->tree();
-        return $this->output($t->init());
+        $this->output($t->init());
     }
 
     public function items($parent_id = 0)

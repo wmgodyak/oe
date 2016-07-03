@@ -30,7 +30,7 @@
 </div>
 
 <div class="form-group">
-    <label for="categories" class="col-md-2 control-label">{$t.common.categories}</label>
+    <label for="categories" class="col-md-2 control-label">Дод. категорії</label>
     <div class="col-md-10">
         <select name="categories[]" multiple id="categories" class="form-control" required>
             {call renderSelectMultiple items=$categories selected=$selected_categories parent=''}

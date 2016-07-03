@@ -62,4 +62,14 @@ class Prices extends Model
     {
         return self::$db->select("select * from __content where id={$id} limit 1")->row();
     }
+
+    public function getProductCurrency($products_id)
+    {
+        return self::$db->select("
+          select cy.id, cy.symbol
+          from __content co
+          join __currency cy on cy.id=co.currency_id
+          where co.id={$products_id} limit 1
+          ")->row();
+    }
 }

@@ -1,20 +1,17 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: wg
- * Date: 23.06.16
- * Time: 23:11
- */
 
 namespace modules\shop\controllers\admin;
+use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
 use helpers\bootstrap\Link;
 use modules\shop\controllers\admin\products\Features;
+use modules\shop\models\admin\Prices;
 use modules\shop\models\Categories;
 use system\components\content\controllers\Content;
 use system\core\DataTables2;
 use system\core\EventsHandler;
 use system\models\ContentRelationship;
+use system\models\UsersGroup;
 
 /**
  * Class shop
@@ -26,7 +23,8 @@ class Products extends Content
     private $relations;
     private $contentTypes;
     private $allowed_types = ['product'];
-
+    private $prices;
+    private $customersGroups;
 
     public function __construct()
     {
@@ -43,12 +41,14 @@ class Products extends Content
         $this->relations = new ContentRelationship();
         $this->categories = new Categories('products_categories');
         $this->contentTypes = new \system\models\ContentTypes();
+        $this->prices = new Prices();
+        $this->customersGroups = new UsersGroup();
 
 
         EventsHandler::getInstance()->add('content.main', [$this, 'contentParams']);
         EventsHandler::getInstance()->add('content.process', [$this, 'contentProcess']);
 
-        $prices = new Prices();
+        $prices = new \modules\shop\controllers\admin\Prices();
         EventsHandler::getInstance()->add('content.main.after', [$prices, 'index']);
         EventsHandler::getInstance()->add('content.process', [$prices, 'process']);
     }
@@ -78,14 +78,20 @@ class Products extends Content
 
         $t  -> ajax('module/run/shop/products/index/' . $parent_id)
 //            ->orderDef(0, 'desc')
-            -> th($this->t('common.id'), 'c.id', 1, 1, 'width: 60px')
-            -> th($this->t('common.name'), 'ci.name', 1, 1)
-            -> th($this->t('common.created'), 'c.created', 0,1, 'width: 200px')
-            -> th($this->t('common.updated'), 'c.updated', 0, 1, 'width: 200px')
-            -> th($this->t('common.tbl_func'), null, 0, 0, 'width: 180px')
+//            -> th($this->t('common.id'), 'c.id', 1, 1, 'width: 60px')
+            -> th($this->t('shop.sky'), 'c.code', 1, 1, 'width: 60px')
+            -> th($this->t('common.name'), 'ci.name', 1, 1);
+
+            foreach ($this->customersGroups->getItems(0, 0) as $group) {
+                $t -> th($group['name'], 'c.created', 0, 0);
+            }
+
+//        $t  -> th($this->t('common.updated'), 'c.updated', 0, 1, 'width: 200px')
+          $t  -> th($this->t('common.tbl_func'), null, 0, 0, 'width: 180px')
         ;
-        $t->get('ci.url',null,null,null);
-        $t->get('c.status',null,null,null);
+        $t->get('c.id',     null, null, null);
+        $t->get('ci.url',   null, null, null);
+        $t->get('c.status', null, null, null);
 
         if($this->request->isXhr()){
 
@@ -107,14 +113,22 @@ class Products extends Content
                 $img = $img ? "<img style='max-width:30px; max-height: 30px; float:left; margin-right: 1em;' src='/{$img}'>" : "<i class='fa fa-file-image-o'></i>";
                 $icon_link = Icon::create('fa-external-link');
                 $status = $this->t($this->type .'.status_' . $row['status']);
-                $res[$i][] = $row['id'];
+
+                $prices = $this->prices->get($row['id']);
+
+//                $res[$i][] = $row['id'];
+                $res[$i][] = $row['code'];
                 $res[$i][] =
                     $img .
                     " <a class='status-{$row['status']}' title='{$status}' href='module/run/shop/products/edit/{$row['id']}'>{$row['name']}</a>"
                     . " <a href='/{$row['url']}' target='_blank'>{$icon_link}</a>"
                 ;
-                $res[$i][] = date('d.m.Y H:i:s', strtotime($row['created']));
-                $res[$i][] = $row['updated'] ? date('d.m.Y H:i:s', strtotime($row['updated'])) : '';
+                $cu = $this->prices->getProductCurrency($row['id']);
+                foreach ($this->customersGroups->getItems(0, 0) as $group) {
+                    $res[$i][] = (isset($cu['symbol']) ? $cu['symbol'] .' ' : '')
+                    . (isset($prices[$group['id']]) ? $prices[$group['id']] : 0);
+                }
+//                $res[$i][] = $row['updated'] ? date('d.m.Y H:i:s', strtotime($row['updated'])) : '';
                 $res[$i][] =
                     (string)(
                     $row['status'] == 'published' ?
@@ -142,6 +156,11 @@ class Products extends Content
                     (
                         Icon::create(Icon::TYPE_EDIT),
                         ['class' => 'btn-primary', 'href' => "module/run/shop/products/edit/" . $row['id'], 'title' => $this->t('common.title_edit')]
+                    ) .
+                    Button::create
+                    (
+                        Icon::create(Icon::TYPE_DELETE),
+                        ['class' => 'btn-danger b-products-delete', 'data-id' => $row['id'], 'title' => $this->t('shop.delete_question')]
                     )
                 ;
             }

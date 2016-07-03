@@ -22,6 +22,19 @@ engine.shop = {
             engine.content.hide(id, 'module/run/shop/products');
         });
 
+        $(document).on('click', '.b-products-delete', function(){
+            var id = $(this).data('id');
+            var pw = engine.confirm
+            (
+                'Товар буде переміщено в кошик. Продовжити?',
+                function()
+                {
+                    engine.request.get('module/run/shop/products/delete/'+id, function(res){
+                        pw.dialog('destroy').remove();
+                        engine.refreshDataTable('content');
+                    }, 'json');
+                });
+        });
 
         $(document).on('click', '.b-products_categories-delete', function(){
             var id = $(this).data('id');
@@ -423,8 +436,6 @@ engine.shop = {
                     var fc_id = $(this).data('fcid');
                     $features.drop(id, fc_id);
                 });
-
-                $features.initSorting();
             },
             get: function(products_id, categories_id){
                 engine.request.post({
