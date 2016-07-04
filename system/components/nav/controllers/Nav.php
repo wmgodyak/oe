@@ -22,6 +22,11 @@ class Nav extends Engine
         $this->nav = new \system\components\nav\models\Nav();
     }
 
+    public function init()
+    {
+        $this->assignToNav('Менеджер меню', 'nav', 'fa-nav', 'tools', 100);
+    }
+
     public function index()
     {
         $this->appendToPanel

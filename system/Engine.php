@@ -290,41 +290,6 @@ abstract class Engine extends Controller
         $this->template->assign('heading_panel', $this->template->fetch('heading_panel'));
     }
 
-    /**
-     *
-     */
-    private function makeNav()
-    {
-//        d(self::$menu_nav);die;
-        $nav = $this->makeNavTranslations($this->engine->nav());
-
-        $nav = array_merge($nav, self::$menu_nav);
-        $this->template->assign('nav_items', $nav);
-        $s = $this->template->fetch('nav');
-        $this->template->assign('nav', $s);
-    }
-
-    private function makeNavTranslations($nav)
-    {
-        $res = [];
-        foreach ($nav as $item) {
-            if($item['isfolder']){
-                $item['items'] = $this->makeNavTranslations($item['items']);
-            }
-
-            $c = $item['controller'];
-            if(strpos($c, '/') !== false){
-                $a = explode('/', $c);
-                $c = end($a);
-                $c = lcfirst($c);
-            }
-            $item['name'] = $this->t($c . '.action_index');
-            $item['url'] = $item['controller'];
-            $res[] = $item;
-        }
-
-        return $res;
-    }
 
     private static $menu_nav = [];
 
@@ -337,7 +302,7 @@ abstract class Engine extends Controller
      */
     protected function assignToNav($name, $url, $icon = null, $parent = null, $position = 0)
     {
-        if($parent != null){
+        /*if($parent != null){
             foreach (self::$menu_nav as $k=>$item) {
                 if($item['url'] == $parent){
 
@@ -358,8 +323,8 @@ abstract class Engine extends Controller
                 }
             }
 
-            throw new Exception("Wrong parent url.");
-        }
+//            throw new Exception("Wrong parent url.");
+        }*/
 
         while(isset(self::$menu_nav[$position])){
             $position += 5;
@@ -372,6 +337,37 @@ abstract class Engine extends Controller
             'parent'   => $parent,
             'isfolder' => 0
         ];
+    }
+    /**
+     *
+     */
+    private function makeNav()
+    {
+        $nav = []; $ws_parents = [];
+        foreach (self::$menu_nav as $k=>$item) {
+            if($item['parent'] != null){
+                $ws_parents[] = $item;
+                continue;
+            }
+            $nav[] = $item;
+        }
+
+        foreach ($ws_parents as $item) {
+            foreach ($nav as $k=>$n) {
+                if($n['url'] == $item['parent']){
+                    $nav[$k]['isfolder'] = 1;
+                    $nav[$k]['items'][] = $item;
+                }
+            }
+        }
+
+
+
+//        ksort(self::$menu_nav);
+//        d(self::$menu_nav);die;
+        $this->template->assign('nav_items', $nav);
+        $s = $this->template->fetch('nav');
+        $this->template->assign('nav', $s);
     }
 
     private function initModules()

@@ -23,7 +23,10 @@ class Themes extends Engine
         $this->path = Settings::getInstance()->get('themes_path');
     }
 
-
+    public function init()
+    {
+        $this->assignToNav('Теми', 'themes', 'fa-file-text', null, 100);
+    }
 
     /**
      * @return mixed

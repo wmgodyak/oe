@@ -22,6 +22,11 @@ class Admins extends Engine
         $this->admins = new \system\components\admins\models\Admins();
     }
 
+    public function init()
+    {
+        $this->assignToNav('Адміністратори', 'admins', 'fa-users', null, 200);
+    }
+
     /**
      * @param null $group_id
      * @return array|null|string

@@ -29,7 +29,7 @@ class Callbacks extends Engine
     {
 //        echo 'Init ' . __CLASS__ . '<br>';
         // додаю в меню
-        $this->assignToNav('Зворотні дзвінки', 'module/run/callbacks', 'fa-phone');
+        $this->assignToNav('Зворотні дзвінки', 'module/run/callbacks', 'fa-phone', null, 100);
 
         $this->template->assignScript("modules/callbacks/js/admin/callbacks.js");
     }

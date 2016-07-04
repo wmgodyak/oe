@@ -42,6 +42,12 @@ class ContentTypes extends Engine
         $this->path = DOCROOT .  $themes_path  . $theme .'/' . $vpath . self::DIR;
     }
 
+    public function init()
+    {
+        $this->assignToNav('Типи контенту', 'contentTypes', 'fa-users', null ,100);
+    }
+
+
     public function index($parent_id=0)
     {
         if($parent_id > 0){

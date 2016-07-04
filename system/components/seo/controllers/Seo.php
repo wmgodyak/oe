@@ -22,6 +22,11 @@ class Seo extends Engine
         $this->mSettings = new \system\components\seo\models\Seo();
     }
 
+    public function init()
+    {
+        $this->assignToNav('Seo', 'seo', 'fa-file-text', 'tools', 100);
+    }
+
     public function index()
     {
         $this->appendToPanel

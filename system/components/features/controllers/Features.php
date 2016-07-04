@@ -25,6 +25,11 @@ class Features extends Engine
         $this->featuresContent = new FeaturesContent();
     }
 
+    public function init()
+    {
+        $this->assignToNav('Динамічні характерист.', 'features', 'fa-users', 'tools', 100);
+    }
+
     public function index($parent_id=0)
     {
         if($parent_id > 0){

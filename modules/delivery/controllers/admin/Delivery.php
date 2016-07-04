@@ -33,7 +33,7 @@ class Delivery extends Engine
 
     public function init()
     {
-        $this->assignToNav('Доставка', 'module/run/delivery', 'fa-bus');//, 'module/run/shop'
+        $this->assignToNav('Доставка', 'module/run/delivery', 'fa-bus', 'settings', 100);//, 'module/run/shop'
         $this->template->assignScript("modules/delivery/js/admin/delivery.js");
     }
 

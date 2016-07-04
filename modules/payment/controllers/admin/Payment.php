@@ -27,7 +27,7 @@ class payment extends Engine
 
     public function init()
     {
-        $this->assignToNav('Оплата', 'module/run/payment', 'fa-bus');//, 'module/run/shop'
+        $this->assignToNav('Оплата', 'module/run/payment', 'fa-bus', 'settings', 100);//, 'module/run/shop'
         $this->template->assignScript("modules/payment/js/admin/payment.js");
     }
 

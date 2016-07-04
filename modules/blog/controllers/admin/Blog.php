@@ -47,7 +47,7 @@ class Blog extends Content
 
     public function init()
     {
-        $this->assignToNav('Блог', 'module/run/blog', 'fa-pencil');
+        $this->assignToNav('Блог', 'module/run/blog', 'fa-pencil', null, 100);
         $this->template->assignScript("modules/blog/js/admin/blog.js");
         $this->template->assignScript("modules/blog/js/admin/bootstrap-tagsinput.min.js");
 //        EventsHandler::getInstance()->debug();

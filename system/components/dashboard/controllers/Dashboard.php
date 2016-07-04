@@ -27,6 +27,11 @@ class Dashboard extends Engine
         $this->output($this->template->fetch('dashboard/index'));
     }
 
+    public function init()
+    {
+        $this->assignToNav('Головна', 'dashboard', 'fa-users', null, 1);
+    }
+
     public function create()
     {
         // TODO: Implement create() method.

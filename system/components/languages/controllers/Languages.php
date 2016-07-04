@@ -12,6 +12,11 @@ defined("CPATH") or die();
 
 class Languages extends Engine
 {
+    public function init()
+    {
+        $this->assignToNav('Мови', 'languages', 'fa-lang', 'settings', 100);
+    }
+
     public function index()
     {
 

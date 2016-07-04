@@ -17,7 +17,7 @@ class Shop extends Engine
 {
     public function init()
     {
-        $this->assignToNav('Магазин', 'module/run/shop', 'fa-shopping-cart');
+        $this->assignToNav('Магазин', 'module/run/shop', 'fa-shopping-cart', null, 100);
 
         $this->assignToNav('Категорії', 'module/run/shop/categories', 'fa-shopping-cart', 'module/run/shop');
         $this->assignToNav('Товари', 'module/run/shop/products', 'fa-shopping-cart', 'module/run/shop');

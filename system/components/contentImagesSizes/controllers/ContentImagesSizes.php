@@ -24,6 +24,11 @@ class ContentImagesSizes extends Engine
         $this->contentImagesSizes = new \system\components\contentImagesSizes\models\ContentImagesSizes();
     }
 
+    public function init()
+    {
+        $this->assignToNav('Розміри зображень', 'contentImagesSizes', 'fa-users', 'tools', 10);
+    }
+
     public function index()
     {
         $this->appendToPanel

@@ -25,6 +25,11 @@ class Trash extends Engine
         $this->trash = new \system\components\trash\models\Trash();
     }
 
+    public function init()
+    {
+        $this->assignToNav('Кошик', 'trash', 'fa-file-text', 'tools', 100);
+    }
+
     public function index()
     {
         $t = new DataTables2('content');

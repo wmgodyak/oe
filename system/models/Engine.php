@@ -33,37 +33,4 @@ class Engine extends Model
         $this->languages_id = $l->getDefault('id');
         self::$language_id  = $this->languages_id;
     }
-
-    /**
-     * @param int $parent_id
-     * @return array
-     */
-    public function nav($parent_id=0)
-    {
-        $res = [];
-
-        $r = self::$db
-        ->select("
-                    select id, icon, isfolder, controller
-                    from __components
-                    where parent_id='{$parent_id}' and published = 1
-                    order by abs(position) asc
-                ")
-        ->all();
-
-        foreach ($r as $item) {
-            $controller = ucfirst($item['controller']);
-
-            if(! Permissions::check($controller, 'index')){
-                continue;
-            }
-
-            if($item['isfolder']) {
-                $item['items'] = $this->nav($item['id']);
-            }
-
-            $res[] = $item;
-        }
-        return $res;
-    }
 }

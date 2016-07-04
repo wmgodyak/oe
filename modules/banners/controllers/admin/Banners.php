@@ -29,7 +29,7 @@ class Banners extends Engine
 
     public function init()
     {
-        $this->assignToNav('Банери', 'module/run/banners', 'fa-picture-o', null, 20);
+        $this->assignToNav('Банери', 'module/run/banners', 'fa-picture-o', null, 100);
         $this->template->assignScript("modules/banners/js/admin/banners.js");
     }
 

@@ -17,6 +17,13 @@ class Settings extends Engine
         $this->mSettings = new \system\components\settings\models\Settings();
     }
 
+    public function init()
+    {
+        $this->assignToNav('Інструменти', 'tools', 'fa-cog', null, 400);
+        $this->assignToNav('Налаштування', 'settings', 'fa-file-text', null, 500);
+        $this->assignToNav('Загальні', 'settings', 'fa-file-text', 'settings', 10);
+    }
+
     public function index()
     {
         $this->appendToPanel

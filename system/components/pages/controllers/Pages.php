@@ -23,6 +23,11 @@ class Pages extends Content
         $this->template->assignScript(dirname(__FILE__) . "/js/pages.js");
     }
 
+    public function init()
+    {
+        $this->assignToNav('Сторінки', 'pages', 'fa-file-text', null, 10);
+    }
+
     public function index($parent_id=0)
     {
 
