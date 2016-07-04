@@ -6,84 +6,197 @@
  * @name footer
  *}
 
-<div id="footer-white">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-3 menu">
-                <h3>Overview</h3>
-                <ul>
-                    <li>
-                        <a href="features.html">Features</a>
-                    </li>
-                    <li>
-                        <a href="services.html">Services</a>
-                    </li>
-                    <li>
-                        <a href="pricing.html">Pricing</a>
-                    </li>
-                    <li>
-                        <a href="support.html">Support</a>
-                    </li>
-                    <li>
-                        <a href="blog.html">Blog</a>
-                    </li>
-                    <li>
-                        <a href="blog.html">Coming soon</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="col-sm-3 menu">
-                <h3>Menu</h3>
-                <ul>
-                    <li>
-                        <a href="features.html">About us</a>
-                    </li>
-                    <li>
-                        <a href="services.html">Contact us</a>
-                    </li>
-                    <li>
-                        <a href="aboutus.html">Jobs</a>
-                        <a href="aboutus.html" class="hiring">
-                            We're hiring!
-                        </a>
-                    </li>
-                    <li>
-                        <a href="support.html">Portfolio</a>
-                    </li>
-                    <li>
-                        <a href="blog.html">Status</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="col-sm-2 menu">
-                <h3>Social</h3>
-                <ul>
-                    <li>
-                        <a href="features.html">Youtube</a>
-                    </li>
-                    <li>
-                        <a href="services.html">Facebook</a>
-                    </li>
-                    <li>
-                        <a href="pricing.html">Twitter</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="col-sm-4 newsletter">
-                <div class="signup clearfix">
-                    <p>
-                        Callback form
-                    </p>
-                    {include file="modules/callback.tpl"}
+<!-- become l_footer -->
+<footer class="l_footer">
+
+    <!-- begin footer__main -->
+    <div class="footer__main">
+        <div class="container">
+
+            <!-- begin footer__first -->
+            <div class="footer__first">
+                <div class="footer__logo">
+                    <a class="footer__link" href="#">
+                        <img src="{$theme_url}/assets/img/footer-logo.png" alt="">
+                    </a>
+                </div>
+                <div class="footer__c-description">
+                    <span>Світ Мобільних Аксесуарів</span> - це
+                    магазин, що пропонує якісний ремонт
+                    та різні аксесуари для ваших телефонів
+                    чи планшетів. Завжди якісно!
+                </div>
+                <div class="m_social">
+                    <div class="social__heading">
+                        Приєднуйтесь до нас у соцмережах:
+                    </div>
+                    <ul class="social__list">
+                        <li class="social__item">
+                            <a href="#" class="social__link social__link--vk"></a>
+                        </li>
+                        <li class="social__item">
+                            <a href="#" class="social__link social__link--fb"></a>
+                        </li>
+                        <li class="social__item">
+                            <a href="#" class="social__link social__link--ok"></a>
+                        </li>
+                        <li class="social__item">
+                            <a href="#" class="social__link social__link--yt"></a>
+                        </li>
+                        <li class="social__item">
+                            <a href="#" class="social__link social__link--ig"></a>
+                        </li>
+                    </ul>
                 </div>
             </div>
+            <!-- end footer__first -->
+
+            <!-- begin footer__second -->
+            <div class="footer__second">
+                <div class="footer__heading">
+                    Інформація
+                </div>
+                <div class="footer-nav">
+                    <ul class="footer-nav__list">
+                        <li class="footer-nav__item">
+                            <a href="#" class="footer-nav__link">
+                                Про нас
+                            </a>
+                        </li>
+                        <li class="footer-nav__item">
+                            <a href="#" class="footer-nav__link">
+                                Доставка
+                            </a>
+                        </li>
+                        <li class="footer-nav__item">
+                            <a href="#" class="footer-nav__link">
+                                Оплата
+                            </a>
+                        </li>
+                        <li class="footer-nav__item">
+                            <a href="#" class="footer-nav__link">
+                                Сервіс
+                            </a>
+                        </li>
+                        <li class="footer-nav__item">
+                            <a href="#" class="footer-nav__link">
+                                Ми на карті
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- end footer__second -->
+
+            <!-- begin footer__thirth -->
+            <div class="footer__thirth">
+
+                <div class="footer__heading">
+                    Працюємо
+                </div>
+
+                <div class="footer__whours">
+                    <span>З понеділка по п’ятницю:</span>
+
+                    <span>09:00 - 19:00</span>
+
+                    <span>Субота: 09:00 до 15:00</span>
+
+                    <span>Неділя - вихідний</span>
+                </div>
+            </div>
+            <!-- end footer__thirth -->
+
+            <!-- begin footer__fourth -->
+            <div class="footer__fourth">
+
+                <div class="footer__heading">
+                    Наші контакти
+                </div>
+
+                <div class="footer__contacts">
+
+                    <a class="ks" href="#">
+                        +38 (097) 59 88 666
+                    </a>
+
+                    <a class="vf" href="#">
+                        +38 (099) 25 88 666
+                    </a>
+
+                    <a class="lc" href="#">
+                        +38 (063) 59 88 666
+                    </a>
+
+                    <a class="gm" href="#">
+                        sma.lviv@gmail.com
+                    </a>
+
+                    <a class="sk" href="#">
+                        sma_lviv
+                    </a>
+
+                </div>
+
+            </div>
+            <!-- end footer__fourth -->
+
+            <!-- begin footer__fifth -->
+            <div class="footer__fifth">
+
+                <div class="footer__heading">
+                    Підписка
+                </div>
+
+                <div class="footer__subscription">
+                    <div class="text">
+                        Підпишіться на розсилку від СМА та
+                        отримуйте завжди свіжі новини, акції
+                        та пропозиції на свою електронну
+                        скриньку.
+                    </div>
+                    <form action="#">
+                        <div class="input-row">
+                            <input type="email" placeholder="введіть ваш  e-mail">
+                        </div>
+                        <div class="btn-row">
+                            <button>Підписатись</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <!-- end footer__fifth -->
+
+
         </div>
-        <div class="row credits">
-            <div class="col-md-12">
-                Copyright © 2016. OYi.Engine7
+    </div>
+    <!-- end footer__main -->
+
+    <!-- begin footer__bottom -->
+    <div class="footer__bottom">
+        <div class="container">
+            <div class="copyright">
+                © 2013-2016, Інтернет-магазин СМА
             </div>
         </div>
     </div>
-</div>
+    <!-- end footer__bottom -->
+
+</footer>
+<!-- end l_footer -->
+
+
+<!-- become scripts -->
+<script src='{$theme_url}/assets/js/vendor/jquery-1.11.3.min.js'></script>
+<script src='{$theme_url}/assets/js/vendor/jquery-ui.min.js'></script>
+<script src='{$theme_url}/assets/js/vendor/jquery.formstyler.js'></script>
+<script src='{$theme_url}/assets/js/vendor/owl.carousel.min.js'></script>
+<script src='{$theme_url}/assets/js/vendor/jquery.barrating.min.js'></script>
+<script src='{$theme_url}/assets/js/vendor/waterfall.min.js'></script>
+<script src="{$theme_url}/assets/js/main.js"></script>
+<!-- end scripts -->
+
+
 </body>
 </html>

@@ -77,10 +77,11 @@ class Content extends Model
     {
         $d = self::$db->select("select {$key} from __content where id='{$id}' limit 1")->row($key);
 
+        if(empty($d)) return null;
+
         if($key != '*') {
             return $d;
         }
-        if(empty($d)) return null;
 
         if(!empty($d['settings'])){
             $d['settings'] = unserialize($d['settings']);
@@ -88,7 +89,7 @@ class Content extends Model
 
         if(empty($d['published'])){
             $d['published'] = date('d.m.Y');
-        } else{
+        } else {
             $d['published'] = date('d.m.Y', strtotime($d['published']));
         }
 

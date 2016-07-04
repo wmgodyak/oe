@@ -1,13 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: wg
- * Date: 22.06.16
- * Time: 23:48
- */
 
 namespace system\models;
-
+/**
+ * Class Nav
+ * @package system\models
+ */
 class Nav extends Model
 {
     /**

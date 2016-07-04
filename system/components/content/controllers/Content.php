@@ -93,6 +93,10 @@ class Content extends Engine
 
         $content = $this->mContent->getData($id);
 
+        if(empty($content)){
+            $this->redirect('dashboard', 404);
+        }
+
         if($this->mContent->hasError()){
             throw new \system\core\exceptions\Exception($this->mContent->getErrorMessage());
         }

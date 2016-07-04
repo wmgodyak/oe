@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.0.10deb1
+-- version 4.4.13.1deb1
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Июл 04 2016 г., 18:20
--- Версия сервера: 5.6.30-0ubuntu0.14.04.1-log
--- Версия PHP: 5.5.9-1ubuntu4.17
+-- Час створення: Лип 04 2016 р., 23:38
+-- Версія сервера: 5.6.30-0ubuntu0.15.10.1
+-- Версія PHP: 5.6.11-1ubuntu3.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -14,20 +14,20 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
--- База данных: `engine`
+-- База даних: `engine`
 --
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_banners`
+-- Структура таблиці `e_banners`
 --
 
 CREATE TABLE IF NOT EXISTS `e_banners` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `places_id` int(10) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
   `skey` varchar(32) NOT NULL,
@@ -38,57 +38,39 @@ CREATE TABLE IF NOT EXISTS `e_banners` (
   `df` date DEFAULT NULL,
   `dt` date DEFAULT NULL,
   `url` varchar(200) DEFAULT NULL,
-  `target` enum('_blank','_self') DEFAULT '_self',
-  PRIMARY KEY (`id`,`places_id`,`languages_id`),
-  UNIQUE KEY `skey_UNIQUE` (`skey`),
-  KEY `fk_banners_banners_places1_idx` (`places_id`),
-  KEY `fk_banners_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=24 ;
-
---
--- Дамп данных таблицы `e_banners`
---
-
-INSERT INTO `e_banners` (`id`, `places_id`, `languages_id`, `skey`, `img`, `name`, `published`, `permanent`, `df`, `dt`, `url`, `target`) VALUES
-(18, 7, 1, 'dfb62995840bd01c4065469e055f6d43', '/uploads/content/2016/06/27/6f4922f45568161a8cdf4ad2299f6d23.jpg', '121', 1, 1, '0000-00-00', '0000-00-00', 'http://google.com', '_blank'),
-(19, 8, 1, 'e0e118f164839036284c48eb8620fd85', '/uploads/content/2016/06/27/1f0e3dad99908345f7439f8ffabdffc4.jpg', '1', 1, 1, '0000-00-00', '0000-00-00', '1', '_self'),
-(20, 8, 1, 'beffc185e3ccca00d4a392d3e75bdfc2', '/uploads/content/2016/06/27/98f13708210194c475687be6106a3b84.jpg', '2', 1, 1, '0000-00-00', '0000-00-00', '2', '_blank'),
-(21, 7, 1, '50412b56b8a7d526a8570056d021ad2e', '/uploads/content/2016/06/27/3c59dc048e8850243be8079a5c74d079.jpg', '2', 1, 1, '0000-00-00', '0000-00-00', 'http://yandex.com', '_self'),
-(22, 7, 1, 'e3987704a441c4ba12edf29dd0bee622', '/uploads/content/2016/06/27/b6d767d2f8ed5d21a44b0e5886680cb9.jpg', '3', 1, 1, '0000-00-00', '0000-00-00', 'http://otakoyi.com', '_self'),
-(23, 7, 1, 'cb8d1658e818735aae8c3f3b5dc258ec', '/uploads/content/2016/06/27/37693cfc748049e45d87b8c7d8b9aacd.jpg', '22', 1, 1, '0000-00-00', '0000-00-00', 'http://ukraine.com', '_self');
+  `target` enum('_blank','_self') DEFAULT '_self'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_banners_places`
+-- Структура таблиці `e_banners_places`
 --
 
 CREATE TABLE IF NOT EXISTS `e_banners_places` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `code` varchar(45) DEFAULT NULL,
   `name` varchar(60) DEFAULT NULL,
   `width` int(11) DEFAULT NULL,
-  `height` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `code_UNIQUE` (`code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
+  `height` int(11) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 --
--- Дамп данных таблицы `e_banners_places`
+-- Дамп даних таблиці `e_banners_places`
 --
 
 INSERT INTO `e_banners_places` (`id`, `code`, `name`, `width`, `height`) VALUES
-(7, 'home-top', 'Голоана', 730, 330),
-(8, 'home-bottom', 'Головна внизу', 350, 175);
+(1, 'home-top', 'Голоана', 730, 330),
+(2, 'home-bottom', 'Головна внизу', 350, 175);
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_callbacks`
+-- Структура таблиці `e_callbacks`
 --
 
 CREATE TABLE IF NOT EXISTS `e_callbacks` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `users_id` int(10) unsigned DEFAULT NULL,
   `phone` varchar(20) NOT NULL,
   `name` varchar(45) NOT NULL,
@@ -98,40 +80,17 @@ CREATE TABLE IF NOT EXISTS `e_callbacks` (
   `ip` char(16) NOT NULL,
   `status` enum('processed','spam','new') NOT NULL DEFAULT 'new',
   `manager_id` int(11) DEFAULT NULL,
-  `updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
-
---
--- Дамп данных таблицы `e_callbacks`
---
-
-INSERT INTO `e_callbacks` (`id`, `users_id`, `phone`, `name`, `message`, `comment`, `created`, `ip`, `status`, `manager_id`, `updated`) VALUES
-(1, NULL, '213123123', 'івіаваіва', 'іваіва', 'іваіваіва', '2016-06-24 08:34:30', '', 'spam', 2, '0000-00-00 00:00:00'),
-(2, NULL, '213123123', 'івіаваіва', 'іваіва', 'іваіваіва', '2016-06-24 08:34:34', '', 'new', NULL, '0000-00-00 00:00:00'),
-(3, NULL, '213123123', 'івіаваіва', 'іваіва', 'іваіваіва', '2016-06-24 08:34:43', '', 'new', NULL, '0000-00-00 00:00:00'),
-(4, NULL, '213123123', 'івіаваіва', 'іваіва', 'іваіваіва', '2016-06-24 08:34:43', '', 'new', NULL, '0000-00-00 00:00:00'),
-(5, NULL, '213123123', 'івіаваіва', 'іваіва', 'іваіваіва', '2016-06-24 08:34:43', '', 'new', NULL, '0000-00-00 00:00:00'),
-(6, NULL, '213123123', 'івіаваіва', 'іваіва', 'іваіваіва', '2016-06-24 08:34:43', '', 'new', NULL, '0000-00-00 00:00:00'),
-(7, NULL, '213123123', 'івіаваіва', 'іваіва', 'іваіваіва', '2016-06-24 08:34:43', '', 'new', NULL, '0000-00-00 00:00:00'),
-(8, NULL, '213123123', 'івіаваіва', 'іваіва', 'іваіваіва', '2016-06-24 08:34:43', '', 'new', NULL, '0000-00-00 00:00:00'),
-(9, NULL, '213123123', 'івіаваіва', 'іваіва', 'іваіваіва', '2016-06-24 08:34:43', '', 'new', NULL, '0000-00-00 00:00:00'),
-(10, NULL, '213123123', 'івіаваіва', 'іваіва', 'іваіваіва', '2016-06-24 08:34:43', '', 'new', NULL, '0000-00-00 00:00:00'),
-(11, NULL, '213123123', 'івіаваіва', 'іваіва', 'іваіваіва', '2016-06-24 08:34:43', '', 'new', NULL, '0000-00-00 00:00:00'),
-(12, NULL, '213123123', 'івіаваіва', 'іваіва', 'іваіваіва', '2016-06-24 08:34:43', '', 'new', NULL, '0000-00-00 00:00:00'),
-(13, NULL, '213123123', 'івіаваіва', 'іваіва', 'іваіваіва', '2016-06-24 08:34:43', '', 'new', NULL, '0000-00-00 00:00:00'),
-(14, NULL, '213123123', 'івіаваіва', 'іваіва', 'іваіваіва', '2016-06-24 08:34:43', '', 'new', NULL, '0000-00-00 00:00:00'),
-(15, NULL, '213123123', 'івіаваіва', 'іваіва', 'ertertertertretret', '2016-06-24 08:34:43', '', 'processed', 2, '2016-06-24 11:34:58'),
-(16, NULL, '213123123', 'івіаваіва', 'іваіва', 'ertertret', '2016-06-24 08:34:43', '', 'processed', 2, '2016-06-24 11:34:49');
+  `updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_comments`
+-- Структура таблиці `e_comments`
 --
 
 CREATE TABLE IF NOT EXISTS `e_comments` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `parent_id` int(11) unsigned NOT NULL DEFAULT '0',
   `isfolder` tinyint(3) unsigned NOT NULL,
   `content_id` int(11) unsigned NOT NULL,
@@ -141,54 +100,30 @@ CREATE TABLE IF NOT EXISTS `e_comments` (
   `status` enum('approved','spam','new') NOT NULL DEFAULT 'new',
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `ip` char(15) DEFAULT NULL,
-  `skey` varchar(64) DEFAULT NULL,
-  PRIMARY KEY (`id`,`content_id`),
-  KEY `fk_comments_content1_idx` (`content_id`),
-  KEY `approved` (`status`),
-  KEY `users_id` (`users_id`),
-  KEY `token` (`skey`),
-  KEY `isfolder` (`isfolder`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=28 ;
-
---
--- Дамп данных таблицы `e_comments`
---
-
-INSERT INTO `e_comments` (`id`, `parent_id`, `isfolder`, `content_id`, `users_id`, `message`, `rate`, `status`, `created`, `ip`, `skey`) VALUES
-(15, 14, 0, 16, 2, 'в якій перерахувала 25 технік генерації ідей для логотипу. Якщо ви її не читали — обов''язково прочитайте :) А потім повертайтеся сюди :)', 1.0, 'approved', '2016-03-31 08:46:30', '127.0.0.1', NULL),
-(16, 14, 0, 16, 2, 'обов''язково прочитайте :) А потім повертайтеся сюди :)', 1.0, 'approved', '2016-03-31 08:48:38', '127.0.0.1', NULL),
-(17, 13, 0, 16, 2, 'ertertert', 1.0, 'approved', '2016-03-31 08:49:52', '127.0.0.1', NULL),
-(18, 13, 0, 16, 2, 'werewrwer', 1.0, 'approved', '2016-03-31 08:49:58', '127.0.0.1', NULL),
-(19, 13, 0, 16, 2, 'werwerwer', 1.0, 'approved', '2016-03-31 08:50:04', '127.0.0.1', NULL),
-(21, 19, 0, 16, 2, 'dfdsfsd', 1.0, 'approved', '2016-03-31 09:11:27', '127.0.0.1', NULL),
-(23, 21, 0, 16, 2, 'rtyr', 1.0, 'approved', '2016-03-31 09:15:54', '127.0.0.1', NULL),
-(27, 26, 0, 16, 2, 'a', 1.0, 'approved', '2016-04-13 07:03:34', '127.0.0.1', NULL);
+  `skey` varchar(64) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_comments_subscribers`
+-- Структура таблиці `e_comments_subscribers`
 --
 
 CREATE TABLE IF NOT EXISTS `e_comments_subscribers` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `content_id` int(10) unsigned NOT NULL,
   `users_id` int(10) unsigned NOT NULL,
-  `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`,`content_id`,`users_id`),
-  UNIQUE KEY `content_id` (`content_id`,`users_id`),
-  KEY `fk_comments_subscribe_content1_idx` (`content_id`),
-  KEY `fk_comments_subscribe_users1_idx` (`users_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_content`
+-- Структура таблиці `e_content`
 --
 
 CREATE TABLE IF NOT EXISTS `e_content` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `types_id` tinyint(3) unsigned NOT NULL,
   `subtypes_id` tinyint(3) unsigned NOT NULL,
   `owner_id` int(11) unsigned NOT NULL,
@@ -205,187 +140,72 @@ CREATE TABLE IF NOT EXISTS `e_content` (
   `unit_id` tinyint(3) unsigned DEFAULT NULL,
   `has_variants` tinyint(1) unsigned DEFAULT NULL,
   `in_stock` tinyint(1) unsigned DEFAULT NULL,
-  `external_id` char(32) DEFAULT NULL,
-  PRIMARY KEY (`id`,`types_id`,`subtypes_id`,`owner_id`),
-  KEY `fk_content_content_types1_idx` (`types_id`),
-  KEY `fk_content_content_subtypes1_idx` (`subtypes_id`),
-  KEY `fk_content_owner_idx` (`owner_id`),
-  KEY `status` (`status`),
-  KEY `published` (`published`),
-  KEY `code` (`sku`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=164 ;
+  `external_id` char(32) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 --
--- Дамп данных таблицы `e_content`
+-- Дамп даних таблиці `e_content`
 --
 
 INSERT INTO `e_content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id`, `isfolder`, `position`, `created`, `updated`, `published`, `settings`, `status`, `sku`, `currency_id`, `unit_id`, `has_variants`, `in_stock`, `external_id`) VALUES
-(1, 1, 6, 2, 0, 1, 0, '2016-03-21 07:55:55', '2016-06-17 17:43:30', '2016-03-21', NULL, 'published', '1', NULL, NULL, NULL, NULL, NULL),
-(2, 1, 1, 2, 1, 0, 0, '2016-03-21 07:56:43', '2016-06-17 22:22:03', '2016-03-21', NULL, 'published', '2', NULL, NULL, NULL, NULL, NULL),
-(3, 1, 7, 2, 1, 0, 0, '2016-03-21 07:56:57', '2016-03-24 14:04:03', '2016-03-21', NULL, 'published', '3', NULL, NULL, NULL, NULL, NULL),
-(4, 1, 1, 2, 1, 0, 0, '2016-03-21 07:57:10', NULL, '2016-03-21', NULL, 'published', '4', NULL, NULL, NULL, NULL, NULL),
-(5, 1, 1, 2, 1, 0, 0, '2016-03-21 07:57:23', NULL, '2016-03-21', NULL, 'published', '5', NULL, NULL, NULL, NULL, NULL),
-(6, 1, 1, 2, 1, 0, 0, '2016-03-21 07:57:34', NULL, '2016-03-21', NULL, 'published', '6', NULL, NULL, NULL, NULL, NULL),
-(7, 1, 1, 2, 1, 0, 0, '2016-03-21 07:58:13', NULL, '2016-03-21', NULL, 'published', '7', NULL, NULL, NULL, NULL, NULL),
-(8, 1, 9, 2, 1, 0, 0, '2016-03-21 07:58:21', '2016-03-31 14:00:44', '2016-03-21', NULL, 'published', '8', NULL, NULL, NULL, NULL, NULL),
-(9, 1, 4, 2, 1, 0, 0, '2016-03-21 12:44:48', NULL, '2016-03-21', NULL, 'published', '9', NULL, NULL, NULL, NULL, NULL),
-(13, 3, 3, 2, 0, 0, 0, '2016-03-24 13:23:43', '2016-03-25 09:56:19', '2016-03-25', NULL, 'published', '13', NULL, NULL, NULL, NULL, NULL),
-(14, 3, 3, 2, 0, 0, 0, '2016-03-24 13:24:00', '2016-03-25 09:56:29', '2016-03-25', NULL, 'published', '14', NULL, NULL, NULL, NULL, NULL),
-(15, 3, 3, 2, 0, 0, 0, '2016-03-24 13:24:10', '2016-03-24 13:24:10', '2016-03-24', NULL, 'published', '15', NULL, NULL, NULL, NULL, NULL),
-(16, 2, 2, 2, 0, 0, 0, '2016-03-24 13:24:14', '2016-06-28 18:52:07', '2016-03-24', NULL, 'published', '16', NULL, NULL, NULL, NULL, NULL),
-(17, 2, 2, 2, 0, 0, 0, '2016-03-24 13:30:28', '2016-03-24 13:31:01', '2016-03-24', NULL, 'published', '17', NULL, NULL, NULL, NULL, NULL),
-(18, 2, 2, 2, 0, 0, 0, '2016-03-24 13:31:04', '2016-03-25 15:53:18', '2016-03-24', NULL, 'published', '18', NULL, NULL, NULL, NULL, NULL),
-(19, 2, 2, 2, 0, 0, 0, '2016-03-24 13:31:33', '2016-03-24 13:32:11', '2016-03-24', NULL, 'published', '19', NULL, NULL, NULL, NULL, NULL),
-(20, 2, 2, 2, 0, 0, 0, '2016-03-24 13:32:19', '2016-03-25 13:02:57', '2016-03-24', NULL, 'published', '20', NULL, NULL, NULL, NULL, NULL),
-(21, 2, 2, 2, 0, 0, 0, '2016-03-24 13:32:39', '2016-03-24 13:33:06', '2016-03-24', NULL, 'published', '21', NULL, NULL, NULL, NULL, NULL),
-(22, 2, 2, 2, 0, 0, 0, '2016-03-24 13:33:07', '2016-03-24 13:33:34', '2016-03-24', NULL, 'published', '22', NULL, NULL, NULL, NULL, NULL),
-(23, 2, 2, 2, 0, 0, 0, '2016-03-24 13:33:41', '2016-03-24 13:34:21', '2016-03-24', NULL, 'published', '23', NULL, NULL, NULL, NULL, NULL),
-(24, 2, 2, 2, 0, 0, 0, '2016-03-24 13:34:28', '2016-03-24 13:34:46', '2016-03-24', NULL, 'deleted', '24', NULL, NULL, NULL, NULL, NULL),
-(25, 1, 1, 2, 1, 0, 0, '2016-03-25 09:45:43', '2016-03-25 09:46:08', '2016-03-25', NULL, 'published', '25', NULL, NULL, NULL, NULL, NULL),
-(27, 3, 3, 2, 0, 0, 0, '2016-03-25 11:52:31', '2016-03-25 11:52:31', '2016-03-25', NULL, 'published', '27', NULL, NULL, NULL, NULL, NULL),
-(28, 1, 1, 2, 1, 1, 0, '2016-03-28 07:15:17', '2016-03-28 12:41:20', '2016-03-28', NULL, 'published', '28', NULL, NULL, NULL, NULL, NULL),
-(29, 1, 8, 2, 28, 0, 0, '2016-03-28 07:19:02', '2016-04-19 14:31:40', '2016-03-28', NULL, 'published', '29', NULL, NULL, NULL, NULL, NULL),
-(30, 1, 8, 2, 28, 0, 0, '2016-03-28 07:19:28', '2016-03-28 12:41:33', '2016-03-28', NULL, 'published', '30', NULL, NULL, NULL, NULL, NULL),
-(31, 1, 8, 2, 28, 0, 0, '2016-03-28 12:50:28', '2016-03-28 12:50:49', '2016-03-28', NULL, 'published', '31', NULL, NULL, NULL, NULL, NULL),
-(34, 1, 8, 2, 28, 0, 0, '2016-03-30 07:40:52', '2016-03-30 07:41:43', '2016-03-30', NULL, 'published', '34', NULL, NULL, NULL, NULL, NULL),
-(40, 11, 11, 2, 0, 1, 0, '2016-04-01 07:08:53', '2016-06-29 07:42:55', '2016-06-29', NULL, 'published', '40', NULL, NULL, NULL, NULL, NULL),
-(41, 11, 11, 2, 40, 0, 0, '2016-04-01 07:09:00', '2016-06-29 11:03:41', '2016-04-01', NULL, 'published', '41', NULL, NULL, NULL, NULL, NULL),
-(42, 11, 11, 2, 0, 0, 0, '2016-04-01 07:10:09', '2016-06-29 07:43:01', '2016-06-29', NULL, 'deleted', '42', NULL, NULL, NULL, NULL, NULL),
-(43, 11, 11, 2, 0, 0, 0, '2016-04-01 07:10:40', '2016-04-01 08:26:37', '2016-04-01', NULL, 'published', '43', NULL, NULL, NULL, NULL, NULL),
-(44, 11, 11, 2, 0, 0, 0, '2016-04-01 07:10:45', '2016-06-29 11:03:49', '2016-06-29', NULL, 'published', '44', NULL, NULL, NULL, NULL, NULL),
-(45, 11, 11, 2, 0, 0, 0, '2016-04-01 07:10:50', '2016-04-01 07:10:50', '2016-04-01', NULL, 'published', '45', NULL, NULL, NULL, NULL, NULL),
-(46, 11, 11, 2, 0, 0, 0, '2016-04-01 07:11:00', '2016-04-01 07:11:00', '2016-04-01', NULL, 'deleted', '46', NULL, NULL, NULL, NULL, NULL),
-(47, 11, 11, 2, 0, 0, 0, '2016-04-01 07:11:07', '2016-04-01 07:11:07', '2016-04-01', NULL, 'deleted', '47', NULL, NULL, NULL, NULL, NULL),
-(48, 11, 11, 2, 0, 1, 0, '2016-04-01 07:11:12', '2016-04-01 07:11:12', '2016-04-01', NULL, 'published', '48', NULL, NULL, NULL, NULL, NULL),
-(49, 11, 11, 2, 40, 0, 0, '2016-04-01 08:26:25', '2016-04-01 08:26:25', '2016-04-01', NULL, 'deleted', '49', NULL, NULL, NULL, NULL, NULL),
-(52, 10, 10, 2, 0, 0, 0, '2016-04-04 14:41:04', '2016-07-04 13:57:42', '2016-07-04', NULL, 'published', '52', 2, 157, 1, 0, NULL),
-(54, 10, 10, 2, 0, 0, 0, '2016-04-04 16:21:23', '2016-04-12 10:57:51', '2016-04-04', NULL, 'published', '54', 2, 2, 0, 0, NULL),
-(55, 10, 10, 2, 0, 0, 0, '2016-04-04 16:22:23', '2016-04-04 16:22:41', '2016-04-04', NULL, 'published', '55', NULL, NULL, NULL, NULL, NULL),
-(57, 10, 10, 2, 0, 0, 0, '2016-04-05 06:12:57', '2016-04-05 06:13:34', '2016-04-05', NULL, 'published', '57', NULL, NULL, NULL, NULL, NULL),
-(59, 10, 10, 2, 0, 0, 0, '2016-04-05 06:27:37', '2016-04-05 06:28:00', '2016-04-05', NULL, 'published', '59', NULL, NULL, NULL, NULL, NULL),
-(92, 10, 10, 2, 0, 0, 0, '2016-04-19 08:37:19', '2016-04-19 09:33:42', '2016-04-19', NULL, 'published', '96069', 2, 2, 1, 0, NULL),
-(130, 11, 11, 2, 48, 0, 0, '2016-04-20 13:36:07', '2016-04-20 13:36:07', '2016-04-20', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
-(146, 11, 11, 2, 0, 0, 0, '2016-06-29 07:48:27', '2016-06-29 07:48:27', '2016-06-29', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
-(147, 10, 10, 2, 0, 0, 0, '2016-06-29 11:54:43', '2016-06-29 11:56:31', '2016-06-29', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
-(150, 13, 13, 2, 0, 0, 0, '2016-06-29 13:14:24', '2016-06-29 13:14:24', '2016-06-29', NULL, 'deleted', NULL, NULL, NULL, NULL, NULL, NULL),
-(151, 13, 13, 2, 0, 0, 0, '2016-06-29 13:15:56', '2016-06-29 13:19:47', '2016-06-29', NULL, 'deleted', NULL, NULL, NULL, NULL, NULL, NULL),
-(152, 13, 13, 2, 0, 0, 0, '2016-06-29 13:16:56', '2016-06-29 13:16:56', '2016-06-29', NULL, 'deleted', NULL, NULL, NULL, NULL, NULL, NULL),
-(153, 13, 13, 2, 0, 0, 0, '2016-06-29 13:17:23', '2016-06-29 13:17:23', '2016-06-29', NULL, 'deleted', NULL, NULL, NULL, NULL, NULL, NULL),
-(154, 13, 13, 2, 0, 0, 0, '2016-06-29 13:17:31', '2016-06-29 13:17:31', '2016-06-29', NULL, 'deleted', NULL, NULL, NULL, NULL, NULL, NULL),
-(155, 13, 13, 2, 0, 0, 0, '2016-06-29 13:18:21', '2016-06-29 13:18:21', '2016-06-29', NULL, 'deleted', NULL, NULL, NULL, NULL, NULL, NULL),
-(156, 13, 13, 2, 0, 1, 0, '2016-06-29 13:24:09', '2016-06-29 13:45:53', '2016-06-29', NULL, 'published', NULL, NULL, NULL, NULL, NULL, 'units'),
-(157, 13, 13, 2, 156, 0, 0, '2016-06-29 13:26:32', '2016-06-29 13:26:32', '2016-06-29', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
-(158, 13, 13, 2, 156, 0, 0, '2016-06-29 13:26:55', '2016-06-29 13:29:48', '2016-06-29', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
-(159, 13, 13, 2, 156, 0, 0, '2016-06-29 13:27:09', '2016-06-29 13:27:09', '2016-06-29', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
-(160, 13, 13, 2, 156, 0, 0, '2016-06-29 13:27:17', '2016-06-29 13:27:17', '2016-06-29', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
-(161, 13, 13, 2, 156, 0, 0, '2016-06-29 13:27:27', '2016-06-29 13:27:27', '2016-06-29', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
-(163, 13, 13, 2, 0, 0, 0, '2016-06-29 13:36:28', NULL, NULL, NULL, 'blank', NULL, NULL, NULL, NULL, NULL, NULL);
+(1, 1, 16, 2, 0, 1, 0, '2016-07-04 19:39:41', '2016-07-04 20:00:21', '2016-07-04', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
+(4, 1, 1, 2, 1, 0, 0, '2016-07-04 20:09:38', '2016-07-04 20:09:53', '2016-07-04', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
+(5, 1, 1, 2, 1, 0, 0, '2016-07-04 20:09:55', '2016-07-04 20:10:09', '2016-07-04', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
+(6, 1, 1, 2, 1, 0, 0, '2016-07-04 20:10:10', '2016-07-04 20:14:44', '2016-07-04', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
+(7, 1, 1, 2, 1, 0, 0, '2016-07-04 20:10:43', '2016-07-04 20:10:55', '2016-07-04', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
+(8, 1, 1, 2, 1, 0, 0, '2016-07-04 20:13:03', NULL, NULL, NULL, 'blank', NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_content_features`
+-- Структура таблиці `e_content_features`
 --
 
 CREATE TABLE IF NOT EXISTS `e_content_features` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `content_id` int(10) unsigned NOT NULL,
   `features_id` int(10) unsigned NOT NULL,
   `values_id` int(10) unsigned DEFAULT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `value` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`,`content_id`,`features_id`),
-  UNIQUE KEY `content_id` (`content_id`,`features_id`,`values_id`,`languages_id`),
-  KEY `fk_content_features_values_content1_idx` (`content_id`),
-  KEY `fk_content_features_values_features1_idx` (`features_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
-
---
--- Дамп данных таблицы `e_content_features`
---
-
-INSERT INTO `e_content_features` (`id`, `content_id`, `features_id`, `values_id`, `languages_id`, `value`) VALUES
-(1, 52, 162, 164, 0, NULL),
-(2, 52, 163, 168, 0, NULL),
-(3, 52, 169, 170, 0, NULL);
+  `value` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_content_images`
+-- Структура таблиці `e_content_images`
 --
 
 CREATE TABLE IF NOT EXISTS `e_content_images` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL,
   `content_id` int(11) unsigned NOT NULL,
   `path` varchar(255) NOT NULL,
   `image` varchar(255) NOT NULL,
   `position` tinyint(5) unsigned NOT NULL,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `fk_content_images_content1_idx` (`content_id`),
-  KEY `position` (`position`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=31 ;
-
---
--- Дамп данных таблицы `e_content_images`
---
-
-INSERT INTO `e_content_images` (`id`, `content_id`, `path`, `image`, `position`, `created`) VALUES
-(1, 2, 'uploads/content/2016/03/22/', 'office3-2x.png', 1, '2016-03-22 15:14:11'),
-(2, 2, 'uploads/content/2016/03/22/', 'office2-2x1.png', 2, '2016-03-22 15:14:11'),
-(3, 2, 'uploads/content/2016/03/22/', 'office1-2x2.png', 3, '2016-03-22 15:14:11'),
-(4, 16, 'uploads/content/2016/03/24/', 'blogpost3-16x.png', 1, '2016-03-24 14:34:56'),
-(5, 17, 'uploads/content/2016/03/24/', 'blogpost2-17x.png', 1, '2016-03-24 14:35:14'),
-(6, 18, 'uploads/content/2016/03/24/', 'blogpost2-18x.png', 1, '2016-03-24 14:35:18'),
-(7, 19, 'uploads/content/2016/03/24/', 'blogpost1-19x.png', 1, '2016-03-24 14:35:22'),
-(8, 21, 'uploads/content/2016/03/24/', 'blogpost2-21x.png', 1, '2016-03-24 14:35:26'),
-(9, 22, 'uploads/content/2016/03/24/', 'blogpost3-22x.png', 1, '2016-03-24 14:35:30'),
-(10, 1, 'uploads/content/2016/03/25/', 'testimonial5-1x.jpg', 1, '2016-03-25 12:33:08'),
-(11, 1, 'uploads/content/2016/03/25/', 'testimonial8-1x10.jpg', 2, '2016-03-25 12:33:08'),
-(12, 1, 'uploads/content/2016/03/25/', 'testimonial4-1x11.jpg', 3, '2016-03-25 12:33:08'),
-(13, 1, 'uploads/content/2016/03/25/', 'testimonial7-1x12.jpg', 4, '2016-03-25 12:33:08'),
-(14, 1, 'uploads/content/2016/03/25/', 'testimonial2-1x13.jpg', 0, '2016-03-25 12:33:08'),
-(15, 1, 'uploads/content/2016/03/25/', 'testimonial3-1x14.jpg', 5, '2016-03-25 12:33:08'),
-(20, 54, 'uploads/content/2016/04/12/', 'potd-grass_3570487k-54x.jpg', 1, '2016-04-12 08:04:02'),
-(22, 57, 'uploads/content/2016/04/12/', 'animals-smile_3379238k-57x.jpg', 1, '2016-04-12 08:04:22'),
-(23, 59, 'uploads/content/2016/04/12/', '1443507958_2cd1e26200000578-0-image-a-312_1443424459664-59x.jpg', 1, '2016-04-12 08:04:26'),
-(24, 55, 'uploads/content/2016/04/12/', '2fab3e6100000578-3377927-andrew_suryono_bali_i_was_taking_pictures_of_some_orangutans_in_-a-42_1451416773881-55x.jpg', 1, '2016-04-12 08:30:17'),
-(25, 1, 'uploads/content/2016/04/19/', 'untitled-1-1x15.png', 6, '2016-04-19 08:02:03'),
-(26, 92, 'uploads/content/2016/04/19/', '474561865-92x.jpg', 1, '2016-04-19 08:39:44'),
-(27, 92, 'uploads/content/2016/04/19/', '474561835-92x26.jpg', 2, '2016-04-19 08:39:44');
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_content_images_sizes`
+-- Структура таблиці `e_content_images_sizes`
 --
 
 CREATE TABLE IF NOT EXISTS `e_content_images_sizes` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `id` tinyint(3) unsigned NOT NULL,
   `size` varchar(16) NOT NULL,
   `width` int(5) unsigned NOT NULL,
-  `height` int(5) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `size` (`size`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
-
---
--- Дамп данных таблицы `e_content_images_sizes`
---
-
-INSERT INTO `e_content_images_sizes` (`id`, `size`, `width`, `height`) VALUES
-(1, 'post', 636, 311),
-(2, 'slider', 935, 450);
+  `height` int(5) unsigned NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_content_info`
+-- Структура таблиці `e_content_info`
 --
 
 CREATE TABLE IF NOT EXISTS `e_content_info` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `content_id` int(10) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
   `name` varchar(255) DEFAULT NULL,
@@ -395,291 +215,134 @@ CREATE TABLE IF NOT EXISTS `e_content_info` (
   `keywords` varchar(255) DEFAULT NULL,
   `description` varchar(255) DEFAULT NULL,
   `intro` text,
-  `content` text,
-  PRIMARY KEY (`id`,`content_id`,`languages_id`),
-  UNIQUE KEY `languages_id` (`languages_id`,`url`),
-  KEY `fk_content_info_content1_idx` (`content_id`),
-  KEY `fk_content_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=73 ;
+  `content` text
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 --
--- Дамп данных таблицы `e_content_info`
+-- Дамп даних таблиці `e_content_info`
 --
 
 INSERT INTO `e_content_info` (`id`, `content_id`, `languages_id`, `name`, `url`, `h1`, `title`, `keywords`, `description`, `intro`, `content`) VALUES
-(1, 1, 1, 'Головна', 'home', '', 'Головна', '', '', '', '<p><img alt="" src="http://engine.loc/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png" style="width: 128px; height: 128px;" /></p>\n'),
-(3, 2, 1, 'Про нас', 'pro-nas', 'Про нас', 'Про нас', '', '<p>httpengine.locuploadsavatarscrtytry rtyrtyr Whether you want to fill this paragraph with some text like I''m doing right now, this place is perfect to describe some features or anything you want - React has a complete solution f</p>\n\n<p> <', '<p>sfd</p>\n', '<div class="row">\n<div class="col-md-12">\n<h1>We care about our work</h1>\n</div>\n</div>\n\n<div class="row">\n<div class="col-md-6">\n<p>Whether you want to fill this paragraph with some text like I&#39;m doing right now, this place is perfect to describe some features or anything you want - React has a complete solution for you.</p>\n\n<p><img alt="" src="http://engine.loc/uploads/avatars/c51ce410c124a10e0db5e4b97fc2af39.png" style="margin-left: 5px; margin-right: 5px; float: left; width: 208px; height: 120px;" />You have complete control over the look &amp; feel of your website, we offer the best quality so you take your site up and running in no time.</p>\n</div>\n\n<div class="col-md-6">\n<p>fhgfh fhgfh<img alt="" src="http://engine.loc/uploads/avatars/c51ce410c124a10e0db5e4b97fc2af39.png" style="width: 208px; height: 120px;" />fghfghfgh</p>\n\n<p>fgfghfghgfh</p>\n\n<p>React is a simple, developer-friendly way to get your site. Full of features, cool documentation ease of use, lots of pages. We want to help bringing cool stuff to people so they can get their projects faster.</p>\n<a class="join-team button button-small" href="#">Join our team</a></div>\n</div>\n\n<div class="row stats">\n<div class="col-sm-3"><strong>13</strong> employees</div>\n\n<div class="col-sm-3"><strong>10k</strong> customers</div>\n\n<div class="col-sm-3"><strong>9</strong> template pages</div>\n\n<div class="col-sm-3"><strong>13k</strong> products sold</div>\n</div>\n'),
-(4, 3, 1, 'Новини', 'novyny', '', 'Новини', '', '', NULL, ''),
-(5, 4, 1, 'Оплата та доставка', 'oplata-ta-dostavka', '', 'Оплата та доставка', '', '', NULL, ''),
-(6, 5, 1, 'Гарантія та сервіс', 'garantiya-ta-servis', '', 'Гарантія та сервіс', '', '', NULL, ''),
-(7, 6, 1, 'Діючі акції', 'diyuchi-akciї', '', 'Діючі акції', '', '', NULL, ''),
-(8, 7, 1, 'Ваканcії', 'vakanciї', '', 'Ваканcії', '', '', NULL, ''),
-(9, 8, 1, 'Контакти', 'kontakty', '', 'Контакти', '', '', NULL, ''),
-(10, 9, 1, '404', '404', '', '404', '', '', NULL, ''),
-(13, 13, 1, 'Новини', 'blog/novyny', '', 'Новини', '', '', NULL, NULL),
-(14, 14, 1, 'Акції', 'akcii', '', 'Акції', '', '', NULL, NULL),
-(15, 15, 1, 'Різне', 'rizne', '', 'Різне', '', '', NULL, NULL),
-(16, 16, 1, '50 відтінків логотипу. Частина 2', '50-vidtinkiv-logotypu-chastyna-2', '', '50 відтінків логотипу. Частина 2', '', 'Як придумати круте лого: продовжуємо говорити про техніки, які можна використати.\nНещодавно я опублікувала статтю, в якій перерахувала 25 технік генерації ідей для логотипу. Якщо ви її не читали — обов''язково прочитайте :) А потім повертайтеся сюди :)', '', '<p>Як придумати круте лого: продовжуємо говорити про техніки, які можна використати.<br />\nНещодавно я опублікувала статтю, в якій перерахувала 25 технік генерації ідей для логотипу. Якщо ви її не читали &mdash; обов&#39;язково прочитайте :) А потім повертайтеся сюди :)</p>\n'),
-(17, 17, 1, 'РЕКУРСИВНЕ ВИДАЛЕННЯ СТАРИХ АРХІВІВ В LINUX', 'rekursyvne-vydalennya-staryh-arhiviv-v-linux', '<p>РЕКУРСИВНЕ ВИДАЛЕННЯ СТАРИХ АРХІВІВ В LINUX</p>\n', 'РЕКУРСИВНЕ ВИДАЛЕННЯ СТАРИХ АРХІВІВ В LINUX', '', '', NULL, '<p>Виникла проблема &mdash; на одному з серверів для збереження бекапів переповнилося місце. Через це на іншому сервері також переповнилося місце. Тому що спочатку робиться архів локально, а потім переміщується на один із серверів бекапів.</p>\n\n<p><img alt="" src="http://engine.loc/uploads/avatars/office1.png" style="width: 932px; height: 450px;" />Але ми адміни ліниві, і вручну перегладати директорії і видаляти архіви понад кількі місяців точно не будемо. Особливо, коли проектів понад 200. Виручить простенький скрипт, який треба повішати на cron.&nbsp;</p>\n'),
-(18, 18, 1, '50 ВІДТІНКІВ ЛОГОТИПУ. ЧАСТИНА 1', '50-vidtinkiv-logotypu-chastyna-1', '<p>50 ВІДТІНКІВ ЛОГОТИПУ. ЧАСТИНА 1.2</p>\n', '50 ВІДТІНКІВ ЛОГОТИПУ. ЧАСТИНА 1', '', '', NULL, '<p><strong>Немає єдиного</strong> підходу до створення логотипів. Проте існує великий вибір технік та стилів, якими може скористатися дизайнер, щоб згенерувати справді круте лого.</p>\n\n<p>В цій статті я покажу <em>приклади логотипів</em>, що <strong>належать до різних категорій</strong>: по стилю, формі, глибині, кольорах, техніці виконання, використаних елементах тощо.</p>\n\n<p>Зазвичай логотип водночас належить до кількох категорій. Наприклад, логотип може бути з унікальним шрифтовим накресленням і мати різні кольорові літери, це може бути тривимірна графіка з <s><em>градієнтами</em></s> або ж персонаж чи тваринка, намальовані як імітація дитячого малюнка.</p>\n\n<p>Кажуть, що творчість полягає в здатності несподіваним чином об&#39;єднати добре відомі, звичні речі. Цю думку, принаймні щодо створення логотипів, я вважаю цілком справедливою.</p>\n\n<p>Хороший дизайнер логотипів створює унікальні логотипи за допомогою декількох інструментів, старається поєднати різні форми і техніки. Хороший дизайнер втілює дух і стиль компанії в знаці, який нестиме потрібні асоціації з діяльністю компанії.</p>\n\n<p>Коли замовник захоче спробувати зовсім іншу, кардинально нову концепцію, перегляньте ці 50 категорій &mdash; у вас неодмінно з&rsquo;явиться нове дихання та ідеї для створення ідеального логотипу.</p>\n\n<p>Осягнути всі 50 ідей за раз буває складно (або ж неефективно), тому в цій частині я покажу перші 25 технік, а решту залишу для другої частини статті ;) До речі, вона вже&nbsp;<a href="http://otakoyi.com/uk/blog/layfkhak-yak-pereviryty-adaptyvnist-vykorystovuyuchy-brauzer" target="_blank">тут</a>.&nbsp;</p>\n'),
-(19, 19, 1, 'БЕКАП САЙТУ С VPS НА ВІДДАЛЕНИЙ СЕРВЕР ПО FTP', 'bekap-sajtu-s-vps-na-viddalenyj-server-po-ftp', '', 'БЕКАП САЙТУ С VPS НА ВІДДАЛЕНИЙ СЕРВЕР ПО FTP', '', '', NULL, ''),
-(20, 20, 1, 'АВТОМАТИЧНИЙ ПЕРЕКЛАД В OYI.ENGINE НЕ ПРАЦЮЄ', 'avtomatychnyj-pereklad-v-oyi-engine-ne-pracyuє', '', 'АВТОМАТИЧНИЙ ПЕРЕКЛАД В OYI.ENGINE НЕ ПРАЦЮЄ', '', '', NULL, '<p>Ця стаття призначена для наших клієнтів, в яких &quot;... не зберігаються сторінки. Я вношу назву, натискаю &quot;Перекласти&quot;. Натискаю &quot;Зберегти&quot; і отримую &quot;Помилка валідації&quot;.&quot;<br />\nПояснення читайте в статті.<br />\nБільшість наших проектів мають кілька мовних версій (від 2 до 25).<br />\nВідповідно для кожної мовної версії потрібно ввести мінімум 3 обов&#39;язкові поля: назву, урл (alias), title. Помилка виникає, якщо ви не заповнюєте ці поля на всіх мовних версіях.<br />\nШвидкість створення 1 сторінки (статті, товару, категорії, ітп) напряму залежить від кількості мовних версій проекту. Щоб зекономити час роботи менеджера, і, відповідно, гроші замовника у нас стандартно<br />\nінтегрована опція автоматичного перекладу контенту на основі Google Translate API || Yandex Translate API. Yandex Translate краще перекладає контент з української на російську і навпаки, Google Translate API інші.</p>\n'),
-(21, 21, 1, '6 ПРАКТИЧНИХ ПОРАД ЯК ДИЗАЙНЕРАМ УНИКАТИ КОНФЛІКТІВ З КЛІЄНТАМИ', '6-praktychnyh-porad-yak-dyzajneram-unykaty-konfliktiv-z-kliєntamy', '', '6 ПРАКТИЧНИХ ПОРАД ЯК ДИЗАЙНЕРАМ УНИКАТИ КОНФЛІКТІВ З КЛІЄНТАМИ', '', '', NULL, '<p>Будь-який фрілансер або дизайнерська компанія, незалежно від свого напрямку (веб, графіка, архітектура, 3д-моделювання), рівня цін та професійності, рано чи пізно стикається з конфліктними клієнтами. Творчість взагалі дуже проблемна галузь, залежна від суб&#39;єктивної думки. Тому особливо важливо подбати про захист своїх тилів та уникати проблемних зон у стосунках з клієнтами.</p>\n\n<p>В цій статті ми підготували шість основних питань, про які треба подбати дизайнерській компанії (або фрілансеру) для того, щоб уникнути конфліктів з клієнтами або ж, якщо вони все-таки виникнуть, максимально захистити себе.&nbsp;</p>\n'),
-(22, 22, 1, 'ALLOWOVERRIDE ALL HTTPD OPTIONS ALL -INDEXES — ЗАБОРОНА ПЕРЕГЛЯДУ ПАПОК В ISPMANAGER', 'allowoverride-all-httpd-options-all-indexes-—-zaborona-pereglyadu-papok-v-ispmanager', '', 'ALLOWOVERRIDE ALL HTTPD OPTIONS ALL -INDEXES — ЗАБОРОНА ПЕРЕГЛЯДУ ПАПОК В ISPMANAGER', '', '', NULL, ''),
-(26, 23, 1, '20 ПРИКЛАДІВ ЦІКАВОГО ДИЗАЙНУ САЙТІВ (ЗА БЕРЕЗЕНЬ)', '20-prykladiv-cikavogo-dyzajnu-sajtiv-za-berezen', '', '20 ПРИКЛАДІВ ЦІКАВОГО ДИЗАЙНУ САЙТІВ (ЗА БЕРЕЗЕНЬ)', '', '', NULL, '<p>Впродовж місяця нам трапляється чимало сайтів, які варті уваги з точки зору дизайну, інформаційної архітектури, інтерактивності тощо. Ми вирішили зібрати їх докупи і поділитися з вами &mdash; тиждень добігає кінця, тож є час пошукати натхнення. Сюди потрапили і звичайні сайти, і портфоліо, і лендінги. Деякі з них здобули відзнаки від&nbsp;<a href="http://www.awwwards.com/" rel="nofollow" target="_blank">Awwwards</a>,&nbsp;<a href="http://www.cssdesignawards.com/" rel="nofollow" target="_blank">CSS Design Awards</a>&nbsp;тощо.</p>\n\n<p>До речі, на прикладі цих сайтів можна простежити за всіма&nbsp;<a href="http://otakoyi.com/blog/10-trendiv-veb-dyzaynu-v-2015-rotsi/">сучасними тенденціями</a>&nbsp;в сфері веб-дизайну.&nbsp;Доведеться трохи скролити, тож будьте терплячими! :)</p>\n'),
-(27, 24, 1, 'ЯКОГО БІСА ТИ СКИГЛИШ?', 'yakogo-bisa-ty-skyglysh', '<p>ЯКОГО БІСА ТИ СКИГЛИШ? ГА</p>\n', 'ЯКОГО БІСА ТИ СКИГЛИШ?', '', '', NULL, '<p>Минулого вересня на ми тестили онлайн редагування IT Weekend мені пощастило побувати на доповіді Слави Панкратова зі Школи менеджерів Стратоплан. На тлі інших доповідачів він вирізнявся своєю харизмою та вмінням захопити увагу аудиторії. З того часу мені в очі періодично впадала реклама у фейсбуці, яку я успішно ігнорував. Проте нещодавно, перебуваючи у вимушеній лікарняній відпустці та вкотре гортаючи стрічку новин, вирішив все ж таки залишити свій імейл для завантаження &laquo;Чорної книги менеджера&raquo;.</p>\n\n<p>Не знаю, чи це у мене настрій був такий, чи температура подіяла на мозок, але, на мою думку, ці 18 сторінок брутального тексту &mdash; це найбільш чесні та відверті рядки з усього, що я читав про керування персоналом та роботу в команді. Це чистий концентрат правди для всіх і кожного: починаючи від власників бізнесу, закінчуючи менеджерами всіх рівнів та їхніми підлеглими. Кожен знайде в ній щось для себе.&nbsp;<strong>Цю книгу треба прочитати обов&#39;язково!</strong></p>\n'),
-(28, 25, 1, 'Пошук', 'poshuk', '', 'Пошук', '', '', NULL, ''),
-(30, 27, 1, 'Всяка всячина', 'vsyaka-vsyachyna', '', 'Всяка всячина', '', '', NULL, NULL),
-(31, 28, 1, 'Аккаунт', 'account', '', 'Аккаунт', '', '', NULL, ''),
-(32, 29, 1, 'Вхід ', 'account/login', '', '', '', '', NULL, ''),
-(33, 30, 1, 'Реєстрація ', 'account/register', '', 'Реєстрація', '', '', NULL, ''),
-(34, 31, 1, 'Профіль', 'account/profile', '', 'Профіль', '', '', NULL, ''),
-(35, 34, 1, 'Нагадати пароль', 'account/fp', '', 'Нагадати пароль', '', '', NULL, ''),
-(37, 40, 1, 'Цифрове фото', 'cyfrove-foto', '', 'Цифрове фото, Планшетні ПК', '', '', NULL, '<p>retert</p>\n'),
-(38, 41, 1, 'Цифрові фотоапарати', 'cyfrovi-fotoaparaty', '', 'Цифрові фотоапарати', '', '', '', '<p>dgfdg</p>\n'),
-(39, 42, 1, 'Планшетні ПК111', 'planshetni-pk111', '', 'Планшетні ПК', '', '', NULL, NULL),
-(40, 43, 1, 'Комп''ютерна периферія', 'komp-yuterna-peryferiya', '', 'Комп''ютерна периферія', '', '', NULL, NULL),
-(41, 44, 1, 'Телефони  aa', 'telefony-aa', '', 'Телефони ', '', '', NULL, NULL),
-(42, 45, 1, 'Аудіо, портативна техніка', 'audio-portatyvna-tehnika', '', 'Аудіо, портативна техніка', '', '', NULL, NULL),
-(43, 46, 1, 'Активний відпочинок, обігрівачі', 'aktyvnyj-vidpochynok-obigrivachi', '', 'Активний відпочинок, обігрівачі', '', '', NULL, NULL),
-(44, 47, 1, 'Чохли та супутні товари', 'chohly-ta-suputni-tovary', '', 'Чохли та супутні товари', '', '', NULL, NULL),
-(45, 48, 1, 'Годинники', 'godynnyky', '', 'Годинники', '', '', NULL, NULL),
-(46, 49, 1, 'Штативи', 'shtatyvy', '', 'Штативи', '', '', NULL, NULL),
-(47, 52, 1, 'ACER Iconia A1-840 FHD 8'''' 16 GBrtertertr', 'acer-iconia-a1-840-fhd-8-16-gbrtertertr', '', 'ACER Iconia A1-840 FHD 8'''' 16 GB', '', '', '', ''),
-(48, 54, 1, 'Смартфон Samsung J500H Galaxy J5', 'smartfon-samsung-j500h-galaxy-j5', '', 'Смартфон Samsung J500H Galaxy J5', '', '', NULL, ''),
-(49, 55, 1, 'Смартфон Keneksi Choice Dual Sim', 'smartfon-keneksi-choice-dual-sim', '', 'Смартфон Keneksi Choice Dual Sim', '', '', NULL, ''),
-(51, 57, 1, 'Смартфон Keneksi Choice Dual Sim2', 'smartfon-keneksi-choice-dual-sim2', '', 'Смартфон Keneksi Choice Dual Sim2', '', '', NULL, ''),
-(52, 59, 1, 'Смартфон Lenovo A1000 Dual Sim', 'smartfon-lenovo-a1000-dual-sim', '', 'Смартфон Lenovo A1000 Dual Sim', '', '', NULL, ''),
-(53, 92, 1, 'PHILIPS E320', 'philips-e320', '', 'PHILIPS E320', '', '', NULL, ''),
-(54, 130, 1, 'Іміджеві', 'imidzhevi', '', 'Іміджеві', '', '', NULL, NULL),
-(55, 146, 1, 'Аксесуари', 'aksesuary', '', 'Аксесуари', '', '', NULL, NULL),
-(56, 147, 1, 'DL2133NMWH BK', 'dl2133nmwh-bk', '', 'DL2133NMWH BK', '', '', '', ''),
-(61, 150, 1, 'sdffsdfsdf', 'sdffsdfsdf', '', 'sdffsdfsdf', '', '', NULL, NULL),
-(62, 151, 1, 'wБуfsdfdsfsdf', 'wbufsdfdsfsdf', '', 'Буfsdfdsfsdf', '', '', NULL, NULL),
-(63, 152, 1, 'retretretert', 'retretretert', '', 'retretretert', '', '', NULL, NULL),
-(64, 153, 1, 'werwerewrewr', 'werwerewrewr', '', 'werwerewrewr', '', '', NULL, NULL),
-(65, 154, 1, 'aaaaaaaaaaaasssssssss', 'aaaaaaaaaaaasssssssss', '', 'aaaaaaaaaaaasssssssss', '', '', NULL, NULL),
-(66, 155, 1, 'dsfsdfdsqaaaaaaaaaa', 'dsfsdfdsqaaaaaaaaaa', '', 'dsfsdfdsqaaaaaaaaaa', '', '', NULL, NULL),
-(67, 156, 1, 'Кількість', 'kil-kist', '', 'Кількість', '', '', NULL, NULL),
-(68, 157, 1, 'шт.', 'sht', '', 'шт.', '', '', NULL, NULL),
-(69, 158, 1, 'уп.', 'up', '', 'уп.', '', '', NULL, NULL),
-(70, 159, 1, 'г.', 'g', '', 'г.', '', '', NULL, NULL),
-(71, 160, 1, 'кг.', 'kg', '', 'кг.', '', '', NULL, NULL),
-(72, 161, 1, 'т.', 't', '', 'т.', '', '', NULL, NULL);
+(1, 1, 1, 'Головна', '', '', 'Головна', '', '', '', ''),
+(2, 4, 1, 'Про нас', 'pro-nas', '', 'Про нас', '', '', '', ''),
+(3, 5, 1, 'Новини та Акції', 'novyny-ta-akcii', '', 'Новини та Акції', '', '', '', ''),
+(4, 6, 1, 'Доставка і оплата', 'dostavka-i-oplata', '', 'Доставка і оплата', '', '', '', ''),
+(5, 7, 1, 'Контакти', 'kontakty', '', 'Контакти', '', '', '', '');
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_content_relationship`
+-- Структура таблиці `e_content_relationship`
 --
 
 CREATE TABLE IF NOT EXISTS `e_content_relationship` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL,
   `content_id` int(10) unsigned NOT NULL,
   `categories_id` int(10) unsigned NOT NULL,
-  `is_main` tinyint(1) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`,`content_id`,`categories_id`),
-  UNIQUE KEY `content_id` (`content_id`,`categories_id`),
-  KEY `fk_content_relationship_content1_idx` (`content_id`),
-  KEY `fk_content_relationship_content2_idx` (`categories_id`),
-  KEY `is_main` (`is_main`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=109 ;
-
---
--- Дамп данных таблицы `e_content_relationship`
---
-
-INSERT INTO `e_content_relationship` (`id`, `content_id`, `categories_id`, `is_main`) VALUES
-(1, 16, 13, 0),
-(2, 17, 13, 0),
-(3, 18, 13, 0),
-(4, 19, 13, 0),
-(5, 20, 13, 0),
-(6, 21, 13, 0),
-(7, 22, 13, 0),
-(8, 23, 13, 0),
-(9, 24, 13, 0),
-(10, 16, 15, 0),
-(94, 52, 44, 0),
-(29, 57, 41, 1),
-(30, 59, 41, 1),
-(76, 54, 41, 1),
-(89, 92, 44, 1),
-(96, 147, 130, 1),
-(108, 52, 43, 1);
+  `is_main` tinyint(1) unsigned DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_content_types`
+-- Структура таблиці `e_content_types`
 --
 
 CREATE TABLE IF NOT EXISTS `e_content_types` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `id` tinyint(3) unsigned NOT NULL,
   `parent_id` tinyint(3) unsigned DEFAULT '0',
   `isfolder` tinyint(1) unsigned DEFAULT '0',
   `type` varchar(45) NOT NULL,
   `name` varchar(60) NOT NULL,
   `is_main` tinyint(1) unsigned DEFAULT NULL,
-  `settings` text,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `parent_id` (`parent_id`,`type`),
-  UNIQUE KEY `parent_id_2` (`parent_id`,`is_main`),
-  KEY `is_main` (`is_main`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
+  `settings` text
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 --
--- Дамп данных таблицы `e_content_types`
+-- Дамп даних таблиці `e_content_types`
 --
 
 INSERT INTO `e_content_types` (`id`, `parent_id`, `isfolder`, `type`, `name`, `is_main`, `settings`) VALUES
-(1, 0, 1, 'pages', 'Сторінки', NULL, 'a:2:{s:7:"ext_url";s:1:"0";s:9:"parent_id";s:0:"";}'),
-(2, 0, 0, 'post', 'Стаття', NULL, NULL),
-(3, 0, 0, 'posts_categories', 'Категорії статтей', NULL, NULL),
-(4, 1, 0, '404', '404', NULL, NULL),
-(6, 1, 0, 'main', 'Головна', NULL, NULL),
-(7, 1, 0, 'blog', 'Блог', NULL, NULL),
-(8, 1, 0, 'account', 'Аккаунт', NULL, NULL),
-(9, 1, 1, 'contacts', 'Контакти', NULL, NULL),
-(10, 0, 0, 'product', 'Товар', NULL, 'a:2:{s:7:"ext_url";s:1:"0";s:9:"parent_id";s:0:"";}'),
-(11, 0, 0, 'products_categories', 'Категорії товарів', NULL, NULL),
-(12, 9, 0, 'aaaa', 'qqqa', NULL, NULL),
-(13, 0, 0, 'guide', 'guide', NULL, 'a:2:{s:7:"ext_url";s:1:"0";s:9:"parent_id";s:0:"";}');
+(1, 0, 1, 'pages', 'Сторінки', 1, NULL),
+(2, 0, 0, 'guide', 'Guides', NULL, NULL),
+(16, 1, 0, 'home', 'home', NULL, 'a:2:{s:7:"ext_url";s:1:"0";s:9:"parent_id";s:0:"";}');
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_content_types_images_sizes`
+-- Структура таблиці `e_content_types_images_sizes`
 --
 
 CREATE TABLE IF NOT EXISTS `e_content_types_images_sizes` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `types_id` tinyint(3) unsigned NOT NULL,
-  `images_sizes_id` tinyint(3) unsigned NOT NULL,
-  PRIMARY KEY (`id`,`types_id`,`images_sizes_id`),
-  KEY `fk_content_types_images_sizes1_idx` (`types_id`),
-  KEY `fk_content_types_images_sizes2_idx` (`images_sizes_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=37 ;
-
---
--- Дамп данных таблицы `e_content_types_images_sizes`
---
-
-INSERT INTO `e_content_types_images_sizes` (`id`, `types_id`, `images_sizes_id`) VALUES
-(35, 1, 1),
-(36, 1, 2),
-(25, 2, 1),
-(30, 4, 1),
-(11, 6, 2),
-(34, 10, 2);
+  `images_sizes_id` tinyint(3) unsigned NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_currency`
+-- Структура таблиці `e_currency`
 --
 
 CREATE TABLE IF NOT EXISTS `e_currency` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `id` tinyint(3) unsigned NOT NULL,
   `name` varchar(45) COLLATE utf8_unicode_ci DEFAULT NULL,
   `code` char(3) COLLATE utf8_unicode_ci DEFAULT NULL,
   `symbol` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
   `rate` decimal(7,3) DEFAULT NULL,
-  `is_main` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`),
-  UNIQUE KEY `code` (`code`),
-  KEY `is_main` (`is_main`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
-
---
--- Дамп данных таблицы `e_currency`
---
-
-INSERT INTO `e_currency` (`id`, `name`, `code`, `symbol`, `rate`, `is_main`) VALUES
-(1, 'Гривня', 'UAH', 'грн', 27.000, 0),
-(2, 'Долар', 'USD', '$', 1.000, 1);
+  `is_main` tinyint(1) unsigned NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_delivery`
+-- Структура таблиці `e_delivery`
 --
 
 CREATE TABLE IF NOT EXISTS `e_delivery` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `id` tinyint(3) unsigned NOT NULL,
   `free_from` decimal(10,2) unsigned NOT NULL DEFAULT '0.00',
   `price` decimal(10,2) NOT NULL DEFAULT '0.00',
   `module` varchar(30) DEFAULT NULL,
   `settings` text,
-  `published` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
-
---
--- Дамп данных таблицы `e_delivery`
---
-
-INSERT INTO `e_delivery` (`id`, `free_from`, `price`, `module`, `settings`, `published`) VALUES
-(1, 500.00, 10.00, '', 'a:2:{s:3:"key";s:1:"1";s:8:"password";s:1:"2";}', 1),
-(2, 500.00, 30.00, 'NovaPoshta', 'a:2:{s:3:"key";s:1:"1";s:8:"password";s:1:"2";}', 1);
+  `published` tinyint(1) unsigned NOT NULL DEFAULT '0'
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_delivery_info`
+-- Структура таблиці `e_delivery_info`
 --
 
 CREATE TABLE IF NOT EXISTS `e_delivery_info` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `id` tinyint(3) unsigned NOT NULL,
   `delivery_id` tinyint(3) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
   `name` varchar(255) DEFAULT NULL,
-  `description` text,
-  PRIMARY KEY (`id`,`delivery_id`,`languages_id`),
-  KEY `fk_delivery_info_delivery1_idx` (`delivery_id`),
-  KEY `fk_delivery_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
-
---
--- Дамп данных таблицы `e_delivery_info`
---
-
-INSERT INTO `e_delivery_info` (`id`, `delivery_id`, `languages_id`, `name`, `description`) VALUES
-(1, 1, 1, 'Самовиз', '12121fds sadsadsa'),
-(2, 2, 1, 'Нова пошта', 'Служба доставки нова пошта');
+  `description` text
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_delivery_payment`
+-- Структура таблиці `e_delivery_payment`
 --
 
 CREATE TABLE IF NOT EXISTS `e_delivery_payment` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `delivery_id` tinyint(3) unsigned NOT NULL,
-  `payment_id` tinyint(3) unsigned NOT NULL,
-  PRIMARY KEY (`id`,`delivery_id`,`payment_id`),
-  UNIQUE KEY `delivery_id` (`delivery_id`,`payment_id`),
-  KEY `fk_delivery_payment_delivery1_idx` (`delivery_id`),
-  KEY `fk_delivery_payment_payment1_idx` (`payment_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18 ;
-
---
--- Дамп данных таблицы `e_delivery_payment`
---
-
-INSERT INTO `e_delivery_payment` (`id`, `delivery_id`, `payment_id`) VALUES
-(17, 2, 1);
+  `payment_id` tinyint(3) unsigned NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_features`
+-- Структура таблиці `e_features`
 --
 
 CREATE TABLE IF NOT EXISTS `e_features` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `parent_id` int(10) unsigned DEFAULT NULL,
   `type` enum('text','textarea','select','file','folder','value','checkbox','number') DEFAULT NULL,
   `code` varchar(45) NOT NULL,
@@ -689,174 +352,88 @@ CREATE TABLE IF NOT EXISTS `e_features` (
   `owner_id` int(11) unsigned NOT NULL,
   `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `status` enum('blank','published','hidden') DEFAULT 'blank',
-  `position` tinyint(3) unsigned NOT NULL,
-  PRIMARY KEY (`id`,`owner_id`),
-  UNIQUE KEY `code_UNIQUE` (`code`),
-  KEY `fk_features_users1_idx` (`owner_id`),
-  KEY `position` (`position`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=173 ;
-
---
--- Дамп данных таблицы `e_features`
---
-
-INSERT INTO `e_features` (`id`, `parent_id`, `type`, `code`, `multiple`, `on_filter`, `required`, `owner_id`, `created`, `status`, `position`) VALUES
-(151, 0, 'select', 'feature_1467373010', 0, NULL, 0, 2, '2016-07-01 11:36:50', 'published', 0),
-(152, 0, 'select', 'feature_1467374072', 0, NULL, 0, 2, '2016-07-01 11:54:32', 'published', 0),
-(153, 0, 'select', 'feature_1467374080', 0, NULL, 0, 2, '2016-07-01 11:54:40', 'published', 0),
-(154, 0, 'text', 'feature_1467374090', 0, NULL, 0, 2, '2016-07-01 11:54:50', 'published', 0),
-(155, 0, 'select', 'feature_1467374098', 0, NULL, 0, 2, '2016-07-01 11:54:58', 'published', 0),
-(156, 0, 'select', 'feature_1467374136', 0, NULL, 0, 2, '2016-07-01 11:55:36', 'published', 0),
-(157, 0, 'select', 'balans_bilogo', 0, 0, 0, 2, '2016-07-01 14:13:57', 'published', 0),
-(158, 0, 'select', 'serijna_zjomka_kadriv_sek', 0, 0, 0, 2, '2016-07-01 14:16:00', 'published', 0),
-(159, 0, 'select', 'maks_rozmir_kadru_kadriv_sek', 0, 0, 0, 2, '2016-07-01 14:16:12', 'published', 0),
-(160, 0, 'select', 'lcd_ekran', 0, 1, 1, 2, '2016-07-01 14:20:55', 'published', 0),
-(161, 0, 'select', 'sf', 0, 0, 0, 2, '2016-07-01 14:39:19', 'published', 0),
-(162, 0, 'select', 'rozmir', 0, 0, 0, 2, '2016-07-04 08:22:15', 'published', 0),
-(163, 0, 'select', 'kolir', 0, 0, 0, 2, '2016-07-04 08:22:22', 'published', 0),
-(164, 162, 'value', 'c2d121e9f228b628c715200e030500d3', NULL, NULL, 0, 2, '2016-07-04 08:22:25', 'published', 0),
-(165, 162, 'value', '0bb1d14c5457815a604af9a9c3f43177', NULL, NULL, 0, 2, '2016-07-04 08:22:28', 'published', 0),
-(166, 162, 'value', '47e3c0c1b3669a9b862acfc97ee53774', NULL, NULL, 0, 2, '2016-07-04 08:22:30', 'published', 0),
-(167, 163, 'value', '21d02304d5e381a81614cf396bfca961', NULL, NULL, 0, 2, '2016-07-04 08:22:36', 'published', 0),
-(168, 163, 'value', '8eb14a484e058c34e031cfbaee5675d5', NULL, NULL, 0, 2, '2016-07-04 08:22:41', 'published', 0),
-(169, 0, 'select', 'klas_yakosti', 0, 0, 0, 2, '2016-07-04 08:22:53', 'published', 0),
-(170, 169, 'value', 'de34fa03f5c8eeda152b2659115f4fd3', NULL, NULL, 0, 2, '2016-07-04 08:22:58', 'published', 0),
-(171, 169, 'value', 'b988cd5587cf91ed771f9c013b2ed0a7', NULL, NULL, 0, 2, '2016-07-04 08:23:02', 'published', 0),
-(172, 169, 'value', '2fae5d6ec775b0b9b220d5c7a3a6e5c8', NULL, NULL, 0, 2, '2016-07-04 08:23:05', 'published', 0);
+  `position` tinyint(3) unsigned NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=173 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_features_content`
+-- Структура таблиці `e_features_content`
 --
 
 CREATE TABLE IF NOT EXISTS `e_features_content` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `features_id` int(10) unsigned NOT NULL,
   `content_types_id` tinyint(3) unsigned NOT NULL,
   `content_subtypes_id` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `content_id` int(10) unsigned NOT NULL DEFAULT '0',
-  `position` tinyint(3) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`,`features_id`,`content_types_id`,`content_subtypes_id`,`content_id`),
-  UNIQUE KEY `features_id` (`features_id`,`content_types_id`,`content_subtypes_id`,`content_id`),
-  KEY `fk_content_features_idx` (`features_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=89 ;
-
---
--- Дамп данных таблицы `e_features_content`
---
-
-INSERT INTO `e_features_content` (`id`, `features_id`, `content_types_id`, `content_subtypes_id`, `content_id`, `position`) VALUES
-(81, 157, 11, 11, 41, 1),
-(82, 159, 11, 11, 41, 2),
-(83, 152, 11, 11, 41, 3),
-(84, 153, 11, 11, 41, 4),
-(85, 160, 11, 11, 41, 0),
-(86, 162, 11, 11, 43, NULL),
-(87, 163, 11, 11, 43, NULL),
-(88, 169, 11, 11, 43, NULL);
+  `position` tinyint(3) unsigned DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_features_info`
+-- Структура таблиці `e_features_info`
 --
 
 CREATE TABLE IF NOT EXISTS `e_features_info` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `features_id` int(10) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`,`features_id`,`languages_id`),
-  KEY `fk_features_info_features1_idx` (`features_id`),
-  KEY `fk_features_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=156 ;
-
---
--- Дамп данных таблицы `e_features_info`
---
-
-INSERT INTO `e_features_info` (`id`, `features_id`, `languages_id`, `name`) VALUES
-(134, 151, 1, 'Кількість мегапікселів'),
-(135, 152, 1, 'Максимальний розмір кадру'),
-(136, 153, 1, 'Фокусна відстань, 35-мм еквівалент '),
-(137, 154, 1, 'Оптичний зум'),
-(138, 155, 1, 'Чутливість ISO   авто'),
-(139, 156, 1, 'Діапазон витримок, сек '),
-(140, 157, 1, 'Баланс білого'),
-(141, 158, 1, 'Серійна зйомка, кадрів/сек'),
-(142, 159, 1, 'Макс. розмір кадру; кадрів/сек'),
-(143, 160, 1, 'LCD-екран'),
-(144, 161, 1, 'sf'),
-(145, 162, 1, 'Розмір'),
-(146, 163, 1, 'Колір'),
-(147, 164, 1, '1'),
-(148, 165, 1, '2'),
-(149, 166, 1, '3'),
-(150, 167, 1, 'чорний'),
-(151, 168, 1, 'білий'),
-(152, 169, 1, 'Клас якості'),
-(153, 170, 1, 'a'),
-(154, 171, 1, 'b'),
-(155, 172, 1, 'c');
+  `name` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=156 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_feedbacks`
+-- Структура таблиці `e_feedbacks`
 --
 
 CREATE TABLE IF NOT EXISTS `e_feedbacks` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `name` varchar(60) NOT NULL,
   `email` varchar(60) NOT NULL,
   `phone` varchar(20) NOT NULL,
   `message` text NOT NULL,
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `status` enum('new','processed') CHARACTER SET utf8 NOT NULL DEFAULT 'new',
-  `ip` char(15) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  `ip` char(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_languages`
+-- Структура таблиці `e_languages`
 --
 
 CREATE TABLE IF NOT EXISTS `e_languages` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `id` tinyint(3) unsigned NOT NULL,
   `code` char(2) NOT NULL,
   `name` varchar(30) NOT NULL,
-  `is_main` tinyint(1) unsigned DEFAULT '0',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`),
-  KEY `is_main` (`is_main`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+  `is_main` tinyint(1) unsigned DEFAULT '0'
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 --
--- Дамп данных таблицы `e_languages`
+-- Дамп даних таблиці `e_languages`
 --
 
 INSERT INTO `e_languages` (`id`, `code`, `name`, `is_main`) VALUES
-(1, 'uk', 'Українська', 1);
+(1, 'uk', 'УКР', 1);
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_mail_templates`
+-- Структура таблиці `e_mail_templates`
 --
 
 CREATE TABLE IF NOT EXISTS `e_mail_templates` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `id` tinyint(3) unsigned NOT NULL,
   `code` varchar(30) NOT NULL,
-  `name` varchar(60) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `code_UNIQUE` (`code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+  `name` varchar(60) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 --
--- Дамп данных таблицы `e_mail_templates`
+-- Дамп даних таблиці `e_mail_templates`
 --
 
 INSERT INTO `e_mail_templates` (`id`, `code`, `name`) VALUES
@@ -870,22 +447,19 @@ INSERT INTO `e_mail_templates` (`id`, `code`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_mail_templates_info`
+-- Структура таблиці `e_mail_templates_info`
 --
 
 CREATE TABLE IF NOT EXISTS `e_mail_templates_info` (
-  `id` smallint(6) unsigned NOT NULL AUTO_INCREMENT,
+  `id` smallint(6) unsigned NOT NULL,
   `templates_id` tinyint(3) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
   `subject` varchar(255) NOT NULL,
-  `body` text NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_mail_templates_info_idx` (`templates_id`),
-  KEY `fk_mail_templates_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
+  `body` text NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 --
--- Дамп данных таблицы `e_mail_templates_info`
+-- Дамп даних таблиці `e_mail_templates_info`
 --
 
 INSERT INTO `e_mail_templates_info` (`id`, `templates_id`, `languages_id`, `subject`, `body`) VALUES
@@ -899,19 +473,17 @@ INSERT INTO `e_mail_templates_info` (`id`, `templates_id`, `languages_id`, `subj
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_nav`
+-- Структура таблиці `e_nav`
 --
 
 CREATE TABLE IF NOT EXISTS `e_nav` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `id` tinyint(3) unsigned NOT NULL,
   `name` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `code` varchar(30) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+  `code` varchar(30) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
--- Дамп данных таблицы `e_nav`
+-- Дамп даних таблиці `e_nav`
 --
 
 INSERT INTO `e_nav` (`id`, `name`, `code`) VALUES
@@ -921,56 +493,43 @@ INSERT INTO `e_nav` (`id`, `name`, `code`) VALUES
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_nav_items`
+-- Структура таблиці `e_nav_items`
 --
 
 CREATE TABLE IF NOT EXISTS `e_nav_items` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `nav_id` tinyint(3) unsigned NOT NULL,
   `content_id` int(11) unsigned NOT NULL,
-  `position` tinyint(3) unsigned NOT NULL,
-  PRIMARY KEY (`id`,`nav_id`,`content_id`),
-  UNIQUE KEY `nav_id` (`nav_id`,`content_id`),
-  KEY `fk_nav_items_nav1_idx` (`nav_id`),
-  KEY `fk_nav_items_content1_idx` (`content_id`),
-  KEY `position` (`position`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=13 ;
+  `position` tinyint(3) unsigned NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
--- Дамп данных таблицы `e_nav_items`
+-- Дамп даних таблиці `e_nav_items`
 --
 
 INSERT INTO `e_nav_items` (`id`, `nav_id`, `content_id`, `position`) VALUES
-(8, 2, 30, 0),
-(9, 2, 29, 0),
-(10, 2, 28, 0),
-(12, 2, 31, 0),
-(1, 1, 2, 2),
-(3, 1, 4, 2),
-(2, 1, 3, 3),
-(6, 1, 8, 5);
+(1, 1, 4, 0),
+(2, 1, 5, 0),
+(3, 1, 7, 0),
+(4, 1, 6, 0);
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_orders_status`
+-- Структура таблиці `e_orders_status`
 --
 
 CREATE TABLE IF NOT EXISTS `e_orders_status` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `bg_color` char(7) DEFAULT NULL,
   `txt_color` varchar(7) DEFAULT NULL,
   `on_site` tinyint(1) unsigned DEFAULT NULL,
   `external_id` varchar(64) DEFAULT NULL,
-  `is_main` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `external_id_2` (`external_id`),
-  KEY `on_site` (`on_site`),
-  KEY `external_id` (`external_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+  `is_main` tinyint(1) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 --
--- Дамп данных таблицы `e_orders_status`
+-- Дамп даних таблиці `e_orders_status`
 --
 
 INSERT INTO `e_orders_status` (`id`, `bg_color`, `txt_color`, `on_site`, `external_id`, `is_main`) VALUES
@@ -979,21 +538,18 @@ INSERT INTO `e_orders_status` (`id`, `bg_color`, `txt_color`, `on_site`, `extern
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_orders_status_info`
+-- Структура таблиці `e_orders_status_info`
 --
 
 CREATE TABLE IF NOT EXISTS `e_orders_status_info` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `status_id` int(10) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
-  `status` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id`,`status_id`,`languages_id`),
-  KEY `fk_orders_status_info_languages1_idx` (`languages_id`),
-  KEY `fk_orders_status_info_orders_status1_idx` (`status_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+  `status` varchar(45) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
--- Дамп данных таблицы `e_orders_status_info`
+-- Дамп даних таблиці `e_orders_status_info`
 --
 
 INSERT INTO `e_orders_status_info` (`id`, `status_id`, `languages_id`, `status`) VALUES
@@ -1002,214 +558,115 @@ INSERT INTO `e_orders_status_info` (`id`, `status_id`, `languages_id`, `status`)
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_payment`
+-- Структура таблиці `e_payment`
 --
 
 CREATE TABLE IF NOT EXISTS `e_payment` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `id` tinyint(3) unsigned NOT NULL,
   `published` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `module` varchar(60) NOT NULL,
   `settings` text,
-  `position` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  KEY `module` (`module`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
-
---
--- Дамп данных таблицы `e_payment`
---
-
-INSERT INTO `e_payment` (`id`, `published`, `module`, `settings`, `position`) VALUES
-(1, 1, '', 'a:2:{s:9:"yandex_id";s:1:"1";s:13:"yandex_secret";s:1:"2";}', 0),
-(2, 1, '', NULL, 0),
-(3, 1, 'LiqPay', 'a:5:{s:10:"public_key";s:1:"1";s:11:"private_key";s:1:"2";s:10:"result_url";s:1:"3";s:9:"error_url";s:1:"4";s:7:"sandbox";s:1:"5";}', 0),
-(4, 1, 'YandexMoney', 'a:2:{s:9:"yandex_id";s:1:"1";s:13:"yandex_secret";s:1:"2";}', 0),
-(5, 1, 'WebMoney', 'a:2:{s:5:"purse";s:1:"1";s:10:"secret_key";s:1:"2";}', 0);
+  `position` tinyint(3) unsigned NOT NULL DEFAULT '0'
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_payment_info`
+-- Структура таблиці `e_payment_info`
 --
 
 CREATE TABLE IF NOT EXISTS `e_payment_info` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `id` tinyint(3) unsigned NOT NULL,
   `payment_id` tinyint(3) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
   `name` varchar(60) DEFAULT NULL,
-  `description` text,
-  PRIMARY KEY (`id`,`payment_id`,`languages_id`),
-  KEY `fk_payment_info_payment1_idx` (`payment_id`),
-  KEY `fk_payment_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
-
---
--- Дамп данных таблицы `e_payment_info`
---
-
-INSERT INTO `e_payment_info` (`id`, `payment_id`, `languages_id`, `name`, `description`) VALUES
-(1, 1, 1, 'При отриманні', ''),
-(2, 2, 1, 'Розрахунковий рахунок', ''),
-(3, 3, 1, 'Онлайн LiqPay', ''),
-(4, 4, 1, 'Онлайн YandexMoney', ''),
-(5, 5, 1, 'WebMoney', '');
+  `description` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_posts_tags`
+-- Структура таблиці `e_posts_tags`
 --
 
 CREATE TABLE IF NOT EXISTS `e_posts_tags` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `posts_id` int(11) unsigned NOT NULL,
   `tags_id` int(10) unsigned NOT NULL,
-  `languages_id` tinyint(3) unsigned NOT NULL,
-  PRIMARY KEY (`id`,`posts_id`,`tags_id`,`languages_id`),
-  UNIQUE KEY `posts_id` (`posts_id`,`tags_id`),
-  KEY `fk_tags_content_content1_idx` (`posts_id`),
-  KEY `fk_tags_posts_tags1_idx` (`tags_id`),
-  KEY `fk_posts_tags_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
-
---
--- Дамп данных таблицы `e_posts_tags`
---
-
-INSERT INTO `e_posts_tags` (`id`, `posts_id`, `tags_id`, `languages_id`) VALUES
-(3, 16, 29, 1),
-(4, 16, 30, 1);
+  `languages_id` tinyint(3) unsigned NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_products_prices`
+-- Структура таблиці `e_products_prices`
 --
 
 CREATE TABLE IF NOT EXISTS `e_products_prices` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `content_id` int(10) unsigned NOT NULL,
   `group_id` tinyint(3) unsigned NOT NULL,
   `price` decimal(10,2) DEFAULT NULL,
-  `price_old` decimal(10,2) DEFAULT NULL,
-  PRIMARY KEY (`id`,`content_id`,`group_id`),
-  UNIQUE KEY `content_id` (`content_id`,`group_id`),
-  KEY `fk_products_prices_content1_idx` (`content_id`),
-  KEY `fk_products_prices_users_group1_idx` (`group_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
-
---
--- Дамп данных таблицы `e_products_prices`
---
-
-INSERT INTO `e_products_prices` (`id`, `content_id`, `group_id`, `price`, `price_old`) VALUES
-(1, 52, 20, 11.00, NULL),
-(2, 52, 21, 22.00, NULL),
-(3, 52, 22, 32.00, NULL);
+  `price_old` decimal(10,2) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_products_variants`
+-- Структура таблиці `e_products_variants`
 --
 
 CREATE TABLE IF NOT EXISTS `e_products_variants` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `content_id` int(10) unsigned NOT NULL,
   `in_stock` tinyint(1) DEFAULT '1',
-  `img` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`,`content_id`),
-  KEY `fk_products_variants_content1_idx` (`content_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=73 ;
-
---
--- Дамп данных таблицы `e_products_variants`
---
-
-INSERT INTO `e_products_variants` (`id`, `content_id`, `in_stock`, `img`) VALUES
-(70, 52, 0, '/uploads/content/2016/07/04/variants/7cbbc409ec990f19c78c75bd1e06f215.png'),
-(71, 52, 0, '/uploads/content/2016/07/04/variants/e2c420d928d4bf8ce0ff2ec19b371514.png'),
-(72, 52, 0, '/uploads/content/2016/07/04/variants/32bb90e8976aab5298d5da10fe66f21d.png');
+  `img` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_products_variants_features`
+-- Структура таблиці `e_products_variants_features`
 --
 
 CREATE TABLE IF NOT EXISTS `e_products_variants_features` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `variants_id` int(10) unsigned NOT NULL,
   `features_id` int(10) unsigned NOT NULL,
-  `values_id` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`,`variants_id`,`features_id`,`values_id`),
-  UNIQUE KEY `variants_id` (`variants_id`,`features_id`,`values_id`),
-  KEY `fk_products_variants_features_features1_idx` (`features_id`),
-  KEY `fk_products_variants_features_products_variants1_idx` (`variants_id`),
-  KEY `fk_products_variants_features_features2_idx` (`values_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=99 ;
-
---
--- Дамп данных таблицы `e_products_variants_features`
---
-
-INSERT INTO `e_products_variants_features` (`id`, `variants_id`, `features_id`, `values_id`) VALUES
-(96, 70, 162, 164),
-(97, 71, 162, 165),
-(98, 72, 162, 166);
+  `values_id` int(10) unsigned NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=99 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_products_variants_prices`
+-- Структура таблиці `e_products_variants_prices`
 --
 
 CREATE TABLE IF NOT EXISTS `e_products_variants_prices` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `variants_id` int(10) unsigned NOT NULL,
   `content_id` int(10) unsigned NOT NULL,
   `group_id` tinyint(3) unsigned NOT NULL,
-  `price` decimal(10,0) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`,`variants_id`,`content_id`,`group_id`),
-  UNIQUE KEY `variants_id` (`variants_id`,`content_id`,`group_id`),
-  KEY `fk_products_variants_prices_products_variants1_idx` (`variants_id`,`content_id`),
-  KEY `fk_products_variants_prices_users_group1_idx` (`group_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=115 ;
-
---
--- Дамп данных таблицы `e_products_variants_prices`
---
-
-INSERT INTO `e_products_variants_prices` (`id`, `variants_id`, `content_id`, `group_id`, `price`) VALUES
-(106, 70, 52, 20, 100),
-(107, 70, 52, 21, 22),
-(108, 70, 52, 22, 32),
-(109, 71, 52, 20, 110),
-(110, 71, 52, 21, 22),
-(111, 71, 52, 22, 32),
-(112, 72, 52, 20, 120),
-(113, 72, 52, 21, 22),
-(114, 72, 52, 22, 32);
+  `price` decimal(10,0) unsigned DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=115 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_settings`
+-- Структура таблиці `e_settings`
 --
 
 CREATE TABLE IF NOT EXISTS `e_settings` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(10) unsigned NOT NULL,
   `name` varchar(45) NOT NULL,
   `value` text NOT NULL,
   `block` enum('company','common','images','themes','editor','content','seo','analitycs','robots','mail') NOT NULL,
   `type` enum('text','textarea') NOT NULL,
-  `required` tinyint(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `sname` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=52 ;
+  `required` tinyint(1) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8;
 
 --
--- Дамп данных таблицы `e_settings`
+-- Дамп даних таблиці `e_settings`
 --
 
 INSERT INTO `e_settings` (`id`, `name`, `value`, `block`, `type`, `required`) VALUES
@@ -1260,41 +717,22 @@ INSERT INTO `e_settings` (`id`, `name`, `value`, `block`, `type`, `required`) VA
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_tags`
+-- Структура таблиці `e_tags`
 --
 
 CREATE TABLE IF NOT EXISTS `e_tags` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `tag` varchar(60) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=31 ;
-
---
--- Дамп данных таблицы `e_tags`
---
-
-INSERT INTO `e_tags` (`id`, `tag`) VALUES
-(17, 'php'),
-(18, 'mysql'),
-(19, 'jquery'),
-(20, 'sdfsdf'),
-(21, 'sdf'),
-(22, 'sd'),
-(23, 'f'),
-(24, 'dsf'),
-(26, 'v'),
-(27, 'b'),
-(29, 'd'),
-(30, 'cc');
+  `id` int(10) unsigned NOT NULL,
+  `tag` varchar(60) DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_users`
+-- Структура таблиці `e_users`
 --
 
 CREATE TABLE IF NOT EXISTS `e_users` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL,
   `group_id` tinyint(3) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
   `sessid` char(35) DEFAULT NULL,
@@ -1308,111 +746,635 @@ CREATE TABLE IF NOT EXISTS `e_users` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated` datetime NOT NULL,
   `lastlogin` timestamp NULL DEFAULT NULL,
-  `status` enum('active','ban','deleted') NOT NULL DEFAULT 'active',
-  PRIMARY KEY (`id`,`group_id`,`languages_id`),
-  UNIQUE KEY `phone` (`phone`,`email`),
-  KEY `fk_users_group1_idx` (`group_id`),
-  KEY `status` (`status`),
-  KEY `skey` (`skey`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=22 ;
+  `status` enum('active','ban','deleted') NOT NULL DEFAULT 'active'
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 
 --
--- Дамп данных таблицы `e_users`
+-- Дамп даних таблиці `e_users`
 --
 
 INSERT INTO `e_users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `updated`, `lastlogin`, `status`) VALUES
-(2, 1, 0, '0j01k53csoqom5k5mlg15hf6s3', 'Володимир', 'Годяк', '+38 (067) 6736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-04-21 11:24:28', '2016-07-04 11:36:07', 'active'),
-(19, 1, 0, NULL, 'Жорік', 'Васильович', '+77 (777) 7777777', 'otakoyi1@gmail.com', 'MTYFiZEAZZjt.', NULL, NULL, '2016-06-18 10:25:22', '0000-00-00 00:00:00', NULL, 'ban'),
-(21, 20, 0, NULL, 'Жорік', 'Абрамович', '+99 (999) 9999999', 'sz@otakoyi.com', 'OT55OBip4.nJU', NULL, NULL, '2016-06-28 06:21:16', '0000-00-00 00:00:00', NULL, 'active');
+(2, 1, 0, 'p5bu55ttgb974047nvd53ucj86', 'Володимир', 'Годяк', '+38 (067) 6736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-04-21 11:24:28', '2016-07-04 18:38:13', 'active');
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_users_group`
+-- Структура таблиці `e_users_group`
 --
 
 CREATE TABLE IF NOT EXISTS `e_users_group` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `id` tinyint(3) unsigned NOT NULL,
   `parent_id` tinyint(3) unsigned NOT NULL,
   `isfolder` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `backend` tinyint(1) unsigned DEFAULT NULL,
   `permissions` text,
-  `position` tinyint(3) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `pid` (`parent_id`),
-  KEY `sort` (`position`),
-  KEY `isfolder` (`isfolder`),
-  KEY `backend` (`backend`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=23 ;
+  `position` tinyint(3) unsigned NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 
 --
--- Дамп данных таблицы `e_users_group`
+-- Дамп даних таблиці `e_users_group`
 --
 
 INSERT INTO `e_users_group` (`id`, `parent_id`, `isfolder`, `backend`, `permissions`, `position`) VALUES
 (1, 0, 0, 1, 'a:1:{s:11:"full_access";s:1:"1";}', 1),
 (2, 0, 0, 1, 'a:15:{s:11:"full_access";s:1:"0";s:9:"Dashboard";a:3:{i:0;s:5:"index";i:1;s:6:"create";i:2;s:4:"edit";}s:12:"content\\Post";a:6:{i:0;s:5:"index";i:1;s:5:"items";i:2;s:6:"create";i:3;s:4:"edit";i:4;s:3:"pub";i:5;s:4:"hide";}s:9:"Customers";a:7:{i:0;s:5:"index";i:1;s:5:"items";i:2;s:6:"create";i:3;s:4:"edit";i:4;s:6:"remove";i:5;s:3:"ban";i:6;s:7:"restore";}s:8:"Comments";a:9:{i:0;s:5:"index";i:1;s:3:"tab";i:2;s:5:"items";i:3;s:6:"create";i:4;s:4:"edit";i:5;s:5:"reply";i:6;s:7:"approve";i:7;s:4:"spam";i:8;s:7:"restore";}s:4:"Shop";a:3:{i:0;s:5:"index";i:1;s:6:"create";i:2;s:4:"edit";}s:16:"content\\Products";a:6:{i:0;s:5:"index";i:1;s:5:"items";i:2;s:6:"create";i:3;s:4:"edit";i:4;s:3:"pub";i:5;s:4:"hide";}s:26:"content\\ProductsCategories";a:6:{i:0;s:5:"index";i:1;s:5:"items";i:2;s:6:"create";i:3;s:4:"edit";i:4;s:3:"pub";i:5;s:4:"hide";}s:8:"Currency";a:4:{i:0;s:5:"index";i:1;s:5:"items";i:2;s:6:"create";i:3;s:4:"edit";}s:8:"Delivery";a:7:{i:0;s:5:"index";i:1;s:5:"items";i:2;s:6:"create";i:3;s:4:"edit";i:4;s:17:"getModuleSettings";i:5;s:3:"pub";i:6;s:4:"hide";}s:9:"Callbacks";a:8:{i:0;s:5:"index";i:1;s:3:"tab";i:2;s:5:"items";i:3;s:6:"create";i:4;s:4:"edit";i:5;s:5:"reply";i:6;s:4:"spam";i:7;s:7:"restore";}s:13:"content\\Pages";a:6:{i:0;s:5:"index";i:1;s:5:"items";i:2;s:6:"create";i:3;s:4:"edit";i:4;s:3:"pub";i:5;s:4:"hide";}s:32:"plugins\\ProductsCategoriesSelect";a:4:{i:0;s:5:"index";i:1;s:6:"create";i:2;s:4:"edit";i:3;s:7:"setMeta";}s:26:"plugins\\ProductsCategories";a:8:{i:0;s:5:"index";i:1;s:6:"create";i:2;s:4:"edit";i:3;s:4:"tree";i:4;s:4:"move";i:5;s:16:"createCategories";i:6;s:14:"editCategories";i:7;s:7:"setMeta";}s:17:"plugins\\PagesTree";a:6:{i:0;s:5:"index";i:1;s:6:"create";i:2;s:4:"edit";i:3;s:4:"tree";i:4;s:4:"move";i:5;s:7:"setMeta";}}', 0),
 (4, 0, 0, 1, 'a:2:{s:11:"full_access";s:1:"0";s:5:"Admin";a:9:{i:0;s:4:"data";i:1;s:2:"id";i:2;s:5:"login";i:3;s:2:"fp";i:4;s:6:"logout";i:5;s:7:"profile";i:6;s:5:"index";i:7;s:6:"create";i:8;s:4:"edit";}}', 0),
-(20, 0, 0, 0, 'N;', 0),
-(21, 0, 0, 0, 'N;', 0),
-(22, 0, 0, 0, 'N;', 0);
+(20, 0, 0, 0, '', 0);
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_users_group_info`
+-- Структура таблиці `e_users_group_info`
 --
 
 CREATE TABLE IF NOT EXISTS `e_users_group_info` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(11) unsigned NOT NULL,
   `group_id` tinyint(3) unsigned NOT NULL,
   `languages_id` tinyint(3) unsigned NOT NULL,
-  `name` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `group_id` (`group_id`,`languages_id`),
-  KEY `fk_users_group_info_users_group1_idx` (`group_id`),
-  KEY `fk_users_group_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=37 ;
+  `name` varchar(100) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
 
 --
--- Дамп данных таблицы `e_users_group_info`
+-- Дамп даних таблиці `e_users_group_info`
 --
 
 INSERT INTO `e_users_group_info` (`id`, `group_id`, `languages_id`, `name`) VALUES
 (15, 1, 1, 'Адміністратори'),
 (16, 2, 1, 'Редактори'),
 (18, 4, 1, 'Модератори'),
-(34, 20, 1, 'Роздріб'),
-(35, 21, 1, 'Гурт'),
-(36, 22, 1, 'Дрібний гурт');
+(34, 20, 1, 'Роздріб');
 
 --
--- Ограничения внешнего ключа сохраненных таблиц
+-- Індекси збережених таблиць
 --
 
 --
--- Ограничения внешнего ключа таблицы `e_banners`
+-- Індекси таблиці `e_banners`
+--
+ALTER TABLE `e_banners`
+  ADD PRIMARY KEY (`id`,`places_id`,`languages_id`),
+  ADD UNIQUE KEY `skey_UNIQUE` (`skey`),
+  ADD KEY `fk_banners_banners_places1_idx` (`places_id`),
+  ADD KEY `fk_banners_languages1_idx` (`languages_id`);
+
+--
+-- Індекси таблиці `e_banners_places`
+--
+ALTER TABLE `e_banners_places`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `code_UNIQUE` (`code`);
+
+--
+-- Індекси таблиці `e_callbacks`
+--
+ALTER TABLE `e_callbacks`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Індекси таблиці `e_comments`
+--
+ALTER TABLE `e_comments`
+  ADD PRIMARY KEY (`id`,`content_id`),
+  ADD KEY `fk_comments_content1_idx` (`content_id`),
+  ADD KEY `approved` (`status`),
+  ADD KEY `users_id` (`users_id`),
+  ADD KEY `token` (`skey`),
+  ADD KEY `isfolder` (`isfolder`);
+
+--
+-- Індекси таблиці `e_comments_subscribers`
+--
+ALTER TABLE `e_comments_subscribers`
+  ADD PRIMARY KEY (`id`,`content_id`,`users_id`),
+  ADD UNIQUE KEY `content_id` (`content_id`,`users_id`),
+  ADD KEY `fk_comments_subscribe_content1_idx` (`content_id`),
+  ADD KEY `fk_comments_subscribe_users1_idx` (`users_id`);
+
+--
+-- Індекси таблиці `e_content`
+--
+ALTER TABLE `e_content`
+  ADD PRIMARY KEY (`id`,`types_id`,`subtypes_id`,`owner_id`),
+  ADD KEY `fk_content_content_types1_idx` (`types_id`),
+  ADD KEY `fk_content_content_subtypes1_idx` (`subtypes_id`),
+  ADD KEY `fk_content_owner_idx` (`owner_id`),
+  ADD KEY `status` (`status`),
+  ADD KEY `published` (`published`),
+  ADD KEY `code` (`sku`);
+
+--
+-- Індекси таблиці `e_content_features`
+--
+ALTER TABLE `e_content_features`
+  ADD PRIMARY KEY (`id`,`content_id`,`features_id`),
+  ADD UNIQUE KEY `content_id` (`content_id`,`features_id`,`values_id`,`languages_id`),
+  ADD KEY `fk_content_features_values_content1_idx` (`content_id`),
+  ADD KEY `fk_content_features_values_features1_idx` (`features_id`);
+
+--
+-- Індекси таблиці `e_content_images`
+--
+ALTER TABLE `e_content_images`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_content_images_content1_idx` (`content_id`),
+  ADD KEY `position` (`position`);
+
+--
+-- Індекси таблиці `e_content_images_sizes`
+--
+ALTER TABLE `e_content_images_sizes`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `size` (`size`);
+
+--
+-- Індекси таблиці `e_content_info`
+--
+ALTER TABLE `e_content_info`
+  ADD PRIMARY KEY (`id`,`content_id`,`languages_id`),
+  ADD UNIQUE KEY `languages_id` (`languages_id`,`url`),
+  ADD KEY `fk_content_info_content1_idx` (`content_id`),
+  ADD KEY `fk_content_info_languages1_idx` (`languages_id`);
+
+--
+-- Індекси таблиці `e_content_relationship`
+--
+ALTER TABLE `e_content_relationship`
+  ADD PRIMARY KEY (`id`,`content_id`,`categories_id`),
+  ADD UNIQUE KEY `content_id` (`content_id`,`categories_id`),
+  ADD KEY `fk_content_relationship_content1_idx` (`content_id`),
+  ADD KEY `fk_content_relationship_content2_idx` (`categories_id`),
+  ADD KEY `is_main` (`is_main`);
+
+--
+-- Індекси таблиці `e_content_types`
+--
+ALTER TABLE `e_content_types`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `parent_id` (`parent_id`,`type`),
+  ADD UNIQUE KEY `parent_id_2` (`parent_id`,`is_main`),
+  ADD KEY `is_main` (`is_main`);
+
+--
+-- Індекси таблиці `e_content_types_images_sizes`
+--
+ALTER TABLE `e_content_types_images_sizes`
+  ADD PRIMARY KEY (`id`,`types_id`,`images_sizes_id`),
+  ADD KEY `fk_content_types_images_sizes1_idx` (`types_id`),
+  ADD KEY `fk_content_types_images_sizes2_idx` (`images_sizes_id`);
+
+--
+-- Індекси таблиці `e_currency`
+--
+ALTER TABLE `e_currency`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `name` (`name`),
+  ADD UNIQUE KEY `code` (`code`),
+  ADD KEY `is_main` (`is_main`);
+
+--
+-- Індекси таблиці `e_delivery`
+--
+ALTER TABLE `e_delivery`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Індекси таблиці `e_delivery_info`
+--
+ALTER TABLE `e_delivery_info`
+  ADD PRIMARY KEY (`id`,`delivery_id`,`languages_id`),
+  ADD KEY `fk_delivery_info_delivery1_idx` (`delivery_id`),
+  ADD KEY `fk_delivery_info_languages1_idx` (`languages_id`);
+
+--
+-- Індекси таблиці `e_delivery_payment`
+--
+ALTER TABLE `e_delivery_payment`
+  ADD PRIMARY KEY (`id`,`delivery_id`,`payment_id`),
+  ADD UNIQUE KEY `delivery_id` (`delivery_id`,`payment_id`),
+  ADD KEY `fk_delivery_payment_delivery1_idx` (`delivery_id`),
+  ADD KEY `fk_delivery_payment_payment1_idx` (`payment_id`);
+
+--
+-- Індекси таблиці `e_features`
+--
+ALTER TABLE `e_features`
+  ADD PRIMARY KEY (`id`,`owner_id`),
+  ADD UNIQUE KEY `code_UNIQUE` (`code`),
+  ADD KEY `fk_features_users1_idx` (`owner_id`),
+  ADD KEY `position` (`position`);
+
+--
+-- Індекси таблиці `e_features_content`
+--
+ALTER TABLE `e_features_content`
+  ADD PRIMARY KEY (`id`,`features_id`,`content_types_id`,`content_subtypes_id`,`content_id`),
+  ADD UNIQUE KEY `features_id` (`features_id`,`content_types_id`,`content_subtypes_id`,`content_id`),
+  ADD KEY `fk_content_features_idx` (`features_id`);
+
+--
+-- Індекси таблиці `e_features_info`
+--
+ALTER TABLE `e_features_info`
+  ADD PRIMARY KEY (`id`,`features_id`,`languages_id`),
+  ADD KEY `fk_features_info_features1_idx` (`features_id`),
+  ADD KEY `fk_features_info_languages1_idx` (`languages_id`);
+
+--
+-- Індекси таблиці `e_feedbacks`
+--
+ALTER TABLE `e_feedbacks`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Індекси таблиці `e_languages`
+--
+ALTER TABLE `e_languages`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `code` (`code`),
+  ADD KEY `is_main` (`is_main`);
+
+--
+-- Індекси таблиці `e_mail_templates`
+--
+ALTER TABLE `e_mail_templates`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `code_UNIQUE` (`code`);
+
+--
+-- Індекси таблиці `e_mail_templates_info`
+--
+ALTER TABLE `e_mail_templates_info`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_mail_templates_info_idx` (`templates_id`),
+  ADD KEY `fk_mail_templates_info_languages1_idx` (`languages_id`);
+
+--
+-- Індекси таблиці `e_nav`
+--
+ALTER TABLE `e_nav`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `code` (`code`);
+
+--
+-- Індекси таблиці `e_nav_items`
+--
+ALTER TABLE `e_nav_items`
+  ADD PRIMARY KEY (`id`,`nav_id`,`content_id`),
+  ADD UNIQUE KEY `nav_id` (`nav_id`,`content_id`),
+  ADD KEY `fk_nav_items_nav1_idx` (`nav_id`),
+  ADD KEY `fk_nav_items_content1_idx` (`content_id`),
+  ADD KEY `position` (`position`);
+
+--
+-- Індекси таблиці `e_orders_status`
+--
+ALTER TABLE `e_orders_status`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `external_id_2` (`external_id`),
+  ADD KEY `on_site` (`on_site`),
+  ADD KEY `external_id` (`external_id`);
+
+--
+-- Індекси таблиці `e_orders_status_info`
+--
+ALTER TABLE `e_orders_status_info`
+  ADD PRIMARY KEY (`id`,`status_id`,`languages_id`),
+  ADD KEY `fk_orders_status_info_languages1_idx` (`languages_id`),
+  ADD KEY `fk_orders_status_info_orders_status1_idx` (`status_id`);
+
+--
+-- Індекси таблиці `e_payment`
+--
+ALTER TABLE `e_payment`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `module` (`module`);
+
+--
+-- Індекси таблиці `e_payment_info`
+--
+ALTER TABLE `e_payment_info`
+  ADD PRIMARY KEY (`id`,`payment_id`,`languages_id`),
+  ADD KEY `fk_payment_info_payment1_idx` (`payment_id`),
+  ADD KEY `fk_payment_info_languages1_idx` (`languages_id`);
+
+--
+-- Індекси таблиці `e_posts_tags`
+--
+ALTER TABLE `e_posts_tags`
+  ADD PRIMARY KEY (`id`,`posts_id`,`tags_id`,`languages_id`),
+  ADD UNIQUE KEY `posts_id` (`posts_id`,`tags_id`),
+  ADD KEY `fk_tags_content_content1_idx` (`posts_id`),
+  ADD KEY `fk_tags_posts_tags1_idx` (`tags_id`),
+  ADD KEY `fk_posts_tags_languages1_idx` (`languages_id`);
+
+--
+-- Індекси таблиці `e_products_prices`
+--
+ALTER TABLE `e_products_prices`
+  ADD PRIMARY KEY (`id`,`content_id`,`group_id`),
+  ADD UNIQUE KEY `content_id` (`content_id`,`group_id`),
+  ADD KEY `fk_products_prices_content1_idx` (`content_id`),
+  ADD KEY `fk_products_prices_users_group1_idx` (`group_id`);
+
+--
+-- Індекси таблиці `e_products_variants`
+--
+ALTER TABLE `e_products_variants`
+  ADD PRIMARY KEY (`id`,`content_id`),
+  ADD KEY `fk_products_variants_content1_idx` (`content_id`);
+
+--
+-- Індекси таблиці `e_products_variants_features`
+--
+ALTER TABLE `e_products_variants_features`
+  ADD PRIMARY KEY (`id`,`variants_id`,`features_id`,`values_id`),
+  ADD UNIQUE KEY `variants_id` (`variants_id`,`features_id`,`values_id`),
+  ADD KEY `fk_products_variants_features_features1_idx` (`features_id`),
+  ADD KEY `fk_products_variants_features_products_variants1_idx` (`variants_id`),
+  ADD KEY `fk_products_variants_features_features2_idx` (`values_id`);
+
+--
+-- Індекси таблиці `e_products_variants_prices`
+--
+ALTER TABLE `e_products_variants_prices`
+  ADD PRIMARY KEY (`id`,`variants_id`,`content_id`,`group_id`),
+  ADD UNIQUE KEY `variants_id` (`variants_id`,`content_id`,`group_id`),
+  ADD KEY `fk_products_variants_prices_products_variants1_idx` (`variants_id`,`content_id`),
+  ADD KEY `fk_products_variants_prices_users_group1_idx` (`group_id`);
+
+--
+-- Індекси таблиці `e_settings`
+--
+ALTER TABLE `e_settings`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `sname` (`name`);
+
+--
+-- Індекси таблиці `e_tags`
+--
+ALTER TABLE `e_tags`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Індекси таблиці `e_users`
+--
+ALTER TABLE `e_users`
+  ADD PRIMARY KEY (`id`,`group_id`,`languages_id`),
+  ADD UNIQUE KEY `phone` (`phone`,`email`),
+  ADD KEY `fk_users_group1_idx` (`group_id`),
+  ADD KEY `status` (`status`),
+  ADD KEY `skey` (`skey`);
+
+--
+-- Індекси таблиці `e_users_group`
+--
+ALTER TABLE `e_users_group`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `pid` (`parent_id`),
+  ADD KEY `sort` (`position`),
+  ADD KEY `isfolder` (`isfolder`),
+  ADD KEY `backend` (`backend`);
+
+--
+-- Індекси таблиці `e_users_group_info`
+--
+ALTER TABLE `e_users_group_info`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `group_id` (`group_id`,`languages_id`),
+  ADD KEY `fk_users_group_info_users_group1_idx` (`group_id`),
+  ADD KEY `fk_users_group_info_languages1_idx` (`languages_id`);
+
+--
+-- AUTO_INCREMENT для збережених таблиць
+--
+
+--
+-- AUTO_INCREMENT для таблиці `e_banners`
+--
+ALTER TABLE `e_banners`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблиці `e_banners_places`
+--
+ALTER TABLE `e_banners_places`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+--
+-- AUTO_INCREMENT для таблиці `e_callbacks`
+--
+ALTER TABLE `e_callbacks`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблиці `e_comments`
+--
+ALTER TABLE `e_comments`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблиці `e_comments_subscribers`
+--
+ALTER TABLE `e_comments_subscribers`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблиці `e_content`
+--
+ALTER TABLE `e_content`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+--
+-- AUTO_INCREMENT для таблиці `e_content_features`
+--
+ALTER TABLE `e_content_features`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблиці `e_content_images`
+--
+ALTER TABLE `e_content_images`
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблиці `e_content_images_sizes`
+--
+ALTER TABLE `e_content_images_sizes`
+  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT для таблиці `e_content_info`
+--
+ALTER TABLE `e_content_info`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT для таблиці `e_content_relationship`
+--
+ALTER TABLE `e_content_relationship`
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблиці `e_content_types`
+--
+ALTER TABLE `e_content_types`
+  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=17;
+--
+-- AUTO_INCREMENT для таблиці `e_content_types_images_sizes`
+--
+ALTER TABLE `e_content_types_images_sizes`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблиці `e_currency`
+--
+ALTER TABLE `e_currency`
+  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблиці `e_delivery`
+--
+ALTER TABLE `e_delivery`
+  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT для таблиці `e_delivery_info`
+--
+ALTER TABLE `e_delivery_info`
+  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT для таблиці `e_delivery_payment`
+--
+ALTER TABLE `e_delivery_payment`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
+--
+-- AUTO_INCREMENT для таблиці `e_features`
+--
+ALTER TABLE `e_features`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=173;
+--
+-- AUTO_INCREMENT для таблиці `e_features_content`
+--
+ALTER TABLE `e_features_content`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=89;
+--
+-- AUTO_INCREMENT для таблиці `e_features_info`
+--
+ALTER TABLE `e_features_info`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=156;
+--
+-- AUTO_INCREMENT для таблиці `e_feedbacks`
+--
+ALTER TABLE `e_feedbacks`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблиці `e_languages`
+--
+ALTER TABLE `e_languages`
+  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT для таблиці `e_mail_templates`
+--
+ALTER TABLE `e_mail_templates`
+  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT для таблиці `e_mail_templates_info`
+--
+ALTER TABLE `e_mail_templates_info`
+  MODIFY `id` smallint(6) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT для таблиці `e_nav`
+--
+ALTER TABLE `e_nav`
+  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT для таблиці `e_nav_items`
+--
+ALTER TABLE `e_nav_items`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+--
+-- AUTO_INCREMENT для таблиці `e_orders_status`
+--
+ALTER TABLE `e_orders_status`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+--
+-- AUTO_INCREMENT для таблиці `e_orders_status_info`
+--
+ALTER TABLE `e_orders_status_info`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+--
+-- AUTO_INCREMENT для таблиці `e_payment`
+--
+ALTER TABLE `e_payment`
+  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
+--
+-- AUTO_INCREMENT для таблиці `e_payment_info`
+--
+ALTER TABLE `e_payment_info`
+  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблиці `e_posts_tags`
+--
+ALTER TABLE `e_posts_tags`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+--
+-- AUTO_INCREMENT для таблиці `e_products_prices`
+--
+ALTER TABLE `e_products_prices`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT для таблиці `e_products_variants`
+--
+ALTER TABLE `e_products_variants`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=73;
+--
+-- AUTO_INCREMENT для таблиці `e_products_variants_features`
+--
+ALTER TABLE `e_products_variants_features`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=99;
+--
+-- AUTO_INCREMENT для таблиці `e_products_variants_prices`
+--
+ALTER TABLE `e_products_variants_prices`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=115;
+--
+-- AUTO_INCREMENT для таблиці `e_settings`
+--
+ALTER TABLE `e_settings`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=52;
+--
+-- AUTO_INCREMENT для таблиці `e_tags`
+--
+ALTER TABLE `e_tags`
+  MODIFY `id` int(10) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=31;
+--
+-- AUTO_INCREMENT для таблиці `e_users`
+--
+ALTER TABLE `e_users`
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=22;
+--
+-- AUTO_INCREMENT для таблиці `e_users_group`
+--
+ALTER TABLE `e_users_group`
+  MODIFY `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=23;
+--
+-- AUTO_INCREMENT для таблиці `e_users_group_info`
+--
+ALTER TABLE `e_users_group_info`
+  MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=37;
+--
+-- Обмеження зовнішнього ключа збережених таблиць
+--
+
+--
+-- Обмеження зовнішнього ключа таблиці `e_banners`
 --
 ALTER TABLE `e_banners`
   ADD CONSTRAINT `fk_banners_banners_places1` FOREIGN KEY (`places_id`) REFERENCES `e_banners_places` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_banners_languages1` FOREIGN KEY (`languages_id`) REFERENCES `e_languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `e_comments`
+-- Обмеження зовнішнього ключа таблиці `e_comments`
 --
 ALTER TABLE `e_comments`
   ADD CONSTRAINT `fk_comments_content1` FOREIGN KEY (`content_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_users_id` FOREIGN KEY (`users_id`) REFERENCES `e_users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `e_comments_subscribers`
+-- Обмеження зовнішнього ключа таблиці `e_comments_subscribers`
 --
 ALTER TABLE `e_comments_subscribers`
   ADD CONSTRAINT `fk_comments_subscribers_content1` FOREIGN KEY (`content_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_comments_subscribers_users1` FOREIGN KEY (`users_id`) REFERENCES `e_users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `e_content`
+-- Обмеження зовнішнього ключа таблиці `e_content`
 --
 ALTER TABLE `e_content`
   ADD CONSTRAINT `fk_content_content_subtypes1` FOREIGN KEY (`subtypes_id`) REFERENCES `e_content_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -1420,102 +1382,102 @@ ALTER TABLE `e_content`
   ADD CONSTRAINT `fk_content_owner_id1` FOREIGN KEY (`owner_id`) REFERENCES `e_users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `e_content_features`
+-- Обмеження зовнішнього ключа таблиці `e_content_features`
 --
 ALTER TABLE `e_content_features`
   ADD CONSTRAINT `fk_content_features_values_content1` FOREIGN KEY (`content_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_content_features_values_features1` FOREIGN KEY (`features_id`) REFERENCES `e_features` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `e_content_images`
+-- Обмеження зовнішнього ключа таблиці `e_content_images`
 --
 ALTER TABLE `e_content_images`
   ADD CONSTRAINT `fk_content_images_content1` FOREIGN KEY (`content_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `e_content_info`
+-- Обмеження зовнішнього ключа таблиці `e_content_info`
 --
 ALTER TABLE `e_content_info`
   ADD CONSTRAINT `fk_content_info_content1` FOREIGN KEY (`content_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_content_info_languages1` FOREIGN KEY (`languages_id`) REFERENCES `e_languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `e_content_relationship`
+-- Обмеження зовнішнього ключа таблиці `e_content_relationship`
 --
 ALTER TABLE `e_content_relationship`
   ADD CONSTRAINT `fk_content_relationship_content1` FOREIGN KEY (`content_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_content_relationship_content2` FOREIGN KEY (`categories_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `e_content_types_images_sizes`
+-- Обмеження зовнішнього ключа таблиці `e_content_types_images_sizes`
 --
 ALTER TABLE `e_content_types_images_sizes`
   ADD CONSTRAINT `fk_content_types_images_sizes1` FOREIGN KEY (`types_id`) REFERENCES `e_content_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_content_types_images_sizes2` FOREIGN KEY (`images_sizes_id`) REFERENCES `e_content_images_sizes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `e_delivery_info`
+-- Обмеження зовнішнього ключа таблиці `e_delivery_info`
 --
 ALTER TABLE `e_delivery_info`
   ADD CONSTRAINT `fk_delivery_info_delivery1` FOREIGN KEY (`delivery_id`) REFERENCES `e_delivery` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_delivery_info_languages1` FOREIGN KEY (`languages_id`) REFERENCES `e_languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `e_delivery_payment`
+-- Обмеження зовнішнього ключа таблиці `e_delivery_payment`
 --
 ALTER TABLE `e_delivery_payment`
   ADD CONSTRAINT `fk_delivery_payment_delivery1` FOREIGN KEY (`delivery_id`) REFERENCES `e_delivery` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_delivery_payment_payment1` FOREIGN KEY (`payment_id`) REFERENCES `e_payment` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `e_features`
+-- Обмеження зовнішнього ключа таблиці `e_features`
 --
 ALTER TABLE `e_features`
   ADD CONSTRAINT `fk_features_users1` FOREIGN KEY (`owner_id`) REFERENCES `e_users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `e_features_content`
+-- Обмеження зовнішнього ключа таблиці `e_features_content`
 --
 ALTER TABLE `e_features_content`
   ADD CONSTRAINT `fk_content_features_idx` FOREIGN KEY (`features_id`) REFERENCES `e_features` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `e_features_info`
+-- Обмеження зовнішнього ключа таблиці `e_features_info`
 --
 ALTER TABLE `e_features_info`
   ADD CONSTRAINT `fk_features_info_features1` FOREIGN KEY (`features_id`) REFERENCES `e_features` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_features_info_languages1` FOREIGN KEY (`languages_id`) REFERENCES `e_languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `e_mail_templates_info`
+-- Обмеження зовнішнього ключа таблиці `e_mail_templates_info`
 --
 ALTER TABLE `e_mail_templates_info`
   ADD CONSTRAINT `fk_mail_templates_info_languages1` FOREIGN KEY (`languages_id`) REFERENCES `e_languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_mail_templates_info_mail_templates1` FOREIGN KEY (`templates_id`) REFERENCES `e_mail_templates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `e_nav_items`
+-- Обмеження зовнішнього ключа таблиці `e_nav_items`
 --
 ALTER TABLE `e_nav_items`
   ADD CONSTRAINT `fk_nav_items_content1` FOREIGN KEY (`content_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_nav_items_nav1` FOREIGN KEY (`nav_id`) REFERENCES `e_nav` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `e_orders_status_info`
+-- Обмеження зовнішнього ключа таблиці `e_orders_status_info`
 --
 ALTER TABLE `e_orders_status_info`
   ADD CONSTRAINT `fk_orders_status_info_languages1` FOREIGN KEY (`languages_id`) REFERENCES `e_languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_orders_status_info_orders_status1` FOREIGN KEY (`status_id`) REFERENCES `e_orders_status` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `e_payment_info`
+-- Обмеження зовнішнього ключа таблиці `e_payment_info`
 --
 ALTER TABLE `e_payment_info`
   ADD CONSTRAINT `fk_payment_info_languages1` FOREIGN KEY (`languages_id`) REFERENCES `e_languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_payment_info_payment1` FOREIGN KEY (`payment_id`) REFERENCES `e_payment` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `e_posts_tags`
+-- Обмеження зовнішнього ключа таблиці `e_posts_tags`
 --
 ALTER TABLE `e_posts_tags`
   ADD CONSTRAINT `fk_posts_tags_languages1` FOREIGN KEY (`languages_id`) REFERENCES `e_languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -1523,20 +1485,20 @@ ALTER TABLE `e_posts_tags`
   ADD CONSTRAINT `fk_tags_posts_tags1` FOREIGN KEY (`tags_id`) REFERENCES `e_tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `e_products_prices`
+-- Обмеження зовнішнього ключа таблиці `e_products_prices`
 --
 ALTER TABLE `e_products_prices`
   ADD CONSTRAINT `fk_products_prices_content1` FOREIGN KEY (`content_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_products_prices_users_group1` FOREIGN KEY (`group_id`) REFERENCES `e_users_group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `e_products_variants`
+-- Обмеження зовнішнього ключа таблиці `e_products_variants`
 --
 ALTER TABLE `e_products_variants`
   ADD CONSTRAINT `fk_products_variants_content1` FOREIGN KEY (`content_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `e_products_variants_features`
+-- Обмеження зовнішнього ключа таблиці `e_products_variants_features`
 --
 ALTER TABLE `e_products_variants_features`
   ADD CONSTRAINT `fk_products_variants_features_features1` FOREIGN KEY (`features_id`) REFERENCES `e_features` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -1544,20 +1506,20 @@ ALTER TABLE `e_products_variants_features`
   ADD CONSTRAINT `fk_products_variants_features_products_variants1` FOREIGN KEY (`variants_id`) REFERENCES `e_products_variants` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `e_products_variants_prices`
+-- Обмеження зовнішнього ключа таблиці `e_products_variants_prices`
 --
 ALTER TABLE `e_products_variants_prices`
   ADD CONSTRAINT `fk_products_variants_prices_products_variants1` FOREIGN KEY (`variants_id`, `content_id`) REFERENCES `e_products_variants` (`id`, `content_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_products_variants_prices_users_group1` FOREIGN KEY (`group_id`) REFERENCES `e_users_group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `e_users`
+-- Обмеження зовнішнього ключа таблиці `e_users`
 --
 ALTER TABLE `e_users`
   ADD CONSTRAINT `fk_users_users_group1` FOREIGN KEY (`group_id`) REFERENCES `e_users_group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `e_users_group_info`
+-- Обмеження зовнішнього ключа таблиці `e_users_group_info`
 --
 ALTER TABLE `e_users_group_info`
   ADD CONSTRAINT `fk_users_group_info_languages1` FOREIGN KEY (`languages_id`) REFERENCES `e_languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
