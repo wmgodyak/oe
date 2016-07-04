@@ -122,6 +122,7 @@ engine.shop = {
 
         engine.shop.categories.features.init();
         engine.shop.products.features.init();
+        engine.shop.products.variants.init();
     },
     categories: {
         before: function()
@@ -565,6 +566,156 @@ engine.shop = {
                         });
                     }
                 });
+            }
+        },
+
+        variants: {
+            init: function()
+            {
+                //var content_id = $('#content_id').val();
+
+                $(document).on('click', '.b-products-add-variant', function(){
+                    var id = $(this).data('id');
+                    engine.shop.products.variants.create(id);
+                });
+                
+                $(document).on('click', '.b-products-rm-variant', function(){
+                    var id = $(this).data('id');
+                    engine.shop.products.variants.delete(id);
+                });
+                
+                $(document).on('click', '.variant-picture', function(){
+                    var id = $(this).data('id');
+                    $("#variantsUploadId").val(id);
+                    $("#variantsUploadFileInput").click();
+                });
+                
+                var form = $('<form id="variantsUploadImage" action="module/run/shop/products/variants/uploadImage/" method="post" style="display: none" enctype="multipart/form-data">\
+                <input type="file" name="image" id="variantsUploadFileInput">\
+                <input type="hidden" name="variant_id" id="variantsUploadId">\
+                <input type="hidden" name="token" value="'+TOKEN+'">\
+                </form>');
+                form.appendTo('body');
+                engine.validateAjaxForm('#variantsUploadImage', function(d){
+                    if(d.s){
+                        var a = $('.variant-picture.variant-'+ d.variant_id);
+                        a.html($('<img src="'+ d.img +'" style="max-width: 50px;">'));
+                    } else{
+                        engine.alert(d.m);
+                    }
+                });
+                $(document).on('change', '#variantsUploadFileInput', function(){
+                    $("#variantsUploadImage").submit();
+                });
+            },
+            create: function(products_id)
+            {
+                engine.request.get
+                (
+                    'module/run/shop/products/variants/create/'+products_id
+                    ,
+                    function(d)
+                    {
+                        var pw = engine.dialog({
+                            content: d,
+                            title: 'Згенеруйте варіанти',
+                            autoOpen: true,
+                            width: 750,
+                            modal: true,
+                            buttons: {
+                                "Зберегти": function(){
+                                    $('#productsVariantsForm').submit();
+                                }
+                            }
+                        });
+
+                        engine.validateAjaxForm('#productsVariantsForm', function(d){
+
+                            if(d.s > 0){
+                                engine.request.get('module/run/shop/products/variants/get/'+products_id, function(res)
+                                {
+                                    $("#products_variants_cnt").html(res);
+                                    pw.dialog('close').dialog('destroy').remove();
+                                });
+                            }
+                        });
+                    }
+                );
+            },
+            delete: function(id)
+            {
+                engine.confirm
+                (
+                    'Видалити варіант?',
+                    function()
+                    {
+                        engine.request.get('module/run/shop/products/variants/delete/' + id, function(d){
+                            if(d > 0){
+                                $('#variant-'+id).remove();
+                            }
+                        });
+                        $(this).dialog('close').dialog('destroy').remove();
+                    }
+                );
+            },
+            render: function(selected)
+            {
+                var cnt = $('#products_variants_cnt'), features = CFV;//, res = [],
+                //var row = [];
+                //
+                //for(var i = 0; i < features.length; i++ ){
+                //    if(selected.contains(parseInt(features[i].id))){
+                //        row.push(features[i].name);
+                //    }
+                //}
+                //
+                //res.push(row);
+                //
+                //for(i = 0; i < features.length; i++ ){
+                //    row[i] = [];
+                //    if(selected.contains(parseInt(features[i].id))){
+                //        for(var c=0;c<features[i].items.length; c++){
+                //            row[i].push(features[i].items[c]);
+                //        }
+                //    }
+                //
+                //    res.push(row);
+                //}
+
+
+                //var tr = [];
+                //for(var i = 0; i < features.length; i++ ){
+                //    var row = [];
+                //    for(var c=0;c<features[i].items.length; i++){
+                //        row.push()
+                //    }
+                //}
+
+
+
+                //res.th = []; res.tr = [];
+                //for(var i = 0; i < features.length; i++ ){
+                //    //console.log(features[i]);
+                //    var row = [];
+                //    res.th.push(features[i].name);
+                //    for(var c=0;c< features[i].items.length; c++){
+                //        //res.tr[features[i].id].push(features[i].items[c])
+                //
+                //    }
+                //
+                //    //row.name= features[i].name;
+                //    //res.push(row);
+                //}
+                /*
+                 * <% for(var i=0;i < features.length; i++) {  %>
+                 <% if(selected.contains(parseInt(features[i].id)) != false) { %>
+                 <th><%= features[i].name %></th>
+                 <% } %>
+                 <% } %>
+                 * */
+                var tmpl = _.template($('#variantsTbl').html());
+                var d = tmpl({features: features, selected: selected});
+                cnt.html(d);
             }
         }
     }

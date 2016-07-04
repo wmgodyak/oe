@@ -56,10 +56,12 @@ class Features extends \modules\shop\models\products\Features
      */
     public function getValues($parent_id, $content_id = 0)
     {
+        $w = $content_id > 0 ? ", IF(cf.id > 0, 'selected', '') as selected" : '';
+        $j = $content_id > 0 ? "left join __content_features cf on cf.content_id = {$content_id} and cf.values_id = f.id" : '';
         return self::$db->select("
-              select f.id, fi.name, IF(cf.id > 0, 'selected', '') as selected
+              select f.id, fi.name {$w}
               from __features f
-              left join __content_features cf on cf.content_id = {$content_id} and cf.values_id = f.id
+              {$j}
               join __features_info fi on fi.features_id=f.id and fi.languages_id={$this->languages_id}
               where f.parent_id = {$parent_id} and f.type = 'value' and f.status='published'
               order by abs(f.position) asc, fi.name asc
