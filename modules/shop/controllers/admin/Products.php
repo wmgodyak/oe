@@ -80,7 +80,7 @@ class Products extends Content
         $t  -> ajax('module/run/shop/products/index/' . $parent_id)
 //            ->orderDef(0, 'desc')
 //            -> th($this->t('common.id'), 'c.id', 1, 1, 'width: 60px')
-            -> th($this->t('shop.sky'), 'c.code', 1, 1, 'width: 60px')
+            -> th($this->t('shop.sky'), 'c.sku', 1, 1, 'width: 60px')
             -> th($this->t('common.name'), 'ci.name', 1, 1);
 
             foreach ($this->customersGroups->getItems(0, 0) as $group) {
@@ -118,7 +118,7 @@ class Products extends Content
                 $prices = $this->prices->get($row['id']);
 
 //                $res[$i][] = $row['id'];
-                $res[$i][] = $row['code'];
+                $res[$i][] = $row['sku'];
                 $res[$i][] =
                     $img .
                     " <a class='status-{$row['status']}' title='{$status}' href='module/run/shop/products/edit/{$row['id']}'>{$row['name']}</a>"
