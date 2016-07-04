@@ -6,7 +6,7 @@
             <div class="form-group">
                 <label for="content_code" class="col-md-4 control-label">Артикул</label>
                 <div class="col-md-8">
-                    <input name="content[code]" id="content_code" class="form-control" value="{$content.code}">
+                    <input name="content[sku]" id="content_code" class="form-control" value="{$content.sku}">
                 </div>
             </div>
         </div>

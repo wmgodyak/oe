@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Июл 01 2016 г., 17:57
+-- Время создания: Июл 04 2016 г., 16:42
 -- Версия сервера: 5.6.30-0ubuntu0.14.04.1-log
 -- Версия PHP: 5.5.9-1ubuntu4.17
 
@@ -263,7 +263,7 @@ CREATE TABLE IF NOT EXISTS `e_content` (
   `published` date DEFAULT NULL,
   `settings` text,
   `status` enum('blank','hidden','published','deleted') DEFAULT 'blank',
-  `code` varchar(60) DEFAULT NULL,
+  `sku` varchar(60) DEFAULT NULL,
   `currency_id` tinyint(3) unsigned DEFAULT NULL,
   `unit_id` tinyint(3) unsigned DEFAULT NULL,
   `has_variants` tinyint(1) unsigned DEFAULT NULL,
@@ -275,14 +275,14 @@ CREATE TABLE IF NOT EXISTS `e_content` (
   KEY `fk_content_owner_idx` (`owner_id`),
   KEY `status` (`status`),
   KEY `published` (`published`),
-  KEY `code` (`code`)
+  KEY `code` (`sku`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=164 ;
 
 --
 -- Дамп данных таблицы `e_content`
 --
 
-INSERT INTO `e_content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id`, `isfolder`, `position`, `created`, `updated`, `published`, `settings`, `status`, `code`, `currency_id`, `unit_id`, `has_variants`, `in_stock`, `external_id`) VALUES
+INSERT INTO `e_content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id`, `isfolder`, `position`, `created`, `updated`, `published`, `settings`, `status`, `sku`, `currency_id`, `unit_id`, `has_variants`, `in_stock`, `external_id`) VALUES
 (1, 1, 6, 2, 0, 1, 0, '2016-03-21 07:55:55', '2016-06-17 17:43:30', '2016-03-21', NULL, 'published', '1', NULL, NULL, NULL, NULL, NULL),
 (2, 1, 1, 2, 1, 0, 0, '2016-03-21 07:56:43', '2016-06-17 22:22:03', '2016-03-21', NULL, 'published', '2', NULL, NULL, NULL, NULL, NULL),
 (3, 1, 7, 2, 1, 0, 0, '2016-03-21 07:56:57', '2016-03-24 14:04:03', '2016-03-21', NULL, 'published', '3', NULL, NULL, NULL, NULL, NULL),
@@ -321,7 +321,7 @@ INSERT INTO `e_content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id
 (47, 11, 11, 2, 0, 0, 0, '2016-04-01 07:11:07', '2016-04-01 07:11:07', '2016-04-01', NULL, 'deleted', '47', NULL, NULL, NULL, NULL, NULL),
 (48, 11, 11, 2, 0, 1, 0, '2016-04-01 07:11:12', '2016-04-01 07:11:12', '2016-04-01', NULL, 'published', '48', NULL, NULL, NULL, NULL, NULL),
 (49, 11, 11, 2, 40, 0, 0, '2016-04-01 08:26:25', '2016-04-01 08:26:25', '2016-04-01', NULL, 'deleted', '49', NULL, NULL, NULL, NULL, NULL),
-(52, 10, 10, 2, 0, 0, 0, '2016-04-04 14:41:04', '2016-06-29 14:37:17', '2016-06-29', NULL, 'published', '52', 2, 157, 1, 0, NULL),
+(52, 10, 10, 2, 0, 0, 0, '2016-04-04 14:41:04', '2016-07-04 13:42:24', '2016-07-04', NULL, 'published', '52', 2, 157, 1, 0, NULL),
 (54, 10, 10, 2, 0, 0, 0, '2016-04-04 16:21:23', '2016-04-12 10:57:51', '2016-04-04', NULL, 'published', '54', 2, 2, 0, 0, NULL),
 (55, 10, 10, 2, 0, 0, 0, '2016-04-04 16:22:23', '2016-04-04 16:22:41', '2016-04-04', NULL, 'published', '55', NULL, NULL, NULL, NULL, NULL),
 (57, 10, 10, 2, 0, 0, 0, '2016-04-05 06:12:57', '2016-04-05 06:13:34', '2016-04-05', NULL, 'published', '57', NULL, NULL, NULL, NULL, NULL),
@@ -361,7 +361,16 @@ CREATE TABLE IF NOT EXISTS `e_content_features` (
   UNIQUE KEY `content_id` (`content_id`,`features_id`,`values_id`,`languages_id`),
   KEY `fk_content_features_values_content1_idx` (`content_id`),
   KEY `fk_content_features_values_features1_idx` (`features_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+
+--
+-- Дамп данных таблицы `e_content_features`
+--
+
+INSERT INTO `e_content_features` (`id`, `content_id`, `features_id`, `values_id`, `languages_id`, `value`) VALUES
+(1, 52, 162, 164, 0, NULL),
+(2, 52, 163, 168, 0, NULL),
+(3, 52, 169, 170, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -538,7 +547,7 @@ CREATE TABLE IF NOT EXISTS `e_content_relationship` (
   KEY `fk_content_relationship_content1_idx` (`content_id`),
   KEY `fk_content_relationship_content2_idx` (`categories_id`),
   KEY `is_main` (`is_main`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=101 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=108 ;
 
 --
 -- Дамп данных таблицы `e_content_relationship`
@@ -561,7 +570,7 @@ INSERT INTO `e_content_relationship` (`id`, `content_id`, `categories_id`, `is_m
 (76, 54, 41, 1),
 (89, 92, 44, 1),
 (96, 147, 130, 1),
-(100, 52, 43, 1);
+(107, 52, 43, 1);
 
 -- --------------------------------------------------------
 
@@ -588,7 +597,7 @@ CREATE TABLE IF NOT EXISTS `e_content_types` (
 --
 
 INSERT INTO `e_content_types` (`id`, `parent_id`, `isfolder`, `type`, `name`, `is_main`, `settings`) VALUES
-(1, 0, 1, 'pages', 'Сторінки', NULL, NULL),
+(1, 0, 1, 'pages', 'Сторінки', NULL, 'a:2:{s:7:"ext_url";s:1:"0";s:9:"parent_id";s:0:"";}'),
 (2, 0, 0, 'post', 'Стаття', NULL, NULL),
 (3, 0, 0, 'posts_categories', 'Категорії статтей', NULL, NULL),
 (4, 1, 0, '404', '404', NULL, NULL),
@@ -596,7 +605,7 @@ INSERT INTO `e_content_types` (`id`, `parent_id`, `isfolder`, `type`, `name`, `i
 (7, 1, 0, 'blog', 'Блог', NULL, NULL),
 (8, 1, 0, 'account', 'Аккаунт', NULL, NULL),
 (9, 1, 1, 'contacts', 'Контакти', NULL, NULL),
-(10, 0, 0, 'product', 'Товар', NULL, NULL),
+(10, 0, 0, 'product', 'Товар', NULL, 'a:2:{s:7:"ext_url";s:1:"0";s:9:"parent_id";s:0:"";}'),
 (11, 0, 0, 'products_categories', 'Категорії товарів', NULL, NULL),
 (12, 9, 0, 'aaaa', 'qqqa', NULL, NULL),
 (13, 0, 0, 'guide', 'guide', NULL, 'a:2:{s:7:"ext_url";s:1:"0";s:9:"parent_id";s:0:"";}');
@@ -614,18 +623,19 @@ CREATE TABLE IF NOT EXISTS `e_content_types_images_sizes` (
   PRIMARY KEY (`id`,`types_id`,`images_sizes_id`),
   KEY `fk_content_types_images_sizes1_idx` (`types_id`),
   KEY `fk_content_types_images_sizes2_idx` (`images_sizes_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=33 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=37 ;
 
 --
 -- Дамп данных таблицы `e_content_types_images_sizes`
 --
 
 INSERT INTO `e_content_types_images_sizes` (`id`, `types_id`, `images_sizes_id`) VALUES
-(31, 1, 1),
-(32, 1, 2),
+(35, 1, 1),
+(36, 1, 2),
 (25, 2, 1),
 (30, 4, 1),
-(11, 6, 2);
+(11, 6, 2),
+(34, 10, 2);
 
 -- --------------------------------------------------------
 
@@ -748,7 +758,7 @@ CREATE TABLE IF NOT EXISTS `e_features` (
   UNIQUE KEY `code_UNIQUE` (`code`),
   KEY `fk_features_users1_idx` (`owner_id`),
   KEY `position` (`position`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=165 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=173 ;
 
 --
 -- Дамп данных таблицы `e_features`
@@ -765,7 +775,18 @@ INSERT INTO `e_features` (`id`, `parent_id`, `type`, `code`, `multiple`, `on_fil
 (158, 0, 'select', 'serijna_zjomka_kadriv_sek', 0, 0, 0, 2, '2016-07-01 14:16:00', 'published', 0),
 (159, 0, 'select', 'maks_rozmir_kadru_kadriv_sek', 0, 0, 0, 2, '2016-07-01 14:16:12', 'published', 0),
 (160, 0, 'select', 'lcd_ekran', 0, 1, 1, 2, '2016-07-01 14:20:55', 'published', 0),
-(161, 0, 'select', 'sf', 0, 0, 0, 2, '2016-07-01 14:39:19', 'published', 0);
+(161, 0, 'select', 'sf', 0, 0, 0, 2, '2016-07-01 14:39:19', 'published', 0),
+(162, 0, 'select', 'rozmir', 0, 0, 0, 2, '2016-07-04 08:22:15', 'published', 0),
+(163, 0, 'select', 'kolir', 0, 0, 0, 2, '2016-07-04 08:22:22', 'published', 0),
+(164, 162, 'value', 'c2d121e9f228b628c715200e030500d3', NULL, NULL, 0, 2, '2016-07-04 08:22:25', 'published', 0),
+(165, 162, 'value', '0bb1d14c5457815a604af9a9c3f43177', NULL, NULL, 0, 2, '2016-07-04 08:22:28', 'published', 0),
+(166, 162, 'value', '47e3c0c1b3669a9b862acfc97ee53774', NULL, NULL, 0, 2, '2016-07-04 08:22:30', 'published', 0),
+(167, 163, 'value', '21d02304d5e381a81614cf396bfca961', NULL, NULL, 0, 2, '2016-07-04 08:22:36', 'published', 0),
+(168, 163, 'value', '8eb14a484e058c34e031cfbaee5675d5', NULL, NULL, 0, 2, '2016-07-04 08:22:41', 'published', 0),
+(169, 0, 'select', 'klas_yakosti', 0, 0, 0, 2, '2016-07-04 08:22:53', 'published', 0),
+(170, 169, 'value', 'de34fa03f5c8eeda152b2659115f4fd3', NULL, NULL, 0, 2, '2016-07-04 08:22:58', 'published', 0),
+(171, 169, 'value', 'b988cd5587cf91ed771f9c013b2ed0a7', NULL, NULL, 0, 2, '2016-07-04 08:23:02', 'published', 0),
+(172, 169, 'value', '2fae5d6ec775b0b9b220d5c7a3a6e5c8', NULL, NULL, 0, 2, '2016-07-04 08:23:05', 'published', 0);
 
 -- --------------------------------------------------------
 
@@ -783,7 +804,7 @@ CREATE TABLE IF NOT EXISTS `e_features_content` (
   PRIMARY KEY (`id`,`features_id`,`content_types_id`,`content_subtypes_id`,`content_id`),
   UNIQUE KEY `features_id` (`features_id`,`content_types_id`,`content_subtypes_id`,`content_id`),
   KEY `fk_content_features_idx` (`features_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=90 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=89 ;
 
 --
 -- Дамп данных таблицы `e_features_content`
@@ -794,7 +815,10 @@ INSERT INTO `e_features_content` (`id`, `features_id`, `content_types_id`, `cont
 (82, 159, 11, 11, 41, 2),
 (83, 152, 11, 11, 41, 3),
 (84, 153, 11, 11, 41, 4),
-(85, 160, 11, 11, 41, 0);
+(85, 160, 11, 11, 41, 0),
+(86, 162, 11, 11, 43, NULL),
+(87, 163, 11, 11, 43, NULL),
+(88, 169, 11, 11, 43, NULL);
 
 -- --------------------------------------------------------
 
@@ -810,7 +834,7 @@ CREATE TABLE IF NOT EXISTS `e_features_info` (
   PRIMARY KEY (`id`,`features_id`,`languages_id`),
   KEY `fk_features_info_features1_idx` (`features_id`),
   KEY `fk_features_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=148 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=156 ;
 
 --
 -- Дамп данных таблицы `e_features_info`
@@ -827,7 +851,18 @@ INSERT INTO `e_features_info` (`id`, `features_id`, `languages_id`, `name`) VALU
 (141, 158, 1, 'Серійна зйомка, кадрів/сек'),
 (142, 159, 1, 'Макс. розмір кадру; кадрів/сек'),
 (143, 160, 1, 'LCD-екран'),
-(144, 161, 1, 'sf');
+(144, 161, 1, 'sf'),
+(145, 162, 1, 'Розмір'),
+(146, 163, 1, 'Колір'),
+(147, 164, 1, '1'),
+(148, 165, 1, '2'),
+(149, 166, 1, '3'),
+(150, 167, 1, 'чорний'),
+(151, 168, 1, 'білий'),
+(152, 169, 1, 'Клас якості'),
+(153, 170, 1, 'a'),
+(154, 171, 1, 'b'),
+(155, 172, 1, 'c');
 
 -- --------------------------------------------------------
 
@@ -846,63 +881,6 @@ CREATE TABLE IF NOT EXISTS `e_feedbacks` (
   `ip` char(15) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `e_guides`
---
-
-CREATE TABLE IF NOT EXISTS `e_guides` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `parent_id` int(11) unsigned NOT NULL,
-  `position` tinyint(3) unsigned NOT NULL,
-  `code` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `parent_id` (`parent_id`),
-  KEY `position` (`position`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
-
---
--- Дамп данных таблицы `e_guides`
---
-
-INSERT INTO `e_guides` (`id`, `parent_id`, `position`, `code`) VALUES
-(1, 0, 0, 'units'),
-(2, 1, 0, ''),
-(3, 1, 0, ''),
-(4, 1, 0, ''),
-(5, 1, 0, ''),
-(6, 1, 0, '');
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `e_guides_info`
---
-
-CREATE TABLE IF NOT EXISTS `e_guides_info` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `guides_id` int(11) unsigned NOT NULL,
-  `languages_id` tinyint(3) unsigned NOT NULL,
-  `name` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`,`guides_id`,`languages_id`),
-  UNIQUE KEY `guides_id` (`guides_id`,`languages_id`),
-  KEY `fk_guides_info_languages2_idx` (`languages_id`),
-  KEY `fk_guides_info_guides2_idx` (`guides_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
-
---
--- Дамп данных таблицы `e_guides_info`
---
-
-INSERT INTO `e_guides_info` (`id`, `guides_id`, `languages_id`, `name`) VALUES
-(1, 1, 1, 'Кількість'),
-(2, 2, 1, 'шт.'),
-(3, 3, 1, 'уп.'),
-(4, 4, 1, 'г.'),
-(5, 5, 1, 'кг.'),
-(6, 6, 1, 'т.');
 
 -- --------------------------------------------------------
 
@@ -981,34 +959,6 @@ INSERT INTO `e_mail_templates_info` (`id`, `templates_id`, `languages_id`, `subj
 (4, 4, 1, 'Вітаємо. Новий коментар. ', '<p>Вітаємо {$data.name}. Ви отримали це повідомлення, так як слідкуєте за коментарями до статті {$data.page_name}.</p>\n\n<p>Ви можете <a href="{$data.page_url}">переглянути його тут</a>.</p>\n'),
 (5, 5, 1, 'Повідолення з форми контактів', '<p>Вітаємо. Нове повідомлення з форми контактів.</p>\n\n<p>Ім&#39;я: {$data.name}</p>\n\n<p>Телефон: {$data.phone}</p>\n\n<p>Email: {$data.email}</p>\n\n<p>Повідомлення</p>\n\n<p>{$data.message}</p>\n'),
 (6, 6, 1, 'Новий зворотній дзвінок', '<p>Вітаємо. Замовлено зворотній дзвінок.</p>\n\n<p>Ім&#39;я: {$data.name}</p>\n\n<p>Телефон: {$data.phone}</p>\n\n<p>Повідомлення</p>\n\n<p>{$data.message}</p>\n');
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `e_modules`
---
-
-CREATE TABLE IF NOT EXISTS `e_modules` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
-  `icon` varchar(30) DEFAULT NULL,
-  `author` varchar(60) DEFAULT NULL,
-  `version` varchar(10) DEFAULT NULL,
-  `controller` varchar(150) DEFAULT NULL,
-  `settings` text,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `controller` (`controller`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
-
---
--- Дамп данных таблицы `e_modules`
---
-
-INSERT INTO `e_modules` (`id`, `icon`, `author`, `version`, `controller`, `settings`, `created`) VALUES
-(8, 'fa-nav', 'Volodymyr Hodiak', '1.0.0', 'nav', NULL, '2016-03-24 08:44:14'),
-(9, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'blog', NULL, '2016-03-24 13:36:39'),
-(10, 'fa-user', 'Volodymyr Hodiak', '1.0.0', 'account', NULL, '2016-03-28 07:13:08'),
-(11, 'fa-mail', 'Volodymyr Hodiak', '1.0.0', 'feedback', NULL, '2016-03-31 13:55:23');
 
 -- --------------------------------------------------------
 
@@ -1171,90 +1121,6 @@ INSERT INTO `e_payment_info` (`id`, `payment_id`, `languages_id`, `name`, `descr
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_plugins`
---
-
-CREATE TABLE IF NOT EXISTS `e_plugins` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
-  `icon` varchar(30) DEFAULT NULL,
-  `author` varchar(60) DEFAULT NULL,
-  `version` varchar(10) DEFAULT NULL,
-  `controller` varchar(150) DEFAULT NULL,
-  `place` enum('top','main','after_main','params','after_params','bottom','sidebar','meta','after_meta','after_features','content','after_content','dashboard') NOT NULL,
-  `published` tinyint(1) NOT NULL DEFAULT '0',
-  `rang` int(4) unsigned DEFAULT NULL,
-  `settings` text,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `published` (`published`),
-  KEY `module` (`controller`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=37 ;
-
---
--- Дамп данных таблицы `e_plugins`
---
-
-INSERT INTO `e_plugins` (`id`, `icon`, `author`, `version`, `controller`, `place`, `published`, `rang`, `settings`, `created`) VALUES
-(16, 'fa-picture-o', 'Volodymyr Hodiak', '1.0.0', 'contentImages', 'after_params', 1, 300, NULL, '2016-03-09 11:26:40'),
-(18, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'adminsGroup', 'sidebar', 1, 300, NULL, '2016-03-17 14:57:30'),
-(21, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'dashboard', 'dashboard', 1, 300, NULL, '2016-03-18 15:28:13'),
-(23, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'modules', 'params', 1, 300, NULL, '2016-03-23 15:46:16'),
-(24, 'fa-folder-o', 'Volodymyr Hodiak', '1.0.0', 'postsCategories', 'sidebar', 1, 300, NULL, '2016-03-25 10:53:16'),
-(25, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'postsCategoriesSelect', 'params', 1, 300, NULL, '2016-03-25 12:03:47'),
-(26, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'tags', 'after_params', 1, 300, NULL, '2016-03-25 14:12:23'),
-(27, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'customersGroup', 'sidebar', 1, 300, NULL, '2016-03-28 08:33:12'),
-(28, 'fa-comments', 'Volodymyr Hodiak', '1.0.0', 'comments', 'after_content', 1, 300, NULL, '2016-03-31 10:26:15'),
-(30, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'productsCategoriesSelect', 'main', 1, 300, NULL, '2016-04-01 07:23:48'),
-(31, 'fa-folder-o', 'Volodymyr Hodiak', '1.0.0', 'productsCategories', 'sidebar', 1, 300, NULL, '2016-04-01 08:17:04'),
-(32, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'productsPrices', 'after_main', 1, 300, NULL, '2016-04-05 10:34:07'),
-(33, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'productsVariants', 'after_main', 1, 300, NULL, '2016-04-05 12:29:51'),
-(34, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'productsAccessories', 'after_features', 1, 300, NULL, '2016-04-12 06:14:56'),
-(35, 'fa-users', 'Volodymyr Hodiak', '1.0.0', 'productsSimilar', 'after_params', 1, 300, NULL, '2016-04-12 13:21:46'),
-(36, 'fa-folder-o', 'Volodymyr Hodiak', '1.0.0', 'pagesTree', 'sidebar', 1, 300, NULL, '2016-04-25 12:33:16');
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `e_plugins_components`
---
-
-CREATE TABLE IF NOT EXISTS `e_plugins_components` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `plugins_id` tinyint(3) unsigned NOT NULL,
-  `components_id` tinyint(3) unsigned NOT NULL,
-  `position` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`,`plugins_id`,`components_id`),
-  KEY `fk_plugins_components_plugins1_idx` (`plugins_id`),
-  KEY `fk_plugins_components_components1_idx` (`components_id`),
-  KEY `position` (`position`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=28 ;
-
---
--- Дамп данных таблицы `e_plugins_components`
---
-
-INSERT INTO `e_plugins_components` (`id`, `plugins_id`, `components_id`, `position`) VALUES
-(2, 18, 13, 0),
-(7, 21, 1, 0),
-(9, 24, 67, 0),
-(10, 25, 67, 0),
-(11, 26, 67, 0),
-(12, 27, 68, 0),
-(13, 28, 67, 0),
-(14, 16, 67, 0),
-(15, 16, 72, 0),
-(17, 30, 72, 0),
-(20, 31, 72, 0),
-(21, 31, 76, 0),
-(22, 32, 72, 0),
-(23, 33, 72, 0),
-(24, 34, 72, 0),
-(25, 35, 76, 0),
-(27, 36, 2, 0);
-
--- --------------------------------------------------------
-
---
 -- Структура таблицы `e_posts_tags`
 --
 
@@ -1277,31 +1143,6 @@ CREATE TABLE IF NOT EXISTS `e_posts_tags` (
 INSERT INTO `e_posts_tags` (`id`, `posts_id`, `tags_id`, `languages_id`) VALUES
 (3, 16, 29, 1),
 (4, 16, 30, 1);
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `e_products_accessories`
---
-
-CREATE TABLE IF NOT EXISTS `e_products_accessories` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `products_id` int(10) unsigned NOT NULL,
-  `accessories_id` int(10) unsigned NOT NULL,
-  `position` tinyint(3) DEFAULT NULL,
-  PRIMARY KEY (`id`,`products_id`,`accessories_id`),
-  KEY `fk_products_accessories_content1_idx` (`products_id`),
-  KEY `fk_products_accessories_content2_idx` (`accessories_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18 ;
-
---
--- Дамп данных таблицы `e_products_accessories`
---
-
-INSERT INTO `e_products_accessories` (`id`, `products_id`, `accessories_id`, `position`) VALUES
-(15, 54, 55, 1),
-(16, 54, 59, 2),
-(17, 52, 54, 1);
 
 -- --------------------------------------------------------
 
@@ -1333,21 +1174,6 @@ INSERT INTO `e_products_prices` (`id`, `content_id`, `group_id`, `price`, `price
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_products_similar`
---
-
-CREATE TABLE IF NOT EXISTS `e_products_similar` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `products_id` int(10) unsigned NOT NULL,
-  `features_id` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`,`products_id`,`features_id`),
-  KEY `fk_products_similar_content1_idx` (`products_id`),
-  KEY `fk_products_similar_features1_idx` (`features_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
-
--- --------------------------------------------------------
-
---
 -- Структура таблицы `e_products_variants`
 --
 
@@ -1358,17 +1184,16 @@ CREATE TABLE IF NOT EXISTS `e_products_variants` (
   `img` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`,`content_id`),
   KEY `fk_products_variants_content1_idx` (`content_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=29 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=73 ;
 
 --
 -- Дамп данных таблицы `e_products_variants`
 --
 
 INSERT INTO `e_products_variants` (`id`, `content_id`, `in_stock`, `img`) VALUES
-(22, 92, 1, '/uploads/content/2016/04/19/variants/b6d767d2f8ed5d21a44b0e5886680cb9.png'),
-(23, 92, 1, '/uploads/content/2016/04/19/variants/37693cfc748049e45d87b8c7d8b9aacd.png'),
-(27, 52, 1, '/uploads/content/2016/04/20/variants/02e74f10e0327ad868d138f2b4fdd6f0.png'),
-(28, 52, 1, '/uploads/content/2016/04/21/variants/33e75ff09dd601bbe69f351039152189.png');
+(70, 52, 1, '/uploads/content/2016/07/04/variants/7cbbc409ec990f19c78c75bd1e06f215.png'),
+(71, 52, 1, '/uploads/content/2016/07/04/variants/e2c420d928d4bf8ce0ff2ec19b371514.png'),
+(72, 52, 2, '/uploads/content/2016/07/04/variants/32bb90e8976aab5298d5da10fe66f21d.png');
 
 -- --------------------------------------------------------
 
@@ -1386,7 +1211,16 @@ CREATE TABLE IF NOT EXISTS `e_products_variants_features` (
   KEY `fk_products_variants_features_features1_idx` (`features_id`),
   KEY `fk_products_variants_features_products_variants1_idx` (`variants_id`),
   KEY `fk_products_variants_features_features2_idx` (`values_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=99 ;
+
+--
+-- Дамп данных таблицы `e_products_variants_features`
+--
+
+INSERT INTO `e_products_variants_features` (`id`, `variants_id`, `features_id`, `values_id`) VALUES
+(96, 70, 162, 164),
+(97, 71, 162, 165),
+(98, 72, 162, 166);
 
 -- --------------------------------------------------------
 
@@ -1404,7 +1238,22 @@ CREATE TABLE IF NOT EXISTS `e_products_variants_prices` (
   UNIQUE KEY `variants_id` (`variants_id`,`content_id`,`group_id`),
   KEY `fk_products_variants_prices_products_variants1_idx` (`variants_id`,`content_id`),
   KEY `fk_products_variants_prices_users_group1_idx` (`group_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=115 ;
+
+--
+-- Дамп данных таблицы `e_products_variants_prices`
+--
+
+INSERT INTO `e_products_variants_prices` (`id`, `variants_id`, `content_id`, `group_id`, `price`) VALUES
+(106, 70, 52, 20, 100),
+(107, 70, 52, 21, 22),
+(108, 70, 52, 22, 32),
+(109, 71, 52, 20, 110),
+(110, 71, 52, 21, 22),
+(111, 71, 52, 22, 32),
+(112, 72, 52, 20, 120),
+(113, 72, 52, 21, 22),
+(114, 72, 52, 22, 32);
 
 -- --------------------------------------------------------
 
@@ -1536,7 +1385,7 @@ CREATE TABLE IF NOT EXISTS `e_users` (
 --
 
 INSERT INTO `e_users` (`id`, `group_id`, `languages_id`, `sessid`, `name`, `surname`, `phone`, `email`, `password`, `avatar`, `skey`, `created`, `updated`, `lastlogin`, `status`) VALUES
-(2, 1, 0, 'kc7uphjmss68v9al9aels3pf42', 'Володимир', 'Годяк', '+38 (067) 6736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-04-21 11:24:28', '2016-07-01 11:06:19', 'active'),
+(2, 1, 0, '0j01k53csoqom5k5mlg15hf6s3', 'Володимир', 'Годяк', '+38 (067) 6736242', 'wmgodyak@gmail.com', 'MTTuFPm3y4m2o', '/uploads/avatars/c81e728d9d4c2f636f067f89cc14862c.png', NULL, '2016-03-03 13:25:08', '2016-04-21 11:24:28', '2016-07-04 11:36:07', 'active'),
 (19, 1, 0, NULL, 'Жорік', 'Васильович', '+77 (777) 7777777', 'otakoyi1@gmail.com', 'MTYFiZEAZZjt.', NULL, NULL, '2016-06-18 10:25:22', '0000-00-00 00:00:00', NULL, 'ban'),
 (21, 20, 0, NULL, 'Жорік', 'Абрамович', '+99 (999) 9999999', 'sz@otakoyi.com', 'OT55OBip4.nJU', NULL, NULL, '2016-06-28 06:21:16', '0000-00-00 00:00:00', NULL, 'active');
 
@@ -1702,13 +1551,6 @@ ALTER TABLE `e_features_info`
   ADD CONSTRAINT `fk_features_info_languages1` FOREIGN KEY (`languages_id`) REFERENCES `e_languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `e_guides_info`
---
-ALTER TABLE `e_guides_info`
-  ADD CONSTRAINT `fk_guides_info_guides2` FOREIGN KEY (`guides_id`) REFERENCES `e_guides` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_guides_info_languages2` FOREIGN KEY (`languages_id`) REFERENCES `e_languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
 -- Ограничения внешнего ключа таблицы `e_mail_templates_info`
 --
 ALTER TABLE `e_mail_templates_info`
@@ -1737,13 +1579,6 @@ ALTER TABLE `e_payment_info`
   ADD CONSTRAINT `fk_payment_info_payment1` FOREIGN KEY (`payment_id`) REFERENCES `e_payment` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `e_plugins_components`
---
-ALTER TABLE `e_plugins_components`
-  ADD CONSTRAINT `fk_plugins_components_components1` FOREIGN KEY (`components_id`) REFERENCES `e_components` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_plugins_components_plugins1` FOREIGN KEY (`plugins_id`) REFERENCES `e_plugins` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
 -- Ограничения внешнего ключа таблицы `e_posts_tags`
 --
 ALTER TABLE `e_posts_tags`
@@ -1752,25 +1587,11 @@ ALTER TABLE `e_posts_tags`
   ADD CONSTRAINT `fk_tags_posts_tags1` FOREIGN KEY (`tags_id`) REFERENCES `e_tags` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `e_products_accessories`
---
-ALTER TABLE `e_products_accessories`
-  ADD CONSTRAINT `fk_products_accessories_content1` FOREIGN KEY (`products_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_products_accessories_content2` FOREIGN KEY (`accessories_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
 -- Ограничения внешнего ключа таблицы `e_products_prices`
 --
 ALTER TABLE `e_products_prices`
   ADD CONSTRAINT `fk_products_prices_content1` FOREIGN KEY (`content_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_products_prices_users_group1` FOREIGN KEY (`group_id`) REFERENCES `e_users_group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Ограничения внешнего ключа таблицы `e_products_similar`
---
-ALTER TABLE `e_products_similar`
-  ADD CONSTRAINT `fk_products_similar_content1` FOREIGN KEY (`products_id`) REFERENCES `e_content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `fk_products_similar_features1` FOREIGN KEY (`features_id`) REFERENCES `e_features` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Ограничения внешнего ключа таблицы `e_products_variants`

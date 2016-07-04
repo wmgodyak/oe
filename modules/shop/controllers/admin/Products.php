@@ -218,7 +218,7 @@ class Products extends Content
 
         $this->template->assign('selected_categories', $this->relations->getCategories($content['id']));
         $this->template->assign('main_categories_id', $this->relations->getMainCategoriesId($content['id']));
-        $this->template->assign('categories', $this->categories->get(0,1));
+        $this->template->assign('categories', $this->categories->get(0, 1));
 
         return $this->template->fetch('shop/select_categories');
     }
