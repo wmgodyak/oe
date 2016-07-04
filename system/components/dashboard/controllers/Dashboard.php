@@ -29,7 +29,7 @@ class Dashboard extends Engine
 
     public function init()
     {
-        $this->assignToNav('Головна', 'dashboard', 'fa-users', null, 1);
+        $this->assignToNav('Головна', 'dashboard', 'fa-home', null, 1);
     }
 
     public function create()

@@ -44,7 +44,7 @@ class ContentTypes extends Engine
 
     public function init()
     {
-        $this->assignToNav('Типи контенту', 'contentTypes', 'fa-users', null ,100);
+        $this->assignToNav('Типи контенту', 'contentTypes', 'fa-file-text-o', 'tools' ,100);
     }
 
 

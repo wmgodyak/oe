@@ -349,7 +349,7 @@ abstract class Engine extends Controller
                 $ws_parents[] = $item;
                 continue;
             }
-            $nav[] = $item;
+            $nav[$k] = $item;
         }
 
         foreach ($ws_parents as $item) {
@@ -361,9 +361,8 @@ abstract class Engine extends Controller
             }
         }
 
-
-
-//        ksort(self::$menu_nav);
+        ksort($nav);
+//        d($nav);die;
 //        d(self::$menu_nav);die;
         $this->template->assign('nav_items', $nav);
         $s = $this->template->fetch('nav');

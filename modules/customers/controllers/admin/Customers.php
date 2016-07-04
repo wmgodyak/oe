@@ -30,7 +30,7 @@ class Customers extends Engine
 
     public function init()
     {
-        $this->assignToNav('Клієнти', 'module/run/customers', 'fa-users', null, 40);
+        $this->assignToNav('Клієнти', 'module/run/customers', 'fa-user', null, 40);
         $this->template->assignScript("modules/customers/js/admin/customers.js");
     }
 

@@ -25,7 +25,7 @@ class Themes extends Engine
 
     public function init()
     {
-        $this->assignToNav('Теми', 'themes', 'fa-file-text', null, 100);
+        $this->assignToNav('Теми', 'themes', 'puzzle-piece', 'settings', 100);
     }
 
     /**
