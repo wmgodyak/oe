@@ -143,7 +143,6 @@ class ContentTypes extends Engine
         $data = ['parent_id' => $parent_id,'images_sizes' => []];
         $this->template->assign('data', $data);
         $this->template->assign('imagesSizes', $this->contentTypes->getContentImagesSizes());
-        $this->template->assign('features_types', $this->contentTypes->getFeaturesTypes());
         $this->template->assign('content_types', $this->contentTypes->get(0));
         $this->template->assign('action', 'create');
         $this->output($this->template->fetch('contentTypes/form'));
@@ -179,9 +178,7 @@ class ContentTypes extends Engine
 
         $this->template->assign('imagesSizes', $this->contentTypes->getContentImagesSizes());
         $this->template->assign('data', $data);
-        $this->template->assign('features_types', $this->contentTypes->getFeaturesTypes());
         $this->template->assign('content_types', $this->contentTypes->get(0));
-        $this->template->assign('features', $this->contentTypes->getFeatures());
 
         $this->template->assign('action', 'edit');
         $this->output($this->template->fetch('contentTypes/form'));
@@ -358,41 +355,6 @@ class ContentTypes extends Engine
         }
 
         return !$abs ? str_replace(DOCROOT , '', $template) : $template;
-    }
-
-    /**
-     * @param $types_id
-     * @param $subtypes_id
-     * @param $features_id
-     * @return int
-     */
-    public function selectFeatures($types_id, $subtypes_id, $features_id)
-    {
-        if(empty($features_id)) return 0;
-
-        if($types_id == 0) {
-            $types_id = $subtypes_id;
-            $subtypes_id = 0;
-        }
-
-        $s = $this->contentTypes->selectFeatures($types_id, $subtypes_id, $features_id);
-        if($this->contentTypes->hasError()){
-            echo $this->contentTypes->getErrorMessage();
-        }
-
-        $s = $s ? 1 : 0; $sf = null;
-
-        if($s){
-            $sf = $this->contentTypes->getSelectedFeatures($types_id, $subtypes_id);
-        }
-        $this->response->body(['s' => $s, 'sf' => $sf])->asJSON();
-    }
-
-    public function deleteFeatures($id)
-    {
-        $s = $this->contentTypes->deleteFeatures($id);
-        $s = $s ? 1 : 0;
-        $this->response->body($s)->asHtml();
     }
 
     public function getImagesSizes()

@@ -89,17 +89,6 @@ class ContentTypes extends \system\models\ContentTypes
             ->row('id');
     }
 
-    public function getFeatures()
-    {
-        return self::$db
-            ->select("
-                select f.id, i.name
-                from __features f, __features_info i
-                where f.status='published' and f.parent_id=0 and i.features_id=f.id and i.languages_id={$this->languages_id}
-            ")
-            ->all();
-    }
-
     /**
      * @param $types_id
      * @param $subtypes_id
@@ -147,11 +136,6 @@ class ContentTypes extends \system\models\ContentTypes
     public function getContentImagesSizes()
     {
         return self::$db->select("select * from __content_images_sizes order by id asc")->all();
-    }
-
-    public function getFeaturesTypes()
-    {
-        return self::$db->enumValues('__features', 'type');
     }
 
     public function get($parent_id)
