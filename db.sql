@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Июл 04 2016 г., 16:42
+-- Время создания: Июл 04 2016 г., 18:20
 -- Версия сервера: 5.6.30-0ubuntu0.14.04.1-log
 -- Версия PHP: 5.5.9-1ubuntu4.17
 
@@ -184,69 +184,6 @@ CREATE TABLE IF NOT EXISTS `e_comments_subscribers` (
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `e_components`
---
-
-CREATE TABLE IF NOT EXISTS `e_components` (
-  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
-  `parent_id` tinyint(3) unsigned NOT NULL,
-  `isfolder` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `icon` varchar(30) DEFAULT NULL,
-  `controller` varchar(150) DEFAULT NULL,
-  `position` tinyint(3) unsigned DEFAULT '0',
-  `published` tinyint(1) NOT NULL DEFAULT '0',
-  `settings` text,
-  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `parent_id` (`parent_id`),
-  KEY `isfolder` (`isfolder`),
-  KEY `position` (`position`),
-  KEY `published` (`published`),
-  KEY `module` (`controller`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=84 ;
-
---
--- Дамп данных таблицы `e_components`
---
-
-INSERT INTO `e_components` (`id`, `parent_id`, `isfolder`, `icon`, `controller`, `position`, `published`, `settings`, `created`) VALUES
-(1, 0, 0, 'fa-home', 'dashboard', 1, 1, NULL, '2016-03-18 15:27:32'),
-(2, 0, 0, 'fa-file-text', 'pages', 2, 1, NULL, '2016-04-25 12:20:14'),
-(3, 0, 1, 'fa-th-large', 'tools', 9, 1, NULL, '2016-03-16 15:10:15'),
-(4, 0, 1, 'fa-cogs', 'settingsGroup', 12, 1, NULL, '2016-03-18 11:41:11'),
-(5, 4, 0, 'fa-cogs', 'seo', 1, 1, NULL, '2016-04-13 13:10:56'),
-(6, 4, 0, 'fa-flag', 'languages', 58, 1, NULL, '2016-03-16 15:26:13'),
-(7, 3, 0, 'fa-bars', 'nav', 46, 1, NULL, '2016-03-16 15:18:30'),
-(8, 3, 0, 'fa-television', 'themes', 49, 1, NULL, '2016-03-16 15:21:51'),
-(9, 3, 0, 'fa-file-code-o', 'features', 52, 1, NULL, '2016-03-16 15:24:22'),
-(10, 3, 0, 'fa-trash', 'trash', 55, 1, NULL, '2016-03-16 15:25:45'),
-(11, 3, 0, 'fa-book', 'contentImagesSizes', 56, 1, NULL, '2016-03-16 15:25:52'),
-(12, 3, 0, 'fa-cubes', 'contentTypes', 57, 1, NULL, '2016-03-16 15:26:02'),
-(13, 0, 0, 'fa-users', 'admins', 8, 1, NULL, '2016-03-16 15:22:03'),
-(14, 3, 0, 'fa-puzzle-piece', 'widgets', 48, 1, NULL, '2016-03-16 15:19:05'),
-(47, 60, 1, 'fa-puzzle-piece', 'components', 47, 0, NULL, '2016-03-16 15:18:54'),
-(54, 45, 0, 'fa-book', 'guides', 54, 0, NULL, '2016-03-16 15:25:16'),
-(59, 45, 0, 'fa-file-code-o', 'backup', 59, 0, NULL, '2016-03-16 15:26:21'),
-(60, 0, 1, 'fa-puzzle-piece', 'componentsGroup', 11, 0, NULL, '2016-03-17 07:52:27'),
-(61, 4, 0, 'fa-cogs', 'settings', 61, 1, NULL, '2016-03-17 07:54:17'),
-(64, 45, 0, 'fa-envelope-o', 'mailTemplates', 64, 0, NULL, '2016-03-18 10:14:32'),
-(66, 60, 0, 'fa-puzzle-piece', 'modules', 0, 0, NULL, '2016-03-23 13:50:46'),
-(67, 0, 0, 'fa-pencil', 'content/Post', 3, 0, NULL, '2016-03-25 10:43:43'),
-(68, 0, 0, 'fa-users', 'customers', 5, 0, NULL, '2016-03-28 07:56:25'),
-(69, 0, 0, 'fa-comments', 'comments', 5, 0, NULL, '2016-03-31 07:17:06'),
-(70, 0, 1, 'fa-shopping-cart', 'shop', 3, 0, NULL, '2016-04-01 06:30:35'),
-(72, 70, 0, 'fa-mobile', 'cProducts', 0, 0, NULL, '2016-04-01 06:38:03'),
-(76, 70, 0, 'fa-file-text', 'ProductsCategories', 0, 0, NULL, '2016-04-01 08:10:43'),
-(77, 70, 0, 'fa-money', 'currency', 0, 0, NULL, '2016-04-01 10:28:14'),
-(78, 70, 0, 'fa-bus', 'delivery', 0, 0, NULL, '2016-04-01 10:55:57'),
-(79, 70, 0, 'fa-credit-card', 'payment', 0, 0, NULL, '2016-04-01 11:16:34'),
-(81, 0, 0, 'fa-cogs', 'banners', 6, 0, NULL, '2016-04-07 12:06:56'),
-(82, 0, 0, 'fa-phone-square', 'callbacks', 5, 0, NULL, '2016-04-11 07:55:03'),
-(83, 65, 0, 'fa-bus', 'ordersStatus', 3, 0, NULL, '2016-04-11 11:53:42');
-
--- --------------------------------------------------------
-
---
 -- Структура таблицы `e_content`
 --
 
@@ -321,7 +258,7 @@ INSERT INTO `e_content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id
 (47, 11, 11, 2, 0, 0, 0, '2016-04-01 07:11:07', '2016-04-01 07:11:07', '2016-04-01', NULL, 'deleted', '47', NULL, NULL, NULL, NULL, NULL),
 (48, 11, 11, 2, 0, 1, 0, '2016-04-01 07:11:12', '2016-04-01 07:11:12', '2016-04-01', NULL, 'published', '48', NULL, NULL, NULL, NULL, NULL),
 (49, 11, 11, 2, 40, 0, 0, '2016-04-01 08:26:25', '2016-04-01 08:26:25', '2016-04-01', NULL, 'deleted', '49', NULL, NULL, NULL, NULL, NULL),
-(52, 10, 10, 2, 0, 0, 0, '2016-04-04 14:41:04', '2016-07-04 13:42:24', '2016-07-04', NULL, 'published', '52', 2, 157, 1, 0, NULL),
+(52, 10, 10, 2, 0, 0, 0, '2016-04-04 14:41:04', '2016-07-04 13:57:42', '2016-07-04', NULL, 'published', '52', 2, 157, 1, 0, NULL),
 (54, 10, 10, 2, 0, 0, 0, '2016-04-04 16:21:23', '2016-04-12 10:57:51', '2016-04-04', NULL, 'published', '54', 2, 2, 0, 0, NULL),
 (55, 10, 10, 2, 0, 0, 0, '2016-04-04 16:22:23', '2016-04-04 16:22:41', '2016-04-04', NULL, 'published', '55', NULL, NULL, NULL, NULL, NULL),
 (57, 10, 10, 2, 0, 0, 0, '2016-04-05 06:12:57', '2016-04-05 06:13:34', '2016-04-05', NULL, 'published', '57', NULL, NULL, NULL, NULL, NULL),
@@ -388,7 +325,7 @@ CREATE TABLE IF NOT EXISTS `e_content_images` (
   PRIMARY KEY (`id`),
   KEY `fk_content_images_content1_idx` (`content_id`),
   KEY `position` (`position`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=28 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=31 ;
 
 --
 -- Дамп данных таблицы `e_content_images`
@@ -411,7 +348,6 @@ INSERT INTO `e_content_images` (`id`, `content_id`, `path`, `image`, `position`,
 (14, 1, 'uploads/content/2016/03/25/', 'testimonial2-1x13.jpg', 0, '2016-03-25 12:33:08'),
 (15, 1, 'uploads/content/2016/03/25/', 'testimonial3-1x14.jpg', 5, '2016-03-25 12:33:08'),
 (20, 54, 'uploads/content/2016/04/12/', 'potd-grass_3570487k-54x.jpg', 1, '2016-04-12 08:04:02'),
-(21, 52, 'uploads/content/2016/04/12/', 'pictures-38191-52x.jpg', 1, '2016-04-12 08:04:17'),
 (22, 57, 'uploads/content/2016/04/12/', 'animals-smile_3379238k-57x.jpg', 1, '2016-04-12 08:04:22'),
 (23, 59, 'uploads/content/2016/04/12/', '1443507958_2cd1e26200000578-0-image-a-312_1443424459664-59x.jpg', 1, '2016-04-12 08:04:26'),
 (24, 55, 'uploads/content/2016/04/12/', '2fab3e6100000578-3377927-andrew_suryono_bali_i_was_taking_pictures_of_some_orangutans_in_-a-42_1451416773881-55x.jpg', 1, '2016-04-12 08:30:17'),
@@ -547,7 +483,7 @@ CREATE TABLE IF NOT EXISTS `e_content_relationship` (
   KEY `fk_content_relationship_content1_idx` (`content_id`),
   KEY `fk_content_relationship_content2_idx` (`categories_id`),
   KEY `is_main` (`is_main`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=108 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=109 ;
 
 --
 -- Дамп данных таблицы `e_content_relationship`
@@ -570,7 +506,7 @@ INSERT INTO `e_content_relationship` (`id`, `content_id`, `categories_id`, `is_m
 (76, 54, 41, 1),
 (89, 92, 44, 1),
 (96, 147, 130, 1),
-(107, 52, 43, 1);
+(108, 52, 43, 1);
 
 -- --------------------------------------------------------
 
@@ -1191,9 +1127,9 @@ CREATE TABLE IF NOT EXISTS `e_products_variants` (
 --
 
 INSERT INTO `e_products_variants` (`id`, `content_id`, `in_stock`, `img`) VALUES
-(70, 52, 1, '/uploads/content/2016/07/04/variants/7cbbc409ec990f19c78c75bd1e06f215.png'),
-(71, 52, 1, '/uploads/content/2016/07/04/variants/e2c420d928d4bf8ce0ff2ec19b371514.png'),
-(72, 52, 2, '/uploads/content/2016/07/04/variants/32bb90e8976aab5298d5da10fe66f21d.png');
+(70, 52, 0, '/uploads/content/2016/07/04/variants/7cbbc409ec990f19c78c75bd1e06f215.png'),
+(71, 52, 0, '/uploads/content/2016/07/04/variants/e2c420d928d4bf8ce0ff2ec19b371514.png'),
+(72, 52, 0, '/uploads/content/2016/07/04/variants/32bb90e8976aab5298d5da10fe66f21d.png');
 
 -- --------------------------------------------------------
 
