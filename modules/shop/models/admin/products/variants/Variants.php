@@ -2,13 +2,18 @@
 
 namespace modules\shop\models\admin\products\variants;
 
+use modules\shop\models\admin\Prices;
 use modules\shop\models\admin\products\Features;
+use system\models\UsersGroup;
 
 class Variants extends \modules\shop\models\products\variants\Variants
 {
     private $pv;
     private $pvf;
     private $features;
+    private $pp;
+    private $ug;
+    private $pvp;
 
     public function __construct()
     {
@@ -17,6 +22,9 @@ class Variants extends \modules\shop\models\products\variants\Variants
         $this->pv = new ProductsVariants();
         $this->pvf = new ProductsVariantsFeatures();
         $this->features = new Features();
+        $this->pp = new Prices();
+        $this->ug = new UsersGroup();
+        $this->pvp = new ProductsVariantsPrices();
     }
 
     public function create($content_id)
@@ -26,65 +34,33 @@ class Variants extends \modules\shop\models\products\variants\Variants
 
         $this->beginTransaction();
 
-        $_features = []; $values = [];
+        $values = [];
 
         foreach ($features as $k=>$features_id) {
             $v = $this->features->getValues($features_id);
             foreach ($v as $item) {
                 $values[$features_id][] = $item['id'];
-                $_features[$features_id][] = $item['id'];
             }
         }
 
-        $variants = [];
-        $variant = [];
-//        foreach ($features as $k=>$features_id) {
+        $variants = $this->generateVariants($values);
 
-//            foreach ($values[$features_id] as $i=>$values_id) {
-//
-//            }
-//        }
+        foreach ($variants as $k=>$a) {
+            $variants_id = $this->pv->create($content_id);
 
-        foreach ($values[$features[0]] as $i=>$values_id) {
-            $variant[] = [
-                'features_id' => $features[0],
-                'values_id'   => $values_id
-            ];
+            foreach ($a as $features_id => $values_id) {
+                $this->pvf->create($variants_id, $features_id, $values_id);
+            }
+
+            $prices = $this->pp->get($content_id);
+            foreach ($this->ug->getItems(0) as $item) {
+                $price = isset($prices[$item['id']]) ? $prices[$item['id']] : 0;
+                $this->pvp->create($variants_id, $content_id, $item['id'], $price);
+            }
+
         }
 
-//        d($_features);
-        /*
-Array
-(
-    [160] => Array
-        (
-            [0] => 172
-            [1] => 173
-            [2] => 180
-        )
-
-    [151] => Array
-        (
-            [0] => 165
-            [1] => 181
-        )
-
-)
-        */
-
-
-//        for($i=0;$i<count($_features); $i++){
-//            $a = [];
-//            $a[$_features[$i]]
-//        }
-
-        die;
-        $variants_id = $this->pv->create($content_id);
-
-        foreach ($data['features_id'] as $k=>$features_id) {
-            $values_id = $data['values_id'][$k];
-            $this->pvf->create($variants_id, $features_id, $values_id);
-        }
+        $this->updateRow('__content', $content_id, ['has_variants' => 1]);
 
         if($this->hasError()){
             $this->rollback();
@@ -96,14 +72,65 @@ Array
         return true;
     }
 
+    /**
+     * Generate products variants based on selected features
+     * @param $a
+     * @param null $m
+     * @param null $e
+     * @return array
+     * @author Vitaliy Stupak at Otakoyi.com
+     */
+    private function generateVariants($a, $m = null, $e = null)
+    {
+        $res = [];
+        if (!$e) {
+            $e = 1;
+            foreach ($a as $k => $v) {
+                $e *= count($v);
+            }
+        }
+
+        $e--;
+
+        if ($e < 0) return $res;
+
+        if (!$m) {
+            foreach ($a as $k => $v) {
+                $m[$k] = 0;
+            }
+        }
+
+        $r = [];
+
+        foreach ($a as $k => $v) {
+            $r[$k] = $v[$m[$k]];
+        }
+        $res[] = $r;
+
+        $s = false;
+        foreach (array_reverse($m, true) as $k => $v) {
+            if (($v < (count($a[$k]) - 1)) && $s == false) {
+                $m[$k]++;
+                $s = true;
+            } else {
+                if ($s == false) {
+                    $m[$k] = 0;
+                }
+            }
+        }
+
+        if ($s) $res = array_merge($res, $this->generateVariants($a, $m, $e));
+
+        return $res;
+    }
 
     public function get($content_id)
     {
         $r= self::$db->select("select id, in_stock, img from __products_variants where content_id = '{$content_id}' ")->all();
         $res = [];
         foreach ($r as $row) {
-            $row['features'] = $this->variantsFeatures->get($row['id']);
-            $row['prices']   = $this->variantsPrices->get($content_id, $row['id']);
+            $row['features'] = $this->pvf->get($row['id']);
+            $row['prices']   = $this->pvp->get($content_id, $row['id']);
             $res[] = $row;
         }
         return $res;
@@ -122,7 +149,7 @@ Array
         foreach ($variants as $variant_id=>$a) {
             $this->updateRow('__products_variants', $variant_id, ['in_stock' => $a['in_stock']]);
             foreach($a['prices'] as $group_id=>$price){
-                $this->variantsPrices->set($content_id, $variant_id, $group_id, $price);
+                $this->pvp->set($content_id, $variant_id, $group_id, $price);
             }
         }
 
@@ -135,7 +162,23 @@ Array
      */
     public function delete($id)
     {
-        return $this->deleteRow('__products_variants', $id);
+        $content_id = self::$db->select("select content_id from __products_variants where id={$id} limit 1")->row('content_id');
+        if(empty($content_id)) return false;
+
+        $t = self::$db->select("select count(id) as t from __products_variants where content_id={$content_id}")->row('t');
+
+        $this->deleteRow('__products_variants', $id);
+
+        if($t == 1){
+            $this->updateRow('__content', $content_id, ['has_variants' => 0]);
+        }
+
+        return true;
+    }
+
+    public function deleteAll($content_id)
+    {
+        return self::$db->delete('__products_variants', " content_id = {$content_id}");
     }
 
     public function uploadImage()

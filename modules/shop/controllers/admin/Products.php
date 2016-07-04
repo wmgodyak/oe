@@ -201,6 +201,12 @@ class Products extends Content
         parent::edit($id);
     }
 
+    public function process($id, $response = true)
+    {
+        EventsHandler::getInstance()->add('content.process', [new Variants(), 'process']);
+        return parent::process($id, $response);
+    }
+
     /**
      * @param $content
      * @return string

@@ -28,18 +28,20 @@ class Variants extends Engine
         $this->contentRelations = new ContentRelationship();
     }
 
-    public function index()
+    public function index($content = null)
     {
         $this->template->assign('customers_group', $this->customersGroup->getItems(0));
-        $this->template->assign('variants', []);
+        $this->template->assign('variants', $this->variants->get($content['id']));
         return $this->template->fetch('shop/products/variants/index');
     }
 
     public function create($products_id = 0)
     {
         if($this->request->isPost() && $this->request->post('action')){
+            $this->variants->deleteAll($products_id);
             $s = $this->variants->create($products_id);
             $this->response->body(['s'=>$s])->asJSON();
+            return '';
         }
 
         $category_id = $this->contentRelations->getMainCategoriesId($products_id);
@@ -56,6 +58,7 @@ class Variants extends Engine
 
     public function edit($id)
     {
+
     }
 
     public function process($id)
@@ -66,10 +69,10 @@ class Variants extends Engine
     public function get($content_id)
     {
         if(empty($content_id)) return '';
-        echo 'OK';die;
-        $this->template->assign('customers_group', $this->customersGroup->get());
+
+        $this->template->assign('customers_group', $this->customersGroup->getItems(0));
         $this->template->assign('variants', $this->variants->get($content_id));
-        return $this->template->fetch('shop/products/variants/items');
+        $this->response->body($this->template->fetch('shop/products/variants/items'));
     }
 
     public function delete($variant_id)

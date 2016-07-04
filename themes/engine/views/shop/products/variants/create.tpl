@@ -1,5 +1,5 @@
 <form action="module/run/shop/products/variants/create/{$content_id}" method="post" id="productsVariantsForm" class="form-horizontal">
-    <p>Згенеруйте варіанти товарів на основі вибраних властивостей</p>
+    <p>Згенеруйте варіанти товарів на основі вибраних властивостей. <b>Зверніть увагу!!!</b> Раніше створені варіанти <b>будуть видалені</b></p>
     <div class="form-group">
         <div class="col-md-12">
             <select name="features[]" multiple class="form-control variants-feature" required data-placeholder="Виберіть властивості">

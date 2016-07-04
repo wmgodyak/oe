@@ -25,4 +25,21 @@ class ProductsVariantsFeatures extends \modules\shop\models\products\variants\Pr
             ]
         );
     }
+
+    /**
+     * @param $variants_id
+     * @return mixed
+     */
+    public function get($variants_id)
+    {
+        return self::$db
+            ->select("
+              select v.features_id, v.values_id, fi.name as features_name, vi.name as values_name
+              from __products_variants_features v
+               join __features_info fi on fi.features_id=v.features_id and fi.languages_id={$this->languages_id}
+               join __features_info vi on vi.features_id=v.values_id and vi.languages_id={$this->languages_id}
+              where v.variants_id={$variants_id}
+              ")
+            ->all();
+    }
 }
