@@ -1,0 +1,1182 @@
+$red-light-color: #F04D4D
+$gray-color: #eeeeee
+$text-color: #666666
+
+html
+    height: 100%
+    font-size: 100%
+    -moz-user-select: none
+    -khtml-user-select: none
+    -webkit-user-select: none
+    -ms-user-select:none
+    user-select: none
+
+body
+    padding: 0
+    min-width: 320px
+    font-family: 'Roboto' !important
+    font-weight: 400 !important
+    color: $text-color !important
+    
+//ШАПКА
+.preheader-back
+    background-color: $gray-color
+    height: 35px
+.preheader
+    margin: 0 auto !important
+    font-weight: 300
+    width: 100%
+    max-width: 1170px
+    padding: 0 30px
+.header
+    border-bottom: 1px solid #bebebe 
+    
+//ІНФОРМАЦІЙНЕ МЕНЮ
+.header-links-info
+    padding-top: 8px !important
+    padding-left: 0 !important
+    ul
+        padding: 0
+        margin: 0
+        li
+            display: inline-block
+            list-style: none
+            padding-right: 20px
+            a
+                text-decoration: none
+                color: $text-color
+            &:hover
+                text-decoration: underline
+.number
+    font-size: 14px
+    padding: 0 !important
+    p
+        padding-top: 8px !important
+            
+//МОВА І ЛИСТ БАЖАНЬ
+.header-lang-des
+    padding-top: 8px !important
+    p
+        margin: 0
+        padding: 0
+        display: inline-block
+        a
+            text-decoration: none
+            color: $text-color
+            padding-left: 6px
+            &:hover
+                text-decoration: underline
+                color: $red-light-color
+            .like
+                width: 17px
+                height: 14px
+                display: block
+                float: left
+                margin-top: 2px
+                background-image: url(images/like.png)
+                background-position: 0px 0px
+    .active-lang
+        text-decoration: underline !important
+        color: $red-light-color !important  
+    .desires
+        float: right
+        margin-right: 15px
+        a
+            &:hover
+                text-decoration: underline
+                .like
+                    background-image: url(images/like.png)
+                    background-position: 17px 0px
+            
+        
+    
+//ВХІД І РЕГІСТРАЦІЯ
+.header-login
+    background-color: $red-light-color
+    text-align: center
+    color: #fff
+    height: 35px
+    padding-top: 8px
+    width: 165px !important
+    float: right !important
+    p
+        margin: 0
+        a
+            color: #fff
+            text-decoration: underline
+            
+//ГОЛОВНИЙ БЛОК В ШАПЦІ САЙТУ
+.header-main
+    height: 120px
+    margin: 0 auto !important
+    width: 100%
+    max-width: 1170px
+    padding: 0 30px
+.logo
+    margin: 16px 0
+    width: 100%
+    padding-left: 0 !important
+    a
+        &:hover
+            text-decoration: none
+        .logo-text
+            margin-left: 5px
+            margin-top: 5px 
+            width: 60%
+    
+//НОМЕРА І ПОШУК
+.tel-search
+    font-size: 15px
+    font-weight: 300 
+    color: $text-color  
+.tel
+    height: 54px
+    padding-top: 24px
+    div
+        ul
+            list-style: none
+            display: inline-block
+            padding: 0
+            margin: 0
+            li
+                display: inline-block
+                margin-right: 30px
+                i
+                    display: block
+                    width:15px
+                    height: 15px
+                    float: left
+                    margin-top: 3px
+                    margin-right: 12px
+                .vodafon
+                    background-image: url(images/contacts_icon.png)
+                    background-position: 0px 0px
+                .kyivstar
+                    background-image: url(images/contacts_icon.png)
+                    background-position: 15px 0px
+                .life
+                    background-image: url(images/contacts_icon.png)
+                    background-position: 0px 15px
+                .call
+                    background-image: url(images/contacts_icon.png)
+                    background-position: -60px 15px
+                &:last-child
+                    margin-right: 0 !important
+                span
+                    font-size: 14px
+                    &:nth-child(2n)
+                        color: $red-light-color
+                    &:nth-child(2n-1)
+                        padding-left: 35px
+                img
+                    padding-right: 10px
+                    padding-bottom: 4px
+                a
+                    color: $text-color
+                    &:hover
+                        color: $red-light-color !important
+.search
+    padding: 9px 0
+    position: relative
+    input
+        max-width: 408px
+        width: 100%
+        height: 33px
+        padding-left: 10px
+        padding-top: 0
+        padding-bottom: 0
+        vertical-align: middle
+        border: 1px solid #ccc
+        &:focus
+            outline: none
+.categories
+    height: 35px
+    width: 150px
+    margin-left: -5px
+    vertical-align: middle
+    background-color: #fff
+    border: 1px solid #ccc
+    &:focus
+        outline: none
+    &:hover
+        p
+            color: $red-light-color
+        .cat-arrow
+            background-position: 16px 0px !important
+    p
+        font-size: 16px
+        float: left
+        text-align: left
+        margin: 0
+        padding: 0 0 0 5px
+        color: #aaa
+    .cat-arrow
+        width: 16px 
+        height: 8px
+        display: block
+        background-image: url(images/arrow_down.png)
+        background-position: 0px 0px
+        margin: 8px 0 0 116px
+.button-search
+    width: 35px
+    height: 35px
+    margin-left: -5px
+    border: none
+    vertical-align: middle
+    background: $red-light-color
+    &:focus
+        outline: 0
+    .icon-search
+        width: 23px
+        height: 23px
+        display: block
+        background-image: url(images/search.png)
+        background-position: 0px 0px
+.all-categories
+    position: absolute
+    display: none
+    z-index: 5
+    background-color: #fff
+    border: 1px solid #ccc
+    border-top: 0
+    right: 51px
+    ul
+        margin: 0
+        padding: 0
+        li
+            list-style: none
+            a
+                display: block
+                padding: 5px 20px
+                color: $text-color
+                font-size: 15px
+                text-decoration: none
+                &:hover
+                    background-color: $red-light-color
+                    color: #fff
+//КОШИК
+.basket
+    margin: 16px 0
+    padding: 0 !important
+    width: 165px !important
+    float: right !important
+.basket-left-box
+    width: 60px
+    float: left
+    position: relative
+.cart
+    background-color: #fab031
+    width: 49px !important
+    height: 49px
+    border-radius: 50px
+    margin-top: 10px
+    padding-top: 14px
+    padding-left: 12px
+.price
+    width: 30px
+    height: 30px
+    top: 1px
+    right: 0
+    background-color: #fff
+    margin: 0 0 0 5px
+    padding: 5px 0 0 10px
+    border: 1px solid #fab031
+    border-radius: 50px
+    position: absolute
+    span
+        font-size: 15px
+        color: #fab031
+.basket-right-box
+    text-align: right
+    h2
+        margin: 0
+        text-transform: uppercase
+        color: $red-light-color
+        font-weight: 500;
+        font-size: 16px
+    p
+        margin: 4px 0 0 0
+        font-size: 13px
+        color: $text-color
+        line-height: 1.2
+        font-weight: 400;
+        span
+            font-size: 15px
+            font-weight: 400
+            color: $red-light-color
+    a
+        display: block
+        margin-top: 7px
+        font-size: 15px
+        color: $text-color
+        font-weight: 300
+        text-align: right
+        text-decoration: underline
+        &:hover
+            text-decoration: none
+            color: $red-light-color
+            text-decoration: underline     
+
+//СТИЛІ ДО СТОРІНКИ home.html
+//МЕНЮ
+.menu
+    width: 350px !important
+    background: #fff
+    padding: 0 !important
+    h2
+        font-size: 18px
+        text-transform: uppercase
+        height: 40px
+        padding: 10px 0 0 13px
+        margin: 0
+        background: $red-light-color
+        color: #fff
+        .cat-tov
+            width: 13px
+            height: 14px
+            display: block
+            float: left
+            margin: 4px 14px 0 0
+            background: url('images/cat-tov.png')
+    ul
+        margin: 0
+        padding: 0
+        li
+            list-style: none
+            font-size: 16px
+            font-weight: 300
+            height: 40px
+            padding-top: 8px
+            position: relative
+            span
+                display: block
+                padding-left: 40px
+                position: relative
+                cursor: pointer
+                &:before
+                    background: url(images/menu_icons.png) no-repeat 0 0;
+                    display: block;
+                    position: absolute;
+                    left: 10px;
+                    top: 0;
+                    content: ' ';
+                    width: 20px;
+                    height: 20px;
+                    vertical-align: top;
+                
+        .parts-phone
+            span
+                &:before
+                    background-position: 0 0
+        .categ.parts-phone.active
+                border: 1px solid $red-light-color
+                border-right: 0 none
+                border-left: 0 none
+                span
+                    color: $red-light-color
+                    &:before
+                        background-position: -60px 0
+        .parts-tablet
+            span
+                &:before
+                    background-position: -20px 0
+        .categ.parts-tablet.active
+                border: 1px solid $red-light-color
+                border-right: 0 none
+                border-left: 0 none
+                span
+                    color: $red-light-color
+                    &:before
+                        background-position: -80px 0
+        .parts-iphone
+            span
+                &:before
+                    background-position: -40px 0
+        .categ.parts-iphone.active
+                border: 1px solid $red-light-color
+                border-right: 0 none
+                border-left: 0 none
+                span
+                    color: $red-light-color
+                    &:before
+                        background-position: -100px 0
+        .parts-ipod
+            span
+                &:before
+                    background-position: 0 -20px
+        .categ.parts-ipod.active
+                border: 1px solid $red-light-color
+                border-right: 0 none
+                border-left: 0 none
+                span
+                    color: $red-light-color
+                    &:before
+                        background-position: -60px -20px
+        .parts-ipad
+            span
+                &:before
+                    background-position: -20px -20px
+        .categ.parts-ipad.active
+                border: 1px solid $red-light-color
+                border-right: 0 none
+                border-left: 0 none
+                span
+                    color: $red-light-color
+                    &:before
+                        background-position: -80px -20px
+        .accessories-phone
+            span
+                &:before
+                    background-position: -40px -20px
+        .categ.accessories-phone.active
+                border: 1px solid $red-light-color
+                border-right: 0 none
+                border-left: 0 none
+                span
+                    color: $red-light-color
+                    &:before
+                        background-position: -100px -20px
+        .accessories-iphone
+            span
+                &:before
+                    background-position: 0 -40px
+        .categ.accessories-iphone.active
+                border: 1px solid $red-light-color
+                border-right: 0 none
+                border-left: 0 none
+                span
+                    color: $red-light-color
+                    &:before
+                        background-position: -60px -40px
+        .accessories-ipad
+            span
+                &:before
+                    background-position: -20px -40px
+        .categ.accessories-ipad.active
+                border: 1px solid $red-light-color
+                border-right: 0 none
+                border-left: 0 none
+                span
+                    color: $red-light-color
+                    &:before
+                        background-position: -80px -40px
+        .equipment-instruments
+            span
+                &:before
+                    background-position: -40px -40px
+        .categ.equipment-instruments.active
+                border: 1px solid $red-light-color
+                border-right: 0 none
+                border-left: 0 none
+                span
+                    color: $red-light-color
+                    &:before
+                        background-position: -100px -40px
+        .equipment-programming
+            span
+                &:before
+                    background-position: 0 -60px
+        .categ.equipment-programming.active
+                border: 1px solid $red-light-color
+                border-right: 0 none
+                border-left: 0 none
+                span
+                    color: $red-light-color
+                    &:before
+                        background-position: -60px -60px
+        .supplies-repair
+            span
+                &:before
+                    background-position: -20px -60px
+        .categ.supplies-repair.active
+                border: 1px solid $red-light-color
+                border-right: 0 none
+                border-left: 0 none
+                span
+                    color: $red-light-color
+                    &:before
+                        background-position: -80px -60px
+        .accessories-brands
+            span
+                &:before
+                    background-position: -40px -60px
+        .categ.accessories-brands.active
+                border: 1px solid $red-light-color
+                border-right: 0 none
+                border-left: 0 none
+                span
+                    color: $red-light-color
+                    &:before
+                        background-position: -100px -60px
+
+//БАНЕРА І СЛАЙДЕР
+.slider-menu-back
+    background-color: $gray-color
+    padding: 15px 0
+.menu-slider-baners
+    width: 100%
+    max-width: 1170px
+    padding: 0 30px
+    margin: 0 auto !important
+.slider
+    padding: 0 !important
+    margin-left: 20px
+.slider-big
+    position: relative
+    margin: 0 0 15px 10px
+    i
+        display: block
+        position: absolute
+        background: url('images/banner_arrows.png')
+        width: 20px
+        height: 30px
+        z-index: 3
+.arrow-left
+    background-position: 0 0 !important
+    left: 3%
+    top: 46%
+    &:hover 
+        background-position: -20px 0 !important
+        cursor: pointer
+.arrow-right
+    background-position: -40px 0 !important
+    right: 3%
+    top: 46%
+    &:hover
+        background-position: -60px 0 !important
+        cursor: pointer
+.rslides
+    position: relative
+    list-style: none
+    overflow: hidden
+    width: 100%
+    max-width: 730px
+    padding: 0
+    margin: 0
+.rslides 
+    li
+      -webkit-backface-visibility: hidden
+      position: absolute
+      display: none
+      width: 100%
+      left: 0
+      top: 0
+.rslides 
+    li
+        &:first-child
+          position: relative
+          display: block
+          float: left
+.rslides 
+    img
+      display: block
+      height: auto
+      float: left
+      width: 100%
+      border: 0
+.mini-baners
+    width: 100%
+    min-width: 350px
+    padding: 0 !important
+    overflow: hidden
+    display: inline-flex
+    margin-left: 10px
+    div
+        position: relative
+        img
+            display: inline-block
+            width: 100%
+            &:first-child
+                padding-bottom: 7px
+        a
+            position: absolute
+            color: $red-light-color
+            font-size: 16px
+            padding: 5px 27px
+            background-color: #fff
+            border: 1px solid $red-light-color
+            font-weight: 500;
+            &:hover
+                text-decoration: none
+                background-color: $red-light-color
+                color: #fff
+.mini-baners-left
+    margin-right: 30px
+    a
+        bottom: 19px
+        right: 15px
+.mini-baners-right
+    a
+        bottom: 19px
+        right: 15px
+    .mini-baners
+        display: none
+    .advantages
+        display: none
+    
+//КОНТЕНТ
+.content
+    width: 100%
+    max-width: 1170px
+    padding: 24px 30px
+    margin: 0 auto !important
+    overflow: hidden
+.product-wrap.row
+        margin: 0 15px 31px 15px !important
+.product-wrap
+    border: 1px solid #aaa
+    padding: 17px 34px
+    position: relative
+    h1
+        font-size: 30px
+        font-weight: 400;
+        margin: 0
+        padding: 0 20px
+        position: absolute
+        top: -25px
+        left: 20px
+        background-color: #fff
+    i
+        background: url('images/carousel_arrows.png')
+        width: 30px
+        height: 30px
+        position: absolute
+    .product-arrow-left
+        background-position: 0 0 !important
+        left: -15px
+        top: 45%
+        &:hover
+            cursor: pointer
+            background-position: -30px 0 !important
+    .product-arrow-right
+        background-position: -60px 0 !important
+        right: -15px
+        top: 45%
+        &:hover
+            cursor: pointer
+            background-position: -90px 0 !important
+//БЛОК ТОВАРУ
+.product-block
+    width: 170px !important
+    padding: 0 !important
+    position: relative
+    margin: 0 auto
+    .product-status
+        position: absolute
+        z-index: 1
+        img
+            display: block
+            width: auto
+            &:last-child
+                margin: 0 auto
+                padding-top: 6px
+    .product-image
+        img
+            max-width: 100%
+.product-meta
+    text-align: left
+    .rating
+        padding-bottom: 10px
+        .star
+            display: inline-block
+            a 
+                font-size: 16px
+                padding: 0 1px
+                cursor: pointer
+                color: $red-light-color
+                text-decoration: none
+                background-color: transparent
+    p
+        margin: 0
+.product-price
+    font-size: 16px
+    font-weight: 500
+    padding: 10px 0
+    margin: 5px 0 !important
+    color: $text-color
+    span
+        display: block
+        color: #ccc
+        font-size: 14px
+        text-decoration: line-through
+        font-weight: 300 
+.light
+    color: $red-light-color
+.your-bonus
+    font-size: 12px
+    font-weight: 300
+    span
+        color: #79bf79
+        font-weight: 500 
+.action
+    margin-top: 10px
+    overflow: hidden
+    .cart-add
+        float: left
+        font-size: 13px
+        button
+            background-color: $red-light-color
+            float: left
+            padding: 4px
+            border: 1px solid $red-light-color
+            color: #fff
+            text-decoration: none
+            &:hover
+                background-color: transparent !important
+                border: 1px solid $red-light-color !important
+                color: $red-light-color !important
+            &:focus
+                outline: none
+    .button-group
+        margin-top: 5px
+        .availability
+            float: left
+            margin: 0 7px
+            .product-icon
+                background: url('images/cart_like.png')
+                border: none
+                width: 21px
+                height: 20px
+                &:focus
+                    outline: none
+        .wishlist
+            .product-icon
+                background: url('images/cart_like.png')
+                border: none
+                width: 22px
+                height: 20px
+                background-position: 44px 0
+                &:focus
+                    outline: none
+                    background-position: 22px 0
+                &:hover
+                    background-position: 22px 0
+//БЛОК НОВИН
+.box-news.row
+    margin: 0 0 20px 0 !important
+.box-news
+    position: relative
+    h2
+        font-size: 30px
+        color: $text-color
+        font-weight: 400
+        margin: 0
+        padding-bottom: 10px
+    a
+        margin-top: 15px
+        display: block
+        font-size: 16px
+        font-weight: 400
+        color: $red-light-color
+        position: absolute
+        top: 0
+        right: 0
+        &:hover
+            color: $red-light-color
+    div
+        overflow: hidden
+        .block-new
+            padding: 13px 0
+            width: 350px
+            margin-right: 30px
+            border: 1px solid #eee
+            background-color: #eee
+            display: inline-block
+            &:last-child
+                margin-right: 0 !important
+            &:hover
+                cursor: pointer
+                border: 1px solid $red-light-color
+                background-color: transparent
+                h2
+                    color: #ff4646
+            img
+                float: left
+                padding: 0 44px 0 14px
+                max-width: 100%
+        .new-info
+            h2
+                font-size: 14px
+                font-weight: 700
+                margin: 0 0 10px 0
+                padding: 0
+            p
+                font-size: 11px
+                font-weight: 300
+                margin: 0
+                padding-bottom: 10px
+            .new-info-date
+                color: #999
+                font-weight: 100
+                padding-bottom: 0
+                
+// БЛОК SEO-TEXT
+.description.row
+    margin: 0 0 20px 0 !important
+.description
+    .advantages
+        width: 540px
+        margin-right: 30px
+        background-color: #eee
+        padding: 17px 8px
+        float: left
+    .advantages-img
+        float: left
+        p
+            margin: 0
+            color: $red-light-color
+            font-weight: 700
+            font-size: 13px
+            padding-top: 8px
+            margin-bottom: 2px
+            text-align: center
+    .advantages-icon
+        p
+            position: relative
+            display: inline-block
+            width: 80px
+            padding-top: 80px
+            overflow: hidden
+            margin-top: 0
+            margin-bottom: 5px
+            &:before
+                background: url(images/factors.png) no-repeat 0 0;
+                display: block;
+                position: absolute;
+                left: 10px;
+                top: 0;
+                content: ' ';
+                width: 65px;
+                height: 65px;
+                vertical-align: top;
+    .advantages-icon
+        margin-left: 175px
+        .available
+            padding-left: 10px
+            &:before
+                background-position: 0 0
+    .advantages-icon
+        .modern
+            padding-left: 15px
+            &:before
+                background-position: -65px 0
+    .advantages-icon
+        .qualitatively
+            padding-left: 20px
+            &:before
+                background-position: -130px 0
+    .advantages-icon
+        .quickly
+            padding-left: 15px
+            &:before
+                background-position: -195px 0
+        span
+            font-size: 12px
+            display: block
+    .about-us
+        float: right
+        margin: 0
+        padding: 0
+        width: 540px
+        h2
+            font-size: 24px
+            margin: 16px 0 0 0
+        p
+            font-weight: 300
+            font-size: 12px
+            margin: 16px 0 0 0 
+        .address
+            font-weight: 500
+            font-size: 16px
+            a
+                color: $red-light-color
+
+//СТИЛІ ДО СТОРІНКИ news.html
+//ХЛІБНІ КРИХТИ
+.breadcrumbs-back
+    background-color: $gray-color
+    border-top: 1px solid #ccc
+    font-size: 14px
+    font-weight: 300
+.breadcrumbs
+    margin: 0 auto !important
+    width: 100%
+    max-width: 1170px
+    padding: 5px 30px
+#breadcrumbs-two
+    width: 100%
+    margin: 0
+    padding: 0
+#breadcrumbs-two
+    list-style: none
+    li
+        display: inline-block
+#breadcrumbs-two 
+    a
+        text-decoration: none
+        color: $text-color
+        padding: 0 5px
+        &:hover
+            text-decoration: underline
+            color: $red-light-color
+        &:first-child
+            padding-left: 0
+    .active
+        &:hover
+            text-decoration: none
+            color: $text-color
+.tabs-search
+    margin-bottom: 17px
+    div
+        float: left
+        margin-right: 30px
+        button
+            width: 120px
+            height: 35px
+            font-size: 18px
+            font-weight: 400
+            margin-right: 15px
+            background: $red-light-color
+            border: 1px solid $red-light-color
+            color: #fff
+            &:hover
+                background: #fff
+                color: $red-light-color
+            &:last-child
+                margin-right: 0
+            &:focus
+                outline: none
+.news
+    .new
+        padding: 15px 5px 15px 17px
+        border: 1px solid #fff
+        &:hover
+            border: 1px solid $red-light-color
+            cursor: pointer
+            h2
+                color: $red-light-color
+        h2
+            font-size: 23px
+            font-weight: 500
+            padding: 0
+            margin: 0 0 7px 0
+        p
+            font-size: 15px
+            font-weight: 100
+            margin: 7px 0 0 0
+            a
+                font-weight: 400
+                text-decoration: underline
+                color: $red-light-color
+        img
+            float: left
+            padding: 2px 30px 0 0
+.short-info-new
+    p
+        display: inline-block
+        margin: 0 50px 0 0 !important
+        font-size: 14px !important
+        font-weight: 400
+        color: #adadad
+        &:last-child
+            margin-right: 0
+        .views
+            background: url('images/comment_eye.png')
+            background-position: 0 0
+            width: 20px
+            height: 12px
+            display: block
+            float: left
+            margin-top: 3px
+            margin-right: 8px
+        .comments
+            background: url('images/comment_eye.png')
+            background-position: 0 15px
+            width: 15px
+            height: 15px
+            display: block
+            float: left
+            margin-top: 3px
+            margin-right: 8px
+.pagination
+    margin: 0 auto
+    width: 35%
+    ul
+        list-style: none
+        li
+            display: inline-block
+            padding: 3px 10px
+            font-size: 18px
+            border: 1px solid $red-light-color
+            background: #fff
+            color: $red-light-color
+            margin-right: 3px
+            &:hover
+                background: $red-light-color
+                color: #fff
+                cursor: pointer
+.form-search
+    input[type="search"]
+        width: 100%
+        max-width: 305px 
+        height: 32px !important
+        padding-left: 6px
+        padding-top: 0
+        padding-bottom: 0
+        margin-right: 10px
+        &:focus
+            outline: none
+    .button-search
+        margin-left: 0
+.widgets
+    padding: 0 0 0 23px !important
+    .facebook-block
+        margin-top: 20px
+//ФУТЕР
+.footer-back
+    background-color: $gray-color
+    border-top: 1px solid #ccc
+.footer
+    margin: 0 auto !important
+    width: 100%
+    max-width: 1170px
+    padding: 20px 30px
+    .box-about-us
+        padding: 0
+        width: 255px
+        margin-right: 25px
+        .box-top
+            img
+                max-width: 100%
+                display: block
+            p
+                font-size: 14px
+                font-weight: 300
+                span
+                    font-weight: 500
+        .box-bottom
+            p
+                margin-top: 0
+                margin-bottom: 7px
+                font-size: 14px
+                font-weight: 500
+            a
+                i
+                    display: block
+                    width: 25px
+                    height: 25px
+                    float: left
+                    margin-right: 12px
+                .vkontakte
+                    background-image: url(images/social_icon.png)
+                    background-position: 0px 0px
+                    &:hover
+                        background-position: 0px 25px
+                .facebook
+                    background-image: url(images/social_icon.png)
+                    background-position: -25px 0px
+                    &:hover
+                        background-position: -25px 25px
+                .odnoklassniki
+                    background-image: url(images/social_icon.png)
+                    background-position: -50px 0px
+                    &:hover
+                        background-position: -50px 25px
+                .youtube
+                    background-image: url(images/social_icon.png)
+                    background-position: -75px 0px
+                    &:hover
+                        background-position: -75px 25px
+                .instagram
+                    background-image: url(images/social_icon.png)
+                    background-position: -100px 0px
+                    &:hover
+                        background-position: -100px 25px     
+//ПРЕФУТЕР
+.prefooter
+    background-color: #ccc
+    padding: 13px 0
+    text-align: center
+    p
+        margin: 0
+        font-size: 14px
+        font-weight: 300
+.footer-menu
+    padding: 0 20px !important
+    
+    div
+        display: inline-block
+        vertical-align: top
+        margin-right: 30px
+        &:last-child
+            margin-right: 0 !important
+    .information
+        width: 115px
+        h2
+            margin: 0
+            font-size: 18px
+            padding-bottom: 15px
+        ul
+            list-style: none
+            padding: 0
+            margin: 0
+            li
+                padding-top: 15px
+                a
+                    color: $text-color
+    .working
+        width: 170px
+        h2
+            margin: 0
+            font-size: 18px
+            padding-bottom: 15px
+        p
+            margin: 8px 0 0 0
+            line-height: 2.5
+    .our-contacts
+        width: 160px
+        h2
+            margin: 0
+            font-size: 18px
+            padding-bottom: 15px
+        ul
+            list-style: none
+            padding: 0
+            margin: 0
+            li
+                padding-top: 15px
+                i
+                    display: block
+                    width:15px
+                    height: 15px
+                    float: left
+                    margin-top: 3px
+                    margin-right: 12px
+                .vodafon
+                    background-image: url(images/contacts_icon.png)
+                    background-position: 0px 0px
+                .kyivstar
+                    background-image: url(images/contacts_icon.png)
+                    background-position: 15px 0px
+                .life
+                    background-image: url(images/contacts_icon.png)
+                    background-position: 0px 15px
+                .gmail
+                    background-image: url(images/contacts_icon.png)
+                    background-position: -30px -15px
+                .skype
+                    background-image: url(images/contacts_icon.png)
+                    background-position: 15px -30px
+.subscription
+    padding: 0 !important
+    width: 255px !important
+    margin-left: 15px
+    h2
+        margin-top: 0
+        font-size: 18px
+        padding-bottom: 15px
+    input[type="text"]
+        width: 100%
+        height: 25px
+        padding-left: 6px
+        margin-bottom: 10px
