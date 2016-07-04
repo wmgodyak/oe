@@ -1,0 +1,27 @@
+<?php
+    /**
+     * OYiEngine 6X
+     *
+     * Швидка і потужна CMF для вирішення будь-яких завдань
+     *
+     * @package		OYi.Engine
+     * @author		wmgodyak mailto:wmgoyak@gmail.com
+     * @copyright	Copyright (c) 2014 Otakoyi.com
+     * @license		http://Otakoyi.com
+     * @link		http://Egine.Otakoyi.com
+     * @since		Version 6.0
+     */
+
+    $time_start = microtime(true);
+
+    if(!defined('DOCROOT')) define('DOCROOT', str_replace("\\", "/", $_SERVER['DOCUMENT_ROOT'] . '/'));
+    if(!defined('SYSPATH')) define('SYSPATH', DOCROOT . 'system/');
+
+    // load startup file
+    include_once SYSPATH ."bootstrap.php";
+
+    // запуск маршрутизатора
+    $router->run();
+
+    // вивід на екран
+    \controllers\core\Output::render($time_start);

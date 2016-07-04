@@ -1441,7 +1441,7 @@ engine.contentImages = {
             update: function( event, ui ) {
                 var newOrder = $(this).sortable('toArray').toString();
                 engine.request.post({
-                    url:'./plugins/ContentImages/sort',
+                    url:'ContentImages/sort',
                     data: {
                         order: newOrder
                     }
@@ -1452,7 +1452,7 @@ engine.contentImages = {
     },
     removeImage: function(id, e)
     {
-        engine.request.get('./plugins/ContentImages/delete/'+id, function(d){
+        engine.request.get('ContentImages/delete/'+id, function(d){
             if(d == 1){
                 $(e).parents('.dz-preview').fadeOut(250, function () {
                     $(e).remove();
@@ -2290,254 +2290,7 @@ engine.nav = {
         inp.val(pos.join('x'));
     }
 };
-engine.plugins = {
-    init: function()
-    {
-        //engine.require('installer');
 
-        // console.log('Init plugins');
-
-        $(document).on('click', '.b-plugin-pub', function(){
-            engine.plugins.pub($(this).data('id'));
-        });
-
-        $(document).on('click', '.b-plugin-hide', function(){
-            engine.plugins.hide($(this).data('id'));
-        });
-
-        $(document).on('click', '.b-plugin-install', function(){
-            engine.plugins.install($(this).data('id'));
-        });
-
-        $(document).on('click', '.b-plugin-uninstall', function(){
-            engine.plugins.uninstall($(this).data('id'));
-        });
-        $(document).on('click', '.b-plugin-edit', function(){
-            engine.plugins.edit($(this).data('id'));
-        });
-        $(document).on('click', '.install-archive', function(){
-            engine.plugins.install(null, 'archive');
-        });
-    },
-    pub : function(id)
-    {
-        engine.confirm
-        (
-            t.plugins.pub_question,
-            function()
-            {
-                engine.request.post({
-                    url: './plugins/pub',
-                    data: {id: id},
-                    success: function(d)
-                    {
-                        if(d > 0){
-                            engine.refreshDataTable('plugins');
-                        }
-                    }
-                });
-                $(this).dialog('close').dialog('destroy').remove();
-            }
-        );
-    },
-    hide : function(id)
-    {
-        engine.confirm
-        (
-            t.plugins.hide_question,
-            function()
-            {
-                engine.request.post({
-                    url: './plugins/hide',
-                    data: {id: id},
-                    success: function(d)
-                    {
-                        if(d > 0){
-                            engine.refreshDataTable('plugins');
-                        }
-                    }
-                });
-                $(this).dialog('close').dialog('destroy').remove();
-            }
-        );
-    },
-    install: function(plugin)
-    {
-        engine.request.post({
-            url: './plugins/install',
-            data: {c: plugin},
-            success: function(d)
-            {
-                var bi = t.plugins.button_install;
-                var buttons = {};
-                buttons[bi] =  function(){
-                    $('#pluginsInstall').submit();
-                };
-                var dialog = engine.dialog({
-                    content: d,
-                    title: t.plugins.install_title,
-                    autoOpen: true,
-                    width: 750,
-                    modal: true,
-                    buttons: buttons
-                });
-                $('#components').select2();
-                engine.validateAjaxForm('#pluginsInstall', function(d){
-                    if(d.s){
-                        engine.refreshDataTable('plugins');
-                        dialog.dialog('close').dialog('destroy').remove();
-                        if(typeof d.m != 'undefined' && d.m != ''){
-                            engine.alert(d.m);
-                        }
-
-                    }
-                });
-            }
-        })
-    },
-    uninstall: function(id)
-    {
-        engine.confirm
-        (
-            t.plugins.uninstall_question,
-            function()
-            {
-                engine.request.post({
-                    url: './plugins/uninstall',
-                    data: {id: id},
-                    success: function(d)
-                    {
-                        if(d > 0){
-                            engine.refreshDataTable('plugins');
-                        }
-                    }
-                });
-                $(this).dialog('close').dialog('destroy').remove();
-            }
-        );
-    },
-    edit: function(id)
-    {
-        engine.request.post({
-            url: './plugins/edit/' + id,
-            data: {id: id},
-            success: function(d)
-            {
-                var bi = t.common.button_save;
-                var buttons = {};
-                buttons[bi] =  function(){
-                    $('#form').submit();
-                };
-                var dialog = engine.dialog({
-                    content: d,
-                    title: t.plugins.action_edit,
-                    autoOpen: true,
-                    width: 750,
-                    modal: true,
-                    buttons: buttons
-                });
-
-                $('#components').select2();
-
-                engine.validateAjaxForm('#form', function(d){
-                    if(d.s){
-                        engine.refreshDataTable('plugins');
-                        dialog.dialog('close').dialog('destroy').remove();
-                    }
-                });
-            }
-        })
-    }
-};
-
-engine.modules = {
-    init: function()
-    {
-        // console.log('Init modules');
-
-        $(document).on('click', '.b-module-install', function(){
-            engine.modules.install($(this).data('id'));
-        });
-
-        $(document).on('click', '.b-module-uninstall', function(){
-            engine.modules.uninstall($(this).data('id'));
-        });
-        $(document).on('click', '.b-module-edit', function(){
-            engine.modules.edit($(this).data('id'));
-        });
-    },
-    install: function(module)
-    {
-        engine.request.post({
-            url: './modules/install',
-            data: {c: module},
-            success: function(d)
-            {
-                if(d.s){
-                    engine.refreshDataTable('modules');
-                    dialog.dialog('close').dialog('destroy').remove();
-                    if(typeof d.m != 'undefined' && d.m != ''){
-                        engine.alert(d.m);
-                    }
-
-                }
-            }
-        })
-    },
-    uninstall: function(id)
-    {
-        engine.confirm
-        (
-            t.modules.uninstall_question,
-            function()
-            {
-                engine.request.post({
-                    url: './modules/uninstall',
-                    data: {id: id},
-                    success: function(d)
-                    {
-                        if(d > 0){
-                            engine.refreshDataTable('modules');
-                        }
-                    }
-                });
-                $(this).dialog('close').dialog('destroy').remove();
-            }
-        );
-    },
-    edit: function(id)
-    {
-        engine.request.post({
-            url: './modules/edit/' + id,
-            data: {id: id},
-            success: function(d)
-            {
-                var bi = t.common.button_save;
-                var buttons = {};
-                buttons[bi] =  function(){
-                    $('#form').submit();
-                };
-                var dialog = engine.dialog({
-                    content: d,
-                    title: t.modules.action_edit,
-                    autoOpen: true,
-                    width: 750,
-                    modal: true,
-                    buttons: buttons
-                });
-
-                $('#components').select2();
-
-                engine.validateAjaxForm('#form', function(d){
-                    if(d.s){
-                        engine.refreshDataTable('modules');
-                        dialog.dialog('close').dialog('destroy').remove();
-                    }
-                });
-            }
-        })
-    }
-};
 /**
  * Created by wg on 08.02.16.
  */
@@ -2884,8 +2637,6 @@ $(document).ready(function(){
     engine.features.init();
     engine.languages.init();
     engine.nav.init();
-    engine.plugins.init();
-    engine.modules.init();
     engine.themes.init();
     engine.translations.init();
     engine.mailTemplates.init();

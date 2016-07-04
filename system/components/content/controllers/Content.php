@@ -94,7 +94,7 @@ class Content extends Engine
         $content = $this->mContent->getData($id);
 
         if($this->mContent->hasError()){
-            throw new Exception($this->mContent->getErrorMessage());
+            throw new \system\core\exceptions\Exception($this->mContent->getErrorMessage());
         }
 //        $this->dump($content);die;
         $this->template->assign('content', $content);
@@ -142,7 +142,9 @@ class Content extends Engine
     {
         $s = $this->mContent->delete($id);
         $m = $this->mContent->getError();
-
+        if($s){
+            EventsHandler::getInstance()->call('content.delete', ['id' => $id]);
+        }
         $this->response->body(['s'=>$s,'m' => $m])->asJSON();
     }
 

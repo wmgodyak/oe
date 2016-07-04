@@ -5,6 +5,7 @@ namespace system\components\trash\controllers;
 use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
 use system\core\DataTables2;
+use system\core\EventsHandler;
 use system\Engine;
 
 defined("CPATH") or die();
@@ -87,7 +88,11 @@ class Trash extends Engine
 
     public function remove($id)
     {
-        $this->trash->remove($id);
+        $s = $this->trash->remove($id);
+
+        if($s){
+            EventsHandler::getInstance()->call('trash.remove', ['id' => $id]);
+        }
     }
 
     public function restore($id)
