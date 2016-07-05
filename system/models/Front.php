@@ -32,7 +32,7 @@ class Front extends Model
         parent::__construct();
 
         $this->languages = new Languages();
-        $this->images    = new ContentImages();
+        $this->images    = new Images();
 
         if($init){
             $this->init();

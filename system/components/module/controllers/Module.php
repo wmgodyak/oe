@@ -31,7 +31,7 @@ class Module extends Engine
             $this->redirect('/404', 404);
         }
 
-        $this->makeCrumbs($this->t($module . '.action_index'), "module/run/callbacks");
+        $this->makeCrumbs($this->t($module . '.action_index'), "module/run/{$module}");
 
         $this->template->assign('title', $this->t($module . '.action_' . $action));
         $this->template->assign('name',  $this->t($module . '.action_' . $action));

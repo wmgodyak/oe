@@ -15,7 +15,7 @@ use system\core\Session;
 use system\core\Template;
 use system\models\App;
 use system\models\Content;
-use system\models\ContentImages;
+use system\models\Images;
 use system\models\Languages;
 use system\models\Settings;
 
@@ -85,7 +85,7 @@ class Front extends core\Controller
 //            $this->_init();
         }
 
-        $this->images   = new ContentImages();
+        $this->images   = new Images();
 
         $this->languages_id   = Session::get('app.languages_id');
         $this->languages_code = Session::get('app.languages_code');

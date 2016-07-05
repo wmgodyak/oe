@@ -12,6 +12,10 @@ defined("CPATH") or die();
 
 class DateTime
 {
+    /**
+     * @param $ptime
+     * @return string
+     */
     public static function ago($ptime)
     {
         $etime = time() - $ptime;
@@ -46,4 +50,5 @@ class DateTime
             }
         }
     }
+
 }

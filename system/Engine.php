@@ -11,13 +11,12 @@ use system\components\admin\controllers\Admin;
 use system\core\Config;
 use system\core\Controller;
 use system\core\EventsHandler;
-use system\core\exceptions\Exception;
 use system\core\Lang;
 use system\core\Request;
 use system\core\Response;
 use system\core\Session;
 use system\core\Template;
-use system\models\ContentImages;
+use system\models\Images;
 use system\models\Languages;
 use system\models\Permissions;
 use system\models\Settings;
@@ -80,7 +79,7 @@ abstract class Engine extends Controller
         $this->languages = new Languages();
         $this->languages_id = $this->languages->getDefault('id');
 
-        $this->images = new ContentImages();
+        $this->images = new Images();
 
         $namespace   = $this->request->param('namespace');
         $controller  = $this->request->param('controller');
@@ -447,8 +446,6 @@ abstract class Engine extends Controller
      */
     protected final function output($body)
     {
-//        $this->dump($this->t('callbacks'));
-//        die;
         $this->renderHeadingPanel();
 //        return  $body;
         $this->response->body($body)->asHtml(); // todo ???

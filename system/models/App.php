@@ -10,7 +10,7 @@ class App
     const EXT = '.php';
     private static $storage = [];
 
-    private $allowed = ['nav', 'languages'];
+    private $allowed = ['nav', 'languages', 'images'];
     /**
      * @param $model
      * @return mixed

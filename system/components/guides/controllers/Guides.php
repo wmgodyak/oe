@@ -21,14 +21,12 @@ class Guides extends Content
     public function __construct()
     {
         parent::__construct('guide');
-
     }
 
     public function init()
     {
         $this->assignToNav('Довідкники', 'guides', 'fa-book', 'tools', 100);
         $this->template->assignScript(dirname(__FILE__) . "/js/guides.js");
-        EventsHandler::getInstance()->add('content.main', [$this, 'main']);
     }
 
     public function main($guide)
@@ -136,6 +134,7 @@ class Guides extends Content
 
     public function create($parent_id = 0)
     {
+        EventsHandler::getInstance()->add('content.main', [$this, 'main']);
         $this->template->assign('content', ['parent_id' => $parent_id]);
         $this->template->assign('action', 'create');
 
@@ -144,6 +143,7 @@ class Guides extends Content
 
     public function edit($id)
     {
+        EventsHandler::getInstance()->add('content.main', [$this, 'main']);
         $this->template->assign('content', $this->mContent->getData($id));
         $this->template->assign('action', 'edit');
         $this->response->body($this->template->fetch('guides/form'));
