@@ -22,8 +22,6 @@
                 </div>
 
                 {include file="modules/blog/posts.tpl"}
-                {include file="modules/pagiation.tpl"}
-
             </div>
             <!-- end newspage__content -->
 

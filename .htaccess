@@ -13,7 +13,7 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_URI} !(\.css|\.js|\.png|\.jpg|\.gif|robots\.txt)$ [NC]
 
-RewriteRule ^(.+)$ /index.php/?$1 [L,QSA]
+RewriteRule ^(.+)$ /index.php/$1 [L,QSA]
 
 # Error Reporting
 php_flag display_startup_errors on

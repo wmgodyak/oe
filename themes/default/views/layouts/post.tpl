@@ -14,102 +14,31 @@
     <!-- begin article-page -->
     <div class="article-page">
 
-        <!-- begin m_pagination -->
-        <div class="m_breadcrumbs">
-            <div class="container">
-                <ul class="breadcrumbs__list">
-                    <li class="breadcrumbs__item">
-                        <a href="#" class="breadcrumbs__link">Головна</a>
-                    </li>
-                    <li class="breadcrumbs__item breadcrumbs__item--current">
-                        <a href="#" class="breadcrumbs__link">Новини та акції</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <!-- end m_pagination -->
+       {include file="modules/breadcrumbs.tpl"}
 
         <div class="container">
 
             <!-- begin article-page__content -->
             <div class="article-page__content">
 
-                <h1>Samsung Galaxy S7: як змусити працювати дві SIM і microSD разом</h1>
+                <h1>{$post.name}</h1>
 
                 <span class="m_article-info">
                     <span class="article-info__date">
-                        24 березня 2016
+                       {strftime('%d', $post.created)} {$t.month[date('n', $post.created)]} {strftime('%Y', $post.created)}
                     </span>
                     <span class="article-info__views">
-                        32 перегляди
+                        {$post.views} перегляди
                     </span>
                     <span class="article-info__comments">
                         4 коментарі
                     </span>
                 </span>
 
-                <div class="text cms-content">
-
-                    <p>
-                        <img class="img-right" src="{$theme_url}/assets/img/article-img/1.jpg" alt="">
-                        Samsung услышала просьбы фанатов и оснастила флагманы Galaxy S7
-                        и Galaxy S7 edge слотом для карт microSD. Правда, сделала это, как
-                        сейчас модно, с помощью гибридного лотка, то есть пользователь
-                        должен выбрать, будет ли он использовать две SIM-карты или одну SIM
-                        и microSD. «Очумелые ручки» желающих получить все и сразу привели
-                        к появлению инструкции, как добиться одновременной работы двух
-                        SIM-карт и microSD. Для этого вам необходимо осторожно отделить чип
-                        SIM-карты от корпуса (по словам автора, это занимает не больше
-                        минуты времени), обрезать по 1-2 мм с каждой стороны, чтобы она не
-                        выходила за пределы карты памяти, приклеить симку к обратной
-                        стороне microSD строго, как показано на картинке
-
-                    </p>
-
-                    <img class="img-left" src="{$theme_url}/assets/img/article-img/2.jpg" alt="">
-                    <p>
-                        Отметим, такой способ может применяться на всех смартфонах с
-                        таким гибридным лотком для SIM-карт. В частности, есть подобный опыт
-                        у владельцев Meizu Pro 5. Помните, все эти махинации вы делаете на
-                        свой страх и риск. Существует опасность, что карта отклеится при
-                        нагреве девайса и возникнут проблемы с извлечением лотка. Если вы
-                        готовы смириться с таким риском и есть необходимость в этом,  то
-                        обязательно пробуйте.
-                    </p>
-                    <p>
-                        Отметим, такой способ может применяться на всех смартфонах с таким
-                        гибридным лотком для SIM-карт. В частности, есть подобный опыт у
-                        владельцев Meizu Pro 5. Помните, все эти махинации вы делаете на свой
-                        страх и риск. Существует опасность, что карта.
-                    </p>
-
-                    <p style="display: inline-block;">
-                        <img class="img-left" src="{$theme_url}/assets/img/article-img/3.jpg" alt="">
-                        <img class="" src="{$theme_url}/assets/img/article-img/4.jpg" alt="">
-                        <img class="img-right" src="{$theme_url}/assets/img/article-img/5.jpg" alt="">
-                    </p>
-
-                    <img class="img-right" src="{$theme_url}/assets/img/article-img/6.jpg" alt="">
-                    <img class="img-right" src="{$theme_url}/assets/img/article-img/7.jpg" alt="">
-
-                    <p>
-                        Если все сделано правильно, то Galaxy S7 увидит и две SIM-
-                        карты, и не карточку памяти. Отметим, такой способ может
-                        применяться на всех от и смартфонах с таким гибридным
-                        лотком для SIM-карт. В частности, есть подобный опыт у
-                        владельцев Meizu Pro 5. Помните, все эти махинации вы
-                        делаете на свой страх и риск. Существует опасность, что
-                        карта отклеится при нагреве девайса и возникнут проблемы
-                        с извлечением лотка. Если готовы смириться с таким
-                        риском и есть необходимость в этом, пробуйте. Если все
-                        сделано правильно, то Galaxy S7 увидит и две SIM-карты, и
-                        карточку памяти.
-                    </p>
-
-                </div>
+                <div class="text cms-content">{$post.content}</div>
 
                 <div class="autor-row">
-                    Автор: <span>Світ Мобільних Аксесуарів</span>
+                    Автор: <span>{$post.author.name}</span>
                 </div>
 
                 <div class="m_comments">
@@ -247,5 +176,6 @@
     <!-- end article-page -->
 
 </div>
+<script src="route/blog/setViewed/{$post.id}"></script>
 <!-- end wrapper -->
 {include file="chunks/footer.tpl"}

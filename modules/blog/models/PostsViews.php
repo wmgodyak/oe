@@ -14,6 +14,10 @@ use system\models\Model;
 
 defined("CPATH") or die();
 
+/**
+ * Class PostsViews
+ * @package modules\blog\models
+ */
 class PostsViews extends Model
 {
     /**
@@ -23,11 +27,21 @@ class PostsViews extends Model
      */
     public function getTotal($posts_id)
     {
-        return self::$db->select("select count(id) as t from __posts_views where posts_id='{$posts_id}'")->row('t');
+        return self::$db->select("select sum(views) as t from __posts_views where posts_id='{$posts_id}'")->row('t');
     }
 
+    /**
+     * @param $posts_id
+     * @return bool|string
+     * @throws \system\core\exceptions\Exception
+     */
     public function set($posts_id)
     {
-        $id = self::$db->select("select id from __posts_views where posts_id='{$posts_id}' limit 1")->row('id');
+        $d = date('Y-m-d');
+        $a = self::$db->select("select id,views from __posts_views where posts_id='{$posts_id}' and date='{$d}' limit 1")->row();
+        if(empty($a['id'])){
+            return $this->createRow('__posts_views', ['posts_id' => $posts_id, 'date' => $d, 'views' => 1]);
+        }
+        return $this->updateRow('__posts_views', $a['id'], ['views' => ++ $a['views']]);
     }
 }

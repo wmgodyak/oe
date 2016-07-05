@@ -81,10 +81,10 @@ class Request {
         if(!empty($type) && is_array($val))
             $val = reset($val);
 
-        if($type == 'i')
+        if($type == 's')
             return strval(preg_replace('/[^\p{L}\p{Nd}\d\s_\-\.\%\s]/ui', '', $val));
 
-        if($type == 's')
+        if($type == 'i')
             return intval($val);
 
         if($type == 'b')

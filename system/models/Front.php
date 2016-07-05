@@ -71,7 +71,10 @@ class Front extends Model
             $id = Settings::getInstance()->get('home_id');
             $page = self::$db
                 ->select("
-                select c.*,i.languages_id, i.name,i.title,i.h1,i.url,i.keywords, i.description,i.content, l.code as languages_code
+                select c.*,
+                i.languages_id, i.name,i.title,i.h1,i.url,i.keywords, i.description,i.content,
+                 l.code as languages_code,
+                 UNIX_TIMESTAMP(c.created) as created
                 from __content_info i
                 join __content c on c.id=i.content_id
                 join __languages l on l.id=i.languages_id
@@ -84,7 +87,9 @@ class Front extends Model
             // інформація про сторінку
             $page = self::$db
                 ->select("
-                select c.*,i.languages_id, i.name,i.h1,i.title,i.url,i.keywords, i.description,i.content, l.code as languages_code
+                select c.*,i.languages_id, i.name,i.h1,i.title,i.url,i.keywords, i.description,i.content,
+                 l.code as languages_code,
+                 UNIX_TIMESTAMP(c.created) as created
                 from __content_info i
                 join __content c on c.id=i.content_id
                 join __languages l on l.id=i.languages_id
