@@ -36,11 +36,18 @@ class Users extends Front
     public function init()
     {
         parent::init();
+
+        $this->template->assignScript("modules/users/js/users.js");
 //        echo "Init " . __CLASS__ . "\r\n";
         // todo manual authorize user
-        $user = $this->users->getUserByEmail('m@otakoyi.com');
-        Session::set('user', $user);
+//        $user = $this->users->getUserByEmail('m@otakoyi.com');
+//        Session::set('user', $user);
         $this->template->assign('user', Session::get('user'));
+    }
+
+    public function nav($tpl = 'modules/users/nav')
+    {
+        return $this->template->fetch($tpl);
     }
 
     public function login()
@@ -64,16 +71,18 @@ class Users extends Front
                 } elseif($user['status'] == 'deleted'){
                     $i[] = ['data[password]' => $this->t('admin.e_login_deleted')];
                 } else if ($this->users->checkPassword($data['password'], $user['password'])){
-                    if($user['rang'] > 100) {
-                        $i[] = ['data[password]' => $this->t('admin.e_rang')];
+                    if($user['backend'] == 1){
+                        $i[] = ['data[password]' => "Адміністратори не можуть логінитись на сайті"];
                     } else {
                         $status = $this->users->setOnline($user);
                         if($status){
                             Session::set('user', $user);
-                        } else{
+                        } else {
                             $i[] = ['data[password]' => $this->users->getError()];
                         }
                     }
+
+
                 } else {
                     $i[] = ['data[password]' => $this->t('admin.e_login_pass')];
                 }
@@ -83,9 +92,10 @@ class Users extends Front
                 's' => $status > 0,
                 'i' => $i
             ))->asJSON();
+            return;
         }
 
-        return $this->template->fetch('modules/users/login');
+        $this->response->body($this->template->fetch('modules/users/login'));
     }
 
     public function logout()
@@ -136,19 +146,28 @@ class Users extends Front
                 'i' => $i,
                 'm' => $m
             ))->asJSON();
+            return;
         }
 
-        $this->template->assign('acc_content', $this->template->fetch('modules/users/fp'));
+        $this->response->body($this->template->fetch('modules/users/fp'));
     }
 
     public function newPsw($skey=null)
     {
+
+        if(!empty($skey)){
+            $user = $this->users->getUserBySkey($skey);
+            if(! $user){
+                die('wrong key');
+            }
+            $this->template->assign('user', $user);
+        }
+
         if($this->request->isPost()){
-            $id   = $this->request->post('id', 'i');
-            $data = $this->request->post('data'); $i=[]; $s = 0; $m=null;
+            $data = $this->request->post('data'); $i=[]; $s = 0;
 
             FormValidation::setRule(['password', 'password_c'], FormValidation::REQUIRED);
-            FormValidation::setRule(['password'], FormValidation::PASSWORD);
+//            FormValidation::setRule(['password'], FormValidation::PASSWORD);
             FormValidation::run($data);
 
             if(FormValidation::hasErrors()){
@@ -159,25 +178,21 @@ class Users extends Front
 
                 unset($data['password_c']);
                 $data['skey'] = null;
-                $s = $this->users->update($id, $data);
-                $m = $this->t('users.password_changed_success');
+                $s = $this->users->update($user['id'], $data);
+
+                $this->redirect('/');
             }
 
             if(!$s && $this->users->hasError()){
-                $m = $this->users->getErrorMessage();
+                $i[] = ["data[password_c]" => $this->users->getErrorMessage()];
             }
 
-            $this->response->body(['s'=>$s, 'i' => $i, 'm' => $m])->asJSON();
-        }
-        $user = null;
-        if(!empty($skey)){
-            $user = $this->users->getUserBySkey($skey);
+            $this->template->assign('status', $s);
+            $this->template->assign('errors', $i);;
         }
 
-        $this->template->assign('page', ['title' => $this->t('users.new_psw_title')]);
-        $this->template->assign('user', $user);
-        $this->template->assign('acc_content', $this->template->fetch('modules/users/new_psw'));
-        $this->response->body($this->template->fetch('layouts/pages/user'))->asHtml();
+//        $this->template->assign('page', ['title' => $this->t('users.new_psw_title')]);
+        $this->response->body($this->template->fetch('modules/users/new_psw'));
     }
 
     public function register()
@@ -213,6 +228,7 @@ class Users extends Front
                         ->addAddress($data['email'], $data['name'])
                         ->send();
                 }
+
             }
 
             if(!$s && $this->users->hasError()){
@@ -220,14 +236,11 @@ class Users extends Front
             }
 
             $this->response->body(['s'=>$s, 'i' => $i])->asJSON();
-        }
-        
-        if(Session::get('users.id')){
-            $url = $this->getUrl(31); //profile
 
-            $this->redirect( APPURL . $url);
+            return;
         }
-        $this->template->assign('acc_content', $this->template->fetch('modules/users/register'));
+
+        $this->response->body($this->template->fetch('modules/users/register'));
     }
 
     public function profile()

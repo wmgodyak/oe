@@ -56,35 +56,7 @@
                 <div class="footer__heading">
                     Інформація
                 </div>
-                <div class="footer-nav">
-                    <ul class="footer-nav__list">
-                        <li class="footer-nav__item">
-                            <a href="#" class="footer-nav__link">
-                                Про нас
-                            </a>
-                        </li>
-                        <li class="footer-nav__item">
-                            <a href="#" class="footer-nav__link">
-                                Доставка
-                            </a>
-                        </li>
-                        <li class="footer-nav__item">
-                            <a href="#" class="footer-nav__link">
-                                Оплата
-                            </a>
-                        </li>
-                        <li class="footer-nav__item">
-                            <a href="#" class="footer-nav__link">
-                                Сервіс
-                            </a>
-                        </li>
-                        <li class="footer-nav__item">
-                            <a href="#" class="footer-nav__link">
-                                Ми на карті
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                {include file="modules/nav/bottom.tpl"}
             </div>
             <!-- end footer__second -->
 

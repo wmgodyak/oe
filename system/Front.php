@@ -109,8 +109,8 @@ class Front extends core\Controller
             $this->request->isXhr()
             // || (isset($args['controller']) && $args['namespace'] != 'controllers\App' && $args['controller'] != 'App')
         ){
-            echo 'Configure XHR or move it to model front ';
-            /*if( ! $this->languages_id){
+//            echo 'Configure XHR or move it to model front ';
+            if( ! $this->languages_id){
                 $l = new Languages();
                 $lang = $l->getDefault();
                 $this->languages_id   = $lang['id'];
@@ -123,13 +123,11 @@ class Front extends core\Controller
                 Session::set($a, $this->languages_id);
             }
 
-            new \models\App(null, $this->languages_id);
             Request::getInstance()->param('languages_id', $this->languages_id);
             Request::getInstance()->param('languages_code', $this->languages_code);
 
             // assign translations to template
             $this->template->assign('t', $this->t());
-            */
         } else {
 
             if($this->settings['active'] == 0){

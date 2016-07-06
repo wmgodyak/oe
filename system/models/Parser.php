@@ -26,6 +26,9 @@ class Parser extends Model
 
     private function getUrlById($id, $languages_id, $def_lang, $home_id)
     {
+        if(!$languages_id) {
+            $languages_id = $def_lang['id'];
+        }
         if($id == $home_id){
             $url = '';
         } else {

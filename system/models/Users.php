@@ -238,7 +238,7 @@ class Users extends Model
     public function getUserBySkey($skey)
     {
         return self::$db->select("
-            select u.*, g.rang
+            select u.*, g.backend
             from __users u
             join __users_group g on g.id=u.group_id
             where u.skey = '{$skey}'

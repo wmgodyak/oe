@@ -25,13 +25,7 @@
                 </div>
                 <!-- end wish-list -->
 
-                <!-- begin login-block -->
-                <div class="user-login">
-                    <a class="user-login__link" href="#">Вхід</a>
-                    <span>чи</span>
-                    <a class="user-login__link" href="#">реєстрація</a>
-                </div>
-                <!-- end login-block -->
+                {$mod->users->nav()}
 
             </div>
             <!-- end header__activities -->
