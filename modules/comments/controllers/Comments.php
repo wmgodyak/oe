@@ -21,6 +21,49 @@ class Comments extends Front
         $this->comments = new \modules\comments\models\Comments();
     }
 
+    public function init()
+    {
+        $this->template->assignScript("modules/comments/js/comments.js");
+    }
+
+    /**
+     * @param $content_id
+     * @param string $tpl
+     * @return string
+     */
+    public function form($content_id, $tpl = 'modules/comments/items.tpl')
+    {
+        return $this->template->fetch($tpl);
+    }
+
+    /**
+     * @param $content_id
+     * @param string $tpl
+     * @return string
+     */
+    public function display($content_id, $tpl = 'modules/comments/items.tpl')
+    {
+        $this->template->assign
+        (
+            'comments',
+            [
+                'total' => $this->comments->getTotal($content_id),
+                'items' => $this->comments->get($content_id)
+            ]
+        );
+        return $this->template->fetch($tpl);
+    }
+
+    public function get($content_id)
+    {
+        return $this->comments->get($content_id);
+    }
+
+    public function getTotal($content_id)
+    {
+        $this->comments->getTotal($content_id);
+    }
+
     /**
      * @return string
      */
@@ -72,6 +115,33 @@ class Comments extends Front
         }
 
         $this->response->body(['s'=>$s, 'i' => $i, 'm' => $m])->asJSON();
+    }
+
+    public function like($skey)
+    {
+        $user = Session::get('user');
+        if(!$user) $this->response->sendError(403);
+
+        $s = false; $t = 0; $m = '';
+        if($this->comments->like($skey, $user['id'])){
+            $s = 1;
+            $t = $this->comments->getLikes($skey);
+        }
+
+        $this->response->body(['s'=>$s, 't' => $t, 'm' => $m])->asJSON();
+    }
+    public function dislike($skey)
+    {
+        $user = Session::get('user');
+        if(!$user) $this->response->sendError(403);
+
+        $s = false; $t = 0; $m = '';
+        if($this->comments->dislike($skey, $user['id'])){
+            $s = 1;
+            $t = $this->comments->getDisLikes($skey);
+        }
+
+        $this->response->body(['s'=>$s, 't' => $t, 'm' => $m])->asJSON();
     }
 
     /**

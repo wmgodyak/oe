@@ -13,6 +13,7 @@ use modules\blog\models\Categories;
 use modules\blog\models\Posts;
 use modules\blog\models\PostsViews;
 use modules\blog\models\Tags;
+use modules\comments\models\Comments;
 use system\Front;
 
 /**
@@ -28,6 +29,8 @@ class Blog extends Front
 
     private $ipp = 5;
     private $total = 0;
+    public $commentsEnabled = true; // todo check if module comments is installed
+    private $comments;
 
     public function __construct()
     {
@@ -37,16 +40,25 @@ class Blog extends Front
         $this->categories = new Categories('posts_categories');
         $this->tags = new Tags();
         $this->postViews = new PostsViews();
+
+        if($this->commentsEnabled){
+            $this->comments = new Comments();
+        }
     }
 
-    public function index()
-    {
-    }
+    public function index(){}
 
     public function init()
     {
         $post = $this->page;
         $post['views'] = $this->postViews->getTotal($post['id']);
+        if($this->commentsEnabled){
+            $post['comments'] = [
+                'total' => $this->comments->getTotal($post['id']),
+//                'items' => $this->comments->get($post['id'])
+            ];
+        }
+
         $this->template->assign('post', $post);
     }
 
@@ -85,6 +97,9 @@ class Blog extends Front
         foreach ($posts as $k=>$post) {
             $posts[$k]['tags']  = $this->tags->get($post['id']);
             $posts[$k]['views'] = $this->postViews->getTotal($post['id']);
+            if($this->commentsEnabled){
+                $posts[$k]['comments'] = ['total' => $this->comments->getTotal($post['id'])];
+            }
         }
 
         return $posts;

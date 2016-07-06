@@ -29,8 +29,9 @@ class Comments extends Engine
 
     public function init()
     {
-
-        $this->assignToNav('Коментарі', 'module/run/comments', 'fa-comment', null, 100);
+        $t = $this->comments->getTotal(0, 'new');
+        $t = $t > 0 ? " <b class='badge white'>{$t}</b>" : '';
+        $this->assignToNav("Коментарі" . $t, 'module/run/comments', 'fa-comment', null, 100);
         $this->template->assignScript("modules/comments/js/admin/comments.js");
 //        EventsHandler::getInstance()->debug();
         EventsHandler::getInstance()->add('content.meta.after', [$this, 'postComments']);

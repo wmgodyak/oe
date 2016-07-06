@@ -1549,6 +1549,28 @@ fieldset {
 .dd3-handle:hover {
   background: #ddd; }
 
+.badge {
+  display: inline-block;
+  opacity: 1 !important;
+  min-width: 10px;
+  padding: 3px 7px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  background-color: #777;
+  border-radius: 10px; }
+
+.badge:empty {
+  display: none; }
+
+.badge.white {
+  background: #fff;
+  color: #000; }
+
 .main-navigation {
   -webkit-transform: translateZ(0);
   -moz-transform: translateZ(0);

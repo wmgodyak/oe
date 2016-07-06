@@ -31,10 +31,10 @@ class Comments extends Model
         $res = array();
 
         $r = self::$db->select("
-            select *, DATE_FORMAT(created, '%d.%m.%Y') as pubdate
+            select *, UNIX_TIMESTAMP(created) as created
             from __comments
             where content_id = '{$content_id}' and parent_id={$parent_id} and status='approved'
-            order by abs(id) asc
+            order by abs(id) desc
         ")->all();
 
         foreach ( $r as $row) {
@@ -55,12 +55,13 @@ class Comments extends Model
      * @return array|mixed
      * @throws \system\core\exceptions\Exception
      */
-    public function getTotal($content_id, $status = 'approved')
+    public function getTotal($content_id = 0, $status = 'approved')
     {
+        $w = $content_id > 0 ? "content_id={$content_id} and " : "";
         return self::$db->select("
             select count(id) as t
             from __comments
-            where content_id={$content_id} and status='{$status}'
+            where {$w} status='{$status}'
         ")->row('t');
     }
 
@@ -120,6 +121,45 @@ class Comments extends Model
         }
 
         return $s;
+    }
+
+    public function like($skey, $users_id)
+    {
+        $com = self::$db->select("select id, likes from __comments where skey= '{$skey}' limit 1")->row();
+        if(empty($com)) return false;
+
+        $k = self::$db->select("select id from __comments_likers where comments_id={$com['id']} and users_id={$users_id} limit 1")->row('id');
+        if($k) return false;
+
+        $this->createRow('__comments_likers', ['comments_id'=> $com['id'], 'users_id' => $users_id]);
+
+        $com['likes'] ++;
+        return $this->updateRow('__comments', $com['id'],  ['likes' => $com['likes']]);
+    }
+
+    public function dislike($skey, $users_id)
+    {
+        $com = self::$db->select("select id, dislikes from __comments where skey= '{$skey}' limit 1")->row();
+        if(empty($com)) return false;
+
+        $k = self::$db->select("select id from __comments_likers where comments_id={$com['id']} and users_id={$users_id} limit 1")->row('id');
+        if($k) return false;
+
+        $this->createRow('__comments_likers', ['comments_id'=> $com['id'], 'users_id' => $users_id]);
+
+        $com['dislikes'] ++;
+
+        return $this->updateRow('__comments', $com['id'],  ['dislikes' => $com['dislikes']]);
+    }
+
+    public function getLikes($skey)
+    {
+        return self::$db->select("select likes from __comments where  skey= '{$skey}' limit 1")->row('likes');
+    }
+
+    public function getDisLikes($skey)
+    {
+        return self::$db->select("select dislikes from __comments where  skey= '{$skey}' limit 1")->row('dislikes');
     }
 
     /**

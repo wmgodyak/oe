@@ -21,9 +21,11 @@
                             <span class="article-info__views">
                                 {$post.views * 1} {$t.blog.post_views}
                             </span>
+                            {if $mod->blog->commentsEnabled}
                             <span class="article-info__comments">
-                                4 {$t.blog.post_comments}
+                                {$post.comments.total} {$t.blog.post_comments}
                             </span>
+                            {/if}
                         </span>
                         <span class="news__text">
                             {strip_tags($post.intro)}... <span class="news__read-more">{$t.blog.post_readmore}</span>
@@ -36,5 +38,5 @@
     </div>
     {$mod->blog->pagination()}
     {else}
-    <div class="no-records"><p>Немає записів</p></div>
+    <div class="no-records"><p>{$t.blog.no_records}</p></div>
 {/if}

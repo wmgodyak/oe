@@ -28,105 +28,20 @@
                        {strftime('%d', $post.created)} {$t.month[date('n', $post.created)]} {strftime('%Y', $post.created)}
                     </span>
                     <span class="article-info__views">
-                        {$post.views} перегляди
+                        {$post.views} {$t.blog.post_views}
                     </span>
                     <span class="article-info__comments">
-                        4 коментарі
+                        {$post.comments.total} {$t.blog.post_comments}
                     </span>
                 </span>
 
                 <div class="text cms-content">{$post.content}</div>
 
                 <div class="autor-row">
-                    Автор: <span>{$post.author.name}</span>
+                    {$t.blog.author}: <span>{$post.author.name}</span>
                 </div>
 
-                <div class="m_comments">
-                    <div class="comments__counter">
-                        <span>3 коментарі</span>
-                    </div>
-                    <form action="#">
-                        <div class="row clearfix">
-                            <div class="comments__avatar-block">
-                                <div class="comments__avatar-img" style="background-image: url('{$theme_url}/assets/img/user/avatar1.jpg');">
-
-                                </div>
-                            </div>
-                            <div class="comments__textarea-block input-group">
-                                <textarea placeholder="Введіть текст повідомлення"></textarea>
-                            </div>
-                        </div>
-                        <div class="row clearfix">
-                            <div class="social__sighin">
-                                <span>Увійти за допомогою:</span>
-                                <div class="comments__social">
-                                    <a class="comments__social-link comments__social-link--vk" href="#"></a>
-                                    <a class="comments__social-link comments__social-link--fb" href="#"></a>
-                                </div>
-                            </div>
-                            <div class="social__submit">
-                                <button class="btn md disabled-gray">Коментувати</button>
-                            </div>
-                        </div>
-                    </form>
-                    <ul class="comments__list">
-                        <li class="comments__item">
-                            <div class="row clearfix">
-                                <div class="comments__avatar-block">
-                                    <div class="comments__avatar-img" style="background-image: url('{$theme_url}/assets/img/user/avatar2.jpg');">
-                                    </div>
-                                </div>
-                                <div class="comments__content">
-                                    <div class="row clearfix">
-                                        <div class="comments__name">Меган Фокс</div>
-                                        <div class="comments__date">два дні назад</div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="comments__text">
-                                            Нічо собі новина! Круто, зробила так само, все працює. Є дві сімки + карта пам’яті. Тільки ви там
-                                            обережно приклеюйте :)
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="comments__like-dislike">
-                                            <a class="comments__like" href="#">3</a>
-                                            <a class="comments__dislike" href="#">1</a>
-                                        </div>
-                                        <a class="comments__answer" href="#">Відповісти</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <ul class="comments__list comments__sublist">
-                            <li class="comments__item comments__subitem ">
-                                <div class="row clearfix">
-                                    <div class="comments__avatar-block">
-                                        <div class="comments__avatar-img" style="background-image: url('{$theme_url}/assets/img/user/avatar2.jpg');">
-                                        </div>
-                                    </div>
-                                    <div class="comments__content">
-                                        <div class="row clearfix">
-                                            <div class="comments__name">Меган Фокс</div>
-                                            <div class="comments__date">два дні назад</div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="comments__text">
-                                                Сама собі відповіла на комент, о то я дура, нє?
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="comments__like-dislike">
-                                                <a class="comments__like" href="#">10</a>
-                                                <a class="comments__dislike" href="#">0</a>
-                                            </div>
-                                            <a class="comments__answer" href="#">Відповісти</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </ul>
-                </div>
+                {$mod->comments->display($post.id)}
 
             </div>
             <!-- end article-page__content -->

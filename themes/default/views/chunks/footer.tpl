@@ -194,9 +194,13 @@
 <script src='{$theme_url}/assets/js/vendor/owl.carousel.min.js'></script>
 <script src='{$theme_url}/assets/js/vendor/jquery.barrating.min.js'></script>
 <script src='{$theme_url}/assets/js/vendor/waterfall.min.js'></script>
+<script src="{$theme_url}/assets/js/plugins.js"></script>
 <script src="{$theme_url}/assets/js/main.js"></script>
 <!-- end scripts -->
-
-
+{if isset($modules_scripts)}
+    {foreach $modules_scripts as $k=>$script}
+        <script src="{$script}"></script>
+    {/foreach}
+{/if}
 </body>
 </html>

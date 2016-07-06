@@ -189,6 +189,8 @@ class Front extends core\Controller
 
             $this->template->assign('settings', $this->settings);
 
+            $this->template->assign('modules_scripts', $this->template->getScripts());
+
             $template_path = $this->settings['themes_path']
                 . $this->settings['app_theme_current'] . '/'
                 . $this->settings['app_views_path']
