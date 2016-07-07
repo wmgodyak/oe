@@ -32,7 +32,7 @@
 {/function}
 <div class="m_comments">
     <div class="comments__counter">
-        <span>{$comments.total} коментарі <a href="javascript:void(0);" data-id="{$page.id}" class="b-comments-subscribe" data-s="Слідкувати" data-us="Відписатись">Слідкувати</a></span>
+        <span>{$comments.total} коментарі {if $user.id}<a href="javascript:void(0);" data-id="{$page.id}" class="b-comments-subscribe" data-s="Слідкувати" data-us="Відписатись">Слідкувати</a>{/if}</span>
     </div>
     {include file="modules/comments/form.tpl"}
     {call renderComments items=$comments.items offset=0}

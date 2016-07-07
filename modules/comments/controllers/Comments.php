@@ -120,7 +120,9 @@ class Comments extends Front
     public function like($skey)
     {
         $user = Session::get('user');
-        if(!$user) $this->response->sendError(403);
+        if(!$user) {
+            $this->response->sendError(403); return;
+        }
 
         $s = false; $t = 0; $m = '';
         if($this->comments->like($skey, $user['id'])){
@@ -130,10 +132,13 @@ class Comments extends Front
 
         $this->response->body(['s'=>$s, 't' => $t, 'm' => $m])->asJSON();
     }
+
     public function dislike($skey)
     {
         $user = Session::get('user');
-        if(!$user) $this->response->sendError(403);
+        if(!$user) {
+            $this->response->sendError(403); return;
+        }
 
         $s = false; $t = 0; $m = '';
         if($this->comments->dislike($skey, $user['id'])){
