@@ -395,8 +395,34 @@ var App = {
             };
             return $.ajax(data)
         }
-    }
+    },
+    alert: function(msg, status, target)
+    {
+        var c = typeof target == 'undefined' ? $('.inline-notifications') : target, icon;
 
+        window.cla = function()
+        {
+            c.html('');
+        };
+
+        switch (status){
+            case 'success':
+                icon = 'check-circle';
+                break;
+            case 'error':
+                icon = 'exclamation-triangle';
+                break;
+            default:
+                icon = 'check-circle';
+                break;
+        }
+        status = typeof status =='undefined' ? 'info' : status;
+        c.html("<div class='alert alert-"+status+" alert-dismissible' role='alert'>\
+            <button type=\"button\" onclick='cla();' class=\"close\"><span >&times;</span></button>\
+            <i class='fa fa-"+ icon +"'></i>"+msg+"\
+        </div>");
+        setTimeout(function(){c.html('');}, 7000)
+    }
 };
 
 $(document).ready(function() {

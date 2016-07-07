@@ -167,7 +167,7 @@ class Users extends Front
             $data = $this->request->post('data'); $i=[]; $s = 0;
 
             FormValidation::setRule(['password', 'password_c'], FormValidation::REQUIRED);
-//            FormValidation::setRule(['password'], FormValidation::PASSWORD);
+            FormValidation::setRule(['password'], FormValidation::PASSWORD);
             FormValidation::run($data);
 
             if(FormValidation::hasErrors()){
@@ -257,7 +257,7 @@ class Users extends Front
 
             $data = $this->request->post('data'); $s=0; $i=[];
 
-            FormValidation::setRule(['name', 'surname', 'email', 'profile'], FormValidation::REQUIRED);
+            FormValidation::setRule(['name', 'surname', 'email', 'phone'], FormValidation::REQUIRED);
             FormValidation::setRule('email', FormValidation::EMAIL);
             FormValidation::run($data);
 
@@ -282,42 +282,49 @@ class Users extends Front
                 echo $this->users->getErrorMessage();
             }
 
-            $this->response->body(['s'=>$s, 'i' => $i])->asJSON();
+            $this->response->body(['s'=>$s, 'i' => $i])->asJSON(); return null;
+
         }
         
-        $this->template->assign('acc_content', $this->template->fetch('modules/users/profile'));
+        return $this->template->fetch('modules/users/profile');
     }
 
-    public function updatePassword()
+    public function changePassword()
     {
-        $user = Session::get('user');
-        if(!$user){
-            $this->response->sendError(403);
+        if($this->request->isPost()){
+
+            $user = Session::get('user');
+            if(!$user){
+                $this->response->sendError(403);
+            }
+
+            if(! $this->request->isPost()) die();
+
+            $data = $this->request->post('data'); $i=[]; $s = 0;
+
+            FormValidation::setRule(['password', 'password_c'], FormValidation::REQUIRED);
+            FormValidation::setRule(['password'], FormValidation::PASSWORD);
+            FormValidation::run($data);
+
+            if(FormValidation::hasErrors()){
+                $i = FormValidation::getErrors();
+            } elseif(!empty($data['password']) && ($data['password_c'] != $data['password'])){
+                $i[] = ["data[password_c]" => $this->t('admin_profile.e_pasw_equal')];
+            }  else {
+
+                unset($data['password_c']);
+
+                $s = $this->users->update($user['id'], $data);
+            }
+
+            if(!$s && $this->users->hasError()){
+                echo $this->users->getErrorMessage();
+            }
+
+            $this->response->body(['s'=>$s, 'i' => $i])->asJSON(); return null;
         }
 
-        if(! $this->request->isPost()) die();
 
-        $data = $this->request->post('data'); $i=[]; $s = 0;
-
-        FormValidation::setRule(['password', 'password_c'], FormValidation::REQUIRED);
-        FormValidation::setRule(['password'], FormValidation::PASSWORD);
-        FormValidation::run($data);
-
-        if(FormValidation::hasErrors()){
-            $i = FormValidation::getErrors();
-        } elseif(!empty($data['password']) && ($data['password_c'] != $data['password'])){
-            $i[] = ["data[password_c]" => $this->t('admin_profile.e_pasw_equal')];
-        }  else {
-
-            unset($data['password_c']);
-
-            $s = $this->users->update($user['id'], $data);
-        }
-
-        if(!$s && $this->users->hasError()){
-            echo $this->users->getErrorMessage();
-        }
-
-        $this->response->body(['s'=>$s, 'i' => $i])->asJSON();
+        return $this->template->fetch('modules/users/password');
     }
 }

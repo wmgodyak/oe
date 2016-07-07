@@ -3,5 +3,3 @@ tmp/
 logs/
 robots.txt
 __components
-vendor/filemanager/thumbs/content/
-vendor/filemanager/thumbs/files/

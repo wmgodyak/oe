@@ -33,7 +33,7 @@ engine.pages = {
             )
             .setContextMenu('edit', t.pages.tree_edit, 'fa-pencil', function(o){
                     var node_id= o.reference[0].id;
-                self.location.href='pages/edit/' + node_id;
+                    self.location.href='pages/edit/' + node_id;
                 }
             )
             .setContextMenu('del', t.pages.tree_delete, 'fa-remove', function(o){
@@ -43,7 +43,7 @@ engine.pages = {
                         'ДІйсно видалити сторінку?',
                         function()
                         {
-                            engine.content.delete(node_id, function(d){
+                            engine.content.delete(node_id, 'pages', function(d){
                                 if(ACTION == 'create' || ACTION == 'edit'){
                                     self.location.href = 'pages';
                                 }

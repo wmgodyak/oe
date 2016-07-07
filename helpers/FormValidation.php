@@ -87,13 +87,13 @@ class FormValidation
                     }
                     break;
                 case self::PASSWORD:
+                    $uppercase = preg_match('@[A-Z]@', $data[$input]);
+                    $lowercase = preg_match('@[a-z]@', $data[$input]);
+                    $number    = preg_match('@[0-9]@', $data[$input]);
 
-                    if(!preg_match('/^(?=.*\d)(?=.*[A-Za-z])[0-9A-Za-z]{6,12}$/', $data[$input])) {
+                    if(!$uppercase || !$lowercase || !$number || strlen($data[$input]) < 6) {
                         self::$errors[] = ["data[{$input}]" => self::$messages['password']];
                     }
-//                    if (!preg_match("#.*^(?=.{8,20})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$#", $data[$input])){
-//                        self::$errors[] = ["data[{$input}]" => self::$messages['password']];
-//                    }
                     break;
                 case self::EMAIL:
                     //Check this constant first so it works when extension_loaded() is disabled by safe mode

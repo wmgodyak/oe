@@ -49,12 +49,24 @@ App.users = {
             hideModal();
         });
 
-        App.validateAjaxForm('#usersProfile', function () {
-            App.alert('Дані оновлено.', 'success', $("#usersProfile .response"));
+        /**
+         * Profile
+         */
+        $(document).on('click', '.b-users-profile-edit,.b-users-profile-edit', function(e){
+            e.preventDefault();
+            $(this).parents('form:first').find('input, textarea').removeAttr('disabled');
+            $('.form-action').show();
         });
-        App.validateAjaxForm('#usersUpdatePassword', function () {
-            App.alert('Дані оновлено.', 'success', $("#usersUpdatePassword .response"));
+
+        App.validateAjaxForm('#accountProfile', function () {
+            App.alert('Дані оновлено.', 'success', $("#accountProfile .response"));
         });
+
+
+        App.validateAjaxForm('#accountChangePassword', function () {
+            App.alert('Дані оновлено.', 'success', $("#accountChangePassword .response"));
+        });
+
         App.validateAjaxForm('#usersNewPsw', function (d) {
             App.alert(d.m, 'success', $("#usersNewPsw .response"));
             setTimeout(function(){

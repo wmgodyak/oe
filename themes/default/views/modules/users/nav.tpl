@@ -8,7 +8,7 @@
     <!-- end login-block -->
 {else}
     <div class="user-login">
-        <a class="user-login__link" href="1">{$t.users.b_profile}</a>
+        <a class="user-login__link" href="28">{$t.users.b_profile}</a>
         <a class="user-login__link" href="route/users/logout">{$t.users.b_logout}</a>
     </div>
 {/if}
