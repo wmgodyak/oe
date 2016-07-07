@@ -123,6 +123,7 @@ engine.shop = {
         engine.shop.categories.features.init();
         engine.shop.products.features.init();
         engine.shop.products.variants.init();
+        engine.shop.import.init();
     },
     categories: {
         before: function()
@@ -717,6 +718,59 @@ engine.shop = {
                 var d = tmpl({features: features, selected: selected});
                 cnt.html(d);
             }
+        }
+    },
+    import : {
+        init: function ()
+        {
+            function beginImport(adapter, file)
+            {
+                engine.request.post({
+                    url: 'module/run/shop/import/adapter/' + adapter,
+                    data: {
+                        file: file
+                    },
+                    success: function(res)
+                    {
+                        console.log(res);
+                    },
+                    dataType: 'json',
+                    timeout: 3000000
+                })
+            }
+
+            function processImport(start, type)
+            {
+
+            }
+
+            var bar = $('.bar');
+            var percent = $('.percent');
+            var status = $('#status');
+            $('#shopImport').ajaxForm({
+                beforeSend: function() {
+                    status.empty();
+                    var percentVal = '0%';
+                    bar.width(percentVal)
+                    percent.html(percentVal);
+                },
+                uploadProgress: function(event, position, total, percentComplete) {
+                    var percentVal = percentComplete + '%';
+                    bar.width(percentVal)
+                    percent.html(percentVal);
+                },
+                success: function() {
+                    var percentVal = '100%';
+                    bar.width(percentVal)
+                    percent.html(percentVal);
+                },
+                complete: function(xhr) {
+                    var res = JSON.parse(xhr.responseText);
+                    if(res.status == true){
+                        beginImport(res.adapter, res.file);
+                    }
+                }
+            });
         }
     }
 };

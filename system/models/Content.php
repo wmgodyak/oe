@@ -45,11 +45,14 @@ class Content extends Model
         $type = self::$db
             ->select("select id, isfolder from __content_types where parent_id=0 and type='{$type}' limit 1")
             ->row();
+
         if(empty($type)){
             throw new \Exception('Невірний тип контенту');
         }
 
         $this->types_id = $type['id'];
+        $this->subtypes_id = $type['id'];
+        return;
 
         if($type['isfolder'] == 0){
             $this->subtypes_id = $type['id'];

@@ -40,6 +40,7 @@ class Model
         self::$db = DB::getInstance();
 
         $this->request = Request::getInstance();
+
 // todo modify languages_id, a thinks that set default language as selected languages on frontend
 //        if($this->request->getMode() == 'engine'){
 //            $this->languages_id = Engine::$language_id;
