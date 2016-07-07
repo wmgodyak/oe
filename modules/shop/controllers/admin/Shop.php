@@ -94,4 +94,19 @@ class Shop extends Engine
 
         return call_user_func_array(array($controller, $action), $params);
     }
+    public function import()
+    {
+        include "Import.php";
+
+        $params = func_get_args();
+
+        $action = 'index';
+        if(!empty($params)){
+            $action = array_shift($params);
+        }
+
+        $controller  = new Import();
+
+        return call_user_func_array(array($controller, $action), $params);
+    }
 }
