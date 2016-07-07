@@ -29,9 +29,9 @@ class Features extends \modules\shop\models\products\Features
             self::$db->select("
               select f.id, fi.name, f.code,f.type, fc.id as fc_id, f.multiple
               from __features f
-              join __features_content fc on fc.content_id={$categories_id} and fc.features_id=f.id
-              join __features_info fi on fi.features_id=f.id and fi.languages_id={$this->languages_id}
-              where f.parent_id = {$parent_id}
+              join __features_content fc on fc.content_id='{$categories_id}' and fc.features_id=f.id
+              join __features_info fi on fi.features_id=f.id and fi.languages_id='{$this->languages_id}'
+              where f.parent_id = '{$parent_id}'
                and f.type in ('select', 'folder')
                and f.status='published'
               order by abs(fc.position) asc

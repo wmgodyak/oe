@@ -31,6 +31,7 @@ class Guides extends Content
 
     public function main($guide)
     {
+        if(empty($guide['types_id'])) return null;
         $ct = new ContentTypes();
         $a = $ct->getData($guide['types_id'], 'type');
 

@@ -14,7 +14,6 @@ defined("CPATH") or die();
 
 class ContentTypes extends Engine
 {
-
     /**
      * @param $id
      * @param string $key
@@ -22,7 +21,7 @@ class ContentTypes extends Engine
      */
     public function getData($id, $key= '*')
     {
-        $d = self::$db->select("select {$key} from __content_types where id={$id} limit 1")->row($key);
+        $d = self::$db->select("select {$key} from __content_types where id='{$id}' limit 1")->row($key);
 
         if($key != '*') return $d;
 

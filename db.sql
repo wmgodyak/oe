@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Хост: localhost
--- Время создания: Июл 07 2016 г., 14:06
+-- Время создания: Июл 07 2016 г., 14:15
 -- Версия сервера: 5.6.30-0ubuntu0.14.04.1-log
 -- Версия PHP: 5.5.9-1ubuntu4.17
 
@@ -231,7 +231,7 @@ CREATE TABLE IF NOT EXISTS `e_content` (
   KEY `status` (`status`),
   KEY `published` (`published`),
   KEY `code` (`sku`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=33 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=43 ;
 
 --
 -- Дамп данных таблицы `e_content`
@@ -257,7 +257,14 @@ INSERT INTO `e_content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id
 (29, 1, 20, 2, 28, 0, 0, '2016-07-07 08:08:57', '2016-07-07 08:09:05', '2016-07-07', NULL, 'deleted', NULL, NULL, NULL, NULL, NULL, NULL),
 (30, 1, 20, 2, 26, 0, 0, '2016-07-07 08:09:06', '2016-07-07 08:14:47', '2016-07-07', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
 (31, 1, 20, 2, 26, 0, 0, '2016-07-07 08:14:53', '2016-07-07 08:15:02', '2016-07-07', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
-(32, 1, 20, 2, 26, 0, 0, '2016-07-07 08:15:17', '2016-07-07 08:15:43', '2016-07-07', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL);
+(32, 1, 20, 2, 26, 0, 0, '2016-07-07 08:15:17', '2016-07-07 08:15:43', '2016-07-07', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
+(34, 2, 2, 2, 0, 1, 0, '2016-07-07 11:11:18', '2016-07-07 11:12:46', '2016-07-07', NULL, 'published', NULL, NULL, NULL, NULL, NULL, 'units'),
+(35, 2, 2, 2, 34, 0, 0, '2016-07-07 11:11:31', '2016-07-07 11:11:31', '2016-07-07', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
+(36, 2, 2, 2, 34, 0, 0, '2016-07-07 11:11:48', '2016-07-07 11:11:48', '2016-07-07', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
+(37, 2, 2, 2, 34, 0, 0, '2016-07-07 11:11:55', '2016-07-07 11:11:55', '2016-07-07', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
+(38, 2, 2, 2, 34, 0, 0, '2016-07-07 11:12:06', '2016-07-07 11:12:06', '2016-07-07', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
+(39, 2, 2, 2, 34, 0, 0, '2016-07-07 11:12:12', '2016-07-07 11:12:12', '2016-07-07', NULL, 'published', NULL, NULL, NULL, NULL, NULL, NULL),
+(42, 23, 23, 2, 0, 0, 0, '2016-07-07 11:14:29', NULL, NULL, NULL, 'blank', NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -350,7 +357,7 @@ CREATE TABLE IF NOT EXISTS `e_content_info` (
   UNIQUE KEY `languages_id` (`languages_id`,`url`),
   KEY `fk_content_info_content1_idx` (`content_id`),
   KEY `fk_content_info_languages1_idx` (`languages_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=23 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=29 ;
 
 --
 -- Дамп данных таблицы `e_content_info`
@@ -376,7 +383,13 @@ INSERT INTO `e_content_info` (`id`, `content_id`, `languages_id`, `name`, `url`,
 (19, 29, 1, 'Загальна інформація', 'akkaunt/profil/zagal-na-informaciya', '', 'Загальна інформація', '', '', '', ''),
 (20, 30, 1, 'Мій кошик', 'akkaunt/profil/mij-koshyk', '', 'Мій кошик', '', '', '', ''),
 (21, 31, 1, 'Мої замовлення', 'akkaunt/profil/moi-zamovlennya', '', 'Мої замовлення', '', '', '', ''),
-(22, 32, 1, 'Моя бонусна картка', 'akkaunt/profil/moya-bonusna-kartka', '', 'Моя бонусна картка', '', '', '', '');
+(22, 32, 1, 'Моя бонусна картка', 'akkaunt/profil/moya-bonusna-kartka', '', 'Моя бонусна картка', '', '', '', ''),
+(23, 34, 1, 'Кількісні одиниці', 'units', '', 'Кількісні одиниці', '', '', NULL, NULL),
+(24, 35, 1, 'шт.', 'pt', '', 'шт.', '', '', NULL, NULL),
+(25, 36, 1, 'уп.', 'pk', '', 'уп.', '', '', NULL, NULL),
+(26, 37, 1, 'г.', 'g', '', 'г.', '', '', NULL, NULL),
+(27, 38, 1, 'кг.', 'kg', '', 'кг.', '', '', NULL, NULL),
+(28, 39, 1, 'т.', 't', '', 'т.', '', '', NULL, NULL);
 
 -- --------------------------------------------------------
 
