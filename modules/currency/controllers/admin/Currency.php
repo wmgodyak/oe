@@ -26,7 +26,7 @@ class Currency extends Engine
 
     public function init()
     {
-        $this->assignToNav('Валюти', 'module/run/currency', 'fa-money', 'settings', 100);//, 'module/run/shop'
+        $this->assignToNav('Валюти', 'module/run/currency', 'fa-money', 'module/run/shop', 100);//, 'module/run/shop'
         $this->template->assignScript("modules/currency/js/admin/currency.js");
     }
 

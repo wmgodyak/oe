@@ -37,6 +37,7 @@ class Categories extends Content
         // disable default features block
         $this->form_display_blocks['features'] = false;
 
+        $this->languages_id = 1;
     }
 
     public function index($parent_id=0)

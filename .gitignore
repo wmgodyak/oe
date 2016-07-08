@@ -1,5 +1,8 @@
 .idea/
 tmp/
 logs/
+uploads/
 robots.txt
 __components
+vendor/filemanager/
+vendor/sxd/

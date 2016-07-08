@@ -35,22 +35,73 @@ class Prom extends Engine
         $this->file = $this->request->post('file');
         $this->path = DOCROOT . 'tmp/';
 
-        $this->import = new Import(1, $this->admin);
+        if(! $this->load()){
+            echo 'Виникла помилка при завантаженні файлу';
+            die;
+        }
+//
+        if(! $this->isValid()){
+            echo  'Файл невідповідний до стандарту';
+            die;
+        }
+
+        $currency     = $this->xml_attribute($this->data->currency, 'code');
+        $this->import = new Import(1, $this->admin, $this->data->name, $currency);
+
+        if(! $this->import->checkCurrency()){
+            echo implode('<br>', $this->import->log);
+            die;
+        }
     }
 
     public function index(){
 
-        if(! $this->load()){
-            return;
-        }
-//
-        if(! $this->isValid()){
-            return;
+        $this->response(['s' => $this->parseCategories(), 'log' => $this->import->log]);
+    }
+
+    public function getTotalProducts()
+    {
+        echo count($this->data->items->item);
+    }
+
+    /**
+     * @param $start
+     * @return bool
+     */
+    public function parseProducts($start)
+    {
+        $i=0;
+        foreach ($this->data->items->item as $product) {
+            if($i == $start){
+                $in_stock = $this->xml_attribute($product, 'available') ? 1 : 0;
+                $ex_id    =  $this->xml_attribute($product, 'id');
+                $name = $product->name;
+                $category_ex_id = $product->categoryId;
+                $price          = $product->price;
+                $url = $product->url;
+                $image = $product->image;
+                $vendor = $product->vendor;
+                $description = $product->description;
+                $warranty = $product->warranty;
+
+                $this->import->product
+                (
+                    $ex_id,
+                    $name,
+                    $url,
+                    $category_ex_id,
+                    $price,
+                    $in_stock,
+                    $image,
+                    $description,
+                    $vendor,
+                    $warranty
+                );
+            }
+            $i++;
         }
 
-        $this->parseCategories();
-
-        echo 'OK';
+        $this->response(['s' => 1, 'log' => $this->import->log]);
     }
 
     private function parseCategories()
@@ -59,9 +110,12 @@ class Prom extends Engine
             $ex_id     =  $this->xml_attribute($cat, 'id');
             $parent_id = $this->xml_attribute($cat, 'parentId');
             $name      = (string) $cat;
-            $this->import->category($ex_id, $name, $parent_id);
+            $s = $this->import->category($ex_id, $name, $parent_id);
+
+            if(! $s) return false;
         }
 
+        return true;
     }
 
     function xml_attribute($object, $attribute)

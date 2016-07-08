@@ -723,6 +723,18 @@ engine.shop = {
     import : {
         init: function ()
         {
+            var bar = $('.bar');
+            var percent = $('.percent');
+            var status = $('#status');
+
+            function log(m)
+            {
+                var status = $('#status');
+                var str = status.html();
+                str = m + '<br>' + str;
+                status.html(str);
+            }
+
             function beginImport(adapter, file)
             {
                 engine.request.post({
@@ -733,20 +745,58 @@ engine.shop = {
                     success: function(res)
                     {
                         console.log(res);
+                        if(res.s){
+                            $(res.log).each(function(i, e){
+                                log(e);
+                            });
+                            engine.request.post({
+                                url :'module/run/shop/import/adapter/' + adapter + '/getTotalProducts',
+                                data: {
+                                    file: file
+                                },
+                                success: function(t)
+                                {
+                                    t = parseInt(t);
+                                    if(t > 0){
+                                        parseProducts(adapter, file, 0, t);
+                                    }
+                                }
+                            });
+                        }
                     },
                     dataType: 'json',
-                    timeout: 3000000
-                })
+                    timeout: 3000000,
+                    error: function(d){
+                        log(d.responseText);
+                    }
+                });
             }
 
-            function processImport(start, type)
+            function parseProducts(adapter, file, start, total)
             {
-
+                percent.html("Завантаження товарів: (" + start +'/'+ total + ')');
+                engine.request.post({
+                    url: 'module/run/shop/import/adapter/' + adapter + '/parseProducts/' + start,
+                    data: {
+                        file: file
+                    },
+                    success: function(res)
+                    {
+                        $(res.log).each(function(i, e){
+                            log(e);
+                        });
+                        if(start < total){
+                            start++;
+                            parseProducts(adapter, file, start, total);
+                        }
+                    },
+                    dataType: 'json',
+                    timeout: 3000000,
+                    error: function(d){
+                        log(d.responseText);
+                    }
+                });
             }
-
-            var bar = $('.bar');
-            var percent = $('.percent');
-            var status = $('#status');
             $('#shopImport').ajaxForm({
                 beforeSend: function() {
                     status.empty();

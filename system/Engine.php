@@ -62,7 +62,7 @@ abstract class Engine extends Controller
     private static $initialized = false;
 
     protected $languages;
-    protected $languages_id;
+    protected $languages_id = 1;
 
     protected $plugins;
     protected $admin = [];

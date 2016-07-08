@@ -13,8 +13,27 @@ use system\models\Model;
 
 defined("CPATH") or die();
 
+/**
+ * Class Prices
+ * @package modules\shop\models\admin
+ */
 class Prices extends Model
 {
+    /**
+     * @param $content_id
+     * @param $group_id
+     * @param $price
+     * @return bool|string
+     */
+    public function create($content_id, $group_id, $price)
+    {
+        return $this->createRow
+        (
+            "__products_prices",
+            ['content_id' => $content_id, 'group_id' => $group_id, 'price' => $price]
+        );
+    }
+
     /**
      * @param $content_id
      * @param $group_id
