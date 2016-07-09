@@ -19,7 +19,7 @@ class Image
      * @param int $square_size
      * @return string
      */
-    public static function createSquare($original_file, $destination_file = null, $square_size = 96){
+    public static function createSquare($original_file, $destination_file = null, $square_size = 96, $quality = 80){
 
         // get width and height of original image
         $imagedata = getimagesize($original_file);
@@ -77,7 +77,7 @@ class Image
 
         // save the smaller image FILE if destination file given
         if(substr_count(strtolower($destination_file), ".jpg")){
-            imagejpeg($square_image,$destination_file,100);
+            imagejpeg($square_image,$destination_file,$quality);
         }
         if(substr_count(strtolower($destination_file), ".gif")){
             imagegif($square_image,$destination_file);

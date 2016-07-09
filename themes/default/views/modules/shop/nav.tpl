@@ -1,14 +1,14 @@
 <!-- begin sidebar -->
 <aside class="sidebar sidebar-collapse">
-
     <!-- begin m_goods-nav -->
     <nav class="m_goods-nav">
         <div class="goods-nav__header">
-            <a href="#">КАТАЛОГ ТОВАРІВ</a>
+            <a href="javascript:;">КАТАЛОГ ТОВАРІВ</a>
         </div>
         <ul class="goods-nav__list">
-            <li class="goods-nav__item i1">
-                <a class="goods-nav__link" href="#">Запчастини для мобільних телефонів</a>
+            {foreach $mod->shop->categories() as $i=>$cat}
+            <li class="goods-nav__item i{$i}">
+                <a class="goods-nav__link" title="{$cat.title}" href="{$cat.id}">{$cat.name}</a>
                 <div class="sub-menu">
                     <div class="content my-grid">
                         <div class="item">
@@ -57,6 +57,8 @@
                     </div>
                 </div>
             </li>
+            {/foreach}
+            {*
             <li class="goods-nav__item i2">
                 <a class="goods-nav__link" href="#">Запчастини для планшетів</a>
                 <div class="sub-menu">
@@ -176,6 +178,7 @@
             <li class="goods-nav__item i12">
                 <a class="goods-nav__link" href="#">Аксесуари по брендах</a>
             </li>
+            *}
         </ul>
     </nav>
     <!-- end m_goods-nav -->

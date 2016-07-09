@@ -177,7 +177,9 @@ class Import extends Model
             ]
         );
 
-        $url = preg_replace("@((www|.html|{$this->domain}|http://|https://)[^ ]+)@", '\1', $url);
+//        $url = preg_replace("@((www|.html|{$this->domain}|http://|https://)[^ ]+)@", '\1', $url);
+
+        $url = Translit::str2url($name);
 
         foreach ($this->languages->get() as $lang) {
             $a =

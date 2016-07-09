@@ -191,12 +191,12 @@ class ContentImagesSizes extends Engine
      * @param int $num
      * @return mixed
      */
-    public function resizeItems($sizes_id, $start, $num = 10)
+    public function resizeItems($sizes_id, $start, $num = 1)
     {
         $r = self::$db
             -> select
             ("
-                  select ci.path, ci.image, cis.size, cis.width, cis.height, ci.content_id
+                  select ci.path, ci.image, cis.size, cis.width, cis.height,cis.quality, ci.content_id
                   from __content_types_images_sizes ctis
                   join __content c on c.subtypes_id=ctis.types_id and c.status='published'
                   join __content_images_sizes cis on cis.id=ctis.images_sizes_id
@@ -218,19 +218,20 @@ class ContentImagesSizes extends Engine
 
             $item['width']  = (int)$item['width'];
             $item['height'] = (int)$item['height'];
+            $item['quality'] = (int)$item['quality'];
 
             $image_src  = DOCROOT . $item['path'] . $source . $item['image'];
 
             $img = \AcImage::createImage($image_src);
             \AcImage::setRewrite(true);
-            \AcImage::setQuality(80);
+            \AcImage::setQuality($item['quality']);
 
 
             $size_path =  $item['path'] . $item['size'] .'/';
 
             $image_dest = $size_path . $item['image'];
 
-            if(!is_dir($size_path)) mkdir($size_path, 0775, true);
+            if(!is_dir(DOCROOT. $size_path)) mkdir(DOCROOT . $size_path, 0775, true);
 
             if($item['width'] == 0) {
                 $img->resizeByHeight($item['height']);
@@ -239,7 +240,7 @@ class ContentImagesSizes extends Engine
                 $img->resizeByWidth($item['width']);
                 $img->save(DOCROOT . $image_dest);
             } elseif($item['width'] == $item['height']){
-                Image::createSquare($image_src, DOCROOT . $image_dest, $item['width'] );
+                Image::createSquare($image_src, DOCROOT . $image_dest, $item['width'] , $item['quality']);
             } else {
                 $img->resize($item['width'], $item['height']);
                 $img->save(DOCROOT . $image_dest);

@@ -18,6 +18,12 @@
         </div>
     </div>
     <div class="form-group">
+        <label for="data_quality" class="col-sm-3 control-label">{$t.contentImagesSizes.quality}</label>
+        <div class="col-sm-9">
+            <input name="data[quality]" id="data_quality"  class="form-control" value="{if isset($data.quality)}{$data.quality}{/if}" required onchange="this.value = parseInt(this.value); if (this.value == 'NaN') this.value=0; if(this.value > 100 ) this.value=100; if(this.value < 0) this.value=0;">
+        </div>
+    </div>
+    <div class="form-group">
         <label for="types" class="col-sm-3 control-label">{$t.contentImagesSizes.types}</label>
         <div class="col-sm-9">
             <select name="types[]" multiple id="content_types"  class="form-control" required>

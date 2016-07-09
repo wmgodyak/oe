@@ -7,6 +7,7 @@
  */
 namespace system;
 
+use system\core\EventsHandler;
 use system\core\exceptions\Exception;
 use system\core\Lang;
 use system\core\Request;
@@ -93,6 +94,11 @@ class Front extends core\Controller
 
         // to access custom modules
         $this->page = $this->template->getVars('page');
+
+
+        $events = EventsHandler::getInstance();
+
+        $this->template->assign('events', $events);
     }
 
     public function index()

@@ -34,7 +34,7 @@ class Guides extends Content
         if(empty($guide['types_id'])) return null;
         $ct = new ContentTypes();
         $a = $ct->getData($guide['types_id'], 'type');
-
+//        echo $a, '   ', $this->type;
         if($this->type != $a) return '';
 
         return $this->template->fetch('guides/main');
