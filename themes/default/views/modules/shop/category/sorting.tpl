@@ -21,7 +21,7 @@
         </div>
         {if $smarty.get|count > 0}
             {foreach $smarty.get as $k=>$v}
-                {if $k != 'sort'}
+                {if $k != 'sort' && $k != 'p'}
                     <input type="hidden" name="{$k}" value="{$v}">
                 {/if}
             {/foreach}

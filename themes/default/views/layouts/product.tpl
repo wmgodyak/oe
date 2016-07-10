@@ -147,10 +147,24 @@
 
                         </div>
                         <div class="tab tab2 cms-content">
-                            <p>slide2</p>
+                            {*<pre>{print_r($product.features)}</pre>*}
+                            <table class="table">
+                                {foreach $product.features as $item}
+                                <tr>
+                                    <td>{$item.name}</td>
+                                    <td>
+                                        {if $item.values|count}
+                                            {foreach $item.values as $v}
+                                                {$v.name}
+                                            {/foreach}
+                                        {/if}
+                                    </td>
+                                </tr>
+                                {/foreach}
+                            </table>
                         </div>
                         <div class="tab tab3 cms-content">
-                            <p>slide3</p>
+                            {$mod->comments->display($post.id)}
                         </div>
                         <div class="tab tab4 cms-content">
                             <p>slide4</p>

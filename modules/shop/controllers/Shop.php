@@ -48,14 +48,22 @@ class Shop extends Front
     public function init()
     {
         if($this->page['type'] == 'product'){
-            $product = $this->page;
+            $this->product();
+         }
+    }
 
-            $product['images']   = $this->images->get($product['id']);
-            $product['price']    = $this->prices->get($product['id'], $this->group_id);
-            $product['currency'] = $this->currency->getMeta($product['currency_id'], 'symbol');
+    private function product()
+    {
+        $product = $this->page;
 
-            $this->template->assign('product', $product);
-        }
+        $product['images']   = $this->images->get($product['id']);
+        $product['price']    = $this->prices->get($product['id'], $this->group_id);
+        $product['currency'] = $this->currency->getMeta($product['currency_id'], 'symbol');
+
+        $features = new \modules\shop\models\products\Features();
+        $product['features'] = $features->get($product['id']);
+
+        $this->template->assign('product', $product);
     }
 
     /**
@@ -110,8 +118,6 @@ class Shop extends Front
 
         return $products;
     }
-
-
 
     /**
      * display pagination
