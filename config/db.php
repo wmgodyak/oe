@@ -29,7 +29,7 @@ if($_SERVER['REMOTE_ADDR'] == '127.0.0.1'){
         'db'       => 'engine',
         'prefix'   => 'e_',
         'user'     => 'root',
-        'pass'     => 'dell',
+        'pass'     => 'hp',
         'port'     => 3306,
         'charset'  => 'utf8',
         'debug'    => true
