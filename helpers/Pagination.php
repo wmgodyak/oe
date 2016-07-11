@@ -12,77 +12,43 @@ defined("CPATH") or die();
 
 class Pagination
 {
-    private static $limit = [];
-
     private static $prev;
     private static $next;
     private static $all;
 
     private static $pages = [];
 
-    public static function init($total, $ipp, $cur_p,  $url, $page = 'p', $mid_range = 7)
+    public static function init( $total, $ipp, $cur_p,  $url, $mid_range = 7)
     {
-        if($ipp == "All") {
-            $num_pages = 1;
-        } else {
-            $num_pages = ceil($total/$ipp);
+        $g = $_GET; if(isset($g['p'])) unset($g['p']);
+
+        $qs = empty($g) ? '' : '&' . http_build_query($g);
+
+        $last = ceil($total / $ipp);
+
+        $start = (($cur_p - $ipp) > 0) ? $cur_p - $ipp : 1;
+        $end = (($cur_p + $ipp) < $last) ? $cur_p + $ipp : $last;
+
+        $class = ($cur_p == 1) ? "disabled" : "";
+        self::addPage("$url?p=" . ($cur_p - 1) . "&ipp={$ipp}{$qs}", '&laquo;', $class);
+
+        if ($start > 1) {
+            self::addPage("$url?p=1{$qs}", 1);
+            self::addPage(null, "...", 'disabled');
+        }
+        for ($i = $start, $c=0; $i <= $end && $c < $mid_range; $i++, $c++) {
+            $class = ($cur_p == $i) ? "active" : "";
+            self::addPage("$url?p=$i{$qs}", $i, $class);
         }
 
-        if(isset($_GET[$page])) unset($_GET[$page]);
+        if ($end < $last) {
+            self::addPage(null, '...', 'disabled');
+            self::addPage("$url?p=$last{$qs}", $last);
+        }
 
-        $qs = !empty($_GET) ? '?' . http_build_query($_GET) : '';
-        
-//        if($num_pages > 1) {
-            if($cur_p > 1 ){
-                self::$prev = "$url$page=".($cur_p-1)."$qs";
-            }
-
-            $start_range = $cur_p - floor($mid_range/2);
-            $end_range = $cur_p + floor($mid_range/2);
-
-            if($start_range <= 0) {
-                $end_range += abs($start_range)+1;
-                $start_range = 1;
-            }
-
-            if($end_range > $num_pages) {
-                $start_range -= $end_range-$num_pages;
-                $end_range = $num_pages;
-            }
-
-            $range = range($start_range, $end_range);
-
-            for($i=1;$i<=$num_pages;$i++) {
-
-                if($range[0] > 2 && $i == $range[0]) {
-                    self::addPage('', ' ... ', 'disabled');
-                    continue;
-                }
-
-                if($i == $cur_p && $ipp != "All"){
-                    self::addPage('', $i, 'active');
-                } else {
-                    $u = $i == 1 ? '' : "$page=$i";
-                    self::addPage("$url$u$qs", $i);
-                }
-
-                if($range[$mid_range-1] < $num_pages-1 && $i == $range[$mid_range-1]) {
-                    self::addPage('', ' ... ', 'disabled');
-                }
-            }
-
-            if(($cur_p < $num_pages ) && ($ipp != "All") && $cur_p > 0) {
-                self::$next = "$url$page=" . ($cur_p+1) ."$qs";
-            }
-//        }
-        
-        self::$all = "{$url}ipp=all". str_replace('?', '&', $qs);
-        
-        self::$limit['start'] = ($cur_p <= 0) ? 0 : ($cur_p-1) * $ipp;
-        
-        self::$limit['num'] = ($ipp == "All") ? (int) $total : (int) $ipp;
+        $class = ($cur_p == $last) ? "disabled" : "";
+        self::addPage("$url?p=" . ($cur_p + 1) . $qs, '&raquo;', $class );
     }
-
     /**
      * @param $url
      * @param $name
@@ -92,12 +58,7 @@ class Pagination
     {
         self::$pages[] = [ 'url'   => $url, 'name'  =>$name, 'class' => $class ];
     }
-    
-    public static function getLimit()
-    {
-        return self::$limit;
-    }
-    
+
     public static function getPages()
     {
         return [

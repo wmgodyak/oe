@@ -50,7 +50,7 @@ class ContentImages extends Model
         return self::$db
             ->select
             ("
-                select s.size, s.width, s.height
+                select s.size, s.width, s.height,s.quality
                 from __content c
                 join __content_types_images_sizes cs on cs.types_id=c.types_id
                 join __content_images_sizes s on s.id=cs.images_sizes_id

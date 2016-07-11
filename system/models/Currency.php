@@ -26,6 +26,21 @@ class Currency extends Model
     }
 
     /**
+     * @param string $key
+     * @return array|mixed
+     * @throws \system\core\exceptions\Exception
+     */
+    public function getMainMeta($key = '*')
+    {
+        return self::$db->select("select {$key} from __currency where is_main = 1 limit 1")->row($key);
+    }
+
+    public function getMeta($id, $key = '*')
+    {
+        return self::$db->select("select {$key} from __currency where id={$id} limit 1")->row($key);
+    }
+
+    /**
      * @param $code
      * @return array|mixed
      * @throws \system\core\exceptions\Exception

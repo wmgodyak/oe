@@ -276,7 +276,7 @@ class DB extends \PDO {
         }catch(\PDOException $e){
             if($this->conf['debug']){
                 http_response_code(500);
-                throw new Exception("$sql <br>" . $e->getMessage());
+                throw new Exception($e->getMessage() . $this->interpolateQuery($sql, $data));
             }
 
             self::$errorMessage = $e->getMessage() . $this->interpolateQuery($sql, $data);

@@ -8,13 +8,15 @@
 
 namespace modules\shop\models\admin\products;
 
+use system\models\Model;
+
 defined("CPATH") or die();
 
 /**
  * Class CategoriesFeatures
  * @package modules\shop\models\admin
  */
-class Features extends \modules\shop\models\products\Features
+class Features extends Model
 {
     /**
      * @param $categories_id

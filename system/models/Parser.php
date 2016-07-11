@@ -131,13 +131,18 @@ class Parser extends Model
     public function makeFriendlyUrl()
     {
         $home_id  = self::$db->select("select value from __settings where name='home_id' limit 1")->row('value');
-        $def_lang = self::$db->select("select id,code from __languages where is_main=1 limit 1")->row();
+        $def_lang = self::$db->select("select id, code from __languages where is_main=1 limit 1")->row();
         $languages_id = $this->request->param('languages_id');
         $self = $this;
-//        $pattern = '@(href|action)="([^\"]*)"@siU'; // ok
-        //$pattern = '@(href|action)="([0-9]+)?;??(filter/[a-z0-9_\-]+=[a-z0-9_\-;,=]+)??;??([a-z]+=[a-z0-9а-яА-ЯіїЇІ_\-]+)??;??([a-z]+=[a-z0-9а-яА-ЯіїЇІ_\-]+)??;??([a-z]+=[a-z0-9а-яА-ЯіїЇІ_\-]+)??;??([a-z]+=[a-z0-9а-яА-ЯіїЇІ_\-]+)??([\?a-z]+=[a-z0-9а-яА-ЯіїЇІ_\-]+)??([\&a-z]+=[a-z0-9а-яА-ЯіїЇІ_\-]+)?"@isu';
-//        $pattern = '@(href|action)="([0-9]+)?;??(filter/[a-z0-9_\-]+=[a-z0-9_\-;,=]+)??([a-z]+=[a-z0-9а-яА-ЯіїЇІ_\-]+)?"@isu';
-        $pattern = '@(href|action)="([0-9]+)?;??(filter/[a-z0-9_\-]+=[a-z0-9_\-;,=]+)??(([?&a-z]+=[a-z0-9а-яА-ЯіїЇІ_\-]+)*)?"@isu';
+
+        $pattern = '@';
+        $pattern .= '(href|action)="([0-9]+)';
+        $pattern .= '?;??(([?&a-z]+=[a-z0-9а-яА-ЯіїЇІ_\-]+)*)';
+//        $pattern .= '?(filter/[a-z0-9_\-]+=[a-z0-9_\-;,=]+)?'; // @pavloslviv changed it
+        $pattern .= '?(filter/[a-z0-9_;,\-]+\-[0-9;,]+)?';
+        $pattern .= '?(\?([&a-z]+=[a-zA-Z0-9\.\-]+)*)?';
+        $pattern .= '?"@isu';
+//        return $this->ds;
         $this->ds = preg_replace_callback
         (
             $pattern,
@@ -180,7 +185,7 @@ class Parser extends Model
 
                 foreach($matches as $k=>$v){
                     if($k > 2){
-                        $v = preg_replace('/p=([0-9]+)/u','/page/$1', $v);
+//                        $v = preg_replace('/p=([0-9]+)/u','/page/$1', $v);
                         $s = substr($v,0,1);
                         if($s == '?' || $s == '&'){
                             $url .= "$v";

@@ -28,7 +28,7 @@ class ContentImages extends Engine
      * @var string
      */
     private $source_dir  = 'source/';
-    private $quality     = 60;
+    private $quality     = 80;
 
     public function __construct()
     {
@@ -150,6 +150,7 @@ class ContentImages extends Engine
                         'size' => rtrim($source_dir, '/'),
                         'width' => $sz[0],
                         'height' => $sz[1],
+                        'quality' => $this->quality
                     ];
             }
 
@@ -163,6 +164,7 @@ class ContentImages extends Engine
                         'size'   => rtrim($thumb_dir, '/'),
                         'width'  => $tz[0],
                         'height' => $tz[1],
+                        'quality' => $this->quality
                     ];
             }
 
@@ -172,6 +174,7 @@ class ContentImages extends Engine
                 foreach($sizes as $size){
                     $size['width']  = (int)$size['width'];
                     $size['height'] = (int)$size['height'];
+                    $size['quality'] = (int)$size['quality'];
 
                     if(empty($size['width']) && empty($size['height'])) {
                         $m .= 'Empty width && height for size ' . $size['size'];
@@ -180,7 +183,7 @@ class ContentImages extends Engine
 
                     $img = \AcImage::createImage($image_tmp);
                     \AcImage::setRewrite(true);
-                    \AcImage::setQuality($this->quality);
+                    \AcImage::setQuality($size['quality']);
 
                     $size_path = DOCROOT . $path . $size['size'] .'/';
 
