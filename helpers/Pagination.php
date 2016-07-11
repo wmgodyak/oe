@@ -22,6 +22,10 @@ class Pagination
     {
         $g = $_GET; if(isset($g['p'])) unset($g['p']);
 
+        foreach ($g as $k=>$v) {
+            if(empty($v)) unset($g[$k]);
+        }
+
         $qs = empty($g) ? '' : '&' . http_build_query($g);
 
         $last = ceil($total / $ipp);

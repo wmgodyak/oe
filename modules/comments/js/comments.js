@@ -1,6 +1,9 @@
 App.comments = {
     init: function()
     {
+        $("#rate").barrating({
+            theme: 'css-stars'
+        });
         App.validateAjaxForm('#commentsForm', function (d) {
             App.alert(d.m, 'success');
             $('#commentsForm').resetForm();

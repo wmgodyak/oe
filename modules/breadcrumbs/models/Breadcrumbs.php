@@ -9,6 +9,7 @@
 namespace modules\breadcrumbs\models;
 
 use system\models\Model;
+use system\models\Settings;
 
 defined("CPATH") or die();
 
@@ -26,21 +27,58 @@ class Breadcrumbs extends Model
     public function get($id)
     {
         $items = [];
+        $home_id = Settings::getInstance()->get('home_id');
 
-        $item = self::$db->select("
+        if($id != $home_id){
+            $items[] = $this->getItem($home_id);
+        }
+        if($id == $home_id){
+            return $items;
+        }
+
+        $item = $this->getItem($id);
+        if($item['parent_id'] > 0) {
+            $items = array_merge($items, $this->get($item['parent_id']));
+        } else {
+            $categories_id = $this->getRelations($item['id'], 1);
+            if($categories_id > 0){
+                $_item = $this->getItem($categories_id);
+                $items[] = $_item;
+                if($_item['parent_id'] > 0) {
+                    $items = array_merge($items, $this->get($_item['parent_id']));
+                }
+            } else {
+                $categories_id = $this->getRelations($item['id'], 0);
+                if($categories_id > 0){
+                    $_item = $this->getItem($categories_id);
+                    $items[] = $_item;
+                    if($_item['parent_id'] > 0) {
+                        $items = array_merge($items, $this->get($_item['parent_id']));
+                    }
+                }
+            }
+        }
+
+        $items[] = $item;
+        return $items;
+    }
+
+    private function getItem($id)
+    {
+        return self::$db->select("
             select c.id, c.parent_id, i.name, i.title
             from __content c
             join __content_info i on i.content_id = c.id and i.languages_id = '{$this->languages_id}'
             where c.id='{$id}'
             limit 1
         ")->row();
+    }
 
-        if($item['parent_id'] > 0) {
-            $items = array_merge($items, $this->get($item['parent_id']));
-        }
 
-        $items[] = $item;
-
-        return $items;
+    private function getRelations($content_id, $is_main = 0)
+    {
+        return self::$db
+            ->select("select categories_id as id from __content_relationship where content_id={$content_id} and is_main = {$is_main} limit 1")
+            ->row('id');
     }
 }

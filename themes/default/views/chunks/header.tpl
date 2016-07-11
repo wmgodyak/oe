@@ -81,19 +81,7 @@
                 </div>
                 <!-- end tel-search__top -->
 
-                <!-- begin tel-search__bottom -->
-                <div class="tel-search__bottom">
-                    <form class="search-form" action="#">
-                        <input type="text" placeholder="Пошук по сайту">
-                        <select class="jq-select" name="" id="">
-                            <option value="all">Усі категорії</option>
-                            <option value="all">Усі категорії</option>
-                        </select>
-                        <button class="search-btn" type="submit"></button>
-                    </form>
-                </div>
-                <!-- end tel-search__bottom -->
-
+                {include file="modules/shop/search/form.tpl"}
             </div>
             <!-- end tel-search -->
 

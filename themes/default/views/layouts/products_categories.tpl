@@ -65,7 +65,24 @@
 
                 </div>
                 <!-- end product-page__top-line -->
-                {include file="modules/shop/category/products.tpl"}
+
+                {assign var='products' value= $mod->shop->products($page.id)}
+                {assign var='products' value= array_chunk($products, 3)}
+                <!-- begin product__list -->
+                <div class="product__list">
+                    {if $products|count}
+                        {foreach $products as $k=> $row}
+                            <div class="row clearfix">
+                                {foreach $row as $product}
+                                    {include file="modules/shop/category/product_item.tpl"}
+                                {/foreach}
+                            </div>
+                        {/foreach}
+                    {else}
+                        <p>Немає товарів</p>
+                    {/if}
+                </div>
+                <!-- end product__list -->
 
                 {$mod->shop->pagination()}
 

@@ -1,7 +1,16 @@
 <form action="route/comments/create" method="post" id="commentsForm">
     <div class="row clearfix">
         <div class="comments__avatar-block">
-            <div class="comments__avatar-img" style="background-image: url('{if $user.avatar == ''}{$theme_url}/assets/img/user/avatar1.jpg{else}{$user.avatar}{/if}');"></div>
+            <div class="comments__avatar-img" style="background-image: url('{if isset($user.avatar) && !empty($user.avatar)}{$user.avatar}{else}{$theme_url}/assets/img/user/avatar1.jpg{/if}');"></div>
+        </div>
+
+        <div class="comments__textarea-block input-group">
+            Оцініть:
+            <select {if !$user}disabled{/if} id="rate" name="data[rate]">
+                {for $i=1;$i<=5; $i++ }
+                    <option value="{$i}">{$i}</option>
+                {/for}
+            </select>
         </div>
         <div class="comments__textarea-block input-group">
             <textarea {if !$user}disabled{/if} id="cMessage" name="data[message]" required placeholder="{$t.comments.message_placeholder}"></textarea>

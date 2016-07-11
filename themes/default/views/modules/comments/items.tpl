@@ -4,11 +4,21 @@
         <li class="comments__item">
             <div class="row clearfix">
                 <div class="comments__avatar-block">
-                    <div class="comments__avatar-img" style="background-image: url('{$theme_url}/assets/img/user/avatar2.jpg');"></div>
+                    <div class="comments__avatar-img"
+                         style="background-image: url('{if isset($user.avatar) && !empty($user.avatar)}{$user.avatar}{else}{$theme_url}/assets/img/user/avatar1.jpg{/if}');"></div>
                 </div>
                 <div class="comments__content">
                     <div class="row clearfix">
-                        <div class="comments__name">{$item.user.name} {$item.user.surname}</div>
+                        <div class="comments__name">
+                            {$item.user.name} {$item.user.surname}
+                            <span class="m_star-rating">
+                               <select class="star-rating read-only">
+                                   {for $i=1;$i<=5; $i++ }
+                                   <option {if $item.rate == $i}selected{/if} value="{$i}">{$i}</option>
+                                   {/for}
+                               </select>
+                           </span>
+                        </div>
                         <div class="comments__date">{date('d.m.Y H:i', $item.created)}</div>
                     </div>
                     <div class="row">
@@ -19,7 +29,9 @@
                             <a class="comments__like comment-like" href="javascript:void(0);" data-id="{$item.skey}">{$item.likes}</a>
                             <a class="comments__dislike comment-dislike" href="javascript:void(0);" data-id="{$item.skey}">{$item.dislikes}</a>
                         </div>
+                        {if isset($user.id)}
                         <a class="comments__answer comment-reply" href="javascript:void(0);" data-id="{$item.id}">Відповісти</a>
+                        {/if}
                     </div>
                 </div>
             </div>

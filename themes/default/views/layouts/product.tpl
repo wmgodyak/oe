@@ -93,18 +93,17 @@
                             <button class="btn sm white-red">Купити в 1 клік</button>
                         </div>
                         {$events->call('shop.product.buy.after', array($product))}
+                        {assign var='avRate' value=$mod->comments->getAverageRating($product.id)|ceil}
                         <span class="row comment-row">
                             <span class="m_star-rating">
                                <select class="star-rating read-only">
-                                   <option value="1">1</option>
-                                   <option value="2">2</option>
-                                   <option value="3">3</option>
-                                   <option value="4">4</option>
-                                   <option value="5">5</option>
+                                   {for $i=1;$i<=5; $i++ }
+                                       <option {if $avRate == $i}selected{/if} value="{$i}">{$i}</option>
+                                   {/for}
                                </select>
                            </span>
                             <span class="coment-counter">
-                                3 відгуки
+                                {$mod->comments->getTotal($product.id)} відгуки
                             </span>
                         </span>
                         <div class="row">
@@ -128,7 +127,7 @@
                                 <a href="javascript:;">{$t.shop.product.tab_features}</a>
                             </li>
                             <li>
-                                <a href="javascript:;">{$t.shop.product.tab_comments}</a>
+                                <a href="javascript:;">{$t.shop.product.tab_comments} ({$avRate})</a>
                             </li>
                             <li>
                                 <a href="javascript:;">{$t.shop.product.tab_video}</a>

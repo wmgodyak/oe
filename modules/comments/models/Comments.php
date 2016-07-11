@@ -66,6 +66,20 @@ class Comments extends Model
     }
 
     /**
+     * @param $content_id
+     * @return array|mixed
+     * @throws \system\core\exceptions\Exception
+     */
+    public function getAverageRating($content_id)
+    {
+        return self::$db->select("
+            select AVG(rate) as t
+            from __comments
+            where content_id={$content_id} and status='approved'
+        ")->row('t') * 1;
+    }
+
+    /**
      * @param $data
      * @return bool|string
      */

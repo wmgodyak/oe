@@ -61,7 +61,12 @@ class Comments extends Front
 
     public function getTotal($content_id)
     {
-        $this->comments->getTotal($content_id);
+        return $this->comments->getTotal($content_id);
+    }
+
+    public function getAverageRating($content_id)
+    {
+        return $this->comments->getAverageRating($content_id);
     }
 
     /**

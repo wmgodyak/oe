@@ -14,6 +14,7 @@ use modules\shop\models\categories\Features;
 use modules\shop\models\Products;
 use modules\shop\models\products\Prices;
 use modules\shop\models\products\variants\ProductsVariants;
+use system\core\Session;
 use system\Front;
 use system\models\Currency;
 
@@ -31,14 +32,21 @@ class Shop extends Front
     private $prices;
     private $currency;
 
+    public $search;
+
     public function __construct()
     {
         parent::__construct();
 
-        $this->products   = new Products('product', $this->group_id);
+        $this->products   = new Products('product');
         $this->categories = new Categories('products_categories');
         $this->prices     = new Prices();
         $this->currency   = new Currency();
+
+        $user = Session::get('user');
+        $this->group_id = isset($user['group_id']) ? $user['group_id'] : $this->group_id;
+
+        $this->search = new Search($this->products , $this->group_id    );
     }
 
     public function index()
@@ -68,7 +76,6 @@ class Shop extends Front
             $variants = new ProductsVariants();
             $product['variants'] = $variants->get($product['id'], $this->group_id);
         }
-
 
         $this->template->assign('product', $product);
     }
@@ -107,7 +114,7 @@ class Shop extends Front
         return $this->categories->get($parent_id, $recursive);
     }
 
-    public function products($categories_id)
+    public function products($categories_id = 0)
     {
         $start = (int) $this->request->get('p', 'i');
         $start --;
