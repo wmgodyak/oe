@@ -13,6 +13,7 @@ use modules\shop\models\Categories;
 use modules\shop\models\categories\Features;
 use modules\shop\models\Products;
 use modules\shop\models\products\Prices;
+use modules\shop\models\products\variants\ProductsVariants;
 use system\Front;
 use system\models\Currency;
 
@@ -62,6 +63,12 @@ class Shop extends Front
 
         $features = new \modules\shop\models\products\Features();
         $product['features'] = $features->get($product['id']);
+
+        if($product['has_variants']){
+            $variants = new ProductsVariants();
+            $product['variants'] = $variants->get($product['id'], $this->group_id);
+        }
+
 
         $this->template->assign('product', $product);
     }

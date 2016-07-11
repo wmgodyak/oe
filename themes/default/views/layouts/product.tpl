@@ -68,6 +68,26 @@
                                 Ваш СМА бонус: <span>+0 {$product.currency}</span>
                             </div>
                         </div>
+                        {if $product.has_variants}
+                        <table>
+                            <tr>
+                                <th>Виб.</th>
+                                <th>Зобр.</th>
+                                <th>Назва</th>
+                                <th>Ціна</th>
+                            </tr>
+                            {foreach $product.variants as $k=>$variant}
+                                <tr>
+                                    <td><input {if $k==0}checked{/if} type="radio" name="variant" value="{$variant.id}"></td>
+                                    <td>{$variant.img}</td>
+                                    <td>{$variant.name}</td>
+                                    <td>{$variant.price}</td>
+                                </tr>
+                            {/foreach}
+                        </table>
+                            {*<pre>{print_r($product.variants)}</pre>*}
+                        {*{else}*}
+                        {/if}
                         <div class="bnt-row">
                             <button class="btn sm red buy-btn">КУПИТИ</button>
                             <button class="btn sm white-red">Купити в 1 клік</button>
