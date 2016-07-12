@@ -86,7 +86,7 @@ class Products extends Content
 
         if(empty($where)){
             $this->setError('Не займайтесь дурницями.');
-            return false;
+            return;
         } else{
             $this->where("(" . implode(" AND ", $where) . ")");
         }
@@ -157,7 +157,6 @@ class Products extends Content
         if($this->hasError()){
             return false;
         }
-
 
         $this->sort();
         $this->filter();

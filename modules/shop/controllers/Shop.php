@@ -139,6 +139,25 @@ class Shop extends Front
         return $products;
     }
 
+
+    public function actionsProducts()
+    {
+        $this->products->start = 0;
+        $this->products->num   = 30;
+        $products = $this->products->get();
+
+        return $products;
+    }
+
+    public function lastProducts()
+    {
+        $this->products->start = 0;
+        $this->products->num   = 30;
+        $products = $this->products->get();
+        return $products;
+    }
+
+
     public function foundTotal()
     {
         return $this->total;
@@ -167,9 +186,6 @@ class Shop extends Front
         return $this->template->fetch($tpl);
     }
 
-    /**
-     *
-     */
     public function ajaxSearch()
     {
         $products = $this->search->results();

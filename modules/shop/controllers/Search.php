@@ -41,7 +41,6 @@ class Search extends Front
     {
         $start = (int) $this->request->get('p', 'i');
         $categories_id = (int) $this->request->get('cat', 'i');
-        $q = $this->request->get('q', 's');
 
         $start --;
 
@@ -56,7 +55,6 @@ class Search extends Front
         $this->products->num = $this->ipp;
 
         $products = $this->products->get();
-
         if($this->products->hasError()){
             return false;
         }
