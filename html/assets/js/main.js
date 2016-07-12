@@ -260,13 +260,19 @@ var App = {
                 email: {
                     required: true,
                     email: true
+                },
+                password: {
+                    required: true
                 }
             },
             messages: {
                 name: "Будь-ласка введіть своє ім'я",
                 email: {
-                    required: "Будь-ласка введіть свою електронну пошту",
+                    required: "Поле e-mail є обов’язковим",
                     email: "Your email address must be in the format of name@domain.com"
+                },
+                password: {
+                    required: "Поле Пароль є обов’язковим"
                 }
             }
         });

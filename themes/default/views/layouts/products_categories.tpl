@@ -67,10 +67,10 @@
                 <!-- end product-page__top-line -->
 
                 {assign var='products' value= $mod->shop->products($page.id)}
-                {assign var='products' value= array_chunk($products, 3)}
                 <!-- begin product__list -->
                 <div class="product__list">
                     {if $products|count}
+                        {assign var='products' value= array_chunk($products, 3)}
                         {if isset($smarty.get.q) && !empty($smarty.get.q)}
                             <h3>Знайдено {$mod->shop->foundTotal()} товарів</h3>
                         {/if}

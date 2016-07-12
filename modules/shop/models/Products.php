@@ -62,6 +62,11 @@ class Products extends Content
         $q = $this->request->get('q', 's');
         if(! $q) return;
 
+        if(strlen($q) < 3){
+            $this->setError('Пошуковий запит має містити не менше 3х букв.');
+            return;
+        }
+
         $bad_words = [];
         $words = explode(' ', $q);
         foreach($words as $key=>$word) {
@@ -79,7 +84,10 @@ class Products extends Content
             $where[] = " ci.name like '%{$val}%'";
         }
 
-        if(!empty($where)){
+        if(empty($where)){
+            $this->setError('Не займайтесь дурницями.');
+            return false;
+        } else{
             $this->where("(" . implode(" AND ", $where) . ")");
         }
     }
@@ -145,6 +153,12 @@ class Products extends Content
         }
 
         $this->search();
+
+        if($this->hasError()){
+            return false;
+        }
+
+
         $this->sort();
         $this->filter();
 

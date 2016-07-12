@@ -54,20 +54,24 @@ class Search extends Front
             $start = $start * $this->ipp;
         }
 
-        $products = $this->products->get($categories_id, $start, $this->ipp);
+        $this->products->categories_id = $categories_id;
+        $this->products->start = $start;
+        $this->products->num = $this->ipp;
 
-        if($this->request->isXhr()){
-            foreach ($products as $k=>$product) {
-                $products[$k]['img'] = $this->images->cover($product['id']);
-            }
-
-            $this->response->body(['items' => $products])->asJSON(); return null;
+        $products = $this->products->get();
+        if($this->products->hasError()){
+            return false;
         }
 
         // save total posts count
         $this->total = $this->products->getTotal();
 
         return $products;
+    }
+
+    public function getError()
+    {
+        return $this->products->getError();
     }
 
     public function total()

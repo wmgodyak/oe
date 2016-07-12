@@ -82,11 +82,12 @@
                 {*{print_r($mod->shop->search->categories())}*}
                 <!-- end product-page__top-line -->
                 {assign var='products' value= $mod->shop->search->results()}
-                {assign var='products' value= array_chunk($products, 3)}
+                {assign var='error' value=$mod->shop->search->getError()}
                 <!-- begin product__list -->
                 <div class="product__list">
-                    <h3>Знайдено {$mod->shop->search->total()} товарів</h3>
-                    {if $products|count}
+                    {if $products && $products|count}
+                        <h3>Знайдено {$mod->shop->search->total()} товарів</h3>
+                        {assign var='products' value= array_chunk($products, 3)}
                         {foreach $products as $k=> $row}
                             <div class="row clearfix">
                                 {foreach $row as $product}
@@ -95,13 +96,18 @@
                             </div>
                         {/foreach}
                     {else}
-                        <p>Немає результатів</p>
+                        {if $error}
+                            <p>{implode('<br>', $error)}</p>
+                        {else}
+                            <p>Немає результатів</p>
+                        {/if}
+
                     {/if}
                 </div>
                 <!-- end product__list -->
-
+                {if !$error}
                 {$mod->shop->search->pagination()}
-
+                {/if}
                 <div class="row cms-content">
                     {$page.content}
                 </div>

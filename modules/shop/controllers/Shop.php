@@ -46,7 +46,7 @@ class Shop extends Front
         $user = Session::get('user');
         $this->group_id = isset($user['group_id']) ? $user['group_id'] : $this->group_id;
 
-        $this->search = new Search($this->products , $this->group_id    );
+        $this->search = new Search($this->products , $this->group_id );
     }
 
     public function index()
@@ -56,6 +56,7 @@ class Shop extends Front
 
     public function init()
     {
+        $this->template->assignScript("modules/shop/js/jquery.ajaxSearch.js");
         $this->template->assignScript("modules/shop/js/shop.js");
         if($this->page['type'] == 'product'){
             $this->product();
@@ -126,7 +127,10 @@ class Shop extends Front
             $start = $start * $this->ipp;
         }
 
-        $products = $this->products->get($categories_id, $start, $this->ipp);
+        $this->products->categories_id = $categories_id;
+        $this->products->start = $start;
+        $this->products->num = $this->ipp;
+        $products = $this->products->get();
 
         // save total posts count
         $this->total = $this->products->getTotal();
@@ -160,5 +164,20 @@ class Shop extends Front
 
         $this->template->assign('pagination', Pagination::getPages());
         return $this->template->fetch($tpl);
+    }
+
+    /**
+     *
+     */
+    public function ajaxSearch()
+    {
+        $products = $this->search->results();
+        foreach ($products as $k=>$product) {
+            $products[$k]['url'] = $this->getUrl($product['id']);
+            $products[$k]['img'] = $this->images->cover($product['id']);
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode(['items' => $products]);die;
     }
 }
