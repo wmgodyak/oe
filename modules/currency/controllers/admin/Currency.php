@@ -42,10 +42,11 @@ class Currency extends Engine
         $t  -> ajax('module/run/currency/index')
             -> th($this->t('common.id'), 'id', 1, 1, 'width: 20px')
             -> th($this->t('currency.name'), 'name', 1, 1)
-            -> th($this->t('currency.code'), 'code', 1, 1)
-            -> th($this->t('currency.rate'), 'rate', 1, 1)
-            -> th($this->t('currency.symbol'), 'symbol', 1, 1)
-            -> th($this->t('currency.is_main'), 'is_main', 1, 1)
+            -> th($this->t('currency.code'), 'code', 1, 1, 'width: 140px')
+            -> th($this->t('currency.rate'), 'rate', 1, 1, 'width: 140px')
+            -> th($this->t('currency.symbol'), 'symbol', 1, 1, 'width: 140px')
+            -> th($this->t('currency.is_main'), 'is_main', 1, 1, 'width: 140px')
+            -> th($this->t('currency.on_site'), 'on_site', 1, 1, 'width: 140px')
             -> th($this->t('common.tbl_func'), null, 0, 0, 'width: 140px')
         ;
 
@@ -61,6 +62,7 @@ class Currency extends Engine
                 $res[$i][] = $row['rate'];
                 $res[$i][] = $row['symbol'];
                 $res[$i][] = $row['is_main'] ? 'ТАК' : '';
+                $res[$i][] = $row['on_site'] ? 'ТАК' : '';
                 $res[$i][] =
                     (string)Button::create
                     (

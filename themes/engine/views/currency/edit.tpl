@@ -33,6 +33,16 @@
             </div>
         </div>
     </div>
+    <div class="form-group">
+        <div class="col-md-10 col-md-offset-2">
+            <div class="checkbox">
+                <label>
+                    <input type="hidden"  name="data[on_site]"  class="form-control" value="0" >
+                    <input type="checkbox" {if isset($data.on_site) && $data.on_site}checked{/if} name="data[on_site]" id="data_on_site" value="1" > {$t.currency.on_site}
+                </label>
+            </div>
+        </div>
+    </div>
     <input type="hidden" name="token" value="{$token}">
     <input type="hidden" name="action" value="{$action}">
 </form>

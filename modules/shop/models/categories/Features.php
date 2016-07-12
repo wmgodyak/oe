@@ -8,6 +8,8 @@
 
 namespace modules\shop\models\categories;
 
+use system\models\Currency;
+
 defined("CPATH") or die();
 
 /**
@@ -17,6 +19,15 @@ defined("CPATH") or die();
 class Features extends \system\models\Features
 {
     private $selected_features = [];
+    private $currency;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->currency = new Currency();
+    }
+
     /**
      * @param $categories_id
      * @return mixed
@@ -139,16 +150,28 @@ class Features extends \system\models\Features
             ->row('t');
     }
 
-    public function getMinMaxPrice($categories_id, $group_id, $currency_id)
+    public function getMinMaxPrice($categories_id, $group_id)
     {
+        $cu_on_site = $this->currency->getOnSiteMeta();
+        $cu_main    = $this->currency->getMainMeta();
+
         return self::$db
             ->select("
-              select MIN(pp.price) as minp, MAX(pp.price) as maxp
+              select
+              MIN(CASE
+            WHEN c.currency_id = {$cu_on_site['id']} THEN pp.price
+            WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id = {$cu_main['id']} THEN pp.price * {$cu_on_site['rate']}
+            WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id <> {$cu_main['id']} THEN pp.price / cu.rate * {$cu_on_site['rate']}
+            END) as minp,
+              MAX(CASE
+            WHEN c.currency_id = {$cu_on_site['id']} THEN pp.price
+            WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id = {$cu_main['id']} THEN pp.price * {$cu_on_site['rate']}
+            WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id <> {$cu_main['id']} THEN pp.price / cu.rate * {$cu_on_site['rate']}
+            END) as maxp
               from __content_relationship cr
               join __products_prices pp on pp.content_id=cr.content_id and pp.group_id={$group_id}
-              -- join __currency cu on cu.id = {$currency_id}
-              -- join __content on c.id=cr.content_id
-              -- join __currency cp on cp.id=c.currency_id
+              join __content c on c.id=cr.content_id
+              join __currency cu on cu.id = c.currency_id
               where cr.categories_id={$categories_id}
               ")
             ->row();

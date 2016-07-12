@@ -35,6 +35,11 @@ class Currency extends Model
         return self::$db->select("select {$key} from __currency where is_main = 1 limit 1")->row($key);
     }
 
+    public function getOnSiteMeta($key = '*')
+    {
+        return self::$db->select("select {$key} from __currency where on_site = 1 limit 1")->row($key);
+    }
+
     public function getMeta($id, $key = '*')
     {
         return self::$db->select("select {$key} from __currency where id={$id} limit 1")->row($key);

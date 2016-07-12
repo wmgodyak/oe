@@ -5,22 +5,21 @@
                             <img class="product-item__img" src="{$app->images->cover($product.id, 'psm')}" alt="{$product.title}">
                        </span>
                         <span class="row float-row clearfix">
+                            {assign var='avRate' value=$mod->comments->getAverageRating($product.id)|ceil}
                             <span class="m_star-rating">
                                <select class="star-rating read-only">
-                                   <option value="1">1</option>
-                                   <option value="2">2</option>
-                                   <option value="3">3</option>
-                                   <option value="4">4</option>
-                                   <option value="5">5</option>
+                                   {for $i=1;$i<=5; $i++ }
+                                       <option {if $avRate == $i}selected{/if} value="{$i}">{$i}</option>
+                                   {/for}
                                </select>
-                           </span>
+                            </span>
                             <span class="product-item__coment-counter">
-                                3 відгуки
+                                {$mod->comments->getTotal($product.id)} відгуки
                             </span>
                         </span>
 
                        <span class="product-item__name">
-                           {$product.name}
+                           {$product.name} {$product.pprice}
                        </span>
 
                        <span class="product-item__price">

@@ -11,10 +11,12 @@ namespace modules\shop\models;
 use modules\shop\models\categories\Features;
 use system\core\Session;
 use system\models\Content;
+use system\models\Currency;
 
 class Products extends Content
 {
     private $group_id = 20;
+    private $currency;
 
     /**
      * Products constructor.
@@ -27,6 +29,8 @@ class Products extends Content
 
         $user = Session::get('user');
         $this->group_id = isset($user['group_id']) ? $user['group_id'] : $this->group_id;
+
+        $this->currency = new Currency();
     }
 
     public $start = 0;
@@ -165,8 +169,17 @@ class Products extends Content
         $w = empty($this->where) ? '' : 'and ' . implode(' and ', $this->where);
         $j = empty($this->join) ? '' : implode("\r\n", $this->join);
 
+        $cu_on_site = $this->currency->getOnSiteMeta();
+        $cu_main    = $this->currency->getMainMeta();
+
         $items =  self::$db->select("
-          select SQL_CALC_FOUND_ROWS  c.id, c.isfolder, ci.name, ci.title, pp.price, cu.symbol
+          select SQL_CALC_FOUND_ROWS  c.id, c.isfolder, ci.name, ci.title,
+           ROUND( CASE
+            WHEN c.currency_id = {$cu_on_site['id']} THEN pp.price
+            WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id = {$cu_main['id']} THEN pp.price * {$cu_on_site['rate']}
+            WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id <> {$cu_main['id']} THEN pp.price / cu.rate * {$cu_on_site['rate']}
+            END, 2 ) as price,
+           pp.price as pprice, '{$cu_on_site['symbol']}' as symbol
           from __content c
           join __products_prices pp on pp.content_id=c.id and pp.group_id={$this->group_id}
           {$j}

@@ -36,7 +36,7 @@ var Shop = {
             transformResult: function(response) {
                 return {
                     suggestions: $.map(response.items, function(item) {
-                        var tpl = '<div class="ac-item"><div class="c"><div class="cc"><div class="t"><a href="">'+item.name+'</a></div><div class="p">'+item.price+'</div></div></div><div class="sb-sl"><img src="'+item.img.path+'thumbs/'+item.img.image+'"></div></div>';
+                        var tpl = '<div class="ac-item"><div class="c"><div class="cc"><div class="t"><a href="">'+item.name+'</a></div><div class="p">'+item.price+' '+item.symbol+'</div></div></div><div class="sb-sl"><img src="'+item.img.path+'thumbs/'+item.img.image+'"></div></div>';
                         return { value: tpl, data: item };
                     })
                 };

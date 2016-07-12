@@ -93,12 +93,20 @@ class Shop extends Front
 
         $features = new Features();
 
-        $prices = $features->getMinMaxPrice($categories_id, $this->group_id, $this->currency->getMainMeta('id'));
+        $prices = [];
+
         $minp = $this->request->get('minp', 'i');
         $maxp = $this->request->get('maxp', 'i');
 
-        if($minp > 0) $prices['minp'] = $minp;
-        if($maxp > 0) $prices['maxp'] = $maxp;
+        if($maxp > 0){
+            $prices['minp'] = $minp;
+            $prices['maxp'] = $maxp;
+        } else {
+            $prices = $features->getMinMaxPrice($categories_id, $this->group_id);
+            $prices['minp'] = str_replace(',','.', round($prices['minp'], 2));
+            $prices['maxp'] = str_replace(',','.', round($prices['maxp'], 2));
+
+        }
 
         $filter =
             [

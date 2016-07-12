@@ -35,6 +35,9 @@ class Currency extends Model
         if($id>0 && $data['is_main']) {
             $this->toggleMain($id);
         }
+        if($id > 0 && $data['on_site']) {
+            $this->toggleOnSite($id);
+        }
 
         return $id;
     }
@@ -51,6 +54,9 @@ class Currency extends Model
         if($data['is_main']) {
             $this->toggleMain($id);
         }
+        if($data['on_site']) {
+            $this->toggleOnSite($id);
+        }
 
         return $s;
     }
@@ -64,6 +70,12 @@ class Currency extends Model
     {
         self::$db->update('__currency',['is_main' => 0]);
         return $this->updateRow('__currency', $currency_id, ['is_main' => 1]);
+    }
+
+    private function toggleOnSite($currency_id)
+    {
+        self::$db->update('__currency',['on_site' => 0]);
+        return $this->updateRow('__currency', $currency_id, ['on_site' => 1]);
     }
 
     public static function get()
