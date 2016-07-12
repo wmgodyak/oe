@@ -38,6 +38,10 @@ class Search extends Front
 
     }
 
+    /**
+     * http://jqueryui.com/download/#!version=1.12.0&components=111111011111101000111111110010100000000000000000
+     * @return null
+     */
     public function results()
     {
         $start = (int) $this->request->get('p', 'i');
@@ -52,10 +56,23 @@ class Search extends Front
 
         $products = $this->products->get($categories_id, $start, $this->ipp);
 
+        if($this->request->isXhr()){
+            foreach ($products as $k=>$product) {
+                $products[$k]['img'] = $this->images->cover($product['id']);
+            }
+
+            $this->response->body(['items' => $products])->asJSON(); return null;
+        }
+
         // save total posts count
         $this->total = $this->products->getTotal();
 
         return $products;
+    }
+
+    public function total()
+    {
+        return $this->total;
     }
 
     public function categories()

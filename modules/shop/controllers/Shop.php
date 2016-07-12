@@ -56,6 +56,7 @@ class Shop extends Front
 
     public function init()
     {
+        $this->template->assignScript("modules/shop/js/shop.js");
         if($this->page['type'] == 'product'){
             $this->product();
          }
@@ -131,6 +132,11 @@ class Shop extends Front
         $this->total = $this->products->getTotal();
 
         return $products;
+    }
+
+    public function foundTotal()
+    {
+        return $this->total;
     }
 
     /**

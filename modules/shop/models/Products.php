@@ -183,14 +183,14 @@ class Products extends Content
         $j = empty($this->join) ? '' : implode("\r\n", $this->join);
 
         $items =  self::$db->select("
-          select DISTINCT cr.categories_id, ci.name, ci.title
+          select DISTINCT cr.categories_id as id, ci.name, ci.title
           from __content c
           {$j}
           join __content_types ct on ct.type = '{$this->type}' and ct.id=c.types_id
-          join __content_info ci on ci.content_id=cr.categories_id and ci.languages_id={$this->languages_id}
           join __content_relationship cr on cr.content_id=c.id
+          join __content_info ci on ci.content_id=cr.categories_id and ci.languages_id={$this->languages_id}
           where c.status ='published' {$w}
-          order by i.name asc
+          order by ci.name asc
           limit {$this->start}, {$this->num}
           ")->all();
 

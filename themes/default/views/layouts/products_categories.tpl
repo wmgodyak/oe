@@ -71,6 +71,9 @@
                 <!-- begin product__list -->
                 <div class="product__list">
                     {if $products|count}
+                        {if isset($smarty.get.q) && !empty($smarty.get.q)}
+                            <h3>Знайдено {$mod->shop->foundTotal()} товарів</h3>
+                        {/if}
                         {foreach $products as $k=> $row}
                             <div class="row clearfix">
                                 {foreach $row as $product}

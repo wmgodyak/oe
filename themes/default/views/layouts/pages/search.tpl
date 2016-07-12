@@ -17,19 +17,35 @@
 
         {include file="modules/breadcrumbs.tpl"}
 
-
         <div class="container clearfix">
 
             <!-- begin aside -->
             <aside class="aside">
-
+                <form>
+                    <div class="filter-group">
+                        <a class="toggle-link">
+                            Знайдено в категоріях
+                        </a>
+                        <div class="filter-group__content">
+                            <div class="input-group">
+                                {foreach $mod->shop->search->categories() as $cat}
+                                    <div class="row">
+                                        <label for="cf-15" >
+                                            <a href="{$cat.id};?q={urlencode($smarty.get.q)}">{$cat.name}</a>
+                                        </label>
+                                    </div>
+                                {/foreach}
+                            </div>
+                        </div>
+                    </div>
+                </form>
                 <div class="m_discount-widget">
                     <div class="discount__heading1">
                         Ви у нас вперше?
                     </div>
                     <div class="discount__content">
                         <div class="discount__img-block">
-                            <div class="discount__img" style="background-image: url('assets/img/discount-widget/img1.png');"></div>
+                            <div class="discount__img" style="background-image: url('{$theme_url}assets/img/discount-widget/img1.png');"></div>
                         </div>
                         <div class="discount__heading2">
                             Отримайте знижку!
@@ -69,6 +85,7 @@
                 {assign var='products' value= array_chunk($products, 3)}
                 <!-- begin product__list -->
                 <div class="product__list">
+                    <h3>Знайдено {$mod->shop->search->total()} товарів</h3>
                     {if $products|count}
                         {foreach $products as $k=> $row}
                             <div class="row clearfix">

@@ -11,10 +11,10 @@
 {/function}
 <!-- begin tel-search__bottom -->
 <div class="tel-search__bottom">
-    <form class="search-form" action="8">
+    <form class="search-form" action="8" id="searchForm">
         <input tabindex="1" type="text" required name="q" value="{if isset($smarty.get.q)}{$smarty.get.q}{/if}" placeholder="Пошук по сайту">
-        <select class="jq-select" name="cat" id="cat">
-            <option value="">Усі категорії</option>
+        <select class="jq-select" name="cat" id="search_cat">
+            <option value="" data-href="">Усі категорії</option>
             {call doCategories categories=$mod->shop->categories()}
         </select>
         <button class="search-btn" type="submit"></button>
