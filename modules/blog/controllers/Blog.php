@@ -80,7 +80,7 @@ class Blog extends Front
      */
     public function posts($categories_id = 0)
     {
-        $start = (int) $this->request->param('p');
+        $start = (int) $this->request->get('p', 'i');
         $start --;
         if($start < 0) $start = 0;
         if($start > 0){

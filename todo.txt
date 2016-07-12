@@ -25,7 +25,7 @@
  - фільтр по ціні з врахуванням валюти (currency_rate)
  - хлібні крихти
  + рейтинг на основі коментарів
- - search_query
+ + search_query
  - content_keywords
 
  - cron
