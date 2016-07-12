@@ -108,9 +108,7 @@
                 {if !$error}
                 {$mod->shop->search->pagination()}
                 {/if}
-                <div class="row cms-content">
-                    {$page.content}
-                </div>
+                <script src="route/shop/saveSearchQuery/{$smarty.get.q}"></script>
             </div>
             <!-- end product-page__content -->
 

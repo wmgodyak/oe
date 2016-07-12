@@ -14,6 +14,7 @@ use modules\shop\models\categories\Features;
 use modules\shop\models\Products;
 use modules\shop\models\products\Prices;
 use modules\shop\models\products\variants\ProductsVariants;
+use modules\shop\models\SearchHistory;
 use system\core\Session;
 use system\Front;
 use system\models\Currency;
@@ -172,12 +173,27 @@ class Shop extends Front
     public function ajaxSearch()
     {
         $products = $this->search->results();
-        foreach ($products as $k=>$product) {
-            $products[$k]['url'] = $this->getUrl($product['id']);
-            $products[$k]['img'] = $this->images->cover($product['id']);
+
+        if($products){
+            foreach ($products as $k=>$product) {
+                $products[$k]['url'] = $this->getUrl($product['id']);
+                $products[$k]['img'] = $this->images->cover($product['id']);
+            }
         }
 
         header('Content-Type: application/json');
         echo json_encode(['items' => $products]);die;
+    }
+
+    public function saveSearchQuery($q)
+    {
+        $sh = new SearchHistory();
+
+        $q = strip_tags($q);
+        $q = trim($q);
+        if(empty($q)) return;
+        $sh->add($q);
+        header('Content-Type: application/javascript');
+        die;
     }
 }

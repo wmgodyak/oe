@@ -20,7 +20,6 @@ use system\Front;
 class Search extends Front
 {
     private $products;
-    private $categories;
     private $ipp = 15;
     private $total;
     private $group_id = 20;
@@ -33,19 +32,17 @@ class Search extends Front
         $this->group_id = $group_id;
     }
 
-    public function index()
-    {
-
-    }
+    public function index(){}
 
     /**
-     * http://jqueryui.com/download/#!version=1.12.0&components=111111011111101000111111110010100000000000000000
-     * @return null
+     * @return bool
      */
     public function results()
     {
         $start = (int) $this->request->get('p', 'i');
         $categories_id = (int) $this->request->get('cat', 'i');
+        $q = $this->request->get('q', 's');
+
         $start --;
 
         if($start < 0) $start = 0;
@@ -59,6 +56,7 @@ class Search extends Front
         $this->products->num = $this->ipp;
 
         $products = $this->products->get();
+
         if($this->products->hasError()){
             return false;
         }

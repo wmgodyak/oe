@@ -14,6 +14,11 @@ var Shop = {
             ls.focus();
         });
 
+        $(document).on('submit', '#searchForm', function(){
+            //alert(ls.val());
+            App.request.get('route/shop/saveSearchQuery/' + ls.val())
+        });
+
         ls.ajaxSearch({
             serviceUrl: 'route/shop/ajaxSearch',
             ajaxSettings: {
