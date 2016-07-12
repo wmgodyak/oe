@@ -11,12 +11,6 @@
             <input name="data[code]" id="data_code"  class="form-control" value="{if isset($data.code)}{$data.code}{/if}" placeholder="UAH">
         </div>
     </div>
-   <div class="form-group">
-        <label for="data_rate" class="col-md-2 control-label">{$t.currency.rate}</label>
-        <div class="col-md-10">
-            <input name="data[rate]" id="data_rate"  class="form-control" value="{if isset($data.rate)}{$data.rate}{/if}" placeholder="1">
-        </div>
-    </div>
     <div class="form-group">
         <label for="data_symbol" class="col-md-2 control-label">{$t.currency.symbol}</label>
         <div class="col-md-10">
@@ -33,6 +27,15 @@
             </div>
         </div>
     </div>
+    <p>Налаштування курсу</p>
+    {foreach $old_currencies as $item}
+        <div class="form-group">
+            <label for="rate_{$item.code}" class="col-md-2 control-label">{$item.code}</label>
+            <div class="col-md-10">
+                <input name="rate[{$item.id}]" id="data_{$item.code}"  class="form-control" value="{if isset($data.rate[$item.id])}{$data.rate[$item.id]}{/if}" required placeholder="1.20">
+            </div>
+        </div>
+    {/foreach}
     <input type="hidden" name="token" value="{$token}">
     <input type="hidden" name="action" value="{$action}">
 </form>
