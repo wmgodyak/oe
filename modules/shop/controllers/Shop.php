@@ -34,6 +34,7 @@ class Shop extends Front
     private $currency;
 
     public $search;
+    public $variants;
 
     public function __construct()
     {
@@ -48,6 +49,8 @@ class Shop extends Front
         $this->group_id = isset($user['group_id']) ? $user['group_id'] : $this->group_id;
 
         $this->search = new Search($this->products , $this->group_id );
+
+        $this->variants = new ProductsVariants();
     }
 
     public function index()
@@ -76,11 +79,15 @@ class Shop extends Front
         $product['features'] = $features->get($product['id']);
 
         if($product['has_variants']){
-            $variants = new ProductsVariants();
-            $product['variants'] = $variants->get($product['id'], $this->group_id);
+            $product['variants'] = $this->variants->get($product['id'], $this->group_id);
         }
 
         $this->template->assign('product', $product);
+    }
+
+    public function getProductsVariants($products_id)
+    {
+        return $this->variants->get($products_id, $this->group_id);
     }
 
     /**

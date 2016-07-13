@@ -86,27 +86,7 @@
             <!-- end tel-search -->
 
             <!-- begin cart -->
-            <div class="cart">
-                <div class="cart__main">
-                    <div class="cart__img">
-                        <div class="inner">
-                            <div class="cart_amount">3</div>
-                        </div>
-                    </div>
-                    <div class="cart__text">
-                        <div class="cart__header">
-                            МІЙ КОШИК
-                        </div>
-                        <div class="cart__price">
-                            товарів на суму
-                            <span>333, 00 грн.</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="cart__bottom">
-                    <a class="cart__link" href="#">Оформити замовлення</a>
-                </div>
-            </div>
+            <div class="cart" id="blockCart"></div>
             <!-- end cart -->
 
         </div>
@@ -118,8 +98,8 @@
     <!-- begin header__xs -->
     <div class="header__xs">
         <div class="container">
-            <form class="search-form" action="#">
-                <input type="text" placeholder="Пошук по сайту">
+            <form class="search-form" action="9">
+                <input type="text" required name="q" placeholder="Пошук по магазину">
                 <button class="search-btn" type="submit"></button>
             </form>
         </div>

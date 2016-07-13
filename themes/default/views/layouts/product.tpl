@@ -78,7 +78,7 @@
                             </tr>
                             {foreach $product.variants as $k=>$variant}
                                 <tr>
-                                    <td><input {if $k==0}checked{/if} type="radio" name="variant" value="{$variant.id}"></td>
+                                    <td><input {if $k==0 || (isset($smarty.session.cart[$product.id]['variants_id']) && $smarty.session.cart[$product.id]['variants_id'] == $variant.id) }checked{/if} type="radio" name="variant" value="{$variant.id}"></td>
                                     <td>{$variant.img}</td>
                                     <td>{$variant.name}</td>
                                     <td>{$variant.price}</td>
@@ -89,7 +89,10 @@
                         {*{else}*}
                         {/if}
                         <div class="bnt-row">
-                            <button class="btn sm red buy-btn">КУПИТИ</button>
+                            <button class="btn sm red buy-btn to-cart cart-product-{$product.id} {if isset($smarty.session.cart[$product.id])}in{/if}"
+                                    data-id="{$product.id}"
+                                    data-has-variants="{$product.has_variants}"
+                            >{if isset($smarty.session.cart[$product.id])}В кошику{else}Купити{/if}</button>
                             <button class="btn sm white-red">Купити в 1 клік</button>
                         </div>
                         {$events->call('shop.product.buy.after', array($product))}
@@ -139,31 +142,7 @@
                             {$product.content}
                             {$events->call('shop.product.content', array($product))}
 
-                            <img style="float: left; padding-left: 0;" src="{$theme_url}assets/img/product-article/1.jpg" alt="">
-                            <h4>Чому у нас?</h4>
-                            <p>
-                                Це просто лише текст, який я
-                                написав тут для того, щоб
-                                глянути як він буде виглядати
-                                і чи можливо додати до опису
-                                зображення, от і все.
-                            </p>
-                            <p>
-                                Чохол-книжка Book Cover Jeans виготовлений із якісного матеріалу та із урахуванням всіх особливостей
-                                дизайну більшості телефонів Чохол щільно прилягає до корпусу смартфону та надійно захищає з усіх сторін
-                                Ваш телефон від подряпин, потертостей та різноманітних забрудень, а також зменшує рівень рівня
-                            </p>
-
-                            <img style="float: left; padding-left: 0;" src="{$theme_url}assets/img/product-article/2.jpg" alt="">
-                            <h4>Чому у нас?</h4>
-                            <p>
-                                Це просто лише текст, який я
-                                написав тут для того, щоб
-                                глянути як він буде виглядати
-                                і чи можливо додати до опису
-                                зображення, от і все
-                            </p>
-
+                            {include file="chunks/product_preferences.tpl"}
                         </div>
                         <div class="tab tab2 cms-content">
                             {*<pre>{print_r($product.features)}</pre>*}

@@ -174,5 +174,29 @@
         <script src="{$script}"></script>
     {/foreach}
 {/if}
+
+<script type="text/template" id="tplCart">
+{literal}
+    <div class="cart__main">
+        <div class="cart__img">
+            <div class="inner">
+                <div class="cart_amount"><%- total %></div>
+            </div>
+        </div>
+        <div class="cart__text">
+            <div class="cart__header">
+                МІЙ КОШИК
+            </div>
+            <div class="cart__price">
+                товарів на суму
+                <span><%- amount %></span>
+            </div>
+        </div>
+    </div>
+{/literal}
+    <div class="cart__bottom">
+        <a class="cart__link" href="10">Переглянути кошик</a>
+    </div>
+</script>
 </body>
 </html>

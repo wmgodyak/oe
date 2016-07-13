@@ -385,7 +385,7 @@ var App = {
         post: function(data)
         {
             if(typeof data['data'] == 'undefined') {
-                alert('Post data is undefined');
+                data['data'] = {};
             }
             data['data']['token'] = TOKEN;
             data['type']       = 'post';
