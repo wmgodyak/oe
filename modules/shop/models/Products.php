@@ -222,4 +222,23 @@ class Products extends Content
 
         return $items;
     }
+
+    /**
+     * @param $id
+     * @param string $key
+     * @return array|mixed
+     * @throws \system\core\exceptions\Exception
+     */
+    public function getData($id, $key = 'c.*')
+    {
+        return self::$db
+            ->select("
+                select {$key} , ci.name, ci.title
+                from __content c
+                join __content_info ci on ci.content_id='{$id}' and ci.languages_id='{$this->languages_id}'
+                where c.id='{$id}'
+                limit 1
+            ")
+            ->row();
+    }
 }

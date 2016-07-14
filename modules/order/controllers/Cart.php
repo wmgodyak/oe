@@ -8,7 +8,9 @@
 
 namespace modules\order\controllers;
 
+use modules\shop\models\Products;
 use modules\shop\models\products\Prices;
+use modules\shop\models\products\variants\ProductsVariantsPrices;
 use system\core\Session;
 use system\Front;
 
@@ -20,6 +22,19 @@ defined("CPATH") or die();
  */
 class Cart extends Front
 {
+    private $prices;
+    private $variantsPrices;
+    public $products;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->prices = new Prices();
+        $this->variantsPrices = new ProductsVariantsPrices();
+        $this->products = new Products('product');
+    }
+
     public function add()
     {
         $products_id = $this->request->post('products_id', 'i');
@@ -39,25 +54,74 @@ class Cart extends Front
             ];
 
         Session::set('cart', $cart);
-        echo 1;
+
+        $this->total();
     }
 
-    public function edit(){}
+    public function update()
+    {
+        $id = $this->request->post('id', 'i');
+        $quantity = $this->request->post('quantity', 'i');
+        $cart = Session::get('cart');
 
-    public function delete(){}
+        if(isset($cart[$id])){
+            $cart[$id]['quantity'] = $quantity;
+        }
 
-    public function getTotal()
+        Session::set('cart', $cart);
+
+        $this->response->body(['s' => 1, 'total' => $this->total(false), 'items' => $this->items()])->asJSON();
+    }
+
+    public function delete()
+    {
+        $id = $this->request->post('id', 'i');
+        $cart = Session::get('cart');
+
+        if(isset($cart[$id])) unset($cart[$id]);
+
+        Session::set('cart', $cart);
+
+        $this->response->body(['s' => 1, 'total' => $this->total(false), 'items' => $this->items()])->asJSON();
+    }
+
+    public function items()
+    {
+        $cart = Session::get('cart'); $user = Session::get('user');
+        $group_id = isset($user['group_id']) ? $user['group_id'] : 20;
+
+        foreach ($cart as $k=>$item) {
+            $cart[$k] += $this->products->getData($item['products_id']);
+            $cart[$k]['img'] = $this->images->cover($item['products_id']);
+            if($item['has_variants']){
+                $cart[$k]['price'] = $this->variantsPrices->getPrice($item['variants_id'], $group_id);
+            } else {
+                $cart[$k]['price'] = $this->prices->get($item['products_id'], $group_id);
+            }
+        }
+
+        return $cart;
+    }
+
+    public function total($json = true)
     {
         $amount = 0; $total = 0;
         $cart = Session::get('cart'); $user = Session::get('user');
         $group_id = isset($user['group_id']) ? $user['group_id'] : 20;
 
         if(!empty($cart)){
-            $prices = new Prices();
             foreach ($cart as $item) {
                 $total  += $item['quantity'];
-                $amount += $prices->get($item['products_id'], $group_id);
+                if($item['has_variants']){
+                    $amount += $this->variantsPrices->getPrice($item['variants_id'], $group_id) * $item['quantity'];
+                } else {
+                    $amount += $this->prices->get($item['products_id'], $group_id) * $item['quantity'];
+                }
             }
+        }
+
+        if( ! $json){
+            return ['amount' => $amount, 'total' => $total];
         }
 
         $this->response->body(['amount' => $amount, 'total' => $total])->asJSON();

@@ -161,12 +161,12 @@
 
 <!-- become scripts -->
 <script src='{$theme_url}/assets/js/vendor/jquery-1.11.3.min.js'></script>
+<script src="{$theme_url}/assets/js/plugins.js"></script>
 <script src='{$theme_url}/assets/js/vendor/jquery-ui.min.js'></script>
 <script src='{$theme_url}/assets/js/vendor/jquery.formstyler.js'></script>
 <script src='{$theme_url}/assets/js/vendor/owl.carousel.min.js'></script>
 <script src='{$theme_url}/assets/js/vendor/jquery.barrating.min.js'></script>
 <script src='{$theme_url}/assets/js/vendor/waterfall.min.js'></script>
-<script src="{$theme_url}/assets/js/plugins.js"></script>
 <script src="{$theme_url}/assets/js/main.js"></script>
 <!-- end scripts -->
 {if isset($modules_scripts)}

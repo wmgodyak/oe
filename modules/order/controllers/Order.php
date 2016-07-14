@@ -14,7 +14,7 @@ defined("CPATH") or die();
 
 class Order extends Front
 {
-    private $cart;
+    public $cart;
 
     public function __construct()
     {

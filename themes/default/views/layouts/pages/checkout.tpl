@@ -5,3 +5,13 @@
  * Date: 2016-07-13T18:16:48+03:00
  * @name Checkout
  *}
+
+{include file="chunks/head.tpl"}
+<!-- begin wrapper -->
+<div class="wrapper">
+
+    {include file="chunks/header.tpl"}
+
+</div>
+<!-- end wrapper -->
+{include file="chunks/footer.tpl"}
