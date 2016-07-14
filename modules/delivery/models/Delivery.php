@@ -41,4 +41,16 @@ class Delivery extends Model
 
         return unserialize($s);
     }
+
+    public function get()
+    {
+        return self::$db
+            ->select("select d.id, d.module, d.free_from,d.price, i.name
+                      from __delivery d
+                      join __delivery_info i on i.delivery_id=d.id and i.languages_id={$this->languages_id}
+                      where d.published=1
+                      order by i.name asc
+                      ")
+            ->all();
+    }
 }

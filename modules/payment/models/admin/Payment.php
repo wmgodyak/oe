@@ -46,9 +46,11 @@ class Payment extends \modules\payment\models\Payment
             return false;
         }
 
-        $payment = $this->request->post('payment');
-        foreach ($payment as $k=>$payment_id) {
-            $this->deliveryPayment->create($id, $payment_id);
+        $delivery = $this->request->post('delivery');
+        if($delivery){
+            foreach ($delivery as $k=>$delivery_id) {
+                $this->deliveryPayment->create($delivery_id, $id);
+            }
         }
 
         if($this->hasError()){
@@ -99,8 +101,7 @@ class Payment extends \modules\payment\models\Payment
             return false;
         }
 
-        $selected = $this->deliveryPayment->getSelectedPayment($id);
-        $payment = $this->request->post('payment');
+        /*$payment = $this->request->post('payment');
         if($payment){
             foreach ($payment as $k=>$payment_id) {
                 if(in_array($payment_id, $selected)){
@@ -109,10 +110,23 @@ class Payment extends \modules\payment\models\Payment
                 }
                 $this->deliveryPayment->create($id, $payment_id);
             }
+        }*/
+
+        $delivery = $this->request->post('delivery');
+        $selected = $this->deliveryPayment->getSelectedDelivery($id);
+        if($delivery){
+            foreach ($delivery as $k=>$delivery_id) {
+                if(in_array($delivery_id, $selected)){
+                    unset($selected[$delivery_id]);
+                    continue;
+                }
+
+                $this->deliveryPayment->create($delivery_id, $id);
+            }
         }
         if(!empty($selected)){
-            foreach ($selected as $k=>$payment_id) {
-                $this->deliveryPayment->delete($id, $payment_id);
+            foreach ($selected as $k=>$delivery_id) {
+                $this->deliveryPayment->delete($delivery_id, $id);
             }
         }
 

@@ -39,10 +39,19 @@ class DeliveryPayment extends Model
             ->all();
     }
 
-    public function getPayment()
+    public function getPayment($delivery_id = 0)
     {
+        $from = ''; $where = '';
+        if($delivery_id > 0){
+            $from = ', __delivery_payment dp ';
+            $where = " dp.delivery_id={$delivery_id} and dp.payment_id=d.id and ";
+        }
+
         return self::$db
-            ->select("select d.id, i.name from __payment d, __payment_info i where i.payment_id=d.id and i.languages_id={$this->languages_id}")
+            ->select("
+                    select d.id, i.name
+                    from __payment d, __payment_info i {$from}
+                    where {$where} i.payment_id=d.id and i.languages_id={$this->languages_id}")
             ->all();
     }
 

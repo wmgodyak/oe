@@ -2,8 +2,9 @@ CREATE TABLE IF NOT EXISTS `e_orders` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `oid` VARCHAR(45) NULL DEFAULT NULL,
   `languages_id` TINYINT(3) UNSIGNED NOT NULL,
+  `status_id` INT(10) UNSIGNED NOT NULL,
   `manager_id` INT(11) NULL DEFAULT NULL,
-  `one_click` TINYINT(1) UNSIGNED NULL DEFAULT 0,
+  `one_click` TINYINT(1) UNSIGNED NULL DEFAULT '0',
   `users_id` INT(11) UNSIGNED NOT NULL,
   `users_group_id` TINYINT(3) UNSIGNED NOT NULL,
   `comment` VARCHAR(255) NULL DEFAULT NULL,
@@ -22,43 +23,29 @@ CREATE TABLE IF NOT EXISTS `e_orders` (
   `pay_return_shipping` VARCHAR(45) NULL DEFAULT NULL,
   `delivery_back` VARCHAR(45) NULL DEFAULT NULL,
   `edited` TIMESTAMP NULL DEFAULT NULL,
-  PRIMARY KEY (`id`, `languages_id`, `users_id`, `users_group_id`),
+  PRIMARY KEY (`id`, `languages_id`, `status_id`, `users_id`, `users_group_id`),
+  UNIQUE INDEX `oid` (`oid` ASC),
   INDEX `fk_orders_languages1_idx` (`languages_id` ASC),
   INDEX `fk_orders_users1_idx` (`users_id` ASC, `users_group_id` ASC),
+  INDEX `fk_e_orders_e_orders_status1_idx` (`status_id` ASC),
   CONSTRAINT `fk_orders_languages1`
-    FOREIGN KEY (`languages_id`)
-    REFERENCES `e_languages` (`id`)
+  FOREIGN KEY (`languages_id`)
+  REFERENCES `e_languages` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_orders_users1`
-    FOREIGN KEY (`users_id` , `users_group_id`)
-    REFERENCES `e_users` (`id` , `group_id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-COLLATE = utf8_general_ci;
-
-CREATE TABLE IF NOT EXISTS `orders_products` (
-  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `orders_id` INT(10) UNSIGNED NOT NULL,
-  `products_id` INT(10) UNSIGNED NOT NULL,
-  `variants_id` INT(10) UNSIGNED NULL DEFAULT NULL,
-  `quantity` INT(10) UNSIGNED NULL DEFAULT NULL,
-  `price` DECIMAL(10,2) UNSIGNED NULL DEFAULT NULL,
-  PRIMARY KEY (`id`, `orders_id`, `products_id`),
-  INDEX `fk_orders_products_orders1_idx` (`orders_id` ASC),
-  INDEX `fk_orders_products_content1_idx` (`products_id` ASC),
-  CONSTRAINT `fk_orders_products_orders1`
-    FOREIGN KEY (`orders_id`)
-    REFERENCES `e_orders` (`id`)
+  FOREIGN KEY (`users_id` , `users_group_id`)
+  REFERENCES `e_users` (`id` , `group_id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `fk_orders_products_content1`
-    FOREIGN KEY (`products_id`)
-    REFERENCES `e_content` (`id`)
+  CONSTRAINT `fk_e_orders_e_orders_status1`
+  FOREIGN KEY (`status_id`)
+  REFERENCES `e_orders_status` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8
-  COLLATE = utf8_general_ci;
+  ENGINE = InnoDB
+  AUTO_INCREMENT = 2
+  DEFAULT CHARACTER SET = utf8;
+
+ALTER TABLE e_orders ADD CONSTRAINT fk_status_id FOREIGN KEY (status_id) REFERENCES e_orders_status(id);
+

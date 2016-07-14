@@ -14,12 +14,6 @@ use system\models\Mailer;
 class Users extends Front
 {
     /**
-     * Default group ID to register
-     * @var int
-     */
-    private $guest_group_id = 20;
-    
-    /**
      * Profile page ID
      * @var int
      */
@@ -201,38 +195,10 @@ class Users extends Front
 
             $data = $this->request->post('data'); $s=0; $i=[];
 
-            FormValidation::setRule(['name', 'email'], FormValidation::REQUIRED);
-            FormValidation::setRule('email', FormValidation::EMAIL);
-            FormValidation::run($data);
-
-            if(FormValidation::hasErrors()){
-                $i = FormValidation::getErrors();
-            } elseif(!empty($data['password']) && ($data['password_c'] != $data['password'])){
-                $i[] = ["data[password_c]" => $this->t('admin_profile.e_pasw_equal')];
-            } elseif($this->users->issetEmail($data['email'])){
-                $i[] = ["data[email]" => $this->t('admins.error_email_not_unique')];
-            } else {
-                unset($data['password_c']);
-
-                if(empty($data['password'])) $data['password'] = $this->users->generatePassword();
-
-                $data['group_id'] = $this->guest_group_id;
-                $s = $this->users->create($data);
-                if($s){
-                    $data['id'] = $s;
-                    Session::set('user', $data);
-                }
-                if($s && isset($data['email'])){
-                    $mailer = new Mailer('user_register', $data);
-                    $mailer
-                        ->addAddress($data['email'], $data['name'])
-                        ->send();
-                }
-
-            }
+            $s = $this->users->register($data);
 
             if(!$s && $this->users->hasError()){
-                echo $this->users->getErrorMessage();
+                $i = $this->users->getError();
             }
 
             $this->response->body(['s'=>$s, 'i' => $i])->asJSON();

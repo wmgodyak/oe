@@ -126,4 +126,9 @@ class Cart extends Front
 
         $this->response->body(['amount' => $amount, 'total' => $total])->asJSON();
     }
+
+    public function clear()
+    {
+        Session::delete('cart');
+    }
 }

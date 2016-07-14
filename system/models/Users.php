@@ -40,10 +40,12 @@ class Users extends Model
      */
     public function update($id, $data)
     {
-        if(empty($data['password'])){
-            unset($data['password']);
-        } else {
-            $data['password'] = $this->cryptPassword($data['password']);
+        if(isset($data['password'])){
+            if(empty($data['password'])){
+                unset($data['password']);
+            } else {
+                $data['password'] = $this->cryptPassword($data['password']);
+            }
         }
 
         $data['updated'] = $this->now();
@@ -219,7 +221,7 @@ class Users extends Model
     public function getUserByEmail($email)
     {
         $u = self::$db->select("
-            select u.*, g.backend,g.permissions
+            select u.*, g.backend, g.permissions
             from __users u
             join __users_group g on g.id=u.group_id
             where u.email = '{$email}'

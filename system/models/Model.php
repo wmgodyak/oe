@@ -8,7 +8,9 @@
 namespace system\models;
 
 use system\core\DB;
+use system\core\Lang;
 use system\core\Request;
+use system\core\Session;
 
 defined("CPATH") or die();
 
@@ -35,22 +37,30 @@ class Model
 
     protected $request;
 
+    protected $settings;
+
     public function __construct()
     {
         self::$db = DB::getInstance();
 
         $this->request = Request::getInstance();
 
-// todo modify languages_id, a thinks that set default language as selected languages on frontend
-//        if($this->request->getMode() == 'engine'){
-//            $this->languages_id = Engine::$language_id;
-//        } elseif($this->request->getMode() == 'app'){
-//            $this->languages_id = App::$language_id;
-//        }
-
         $this->languages_id = 1;
+        $this->settings = Settings::getInstance()->get();
 
-        self::$language_id = $this->languages_id;
+        $this->languages_id   = Session::get('app.languages_id');
+        $this->languages_code = Session::get('app.languages_code');
+    }
+
+
+    /**
+     * get translation by key
+     * @param $key
+     * @return string
+     */
+    protected function t($key=null)
+    {
+        return Lang::getInstance($this->settings['app_theme_current'], $this->languages_code)->t($key);
     }
 
     public function setError($msg)

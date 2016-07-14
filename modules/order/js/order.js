@@ -15,13 +15,6 @@ var Order = {
             refreshBlock(res);
         });
 
-        //Order.cart.getTotal(function(res){
-        //    $blockCart.html(tmplCart({
-        //        total: res.total,
-        //        amount: res.amount
-        //    }));
-        //});
-
         $(document).on('change', '.product-variant', function(){
              var product_id = $(this).data('id'),
                  opt = $(this).find('option:selected'),
@@ -87,6 +80,33 @@ var Order = {
                 refreshBlock(res.total);
                 cartForm(res.items);
             });
+        });
+
+        /**
+         * Order
+         */
+
+        $('#user_phone').mask('+38(999)99-99-999');
+        $("#order_delivery_id").change(function(){
+            var id = $(this).find('option:selected').val();
+            App.request.post({
+                url: 'route/delivery/getPayment',
+                data: {delivery_id: id},
+                success: function(d)
+                {
+                    var out = '';
+                    $(d.payment).each(function(i,e){
+                        out += '<option value="'+ e.id +'">'+ e.name +'</option>'
+                    });
+                    $('#data_payment_id').html(out);
+                }
+            })
+        });
+        App.validateAjaxForm('#checkout', function (res) {
+            if(res.s){
+                var url = typeof res.redirect == 'undefined' ? '/' : res.redirect;
+                self.location.href = url;
+            }
         });
     },
     cart : {

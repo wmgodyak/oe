@@ -48,8 +48,10 @@ class Delivery extends \modules\delivery\models\Delivery
         }
 
         $payment = $this->request->post('payment');
-        foreach ($payment as $k=>$payment_id) {
-            $this->deliveryPayment->create($id, $payment_id);
+        if($payment){
+            foreach ($payment as $k=>$payment_id) {
+                $this->deliveryPayment->create($id, $payment_id);
+            }
         }
 
         if($this->hasError()){

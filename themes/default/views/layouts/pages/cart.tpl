@@ -24,7 +24,7 @@
                 <form action="9" id="cartItems"></form>
                 {*<pre>{print_r($mod->order->cart->items())}</pre>*}
                 <script>var cItems = {json_encode($mod->order->cart->items(), true)}</script>
-                {*{include file="modules/shop/widgets/new.tpl"}*}
+                {include file="modules/shop/widgets/new.tpl"}
             </div>
 
             <aside class="aside">{include file="chunks/sidebar.tpl"}</aside>
@@ -70,7 +70,7 @@
                         <div class="item-counter">
                             <form class="clearfix">
                                 <div class="column fl">
-                                    <input onchange="this.value = parseInt(this.value); if(typeof  this.value == 'undefined') this.value=1;" class="counter-mask cart-item-quantity" type="text" value="<%- item.quantity%>" data-id="<%=item.products_id%>">
+                                    <input onchange="this.value = parseInt(this.value); if(typeof  this.value == 'undefined') this.value=1;" class="counter-mask cart-item-quantity" type="number" value="<%- item.quantity%>" data-id="<%=item.products_id%>">
                                 </div>
                             </form>
                         </div>
