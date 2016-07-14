@@ -396,32 +396,47 @@ var App = {
             return $.ajax(data)
         }
     },
-    alert: function(msg, status, target)
+    dialog: function(args)
     {
-        var c = typeof target == 'undefined' ? $('.inline-notifications') : target, icon;
-
-        window.cla = function()
-        {
-            c.html('');
-        };
-
-        switch (status){
-            case 'success':
-                icon = 'check-circle';
-                break;
-            case 'error':
-                icon = 'exclamation-triangle';
-                break;
-            default:
-                icon = 'check-circle';
-                break;
-        }
-        status = typeof status =='undefined' ? 'info' : status;
-        c.html("<div class='alert alert-"+status+" alert-dismissible' role='alert'>\
-            <button type=\"button\" onclick='cla();' class=\"close\"><span >&times;</span></button>\
-            <i class='fa fa-"+ icon +"'></i>"+msg+"\
-        </div>");
-        setTimeout(function(){c.html('');}, 7000)
+        return $('<div></div>')
+            .attr('id', 'modal' + Date.now())
+            .html(args.content)
+            .appendTo('body')
+            .dialog(args)
+            ;
+    },
+    confirm: function(msg, success)
+    {
+        return App.dialog({
+            content: msg,
+            title: 'Увага',
+            autoOpen: true,
+            width: 500,
+            modal: true,
+            buttons:  [
+                {
+                    text    : "Так",
+                    "class" : 'btn-success',
+                    click   : success
+                }
+            ],
+            close: function() {
+                console.log('dialog close ok.');
+            }
+        });
+    },
+    alert: function(msg)
+    {
+        return App.dialog({
+            content: msg,
+            title: 'Інфомація',
+            autoOpen: true,
+            width: 500,
+            modal: true,
+            buttons: {
+                "Ok": function(){$(this).dialog('close');}
+            }
+        });
     }
 };
 

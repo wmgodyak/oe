@@ -6,11 +6,11 @@
             <div class="goods-multiple-slider goods-multiple-slider--5">
                 {foreach $products as $item}
                     <div class="goods-multiple-slider__item">
-                        <a href="{$item.id}" title="{$item.title}" class="goods-multiple-slider__link">
+                        <div href="{$item.id}" title="{$item.title}" class="goods-multiple-slider__link">
                    <span class="m_product-item">
-                       <span class="product-item__img-row">
+                       <a  href="{$item.id}"  class="product-item__img-row">
                             <img class="product-item__img" src="{$app->images->cover($item.id, 'psm')}" alt="{$item.title}">
-                       </span>
+                       </a>
 
                        {assign var='avRate' value=$mod->comments->getAverageRating($item.id)|ceil}
                        <span class="m_star-rating">
@@ -21,9 +21,9 @@
                            </select>
                        </span>
 
-                       <span class="product-item__name">
+                       <a  href="{$item.id}"  class="product-item__name">
                            {$item.name}
-                       </span>
+                       </a>
 
                        <span class="product-item__price">
                            {$item.price} {$item.symbol}
@@ -35,7 +35,7 @@
 
                        <span class="product-item__activities">
 
-                           <button class="btn sm red">Купити в 1 клік</button>
+                           <button class="btn sm red  buy-one-click" data-id="{$item.id}">Купити в 1 клік</button>
 
                            <span class="m_cart-indicator m_cart-indicator--out">
                            </span>
@@ -50,7 +50,7 @@
 
                        <span class="m_hit"></span>
                    </span>
-                        </a>
+                        </div>
                     </div>
                 {/foreach}
             </div>

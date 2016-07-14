@@ -198,5 +198,20 @@
         <a class="cart__link" href="10">Переглянути кошик</a>
     </div>
 </script>
+
+{literal}
+<div id="oneClickTpl" style="display: none;">
+    <form id="<%-formID%>">
+        <div class="form-group">
+            <label for="oc_user_name_<%-formID%>">Ваше ім’я:</label>
+            <input id="oc_user_name_<%-formID%>" required type="text">
+        </div>
+        <div class="form-group">
+            <label for="oc_user_phone_<%-formID%>">Телефон</label>
+            <input id="oc_user_phone_<%-formID%>" type="tel">
+        </div>
+    </form>
+</div>
+{/literal}
 </body>
 </html>

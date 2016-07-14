@@ -55,7 +55,7 @@ var Order = {
                 return [value];
             });
 
-            console.log(items);
+            //console.log(items);
             var $cartItems = $("#cartItems");
             $cartItems.html( _.template($('#cartTemplate').html())({items: items}));
 
@@ -102,12 +102,57 @@ var Order = {
                 }
             })
         });
+
         App.validateAjaxForm('#checkout', function (res) {
             if(res.s){
                 var url = typeof res.redirect == 'undefined' ? '/' : res.redirect;
                 self.location.href = url;
             }
         });
+
+        $(document).on('click', '.buy-one-click', function(){
+            var id=$(this).data('id'), formID = 'ocf_' + id;
+
+            var tpl = _.template($('#oneClickTpl').html())({id: id, formID:formID});
+
+            $('#oc_user_phone').mask('+38(999)99-99-999');
+
+            $(document).on('submit', '#'+formID, function(){
+                var phone = $('#oc_user_phone_' + formID).val(),
+                    name  = $('#oc_user_name_' + formID).val();
+
+                Order.oneClick(id, phone, name, function(){
+                   alert(1);
+                });
+
+                return false;
+            });
+            App.dialog({
+                title: 'Замовлення в один клік',
+                content: tpl,
+                buttons: {
+                    'Замовити' : function(){
+                        $("#"+formID).submit();
+                    }
+                }
+            })
+
+        });
+    },
+    oneClick: function(id, phone, name, onSuccess)
+    {
+        App.request.post(
+            {
+                url: 'route/order/oneClick',
+                data:{
+                    products_id : id,
+                    phone : phone,
+                    name  : name
+                },
+                success: onSuccess,
+                dataType: 'json'
+            }
+        );
     },
     cart : {
         /**

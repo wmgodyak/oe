@@ -114,6 +114,13 @@ class Order extends Front
         $this->response->body(['s'=>$s, 'i' => $m])->asJSON();
     }
 
+    public function oneClick()
+    {
+        $products_id = $this->request->post('products_id', 'i');
+        $phone       = $this->request->post('phone', 's');
+        $name        = $this->request->post('name', 's');
+    }
+
     public function ajaxCart()
     {
         $params = func_get_args();
