@@ -111,7 +111,17 @@ var Order = {
         });
 
         $(document).on('click', '.buy-one-click', function(){
-            var id=$(this).data('id'), formID = 'ocf_' + id;
+            var $this = $(this), products_id = $this.data('id'),  formID = 'ocf_' + id, variants_id = 0,
+                hasVariants = $this.data('has-variants');
+
+            if($this.hasClass('in')) {
+                self.location.href=$('.cart__link:first').attr('href');
+                return;
+            }
+
+            if(hasVariants == 1){
+                variants_id = $('#variants_'+products_id).find('option:selected').val();
+            }
 
             var tpl = _.template($('#oneClickTpl').html())({id: id, formID:formID});
 
@@ -121,12 +131,13 @@ var Order = {
                 var phone = $('#oc_user_phone_' + formID).val(),
                     name  = $('#oc_user_name_' + formID).val();
 
-                Order.oneClick(id, phone, name, function(){
-                   alert(1);
+                Order.oneClick(products_id, variants_id, phone, name, function(){
+
                 });
 
                 return false;
             });
+
             App.dialog({
                 title: 'Замовлення в один клік',
                 content: tpl,
@@ -139,18 +150,19 @@ var Order = {
 
         });
     },
-    oneClick: function(id, phone, name, onSuccess)
+    oneClick: function(products_id, variants_id, phone, name, onSuccess)
     {
         App.request.post(
             {
-                url: 'route/order/oneClick',
-                data:{
-                    products_id : id,
-                    phone : phone,
-                    name  : name
+                url  : 'route/order/oneClick',
+                data : {
+                    products_id : products_id,
+                    variants_id : variants_id,
+                    phone       : phone,
+                    name        : name
                 },
-                success: onSuccess,
-                dataType: 'json'
+                success  : onSuccess,
+                dataType : 'json'
             }
         );
     },

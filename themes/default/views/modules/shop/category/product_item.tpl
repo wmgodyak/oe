@@ -37,7 +37,7 @@
             {/if}
            <span class="product-item__activities">
                 {if $product.in_stock == 1}
-                   <button class="btn sm red buy-one-click" data-id="{$product.id}">Купити в 1 клік</button>
+                   <button class="btn sm red buy-one-click" data-has-variants="{$product.has_variants}" data-id="{$product.id}">Купити в 1 клік</button>
                    <span class="m_cart-indicator m_cart-indicator--out to-cart cart-product-{$product.id} {if isset($smarty.session.cart[$product.id])}in{/if}" data-id="{$product.id}" data-has-variants="{$product.has_variants}" title="В кошик"></span>
                 {/if}
 

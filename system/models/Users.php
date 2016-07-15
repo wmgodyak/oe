@@ -234,6 +234,26 @@ class Users extends Model
     }
 
     /**
+     * @param $phone
+     * @return array|mixed
+     */
+    public function getUserByPhone($phone)
+    {
+        $u = self::$db->select("
+            select u.*, g.backend, g.permissions
+            from __users u
+            join __users_group g on g.id=u.group_id
+            where u.phone = '{$phone}'
+            limit 1
+          ")->row();
+
+        if(!empty($u['permissions'])){
+            $u['permissions'] = unserialize($u['permissions']);
+        }
+        return $u;
+    }
+
+    /**
      * @param $skey
      * @return array|mixed
      */
