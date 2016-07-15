@@ -27,6 +27,12 @@
  + рейтинг на основі коментарів
  + search_query
  - content_keywords
+ - content_meta
+ - фікс jquery error on order page
+ - one click ui data
+ - wishlist
+ + orders history
+ - account / profile / meta
 
  - cron
   - рейтинг товарів на основі коментарів

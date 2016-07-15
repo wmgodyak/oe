@@ -66,7 +66,7 @@ class ProductsVariants extends Model
      * @return string
      * @throws \system\core\exceptions\Exception
      */
-    private function makeName($variants_id)
+    public function makeName($variants_id)
     {
         $r = self::$db
             ->select("select fi.name

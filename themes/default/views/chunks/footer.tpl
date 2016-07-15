@@ -160,7 +160,7 @@
 
 
 <!-- become scripts -->
-<script src='{$theme_url}/assets/js/vendor/jquery-1.11.3.min.js'></script>
+<script src='{$theme_url}assets/js/vendor/jquery-1.11.3.min.js'></script>
 <script src="{$theme_url}/assets/js/plugins.js"></script>
 <script src='{$theme_url}/assets/js/vendor/jquery-ui.min.js'></script>
 <script src='{$theme_url}/assets/js/vendor/jquery.formstyler.js'></script>
@@ -187,16 +187,24 @@
             <div class="cart__header">
                 МІЙ КОШИК
             </div>
+            <% if(total) { %>
             <div class="cart__price">
                 товарів на суму
                 <span><%- amount %></span>
             </div>
+            <% } else { %>
+                <div class="cart__price">
+                    кошик порожній
+                </div>
+            <% } %>
         </div>
     </div>
 {/literal}
+{literal}<% if(total) { %>{/literal}
     <div class="cart__bottom">
         <a class="cart__link" href="10">Переглянути кошик</a>
     </div>
+{literal}<% } %>{/literal}
 </script>
 
 <div id="oneClickTpl" style="display: none;">

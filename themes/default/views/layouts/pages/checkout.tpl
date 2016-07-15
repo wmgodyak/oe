@@ -18,7 +18,7 @@
         {include file="modules/breadcrumbs.tpl"}
 
         <div class="container clearfix">
-            {if !isset($smarty.session.cart)}
+            {if !isset($smarty.session.cart) || empty($smarty.session.cart)}
                 <p>Ваш кошик порожній. Нічого замовляти</p>
             {else}
             <!-- begin aside -->

@@ -9,18 +9,24 @@
 namespace modules\order\controllers;
 
 use helpers\FormValidation;
+use helpers\Pagination;
 use modules\order\models\OrdersProducts;
 use modules\order\models\Status;
 use modules\users\models\Users;
+use system\core\EventsHandler;
 use system\core\Session;
 use system\Front;
 
 defined("CPATH") or die();
 
+/**
+ * Class Order
+ * @package modules\order\controllers
+ */
 class Order extends Front
 {
     private $users;
-    public $cart;
+    public  $cart;
     private $order;
     private $status;
     private $ordersProducts;
@@ -42,6 +48,7 @@ class Order extends Front
     public function init()
     {
         $this->template->assignScript('modules/order/js/order.js');
+        EventsHandler::getInstance()->add('user.account.sidebar', [$this, 'history']);
     }
 
     public function checkout()
@@ -214,6 +221,54 @@ class Order extends Front
 
     public function kits($tpl = 'modules/order/kits')
     {
+        return $this->template->fetch($tpl);
+    }
+
+    private $total = 0;
+    private $ipp   = 5;
+
+    /**
+     * @param int $start
+     * @param int $num
+     * @param string $tpl
+     * @return string
+     */
+    public function history($start = 0, $num = 5, $tpl = 'modules/order/history')
+    {
+        $user = Session::get('user');
+        if(! $user) return '';
+
+        $p = (int) $this->request->get('p', 'i');
+        if($p){
+            $start --;
+
+            if($start < 0) $start = 0;
+
+            if($start > 0){
+                $start = $start * $this->ipp;
+            }
+        }
+
+        $this->template->assign('orders', $this->order->history($user['id'], $start, $num));
+        $this->total = $this->order->total($user['id']);
+
+        return $this->template->fetch($tpl);
+    }
+
+    /**
+     * display pagination
+     * @param string $tpl
+     * @return string
+     */
+    public function pagination($tpl = 'modules/pagination')
+    {
+        $p = $this->request->get('p', 'i');
+
+        $url = $this->page['id'] . ';';
+
+        Pagination::init($this->total, $this->ipp, $p, $url);
+
+        $this->template->assign('pagination', Pagination::getPages());
         return $this->template->fetch($tpl);
     }
 }

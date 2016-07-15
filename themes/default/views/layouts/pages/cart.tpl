@@ -37,7 +37,7 @@
 {include file="chunks/footer.tpl"}
 {literal}
     <script type="text/template" id="cartTemplate">
-
+        <% if( items.length ) { %>
         <div class="goods-list">
             <div class="goods-list__top-row">
                 <div class="item item1">
@@ -104,5 +104,8 @@
                 <button type="submit" class="btn md red">Оформити замовлення</button>
             </div>
         </div>
+        <% } else { %>
+            <p>Ваш кошик порожній</p>
+        <% } %>
     </script>
 {/literal}

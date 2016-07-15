@@ -59,114 +59,26 @@
                 <!--Begin content of profile-->
                 <div class="profile-content">
 
-                    {$mod->users->profile()}
-                    {include file="modules/users/meta.tpl"}
+                    {if $page.id == 26 || $page.id==28}
 
-                    {$mod->users->changePassword()}
-                    {*{include file="modules/users/password.tpl"}*}
+                        {$mod->users->profile()}
+                        {include file="modules/users/meta.tpl"}
 
+                        {$mod->users->changePassword()}
+
+                        {elseif $page.id == 31}
+                        {$mod->order->history()}
+                        {$mod->order->pagination()}
+                    {/if}
                 </div>
                 <!--End profile content-->
-
+                {if $page.id != 31}
                 <!--Begin right aside orders-->
                 <aside class="aside-right">
-                    <h3 class="head-red">Мої замовлення:</h3>
-                    <div class="orders">
-                        <div class="order">
-                            <div class="header">
-                                <ul>
-                                    <li class="number-order">№ 234516</li>
-                                    <li class="center-block">01.02.2016</li>
-                                    <li class="right-block">
-                                        <span class="text-right">Статус: </span><span class="green">Виконано</span>
-                                    </li>
-                                    <li class="clearfix"></li>
-                                </ul>
-                            </div>
-                            <div class="content">
-                                <div class="product">
-                                    <div class="img">
-                                        <img src="{$theme_url}/assets/img/TOVARS/3.jpg" alt="">
-                                    </div>
-                                    <div class="description">
-                                        <a href="" class="link">Чохол-книжка універсальний Universal Book Cover Jeans Blue</a>
-                                        <ul class="price">
-                                            <li>86,00 грн</li>
-                                            <li>2 шт.</li>
-                                            <li class="text-right">172,00 грн</li>
-                                            <li class="clearfix"></li>
-                                        </ul>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="product">
-                                    <div class="img">
-                                        <img src="{$theme_url}/assets/img/TOVARS/powerbank.png" alt="">
-                                    </div>
-                                    <div class="description">
-                                        <a href="" class="link">Чохол-книжка універсальний Universal Book Cover Jeans Blue</a>
-                                        <ul class="price">
-                                            <li>86,00 грн</li>
-                                            <li>2 шт.</li>
-                                            <li class="text-right">172,00 грн</li>
-                                            <li class="clearfix"></li>
-                                        </ul>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="product-sum text-right">Разом до сплати: 2422,00 грн</div>
-                            </div>
-                        </div>
-                        <div class="order">
-                            <div class="header">
-                                <ul>
-                                    <li class="number-order">№ 234516</li>
-                                    <li class="center-block">01.02.2016</li>
-                                    <li class="right-block">
-                                        <span class="text-right">Статус: </span><span class="green">Виконано</span>
-                                    </li>
-                                    <li class="clearfix"></li>
-                                </ul>
-                            </div>
-                            <div class="content">
-                                <div class="product">
-                                    <div class="img">
-                                        <img src="{$theme_url}/assets/img/TOVARS/3.jpg" alt="">
-                                    </div>
-                                    <div class="description">
-                                        <a href="" class="link">Чохол-книжка універсальний Universal Book Cover Jeans Blue</a>
-                                        <ul class="price">
-                                            <li>86,00 грн</li>
-                                            <li>2 шт.</li>
-                                            <li class="text-right">172,00 грн</li>
-                                            <li class="clearfix"></li>
-                                        </ul>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="product">
-                                    <div class="img">
-                                        <img src="{$theme_url}/assets/img/TOVARS/powerbank.png" alt="">
-                                    </div>
-                                    <div class="description">
-                                        <a href="" class="link">Чохол-книжка універсальний Universal Book Cover Jeans Blue</a>
-                                        <ul class="price">
-                                            <li>86,00 грн</li>
-                                            <li>2 шт.</li>
-                                            <li class="text-right">172,00 грн</li>
-                                            <li class="clearfix"></li>
-                                        </ul>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="product-sum text-right">Разом до сплати: 2422,00 грн</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="text-right"><button class="btn-edit">Змінити пароль</button></div>
+                    {$events->call('user.account.sidebar')}
                 </aside>
                 <!--End right aside-->
-
+                {/if}
             {/if}
         </div>
 

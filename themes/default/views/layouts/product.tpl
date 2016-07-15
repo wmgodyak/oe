@@ -93,7 +93,7 @@
                                     data-id="{$product.id}"
                                     data-has-variants="{$product.has_variants}"
                             >{if isset($smarty.session.cart[$product.id])}В кошику{else}Купити{/if}</button>
-                            <button class="btn sm white-red">Купити в 1 клік</button>
+                            <button class="btn sm white-red buy-one-click" data-has-variants="{$product.has_variants}" data-id="{$product.id}">Купити в 1 клік</button>
                         </div>
                         {$events->call('shop.product.buy.after', array($product))}
                         {assign var='avRate' value=$mod->comments->getAverageRating($product.id)|ceil}
