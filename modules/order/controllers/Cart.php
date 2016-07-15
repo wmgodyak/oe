@@ -22,8 +22,8 @@ defined("CPATH") or die();
  */
 class Cart extends Front
 {
-    private $prices;
-    private $variantsPrices;
+    public $prices;
+    public $variantsPrices;
     public $products;
 
     public function __construct()

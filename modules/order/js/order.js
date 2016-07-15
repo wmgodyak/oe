@@ -111,7 +111,7 @@ var Order = {
         });
 
         $(document).on('click', '.buy-one-click', function(){
-            var $this = $(this), products_id = $this.data('id'),  formID = 'ocf_' + id, variants_id = 0,
+            var $this = $(this), products_id = $this.data('id'),  formID = 'ocf_' + products_id, variants_id = 0,
                 hasVariants = $this.data('has-variants');
 
             if($this.hasClass('in')) {
@@ -123,31 +123,43 @@ var Order = {
                 variants_id = $('#variants_'+products_id).find('option:selected').val();
             }
 
-            var tpl = _.template($('#oneClickTpl').html())({id: id, formID:formID});
+            var tpl = _.template
+            (
+                $('#oneClickTpl').html())({
+                    products_id: products_id,
+                    variants_id:variants_id,
+                    formID:formID,
+                    token : TOKEN
+                }
+            );
 
-            $('#oc_user_phone').mask('+38(999)99-99-999');
-
-            $(document).on('submit', '#'+formID, function(){
-                var phone = $('#oc_user_phone_' + formID).val(),
-                    name  = $('#oc_user_name_' + formID).val();
-
-                Order.oneClick(products_id, variants_id, phone, name, function(){
-
-                });
-
-                return false;
-            });
-
-            App.dialog({
+            var ocd = App.dialog({
                 title: 'Замовлення в один клік',
                 content: tpl,
                 buttons: {
                     'Замовити' : function(){
-                        $("#"+formID).submit();
+                        $("#oneClick"+formID).submit();
                     }
                 }
-            })
+            });
 
+            App.validateAjaxForm('#oneClick' + formID, function (res) {
+                if(res.s){
+                   ocd.dialog('close');
+                    App.dialog({
+                        title: 'Інформація',
+                        content: '<p>Вітаємо. Ваше замовлення прийнято. Очікуйте дзвінка менеджера</p>',
+                        buttons: {
+                            'Ок' : function(){
+                                var url = typeof res.redirect == 'undefined' ? '/' : res.redirect;
+                                self.location.href = url;
+                            }
+                        }
+                    });
+                }
+            });
+
+            $('.phone-mask').mask('+38(999)99-99-999');
         });
     },
     oneClick: function(products_id, variants_id, phone, name, onSuccess)

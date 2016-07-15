@@ -199,19 +199,22 @@
     </div>
 </script>
 
-{literal}
 <div id="oneClickTpl" style="display: none;">
-    <form id="<%-formID%>">
+    {literal}
+    <form id="oneClick<%-formID%>" action="route/order/oneClick" method="post">
         <div class="form-group">
             <label for="oc_user_name_<%-formID%>">Ваше ім’я:</label>
-            <input id="oc_user_name_<%-formID%>" required type="text">
+            <input id="oc_user_name_<%-formID%>" name="user[name]" required type="text">
         </div>
         <div class="form-group">
-            <label for="oc_user_phone_<%-formID%>">Телефон</label>
-            <input id="oc_user_phone_<%-formID%>" type="tel">
+            <label for="oc_user_phone_<%-formID%>">Телефон</label><br>
+            <input id="oc_user_phone_<%-formID%>" class="phone-mask" required name="user[phone]" type="tel">
         </div>
+        <input type="hidden" name="token" value="<%-token%>">
+        <input type="hidden" name="products_id" value="<%-products_id%>">
+        <input type="hidden" name="variants_id" value="<%-variants_id%>">
+    {/literal}
     </form>
 </div>
-{/literal}
 </body>
 </html>

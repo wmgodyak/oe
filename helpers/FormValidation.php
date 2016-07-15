@@ -192,4 +192,13 @@ class FormValidation
     {
         self::$messages[$rule] = $message;
     }
+
+    /**
+     * @param $input
+     * @param $message
+     */
+    public static function setError($input, $message)
+    {
+        self::$errors[] = [$input => $message];
+    }
 }

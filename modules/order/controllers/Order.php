@@ -111,7 +111,7 @@ class Order extends Front
             }
         }
 
-        $this->response->body(['s'=>$s, 'i' => $m])->asJSON();
+        $this->response->body(['s'=>$s, 'i' => $m, 'redirect' => $this->getUrl(31)])->asJSON();
     }
 
     public function oneClick()
@@ -120,57 +120,72 @@ class Order extends Front
 
         $products_id = $this->request->post('products_id', 'i');
         $variants_id = $this->request->post('variants_id', 'i');
-        $phone       = $this->request->post('phone', 's');
-        $name        = $this->request->post('name', 's');
 
-        $s = 0; $m = null;
-        $ui = Session::get('user');
+        $s = 1; $m = null;
 
-        if(empty($ui)){
-            $ui = $this->users->getUserByPhone($phone);
+        $user = Session::get('user');
+
+        if(empty($products_id)){
+            FormValidation::setError('data[phone]', 'Невірний артикул товару');
+            $s = 0;
+            $m = FormValidation::getErrors();
         }
 
-        $this->order->beginTransaction();
-
-        if(empty($ui)){
-
-            $user = [
-                'name'  => $name,
-                'phone' => $phone,
-                'email' => $phone
-            ];
-
-            $users_id = $this->users->register($user);
-
-            if(! $users_id){
-                $m = $this->users->getError();
+        if($s && ! $user){
+            $user = $this->request->post('user');
+            if(empty($user['name']) || empty($user['phone'])){
+                FormValidation::setError('data[phone]', 'Введіть ім\'я і телефон');
+                $s = 0;
+                $m = FormValidation::getErrors();
             } else {
-                $s=1;
-                $ui = $this->users->getData($users_id);
+
+                $u = $this->users->getUserByPhone($user['phone']);
+
+                if(empty($u)){
+
+                    $user['email'] = str_replace(['+','(',')','-'], [], $user['phone']) . '@one.click';
+
+                    $users_id = $this->users->register($user);
+
+                    if($this->users->hasError()){
+                        $m = $this->users->getError();
+                        $s=0;
+                    } else {
+                        $user = $this->users->getData($users_id);
+                        $s=1;
+                    }
+                } else{
+                    $user = $u;
+                }
             }
         }
 
-        if($s){
+        if($s && !empty($user)){
+            $this->order->beginTransaction();
             // register order
             $order = [];
             $order['one_click']      = 1;
-            $order['users_id']       = $ui['id'];
+            $order['users_id']       = $user['id'];
             $order['oid']            = date('ymd-hms');
             $order['languages_id']   = $this->languages_id;
-            $order['users_group_id'] = $ui['group_id'];
+            $order['users_group_id'] = $user['group_id'];
             $order['status_id']      = $this->status->getMainId();
 
             $orders_id = $this->order->create($order);
+            if($orders_id > 0){
+                if($variants_id > 0){
+                    $price = $this->cart->variantsPrices->getPrice($orders_id, $user['group_id']);
+                } else {
+                    $price = $this->cart->prices->get($products_id, $user['group_id']);
+                }
 
-            // todo доробити товари
-            foreach ($this->cart->items() as $item) {
-                $this->ordersProducts->create
+                $s += $this->ordersProducts->create
                 (
                     $orders_id,
-                    $item['products_id'],
-                    $item['quantity'],
-                    $item['price'],
-                    (isset($item['variants_id']) ? $item['variants_id'] : 0)
+                    $products_id,
+                    1,
+                    $price,
+                    ($variants_id > 0 ? $variants_id : 0)
                 );
             }
 
@@ -182,8 +197,7 @@ class Order extends Front
             }
         }
 
-
-        $this->response->body(['s'=>$s, 'i' => $m])->asJSON();
+        $this->response->body(['s'=>$s > 0, 'i' => $m, 'redirect' => $this->getUrl(31)])->asJSON();
     }
 
     public function ajaxCart()
