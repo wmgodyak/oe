@@ -41,7 +41,7 @@
                            </span>
 
                            <span class="m_hearth-like">
-                               <span class="hearth-like__link"></span>
+                               <span class="hearth-like__link wishlist-add {if isset($smarty.session.wishlist[$item.id])}hearth-like__link--liked{/if}" data-id="{$item.id}" data-has-variants="{$item.has_variants}"></span>
                            </span>
 
                        </span>

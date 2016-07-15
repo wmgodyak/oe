@@ -29,10 +29,7 @@
  - content_keywords
  - content_meta
  - фікс jquery error on order page
- - one click ui data
- - wishlist
  + orders history
- - account / profile / meta
 
  - cron
   - рейтинг товарів на основі коментарів
@@ -53,8 +50,12 @@ FRONTEND
   + нові товари
   + акційні товари
   - callbacks
-  - one click
-
+  + one click
+ - account / profile / meta
+ - one click ui data
+ - wishlist
+ - fix checkout jquery error
+  git
 
   + Ми на карті
   + Аккаунт

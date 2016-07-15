@@ -148,10 +148,10 @@ var App = {
         }
     },
     like: function () {
-        $('.hearth-like__link').on('click', function (e) {
-            e.preventDefault();
-            $(this).toggleClass('hearth-like__link--liked');
-        });
+        //$('.hearth-like__link').on('click', function (e) {
+        //    e.preventDefault();
+        //    $(this).toggleClass('hearth-like__link--liked');
+        //});
     },
     filterToggle: function () {
         var $link = $('.toggle-link');
