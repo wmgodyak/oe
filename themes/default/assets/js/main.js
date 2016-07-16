@@ -11,7 +11,6 @@ var App = {
         this.cartDelateItem();
         this.mask();
         this.sidebar();
-        this.formValid();
         this.menu();
     },
     formStyle: function () {
@@ -251,25 +250,6 @@ var App = {
             });
         }
     },
-    formValid: function () {
-        $('.form').validate({
-            rules: {
-                name: "required",
-                email: {
-                    required: true,
-                    email: true
-                }
-            },
-            messages: {
-                name: "Будь-ласка введіть своє ім'я",
-                email: {
-                    required: "Будь-ласка введіть свою електронну пошту",
-                    email: "Your email address must be in the format of name@domain.com"
-                }
-            }
-        });
-    },
-
 
     /**
      * validate form and send request via ajax

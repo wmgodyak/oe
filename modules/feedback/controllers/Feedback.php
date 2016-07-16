@@ -15,13 +15,20 @@ use system\models\Mailer;
 class Feedback extends Front
 {
     private $feedback;
+
     public function __construct()
     {
         parent::__construct();
+
         $this->feedback = new \modules\feedback\models\Feedback();
     }
 
-    public function send()
+    public function init()
+    {
+        $this->template->assignScript('modules/feedback/js/feedback.js');
+    }
+
+    public function process()
     {
         if(! $this->request->isPost()) die;
 

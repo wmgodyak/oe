@@ -5,14 +5,6 @@
  * Date: 2016-07-07T10:38:57+03:00
  * @name Контакти
  *}
-{*
- * OYiEngine 7
- * @author Володимир Годяк mailto:wmgodyak@gmail.com
- * @copyright Copyright (c) 2016 Otakoyi.com
- * Date: 2016-07-07T10:35:40+03:00
- * @name account
- *}
-
 {include file="chunks/head.tpl"}
 <!-- begin wrapper -->
 <div class="wrapper">
@@ -35,60 +27,11 @@
                     <div class="goods-list">
                         <div class="goods-list__top-row">
                             <div class="item item1">
-                                Наші контакти:
+                                {$page.title}
                             </div>
                         </div>
                         <div class="goods-list__main">
-
-                            <div class="goods-list__row">
-
-                                <div class="item item7">
-                                    <h3>Головний офіс, вул. Наукова 7а <br><span>(Офісний центр “Оптіма Плаза”)</span></h3>
-
-                                    <p>1 поверх, офіс №124</p>
-                                    <p>Працюємо з 09:00 до 19:00</p>
-                                    <p>Сб: 09:00 - 15:00, Нд: вихідний</p>
-                                </div>
-
-                                <div class="item item5">
-                                    <img src="{$theme_url}/assets/img/contacts.jpg" alt="">
-                                </div>
-
-                            </div>
-                            <div class="goods-list__row">
-                                <div class="head">Телефонні номери, інтернет зв’язок:</div>
-                                <div class="item item6">
-                                    <div class="footer__contacts">
-
-                                        <a class="ks" href="#">
-                                            +38 (097) 59 88 666
-                                        </a>
-
-                                        <a class="vf" href="#">
-                                            +38 (099) 25 88 666
-                                        </a>
-
-                                        <a class="lc" href="#">
-                                            +38 (063) 59 88 666
-                                        </a>
-
-                                    </div>
-                                </div>
-                                <div class="item item6">
-                                    <div class="footer__contacts">
-
-                                        <a class="gm" href="#">
-                                            sma.lviv@gmail.com
-                                        </a>
-
-                                        <a class="sk" href="#">
-                                            sma_lviv
-                                        </a>
-
-                                    </div>
-                                </div>
-
-                            </div>
+                            {$page.content}
                         </div>
                     </div>
 
@@ -107,21 +50,7 @@
 
                             <div class="goods-list__row">
                                 <div class="form-block">
-                                    <form class="form" action="">
-                                        <div class="form-group">
-                                            <label for="pass-modal">Ваше ім’я:</label>
-                                            <input id="pass-modal" name="name" type="text">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="email-modal">Електронна пошта:</label>
-                                            <input id="email-modal" name="email" type="email">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="asking">Питання</label>
-                                            <textarea name="" id="asking" cols="20" rows="5"></textarea>
-                                        </div>
-                                        <button type="submit" class="btn md red" >Надіслати</button>
-                                    </form>
+                                    {include file="modules/feedback/form.tpl"}
                                 </div>
                             </div>
                         </div>

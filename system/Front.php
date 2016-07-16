@@ -148,6 +148,8 @@ class Front extends core\Controller
 
             $page = $app->getPage();
 
+            $page['content'] = $this->template->fetchString($page['content']);
+
             Request::getInstance()->param('page', $page);
 
             if (!$page) {
