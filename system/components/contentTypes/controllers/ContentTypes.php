@@ -37,7 +37,7 @@ class ContentTypes extends Engine
         // активна тема
         $theme = Settings::getInstance()->get('app_theme_current');
         // шлях до вьюшок
-        $vpath = Settings::getInstance()->get('app_views_path');
+        $vpath = '';//Settings::getInstance()->get('app_views_path');
 
         $this->path = DOCROOT .  $themes_path  . $theme .'/' . $vpath . self::DIR;
     }

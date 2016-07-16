@@ -59,8 +59,8 @@ class Template
         // get theme
         $theme = $settings['themes_path'] . $theme . '/';
 
-        $this->smarty->setCompileDir(DOCROOT . '/tmp/' . $theme . $settings['app_views_path'] .'/');
-        $this->smarty->setTemplateDir(DOCROOT . $theme. $settings['app_views_path'] .'/');
+        $this->smarty->setCompileDir(DOCROOT . '/tmp/' . $theme . '/');
+        $this->smarty->setTemplateDir(DOCROOT . $theme. '/');
 
         if(!is_dir($this->smarty->getCompileDir()))
             mkdir($this->smarty->getCompileDir(), 0777, true);
