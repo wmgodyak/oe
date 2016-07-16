@@ -9,7 +9,7 @@
             {foreach $mod->shop->categories() as $i=>$cat}
             <li class="goods-nav__item i{$i}">
                 <a class="goods-nav__link" title="{$cat.title}" href="{$cat.id}">{$cat.name}</a>
-                <div class="sub-menu">
+                {*<div class="sub-menu">
                     <div class="content my-grid">
                         <div class="item">
                             <ul class="single-category">
@@ -55,7 +55,7 @@
                             </ul>
                         </div>
                     </div>
-                </div>
+                </div> *}
             </li>
             {/foreach}
             {*

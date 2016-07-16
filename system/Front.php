@@ -83,12 +83,13 @@ class Front extends core\Controller
         $this->template = Template::getInstance($theme);
 
         if(!self::$initialized){
-//            $this->_init();
+            $this->initialize();
         }
 
         $this->images   = new Images();
 
         $this->languages_id   = Session::get('app.languages_id');
+
         $this->languages_code = Session::get('app.languages_code');
 
 
@@ -209,6 +210,20 @@ class Front extends core\Controller
                 $this->response->sendError(404);
             }
         }
+    }
+
+    private function initialize()
+    {
+        $l = new Languages();
+        $lang = $l->getDefault();
+        $this->languages_id   = $lang['id'];
+        $this->languages_code = $lang['code'];
+
+        $a = [];
+        $a['app']['languages_id']   = $this->languages_id;
+        $a['app']['languages_code'] = $this->languages_code;
+
+        Session::set($a, $this->languages_id);
     }
 
     /**

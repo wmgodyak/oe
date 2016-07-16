@@ -97,6 +97,7 @@
                         </div>
                         {$events->call('shop.product.buy.after', array($product))}
                         {assign var='avRate' value=$mod->comments->getAverageRating($product.id)|ceil}
+                        {assign var='commentsTotal' value=$mod->comments->getTotal($product.id)}
                         <span class="row comment-row">
                             <span class="m_star-rating">
                                <select class="star-rating read-only">
@@ -106,7 +107,7 @@
                                </select>
                            </span>
                             <span class="coment-counter">
-                                {$mod->comments->getTotal($product.id)} відгуки
+                                {$commentsTotal} відгуки
                             </span>
                         </span>
                         <div class="row">
@@ -130,7 +131,7 @@
                                 <a href="javascript:;">{$t.shop.product.tab_features}</a>
                             </li>
                             <li>
-                                <a href="javascript:;">{$t.shop.product.tab_comments} ({$avRate})</a>
+                                <a href="javascript:;">{$t.shop.product.tab_comments} ({$commentsTotal})</a>
                             </li>
                             <li>
                                 <a href="javascript:;">{$t.shop.product.tab_video}</a>
