@@ -199,7 +199,6 @@ class Front extends core\Controller
 
             $template_path = $this->settings['themes_path']
                 . $this->settings['app_theme_current'] . '/'
-                . $this->settings['app_views_path']
                 . 'layouts/';
 
             $ds = $this->template->fetch($template_path . $page['template']);
