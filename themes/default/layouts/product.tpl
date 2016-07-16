@@ -60,14 +60,14 @@
                         </div>
                         <div class="row">
                             <div class="price">
-                                {$product.price} {$product.currency}
+                                {$product.price} грн.
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="bonus">
-                                Ваш СМА бонус: <span>+0 {$product.currency}</span>
-                            </div>
-                        </div>
+                        {*<div class="row">*}
+                            {*<div class="bonus">*}
+                                {*Ваш СМА бонус: <span>+0 {$product.currency}</span>*}
+                            {*</div>*}
+                        {*</div>*}
                         {if $product.has_variants}
                         <table>
                             <tr>

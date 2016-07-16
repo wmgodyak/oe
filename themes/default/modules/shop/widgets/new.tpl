@@ -37,8 +37,7 @@
 
                            <button class="btn sm red  buy-one-click" data-id="{$item.id}">Купити в 1 клік</button>
 
-                           <span class="m_cart-indicator m_cart-indicator--out">
-                           </span>
+                           <span class="m_cart-indicator m_cart-indicator--out to-cart cart-product-{$item.id} {if isset($smarty.session.cart[$item.id])}in{/if}" data-id="{$item.id}" data-has-variants="{$item.has_variants}"></span>
 
                            <span class="m_hearth-like">
                                <span class="hearth-like__link wishlist-add {if isset($smarty.session.wishlist[$item.id])}hearth-like__link--liked{/if}" data-id="{$item.id}" data-has-variants="{$item.has_variants}"></span>

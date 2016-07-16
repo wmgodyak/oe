@@ -45,6 +45,7 @@ var Order = {
 
             Order.cart.add(products_id, variants_id, 1, function(res){
                 $this.addClass('in');
+                App.alert('Товар додано в кошик');
                 refreshBlock(res);
             });
         });
@@ -98,7 +99,7 @@ var Order = {
                     $(d.payment).each(function(i,e){
                         out += '<option value="'+ e.id +'">'+ e.name +'</option>'
                     });
-                    $('#data_payment_id').html(out);
+                    $('#order_payment_id').html(out);
                 }
             })
         });
