@@ -32,6 +32,7 @@ class Callbacks extends Front
 
     public function init()
     {
+        $this->template->assignScript('modules/callbacks/js/callbacks.js');
     }
 
     public function process()
@@ -39,9 +40,9 @@ class Callbacks extends Front
         if(! $this->request->isPost()) die;
 
         $s=0; $i = array(); $m = '';
-        $data = $this->request->post('data', 's');
+        $data = $this->request->post('data');
 
-        FormValidation::setRule(['message', 'name', 'phone'], FormValidation::REQUIRED);
+        FormValidation::setRule(['name', 'phone'], FormValidation::REQUIRED);
         FormValidation::run($data);
 
         if(FormValidation::hasErrors()){

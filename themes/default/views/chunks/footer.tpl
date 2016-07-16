@@ -242,5 +242,20 @@
     {/literal}
     </form>
 </div>
+<script type="text/template" id="callbackTpl">
+    {literal}
+    <form id="callbackForm" action="route/callbacks/process" method="post">
+        <div class="form-group">
+            <label for="cb_name">Ваше ім'я</label><br>
+            <input id="cb_name" name="data[name]" required type="text">
+        </div>
+        <div class="form-group">
+            <label for="cb_phone">Телефон</label><br>
+            <input id="cb_phone" name="data[phone]" class="phone-mask" required type="tel">
+        </div>
+        <input type="hidden" name="token" value="<%-token%>">
+    {/literal}
+    </form>
+</script>
 </body>
 </html>

@@ -6,12 +6,6 @@
         </div>
     </div>
     <div class="form-group">
-        <label for="data_message" class="col-sm-3 control-label">{$t.callbacks.message}</label>
-        <div class="col-md-9">
-            {$data.message}
-        </div>
-    </div>
-    <div class="form-group">
         <label for="data_message" class="col-sm-3 control-label">{$t.callbacks.comment}</label>
         <div class="col-md-9">
             <textarea name="data[comment]" id="data_comment" class="form-control" style="height: 150px;" placeholder="{$t.callbacks.comment_not_r}">{$data.comment}</textarea>

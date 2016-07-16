@@ -47,13 +47,12 @@ class Callbacks extends Engine
             -> orderDef(0, 'desc')
             -> th($this->t('common.id'), 'id', 1,1, 'width:60px')
             -> th($this->t('callbacks.pib'), 'name', 1, 1, 'width: 200px')
-            -> th($this->t('callbacks.message'), 'message', 0, 0)
+            -> th($this->t('callbacks.phone'), 'phone', 1, 1)
             -> th($this->t('callbacks.created'), 'created', 0, 0, 'width: 100px')
             -> th($this->t('common.tbl_func'), null, 0, 0, 'width: 180px')
         ;
 
         $t->get('status', 0, 0, 0);
-        $t->get('phone', 0, 0, 0);
         $t->get('comment', 0, 0, 0);
         $t->get('manager_id', 0, 0, 0);
         $t->get('updated', 0, 0, 0);
@@ -80,7 +79,7 @@ class Callbacks extends Engine
 
                 $res[$i][] = $row['id'];
                 $res[$i][] = $row['name'] . "<br><small>{$row['phone']}</small>";
-                $res[$i][] = "<small>{$row['message']}</small>
+                $res[$i][] = "<small>{$row['phone']}</small>
                            <br><small>Ip:{$row['ip']}</small>
                            <br><span class='label label-{$row['status']}'>{$status_t}</span>
                         " . ($row['status'] != 'new' ? " {$row['updated']} {$manager}" : '');

@@ -26,7 +26,7 @@ class Callbacks extends Model
 
         $data['ip'] = $_SERVER['REMOTE_ADDR'];
 
-        return parent::createRow('callbacks', $data);
+        return parent::createRow('__callbacks', $data);
     }
 
     /**

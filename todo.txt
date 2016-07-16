@@ -53,9 +53,11 @@ FRONTEND
   + one click
  - account / profile / meta
  - one click ui data
- - wishlist
+ +- wishlist
  - fix checkout jquery error
   git
+ - купити, міняти на в кошику
+ - додати ефекти
 
   + Ми на карті
   + Аккаунт

@@ -75,7 +75,7 @@
                             <span class="hidden">123 12 21</span>
                         </li>
                         <li class="tel__item tel__item--order-call ">
-                            <a href="#">{$t.common.callback_link}</a>
+                            <a href="javascript:;" id="callback">{$t.common.callback_link}</a>
                         </li>
                     </ul>
                 </div>
