@@ -8,6 +8,8 @@
 
 namespace modules\wishlist\controllers;
 
+use helpers\FormValidation;
+use modules\users\models\Users;
 use system\core\Session;
 use system\Front;
 
@@ -20,12 +22,16 @@ defined("CPATH") or die();
 class Wishlist extends Front
 {
     private $wishlist;
+    private $wishlistProducts;
+    private $users;
 
     public function __construct()
     {
         parent::__construct();
 
         $this->wishlist = new \modules\wishlist\models\Wishlist();
+        $this->wishlistProducts = new \modules\wishlist\models\WishlistProducts();
+        $this->users = new Users();
     }
 
     public function init()
@@ -43,29 +49,99 @@ class Wishlist extends Front
 
     }
 
+   public function create()
+   {
+       if(!$this->request->isPost()) die;
+
+       $s = 1; $m = null;
+
+       $user = Session::get('user');
+
+       if(! $user){
+           $data = $this->request->post('data');
+
+           FormValidation::setRule(['name', 'email'], FormValidation::REQUIRED);
+           FormValidation::setRule('email', FormValidation::EMAIL);
+           FormValidation::run($data);
+
+           if(FormValidation::hasErrors()){
+               $m = FormValidation::getErrors();
+           } else {
+
+               $u = $this->users->getUserByEmail($data['email']);
+
+               if(empty($u)){
+                   $users_id = $this->users->register(['name' => 'no name', 'email' => $data['email']]);
+
+                   if($this->users->hasError()){
+                       $m = $this->users->getError();
+                       $s=0;
+                       $this->response->body(['s'=>$s > 0, 'i' => $m])->asJSON();
+                       return;
+                   } else {
+                       $user = $this->users->getData($users_id);
+                       Session::set('user', $user);
+                       $this->add();
+                       return;
+                   }
+               } else{
+                   Session::set('user', $u);
+                   $this->add();
+                   return;
+               }
+           }
+       }
+
+       $this->response->body(['s'=>$s > 0, 'i' => $m])->asJSON();
+   }
+
     public function add()
     {
+        $s = 0; $m = '';
+        $data = $this->request->post('data');
         $products_id = $this->request->post('products_id', 'i');
-        if(empty($products_id)) return 0;
+        $variants_id = $this->request->post('variants_id', 'i');
 
-        $wl = Session::get('wishlist');
-        if( ! $wl){
-            $wl[$products_id] = $products_id;
+        if(empty($products_id)) die;
+
+        $user = Session::get('user');
+
+        if(! $user){
+            $this->response->body(['s'=> 0, 'a' => 'login'])->asJSON();
+            return null;
         }
 
-        Session::set('wishlist', $wl);
+        $wishlist_id = Session::get('wishlist_id');
 
-        echo 1;
+        if(! $wishlist_id){
+
+            $name = isset($data['name']) ? $data['name'] : 'Мій список бажань';
+            $wishlist_id = $this->wishlist->create($name, $user['id']);
+
+            Session::set('wishlist_id', $wishlist_id);
+        }
+
+        if($wishlist_id > 0){
+            $s = $this->wishlistProducts->create($wishlist_id, $products_id, $variants_id);
+            if($s){
+                $wl = Session::get('wishlist');
+                $wl[$products_id] = $products_id;
+                Session::set('wishlist', $wl);
+            }else {
+                $m = $this->wishlist->getError();
+            }
+        }
+
+        $this->response->body(['s'=>$s > 0, 'i' => $m])->asJSON();
     }
 
     public function delete()
     {
-        $products_id = $this->request->post('products_id', 'i');
-        $wl = Session::get('wishlist');
+        $id = $this->request->post('id', 'i');
+//        $wl = Session::get('wishlist');
+//        if(isset($wl[$products_id])) unset($wl[$products_id]);
 
-        if(isset($wl[$products_id])) unset($wl[$products_id]);
-
-        echo 1;
+        echo $this->wishlistProducts->delete($id);
     }
 
 }

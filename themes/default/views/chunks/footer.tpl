@@ -224,5 +224,23 @@
     {/literal}
     </form>
 </div>
+
+<div id="wishlistCreateTpl" style="display: none;">
+    {literal}
+    <form id="wishlist<%-formID%>" action="route/wishlist/create" method="post">
+        <div class="form-group">
+            <label for="name_<%-formID%>">Введіть назву списку</label>
+            <input id="name_<%-formID%>" name="data[name]" required type="text">
+        </div>
+        <div class="form-group">
+            <label for="phone_<%-formID%>">E-mail</label><br>
+            <input id="phone_<%-formID%>" required name="data[email]" type="email">
+        </div>
+        <input type="hidden" name="token" value="<%-token%>">
+        <input type="hidden" name="products_id" value="<%-products_id%>">
+        <input type="hidden" name="variants_id" value="<%-variants_id%>">
+    {/literal}
+    </form>
+</div>
 </body>
 </html>

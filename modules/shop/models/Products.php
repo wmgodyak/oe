@@ -23,9 +23,9 @@ class Products extends Content
      * @param $type
      * @param int $group_id default group id
      */
-    public function __construct($type)
+    public function __construct()
     {
-        parent::__construct($type);
+        parent::__construct('product');
 
         $user = Session::get('user');
         $this->group_id = isset($user['group_id']) ? $user['group_id'] : $this->group_id;
@@ -146,6 +146,15 @@ class Products extends Content
         }
     }
 
+    private $sel_fields = [];
+
+    public function fields( $field )
+    {
+        $this->sel_fields[] = $field;
+
+        return $this;
+    }
+
     /**
      * @return mixed
      * @throws \system\core\exceptions\Exception
@@ -169,6 +178,8 @@ class Products extends Content
         $w = empty($this->where) ? '' : 'and ' . implode(' and ', $this->where);
         $j = empty($this->join) ? '' : implode("\r\n", $this->join);
 
+        $sel = empty($this->sel_fields) ? '' : ','.implode(',', $this->sel_fields);
+
         $cu_on_site = $this->currency->getOnSiteMeta();
         $cu_main    = $this->currency->getMainMeta();
 
@@ -179,7 +190,7 @@ class Products extends Content
             WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id = {$cu_main['id']} THEN pp.price * {$cu_on_site['rate']}
             WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id <> {$cu_main['id']} THEN pp.price / cu.rate * {$cu_on_site['rate']}
             END, 2 ) as price,
-           pp.price as pprice, '{$cu_on_site['symbol']}' as symbol
+           pp.price as pprice, '{$cu_on_site['symbol']}' as symbol {$sel}
           from __content c
           join __products_prices pp on pp.content_id=c.id and pp.group_id={$this->group_id}
           {$j}

@@ -2194,7 +2194,7 @@ engine.nav = {
                 is_selected = false;
 
             $(selected_items).each(function(i,e){
-                if(e.id == item_id){
+                if(e.content_id == item_id){
                     is_selected = true;
                     return;
                 }

@@ -16,11 +16,25 @@
 
         {include file="modules/breadcrumbs.tpl"}
 
+        {assign var='wishlist' value=$mod->wishlist->get()}
+
         <div class="container clearfix">
             <div class="cart-page__content">
                 <div class="heading">{$page.name}</div>
-                <script>var cItems = {json_encode($mod->wishlist->get())}</script>
-                {include file="modules/shop/widgets/new.tpl"}
+
+                {*<pre>{print_r($smarty.session.wishlist)}</pre>*}
+
+                {if $wishlist|count}
+                    {foreach $wishlist as $list}
+                        <h3 class="head-red">{$list.name}</h3>
+                        {if $list.products|count}
+                            {foreach $list.products as $product}
+                                {include file="modules/shop/category/product_item.tpl"}
+                            {/foreach}
+                        {/if}
+                    {/foreach}
+                    {else}
+                {/if}
             </div>
 
             <aside class="aside">{include file="chunks/sidebar.tpl"}</aside>
