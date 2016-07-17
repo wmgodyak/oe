@@ -72,37 +72,37 @@ engine.shop = {
         var $tree = new engine.tree('shopCategories');
         $tree
             .setUrl('module/run/shop/categories/tree')
-            .setContextMenu('create', t.shopCategories.tree_create, 'fa-file', function(o){
+            .setContextMenu('create', 'Швидко створити', 'fa-file', function(o){
                     var node_id= o.reference[0].id;
                     engine.shop.categories.create(node_id);
                 }
             )
-            .setContextMenu('edit', t.shopCategories.tree_edit, 'fa-pencil', function(o){
+            .setContextMenu('edit', 'Швиде редагування', 'fa-pencil', function(o){
                 var node_id= o.reference[0].id;
-                engine.shop.categories.edit(node_id);
+                   engine.shop.categories.edit(node_id);
+                }
+            )
+            .setContextMenu('children', 'Список підкатегорій', 'fa-list', function(o){
+                    var node_id= o.reference[0].id;
+                    self.location.href='module/run/shop/categories/index/'+node_id;
+                }
+            )
+            .setContextMenu('children1', 'Список товарів', 'fa-list', function(o){
+                    var node_id= o.reference[0].id;
+                    self.location.href='module/run/shop/products/index/'+node_id;
                 }
             )
             .setContextMenu('del', t.shopCategories.tree_delete, 'fa-remove', function(o){
                     var node_id= o.reference[0].id;
                     engine.confirm
                     (
-                        'Дійсно видалити Категорію?',
+                        'Дійсно видалити категорію?',
                         function()
                         {
                             engine.request.get('module/run/shop/categories/delete/'+node_id, function(res){
                                 self.location.href = 'module/run/shop';
                             }, 'json');
                         });
-                }
-            )
-            .setContextMenu('children', t.shopCategories.tree_children, 'fa-list', function(o){
-                    var node_id= o.reference[0].id;
-                    self.location.href='module/run/shop/categories/index/'+node_id;
-                }
-            )
-            .setContextMenu('children', t.shopCategories.tree_products, 'fa-list', function(o){
-                    var node_id= o.reference[0].id;
-                    self.location.href='module/run/shop/products/index/'+node_id;
                 }
             )
             .move(function(e, data){

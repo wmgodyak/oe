@@ -7,6 +7,7 @@
  */
 
 namespace modules\shop\controllers\admin;
+use system\core\EventsHandler;
 use system\Engine;
 
 /**
@@ -15,6 +16,9 @@ use system\Engine;
  */
 class Shop extends Engine
 {
+    /**
+     * @throws \system\core\exceptions\Exception
+     */
     public function init()
     {
         $this->assignToNav('Магазин', 'module/run/shop', 'fa-shopping-cart', null, 30);
@@ -24,6 +28,14 @@ class Shop extends Engine
         $this->assignToNav('Імпорт', 'module/run/shop/import', 'fa-shopping-cart', 'module/run/shop');
 
         $this->template->assignScript("modules/shop/js/admin/shop.js");
+        EventsHandler::getInstance()->add('content.main',[$this, 'catMeta']);
+    }
+
+    public function catMeta($content)
+    {
+        if($content['type'] != 'products_categories') return null;
+
+        return $this->template->fetch('shop/categories/meta');
     }
 
     public function index($parent_id=0)

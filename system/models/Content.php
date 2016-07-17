@@ -23,6 +23,7 @@ class Content extends Model
     protected $types_id;
     protected $subtypes_id;
     protected $languages;
+    protected $meta;
 
     /**
      * Content constructor.
@@ -36,6 +37,7 @@ class Content extends Model
 
         $languages = new Languages();
         $this->languages = $languages->get();
+        $this->meta = new ContentMeta();
     }
 
     private function setTypeAndSubtype($type)
@@ -86,6 +88,9 @@ class Content extends Model
             return $d;
         }
 
+        $d['type'] = $this->getContentType($id);
+
+
         if(!empty($d['settings'])){
             $d['settings'] = unserialize($d['settings']);
         }
@@ -107,6 +112,8 @@ class Content extends Model
 
         $d['info']   = $this->getInfo($id);
 
+//        $d['meta'] = $this->meta->get($id);
+
         if($d['parent_id'] > 0){
             $d['parent_url'] = $this->getParentUrl($d['parent_id']);
         }
@@ -116,6 +123,7 @@ class Content extends Model
         // todo тимчасово закоментував features
         $s = isset($d['settings']['type']['features']) ? $d['settings']['type']['features'] : null;
         $d['features'] = ContentFeatures::get($id, $s);
+
 
         return $d;
     }
@@ -279,6 +287,9 @@ class Content extends Model
             $this->updateRow('__content', $content['parent_id'], ['isfolder' => 1]);
         }
 
+        // content_meta
+        $this->updateMeta($id);
+
         // todo modify contentFeatures
 
 //        $cf = new ContentFeatures();
@@ -293,6 +304,25 @@ class Content extends Model
         $this->commit();
 
         return true;
+    }
+
+    /**
+     * @param $content_id
+     */
+    private function updateMeta($content_id)
+    {
+        $cm = $this->request->post('content_meta');
+        if($cm){
+            foreach ($cm as $meta_k => $a) {
+                if(is_array($a)){
+//                    foreach ($a as $k=>$meta_v) {
+//                       todo треба подумати
+//                    }
+                } else {
+                    $this->meta->update($content_id, $meta_k, $a);
+                }
+            }
+        }
     }
 
     public function delete($id)

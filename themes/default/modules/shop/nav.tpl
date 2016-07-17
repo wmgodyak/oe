@@ -7,7 +7,7 @@
         </div>
         <ul class="goods-nav__list">
             {foreach $mod->shop->categories() as $i=>$cat}
-            <li class="goods-nav__item i{$i}">
+            <li class="goods-nav__item {$app->contentMeta->get($cat.id,'icon_class', true)}">
                 <a class="goods-nav__link" title="{$cat.title}" href="{$cat.id}">{$cat.name}</a>
                 {*<div class="sub-menu">
                     <div class="content my-grid">

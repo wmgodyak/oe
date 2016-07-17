@@ -247,7 +247,7 @@ class Categories extends Content
                 $item['parent'] = $parent_id;
             }
             $item['text'] .= " #{$item['id']}";
-            $item['a_attr'] = ['id'=> $item['id'], 'href' => './module/run/shop/categories/index/' . $item['id']];
+            $item['a_attr'] = ['id'=> $item['id'], 'href' => './module/run/shop/products/index/' . $item['id']];
             $item['li_attr'] = [
                 'id'=> 'li_'.$item['id'],
                 'class' => 'status-' . $item['status'],

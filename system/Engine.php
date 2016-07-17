@@ -16,6 +16,7 @@ use system\core\Request;
 use system\core\Response;
 use system\core\Session;
 use system\core\Template;
+use system\models\App;
 use system\models\Images;
 use system\models\Languages;
 use system\models\Permissions;
@@ -159,8 +160,11 @@ abstract class Engine extends Controller
         $this->template->assign('controller', $controller);
         $this->template->assign('action',     $action);
 
-        $this->initSystemComponents();
-        $this->initModules();
+        $com = $this->initSystemComponents();
+        $mod = $this->initModules();
+
+        $app = new App();
+        $this->template->assign('app', $app);
         // assign events
         $events = EventsHandler::getInstance();
 
@@ -301,30 +305,6 @@ abstract class Engine extends Controller
      */
     protected function assignToNav($name, $url, $icon = null, $parent = null, $position = 0)
     {
-        /*if($parent != null){
-            foreach (self::$menu_nav as $k=>$item) {
-                if($item['url'] == $parent){
-
-                    if(!isset(self::$menu_nav[$k]['items'])) self::$menu_nav[$k]['items'] = [];
-
-                    while(isset(self::$menu_nav[$k]['items'][$position])){
-                        $position += 5;
-                    }
-                    self::$menu_nav[$k]['isfolder'] = 1;
-                    self::$menu_nav[$k]['items'][$position] = [
-                        'name'     => $name,
-                        'url'      => $url,
-                        'icon'     => $icon,
-                        'parent'   => $parent,
-                        'isfolder' => 0
-                    ];
-                    return ;
-                }
-            }
-
-//            throw new Exception("Wrong parent url.");
-        }*/
-
         while(isset(self::$menu_nav[$position])){
             $position += 5;
         }

@@ -96,7 +96,7 @@ class ContentMeta extends Model
             }
         } else {
             $r = self::$db
-                ->select("select id, meta_k, meta_v from __content_meta where content_id='{$content_id}' and meta_k='{$meta_k}'")
+                ->select("select id, meta_k, meta_v from __content_meta where content_id='{$content_id}'")
                 ->all();
             foreach ($r as $row) {
                 if(! isset($meta_v[$row['meta_k']])) $meta_v[$row['meta_k']] = [];
