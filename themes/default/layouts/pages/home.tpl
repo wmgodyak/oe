@@ -18,7 +18,6 @@
         <div class="container clearfix">
             {include file="modules/shop/nav.tpl"}
             {include file="modules/banners/home.tpl"}
-
         </div>
         <!-- end container -->
 

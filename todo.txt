@@ -51,13 +51,14 @@ FRONTEND
   + акційні товари
   - callbacks
   + one click
- - account / profile / meta
- - one click ui data
- +- wishlist
- - fix checkout jquery error
-  git
- - купити, міняти на в кошику
- - додати ефекти
+  - account / profile / meta
+  - one click ui data
+  +- wishlist
+  + fix checkout jquery error
+   git
+  - купити, міняти на в кошику
+  - додати ефекти
+  - gmap
 
   + Ми на карті
   + Аккаунт

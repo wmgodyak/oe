@@ -136,11 +136,8 @@
                         </div>
                     </form>
                 </div>
-
             </div>
             <!-- end footer__fifth -->
-
-
         </div>
     </div>
     <!-- end footer__main -->
@@ -149,7 +146,7 @@
     <div class="footer__bottom">
         <div class="container">
             <div class="copyright">
-                © 2013-2016, Інтернет-магазин СМА
+                © 2013-{date('Y')}, Інтернет-магазин СМА
             </div>
         </div>
     </div>
