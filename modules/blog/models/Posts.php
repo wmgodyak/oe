@@ -60,7 +60,7 @@ class Posts extends Content
                   from __content c
                   {$j}
                   join __content_types ct on ct.type = '{$this->type}' and ct.id=c.types_id
-                  join __content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
+                  join __content_info ci on ci.content_id=c.id and ci.languages_id='{$this->languages_id}'
                   join __users u on u.id = c.owner_id
                   where {$w} c.status in ('published', 'hidden')
                   order by c.published desc

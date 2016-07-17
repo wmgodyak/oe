@@ -78,7 +78,7 @@ class Front extends Model
                 from __content_info i
                 join __content c on c.id=i.content_id
                 join __languages l on l.id=i.languages_id
-                where c.id={$id} and i.languages_id={$this->languages_id}
+                where c.id={$id} and i.languages_id='{$this->languages_id}'
                 limit 1
                 ")
                 ->row();
@@ -93,7 +93,7 @@ class Front extends Model
                 from __content_info i
                 join __content c on c.id=i.content_id
                 join __languages l on l.id=i.languages_id
-                where i.url = '{$url}' and i.languages_id={$this->languages_id}
+                where i.url = '{$url}' and i.languages_id='{$this->languages_id}'
                 limit 1
                 ")
                 ->row();

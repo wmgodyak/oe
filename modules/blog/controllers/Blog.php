@@ -51,15 +51,18 @@ class Blog extends Front
     public function init()
     {
         $post = $this->page;
-        $post['views'] = $this->postViews->getTotal($post['id']);
-        if($this->commentsEnabled){
-            $post['comments'] = [
-                'total' => $this->comments->getTotal($post['id']),
-//                'items' => $this->comments->get($post['id'])
-            ];
-        }
+        if($post['type'] == 'post'){
 
-        $this->template->assign('post', $post);
+            $post['views'] = $this->postViews->getTotal($post['id']);
+            if($this->commentsEnabled){
+                $post['comments'] = [
+                    'total' => $this->comments->getTotal($post['id']),
+//                'items' => $this->comments->get($post['id'])
+                ];
+            }
+
+            $this->template->assign('post', $post);
+        }
     }
 
     /**

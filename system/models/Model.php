@@ -24,12 +24,12 @@ class Model
      * default languages id
      * @var int
      */
-    protected static $language_id;
+    protected static $language_id = 1;
     /**
      * default languages id not static only
      * @var int
      */
-    protected $languages_id;
+    protected $languages_id = 1;
 
     protected static $db;
 
