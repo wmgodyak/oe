@@ -21,6 +21,10 @@ defined("CPATH") or die();
 
 /**
  * Class Order
+ * @name Замовлення
+ * @description
+ * @author Volodymyr Hodiak
+ * @version 1.0.0
  * @package modules\order\controllers
  */
 class Order extends Front

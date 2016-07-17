@@ -17,6 +17,10 @@ defined("CPATH") or die();
 
 /**
  * Class Wishlist
+ * @name Список бажань
+ * @description
+ * @author Volodymyr Hodiak
+ * @version 1.0.0
  * @package modules\wishlist\controllers
  */
 class Wishlist extends Front

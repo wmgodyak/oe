@@ -10,6 +10,14 @@ namespace modules\payment\controllers;
 
 use system\Front;
 
+/**
+ * Class Payment
+ * @name Оплата
+ * @description
+ * @author Volodymyr Hodiak
+ * @version 1.0.0
+ * @package modules\payment\controllers
+ */
 class Payment extends Front
 {
 

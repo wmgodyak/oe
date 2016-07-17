@@ -14,6 +14,11 @@ defined("CPATH") or die();
 
 /**
  * Class Breadcrumbs
+ *
+ * @name Хлібні крихти
+ * @description
+ * @author Volodymyr Hodiak
+ * @version 1.0.0
  * @package modules\breadcrumbs\controllers
  */
 class Breadcrumbs extends Front

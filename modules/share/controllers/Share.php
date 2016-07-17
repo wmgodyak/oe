@@ -10,6 +10,14 @@ namespace modules\share\controllers;
 use system\core\EventsHandler;
 use system\Front;
 
+/**
+ * Class Share
+ * @name Шарінг в соц мережах
+ * @description
+ * @author Volodymyr Hodiak
+ * @version 1.0.0
+ * @package modules\share\controllers
+ */
 class Share extends Front
 {
     public function index()

@@ -9,6 +9,10 @@ use system\models\Mailer;
 
 /**
  * Class users
+ * @name Користувачі
+ * @description
+ * @author Volodymyr Hodiak
+ * @version 1.0.0
  * @package modules\users\controllers
  */
 class Users extends Front

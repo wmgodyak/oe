@@ -10,6 +10,14 @@ namespace modules\banners\controllers;
 
 use system\Front;
 
+/**
+ * Class Banners
+ * @name Банери
+ * @description
+ * @author Volodymyr Hodiak
+ * @version 1.0.0
+ * @package modules\banners\controllers
+ */
 class Banners extends Front
 {
     private $banners;

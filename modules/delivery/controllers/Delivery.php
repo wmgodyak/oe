@@ -11,6 +11,14 @@ namespace modules\delivery\controllers;
 use modules\delivery\models\DeliveryPayment;
 use system\Front;
 
+/**
+ * Class Delivery
+ * @name Доставка
+ * @description
+ * @author Volodymyr Hodiak
+ * @version 1.0.0
+ * @package modules\delivery\controllers
+ */
 class Delivery extends Front
 {
     private $delivery;

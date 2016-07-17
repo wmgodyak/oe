@@ -21,6 +21,10 @@ use system\models\Currency;
 
 /**
  * Class shop
+ * @name Магазин
+ * @description
+ * @author Volodymyr Hodiak
+ * @version 1.0.0
  * @package modules\shop\controllers
  */
 class Shop extends Front

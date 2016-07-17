@@ -12,6 +12,14 @@ use helpers\FormValidation;
 use system\Front;
 use system\models\Mailer;
 
+/**
+ * Class Feedback
+ * @name Фідбек
+ * @description
+ * @author Volodymyr Hodiak
+ * @version 1.0.0
+ * @package modules\feedback\controllers
+ */
 class Feedback extends Front
 {
     private $feedback;
