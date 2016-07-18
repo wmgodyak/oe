@@ -12,6 +12,7 @@ use system\components\content\controllers\Content;
 use system\core\DataTables2;
 use system\core\EventsHandler;
 use system\models\ContentRelationship;
+use system\models\Currency;
 use system\models\UsersGroup;
 
 /**
@@ -25,7 +26,9 @@ class Products extends Content
     private $contentTypes;
     private $allowed_types = ['product'];
     private $prices;
+    private $currency;
     private $customersGroups;
+    private $group_id = 20;
 
     public function __construct()
     {
@@ -44,6 +47,8 @@ class Products extends Content
         $this->contentTypes = new \system\models\ContentTypes();
         $this->prices = new Prices();
         $this->customersGroups = new UsersGroup();
+
+        $this->currency = new Currency();
 
 
         EventsHandler::getInstance()->add('content.main', [$this, 'contentParams']);
@@ -75,31 +80,76 @@ class Products extends Content
             )
         );
 
+        $cu_on_site = $this->currency->getOnSiteMeta();
+        $cu_main    = $this->currency->getMainMeta();
+
         $t = new DataTables2('content');
 
-        $t  -> ajax('module/run/shop/products/index/' . $parent_id)
+        $t  -> ajax('module/run/shop/products/index/' . $parent_id, ['filter' => $_GET])
 //            ->orderDef(0, 'desc')
 //            -> th($this->t('common.id'), 'c.id', 1, 1, 'width: 60px')
             -> th($this->t('shop.sky'), 'c.sku', 1, 1, 'width: 60px')
             -> th($this->t('common.name'), 'ci.name', 1, 1);
 
             foreach ($this->customersGroups->getItems(0, 0) as $group) {
-                $t -> th($group['name'], 'c.created', 0, 0);
+                $t -> th($group['name'], 'c.created', 0, 0, 'width: 160px');
             }
 
 //        $t  -> th($this->t('common.updated'), 'c.updated', 0, 1, 'width: 200px')
-          $t  -> th($this->t('common.tbl_func'), null, 0, 0, 'width: 180px')
+          $t  -> th($this->t('common.tbl_func'), null, 0, 0, 'width: 200px')
         ;
         $t->get('c.id',     null, null, null);
         $t->get('ci.url',   null, null, null);
         $t->get('c.status', null, null, null);
+        $t->get("'{$cu_on_site['symbol']}' as symbol ", null, null, null);
+        $t->get("ROUND( CASE
+            WHEN c.currency_id = {$cu_on_site['id']} THEN pp.price
+            WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id = {$cu_main['id']} THEN pp.price * {$cu_on_site['rate']}
+            WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id <> {$cu_main['id']} THEN pp.price / cu.rate * {$cu_on_site['rate']}
+            END, 2 ) as price", null, null, null);
 
         if($this->request->isXhr()){
 
+            // filter
+            $filter = $this->request->post('filter');
+            if($filter['group_id'] > 0){
+                $this->group_id = $filter['group_id'];
+            }
+
+            $where = [];
+
+            if($filter['minp'] > 0 && $filter['maxp'] > 0){
+                $where[] = " price between '{$filter['minp']}' and '{$filter['maxp']}' ";
+            } elseif($filter['minp'] > 0 && empty($filter['maxp'])){
+                $where[] = " price >= '{$filter['minp']}'";
+            } elseif(empty($filter['minp']) && $filter['maxp'] > 0){
+                $where[] = " price <= '{$filter['maxp']}'";
+            }
+
+            if(strlen($filter['sku']) > 2){
+                $where[]= " c.sku like '{$filter['sku']}%'";
+            }
+
+            switch($filter['status']){
+                case 'publsihed':
+                    $where[] = " c.status = 'publsihed'";
+                    break;
+                case 'hidden':
+                    $where[] = " c.status = 'hidden'";
+                    break;
+                default:
+                    $where[] = " c.status in ('published', 'hidden')";
+                    break;
+            }
+
+            $where = !empty($where) ? implode(' and ', $where)  : null;
+
             $t  -> from('__content c')
                 -> join("__content_types ct on ct.type = '{$this->type}' and ct.id=c.types_id")
+                ->join("__products_prices pp on pp.content_id=c.id and pp.group_id={$this->group_id}")
+                -> join("__currency cu on cu.id = c.currency_id")
                 -> join("__content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}")
-                -> where("c.status in ('published', 'hidden')");
+                -> where($where);
 
             if($parent_id > 0){
                 $t->join("__content_relationship cr on cr.content_id=c.id and cr.categories_id={$parent_id}");
@@ -124,12 +174,13 @@ class Products extends Content
                     " <a class='status-{$row['status']}' title='{$status}' href='module/run/shop/products/edit/{$row['id']}'>{$row['name']}</a>"
                     . " <a href='/{$row['url']}' target='_blank'>{$icon_link}</a>"
                 ;
-                $cu = $this->prices->getProductCurrency($row['id']);
+//                $cu = $this->prices->getProductCurrency($row['id']);
                 foreach ($this->customersGroups->getItems(0, 0) as $group) {
-                    $res[$i][] = (isset($cu['symbol']) ? $cu['symbol'] .' ' : '')
-                    . (isset($prices[$group['id']]) ? $prices[$group['id']] : 0);
+                    $res[$i][] =
+                    "<span style='margin-right: 1em;'><input class='form-control' value='". (isset($prices[$group['id']]) ? $prices[$group['id']] : 0) ."'></span>"
+//                    . "<span style='position:relative;margin-top:-10px;'>". (isset($cu['symbol']) ? $cu['symbol'] .' ' : '') ."</span>"
+                    ;
                 }
-//                $res[$i][] = $row['updated'] ? date('d.m.Y H:i:s', strtotime($row['updated'])) : '';
                 $res[$i][] =
                     (string)(
                     $row['status'] == 'published' ?
@@ -171,7 +222,13 @@ class Products extends Content
         }
 
         $this->template->assign('sidebar', $this->template->fetch('shop/categories/tree'));
-        $this->output($t->init());
+        $this->output( $this->filter() . $t->init());
+    }
+
+    private function filter()
+    {
+        $this->template->assign('groups', $this->customersGroups->getItems(0, 0));
+        return $this->template->fetch('shop/products/filter');
     }
 
     public function create()

@@ -45,11 +45,13 @@ class Model
 
         $this->request = Request::getInstance();
 
-        $this->languages_id = 1;
         $this->settings = Settings::getInstance()->get();
 
         $this->languages_id   = Session::get('app.languages_id');
         $this->languages_code = Session::get('app.languages_code');
+
+        if(! $this->languages_id)
+            $this->languages_id = 1;
     }
 
 
