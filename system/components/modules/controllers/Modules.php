@@ -100,7 +100,7 @@ class Modules extends Engine
 
                     $b[] = (string)Button::create
                     (
-                        Icon::create(Icon::TYPE_EDIT),
+                        Icon::create(Icon::TYPE_SETTINGS),
                         ['class' => 'b-modules-edit', 'data-id' => $module['module'], 'title' => $this->t('modules.title_edit')]
                     );
                     $b[] = (string)Button::create
@@ -201,14 +201,70 @@ class Modules extends Engine
     {
 
     }
-    public function edit($id)
+
+    public function edit($id = null)
     {
-        echo 'Skoro bude';
+        $s=0; $t=null; $m=null;
+        $module =  $this->request->post('module');
+        $modules = Settings::getInstance()->get('modules');
+        if(isset($modules[$module])){
+            $_module = lcfirst($module);
+            $t = 'Налаштування модуля';
+            $path = DOCROOT . "modules/{$_module}/config.ini";
+            if( !file_exists($path)){
+                $m = "Цей модуль немає налаштувань";
+            } else {
+                $s=1;
+
+                $config = parse_ini_file($path);
+                $s_config = isset($modules[$module]['config']) ? $modules[$module]['config'] : [];
+                $config = array_merge($config, $s_config);
+
+                $this->template->assign('module', $module);
+                $this->template->assign('config', $config);
+                $m = $this->template->fetch('modules/config');
+            }
+
+        }
+
+        $this->response->body(['s' => $s, 't' => $t, 'm' => $m])->asJSON();
     }
-    public function delete($id)
+
+
+    public function process($id = null)
     {
+        $s=0; $t=null; $m=null;
+        $module = $this->request->post('module');
+        $config = $this->request->post('config');
+
+        $module = ucfirst($module);
+
+        $modules = Settings::getInstance()->get('modules');
+
+        if(isset($modules[$module])){
+            $_module = lcfirst($module);
+            $path = DOCROOT . "modules/{$_module}/config.ini";
+            if( !file_exists($path)){
+                $m = "Цей модуль немає налаштувань";
+            } else {
+                $s=1;
+                $m = 'Налаштування модуля оновлено';
+
+                if( !isset($modules[$module]['config'])){
+                    $modules[$module]['config'] = [];
+                }
+
+                $modules[$module]['config'] = $config;
+
+                Settings::getInstance()->set('modules', $modules);
+            }
+
+        } else {
+            $m = 'error';
+        }
+
+        $this->response->body(['s' => $s, 't' => $t, 'm' => $m])->asJSON();
     }
-    public function process($id)
-    {
-    }
+
+    public function delete($id){}
 }

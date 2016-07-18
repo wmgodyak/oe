@@ -37,12 +37,12 @@ engine.blog = {
                     engine.blog.categories.create(node_id);
                 }
             )
-            .setContextMenu('edit', t.blogCategories.tree_edit, 'fa-pencil', function(o){
+            .setContextMenu('edit', t.blog.categories.tree_edit, 'fa-pencil', function(o){
                 var node_id= o.reference[0].id;
                 engine.blog.categories.edit(node_id);
                 }
             )
-            .setContextMenu('del', t.blogCategories.tree_delete, 'fa-remove', function(o){
+            .setContextMenu('del', t.blog.categories.tree_delete, 'fa-remove', function(o){
                     var node_id= o.reference[0].id;
                     engine.confirm
                     (
@@ -128,7 +128,7 @@ engine.blog = {
 
                 var dialog = engine.dialog({
                     content: d,
-                    title: t.blogCategories.create_title,
+                    title: t.blog.categories.create_title,
                     autoOpen: true,
                     width: 750,
                     modal: true,
@@ -163,7 +163,7 @@ engine.blog = {
 
                 var dialog = engine.dialog({
                     content: d,
-                    title: t.blogCategories.action_edit,
+                    title: t.blog.categories.action_edit,
                     autoOpen: true,
                     width: 750,
                     modal: true,

@@ -92,7 +92,7 @@ engine.shop = {
                     self.location.href='module/run/shop/products/index/'+node_id;
                 }
             )
-            .setContextMenu('del', t.shopCategories.tree_delete, 'fa-remove', function(o){
+            .setContextMenu('del', t.shop.categories.tree_delete, 'fa-remove', function(o){
                     var node_id= o.reference[0].id;
                     engine.confirm
                     (
@@ -173,7 +173,7 @@ engine.shop = {
 
                 var dialog = engine.dialog({
                     content: d,
-                    title: t.shopCategories.create_title,
+                    title: t.shop.categories.create_title,
                     autoOpen: true,
                     width: 750,
                     modal: true,
@@ -208,7 +208,7 @@ engine.shop = {
 
                 var dialog = engine.dialog({
                     content: d,
-                    title: t.shopCategories.action_edit,
+                    title: t.shop.categories.action_edit,
                     autoOpen: true,
                     width: 750,
                     modal: true,

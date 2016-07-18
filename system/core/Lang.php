@@ -110,6 +110,15 @@ class Lang
     }
 
     /**
+     * @param $key
+     * @param $translations
+     */
+    public function addTranslations($key, $translations)
+    {
+        $this->translations[$key] = $translations;
+    }
+
+    /**
      * @param null $key
      * @return null
      */

@@ -107,9 +107,32 @@ engine.modules = {
             },
             success: function(res)
             {
+                var bi = t.common.button_save;
+                var buttons = {};
+
                 if(res.s){
-                    engine.modules.reload();
+                    buttons[bi] =  function(){
+                        $('#modulesForm').submit();
+                    };
                 }
+
+                var dialog = engine.dialog({
+                    content: res.m,
+                    title: res.t,
+                    autoOpen: true,
+                    width: 750,
+                    modal: true,
+                    buttons: buttons
+                });
+
+                engine.validateAjaxForm('#modulesForm', function(d){
+                    if(d.s){
+                        dialog.dialog('destroy').remove();
+                        engine.modules.reload();
+                    } else {
+                        engine.showFormErrors('#modulesForm', d.i);
+                    }
+                });
             }
         });
     }

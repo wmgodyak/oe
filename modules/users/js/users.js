@@ -62,7 +62,6 @@ App.users = {
             App.alert('Дані оновлено.', 'success', $("#accountProfile .response"));
         });
 
-
         App.validateAjaxForm('#accountChangePassword', function () {
             App.alert('Дані оновлено.', 'success', $("#accountChangePassword .response"));
         });

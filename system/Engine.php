@@ -19,6 +19,7 @@ use system\core\Template;
 use system\models\App;
 use system\models\Images;
 use system\models\Languages;
+use system\models\Modules;
 use system\models\Permissions;
 use system\models\Settings;
 
@@ -160,8 +161,10 @@ abstract class Engine extends Controller
         $this->template->assign('controller', $controller);
         $this->template->assign('action',     $action);
 
-        $com = $this->initSystemComponents();
-        $mod = $this->initModules();
+        $this->initSystemComponents();
+
+        $m = new Modules($this->theme, $lang, 'backend');
+        $m->init();
 
         $app = new App();
         $this->template->assign('app', $app);
@@ -348,34 +351,6 @@ abstract class Engine extends Controller
         $this->template->assign('nav', $s);
     }
 
-    private function initModules()
-    {
-        $modules_dir = 'modules';
-        $modules = new \stdClass();
-        if ($handle = opendir(DOCROOT . $modules_dir)) {
-            while (false !== ($module = readdir($handle))) {
-                if ($module == "." || $module == "..")  continue;
-
-                $c  = $modules_dir .'\\'. $module . '\controllers\admin\\' . ucfirst($module);
-
-                $path = str_replace("\\", "/", $c);
-
-                if(file_exists(DOCROOT . $path . '.php')) {
-
-                    $this->assignModuleLang($module);
-                    $controller = new $c;
-                    $modules->{$module} = $controller;
-
-                    call_user_func(array($controller, 'init'));
-                }
-
-            }
-            closedir($handle);
-        }
-
-        return $modules;
-    }
-
     private function initSystemComponents()
     {
         $ns = 'system\components';
@@ -404,21 +379,6 @@ abstract class Engine extends Controller
         }
 
         return $components;
-    }
-
-    private function assignModuleLang($module)
-    {
-        $modules_dir = 'modules';
-        $dir  =  $modules_dir .'/'. $module . '/lang';
-
-        $lang = $this->getLang();
-
-        if(!is_dir(DOCROOT . $dir . '/' . $lang)) {
-//            echo('Missing modules lang ' . $dir . '/' . $lang . '<br>');
-            return ;
-        }
-
-        Lang::getInstance($this->theme, $lang)->setTranslations($dir);
     }
 
     /**

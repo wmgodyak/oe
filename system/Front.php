@@ -18,6 +18,7 @@ use system\models\App;
 use system\models\Content;
 use system\models\Images;
 use system\models\Languages;
+use system\models\Modules;
 use system\models\Settings;
 
 if ( !defined("CPATH") ) die();
@@ -62,8 +63,7 @@ class Front extends core\Controller
     protected $languages_code;
 
     protected $page;
-
-    private $modules_dir = "modules";
+    private $theme;
 
     public function __construct()
     {
@@ -80,6 +80,7 @@ class Front extends core\Controller
 
         // template settings
         $theme = $this->settings['app_theme_current'];
+        $this->theme= $theme;
         $this->template = Template::getInstance($theme);
 
         if(!self::$initialized){
@@ -181,7 +182,9 @@ class Front extends core\Controller
 //            Lang::getInstance($this->settings['app_theme_current'], $this->languages_code);
 
             // init modules
-            $modules = $this->initModules();
+//            $modules = $this->initModules();
+            $m = new Modules($this->theme, $this->languages_code);
+            $modules = $m->init();
 //            $this->dump($modules);die;
 
             // assign translations to template
@@ -224,42 +227,6 @@ class Front extends core\Controller
         $a['app']['languages_code'] = $this->languages_code;
 
         Session::set($a, $this->languages_id);
-    }
-
-    /**
-     * @throws Exception
-     */
-    private function initModules()
-    {
-        $modules = new \stdClass();
-        if ($handle = opendir(DOCROOT . $this->modules_dir)) {
-            while (false !== ($module = readdir($handle))) {
-                if ($module == "." || $module == "..")  continue;
-
-                $c  = $this->modules_dir .'\\'. $module . '\controllers\\' . ucfirst($module);
-
-                $path = str_replace("\\", "/", $c);
-
-                if(!file_exists(DOCROOT . $path . '.php')) {
-                    throw new Exception("Module $module issue.");
-                }
-
-                $this->assignModuleLang($module);
-                $controller = new $c;
-                $modules->{$module} = $controller;
-
-                call_user_func(array($controller, 'init'));
-            }
-            closedir($handle);
-        }
-
-        return $modules;
-    }
-
-    private function assignModuleLang($module)
-    {
-        $dir =  $this->modules_dir .'/'. $module . '/lang/';
-        Lang::getInstance($this->settings['app_theme_current'], $this->languages_code)->setTranslations($dir);
     }
 
     protected function getUrl($id)

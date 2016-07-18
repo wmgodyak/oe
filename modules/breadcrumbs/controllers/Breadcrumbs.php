@@ -16,7 +16,7 @@ defined("CPATH") or die();
  * Class Breadcrumbs
  *
  * @name Хлібні крихти
- * @description
+ * @description Хлібні крихти для сайту
  * @author Volodymyr Hodiak
  * @version 1.0.0
  * @package modules\breadcrumbs\controllers

@@ -53,7 +53,7 @@ class Template
         $this->smarty->caching = $config['caching'];
         $this->smarty->cache_lifetime = $config['cache_lifetime'];
         $this->smarty->debugging = $config['debugging'];
-
+        $this->smarty->muteExpectedErrors();
         $this->smarty->error_reporting = E_ALL & ~E_NOTICE;
 
         // get theme

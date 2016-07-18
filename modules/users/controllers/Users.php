@@ -17,11 +17,6 @@ use system\models\Mailer;
  */
 class Users extends Front
 {
-    /**
-     * Profile page ID
-     * @var int
-     */
-    private $profile_id = 1; 
     private $users;
 
     public function __construct()

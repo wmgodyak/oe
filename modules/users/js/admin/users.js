@@ -37,17 +37,17 @@ engine.users = {
         engine.users.group.tree = new engine.tree('usersGroups');
         engine.users.group.tree
             .setUrl('module/run/users/groups/tree')
-            .setContextMenu('create', t.users_group.tree_create, 'fa-file', function(o){
+            .setContextMenu('create', t.users.group.tree_create, 'fa-file', function(o){
                     var node_id= o.reference[0].id;
                     engine.users.group.create(node_id);
                 }
             )
-            .setContextMenu('edit', t.users_group.tree_edit, 'fa-pencil', function(o){
+            .setContextMenu('edit', t.users.group.tree_edit, 'fa-pencil', function(o){
                     var node_id= o.reference[0].id;
                     engine.users.group.edit(node_id);
                 }
             )
-            .setContextMenu('del', t.users_group.tree_delete, 'fa-remove', function(o){
+            .setContextMenu('del', t.users.group.tree_delete, 'fa-remove', function(o){
                     var node_id= o.reference[0].id;
                     engine.users.group.delete(node_id);
                 }
@@ -247,7 +247,7 @@ engine.users = {
 
                         var dialog = engine.dialog({
                             content: d,
-                            title: t.users_group.create_title,
+                            title: t.users.group.create_title,
                             autoOpen: true,
                             width: 750,
                             modal: true,
@@ -290,7 +290,7 @@ engine.users = {
 
                     var dialog = engine.dialog({
                         content: d,
-                        title: t.users_group.action_edit,
+                        title: t.users.group.action_edit,
                         autoOpen: true,
                         width: 750,
                         modal: true,
@@ -313,7 +313,7 @@ engine.users = {
         {
             var dialog = engine.confirm
             (
-                t.users_group.delete_question,
+                t.users.group.delete_question,
                 function()
                 {
                     engine.request.post(
