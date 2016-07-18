@@ -12,11 +12,16 @@ use system\core\Lang;
 
 defined("CPATH") or die();
 
+/**
+ * Class Modules
+ * @package system\models
+ */
 class Modules
 {
     private $theme;
     private $lang;
     private $mode;
+    private static $configs = [];
 
     public function __construct($theme, $lang, $mode = 'frontend')
     {
@@ -41,15 +46,43 @@ class Modules
 
             if(file_exists(DOCROOT . $path . '.php')) {
 
-                $this->assignLang(lcfirst($module));
+                $_module = lcfirst($module);
+
+                $this->assignLang($_module);
+
+                $config = $this->readConfig($_module, (isset($params['config']) ? $params['config'] : []));
+
+                self::$configs[$_module] = $config;
+
                 $controller = new $c;
-                $modules->{lcfirst($module)} = $controller;
+                // assign config to module
+                $controller->config = $config;
+
+                $modules->{$_module} = $controller;
 
                 call_user_func(array($controller, 'init'));
             }
         }
 
         return $modules;
+    }
+
+    private function readConfig($module, $settings)
+    {
+        $file =  DOCROOT . "modules/{$module}/config.ini";
+
+        if(!file_exists( $file )) {
+            return null;
+        }
+
+        $a = parse_ini_file($file, true);
+
+        return array_merge($a, $settings);
+    }
+
+    public function getConfigs()
+    {
+        return self::$configs;
     }
 
     private function assignLang($module)
