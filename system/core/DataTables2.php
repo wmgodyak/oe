@@ -735,8 +735,8 @@ class DataTables2
         $q = "SELECT {$cols} FROM {$this->table} {$j} {$w} {$order_by} {$this->limit}";
 
         if($this->debug){
-            echo $t,"\r\n";
-            echo $q;
+//            echo $t,"\r\n";
+            echo $q,"\r\n";
         }
 
         $this->total   = $this->db->select($t, $this->debug)->row('t');

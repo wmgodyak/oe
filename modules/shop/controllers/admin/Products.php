@@ -29,6 +29,7 @@ class Products extends Content
     private $currency;
     private $customersGroups;
     private $group_id = 20;
+//    private $variants;
 
     public function __construct()
     {
@@ -49,7 +50,7 @@ class Products extends Content
         $this->customersGroups = new UsersGroup();
 
         $this->currency = new Currency();
-
+//        $this->variants =
 
         EventsHandler::getInstance()->add('content.main', [$this, 'contentParams']);
         EventsHandler::getInstance()->add('content.process', [$this, 'contentProcess']);
@@ -60,10 +61,10 @@ class Products extends Content
     }
 
 
-    public function index($parent_id=0)
+    public function index($categories_id=0)
     {
-        if($parent_id > 0){
-            $parents = $this->mContent->getParents($parent_id);// d($parents);die;
+        if($categories_id > 0){
+            $parents = $this->mContent->getParents($categories_id);// d($parents);die;
 
             $c = count($parents)-1;
             foreach ($parents as $k=>$parent) {
@@ -76,16 +77,23 @@ class Products extends Content
             (string)Link::create
             (
                 $this->t('common.button_create'),
-                ['class' => 'btn-md btn-primary', 'href'=> 'module/run/shop/products/create' . ($parent_id? "/$parent_id" : '')]
+                ['class' => 'btn-md btn-primary', 'href'=> 'module/run/shop/products/create' . ($categories_id? "/$categories_id" : '')]
             )
         );
 
-        $cu_on_site = $this->currency->getOnSiteMeta();
+        $currency_id = $this->request->get('currency_id', 'i');
+        if(! $currency_id){
+            $cu_on_site = $this->currency->getOnSiteMeta();
+
+        } else {
+            $cu_on_site = $this->currency->getMeta($currency_id);
+        }
+
         $cu_main    = $this->currency->getMainMeta();
 
         $t = new DataTables2('content');
 
-        $t  -> ajax('module/run/shop/products/index/' . $parent_id, ['filter' => $_GET])
+        $t  -> ajax('module/run/shop/products/index/' . $categories_id, ['filter' => $_GET])
 //            ->orderDef(0, 'desc')
 //            -> th($this->t('common.id'), 'c.id', 1, 1, 'width: 60px')
             -> th($this->t('shop.sky'), 'c.sku', 1, 1, 'width: 60px')
@@ -101,14 +109,23 @@ class Products extends Content
         $t->get('c.id',     null, null, null);
         $t->get('ci.url',   null, null, null);
         $t->get('c.status', null, null, null);
-        $t->get("'{$cu_on_site['symbol']}' as symbol ", null, null, null);
-        $t->get("ROUND( CASE
-            WHEN c.currency_id = {$cu_on_site['id']} THEN pp.price
-            WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id = {$cu_main['id']} THEN pp.price * {$cu_on_site['rate']}
-            WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id <> {$cu_main['id']} THEN pp.price / cu.rate * {$cu_on_site['rate']}
-            END, 2 ) as price", null, null, null);
+        $t->get("c.has_variants ", null, null, null);
+        $t->get("cu.symbol ", null, null, null);
+
+//        $t->get("CASE
+//            WHEN c.currency_id = {$cu_on_site['id']} and c.currency_id = {$cu_main['id']} THEN pp.price
+//            WHEN c.currency_id = {$cu_on_site['id']} and c.currency_id <> {$cu_main['id']} THEN pp.price / cu.rate * {$cu_on_site['rate']}
+//
+//            WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id = {$cu_main['id']} THEN pp.price * {$cu_on_site['rate']}
+//            WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id <> {$cu_main['id']} THEN 1
+//            END as price", null, null, null);
+
+        $t->get('pp.price as pprice', null, null, null);
+//        $t->debug();
 
         if($this->request->isXhr()){
+
+            $variants = new \modules\shop\models\products\variants\ProductsVariants();
 
             // filter
             $filter = $this->request->post('filter');
@@ -118,12 +135,19 @@ class Products extends Content
 
             $where = [];
 
+            $price = "(CASE
+            WHEN c.currency_id = {$cu_on_site['id']} and c.currency_id = {$cu_main['id']} THEN pp.price
+            WHEN c.currency_id = {$cu_on_site['id']} and c.currency_id <> {$cu_main['id']} THEN pp.price / cu.rate * {$cu_on_site['rate']}
+
+            WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id = {$cu_main['id']} THEN pp.price * {$cu_on_site['rate']}
+            WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id <> {$cu_main['id']} THEN 1
+            END )";
             if($filter['minp'] > 0 && $filter['maxp'] > 0){
-                $where[] = " price between '{$filter['minp']}' and '{$filter['maxp']}' ";
+                $where[] = " $price between '{$filter['minp']}' and '{$filter['maxp']}' ";
             } elseif($filter['minp'] > 0 && empty($filter['maxp'])){
-                $where[] = " price >= '{$filter['minp']}'";
+                $where[] = " $price >= '{$filter['minp']}'";
             } elseif(empty($filter['minp']) && $filter['maxp'] > 0){
-                $where[] = " price <= '{$filter['maxp']}'";
+                $where[] = " $price <= '{$filter['maxp']}'";
             }
 
             if(strlen($filter['sku']) > 2){
@@ -142,6 +166,22 @@ class Products extends Content
                     break;
             }
 
+            // filter features
+
+            if(isset($filter['f'])){
+                foreach ($filter['f'] as $features_id => $a) {
+                    $in = implode(',', $a);
+
+                    $t->join("__content_features cf{$features_id} on
+                        cf{$features_id}.content_id=c.id
+                    and cf{$features_id}.features_id = {$features_id}
+                    and cf{$features_id}.values_id in (". $in .")
+                    ");
+                }
+            }
+
+
+
             $where = !empty($where) ? implode(' and ', $where)  : null;
 
             $t  -> from('__content c')
@@ -151,21 +191,27 @@ class Products extends Content
                 -> join("__content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}")
                 -> where($where);
 
-            if($parent_id > 0){
-                $t->join("__content_relationship cr on cr.content_id=c.id and cr.categories_id={$parent_id}");
+            if($categories_id > 0){
+                $t->join("__content_relationship cr on cr.content_id=c.id and cr.categories_id={$categories_id}");
             }
 
             $t-> execute();
 
             $res = array();
             foreach ($t->getResults(false) as $i=>$row) {
+
                 $img = $this->images->cover($row['id'], 'thumbs');
 
                 $img = $img ? "<img style='max-width:30px; max-height: 30px; float:left; margin-right: 1em;' src='/{$img}'>" : "<i class='fa fa-file-image-o'></i>";
                 $icon_link = Icon::create('fa-external-link');
                 $status = $this->t($this->type .'.status_' . $row['status']);
 
-                $prices = $this->prices->get($row['id']);
+                $variantsCount = 0;
+                if($row['has_variants']){
+                    $variantsCount = $variants->total($row['id']);
+                }
+
+                $prices = $this->prices->get($row['id'], $cu_on_site, $cu_main);
 
 //                $res[$i][] = $row['id'];
                 $res[$i][] = $row['sku'];
@@ -173,12 +219,14 @@ class Products extends Content
                     $img .
                     " <a class='status-{$row['status']}' title='{$status}' href='module/run/shop/products/edit/{$row['id']}'>{$row['name']}</a>"
                     . " <a href='/{$row['url']}' target='_blank'>{$icon_link}</a>"
+                    . ($row['has_variants'] ?  '<br><abbr>'. $variantsCount .' варіанти</abbr>' : '')
                 ;
 //                $cu = $this->prices->getProductCurrency($row['id']);
                 foreach ($this->customersGroups->getItems(0, 0) as $group) {
                     $res[$i][] =
-                    "<span style='margin-right: 1em;'><input class='form-control' value='". (isset($prices[$group['id']]) ? $prices[$group['id']] : 0) ."'></span>"
+//                    "<span style='margin-right: 1em;'><input class='form-control' value='". (isset($prices[$group['id']]) ? $prices[$group['id']] : 0) ."'></span>"
 //                    . "<span style='position:relative;margin-top:-10px;'>". (isset($cu['symbol']) ? $cu['symbol'] .' ' : '') ."</span>"
+                        '<abbr title="'. $row['pprice'] .' '.$row['symbol'].'">'.(isset($prices[$group['id']]) ? $prices[$group['id']] : 0) .' '. $cu_on_site['symbol'] . "</abbr>"
                     ;
                 }
                 $res[$i][] =
@@ -222,11 +270,19 @@ class Products extends Content
         }
 
         $this->template->assign('sidebar', $this->template->fetch('shop/categories/tree'));
-        $this->output( $this->filter() . $t->init());
+        $this->output( $this->filter($categories_id) . $t->init());
     }
 
-    private function filter()
+    private function filter($categories_id)
     {
+        if($categories_id > 0){
+            $features = new \modules\shop\models\categories\Features();
+            $this->template->assign('features', $features->get($categories_id));
+        }
+
+
+        $this->template->assign('categories_id', $categories_id);
+        $this->template->assign('currency', $this->currency->get());
         $this->template->assign('groups', $this->customersGroups->getItems(0, 0));
         return $this->template->fetch('shop/products/filter');
     }

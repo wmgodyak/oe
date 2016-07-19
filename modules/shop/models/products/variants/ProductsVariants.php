@@ -62,6 +62,22 @@ class ProductsVariants extends Model
     }
 
     /**
+     * @param $content_id
+     * @return array|mixed
+     * @throws \system\core\exceptions\Exception
+     */
+    public function total($content_id)
+    {
+        return self::$db
+            ->select("
+              select count(id) as t
+              from __products_variants
+              where content_id = '{$content_id}'
+            ")
+            ->row('t');
+    }
+
+    /**
      * @param $variants_id
      * @return string
      * @throws \system\core\exceptions\Exception
