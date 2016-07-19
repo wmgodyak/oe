@@ -8,22 +8,101 @@
 
 namespace modules\order\controllers\admin;
 
+use helpers\bootstrap\Button;
+use helpers\bootstrap\Icon;
+use modules\order\models\admin\OrdersProducts;
+use system\core\DataTables2;
 use system\Engine;
+use system\models\Currency;
 
 defined("CPATH") or die();
 
+/**
+ * Class Order
+ * @package modules\order\controllers\admin
+ */
 class Order extends Engine
 {
+    private $order;
+    private $orderProducts;
+    private $currency;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->order = new \modules\order\models\admin\Order();
+        $this->orderProducts = new OrdersProducts();
+        $this->currency = new Currency();
+    }
+
     public function init()
     {
         $this->assignToNav('Замовлення', 'module/run/order', 'fa-money', null, 100);
+        $this->assignToNav('Замовлення', 'module/run/order', 'fa-money', 'module/run/order', 1);
+
         $this->assignToNav('Статуси', 'module/run/order/status', 'fa-money', 'module/run/order', 1);
         $this->template->assignScript('modules/order/js/admin/order.js');
     }
 
     public function index()
     {
-        // TODO: Implement index() method.
+        $t = new DataTables2('orders');
+
+        $t  -> ajax('module/run/order')
+            -> th($this->t('order.oid'), 'o.oid', 1, 1, 'width: 160px')
+            -> th($this->t('order.status.status'), "osi.status", 1, 1, 'width:100px')
+            -> th($this->t('order.username'), "concat(u.surname, ' ', u.name) as username", 1, 1)
+            -> th($this->t('order.amount') .', '. $this->currency->getOnSiteMeta('symbol'), null, 0, 0, 'width: 160px')
+            -> th($this->t('order.paid'), 'o.paid', 0, 1, 'width: 20px')
+            -> th($this->t('order.created'), 'o.created', 0, 1, 'width: 180px')
+            -> th($this->t('common.tbl_func'), null, 0, 0, 'width: 180px')
+            -> orderDef(0, 'desc')
+            -> get('o.id', null, 0, 0)
+            -> get('o.status_id', null, 0, 0)
+            -> get('os.bg_color', null, 0, 0)
+            -> get('os.txt_color', null, 0, 0)
+        ;
+
+        if($this->request->isXhr()){
+
+            $t  -> from('__orders o')
+                -> join('__users u on u.id=o.users_id')
+                -> join("__orders_status os on os.id=o.status_id")
+                -> join("__orders_status_info osi on osi.status_id=o.status_id and osi.languages_id={$this->languages_id}")
+                -> execute();
+
+            $res = array();
+            foreach ($t->getResults(false) as $i=>$row) {
+                $res[$i][] = $row['oid'];
+                $res[$i][] = "<span class='label' style='background: {$row['bg_color']}; color:{$row['txt_color']}'>{$row['status']}</span>";
+                $res[$i][] = $row['username'];
+                $res[$i][] = $this->orderProducts->amount($row['id']);
+                $res[$i][] = $row['paid'] == 1 ? 'ТАК' : '';
+                $res[$i][] = date('d.m.Y H:i:s', strtotime($row['created']));
+
+                if($row['status_id'] != 2){
+                    $res[$i][] =
+                        (string)Button::create
+                        (
+                            Icon::create(Icon::TYPE_EDIT),
+                            ['class' => 'b-orders-edit btn-primary', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
+                        ) .
+                        (string)Button::create
+                        (
+                            Icon::create(Icon::TYPE_DELETE),
+                            ['class' => 'b-orders-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+                        )
+                    ;
+                } else {
+                    $res[$i][] = '';
+                }
+            }
+
+            echo $t->render($res, $t->getTotal());return;
+        }
+
+        $this->output($t->init());
     }
     public function create()
     {
@@ -33,10 +112,12 @@ class Order extends Engine
     {
         // TODO: Implement edit() method.
     }
+
     public function delete($id)
     {
-        // TODO: Implement delete() method.
+        echo $this->order->delete($id, $this->admin['id']);
     }
+
     public function process($id)
     {
         // TODO: Implement process() method.

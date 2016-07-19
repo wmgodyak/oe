@@ -41,9 +41,9 @@ class Status extends Engine
 
         $t  -> ajax('module/run/order/status/index')
             -> th($this->t('common.id'), 'os.id', true, true, 'width: 20px')
-            -> th($this->t('ordersStatus.status'), 'i.status', true, true)
-            -> th($this->t('ordersStatus.external_id'), 'os.external_id', true, true, 'width: 280px')
-            -> th($this->t('ordersStatus.on_site'), 'os.on_site', true, true, 'width: 280px')
+            -> th($this->t('order.status.status'), 'i.status', true, true)
+            -> th($this->t('order.status.external_id'), 'os.external_id', true, true, 'width: 280px')
+            -> th($this->t('order.status.on_site'), 'os.on_site', true, true, 'width: 280px')
             -> th($this->t('common.tbl_func'), null, false, false, 'width: 180px')
             ->get('os.bg_color', null,null,null)
             ->get('os.txt_color', null,null,null)

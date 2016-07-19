@@ -26,4 +26,5 @@ class Status extends Model
     {
         return self::$db->select("select id from __orders_status where is_main = 1 limit 1")->row('id');
     }
+
 }

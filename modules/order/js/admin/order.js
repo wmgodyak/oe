@@ -1,4 +1,28 @@
+engine.orders = {
+    init: function()
+    {
+        $(document).on('click', '.b-orders-delete', function(){
+            engine.orders.delete($(this).data('id'));
+        });
+    },
+    delete: function(id)
+    {
+        engine.confirm
+        (
+            t.order.delete_question,
+            function()
+            {
+                engine.request.get('./module/run/order/delete/' + id, function(d){
+                    if(d > 0){
+                        engine.refreshDataTable('orders');
+                    }
+                });
+                $(this).dialog('close').dialog('destroy').remove();
+            }
+        );
+    }
 
+};
 engine.ordersStatus = {
     init: function()
     {
@@ -23,7 +47,7 @@ engine.ordersStatus = {
             };
             var dialog = engine.dialog({
                 content: d,
-                title: t.ordersStatus.action_create,
+                title: t.order.status.action_create,
                 autoOpen: true,
                 width: 600,
                 modal: true,
@@ -53,7 +77,7 @@ engine.ordersStatus = {
                 };
                 var dialog = engine.dialog({
                     content: d,
-                    title: t.ordersStatus.action_edit,
+                    title: t.order.status.action_edit,
                     autoOpen: true,
                     width: 600,
                     modal: true,
@@ -74,7 +98,7 @@ engine.ordersStatus = {
     {
         engine.confirm
         (
-            t.ordersStatus.delete_question,
+            t.order.status.delete_question,
             function()
             {
                 engine.request.get('./module/run/order/status/delete/' + id, function(d){
@@ -89,5 +113,6 @@ engine.ordersStatus = {
 };
 
 $(document).ready(function(){
+    engine.orders.init();
     engine.ordersStatus.init();
 });
