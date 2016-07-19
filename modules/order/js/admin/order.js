@@ -1,8 +1,34 @@
 engine.orders = {
     init: function()
     {
+        $(document).on('click', '.b-orders-edit', function(){
+            engine.orders.edit($(this).data('id'));
+        });
         $(document).on('click', '.b-orders-delete', function(){
             engine.orders.delete($(this).data('id'));
+        });
+    },
+    edit: function(id)
+    {
+        engine.request.get('module/run/order/edit/'+id, function(res)
+        {
+           var d = engine.dialog({
+               title   : res.t,
+               content : res.m,
+               width: 750,
+               buttons: {
+                   'Зберегти': function ()
+                   {
+                       $('#orderForm'+ id).submit();
+                   }
+               }
+           });
+            //engine.styleInputs();
+            $('#orderTabs'+ id).tabs();
+            engine.validateAjaxForm('#orderForm'+ id, function (res) {
+                engine.alert(res.m, 'success');
+                d.dialog('close');
+            });
         });
     },
     delete: function(id)

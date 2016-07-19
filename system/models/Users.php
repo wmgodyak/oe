@@ -268,6 +268,19 @@ class Users extends Model
           ")->row();
     }
 
+    /**
+     * @param $skey
+     * @return array|mixed
+     */
+    public function get()
+    {
+        return self::$db->select("
+            select u.*
+            from __users u
+            join __users_group g on g.id=u.group_id and g.backend = 0
+          ")->all();
+    }
+
     public function logout($id)
     {
         return self::$db->update('__users', array('sessid'=>''), " id = '{$id}' limit 1");

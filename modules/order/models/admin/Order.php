@@ -8,6 +8,7 @@
 
 namespace modules\order\models\admin;
 
+
 defined("CPATH") or die();
 
 /**
@@ -33,5 +34,32 @@ class Order extends \modules\order\models\Order
     public function delete($id, $manager_id)
     {
        return $this->status->change($id, 2, $manager_id);
+    }
+
+    /**
+     * @param $id
+     * @param string $key
+     * @return array|mixed
+     */
+    public function getData($id, $key = '*')
+    {
+        $order = $this->rowData('__orders', $id, $key);
+
+        if($key != '*')
+            return $order;
+
+//        $order['user'] = $this->users->getData($order['users_id']);
+
+        return $order;
+    }
+
+    public function assignToManager($id, $manager_id)
+    {
+
+    }
+
+    public function update($id, $data)
+    {
+        return $this->updateRow('__orders', $id, $data);
     }
 }

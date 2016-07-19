@@ -10,10 +10,12 @@ namespace modules\order\controllers\admin;
 
 use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
+use modules\delivery\models\DeliveryPayment;
 use modules\order\models\admin\OrdersProducts;
 use system\core\DataTables2;
 use system\Engine;
 use system\models\Currency;
+use system\models\Users;
 
 defined("CPATH") or die();
 
@@ -26,6 +28,9 @@ class Order extends Engine
     private $order;
     private $orderProducts;
     private $currency;
+    private $deliveryPayment;
+    private $ordersStatus;
+    private $users;
 
     public function __construct()
     {
@@ -34,6 +39,9 @@ class Order extends Engine
         $this->order = new \modules\order\models\admin\Order();
         $this->orderProducts = new OrdersProducts();
         $this->currency = new Currency();
+        $this->deliveryPayment = new DeliveryPayment();
+        $this->ordersStatus = new \modules\order\models\admin\Status();
+        $this->users = new Users();
     }
 
     public function init()
@@ -108,9 +116,66 @@ class Order extends Engine
     {
         // TODO: Implement create() method.
     }
-    public function edit($id)
+
+    public function edit($id, $tab = null)
     {
-        // TODO: Implement edit() method.
+        $data = $this->order->getData($id);
+        if(empty($data)) {
+            $this->response->sendError(403, 1);
+        }
+        switch($tab){
+            case 'info':
+                $this->editInfo($data);
+                break;
+            case 'products':
+                $this->editProducts($data);
+                break;
+            case 'history':
+                $this->editHistory($data);
+                break;
+            default:
+                $s=0;
+
+                if(empty($data['manager_id'])){
+                    // assign to manager
+                    $this->order->update($id, ['manager_id' => $this->admin['id']]);
+                }
+
+                $dt = date('d.m.Y H:i:s', strtotime($data['created']));
+                $t = "Редагування замовлення №{$data['oid']}. Від {$dt}";
+                $this->template->assign('id', $data['id']);
+
+                $m = $this->template->fetch('orders/form/index');
+
+                $this->response->body(['s' => $s, 'm' => $m, 't' => $t])->asJSON();
+
+                break;
+        }
+    }
+
+    private function editInfo($order)
+    {
+        $this->template->assign('order', $order);
+        $this->template->assign('delivery', $this->deliveryPayment->getDelivery());
+        $this->template->assign('payment', $this->deliveryPayment->getPayment($order['delivery_id']));
+        $this->template->assign('status', $this->ordersStatus->get());
+        $this->template->assign('users', $this->users->get());
+
+        echo $this->template->fetch('orders/form/info');
+    }
+
+    private function editHistory($order)
+    {
+        $this->template->assign('order', $order);
+        echo $this->template->fetch('orders/form/history');
+    }
+
+    private function editProducts($order)
+    {
+        $this->template->assign('products', $this->orderProducts->get($order['id']));
+        $this->template->assign('amount', $this->orderProducts->amount($order['id']));
+        $this->template->assign('order', $order);
+        echo $this->template->fetch('orders/form/products');
     }
 
     public function delete($id)
@@ -120,7 +185,7 @@ class Order extends Engine
 
     public function process($id)
     {
-        // TODO: Implement process() method.
+        d($_POST);
     }
 
 

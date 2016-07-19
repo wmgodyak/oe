@@ -12,6 +12,16 @@ defined("CPATH") or die();
 
 class Status extends \system\models\Engine
 {
+    public function get()
+    {
+        return self::$db
+            ->select("
+                select s.id, i.status
+                from __orders_status s
+                join __orders_status_info i on i.status_id=s.id and i.languages_id='{$this->languages_id}'
+            ")
+            ->all();
+    }
     /**
      * @param $id
      * @param string $key
