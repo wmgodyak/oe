@@ -334,7 +334,7 @@ var engine = {
                 },
                 hide_on_mouseleave: true
             },
-            "plugins" : [ "wholerow",  "ui", 'crrm', "cookies" ]
+            "plugins" : [ "wholerow",  "ui", 'crrm', "cookies", 'state' ]
         };
 
         var moveCallback;
@@ -418,8 +418,8 @@ var engine = {
                     return ;
                 }
 
-                $tree.jstree(config)
-                    .on('click', 'a', function(e) {
+                $tree.jstree(config);
+                $tree.on('click', 'a', function(e) {
                         e.preventDefault();
                         var treeLink = $(this).attr("href");
                         if (treeLink !== "#"){
