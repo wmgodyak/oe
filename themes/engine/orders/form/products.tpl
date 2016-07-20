@@ -20,5 +20,9 @@
             <td>{$product.price * $product.quantity}</td>
         </tr>
     {/foreach}
+    <tr>
+        <td colspan="4" style="text-align: right">Сума: </td>
+        <td><b>{$amount}</b></td>
+    </tr>
     </tbody>
 </table>

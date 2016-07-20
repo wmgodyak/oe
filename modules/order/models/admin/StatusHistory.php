@@ -38,4 +38,9 @@ class StatusHistory extends Model
             ]
         );
     }
+
+    public function history($orders_id)
+    {
+//        return self::$db->select("select s.status_id as id, si.status ")
+    }
 }
