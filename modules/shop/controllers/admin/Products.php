@@ -129,7 +129,8 @@ class Products extends Content
 
             // filter
             $filter = $this->request->post('filter');
-            if($filter['group_id'] > 0){
+
+            if(isset($filter['group_id']) && $filter['group_id'] > 0){
                 $this->group_id = $filter['group_id'];
             }
 
@@ -142,6 +143,9 @@ class Products extends Content
             WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id = {$cu_main['id']} THEN pp.price * {$cu_on_site['rate']}
             WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id <> {$cu_main['id']} THEN 1
             END )";
+
+            $filter['minp'] = isset($filter['minp']) ? $filter['minp'] : 0;
+            $filter['maxp'] = isset($filter['maxp']) ? $filter['maxp'] : 0;
             if($filter['minp'] > 0 && $filter['maxp'] > 0){
                 $where[] = " $price between '{$filter['minp']}' and '{$filter['maxp']}' ";
             } elseif($filter['minp'] > 0 && empty($filter['maxp'])){
@@ -150,20 +154,24 @@ class Products extends Content
                 $where[] = " $price <= '{$filter['maxp']}'";
             }
 
-            if(strlen($filter['sku']) > 2){
+            if(isset($filter['sku']) && strlen($filter['sku']) > 2){
                 $where[]= " c.sku like '{$filter['sku']}%'";
             }
+            if(isset($filter['status'])){
 
-            switch($filter['status']){
-                case 'publsihed':
-                    $where[] = " c.status = 'publsihed'";
-                    break;
-                case 'hidden':
-                    $where[] = " c.status = 'hidden'";
-                    break;
-                default:
-                    $where[] = " c.status in ('published', 'hidden')";
-                    break;
+                switch($filter['status']){
+                    case 'publsihed':
+                        $where[] = " c.status = 'publsihed'";
+                        break;
+                    case 'hidden':
+                        $where[] = " c.status = 'hidden'";
+                        break;
+                    default:
+                        $where[] = " c.status in ('published', 'hidden')";
+                        break;
+                }
+            } else{
+                $where[] = " c.status in ('published', 'hidden')";
             }
 
             // filter features
