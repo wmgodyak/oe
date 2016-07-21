@@ -232,5 +232,20 @@ class Order extends Engine
 
         call_user_func_array(array($controller, $action), $params);
     }
+    public function products()
+    {
+        include "Products.php";
+
+        $params = func_get_args();
+
+        $action = 'index';
+        if(!empty($params)){
+            $action = array_shift($params);
+        }
+
+        $controller  = new Products();
+
+        call_user_func_array(array($controller, $action), $params);
+    }
 
 }

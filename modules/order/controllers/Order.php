@@ -16,6 +16,7 @@ use modules\users\models\Users;
 use system\core\EventsHandler;
 use system\core\Session;
 use system\Front;
+use system\models\Currency;
 
 defined("CPATH") or die();
 
@@ -34,6 +35,7 @@ class Order extends Front
     private $order;
     private $status;
     private $ordersProducts;
+    private $currency;
 
 //    public $delivery;
 //    public $payment;
@@ -47,6 +49,8 @@ class Order extends Front
         $this->order = new \modules\order\models\Order();
         $this->status = new Status();
         $this->ordersProducts = new OrdersProducts();
+
+        $this->currency = new Currency();
     }
 
     public function init()
@@ -100,6 +104,7 @@ class Order extends Front
                 $order['languages_id']   = $this->languages_id;
                 $order['users_group_id'] = $ui['group_id'];
                 $order['status_id']      = $this->status->getMainId();
+                $order['currency_id']    = $this->currency->getMainMeta('id');
 
                 $orders_id = $this->order->create($order);
 
