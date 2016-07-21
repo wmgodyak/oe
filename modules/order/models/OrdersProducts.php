@@ -24,6 +24,7 @@ class OrdersProducts extends Model
      * @param $quantity
      * @param $price
      * @param $variants_id
+     * @return bool|string
      */
     public function create($orders_id, $products_id, $quantity, $price, $variants_id)
     {

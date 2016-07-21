@@ -36,19 +36,19 @@ class OrdersStatus extends Model
      */
     public function change($orders_id, $status_id, $manager_id = null, $comment = null)
     {
-        $this->beginTransaction();
+//        $this->beginTransaction();
 
         $this->updateRow('__orders', $orders_id, ['status_id' => $status_id]);
 
         $this->history->create($orders_id, $status_id, $manager_id, $comment);
 
-        if($this->hasError()){
-            $this->rollback();
+//        if($this->hasError()){
+//            $this->rollback();
+//
+//            return false;
+//        }
 
-            return false;
-        }
-
-        $this->commit();
+//        $this->commit();
 
         return true;
     }

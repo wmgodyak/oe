@@ -55,7 +55,7 @@ class Users extends Engine
         $t
             -> th($this->t('common.id'),        'u.id', true, true)
             -> th($this->t('users.pib'),       'CONCAT(u.surname , \' \', u.name) as username', true, true )
-            -> th($this->t('users.group'),     'ugi.name as group_name', false, true)
+            -> th($this->t('users.group.name'), 'ugi.name as group_name', false, true)
             -> th($this->t('users.email'),     'u.email', true, true)
             -> th($this->t('users.phone'),     'u.phone', true, true)
             -> th($this->t('users.created') ,  'u.created', true, false)

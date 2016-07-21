@@ -352,7 +352,6 @@ class DataTables2
         }
 
         foreach ($this->th as $th) {
-
             $attr = empty($th['style']) ? '' : "style=\"{$th['style']}\"";
             $html .= "<th {$attr}>{$th['label']}</th>\r\n";
             $c++;

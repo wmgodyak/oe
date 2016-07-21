@@ -8,6 +8,7 @@
 
 namespace modules\order\models;
 
+use modules\order\models\admin\OrdersStatus;
 use system\models\Model;
 
 defined("CPATH") or die();
@@ -18,9 +19,25 @@ defined("CPATH") or die();
  */
 class Order extends Model
 {
+    private $ordersStatus;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->ordersStatus = new OrdersStatus();
+    }
+
+    /**
+     * @param $data
+     * @return bool|string
+     */
     public function create($data)
     {
-        return $this->createRow('__orders', $data);
+        $id = $this->createRow('__orders', $data);
+        $this->ordersStatus->change($id, 1);
+
+        return $id;
     }
 
     /**

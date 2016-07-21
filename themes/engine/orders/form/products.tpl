@@ -26,3 +26,10 @@
     </tr>
     </tbody>
 </table>
+
+<div class="form-group">
+    <label for="prepayment" class="col-sm-3 control-label">Передплата</label>
+    <div class="col-sm-9">
+        <input id="addProduct{$order.id}" class="form-control">
+    </div>
+</div>

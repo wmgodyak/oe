@@ -12,6 +12,8 @@ use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
 use modules\delivery\models\DeliveryPayment;
 use modules\order\models\admin\OrdersProducts;
+use modules\order\models\admin\OrdersStatus;
+use modules\order\models\admin\StatusHistory;
 use system\core\DataTables2;
 use system\Engine;
 use system\models\Currency;
@@ -31,6 +33,8 @@ class Order extends Engine
     private $deliveryPayment;
     private $ordersStatus;
     private $users;
+    private $history;
+    private $os;
 
     public function __construct()
     {
@@ -42,6 +46,8 @@ class Order extends Engine
         $this->deliveryPayment = new DeliveryPayment();
         $this->ordersStatus = new \modules\order\models\admin\Status();
         $this->users = new Users();
+        $this->history = new StatusHistory();
+        $this->os = new OrdersStatus();
     }
 
     public function init()
@@ -68,6 +74,7 @@ class Order extends Engine
             -> orderDef(0, 'desc')
             -> get('o.id', null, 0, 0)
             -> get('o.status_id', null, 0, 0)
+            -> get('o.one_click', null, 0, 0)
             -> get('os.bg_color', null, 0, 0)
             -> get('os.txt_color', null, 0, 0)
         ;
@@ -84,7 +91,8 @@ class Order extends Engine
             foreach ($t->getResults(false) as $i=>$row) {
                 $res[$i][] = $row['oid'];
                 $res[$i][] = "<span class='label' style='background: {$row['bg_color']}; color:{$row['txt_color']}'>{$row['status']}</span>";
-                $res[$i][] = $row['username'];
+                $res[$i][] = $row['username']
+                    . ($row['one_click'] ? " <label class='label label-info'>Один клік</label>" : "");
                 $res[$i][] = $this->orderProducts->amount($row['id']);
                 $res[$i][] = $row['paid'] == 1 ? 'ТАК' : '';
                 $res[$i][] = date('d.m.Y H:i:s', strtotime($row['created']));
@@ -123,6 +131,7 @@ class Order extends Engine
         if(empty($data)) {
             $this->response->sendError(403, 1);
         }
+
         switch($tab){
             case 'info':
                 $this->editInfo($data);
@@ -136,9 +145,10 @@ class Order extends Engine
             default:
                 $s=0;
 
+                // assign to manager
                 if(empty($data['manager_id'])){
-                    // assign to manager
                     $this->order->update($id, ['manager_id' => $this->admin['id']]);
+                    $this->os->change($id, 3, $this->admin['id']);
                 }
 
                 $dt = date('d.m.Y H:i:s', strtotime($data['created']));
@@ -167,6 +177,7 @@ class Order extends Engine
     private function editHistory($order)
     {
         $this->template->assign('order', $order);
+        $this->template->assign('history', $this->history->history($order['id']));
         echo $this->template->fetch('orders/form/history');
     }
 
@@ -185,10 +196,26 @@ class Order extends Engine
 
     public function process($id)
     {
-        d($_POST);
+        if(! $this->request->isPost()) die;
+        $s= 0; $m=0;
+        $oData = $this->order->getData($id);
+
+        $data = $this->request->post('data');
+        $this->order->beginTransaction();
+        $this->order->update($id, $data);
+
+        if($oData['status_id'] != $data['status_id']){
+            $this->os->change($id, $data['status_id'], $this->admin['id'], $this->request->post('s_comment', 's'));
+        }
+        if($this->order->hasError()){
+            $this->order->rollback();
+        } else {
+            $this->order->commit();
+            $s=1;
+            $m = 'Дані збережено';
+        }
+        $this->response->body(['s' => $s, 'm' => $m])->asJSON();
     }
-
-
 
     public function status()
     {

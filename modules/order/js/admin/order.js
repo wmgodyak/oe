@@ -4,9 +4,28 @@ engine.orders = {
         $(document).on('click', '.b-orders-edit', function(){
             engine.orders.edit($(this).data('id'));
         });
+
         $(document).on('click', '.b-orders-delete', function(){
             engine.orders.delete($(this).data('id'));
         });
+
+        $(document).on('change', '#delivery_id', function(){
+            var id = $(this).data('id');
+            var delivery_id = $(this).find('option:selected').val();
+            engine.request.post({
+                url  : '/route/delivery/getPayment',
+                data : {delivery_id: delivery_id},
+                success: function(d)
+                {
+                    var out = '';
+                    $(d.payment).each(function(i,e){
+                        out += '<option value="'+ e.id +'">'+ e.name +'</option>'
+                    });
+                    $('#payment_id_'+id).html(out);
+                }
+            })
+        });
+
     },
     edit: function(id)
     {
@@ -25,9 +44,34 @@ engine.orders = {
            });
             //engine.styleInputs();
             $('#orderTabs'+ id).tabs();
-            engine.validateAjaxForm('#orderForm'+ id, function (res) {
-                engine.alert(res.m, 'success');
-                d.dialog('close');
+            $("#addProduct"+id).select2({
+                ajax: {
+                    url: "module/run/order/",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term, // search term
+                            page: params.page
+                        };
+                    },
+                    processResults: function (data, params) {
+                        // parse the results into the format expected by Select2
+                        // since we are using custom formatting functions we do not need to
+                        // alter the remote JSON data, except to indicate that infinite
+                        // scrolling can be used
+                        params.page = params.page || 1;
+
+                        return {
+                            results: data.items,
+                            pagination: {
+                                more: (params.page * 30) < data.total_count
+                            }
+                        };
+                    },
+                    cache: true
+                },
+                minimumInputLength: 1
             });
         });
     },

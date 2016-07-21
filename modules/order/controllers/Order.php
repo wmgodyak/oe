@@ -58,6 +58,7 @@ class Order extends Front
     public function checkout()
     {
         if(! $this->request->isPost()) die;
+
         $s = 0; $m = null;
         $ui = Session::get('user');
 

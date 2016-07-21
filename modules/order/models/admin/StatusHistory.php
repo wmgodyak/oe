@@ -39,8 +39,21 @@ class StatusHistory extends Model
         );
     }
 
+    /**
+     * @param $orders_id
+     * @return mixed
+     * @throws \system\core\exceptions\Exception
+     */
     public function history($orders_id)
     {
-//        return self::$db->select("select s.status_id as id, si.status ")
+        return self::$db
+            ->select("
+                select os.status_id as id, si.status, os.created,os.comment
+                from __orders_status_history os
+                join __orders_status_info si on si.status_id=os.status_id and si.languages_id = {$this->languages_id}
+                where os.orders_id = '{$orders_id}'
+                order by os.id desc
+            ")
+            ->all();
     }
 }

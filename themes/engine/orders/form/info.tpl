@@ -4,7 +4,7 @@
             <div class="form-group">
                 <label for="delivery_id" class="col-sm-3 control-label">Доставка</label>
                 <div class="col-sm-9">
-                    <select name="data[delivery_id]" id="delivery_id" class="form-control">
+                    <select name="data[delivery_id]" id="delivery_id" data-id="{$order.id}" class="form-control">
                         {foreach $delivery as $item}
                             <option {if $order.delivery_id == $item.id}selected{/if} value="{$item.id}">{$item.name}</option>
                         {/foreach}
@@ -27,7 +27,7 @@
             <div class="form-group">
                 <label for="payment_id" class="col-sm-3 control-label">Оплата</label>
                 <div class="col-sm-9">
-                    <select name="data[payment_id]" id="payment_id" class="form-control">
+                    <select name="data[payment_id]" id="payment_id_{$order.id}" class="form-control">
                         {foreach $payment as $item}
                             <option value="{$item.id}" {if $order.payment_id==$item.id}selected{/if}>{$item.name}</option>
                         {/foreach}
@@ -43,7 +43,7 @@
             <div class="form-group">
                 <label for="paid" class="col-md-3 control-label">Оплачено</label>
                 <div class="col-md-9">
-                    <input type="hidden"  name="data[paid]"  value="0">
+                    <input type="hidden"  name="data[paid]"  value="0" {if $order.paid == 1}disabled{/if}>
                     <input class="switch" type="checkbox" name="data[paid]" id="paid" {if $order.paid == 1}checked{/if} value="1">
                 </div>
             </div>
@@ -56,6 +56,13 @@
                             <option value="{$item.id}" {if $order.status_id==$item.id}selected{/if}>{$item.status}</option>
                         {/foreach}
                     </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="s_comment" class="col-sm-3 control-label">Коментар до статусу</label>
+                <div class="col-sm-9">
+                    <textarea name="s_comment" id="s_comment" class="form-control"></textarea>
                 </div>
             </div>
         </div>
@@ -75,10 +82,17 @@
             <div class="form-group">
                 <label for="comment" class="col-sm-3 control-label">Коментар</label>
                 <div class="col-sm-9">
-                    <textarea name="data[comment]" id="comment" class="form-control">{$order.comment}</textarea>
+                    <textarea name="data[comment]" id="comment" disabled class="form-control">{$order.comment}</textarea>
                 </div>
             </div>
         </div>
     </div>
     <input type="hidden" name="token" value="{$token}">
 </form>
+<script>
+    engine.validateAjaxForm('#orderForm'+ {$order.id}, function (res) {
+        engine.alert(res.m, 'success');
+        engine.closeDialog();
+        engine.refreshDataTable('orders');
+    });
+</script>
