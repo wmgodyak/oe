@@ -9,6 +9,8 @@
 namespace modules\order\models\admin;
 
 
+use modules\users\models\Users;
+
 defined("CPATH") or die();
 
 /**
@@ -18,12 +20,14 @@ defined("CPATH") or die();
 class Order extends \modules\order\models\Order
 {
     private $status;
+    private $users;
 
     public function __construct()
     {
         parent::__construct();
 
         $this->status = new OrdersStatus();
+        $this->users = new Users();
     }
 
     /**
@@ -33,7 +37,7 @@ class Order extends \modules\order\models\Order
      */
     public function delete($id, $manager_id)
     {
-       return $this->status->change($id, 2, $manager_id);
+       return $this->status->change($id, 4, $manager_id);
     }
 
     /**
@@ -48,7 +52,7 @@ class Order extends \modules\order\models\Order
         if($key != '*')
             return $order;
 
-//        $order['user'] = $this->users->getData($order['users_id']);
+        $order['user'] = $this->users->getData($order['users_id']);
 
         return $order;
     }

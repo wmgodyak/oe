@@ -104,7 +104,7 @@ class Order extends Front
                 $order['languages_id']   = $this->languages_id;
                 $order['users_group_id'] = $ui['group_id'];
                 $order['status_id']      = $this->status->getMainId();
-                $order['currency_id']    = $this->currency->getMainMeta('id');
+                $order['currency_id']    = $this->currency->getOnSiteMeta('id');
 
                 $orders_id = $this->order->create($order);
 
@@ -187,6 +187,7 @@ class Order extends Front
             $order['languages_id']   = $this->languages_id;
             $order['users_group_id'] = $user['group_id'];
             $order['status_id']      = $this->status->getMainId();
+            $order['currency_id']    = $this->currency->getOnSiteMeta('id');
 
             $orders_id = $this->order->create($order);
             if($orders_id > 0){

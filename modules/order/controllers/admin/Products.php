@@ -9,6 +9,7 @@
 namespace modules\order\controllers\admin;
 
 use modules\order\models\admin\OrdersProducts;
+use modules\shop\models\products\Prices;
 use system\Engine;
 
 /**
@@ -18,20 +19,30 @@ use system\Engine;
 class Products extends Engine
 {
     private $products;
+    private $prices;
     public function __construct()
     {
         parent::__construct();
+
         $this->products = new OrdersProducts();
+        $this->prices   = new Prices();
     }
 
     public function index()
     {
         // TODO: Implement index() method.
     }
+
     public function create()
     {
         $orders_id = $this->request->post('orders_id', 'i');
         $products_id = $this->request->post('products_id', 'i');
+        $currency_id = $this->request->post('currency_id', 'i');
+        $group_id    = $this->request->post('group_id', 'i');
+        $price       = $this->prices->get($products_id, $group_id, $currency_id);
+        $this->products->create($orders_id, $products_id, 1, $price, 0);
+
+        echo $this->products->hasError() ? 0 : 1;
     }
 
     public function search()
@@ -54,27 +65,34 @@ class Products extends Engine
 
         if(!empty($where)){
             $items = $this->products->search($where, $group_id, $currency_id);
+            foreach ($items as $k=>$item) {
+                $items[$k]['text'] = "{$item['sku']} {$item['name']} {$item['price']} {$item['symbol']}";
+            }
         }
 
 
         $res = array(
-            'total_count' => count($items),
+            'total_count' => $this->products->searchTotal(),
             'incomplete_results' => false,
-            'items' => $items
+            'results' => $items
         );
 
         echo json_encode($res);
     }
+
     public function edit($id)
     {
         // TODO: Implement edit() method.
     }
+
     public function process($id)
     {
         // TODO: Implement process() method.
     }
+
     public function delete($id)
     {
-        // TODO: Implement delete() method.
+        echo $this->products->delete($id);
     }
+
 }

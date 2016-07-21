@@ -22,13 +22,20 @@ class Prices extends Model
     /**
      * @param $products_id
      * @param $group_id
+     * @param null $currency_id
      * @return array|mixed
      * @throws \system\core\exceptions\Exception
      */
-    public function get($products_id, $group_id)
+    public function get($products_id, $group_id, $currency_id = null)
     {
-        $cu_on_site = $this->currency->getOnSiteMeta();
+        if( ! $currency_id){
+            $cu_on_site = $this->currency->getOnSiteMeta();
+        } else {
+            $cu_on_site = $this->currency->getMeta($currency_id);
+        }
+
         $cu_main    = $this->currency->getMainMeta();
+
         return self::$db
             ->select("
               select ROUND( CASE

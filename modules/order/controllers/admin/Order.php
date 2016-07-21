@@ -97,7 +97,7 @@ class Order extends Engine
                 $res[$i][] = $row['paid'] == 1 ? 'ТАК' : '';
                 $res[$i][] = date('d.m.Y H:i:s', strtotime($row['created']));
 
-                if($row['status_id'] != 2){
+                if($row['status_id'] != 4){
                     $res[$i][] =
                         (string)Button::create
                         (
@@ -201,12 +201,19 @@ class Order extends Engine
         $oData = $this->order->getData($id);
 
         $data = $this->request->post('data');
+
         $this->order->beginTransaction();
+
+        if($oData['paid'] == 0 && $data['paid'] == 1){
+            $data['paid_date'] = date('Y-m-d H:i:s');
+        }
+
         $this->order->update($id, $data);
 
         if($oData['status_id'] != $data['status_id']){
             $this->os->change($id, $data['status_id'], $this->admin['id'], $this->request->post('s_comment', 's'));
         }
+
         if($this->order->hasError()){
             $this->order->rollback();
         } else {

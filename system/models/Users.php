@@ -16,9 +16,16 @@ class Users extends Model
      * @param $id
      * @return array|mixed
      */
-    public function getData($id, $key= '*')
+    public function getData($id, $key = '*')
     {
-        $data = self::$db->select("select {$key} from __users where id='{$id}'")->row($key);
+        $data = self::$db->select(
+            "select u.{$key}, g.backend, gi.name as group_name
+            from __users u
+            join __users_group g on g.id=u.group_id
+            join __users_group_info gi on gi.group_id=u.group_id and gi.languages_id={$this->languages_id}
+            where u.id = '{$id}'
+            limit 1"
+        )->row($key);
 
         return $data;
     }

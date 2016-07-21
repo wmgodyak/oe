@@ -34,7 +34,7 @@ engine.orders = {
            var d = engine.dialog({
                title   : res.t,
                content : res.m,
-               width: 750,
+               width: 900,
                buttons: {
                    'Зберегти': function ()
                    {

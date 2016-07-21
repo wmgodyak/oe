@@ -70,12 +70,38 @@
 
             <div class="form-group">
                 <label for="users_id" class="col-sm-3 control-label">Клієнт</label>
+                <div class="col-sm-7">
+                    <input type="hidden" name="data[users_id]" id="users_id">
+                    <input type="text" readonly value="{$order.user.surname} {$order.user.name}">
+
+                    {*<select name="data[users_id]" id="users_id" class="form-control">*}
+                        {*{foreach $users as $item}*}
+                            {*<option value="{$item.id}" {if $order.users_id == $item.id}selected{/if}>{$item.surname} {$item.name}</option>*}
+                        {*{/foreach}*}
+                    {*</select>*}
+                </div>
+                <div class="col-sm-2">
+                    {if $order.users_id > 0}
+                        <a href="javascript:;" class="b-o-users-edit" data-id="{$order.users_id}" title="Редагувати"><i class="fa fa-pencil"></i></a>
+                    {/if}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Телефон</label>
                 <div class="col-sm-9">
-                    <select name="data[users_id]" id="users_id" class="form-control">
-                        {foreach $users as $item}
-                            <option value="{$item.id}" {if $order.users_id == $item.id}selected{/if}>{$item.surname} {$item.name}</option>
-                        {/foreach}
-                    </select>
+                    <input type="text" readonly value="{$order.user.phone}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Email</label>
+                <div class="col-sm-9">
+                    <input type="text" readonly value="{$order.user.email}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Група</label>
+                <div class="col-sm-9">
+                    <input type="text" readonly value="{$order.user.group_name}">
                 </div>
             </div>
 
@@ -90,6 +116,10 @@
     <input type="hidden" name="token" value="{$token}">
 </form>
 <script>
+
+    $(document).on('click', '.b-o-users-edit', function(){
+        engine.users.edit($(this).data('id'));
+    });
     engine.validateAjaxForm('#orderForm'+ {$order.id}, function (res) {
         engine.alert(res.m, 'success');
         engine.closeDialog();

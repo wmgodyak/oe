@@ -85,7 +85,8 @@ class Products extends Content
             $val = strip_tags($val);
             $val = addcslashes($val, '"\'');
             if(empty($val)) continue;
-            $where[] = " ci.name like '%{$val}%'";
+
+            $where[] = " (c.sku like '{$val}%' or ci.name like '%{$val}%' ) ";
         }
 
         if(empty($where)){

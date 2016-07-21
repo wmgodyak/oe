@@ -34,8 +34,9 @@ class Order extends Model
      */
     public function create($data)
     {
+//        $data['status_id'] = isset($data['status_id']) ? $data['status_id'] : 1;
         $id = $this->createRow('__orders', $data);
-        $this->ordersStatus->change($id, 1);
+//        $this->ordersStatus->change($id, $data['status_id']);
 
         return $id;
     }
