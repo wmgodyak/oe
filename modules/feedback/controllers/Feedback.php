@@ -54,7 +54,7 @@ class Feedback extends Front
         } else {
 
             $this->feedback->create($data);
-            $mailer = new Mailer('feedback', $data);
+            $mailer = new Mailer('modules/feedback/mail', 'Feedback', $data);
 
             if(!$mailer->send()) {
                 $m = '<br>ERROR: '.$mailer->getErrorInfo();

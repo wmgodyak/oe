@@ -28,9 +28,12 @@ class Mailer
     private $languages_id = 0;
     private $data;
     private $has_address = false;
+    private $tpl  = null;
 
-    public function __construct($code, $data = null, $isHtml = true)
+    public function __construct($tpl, $subject, $data = null, $isHtml = true)
     {
+        $this->tpl = $tpl;
+        $this->settings['subject'] = $subject;
         $this->phpmailer    = new \PHPMailer();
         $this->languages_id = 1; // todo change it in future
         $this->data         = $data;
@@ -48,46 +51,7 @@ class Mailer
         $this->phpmailer->isHTML($isHtml);
         $this->phpmailer->CharSet="UTF-8";
 
-        if(strlen($code) <= 30){
-            $this->setTemplate($code);
-        } else{
-            $this->setBody($code);
-        }
         $this->clearAddresses();
-    }
-
-    public function setTemplate($code)
-    {
-        $template = DB::getInstance()
-            ->select("
-                select i.subject, i.body
-                from __mail_templates t
-                join __mail_templates_info i on i.templates_id=t.id and i.languages_id='{$this->languages_id}'
-                where t.code = '{$code}'
-                limit 1
-              ")
-            ->row();
-
-        if(empty($template)){
-            throw new Exception("Wrong template code $code");
-        }
-
-        $this->settings['subject'] = $template['subject'];
-
-        $header                    = Settings::getInstance()->get('mail_header');
-        $footer                    = Settings::getInstance()->get('mail_footer');
-        $this->settings['body']    = $header . $template['body'] . $footer;
-
-        return $this;
-    }
-
-    public function setBody($body)
-    {
-        $header                 = Settings::getInstance()->get('mail_header');
-        $footer                 = Settings::getInstance()->get('mail_footer');
-        $this->settings['body'] = $header . $body . $footer;
-
-        return $this;
     }
 
     /**
@@ -157,16 +121,25 @@ class Mailer
      */
     public function send()
     {
+        $template = Template::getInstance();
         //add subject
         $this->phpmailer->Subject = $this->settings['subject'];
 
-        // add body
-        if(empty($this->settings['body'])){
-            throw new Exception('Empty body. Set template with method $mailer->setTemplate(tpl_code); or $mailer->setBody(custom body);');
-        }
+        $header = Settings::getInstance()->get('mail_header');
+        $footer = Settings::getInstance()->get('mail_footer');
 
         Template::getInstance()->assign('data', $this->data);
-        $this->phpmailer->Body = Template::getInstance()->fetchString($this->settings['body']);
+
+        if($header != ''){
+            $header = $template->fetch($header);
+        }
+        if($footer != ''){
+            $footer = $template->fetch($footer);
+        }
+
+        $body = $template->fetch($this->tpl);
+
+        $this->phpmailer->Body = $header . $body . $footer;
 
         // add address
 

@@ -50,7 +50,7 @@ class Users extends \system\models\Users
             }
 
             if($s && isset($data['email'])){
-                $mailer = new Mailer('user_register', $data);
+                $mailer = new Mailer('modules/users/mail/register', 'Register user', $data);
                 $mailer
                     ->addAddress($data['email'], $data['name'])
                     ->send();

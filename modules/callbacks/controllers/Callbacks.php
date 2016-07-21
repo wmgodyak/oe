@@ -57,7 +57,7 @@ class Callbacks extends Front
                 $m = 'ERROR1: '. $this->callback->getErrorMessage();
             } else {
 
-                $mailer = new Mailer('callback', $data);
+                $mailer = new Mailer('modules/callback/mail', 'New callback', $data);
 
                 if(!$mailer->send()) {
                     $m = '<br>ERROR2: '.$mailer->getErrorInfo();

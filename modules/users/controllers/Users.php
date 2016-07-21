@@ -125,7 +125,7 @@ class Users extends Front
                         $user['skey'] = $skey;
                         $user['fp_link'] = APPURL . "route/users/newPsw/{$skey}";
 
-                        $mailer = new Mailer('user_fp', $user);
+                        $mailer = new Mailer('modules/users/mail/fp', 'FP', $user);
                         $mailer
                             ->addAddress($user['email'], $user['name'])
                             ->send();

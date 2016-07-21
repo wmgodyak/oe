@@ -250,7 +250,7 @@ class Comments extends Model
             if(empty($item['email'])) continue;
 
             $item['page_url'] = $url;
-            $mailer = new Mailer('comments_notify_subscribers', $item);
+            $mailer = new Mailer('modules/comments/notify_subscribers', 'Notify', $item);
             $mailer->addAddress($item['email'], $item['name']);
 
             if(!$mailer->send()){
