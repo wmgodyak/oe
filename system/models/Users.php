@@ -276,17 +276,30 @@ class Users extends Model
     }
 
     /**
-     * @param $skey
-     * @return array|mixed
+     * @param int $backend
+     * @param array $where
+     * @return mixed
+     * @throws \system\core\exceptions\Exception
      */
-    public function get()
+    public function get($backend = 0, $where  = [])
     {
+        $w = '';
+        if( ! empty($where)){
+            $w = ' where '. implode(' and ', $where);
+        }
         return self::$db->select("
-            select u.*
+            select SQL_CALC_FOUND_ROWS u.*
             from __users u
-            join __users_group g on g.id=u.group_id and g.backend = 0
+            join __users_group g on g.id=u.group_id and g.backend = {$backend}
+            {$w}
           ")->all();
     }
+
+    public function getTotal()
+    {
+        return self::$db->select('SELECT FOUND_ROWS() as t')->row('t');
+    }
+
 
     public function logout($id)
     {

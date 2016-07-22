@@ -71,16 +71,11 @@
             <div class="form-group">
                 <label for="users_id" class="col-sm-3 control-label">Клієнт</label>
                 <div class="col-sm-7">
-                    <input type="hidden" name="data[users_id]" id="users_id">
-                    <input type="text" readonly value="{$order.user.surname} {$order.user.name}">
-
-                    {*<select name="data[users_id]" id="users_id" class="form-control">*}
-                        {*{foreach $users as $item}*}
-                            {*<option value="{$item.id}" {if $order.users_id == $item.id}selected{/if}>{$item.surname} {$item.name}</option>*}
-                        {*{/foreach}*}
-                    {*</select>*}
+                    <input type="hidden" name="data[users_id]" id="users_id" value="{$order.users_id}">
+                    <input type="text" id="users_name" readonly value="{$order.user.surname} {$order.user.name}">
                 </div>
                 <div class="col-sm-2">
+                    <a href="javascript:;" class="b-o-users-add" title="Додати"><i class="fa fa-plus"></i></a>
                     {if $order.users_id > 0}
                         <a href="javascript:;" class="b-o-users-edit" data-id="{$order.users_id}" title="Редагувати"><i class="fa fa-pencil"></i></a>
                     {/if}
@@ -89,19 +84,19 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">Телефон</label>
                 <div class="col-sm-9">
-                    <input type="text" readonly value="{$order.user.phone}">
+                    <input type="text" id="users_phone" readonly value="{$order.user.phone}">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">Email</label>
                 <div class="col-sm-9">
-                    <input type="text" readonly value="{$order.user.email}">
+                    <input type="text" id="users_email" readonly value="{$order.user.email}">
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">Група</label>
                 <div class="col-sm-9">
-                    <input type="text" readonly value="{$order.user.group_name}">
+                    <input type="text" id="users_group" readonly value="{$order.user.group_name}">
                 </div>
             </div>
 
@@ -117,12 +112,175 @@
 </form>
 <script>
 
-    $(document).on('click', '.b-o-users-edit', function(){
-        engine.users.edit($(this).data('id'));
+    function setCustomerData(id){
+        engine.request.post({
+            url: 'module/run/order/customerData',
+            data: {
+                id: id
+            },
+            success: function(d){
+                var user = d.user;
+                $("#users_id").val(user.id);
+                $("#users_name").val(user.surname + ' ' + user.name);
+                $("#users_phone").val(user.phone);
+                $("#users_email").val(user.email);
+            }
+        });
+    }
+
+    $(document).on('click', '.b-o-users-add', function(){
+        engine.request.get('module/run/order/selectCustomer/{$order.id}', function(res)
+        {
+            var dd = engine.dialog({
+                title   : res.t,
+                content : res.m,
+                width: 900,
+                buttons: {
+                    'Додати': function ()
+                    {
+                        dd.dialog('close');//.dialog('remove');
+
+                        engine.request.get('module/run/users/create', function(d)
+                        {
+                            var buttons = [
+                                {
+                                    text    : t.common.button_save,
+                                    "class" : 'btn-success',
+                                    click   : function(){
+                                        $('#form').submit();
+                                    }
+                                }
+                            ];
+                            var dialog = engine.dialog({
+                                content: d,
+                                title: t.users.create_title,
+                                autoOpen: true,
+                                width: 750,
+                                modal: true,
+                                buttons: buttons
+                            });
+
+                            $('#data_phone').mask('+99 (999) 9999999');
+                            $('#data_group_id').select2();
+
+                            engine.validateAjaxForm
+                            (
+                                    '#form',
+                                    function(d){
+                                        if(d.s){
+                                            setCustomerData(d.id);
+                                            dialog.dialog('close');
+                                            dialog.dialog('destroy');//.remove()
+                                        }
+                                    },
+                                    {
+                                        'data[password]': {
+                                            equalTo: "#data_password"
+                                        }
+                                    }
+                            );
+                        });
+//                        d.dialog('close').dialog('remove');
+//                        engine.users.create(function(d){
+//                            setCustomerData(d.id);
+////                            d.dialog('close').dialog('remove');
+//                        });
+                    },
+                    'Зберегти': function ()
+                    {
+                        dd.dialog('close');//.dialog('remove');
+                    }
+                }
+            });
+
+            $("#selCustomer").select2({
+                placeholder: "введіть імя, email або номер телефону",
+                minimumInputLength: 3,
+                ajax: {
+                    url: "module/run/order/customersSearch",
+                    dataType: 'json',
+                    quietMillis: 250,
+                    type: 'POST',
+                    data: function (params) {
+                        return {
+                            q           : params.term, // search term
+                            page        : params.page,
+                            token       : TOKEN
+                        };
+                    }
+                }
+            }).on("select2:selecting", function(e) {
+                engine.request.post({
+                    url: 'module/run/order/process/{$order.id}',
+                    data:{
+                        token       : TOKEN,
+                        data: {
+                            users_id : e.params.args.data.id
+                        }
+                    },
+                    success: function(res)
+                    {
+                        if(res.s){
+                            setCustomerData(e.params.args.data.id);
+                            dd.dialog('close');//.dialog('remove');
+                        }
+                    }
+                });
+        });
     });
-    engine.validateAjaxForm('#orderForm'+ {$order.id}, function (res) {
-        engine.alert(res.m, 'success');
-        engine.closeDialog();
-        engine.refreshDataTable('orders');
     });
+
+        $(document).on('click', '.b-o-users-edit', function(){
+            var id = $(this).data('id');
+//            engine.users.edit($(this).data('id'));
+            engine.request.post({
+                url: 'module/run/users/edit/' + id,
+                data: {
+                    id: id
+                },
+                success: function(d)
+                {
+                    var buttons = [
+                        {
+                            text    : t.common.button_save,
+                            "class" : 'btn-success',
+                            click   : function(){
+                                $('#form').submit();
+                            }
+                        }
+                    ];
+                    var dialog = engine.dialog({
+                        content: d,
+                        title: t.users.action_edit,
+                        autoOpen: true,
+                        width: 750,
+                        modal: true,
+                        buttons: buttons
+                    });
+
+                    $('#data_phone').mask('+99 (999) 9999999');
+
+                    $('#data_group_id').select2();
+
+                    engine.validateAjaxForm('#form', function(d){
+                                if(d.s){
+                                    setCustomerData(id);
+                                    dialog.dialog('close');
+                                    dialog.dialog('destroy').remove()
+                                }
+                            },
+                            {
+                                'data[password]': {
+                                 equalTo: "#data_password"
+                                }
+                            });
+                }
+            });
+        });
+
+        engine.validateAjaxForm('#orderForm'+ {$order.id}, function (res) {
+            engine.alert(res.m, 'success');
+            engine.closeDialog();
+            engine.refreshDataTable('orders');
+        });
 </script>

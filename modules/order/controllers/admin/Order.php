@@ -204,13 +204,13 @@ class Order extends Engine
 
         $this->order->beginTransaction();
 
-        if($oData['paid'] == 0 && $data['paid'] == 1){
+        if(isset($data['paid']) && $oData['paid'] == 0 && $data['paid'] == 1){
             $data['paid_date'] = date('Y-m-d H:i:s');
         }
 
         $this->order->update($id, $data);
 
-        if($oData['status_id'] != $data['status_id']){
+        if(isset($data['status_id']) && $oData['status_id'] != $data['status_id']){
             $this->os->change($id, $data['status_id'], $this->admin['id'], $this->request->post('s_comment', 's'));
         }
 
@@ -222,6 +222,54 @@ class Order extends Engine
             $m = 'Дані збережено';
         }
         $this->response->body(['s' => $s, 'm' => $m])->asJSON();
+    }
+
+    public function customersSearch()
+    {
+        $where =[]; $items= [];
+
+        $q = $this->request->post('q', 's');
+
+        if(!empty($q)){
+            $q = explode(' ', $q);
+            foreach ($q as $k=>$v) {
+                $v = trim($v);
+                if(empty($v)) continue;
+
+                $where[] = " ( u.name like '{$v}%' or u.surname like '{$v}%' or u.phone like '%{$v}%' or u.email like '{$v}%' ) ";
+            }
+        }
+
+        if(!empty($where)){
+            $items = $this->users->get(0, $where);
+            foreach ($items as $k=>$item) {
+                $items[$k]['text'] = "{$item['surname']} {$item['name']} {$item['phone']} {$item['email']}";
+            }
+        }
+
+        $res = array(
+            'total_count' => $this->users->getTotal(),
+            'incomplete_results' => false,
+            'results' => $items
+        );
+
+        echo json_encode($res);
+    }
+
+    /**
+     *
+     */
+    public function customerData()
+    {
+        $id = $this->request->post('id', 'i');
+        if($id > 0){
+            $this->response->body(['user' => $this->users->getData($id)])->asJSON();
+        }
+    }
+
+    public function selectCustomer()
+    {
+        $this->response->body(['t' => 'Виберіть кліеєнта', 'm' => $this->template->fetch('orders/form/select_customer')])->asJSON();
     }
 
     public function status()

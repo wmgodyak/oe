@@ -180,6 +180,7 @@ class Users extends Engine
                     if(empty($data['password'])) $data['password'] = $this->users->generatePassword();
 
                     $s = $this->users->create($data);
+                    $id = $s;
 
                     if($s > 0 && $this->request->post('notify', 'i') == 1){
                         $this->notify($data);
@@ -221,7 +222,7 @@ class Users extends Engine
             echo $this->users->getErrorMessage();
         }
 
-        $this->response->body(['s'=>$s, 'i' => $i, 'a' => isset($a['f']) ? $a['f'] : null])->asJSON();
+        $this->response->body(['s'=>$s, 'id' => $id, 'i' => $i, 'a' => isset($a['f']) ? $a['f'] : null])->asJSON();
     }
 
     private function notify($data)
