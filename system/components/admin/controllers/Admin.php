@@ -145,14 +145,15 @@ class Admin extends Engine {
 
         // витягнути список доступних мовних версій
         $langs = Lang::getInstance()->getLangs(); $c= false;
-        foreach ($langs as $l) {
-            if($lang == $l['code']){
-                Config::getInstance()->set('core.lang', $lang);
-                setcookie('lang', $lang, 3600+8, "/", "." . $_SERVER['HTTP_HOST']);
-                $this->template->assign('t', Lang::getInstance($lang, true)->t());
-                $c=true;
-            }
-        }
+//        foreach ($langs as $l) {
+//            if($lang == $l['code']){
+//                Config::getInstance()->set('core.lang', $lang);
+//                setcookie('lang', $lang, 3600+8, "/", "." . $_SERVER['HTTP_HOST']);
+//                $this->template->assign('t', Lang::getInstance($lang, true)->t());
+//                $c=true;
+//            }
+//        }
+
         if(! $c){
             $lang = Config::getInstance()->get('core.lang');
         }

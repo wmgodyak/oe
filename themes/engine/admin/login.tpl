@@ -20,8 +20,8 @@
                 <div class="input-group">
                     <label for="lang">{$t.admin.lang}</label>
                     <select name="data[lang]" id="adminLang">
-                        {foreach $langs as $lang}
-                            <option {if $lang.code == $s_lang}selected{/if} value="{$lang.code}">{$lang.name}</option>
+                        {foreach $langs as $code=>$lang}
+                            <option {if $code == $s_lang}selected{/if} value="{$code}">{$lang}</option>
                         {/foreach}
                     </select>
                 </div>
