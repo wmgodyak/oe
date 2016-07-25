@@ -88,8 +88,10 @@ class Import extends Engine
     private function upload()
     {
         if($_FILES['file']['error'] == UPLOAD_ERR_OK){
+            $path = $_FILES['file']['name'];
+            $ext = pathinfo($path, PATHINFO_EXTENSION);
             $tmp_name = $_FILES["file"]["tmp_name"];
-            $name = 'import.' . time() . '.xml';
+            $name = 'import.' . time() . '.' . $ext;
             $this->fname = $name;
             return move_uploaded_file($tmp_name, DOCROOT . self::UPLOADS_DIR . "$name");
         }

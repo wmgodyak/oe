@@ -82,7 +82,7 @@ class Import extends Model
         return true;
     }
 
-    public function category($ex_id, $name, $ex_parentId = 0)
+    public function category($ex_id, $name, $ex_parentId = null)
     {
         $id = $this->getContentIdByExID($ex_id);
 
@@ -90,9 +90,9 @@ class Import extends Model
             return true;
         }
 
-        $parent_id = 0;
+        $parent_id = 0; $parent_url = '';
 
-        if($ex_parentId > 0){
+        if($ex_parentId){
             $parent_id = $this->getContentIdByExID($ex_parentId);
         }
 
@@ -112,12 +112,30 @@ class Import extends Model
         );
 
         foreach ($this->languages->get() as $lang) {
+
+            if($parent_id > 0){
+                $parent_url = self::$db
+                    ->select("
+                        select url
+                        from __content_info
+                        where content_id={$parent_id} and languages_id={$this->languages_id}
+                        limit 1
+                       ")
+                    ->row('url');
+                $parent_url = (! empty($parent_url)) ? $parent_url . '/' : '';
+            }
+
+            $url = $parent_url . Translit::str2url($name);
+            if($this->issetUrl($url)){
+                $url .= '_dubl_' . microtime();
+            }
+
             $a =
                 [
                     'content_id'   => $content_id,
                     'languages_id' => $lang['id'],
                     'name'         => $name,
-                    'url'          => Translit::str2url($name)
+                    'url'          => $url
                 ];
             parent::createRow('__content_info', $a);
         }
@@ -132,6 +150,27 @@ class Import extends Model
         $this->commit();
 
         return true;
+    }
+
+    public function setIsFolder()
+    {
+        $in = self::$db
+            ->select("select distinct parent_id from __content where types_id={$this->cat_type_id} and parent_id <> 0")
+            ->all('parent_id');
+        $in = implode(',', $in);
+        self::$db->update('__content', ['isfolder'=> 1], " id in ({$in})");
+    }
+
+    private function issetUrl($url)
+    {
+        return self::$db
+            ->select("
+                        select id
+                        from __content_info
+                        where url = '{$url}' and languages_id={$this->languages_id}
+                        limit 1
+                       ")
+            ->row('id') > 0;
     }
 
     public function product

@@ -21,6 +21,13 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <label for="file" class="col-sm-3 control-label">Що імпортуємо?</label>
+                    <div class="col-sm-9">
+                        <input type="radio" name="type" value="categories"> категорії
+                        <input type="radio" name="type" value="products"> товари
+                    </div>
+                </div>
+                <div class="form-group">
                     <div class="col-sm-9 col-md-offset-3">
                         <button type="submit" class="btn btn-large btn-success">Погнали</button>
                     </div>
