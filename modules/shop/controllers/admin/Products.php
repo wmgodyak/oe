@@ -28,7 +28,7 @@ class Products extends Content
     private $prices;
     private $currency;
     private $customersGroups;
-    private $group_id = 20;
+    private $group_id = 5;
 //    private $variants;
 
     public function __construct()
@@ -112,14 +112,6 @@ class Products extends Content
         $t->get("c.has_variants ", null, null, null);
         $t->get("cu.symbol ", null, null, null);
 
-//        $t->get("CASE
-//            WHEN c.currency_id = {$cu_on_site['id']} and c.currency_id = {$cu_main['id']} THEN pp.price
-//            WHEN c.currency_id = {$cu_on_site['id']} and c.currency_id <> {$cu_main['id']} THEN pp.price / cu.rate * {$cu_on_site['rate']}
-//
-//            WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id = {$cu_main['id']} THEN pp.price * {$cu_on_site['rate']}
-//            WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id <> {$cu_main['id']} THEN 1
-//            END as price", null, null, null);
-
         $t->get('pp.price as pprice', null, null, null);
 //        $t->debug();
 
@@ -194,7 +186,7 @@ class Products extends Content
 
             $t  -> from('__content c')
                 -> join("__content_types ct on ct.type = '{$this->type}' and ct.id=c.types_id")
-                ->join("__products_prices pp on pp.content_id=c.id and pp.group_id={$this->group_id}")
+                -> join("__products_prices pp on pp.content_id=c.id and pp.group_id={$this->group_id}", 'left')
                 -> join("__currency cu on cu.id = c.currency_id")
                 -> join("__content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}")
                 -> where($where);

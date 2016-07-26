@@ -286,6 +286,116 @@ class Import extends Model
         return true;
     }
 
+
+    public function product2
+    (
+        $ex_id,
+        $category_ex_id,
+        array $data,
+        array $info,
+        array $prices = [],
+        $image = null
+    )
+    {
+        $id = $this->getContentIdByExID($ex_id);
+
+        if($id){
+            return true;
+        }
+
+        $category_id = 0;
+
+        if($category_ex_id > 0){
+            $category_id = $this->getContentIdByExID($category_ex_id);
+        }
+
+        $this->beginTransaction();
+
+        $data = array_merge
+        (
+            $data,
+            [
+                'types_id'     => $this->product_type_id,
+                'subtypes_id'  => $this->product_sub_type_id,
+                'owner_id'     => $this->owner['id'],
+                'external_id'  => $ex_id,
+                'status'       => 'published'
+            ]
+        );
+
+        $content_id = parent::createRow
+        (
+            '__content',
+            $data
+        );
+
+        $url = Translit::str2url($info['name']);
+
+        if($this->issetUrl($url)){
+            $url .= '_dubl_' . microtime();
+        }
+
+        foreach ($this->languages->get() as $lang) {
+            $info['content_id']   = $content_id;
+            $info['languages_id'] = $lang['id'];
+            $info['url']          = $url;
+            parent::createRow('__content_info', $info);
+        }
+
+        if($this->hasError()){
+            $this->log[] = 'Помилка при створенні товару. ' . $this->getError();
+            $this->rollback();
+            d($this->log);
+            return false;
+        }
+
+        // створю категорію
+        if($category_id > 0){
+            $this->contentRelations->create($content_id, $category_id, 1);
+        }
+
+        if($this->hasError()){
+            $this->log[] = 'Помилка при створенні товару. ' . $this->getError();
+            $this->rollback();
+            d($this->log);
+            return false;
+        }
+
+        // ціни
+        foreach ($prices as $group_id => $price) {
+            $this->productsPrices->create($content_id, $group_id, $price);
+        }
+
+        if($this->hasError()){
+            $this->log[] = 'Помилка при створенні товару. ' . $this->getError();
+            $this->rollback();
+            d($this->log);
+            return false;
+        }
+
+        // зображення
+        if(! empty($image)){
+            if(! $this->saveImage($image, $content_id)){
+                $this->rollback();
+                $this->log[] = "Помилка при збереженні зображення";
+                return false;
+            };
+        }
+
+        if($this->hasError()){
+            $this->log[] = 'Помилка при створенні товару. ' . $this->getError();
+            $this->rollback();
+            d($this->log);
+            return false;
+        }
+
+        $this->log[] = "Створено #$content_id {$info['name']}. ";
+
+        $this->commit();
+
+        return true;
+    }
+
     private function saveImage($url, $content_id)
     {
         $path = 'uploads/content/' . date('Y/m/d/H/i/');

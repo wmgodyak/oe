@@ -238,9 +238,9 @@ class DataTables2
      * @param string $type
      * @return $this
      */
-    public function join($q, $type = "join ")
+    public function join($q, $type = "")
     {
-        $this->join[] = $type .' '. $q;
+        $this->join[] = $type .' join '. $q;
 
         return $this;
     }

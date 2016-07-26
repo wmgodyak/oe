@@ -729,10 +729,35 @@ engine.shop = {
 
             function log(m)
             {
+                return;
                 var status = $('#status');
                 var str = status.html();
                 str = m + '<br>' + str;
                 status.html(str);
+            }
+
+            function parseCategories(adapter, file)
+            {
+                engine.request.post({
+                    url: 'module/run/shop/import/adapter/' + adapter,
+                    data: {
+                        type: 'categories',
+                        file: file
+                    },
+                    success: function(res)
+                    {
+                        if(res.s){
+                            $(res.log).each(function(i, e){
+                                log(e);
+                            });
+                        }
+                    },
+                    dataType: 'json',
+                    timeout: 3000000,
+                    error: function(d){
+                        log(d.responseText);
+                    }
+                });
             }
 
             function beginImport(adapter, file)
@@ -744,7 +769,6 @@ engine.shop = {
                     },
                     success: function(res)
                     {
-                        console.log(res);
                         if(res.s){
                             $(res.log).each(function(i, e){
                                 log(e);
@@ -778,6 +802,7 @@ engine.shop = {
                 engine.request.post({
                     url: 'module/run/shop/import/adapter/' + adapter + '/parseProducts/' + start,
                     data: {
+                        type: 'products',
                         file: file
                     },
                     success: function(res)
@@ -785,9 +810,9 @@ engine.shop = {
                         $(res.log).each(function(i, e){
                             log(e);
                         });
-                        if(start < total){
+                        if(res.s && start < total){
                             start++;
-                            parseProducts(adapter, file, start, total);
+                            //parseProducts(adapter, file, start, total);
                         }
                     },
                     dataType: 'json',
@@ -801,23 +826,42 @@ engine.shop = {
                 beforeSend: function() {
                     status.empty();
                     var percentVal = '0%';
-                    bar.width(percentVal)
+                    bar.width(percentVal);
                     percent.html(percentVal);
                 },
                 uploadProgress: function(event, position, total, percentComplete) {
                     var percentVal = percentComplete + '%';
-                    bar.width(percentVal)
+                    bar.width(percentVal);
                     percent.html(percentVal);
                 },
                 success: function() {
                     var percentVal = '100%';
-                    bar.width(percentVal)
+                    bar.width(percentVal);
                     percent.html(percentVal);
                 },
                 complete: function(xhr) {
                     var res = JSON.parse(xhr.responseText);
                     if(res.status == true){
-                        beginImport(res.adapter, res.file);
+                        if(res.type == 'categories'){
+                            parseCategories(res.adapter, res.file);
+                        } else if(res.type == 'products'){
+                            engine.request.post({
+                                url :'module/run/shop/import/adapter/' + res.adapter + '/getTotalProducts',
+                                data: {
+                                    file: res.file
+                                },
+                                success: function(t)
+                                {
+                                    t = parseInt(t);
+                                    if(t > 0){
+                                        parseProducts(res.adapter, res.file, 0, t);
+                                    }
+                                }
+                            });
+                        } else {
+                            beginImport(res.adapter, res.file);
+                        }
+
                     }
                 }
             });

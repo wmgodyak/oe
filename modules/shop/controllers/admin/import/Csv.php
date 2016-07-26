@@ -64,50 +64,58 @@ class Csv extends Engine
 
     public function getTotalProducts()
     {
-//        echo count($this->data->items->item);
+        echo count($this->data);
     }
 
     /**
      * @param $start
      * @return bool
      */
-    public function parseProducts($start)
+    public function parseProducts($start = 0)
     {
-        $i=0;
+        $i=0; $s = 1;
         foreach ($this->data as $product) {
-            d($product);
-            if($i> 5) break;
 
-            /*if($i == $start){
-                $in_stock = $this->xml_attribute($product, 'available') ? 1 : 0;
-                $ex_id    =  $this->xml_attribute($product, 'id');
-                $name = $product->name;
-                $category_ex_id = $product->categoryId;
-                $price          = $product->price;
-                $url = $product->url;
-                $image = $product->image;
-                $vendor = $product->vendor;
-                $description = $product->description;
-                $warranty = $product->warranty;
+            if($i > 13325 ){ // && $i == $start
 
-                $this->import->product
+                $currency = [
+                    'USD' => 1,
+                    'UAH' => 2
+                ];
+
+                $data = []; $info = []; $prices = [];
+
+                $category_ex_id = $product[0];
+                $ex_id          = $product[1];
+
+                $data['sku']         = $product[2];
+                $data['currency_id'] = $product[5] == 'ДОЛАР' ? $currency['USD'] : 'UAH';
+                $data['quantity'] = $product[6];
+                $data['in_stock'] = $product[6] > 0 ? 1 : 0;
+
+                $info['name']   = $product[3];
+                $info['title']  = $product[4];
+
+                $prices[5] = $product[7] * 1;
+                $prices[6] = $product[8] * 1;
+                $prices[7] = $product[9] * 1;
+                $prices[8] = $product[10] * 1;
+
+                $s = $this->import->product2
                 (
                     $ex_id,
-                    $name,
-                    $url,
                     $category_ex_id,
-                    $price,
-                    $in_stock,
-                    $image,
-                    $description,
-                    $vendor,
-                    $warranty
+                    $data,
+                    $info,
+                    $prices
                 );
-            }*/
+
+                $s = $s ? 1 : 0;
+            }
             $i++;
         }
 
-        $this->response(['s' => 1, 'log' => $this->import->log]);
+        $this->response(['s' => $s, 'log' => $this->import->log]);
     }
 
     private function parseCategories()
@@ -141,7 +149,7 @@ class Csv extends Engine
             if(!is_array($a)) continue;
 
             foreach ($a as $k=>$v) {
-                $a[$k] = iconv('cp1251', 'utf-8', $v);
+                $a[$k] = trim(iconv('cp1251', 'utf-8', $v));
             }
             $this->data[] = $a;
         }

@@ -46,17 +46,12 @@ class Import extends Engine
         $status = 0; $a = null;
         $adapter = $this->request->post('adapter');
 
-        $res = ['status' => $status, 'adapter' => $adapter ];
+        $res = ['status' => $status, 'adapter' => $adapter, 'type' => $this->request->post('type') ];
 
         $res['status'] = $this->upload();
         $res['file']   = $this->fname;
-        $this->response->body($res)->asJSON();
 
-        // 1. завантажити файл
-        // 2. валідація
-        // оновлення валюти
-        // імпорт категорій
-        // імпорт товарів
+        $this->response->body($res)->asJSON();
     }
 
     public function adapter()

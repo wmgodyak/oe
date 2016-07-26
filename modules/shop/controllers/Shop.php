@@ -33,7 +33,7 @@ class Shop extends Front
     private $categories;
     private $ipp = 15;
     private $total;
-    private $group_id = 20;
+    private $group_id = 5;
     private $prices;
     private $currency;
 
