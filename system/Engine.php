@@ -71,6 +71,8 @@ abstract class Engine extends Controller
 
     private $theme = null;
 
+    protected $modules = [];
+
 
     public function __construct()
     {
@@ -164,7 +166,7 @@ abstract class Engine extends Controller
         $this->initSystemComponents();
 
         $m = new Modules($this->theme, $lang, 'backend');
-        $m->init();
+        $this->modules = $m->init();
 
         $app = new App();
         $this->template->assign('app', $app);

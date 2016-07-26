@@ -152,14 +152,14 @@ class Lang
         'os' => 'Ossetian, Ossetic',
         'pa' => 'Panjabi, Punjabi',
         'pi' => 'Pali',
-        'pl' => 'Polish',
+        'pl' => 'Polska',
         'ps' => 'Pashto, Pushto',
         'pt' => 'Portuguese',
         'qu' => 'Quechua',
         'rm' => 'Romansh',
         'rn' => 'Kirundi',
         'ro' => 'Romanian, Moldavian, Moldovan',
-        'ru' => 'Russian',
+        'ru' => 'Русский',
         'rw' => 'Kinyarwanda',
         'sa' => 'Sanskrit (Sa?sk?ta)',
         'sc' => 'Sardinian',
@@ -238,15 +238,28 @@ class Lang
         return self::$instance;
     }
 
+    public function getAllowedLanguages()
+    {
+        return $this->_langs;
+    }
+
     /**
+     * @param null $theme
      * @return array
      */
-    public function getLangs()
+    public function getLangs($theme = null)
     {
-        if ($handle = opendir($this->dir)) {
+        $dir = $this->dir;
+
+        if($theme){
+            $dir = "themes/$theme/lang/";
+        }
+
+        if ($handle = opendir($dir)) {
             while (false !== ($entry = readdir($handle))) {
                 if ($entry != "." && $entry != ".."){
                     $entry = mb_strtolower($entry);
+                    $entry = str_replace('.ini','', $entry);
                     $this->langs[$entry] = $this->_langs[$entry];
                 }
             }
@@ -254,6 +267,11 @@ class Lang
         }
 
         return $this->langs;
+    }
+
+    public function getLang()
+    {
+        return $this->lang;
     }
 
     /**
@@ -264,12 +282,12 @@ class Lang
     {
         $dir = !$dir ? $this->dir : $dir;
 
-        if(!is_dir(DOCROOT . $dir . '/' . $this->lang)) {
+        if(!is_dir(DOCROOT . $dir )) {
 //            throw new Exception("Wrong lang dir: $dir");
             return;
         }
 
-        $fn = DOCROOT . $dir . '/' . $this->lang .'/common.ini';
+        $fn = DOCROOT . $dir . '/' . $this->lang .'.ini';
         if(! file_exists($fn)) return ;
 
         $a = parse_ini_file($fn, true);

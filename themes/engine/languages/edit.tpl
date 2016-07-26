@@ -8,7 +8,11 @@
     <div class="form-group">
         <label for="data_code" class="col-sm-3 control-label">{$t.languages.code}</label>
         <div class="col-sm-9">
-            <input name="data[code]" id="data_code"  class="form-control" value="{$data.code}" required placeholder="{$t.languages.placeholder_code}">
+            <select name="data[code]" id="data_code"  class="form-control" required>
+                {foreach $allowed as $code=>$name}
+                    <option {if $data.code == $code}selected{/if} value="{$code}">{$name} ({$code})</option>
+                {/foreach}
+            </select>
         </div>
     </div>
     <div class="form-group">

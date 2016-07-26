@@ -1194,3 +1194,31 @@
 .label-danger[href]:hover, .label-danger[href]:focus {
   background-color: #e15328
 }
+.ui-tabs-vertical {
+  width: 100%;
+  .ui-tabs-nav {
+    padding: .2em .1em .2em .2em;
+    float: left;
+    width: 15%;
+    li {
+      clear: left;
+      width: 100%;
+      border-bottom-width: 1px !important;
+      border-right-width: 0 !important;
+      margin: 0 -1px .2em 0;
+      a {
+        display: block;
+      }
+      &.ui-tabs-active {
+        padding-bottom: 0;
+        padding-right: .1em;
+        border-right-width: 1px;
+      }
+    }
+  }
+  .ui-tabs-panel {
+    //padding: 1em;
+    float: right;
+    width: 80%;
+  }
+}

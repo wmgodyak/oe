@@ -89,7 +89,7 @@ class Modules
     {
         $modules_dir = 'modules';
         $dir  =  $modules_dir .'/'. $module . '/lang';
-        $file = DOCROOT . $dir . '/' . $this->lang . '/'. $module . '.ini';
+        $file = DOCROOT . $dir . '/' . $this->lang . '.ini';
 
         if(!file_exists( $file )) {
             return ;
