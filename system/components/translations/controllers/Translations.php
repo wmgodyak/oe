@@ -89,6 +89,28 @@ class Translations extends Engine
 
     public function process($id = null)
     {
-        d($_POST);
+        $theme_path = Settings::getInstance()->get('themes_path');
+        $current = Settings::getInstance()->get('app_theme_current');
+
+        
+        $common = $this->request->post('common');
+
+        d($common);
+        
+        if($common){
+            foreach ($common as $code => $a) {
+                $fn = DOCROOT . $theme_path . $current . "/lang/{$code}_.ini";
+
+                d($a);
+            }
+        }
+        
+    }
+    
+    private function write($fn, $data)
+    {
+        foreach ($data as $item) {
+            
+        }
     }
 }
