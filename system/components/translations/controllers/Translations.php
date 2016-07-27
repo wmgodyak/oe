@@ -92,25 +92,107 @@ class Translations extends Engine
         $theme_path = Settings::getInstance()->get('themes_path');
         $current = Settings::getInstance()->get('app_theme_current');
 
-        
         $common = $this->request->post('common');
 
-        d($common);
+//        d($common);
         
         if($common){
             foreach ($common as $code => $a) {
                 $fn = DOCROOT . $theme_path . $current . "/lang/{$code}_.ini";
-
-                d($a);
+                $data = $this->buildOutputString($a);
+                file_put_contents($fn, $data);
             }
         }
-        
     }
-    
-    private function write($fn, $data)
+
+
+    /**
+     * line-break chars, default *x: "\n", windows: "\r\n"
+     *
+     * @var string
+     */
+    private $linebreak = "\n";
+
+    /**
+     * quote Strings - if true,
+     * writes ini files with doublequoted strings
+     *
+     * @var bool
+     */
+    private $quoteStrings = true;
+
+    /**
+     * string delimiter
+     *
+     * @var string
+     */
+    private $delim = '"';
+
+    private function buildOutputString($sectionsarray)
     {
-        foreach ($data as $item) {
-            
+        $content = '';
+        $sections = '';
+        $globals  = '';
+        if (!empty($sectionsarray)) {
+            // 2 loops to write `globals' on top, alternative: buffer
+            foreach ($sectionsarray as $section => $item) {
+                if (!is_array($item)) {
+                    $value    = $this->normalizeValue($item);
+                    $globals .= $section . ' = ' . $value . $this->linebreak;
+                }
+            }
+            $content .= $globals;
+            foreach ($sectionsarray as $section => $item) {
+                if (is_array($item)) {
+                    $sections .= $this->linebreak
+                        . "[" . $section . "]" . $this->linebreak;
+                    foreach ($item as $key => $value) {
+                        if (is_array($value)) {
+                            foreach ($value as $arrkey => $arrvalue) {
+                                $arrvalue  = $this->normalizeValue($arrvalue);
+                                $arrkey    = $key . '[' . $arrkey . ']';
+                                $sections .= $arrkey . ' = ' . $arrvalue
+                                    . $this->linebreak;
+                            }
+                        } else {
+                            $value     = $this->normalizeValue($value);
+                            $sections .= $key . ' = ' . $value . $this->linebreak;
+                        }
+                    }
+                }
+            }
+            $content .= $sections;
         }
+        return $content;
     }
+
+    /**
+     * normalize a Value by determining the Type
+     *
+     * @param string $value value
+     *
+     * @return string
+     */
+    protected function normalizeValue($value)
+    {
+        if (is_bool($value)) {
+            $value = $this->toBool($value);
+            return $value;
+        } elseif (is_numeric($value)) {
+            return $value;
+        }
+        if ($this->quoteStrings) {
+            $value = $this->delim . $value . $this->delim;
+        }
+        return $value;
+    }
+
+    public function toBool($value)
+    {
+        if ($value === true) {
+            return 'yes';
+        }
+        return 'no';
+    }
+
 }
