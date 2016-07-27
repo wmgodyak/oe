@@ -15,7 +15,7 @@ use system\models\Currency;
 
 class Products extends Content
 {
-    private $group_id = 20;
+    private $group_id = 5;
     private $currency;
 
     /**
@@ -156,6 +156,8 @@ class Products extends Content
         return $this;
     }
 
+
+
     /**
      * @return mixed
      * @throws \system\core\exceptions\Exception
@@ -163,7 +165,14 @@ class Products extends Content
     public function get()
     {
         if($this->categories_id > 0){
-            $this->join("join __content_relationship cr on cr.content_id=c.id and cr.categories_id = {$this->categories_id}");
+            if($this->isfolder($this->categories_id)){
+                $in = $this->categoriesChildrenID($this->categories_id);
+                if(! empty($in)){
+                    $this->join("join __content_relationship cr on cr.content_id=c.id and cr.categories_id in (". implode(',', $in) .")");
+                }
+            } else{
+                $this->join("join __content_relationship cr on cr.content_id=c.id and cr.categories_id = {$this->categories_id}");
+            }
         }
 
         $this->search();
@@ -252,5 +261,23 @@ class Products extends Content
                 limit 1
             ")
             ->row();
+    }
+
+    private function isfolder($id)
+    {
+        return self::$db->select("select isfolder from __content where parent_id={$id} limit 1")->row('isfolder') > 0;
+    }
+
+    public function categoriesChildrenID($parent_id)
+    {
+        $in = [];
+        foreach (self::$db->select("select id, isfolder from __content where parent_id={$parent_id}")->all() as $item)
+        {
+            $in[] = $item['id'];
+            if($item['isfolder']){
+                $in = array_merge($in, $this->categoriesChildrenID($item['id']));
+            }
+        }
+        return $in;
     }
 }

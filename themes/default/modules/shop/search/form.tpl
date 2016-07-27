@@ -1,12 +1,12 @@
 {function name=doCategories}
     {foreach $categories as $cat}
-        {if $cat.isfolder}
-            <optgroup>
-                {call doCategories categories=$cat.items}
-            </optgroup>
-        {else}
+        {* if $cat.isfolder}*}
+            {*<optgroup>*}
+                {*{call doCategories categories=$cat.items}*}
+            {*</optgroup>*}
+        {*{else}*}
             <option {if isset($smarty.get.cat) && $smarty.get.cat == $cat.id}selected{/if} data-href="{$cat.id}" value="{$cat.id}">{$cat.name}</option>
-        {/if}
+        {*{/if}*}
     {/foreach}
 {/function}
 <!-- begin tel-search__bottom -->
