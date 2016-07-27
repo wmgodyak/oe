@@ -258,8 +258,12 @@ class Lang
         if ($handle = opendir($dir)) {
             while (false !== ($entry = readdir($handle))) {
                 if ($entry != "." && $entry != ".."){
+
                     $entry = mb_strtolower($entry);
                     $entry = str_replace('.ini','', $entry);
+
+                    if( !isset($this->_langs[$entry])) continue;
+
                     $this->langs[$entry] = $this->_langs[$entry];
                 }
             }

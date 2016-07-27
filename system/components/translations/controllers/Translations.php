@@ -94,15 +94,27 @@ class Translations extends Engine
 
         $common = $this->request->post('common');
 
-//        d($common);
-        
         if($common){
             foreach ($common as $code => $a) {
-                $fn = DOCROOT . $theme_path . $current . "/lang/{$code}_.ini";
+                $fn = DOCROOT . $theme_path . $current . "/lang/{$code}.ini";
                 $data = $this->buildOutputString($a);
                 file_put_contents($fn, $data);
             }
         }
+
+        $modules = $this->request->post('modules');
+
+        if($modules){
+            foreach ($modules as $module => $a) {
+                foreach ($a as $lang => $data) {
+                    $fn = DOCROOT . "modules/{$module}/lang/{$lang}.ini";
+                    $data = $this->buildOutputString($data);
+                    file_put_contents($fn, $data);
+                }
+            }
+        }
+
+        $this->response->body(['s' => 1, 'm' => 'Переклади оновлено'])->asJSON();
     }
 
 
