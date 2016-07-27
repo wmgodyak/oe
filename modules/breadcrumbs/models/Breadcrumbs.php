@@ -37,13 +37,14 @@ class Breadcrumbs extends Model
         }
 
         $item = $this->getItem($id);
+
         if($item['parent_id'] > 0) {
             $items = array_merge($items, $this->get($item['parent_id']));
         } else {
             $categories_id = $this->getRelations($item['id'], 1);
             if($categories_id > 0){
                 $_item = $this->getItem($categories_id);
-                $items[] = $_item;
+//                $items[] = $_item;
                 if($_item['parent_id'] > 0) {
                     $items = array_merge($items, $this->get($_item['parent_id']));
                 }
