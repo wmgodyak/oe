@@ -83,9 +83,9 @@ class Categories extends Content
                 -> join('__users u on u.id=c.owner_id')
                 -> where("c.status in ('published', 'hidden')");
 
-            if($parent_id > 0){
+//            if($parent_id > 0){
                 $t->where("c.parent_id={$parent_id}");
-            }
+//            }
 
             $t-> execute();
 
