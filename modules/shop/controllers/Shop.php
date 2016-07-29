@@ -131,9 +131,14 @@ class Shop extends Front
         return $this->template->fetch($tpl);
     }
 
-    public function categories($parent_id = 0, $recursive = false)
+    /**
+     * @param int $parent_id
+     * @param int $level
+     * @return mixed
+     */
+    public function categories($parent_id = 0, $level = 0)
     {
-        return $this->categories->get($parent_id, $recursive);
+        return $this->categories->get($parent_id, $level);
     }
 
     public function products($categories_id = 0)

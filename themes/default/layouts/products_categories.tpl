@@ -11,9 +11,6 @@
 <div class="wrapper">
 
     {include file="chunks/header.tpl"}
-
-
-
     <!-- begin product-page -->
     <div class="product-page">
 
@@ -60,12 +57,10 @@
                 <!-- begin product-page__top-line -->
                 <div class="product-page__top-line">
                     <div class="title">{$page.title}</div>
-
                     {include file="modules/shop/category/sorting.tpl"}
-
                 </div>
                 <!-- end product-page__top-line -->
-
+                {include file="modules/shop/subnav.tpl"}
                 {assign var='products' value= $mod->shop->products($page.id)}
                 <!-- begin product__list -->
                 <div class="product__list">

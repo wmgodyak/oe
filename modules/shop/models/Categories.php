@@ -22,7 +22,7 @@ class Categories extends Content
      * @return mixed
      * @throws \system\core\exceptions\Exception
      */
-    public function get($parent_id = 0, $recursive = false)
+    public function get($parent_id = 0, $level = 0)
     {
         $items =  self::$db->select("
           select c.id, c.isfolder, ci.name, ci.title
@@ -32,10 +32,10 @@ class Categories extends Content
           where c.parent_id='{$parent_id}' and c.status = 'published'
           ")->all();
 
-        if($recursive){
+        if($level > 0){
             foreach ($items as $k=>$item) {
                 if($item['isfolder']){
-                    $items[$k]['items'] = $this->get($item['id'], $recursive);
+                    $items[$k]['items'] = $this->get($item['id'], -- $level);
                 }
             }
         }

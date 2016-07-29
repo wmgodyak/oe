@@ -11,7 +11,7 @@ var App = {
         this.cartDelateItem();
         this.mask();
         this.sidebar();
-        this.formValid();
+        //this.formValid();
         this.menu();
     },
     formStyle: function () {
@@ -253,7 +253,7 @@ var App = {
             });
         }
     },
-    formValid: function () {
+    /*formValid: function () {
         $('.form').validate({
             rules: {
                 name: "required",
@@ -276,7 +276,7 @@ var App = {
                 }
             }
         });
-    }
+    }*/
 };
 
 $(document).ready(function() {

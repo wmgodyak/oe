@@ -1,0 +1,12 @@
+.shop-sub-nav h2{
+    color: #666666;
+    font:16px/20px "Roboto-Regular", sans-serif;
+}
+.shop-sub-nav ul > li{
+    display: inline-block;
+    padding: 0 5px;
+}
+.shop-sub-nav ul > li > a{
+    color: #f04d4d;
+    font:14px/18px "Roboto-Regular", sans-serif;
+}

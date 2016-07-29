@@ -265,7 +265,7 @@ class Products extends Content
 
     private function isfolder($id)
     {
-        return self::$db->select("select isfolder from __content where parent_id={$id} limit 1")->row('isfolder') > 0;
+        return self::$db->select("select isfolder from __content where id={$id} limit 1")->row('isfolder') > 0;
     }
 
     public function categoriesChildrenID($parent_id)

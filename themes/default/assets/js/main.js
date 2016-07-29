@@ -237,10 +237,16 @@ var App = {
             $('.goods-nav__item').hover(function () {
                 $(this).children('.sub-menu').toggleClass('active')
             });
-            //var grid = document.getElementsByClassName('my-grid');
-            //for (var i = 0; i <= grid.length; i++){
-            //    waterfall(grid[i]);
-            //}
+            try{
+
+                var grid = document.getElementsByClassName('my-grid');
+                for (var i = 0; i <= grid.length; i++){
+                    waterfall(grid[i]);
+                }
+            } catch (err)
+            {
+                console.log(err);
+            }
         }else {
             $('.goods-nav__link').on('click', function () {
                 if(false == $(this).siblings().is(':visible')) {
