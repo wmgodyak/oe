@@ -108,6 +108,9 @@ class Wishlist extends Front
 
         if(empty($products_id)) die;
 
+        $wl = Session::get('wishlist');
+        if(isset($wl[$products_id])) die;
+
         $user = Session::get('user');
 
         if(! $user){
@@ -142,8 +145,8 @@ class Wishlist extends Front
     public function delete()
     {
         $id = $this->request->post('id', 'i');
-//        $wl = Session::get('wishlist');
-//        if(isset($wl[$products_id])) unset($wl[$products_id]);
+        $wl = Session::get('wishlist');
+        if(isset($wl[$id])) unset($wl[$id]);
 
         echo $this->wishlistProducts->delete($id);
     }

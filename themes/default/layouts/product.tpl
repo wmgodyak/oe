@@ -31,9 +31,13 @@
 
                     <div class="left">
                         <div class="product-slider1">
-                            {foreach $product.images as $k=>$img}
-                                <div class="slider1-item" style="background-image: url('/{$img.path}source/{$img.image}');"></div>
-                            {/foreach}
+                            {if $product.images|count > 0}
+                                {foreach $product.images as $k=>$img}
+                                    <div class="slider1-item" style="background-image: url('/{$img.path}source/{$img.image}');"></div>
+                                {/foreach}
+                                {else}
+                                <div class="slider1-item" style="background-image: url('/uploads/noimage.jpg');"></div>
+                            {/if}
                         </div>
 
                         {if $product.images|count > 1}
@@ -68,7 +72,7 @@
                                 {*Ваш СМА бонус: <span>+0 {$product.currency}</span>*}
                             {*</div>*}
                         {*</div>*}
-                        {if $product.has_variants}
+                        {if $product.has_variants && $product.in_stock == 1}
                         <table>
                             <tr>
                                 <th>Виб.</th>
@@ -88,13 +92,18 @@
                             {*<pre>{print_r($product.variants)}</pre>*}
                         {*{else}*}
                         {/if}
+
+                        {if $product.in_stock == 1}
                         <div class="bnt-row">
                             <button class="btn sm red buy-btn to-cart cart-product-{$product.id} {if isset($smarty.session.cart[$product.id])}in{/if}"
                                     data-id="{$product.id}"
                                     data-has-variants="{$product.has_variants}"
+                                    data-in="В кошику"
+                                    data-bye="Купити"
                             >{if isset($smarty.session.cart[$product.id])}В кошику{else}Купити{/if}</button>
                             <button class="btn sm white-red buy-one-click" data-has-variants="{$product.has_variants}" data-id="{$product.id}">Купити в 1 клік</button>
                         </div>
+                        {/if}
                         {$events->call('shop.product.buy.after', array($product))}
                         {assign var='avRate' value=$mod->comments->getAverageRating($product.id)|ceil}
                         {assign var='commentsTotal' value=$mod->comments->getTotal($product.id)}

@@ -26,7 +26,7 @@ class Images extends Model
             ->row();
 
         if(empty($image)) {
-            return "/uploads/noimage.png";
+            return "/uploads/noimage.jpg";
         }
 
         if(!$size) return $image;

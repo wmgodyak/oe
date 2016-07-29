@@ -32,7 +32,11 @@ var Order = {
         $(document).on('click', '.to-cart', function(e){
             e.preventDefault();
 
-            var $this = $(this), products_id = $this.data('id'), variants_id = 0, hasVariants = $this.data('has-variants');
+            var $this = $(this), products_id = $this.data('id'), variants_id = 0,
+                hasVariants = $this.data('has-variants'),
+                t_in = $this.data('in'),
+                t_bye = $this.data('bye')
+                ;
 
             if($this.hasClass('in')) {
                 self.location.href=$('.cart__link:first').attr('href');
@@ -44,7 +48,7 @@ var Order = {
             }
 
             Order.cart.add(products_id, variants_id, 1, function(res){
-                $this.addClass('in');
+                $this.addClass('in').text(t_in);
                 App.alert('Товар додано в кошик');
                 refreshBlock(res);
             });

@@ -55,7 +55,11 @@
                 <% items.forEach(function(item) { %>
                 <div class="goods-list__row">
                     <div class="item item1">
-                        <img src="<%- item.img.path%>thumbs/<%- item.img.image%>">
+                        <% if ( item.img.image ) { %>
+                            <img src="<%- item.img.path%>thumbs/<%- item.img.image%>">
+                        <% } else { %>
+                            <img src="/uploads/noimage.jpg">
+                        <% } %>
                     </div>
                     <div class="item item2">
                         <div class="name"><%- item.name%></div>
@@ -68,11 +72,9 @@
                     </div>
                     <div class="item item3">
                         <div class="item-counter">
-                            <form class="clearfix">
-                                <div class="column fl">
-                                    <input onchange="this.value = parseInt(this.value); if(typeof  this.value == 'undefined') this.value=1;" class="counter-mask cart-item-quantity" type="number" value="<%- item.quantity%>" data-id="<%=item.products_id%>">
-                                </div>
-                            </form>
+                            <div class="column fl">
+                                <input style="width: 50px;" onchange="this.value = parseInt(this.value); if(typeof  this.value == 'undefined') this.value=1;" class="counter-mask cart-item-quantity" type="number" value="<%- item.quantity%>" data-id="<%=item.products_id%>">
+                            </div>
                         </div>
                     </div>
                     <div class="item item4">

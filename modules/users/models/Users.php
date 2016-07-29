@@ -14,7 +14,7 @@ class Users extends \system\models\Users
      * Default group ID to register
      * @var int
      */
-    private $guest_group_id = 20;
+    private $guest_group_id = 5;
 
     public function setOnline($user)
     {

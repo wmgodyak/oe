@@ -212,7 +212,7 @@
             <input id="oc_user_name_<%-formID%>" name="user[name]" required type="text">
         </div>
         <div class="form-group">
-            <label for="oc_user_phone_<%-formID%>">Телефон</label><br>
+            <label for="oc_user_phone_<%-formID%>">Телефон</label>
             <input id="oc_user_phone_<%-formID%>" class="phone-mask" required name="user[phone]" type="tel">
         </div>
         <input type="hidden" name="token" value="<%-token%>">
