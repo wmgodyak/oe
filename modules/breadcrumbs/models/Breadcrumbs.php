@@ -24,14 +24,15 @@ class Breadcrumbs extends Model
      * @return array
      * @throws \system\core\exceptions\Exception
      */
-    public function get($id)
+    public function get($id, $home = true)
     {
         $items = [];
         $home_id = Settings::getInstance()->get('home_id');
 
-        if($id != $home_id){
+        if($home && $id != $home_id){
             $items[] = $this->getItem($home_id);
         }
+
         if($id == $home_id){
             return $items;
         }
@@ -39,14 +40,15 @@ class Breadcrumbs extends Model
         $item = $this->getItem($id);
 
         if($item['parent_id'] > 0) {
-            $items = array_merge($items, $this->get($item['parent_id']));
+            $items = array_merge($items, $this->get($item['parent_id'], false));
         } else {
             $categories_id = $this->getRelations($item['id'], 1);
             if($categories_id > 0){
                 $_item = $this->getItem($categories_id);
-//                $items[] = $_item;
+
                 if($_item['parent_id'] > 0) {
-                    $items = array_merge($items, $this->get($_item['parent_id']));
+                    $items = array_merge($items, $this->get($_item['parent_id'], false));
+                    $items[] = $_item;
                 }
             } else {
                 $categories_id = $this->getRelations($item['id'], 0);
@@ -54,7 +56,7 @@ class Breadcrumbs extends Model
                     $_item = $this->getItem($categories_id);
                     $items[] = $_item;
                     if($_item['parent_id'] > 0) {
-                        $items = array_merge($items, $this->get($_item['parent_id']));
+                        $items = array_merge($items, $this->get($_item['parent_id'], false));
                     }
                 }
             }
