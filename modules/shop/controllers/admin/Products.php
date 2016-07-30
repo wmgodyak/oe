@@ -58,6 +58,11 @@ class Products extends Content
         $prices = new \modules\shop\controllers\admin\Prices();
         EventsHandler::getInstance()->add('content.main.after', [$prices, 'index']);
         EventsHandler::getInstance()->add('content.process', [$prices, 'process']);
+
+        $video = new Video();
+        EventsHandler::getInstance()->add('content.params.after', [$video, 'index']);
+        EventsHandler::getInstance()->add('content.process', [$video, 'process']);
+
     }
 
 

@@ -172,10 +172,21 @@
                             </table>
                         </div>
                         <div class="tab tab3 cms-content">
-                            {$mod->comments->display($post.id)}
+                            {$mod->comments->display($product.id)}
                         </div>
                         <div class="tab tab4 cms-content">
-                            <p>slide4</p>
+                            {assign var ='video_1' value=$app->contentMeta->get($product.id, 'video_1', true)}
+                            {assign var ='video_2' value=$app->contentMeta->get($product.id, 'video_2', true)}
+                            {assign var ='video_3' value=$app->contentMeta->get($product.id, 'video_3', true)}
+                            {if $video_1 != ''}
+                                <div style="padding: 10px 0 10px 0;"><iframe width="100%" height="500" src="https://www.youtube.com/embed/{$video_1}" frameborder="0" allowfullscreen></iframe></div>
+                            {/if}
+                            {if $video_2 != ''}
+                                <div style="padding: 0 0 10px 0;"><iframe width="100%" height="500" src="https://www.youtube.com/embed/{$video_2}" frameborder="0" allowfullscreen></iframe></div>
+                            {/if}
+                            {if $video_3 != ''}
+                                <div style=""><iframe width="100%" height="500" src="https://www.youtube.com/embed/{$video_3}" frameborder="0" allowfullscreen></iframe></div>
+                            {/if}
                         </div>
                     </div>
                 </div>
@@ -255,7 +266,7 @@
 
                     <div class="top-line">
                         <div class="text">АРТИКУЛ ТОВАРУ:</div>
-                        <span class="number">142804</span>
+                        <span class="number">{$product.sku}</span>
                     </div>
 
                     <div class="content">

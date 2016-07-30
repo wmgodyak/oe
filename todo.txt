@@ -78,7 +78,7 @@ FRONTEND
   + shop default noimage
   + breadcrumbs
   - fix i like it on product cart
-  - style ui dialog to company style
+  + style ui dialog to company style
   - add block video as content_meta
 
 
