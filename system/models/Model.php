@@ -167,4 +167,9 @@ class Model
     {
         return self::$db->select("select {$key} from {$table} where id={$id} limit 1")->row($key);
     }
+
+    public function getSQL()
+    {
+        return self::$db->getSQL();
+    }
 } 

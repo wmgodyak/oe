@@ -8,6 +8,7 @@
 
 namespace modules\delivery\controllers;
 
+use modules\delivery\adapters\NovaPoshta;
 use modules\delivery\models\DeliveryPayment;
 use system\Front;
 
@@ -43,5 +44,11 @@ class Delivery extends Front
         $payment = $this->deliveryPayment->getPayment($delivery_id);
 
         $this->response->body(['payment' => $payment])->asJSON();
+    }
+
+    public function refresh()
+    {
+        $np = new NovaPoshta();
+        $np->refresh();
     }
 }

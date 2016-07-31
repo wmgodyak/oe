@@ -554,4 +554,9 @@ class DB extends \PDO {
             return $e->getMessage(); //return exception
         }
     }
+
+    public function getSQL()
+    {
+        return $this->sql;
+    }
 }

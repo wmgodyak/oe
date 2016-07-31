@@ -33,9 +33,9 @@ class Shop extends Engine
 
     public function catMeta($content)
     {
-        if($content['type'] != 'products_categories') return null;
-
-        return $this->template->fetch('shop/categories/meta');
+        if(isset($content['type']) && $content['type'] == 'products_categories') {
+            return $this->template->fetch('shop/categories/meta');
+        }
     }
 
     public function index($parent_id=0)
