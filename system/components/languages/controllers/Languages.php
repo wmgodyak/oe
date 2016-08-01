@@ -6,6 +6,7 @@ use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
 use helpers\FormValidation;
 use system\core\DataTables2;
+use system\core\EventsHandler;
 use system\core\Lang;
 use system\Engine;
 use system\models\Settings;
@@ -31,7 +32,7 @@ class Languages extends Engine
             -> th($this->t('languages.name'), 'name', true, true)
             -> th($this->t('languages.code'), 'code', true, true)
             -> th($this->t('languages.is_main'), 'is_main')
-            -> th($this->t('common.tbl_func'), null, false, false, 'width:160px');
+            -> th($this->t('common.tbl_func'), null, false, false, 'width:200px');
 //        ;
 
         $t-> ajax('languages/index');
@@ -55,6 +56,7 @@ class Languages extends Engine
                 $res[$i][] = $row['code'];
                 $res[$i][] = ($row['is_main'] == 1 ? "<label class='label'>ТАК</label>" : "");
                 $res[$i][] =
+                    ($row['is_main'] == 0 ? EventsHandler::getInstance()->call('system.languages.list.actions', ['language' => $row], false) : "") .
                     (string)Button::create
                     (
                         Icon::create(Icon::TYPE_EDIT),
@@ -65,6 +67,8 @@ class Languages extends Engine
                         Icon::create(Icon::TYPE_DELETE),
                         ['class' => 'b-languages-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
                     ) : "")
+
+
 
                 ;
             }

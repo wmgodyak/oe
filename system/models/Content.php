@@ -235,9 +235,11 @@ class Content extends Model
             if(empty($item['name'])){
                 $this->error[] = ["content_info[$languages_id][name]" => 'field_required'];
             }
-            if(empty($item['url'])){
+
+            if( $this->settings['home_id'] != $id && empty($item['url'])){
                 $this->error[] = ["content_info[$languages_id][url]" => 'field_required'];
             }
+
         }
 
         if(!empty($this->error)) {
@@ -262,6 +264,11 @@ class Content extends Model
         }
 
         foreach($info as $languages_id => $data){
+
+            if($this->settings['home_id'] == $id){
+                $data['url'] = '';
+            }
+
             $aid = self::$db
                 ->select("select id from __content_info where content_id={$id} and languages_id={$languages_id} limit 1")
                 ->row('id');

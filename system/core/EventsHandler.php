@@ -63,21 +63,29 @@ class EventsHandler
     /**
      * @param $action
      * @param array $params
+     * @param bool $display
+     * @return null|string
      */
-    public function call($action, $params = [])
+    public function call($action, $params = [], $display = true)
     {
         if($this->debug) echo "<code>".$action . "</code><br>";
 
-        if(!isset(self::$events[$action])) return;
-
+        if(!isset(self::$events[$action])) return null;
+        $out = '';
         foreach (self::$events[$action] as $callback) {
             if(is_array($callback) && isset($callback[1])){
                 if(is_callable($callback, true, $callable_name)){
                     if($this->debug)  echo $callable_name, '<br>';
 
-                    echo call_user_func_array($callback, $params);
+                    $out .= call_user_func_array($callback, $params);
                 }
             }
+        }
+
+        if($display) {
+            echo $out;
+        } else {
+            return $out;
         }
     }
 

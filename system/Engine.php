@@ -47,7 +47,7 @@ abstract class Engine extends Controller
      */
     private $buttons = array();
 
-    private $settings;
+    protected $settings;
 
     protected $images;
 
@@ -162,6 +162,7 @@ abstract class Engine extends Controller
         $this->template->assign('base_url',   APPURL . 'engine/');
         $this->template->assign('controller', $controller);
         $this->template->assign('action',     $action);
+        $this->template->assign('settings',   $this->settings);
 
         $this->initSystemComponents();
 

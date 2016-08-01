@@ -21,7 +21,6 @@ class Modules
     private $theme;
     private $lang;
     private $mode;
-    private static $configs = [];
 
     public function __construct($theme, $lang, $mode = 'frontend')
     {
@@ -52,7 +51,7 @@ class Modules
 
                 $config = $this->readConfig($_module, (isset($params['config']) ? $params['config'] : []));
 
-                self::$configs[$_module] = $config;
+                $active[$module]['config'] = $config;
 
                 $controller = new $c;
                 // assign config to module
@@ -63,6 +62,8 @@ class Modules
                 call_user_func(array($controller, 'init'));
             }
         }
+
+        Settings::getInstance()->set('modules', $active);
 
         return $modules;
     }
@@ -78,11 +79,6 @@ class Modules
         $a = parse_ini_file($file, true);
 
         return array_merge($a, $settings);
-    }
-
-    public function getConfigs()
-    {
-        return self::$configs;
     }
 
     private function assignLang($module)

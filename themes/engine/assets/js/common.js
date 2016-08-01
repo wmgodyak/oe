@@ -1116,9 +1116,10 @@ engine.content = {
         });
 
         $('#switchLanguages').find('button').click(function(){
-            $(this).addClass('btn-primary').siblings().removeClass('btn-primary');
             var code = $(this).data('code');
+            if(typeof code == 'undefined')return;
             $('.switch-lang:not(.lang-'+code+')').hide();
+            $(this).addClass('btn-primary').siblings().removeClass('btn-primary');
             $('.switch-lang.lang-' + code).show();
         });
 
@@ -1186,22 +1187,27 @@ engine.content = {
                     '?': space, '<': space, '>': space, '№': space
                 };
                 break;
-            //case 'ru':
-            //    transl = {
-            //        'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'e', 'ж': 'zh',
-            //        'з': 'z', 'и': 'i', 'й': 'j', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'ї' : 'i',
-            //        'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h',
-            //        'ц': 'c', 'ч': 'ch', 'ш': 'sh', 'щ': 'sh', 'ъ': space, 'ы': 'y', 'ь': space, 'э': 'e', 'ю': 'yu', 'я': 'ya',
-            //        ' ': space, '_': space, '`': space, '~': space, '!': space, '@': space,
-            //        '#': space, '$': space, '%': space, '^': space, '&': space, '*': space,
-            //        '(': space, ')': space, '-': space, '\=': space, '+': space, '[': space,
-            //        ']': space, '\\': space, '|': space, '/': space, '.': space, ',': space,
-            //        '{': space, '}': space, '\'': space, '"': space, ';': space, ':': space,
-            //        '?': space, '<': space, '>': space, '№': space
-            //    };
-            //    break;
+            case 'ru':
+                transl = {
+                    'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'e', 'ж': 'zh',
+                    'з': 'z', 'и': 'i', 'й': 'j', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'ї' : 'i',
+                    'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h',
+                    'ц': 'c', 'ч': 'ch', 'ш': 'sh', 'щ': 'sh', 'ъ': space, 'ы': 'y', 'ь': space, 'э': 'e', 'ю': 'yu', 'я': 'ya',
+                    ' ': space, '_': space, '`': space, '~': space, '!': space, '@': space,
+                    '#': space, '$': space, '%': space, '^': space, '&': space, '*': space,
+                    '(': space, ')': space, '-': space, '\=': space, '+': space, '[': space,
+                    ']': space, '\\': space, '|': space, '/': space, '.': space, ',': space,
+                    '{': space, '}': space, '\'': space, '"': space, ';': space, ':': space,
+                    '?': space, '<': space, '>': space, '№': space
+                };
+                break;
             default:
                 transl = {
+                    'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'e', 'ж': 'zh',
+                    'з': 'z', 'и': 'y', 'й': 'j', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'і' : 'i', 'ї' : 'i',
+                    'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h',
+                    'ц': 'c', 'ч': 'ch', 'ш': 'sh', 'щ': 'sh', 'ъ': space, 'ы': 'y', 'ь': space, 'э': 'e',
+                    'ю': 'yu', 'я': 'ya', 'є': 'ye',
                     ' ': space, '_': space, '`': space, '~': space, '!': space, '@': space,
                     '#': space, '$': space, '%': space, '^': space, '&': space, '*': space,
                     '(': space, ')': space, '-': space, '\=': space, '+': space, '[': space,
@@ -2497,8 +2503,10 @@ engine.mailTemplates = {
         });
 
         $('#switchLanguages').find('button').click(function(){
-            $(this).addClass('btn-primary').siblings().removeClass('btn-primary');
             var code = $(this).data('code');
+            if(typeof code == 'undefined')return;
+
+            $(this).addClass('btn-primary').siblings().removeClass('btn-primary');
             $('.switch-lang:not(.lang-'+code+')').hide();
             $('.switch-lang.lang-' + code).show();
         });
