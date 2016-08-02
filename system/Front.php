@@ -64,7 +64,6 @@ class Front extends core\Controller
 
     protected $page;
     private $theme;
-    private static $config;
 
     public function __construct()
     {
@@ -185,7 +184,6 @@ class Front extends core\Controller
             // init modules
             $m = new Modules($this->theme, $this->languages_code);
             $modules = $m->init();
-            self::$config = $m->getConfigs();
 
             // assign translations to template
             $this->template->assign('t', $this->t());
@@ -212,33 +210,6 @@ class Front extends core\Controller
                 $this->response->sendError(404);
             }
         }
-    }
-
-    public function config($key = null)
-    {
-        if( ! $key) return self::$config;
-
-        if(strpos($key,'.')){
-
-            $parts = explode('.', $key);
-            $c = count($parts);
-
-            if($c == 1){
-                if(isset(self::$config[$parts[0]])){
-                    return self::$config[$parts[0]];
-                }
-            } else if($c == 2){
-                if(isset(self::$config[$parts[0]][$parts[1]])){
-                    return  self::$config[$parts[0]][$parts[1]];
-                }
-            } else if($c == 3){
-                if(isset(self::$config[$parts[0]][$parts[1]][$parts[2]])){
-                    return self::$config[$parts[0]][$parts[1]][$parts[2]];
-                }
-            }
-        }
-
-        return isset(self::$config[$key]) ? self::$config[$key] : null;
     }
 
     private function initialize()

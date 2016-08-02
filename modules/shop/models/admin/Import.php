@@ -300,7 +300,8 @@ class Import extends Model
         $id = $this->getContentIdByExID($ex_id);
 
         if($id){
-            return true;
+            return  $this->updateProductsParams($id, $data, $prices);
+//            return;
         }
 
         $category_id = 0;
@@ -345,7 +346,7 @@ class Import extends Model
         if($this->hasError()){
             $this->log[] = 'Помилка при створенні товару. ' . $this->getError();
             $this->rollback();
-            d($this->log);
+//            d($this->log);
             return false;
         }
 
@@ -357,7 +358,7 @@ class Import extends Model
         if($this->hasError()){
             $this->log[] = 'Помилка при створенні товару. ' . $this->getError();
             $this->rollback();
-            d($this->log);
+//            d($this->log);
             return false;
         }
 
@@ -369,7 +370,7 @@ class Import extends Model
         if($this->hasError()){
             $this->log[] = 'Помилка при створенні товару. ' . $this->getError();
             $this->rollback();
-            d($this->log);
+//            d($this->log);
             return false;
         }
 
@@ -385,7 +386,7 @@ class Import extends Model
         if($this->hasError()){
             $this->log[] = 'Помилка при створенні товару. ' . $this->getError();
             $this->rollback();
-            d($this->log);
+//            d($this->log);
             return false;
         }
 
@@ -394,6 +395,31 @@ class Import extends Model
         $this->commit();
 
         return true;
+    }
+
+    /**
+     * @param $id
+     * @param $data
+     * @param $prices
+     * @return bool
+     */
+    private function updateProductsParams($id, $data, $prices)
+    {
+        $this->updateRow
+        (
+            '__content',
+            $id,
+            [
+                'quantity' => $data['quantity'],
+                'in_stock' => $data['in_stock']
+            ]
+        );
+
+        foreach ($prices as $group_id => $price) {
+            $this->productsPrices->updateRow($id, $group_id, $price);
+        }
+
+        return ! $this->hasError();
     }
 
     private function saveImage($url, $content_id)
