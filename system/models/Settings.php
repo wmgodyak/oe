@@ -77,7 +77,7 @@ class Settings
             }
         }
 
-        return $key ? $this->data[$key] : $this->data;
+        return $key ? isset($this->data[$key]) ? $this->data[$key] : null : $this->data;
     }
 
     /**

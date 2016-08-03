@@ -2,9 +2,420 @@
 
 namespace modules\exchange1c\models;
 
+use modules\order\models\Status;
+use system\core\Logger;
 use system\models\Model;
+use system\models\Settings;
+use system\models\Users;
 
 class Sale extends Model
 {
 
+    private $tmp_dir;
+    private $config;
+    private $login;
+    private $password;
+
+    private $ordersStatus;
+    private $users;
+
+    /**
+     * csv array data
+     * @var array
+     */
+    private $data = [];
+
+    public function __construct($login, $password, $config)
+    {
+        parent::__construct();
+
+        $this->tmp_dir = DOCROOT . 'tmp/1c_exchange/sale/';
+
+        if(!is_dir($this->tmp_dir)){
+            mkdir($this->tmp_dir, 0777, true);
+        }
+
+        $this->config   = $config;
+        $this->login    = $login;
+        $this->password = $password;
+
+        $this->ordersStatus = new Status();
+        $this->users = new Users();
+    }
+
+    public function orders()
+    {
+//        if( ! $this->auth()) return ['failure', "Wrong token"];
+
+        $orders = self::$db
+            ->select("
+                select o.id, o.oid, os.external_id as status, o.one_click,
+                 o.users_id, o.users_group_id, u.name as user_name, u.surname as user_surname, u.phone as user_phone, u.email as user_email,
+                 cu.code, o.currency_rate, (select SUM(quantity * price) from __orders_products where orders_id=o.id) as amount,
+                 o.comment, o.created, o.paid, o.paid_date, o.payment_id, o.delivery_id, o.delivery_cost, o.delivery_address
+                from __orders o
+                join __orders_status os on os.id=o.status_id
+                join __users u on u.id=o.users_id
+                join __currency cu on cu.id=o.currency_id
+                where o.ex = 0 and o.status_id >= 6
+                order by o.id desc
+            ")
+            ->all();
+
+        header("Content-type: text/csv");
+        header("Content-Disposition: attachment; filename=orders.csv");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+
+        echo "id,oid,status,one_click,users_id,users_group_id,user_name,user_surname,user_phone,user_email,currency,currency_rate,amount,comment,created,paid,paid_date,payment_id,delivery_id,delivery_cost,delivery_address\n";
+
+        $in = [];
+        foreach ($orders as $fields) {
+            echo implode(',', $fields), "\n";
+            $in[] = $fields['id'];
+        }
+
+        $in = implode(',', $in);
+        file_put_contents($this->tmp_dir . 'oid.txt', $in);
+
+        Logger::info("Export orders: {$in}");
+
+        die;
+    }
+
+    public function products()
+    {
+//        if( ! $this->auth()) return ['failure', "Wrong token"];
+        if( ! file_exists($this->tmp_dir . 'oid.txt')) {
+            Logger::error("No orders");
+            return ['failure', 'There are no orders'];
+        }
+
+        $in = file_get_contents($this->tmp_dir . 'oid.txt');
+
+        $products = self::$db
+            -> select("
+                select op.orders_id, op.products_id, p.sku, pi.name as products_name, op.quantity, op.price
+                from
+                __orders_products op
+                join __content p on p.id=op.products_id
+                join __content_info pi on pi.content_id=op.products_id and pi.languages_id='{$this->languages_id}'
+                where op.orders_id in ($in)
+                order by op.orders_id desc
+            ")
+            -> all();
+
+        header("Content-type: text/csv");
+        header("Content-Disposition: attachment; filename=orders_products.csv");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+
+        echo "orders_id,products_id,sku,products_name,quantity,price\n";
+
+        foreach ($products as $fields) {
+            echo implode(',', $fields), "\n";
+        }
+
+        die;
+    }
+
+    public function success()
+    {
+        if( ! file_exists($this->tmp_dir . 'oid.txt')) {
+            Logger::error("No orders");
+            return ['failure', 'There are no orders'];
+        }
+
+        $in = file_get_contents($this->tmp_dir . 'oid.txt');
+
+        self::$db->update('__orders', ['ex' => 1, 'edited' => date('Y-m-d H:i:s')], " id in ($in)");
+
+        @unlink($this->tmp_dir . 'oid.txt');
+
+        Logger::info("Export orders: {$in} success");
+
+        return ['success'];
+    }
+
+    public function checkauth()
+    {
+        if (($this->config['user']['login'] == $this->login)  && ($this->config['user']['password'] == $this->password)) {
+
+            $key  = session_name();
+            $pass = TOKEN;
+
+            Logger::info("Auth success. SN: $key PASS: $pass");
+
+            Settings::getInstance()->set('1c_token', $pass);
+
+            return ['success', $key, $pass];
+        }
+
+        Logger::error("Auth fail. L:{$this->login}. P:{$this->password}");
+//        Logger::debug(var_export($_SERVER, 1));
+
+        return ['failure', "Bad login or password."];
+    }
+
+    public function init()
+    {
+        if( ! $this->auth()) return ['failure', "Wrong token"];
+
+        return ["zip={$this->config['zip']}", "file_limit={$this->config['file_limit']}"];
+    }
+
+    private function auth()
+    {
+        $pass = Settings::getInstance()->get('1c_token');
+
+        if($pass == TOKEN){
+            Logger::debug('Auth OK');
+
+            return true;
+        }
+
+        Logger::error('Auth FAIL');
+
+        return false;
+    }
+
+
+    public function file()
+    {
+        if( ! $this->auth()) return ['failure', "Wrong token"];
+
+        $file_info = pathinfo($this->request->get('filename', 's'));
+
+        if(empty($file_info['basename'])){
+            return ['failure', "empty filename"];
+        }
+
+        $file_extension = $file_info['extension'];
+        $basename = $file_info['basename'];
+
+        Logger::debug('Loading filename:' . $basename);
+
+        $file_content = file_get_contents('php://input');
+
+        if(empty($file_content)){
+            Logger::error('failure php://input  return empty string');
+            return ['failure', 'php://input  return empty string'];
+        }
+
+        if ( $file_extension == 'csv' ) {
+            if (! $this->saveFile($this->tmp_dir . $this->request->get('filename', 's'), $file_content, 'w+')) {
+                return ['failure', "Can't save file"];
+            }
+        } else if ($file_extension == 'zip' && class_exists('ZipArchive')) {
+            $zip = new \ZipArchive();
+            $res = $zip->open($this->tmp_dir . $this->request->get('filename', 's'));
+            if ($res > 0 && $res != TRUE) {
+                switch ($res) {
+                    case \ZipArchive::ER_NOZIP :
+                        Logger::error('Not a zip archive.');
+                        break;
+                    case \ZipArchive::ER_INCONS :
+                        Logger::error('Zip archive inconsistent.');
+                        break;
+                    case \ZipArchive::ER_CRC :
+                        Logger::error('checksum failed');
+                        break;
+                    case \ZipArchive::ER_EXISTS :
+                        Logger::error('File already exists.');
+                        break;
+                    case \ZipArchive::ER_INVAL :
+                        Logger::error('Invalid argument.');
+                        break;
+                    case \ZipArchive::ER_MEMORY :
+                        Logger::error('Malloc failure.');
+                        break;
+                    case \ZipArchive::ER_NOENT :
+                        Logger::error('No such file.');
+                        break;
+                    case \ZipArchive::ER_OPEN :
+                        Logger::error("Can't open file.");
+                        break;
+                    case \ZipArchive::ER_READ :
+                        Logger::error("Read error.");
+                        break;
+                    case \ZipArchive::ER_SEEK :
+                        Logger::error("Seek error.");
+                        break;
+                }
+                return ['failure', "Can't save zip archive"];
+            }
+
+            $zip->extractTo($this->tmp_dir);
+            $zip->close();
+        }
+
+        return ['success'];
+    }
+
+
+    /**
+     * @param $path
+     * @param $data
+     * @param string $mode
+     * @return bool
+     */
+    private function saveFile($path, $data, $mode = 'w+b')
+    {
+        if ( ! $fp = @fopen($path, $mode))
+        {
+            return FALSE;
+        }
+
+        flock($fp, LOCK_EX);
+        fwrite($fp, $data);
+        flock($fp, LOCK_UN);
+        fclose($fp);
+
+        return TRUE;
+    }
+
+    public function import()
+    {
+//        if( ! $this->auth()) return ['failure', "Wrong token"];
+
+        $filename = $this->request->get('filename', 's');
+
+        if(empty($filename) || !file_exists($this->tmp_dir . $filename)){
+            Logger::error("Can't find file {$filename}");
+            return ['failure', "Can't find file {$filename}"];
+        }
+
+        $file_handle = fopen($this->tmp_dir . $filename, 'r');
+
+        while (!feof($file_handle) ) {
+            $a = fgetcsv($file_handle, 1024, ',');
+            if(!is_array($a)) continue;
+
+//            foreach ($a as $k=>$v) {
+//                $a[$k] = trim(iconv('cp1251', 'utf-8', $v));
+//            }
+            $this->data[] = $a;
+        }
+
+        fclose($file_handle);
+
+        $fname = pathinfo($filename, PATHINFO_FILENAME);
+
+        switch($fname){
+            case 'orders':
+                return $this->importOrders();
+                break;
+
+            case 'orders_products':
+                return $this->importProducts();
+                break;
+        }
+
+        return ['failure', "Wrong filename"];
+    }
+
+    private function importOrders()
+    {
+        $currency = [
+            'USD' => 1,
+            'UAH' => 2
+        ];
+
+        $users_group_id = Settings::getInstance()->get('modules.Exchange1c.config.users_group_id');
+        $languages_id   =  Settings::getInstance()->get('modules.Exchange1c.config.languages_id');
+
+        // "id,oid,status,one_click,users_id,users_group_id,user_name,user_surname,user_phone,user_email,
+        //currency,currency_rate,amount,comment,created,paid,paid_date,payment_id,delivery_id,delivery_cost,delivery_address\n";
+        foreach ($this->data as $i=>$order) {
+            if($i == 0) continue;
+
+            $status_id = $this->ordersStatus->getIdByExternalId($order[2]);
+
+            if(empty($status_id)){
+                return ['failure', "Wrong status"];
+            }
+
+            $users_id = $order[5];
+
+            if(empty($users_id)){
+                // create user
+                $users_id = $this->users->create
+                (
+                    [
+                        'group_id'     => $users_group_id,
+                        'languages_id' => $languages_id,
+                        'name'         => $order[6],
+                        'surname'      => $order[7],
+                        'phone'        => $order[8],
+                        'email'        => $order[9],
+                    ]
+                );
+            } else {
+                $s = $this->users->getData($order[5], 'id');
+
+                if(empty($s)){
+                    return ['failure', "Wrong users_id"];
+                }
+            }
+
+            $data = [
+                'oid'            => $order[1],
+                'languages_id'   => $languages_id,
+                'status_id'      => $status_id,
+                'one_click'      => $order[3],
+                'users_id'       => $users_id,
+                'users_group_id' => $users_group_id,
+                'currency_id'    => $currency[$order[10]],
+                'currency_rate'  => $order[11],
+                'comment'        => $order[13],
+                'created'        => $order[14],
+                'paid'           => $order[15],
+                'paid_date'      => $order[16],
+                'payment_id'     => $order[17],
+                'delivery_id'     => $order[18],
+                'delivery_cost'   => $order[19],
+                'delivery_address'=> $order[20],
+            ];
+
+            if(empty($order[0])){
+                $this->createRow('__orders', $data);
+
+                if($this->hasError()){
+                    return ['failure', $this->getErrorMessage()];
+                }
+            } else {
+                $id = self::$db->select("select id from __orders where id='{$order[0]}' limit 1")->row('id');
+
+                if(empty($id)){
+                    return ['failure', "Wrong id"];
+                }
+
+                $this->updateRow
+                (
+                    '__orders',
+                    $id,
+                    [
+                        'edited'          => date('Y-m-d H:i:s'),
+                        'paid'            => $order[15],
+                        'paid_date'       => $order[16],
+                        'payment_id'      => $order[17],
+                        'delivery_id'     => $order[18],
+                        'delivery_cost'   => $order[19],
+                        'delivery_address'=> $order[20]
+                    ]
+                );
+
+                if($this->hasError()){
+                    return ['failure', $this->getErrorMessage()];
+                }
+            }
+        }
+
+        return ['success'];
+    }
+
+    private function importProducts()
+    {
+
+    }
 }

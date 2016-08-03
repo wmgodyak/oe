@@ -27,4 +27,9 @@ class Status extends Model
         return self::$db->select("select id from __orders_status where is_main = 1 limit 1")->row('id');
     }
 
+    public function getIdByExternalId($external_id)
+    {
+        return self::$db->select("select id from __orders_status where external_id = '{$external_id}' limit 1")->row('id');
+    }
+
 }

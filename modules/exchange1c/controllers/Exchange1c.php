@@ -96,7 +96,10 @@ class Exchange1c extends Front
 
             Logger::debug("Run $type::$mode");
 
-            $this->callback($instance->$mode());
+            $res = $instance->$mode();
+            if($res){
+                $this->callback($res);
+            }
 
             Logger::debug("******* End exchange *******");
         }
