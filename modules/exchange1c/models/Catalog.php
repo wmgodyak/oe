@@ -59,12 +59,12 @@ class Catalog extends Model
         Logger::error("Auth fail. L:{$this->login}. P:{$this->password}");
         Logger::debug(var_export($_SERVER, 1));
 
-        return ['failure', "Bad login or password."];
+        return ['failure', "EX003. Bad login or password."];
     }
 
     public function init()
     {
-        if( ! $this->auth()) return ['failure', "Wrong token"];
+        if( ! $this->auth()) return ['failure', "EX004. Wrong token"];
 
         return ["zip={$this->config['zip']}", "file_limit={$this->config['file_limit']}"];
     }
@@ -86,12 +86,12 @@ class Catalog extends Model
 
     public function file()
     {
-        if( ! $this->auth()) return ['failure', "Wrong token"];
+        if( ! $this->auth()) return ['failure', "EX004. Wrong token"];
         
         $file_info = pathinfo($this->request->get('filename', 's'));
 
         if(empty($file_info['basename'])){
-            return ['failure', "empty filename"];
+            return ['failure', "EX005. empty filename"];
         }
         
         $file_extension = $file_info['extension'];
@@ -103,12 +103,12 @@ class Catalog extends Model
         
         if(empty($file_content)){
             Logger::error('failure php://input  return empty string');
-            return ['failure', 'php://input  return empty string'];
+            return ['failure', 'EX006. php://input  return empty string'];
         }
 
         if ( $file_extension == 'csv' ) {
             if (! $this->saveFile($this->tmp_dir . $this->request->get('filename', 's'), $file_content, 'w+')) {
-                return ['failure', "Can't save file"];
+                return ['failure', "EX007. Can't save file"];
             }
         } else if ($file_extension == 'zip' && class_exists('ZipArchive')) {
             $zip = new \ZipArchive();
@@ -146,7 +146,7 @@ class Catalog extends Model
                         Logger::error("Seek error.");
                         break;
                 }
-                return ['failure', "Can't save zip archive"];
+                return ['failure', "EX008. Can't save zip archive"];
             }
 
             $zip->extractTo($this->tmp_dir);
@@ -158,13 +158,13 @@ class Catalog extends Model
 
     public function import()
     {
-//        if( ! $this->auth()) return ['failure', "Wrong token"];
+//        if( ! $this->auth()) return ['failure', "EX004. Wrong token"];
 
         $filename = $this->request->get('filename', 's');
 
         if(empty($filename) || !file_exists($this->tmp_dir . $filename)){
             Logger::error("Can't find file {$filename}");
-            return ['failure', "Can't find file {$filename}"];
+            return ['failure', "EX005. Can't find file {$filename}"];
         }
 
         $file_handle = fopen($this->tmp_dir . $filename, 'r');
@@ -193,7 +193,7 @@ class Catalog extends Model
                 break;
         }
 
-        return ['failure', "Wrong filename"];
+        return ['failure', "EX004. Wrong filename"];
     }
 
     private function parseCategories()
@@ -208,7 +208,7 @@ class Catalog extends Model
 
             if(! $s) {
                 Logger::error(implode("\n", $this->mImport->log));
-                return ['failure', implode("\n", $this->mImport->log)];
+                return ['failure', 'EX009. ' .implode("\n", $this->mImport->log)];
             }
         }
 
@@ -266,7 +266,7 @@ class Catalog extends Model
 //                d($product);
                 Logger::error(implode("\n", $this->mImport->log));
                 Logger::error($this->mImport->getErrorMessage());
-                return ['failure', implode("\n", $this->mImport->log)];
+                return ['failure', 'EX010. '.implode("\n", $this->mImport->log)];
             }
         }
 

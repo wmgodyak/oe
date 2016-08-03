@@ -26,8 +26,6 @@ use system\models\Settings;
  */
 class Exchange1c extends Front
 {
-//    private $exchange;
-
     private $login;
     private $password;
 
@@ -38,8 +36,6 @@ class Exchange1c extends Front
     public function __construct()
     {
         parent::__construct();
-
-//        $this->exchange = new \modules\exchange1c\models\Exchange1c();
 
         $this->config['debug'] = $this->request->get('debug');
 
@@ -83,7 +79,7 @@ class Exchange1c extends Front
             $type = ucfirst($type);
 
             if( !file_exists(DOCROOT . $path . $type . '.php')){
-                $this->callback(['failure', "Model {$type} not found"]);
+                $this->callback(['failure', "EX001. Model {$type} not found"]);
             }
 
             $c = $ns . $type;
@@ -91,7 +87,7 @@ class Exchange1c extends Front
 
             if (! method_exists($instance, $mode)) {
                 Logger::error("$type::$mode not exists");
-                $this->callback(['failure', "$type::$mode not exists"]);
+                $this->callback(['failure', "EX002. $type::$mode not exists"]);
             }
 
             Logger::debug("Run $type::$mode");

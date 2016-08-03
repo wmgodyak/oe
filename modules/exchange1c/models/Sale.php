@@ -8,9 +8,12 @@ use system\models\Model;
 use system\models\Settings;
 use system\models\Users;
 
+/**
+ * Class Sale
+ * @package modules\exchange1c\models
+ */
 class Sale extends Model
 {
-
     private $tmp_dir;
     private $config;
     private $login;
@@ -88,7 +91,7 @@ class Sale extends Model
 //        if( ! $this->auth()) return ['failure', "Wrong token"];
         if( ! file_exists($this->tmp_dir . 'oid.txt')) {
             Logger::error("No orders");
-            return ['failure', 'There are no orders'];
+            return ['failure', 'EX011. There are no orders'];
         }
 
         $in = file_get_contents($this->tmp_dir . 'oid.txt');
@@ -123,7 +126,7 @@ class Sale extends Model
     {
         if( ! file_exists($this->tmp_dir . 'oid.txt')) {
             Logger::error("No orders");
-            return ['failure', 'There are no orders'];
+            return ['failure', 'EX012. There are no orders'];
         }
 
         $in = file_get_contents($this->tmp_dir . 'oid.txt');
@@ -154,12 +157,12 @@ class Sale extends Model
         Logger::error("Auth fail. L:{$this->login}. P:{$this->password}");
 //        Logger::debug(var_export($_SERVER, 1));
 
-        return ['failure', "Bad login or password."];
+        return ['failure', "EX003. Bad login or password."];
     }
 
     public function init()
     {
-        if( ! $this->auth()) return ['failure', "Wrong token"];
+        if( ! $this->auth()) return ['failure', "EX004. Wrong token"];
 
         return ["zip={$this->config['zip']}", "file_limit={$this->config['file_limit']}"];
     }
@@ -182,12 +185,12 @@ class Sale extends Model
 
     public function file()
     {
-        if( ! $this->auth()) return ['failure', "Wrong token"];
+        if( ! $this->auth()) return ['failure', "EX004. Wrong token"];
 
         $file_info = pathinfo($this->request->get('filename', 's'));
 
         if(empty($file_info['basename'])){
-            return ['failure', "empty filename"];
+            return ['failure', "EX005. empty filename"];
         }
 
         $file_extension = $file_info['extension'];
@@ -199,12 +202,12 @@ class Sale extends Model
 
         if(empty($file_content)){
             Logger::error('failure php://input  return empty string');
-            return ['failure', 'php://input  return empty string'];
+            return ['failure', 'EX006. php://input  return empty string'];
         }
 
         if ( $file_extension == 'csv' ) {
             if (! $this->saveFile($this->tmp_dir . $this->request->get('filename', 's'), $file_content, 'w+')) {
-                return ['failure', "Can't save file"];
+                return ['failure', "EX007 . Can't save file"];
             }
         } else if ($file_extension == 'zip' && class_exists('ZipArchive')) {
             $zip = new \ZipArchive();
@@ -242,7 +245,7 @@ class Sale extends Model
                         Logger::error("Seek error.");
                         break;
                 }
-                return ['failure', "Can't save zip archive"];
+                return ['failure', "EX008. Can't save zip archive"];
             }
 
             $zip->extractTo($this->tmp_dir);
@@ -276,13 +279,13 @@ class Sale extends Model
 
     public function import()
     {
-//        if( ! $this->auth()) return ['failure', "Wrong token"];
+//        if( ! $this->auth()) return ['failure', "EX004. Wrong token"];
 
         $filename = $this->request->get('filename', 's');
 
         if(empty($filename) || !file_exists($this->tmp_dir . $filename)){
             Logger::error("Can't find file {$filename}");
-            return ['failure', "Can't find file {$filename}"];
+            return ['failure', "EX005. Can't find file {$filename}"];
         }
 
         $csv = array_map('str_getcsv', file($this->tmp_dir . $filename));
@@ -304,7 +307,7 @@ class Sale extends Model
                 break;
         }
 
-        return ['failure', "Wrong filename"];
+        return ['failure', "EX005. Wrong filename"];
     }
 
     private function importOrders()
@@ -322,7 +325,7 @@ class Sale extends Model
             $status_id = $this->ordersStatus->getIdByExternalId($order['status']);
 
             if(empty($status_id)){
-                return ['failure', "Wrong status"];
+                return ['failure', "EX013. Wrong status"];
             }
 
             $users_id = $order['user_id'];
@@ -344,7 +347,7 @@ class Sale extends Model
                 $s = $this->users->getData($order['user_id'], 'id');
 
                 if(empty($s)){
-                    return ['failure', "Wrong users_id"];
+                    return ['failure', "EX014. Wrong users_id"];
                 }
             }
 
@@ -372,13 +375,13 @@ class Sale extends Model
                 $this->createRow('__orders', $data);
 
                 if($this->hasError()){
-                    return ['failure', $this->getErrorMessage()];
+                    return ['failure', 'EX015. ' . $this->getErrorMessage()];
                 }
             } else {
                 $id = self::$db->select("select id from __orders where id='{$order['id']}' limit 1")->row('id');
 
                 if(empty($id)){
-                    return ['failure', "Wrong id"];
+                    return ['failure', "EX016. Wrong id"];
                 }
 
                 $this->updateRow
@@ -398,7 +401,7 @@ class Sale extends Model
                 );
 
                 if($this->hasError()){
-                    return ['failure', $this->getErrorMessage()];
+                    return ['failure',  'EX015. ' . $this->getErrorMessage()];
                 }
             }
        }
@@ -415,17 +418,17 @@ class Sale extends Model
             if(empty($product['orders_id'])){
                 // get orders_id by ex_id
                 if(empty($product['external_id'])){
-                    return ['failure', 'Can not save record. Empty orders_id and empty external_id'];
+                    return ['failure', 'EX017. Can not save record. Empty orders_id and empty external_id'];
                 }
 
                 $product['orders_id'] = $this->getOrdersIdByExternalId($product['external_id']);
                 if(empty($product['orders_id'])){
-                    return ['failure', 'Can not save record. Empty orders_id and empty external_id'];
+                    return ['failure', 'EX018. Can not save record. Wrong External id Empty orders_id and empty external_id'];
                 }
 
                 $this->createRow('__orders_products', $product);
                 if($this->hasError()){
-                    return ['failure', $this->getErrorMessage()];
+                    return ['failure', 'EX019. '. $this->getErrorMessage()];
                 }
             }
 
@@ -438,7 +441,7 @@ class Sale extends Model
                 );
 
             if($this->hasError()){
-                return ['failure', $this->getErrorMessage()];
+                return ['failure', 'EX020. ' . $this->getErrorMessage()];
             }
         }
 
