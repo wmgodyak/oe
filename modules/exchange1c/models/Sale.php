@@ -49,7 +49,7 @@ class Sale extends Model
 
         $orders = self::$db
             ->select("
-                select o.id, o.oid, os.external_id as status, o.one_click,
+                select o.id, o.external_id, o.oid, os.external_id as status, o.one_click,
                  o.users_id, o.users_group_id, u.name as user_name, u.surname as user_surname, u.phone as user_phone, u.email as user_email,
                  cu.code, o.currency_rate, (select SUM(quantity * price) from __orders_products where orders_id=o.id) as amount,
                  o.comment, o.created, o.paid, o.paid_date, o.payment_id, o.delivery_id, o.delivery_cost, o.delivery_address
@@ -67,7 +67,7 @@ class Sale extends Model
         header("Pragma: no-cache");
         header("Expires: 0");
 
-        echo "id,oid,status,one_click,users_id,users_group_id,user_name,user_surname,user_phone,user_email,currency,currency_rate,amount,comment,created,paid,paid_date,payment_id,delivery_id,delivery_cost,delivery_address\n";
+        echo "id,external_id,oid,status,one_click,users_id,users_group_id,user_name,user_surname,user_phone,user_email,currency,currency_rate,amount,comment,created,paid,paid_date,payment_id,delivery_id,delivery_cost,delivery_address\n";
 
         $in = [];
         foreach ($orders as $fields) {
@@ -95,7 +95,7 @@ class Sale extends Model
 
         $products = self::$db
             -> select("
-                select op.orders_id, op.products_id, p.sku, pi.name as products_name, op.quantity, op.price
+                select op.orders_id, op.external_id, op.products_id, p.sku, pi.name as products_name, op.quantity, op.price
                 from
                 __orders_products op
                 join __content p on p.id=op.products_id
@@ -110,7 +110,7 @@ class Sale extends Model
         header("Pragma: no-cache");
         header("Expires: 0");
 
-        echo "orders_id,products_id,sku,products_name,quantity,price\n";
+        echo "orders_id, external_id, products_id,sku,products_name,quantity,price\n";
 
         foreach ($products as $fields) {
             echo implode(',', $fields), "\n";
@@ -285,19 +285,12 @@ class Sale extends Model
             return ['failure', "Can't find file {$filename}"];
         }
 
-        $file_handle = fopen($this->tmp_dir . $filename, 'r');
-
-        while (!feof($file_handle) ) {
-            $a = fgetcsv($file_handle, 1024, ',');
-            if(!is_array($a)) continue;
-
-//            foreach ($a as $k=>$v) {
-//                $a[$k] = trim(iconv('cp1251', 'utf-8', $v));
-//            }
-            $this->data[] = $a;
-        }
-
-        fclose($file_handle);
+        $csv = array_map('str_getcsv', file($this->tmp_dir . $filename));
+        array_walk($csv, function(&$a) use ($csv) {
+            $a = array_combine($csv[0], $a);
+        });
+        array_shift($csv); # remove column header
+        $this->data = $csv;
 
         $fname = pathinfo($filename, PATHINFO_FILENAME);
 
@@ -324,18 +317,15 @@ class Sale extends Model
         $users_group_id = Settings::getInstance()->get('modules.Exchange1c.config.users_group_id');
         $languages_id   =  Settings::getInstance()->get('modules.Exchange1c.config.languages_id');
 
-        // "id,oid,status,one_click,users_id,users_group_id,user_name,user_surname,user_phone,user_email,
-        //currency,currency_rate,amount,comment,created,paid,paid_date,payment_id,delivery_id,delivery_cost,delivery_address\n";
-        foreach ($this->data as $i=>$order) {
-            if($i == 0) continue;
+       foreach ($this->data as $i=>$order) {
 
-            $status_id = $this->ordersStatus->getIdByExternalId($order[2]);
+            $status_id = $this->ordersStatus->getIdByExternalId($order['status']);
 
             if(empty($status_id)){
                 return ['failure', "Wrong status"];
             }
 
-            $users_id = $order[5];
+            $users_id = $order['user_id'];
 
             if(empty($users_id)){
                 // create user
@@ -344,14 +334,14 @@ class Sale extends Model
                     [
                         'group_id'     => $users_group_id,
                         'languages_id' => $languages_id,
-                        'name'         => $order[6],
-                        'surname'      => $order[7],
-                        'phone'        => $order[8],
-                        'email'        => $order[9],
+                        'name'         => $order['user_name'],
+                        'surname'      => $order['user_surname'],
+                        'phone'        => $order['user_phone'],
+                        'email'        => $order['user_email']
                     ]
                 );
             } else {
-                $s = $this->users->getData($order[5], 'id');
+                $s = $this->users->getData($order['user_id'], 'id');
 
                 if(empty($s)){
                     return ['failure', "Wrong users_id"];
@@ -359,32 +349,33 @@ class Sale extends Model
             }
 
             $data = [
-                'oid'            => $order[1],
+                'oid'            => $order['oid'],
+                'external_id'    => $order['external_id'],
                 'languages_id'   => $languages_id,
                 'status_id'      => $status_id,
-                'one_click'      => $order[3],
+                'one_click'      => $order['one_click'],
                 'users_id'       => $users_id,
                 'users_group_id' => $users_group_id,
-                'currency_id'    => $currency[$order[10]],
-                'currency_rate'  => $order[11],
-                'comment'        => $order[13],
-                'created'        => $order[14],
-                'paid'           => $order[15],
-                'paid_date'      => $order[16],
-                'payment_id'     => $order[17],
-                'delivery_id'     => $order[18],
-                'delivery_cost'   => $order[19],
-                'delivery_address'=> $order[20],
+                'currency_id'    => $currency[$order['currency']],
+                'currency_rate'  => $order['currency_rate'],
+                'comment'        => $order['comment'],
+                'created'        => $order['created'],
+                'paid'           => $order['paid'],
+                'paid_date'      => $order['paid_date'],
+                'payment_id'     => $order['payment_id'],
+                'delivery_id'     => $order['delivery_id'],
+                'delivery_cost'   => $order['delivery_cost'],
+                'delivery_address'=> $order['delivery_address'],
             ];
 
-            if(empty($order[0])){
+            if(empty($order['id'])){
                 $this->createRow('__orders', $data);
 
                 if($this->hasError()){
                     return ['failure', $this->getErrorMessage()];
                 }
             } else {
-                $id = self::$db->select("select id from __orders where id='{$order[0]}' limit 1")->row('id');
+                $id = self::$db->select("select id from __orders where id='{$order['id']}' limit 1")->row('id');
 
                 if(empty($id)){
                     return ['failure', "Wrong id"];
@@ -396,12 +387,13 @@ class Sale extends Model
                     $id,
                     [
                         'edited'          => date('Y-m-d H:i:s'),
-                        'paid'            => $order[15],
-                        'paid_date'       => $order[16],
-                        'payment_id'      => $order[17],
-                        'delivery_id'     => $order[18],
-                        'delivery_cost'   => $order[19],
-                        'delivery_address'=> $order[20]
+                        'external_id'     => $order['external_id'],
+                        'paid'            => $order['paid'],
+                        'paid_date'       => $order['paid_date'],
+                        'payment_id'      => $order['payment_id'],
+                        'delivery_id'     => $order['delivery_id'],
+                        'delivery_cost'   => $order['delivery_cost'],
+                        'delivery_address'=> $order['delivery_address']
                     ]
                 );
 
@@ -409,13 +401,52 @@ class Sale extends Model
                     return ['failure', $this->getErrorMessage()];
                 }
             }
-        }
+       }
 
         return ['success'];
     }
 
     private function importProducts()
     {
+        foreach ($this->data as $product) {
 
+            unset($product['products_name'], $product['sku']);
+
+            if(empty($product['orders_id'])){
+                // get orders_id by ex_id
+                if(empty($product['external_id'])){
+                    return ['failure', 'Can not save record. Empty orders_id and empty external_id'];
+                }
+
+                $product['orders_id'] = $this->getOrdersIdByExternalId($product['external_id']);
+                if(empty($product['orders_id'])){
+                    return ['failure', 'Can not save record. Empty orders_id and empty external_id'];
+                }
+
+                $this->createRow('__orders_products', $product);
+                if($this->hasError()){
+                    return ['failure', $this->getErrorMessage()];
+                }
+            }
+
+            self::$db
+                ->update
+                (
+                    '__orders_products',
+                    $product,
+                    "orders_id = '{$product['orders_id']}' and products_id = '{$product['products_id']}' limit 1"
+                );
+
+            if($this->hasError()){
+                return ['failure', $this->getErrorMessage()];
+            }
+        }
+
+        return ['success'];
+    }
+
+    private function getOrdersIdByExternalId($ex_id)
+    {
+        return self::$db->select("select id from __orders where external_id = '{$ex_id}' limit 1")->row('id');
     }
 }
