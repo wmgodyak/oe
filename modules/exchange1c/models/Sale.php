@@ -53,7 +53,7 @@ class Sale extends Model
         $orders = self::$db
             ->select("
                 select o.id, o.external_id, o.oid, os.external_id as status, o.one_click,
-                 o.users_id, o.users_group_id, u.name as user_name, u.surname as user_surname, u.phone as user_phone, u.email as user_email,
+                 o.users_id as user_id, o.users_group_id, u.name as user_name, u.surname as user_surname, u.phone as user_phone, u.email as user_email,
                  cu.code, o.currency_rate, (select SUM(quantity * price) from __orders_products where orders_id=o.id) as amount,
                  o.comment, o.created, o.paid, o.paid_date, o.payment_id, o.delivery_id, o.delivery_cost, o.delivery_address
                 from __orders o
@@ -70,11 +70,11 @@ class Sale extends Model
         header("Pragma: no-cache");
         header("Expires: 0");
 
-        echo "id,external_id,oid,status,one_click,users_id,users_group_id,user_name,user_surname,user_phone,user_email,currency,currency_rate,amount,comment,created,paid,paid_date,payment_id,delivery_id,delivery_cost,delivery_address\n";
+        echo "id;external_id;oid;status;one_click;user_id;users_group_id;user_name;user_surname;user_phone;user_email;currency;currency_rate;amount;comment;created;paid;paid_date;payment_id;delivery_id;delivery_cost;delivery_address\n";
 
         $in = [];
         foreach ($orders as $fields) {
-            echo implode(',', $fields), "\n";
+            echo implode(';', $fields), "\n";
             $in[] = $fields['id'];
         }
 
@@ -113,10 +113,10 @@ class Sale extends Model
         header("Pragma: no-cache");
         header("Expires: 0");
 
-        echo "orders_id, external_id, products_id,sku,products_name,quantity,price\n";
+        echo "orders_id;external_id;products_id;sku;products_name;quantity;price\n";
 
         foreach ($products as $fields) {
-            echo implode(',', $fields), "\n";
+            echo implode(';', $fields), "\n";
         }
 
         die;
@@ -288,11 +288,27 @@ class Sale extends Model
             return ['failure', "EX005. Can't find file {$filename}"];
         }
 
-        $csv = array_map('str_getcsv', file($this->tmp_dir . $filename));
+//        $csv = array_map('str_getcsv', file($this->tmp_dir . $filename));
+        $file_handle = fopen($this->tmp_dir . $filename, 'r');
+
+        while (!feof($file_handle) ) {
+            $a = fgetcsv($file_handle, 1024, ';');
+            if(!is_array($a)) continue;
+
+            foreach ($a as $k=>$v) {
+                $a[$k] = trim(iconv('cp1251', 'utf-8', $v));
+            }
+            $csv[] = $a;
+        }
+
+        fclose($file_handle);
+
+
         array_walk($csv, function(&$a) use ($csv) {
             $a = array_combine($csv[0], $a);
         });
         array_shift($csv); # remove column header
+
         $this->data = $csv;
 
         $fname = pathinfo($filename, PATHINFO_FILENAME);

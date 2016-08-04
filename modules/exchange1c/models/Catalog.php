@@ -170,7 +170,7 @@ class Catalog extends Model
         $file_handle = fopen($this->tmp_dir . $filename, 'r');
 
         while (!feof($file_handle) ) {
-            $a = fgetcsv($file_handle, 1024, ',');
+            $a = fgetcsv($file_handle, 1024, ';');
             if(!is_array($a)) continue;
 
             foreach ($a as $k=>$v) {

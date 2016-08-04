@@ -39,7 +39,7 @@ class Session {
      * @param mixed $key
      * @param mixed $value
      */
-    public static function set($key, $value){
+    public static function set($key, $value=null){
         if(is_array($key)){
             $_SESSION = array_merge($_SESSION, $key);
             return;
