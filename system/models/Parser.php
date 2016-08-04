@@ -24,23 +24,26 @@ class Parser extends Model
         $this->addAnalytics();
     }
 
-    private function getUrlById($id, $languages_id, $def_lang, $home_id)
+    private function getUrlById($id, $languages_id, $def_lang, $home_id, $debug=0)
     {
         if(!$languages_id) {
             $languages_id = $def_lang['id'];
         }
+
         if($id == $home_id){
             $url = '';
         } else {
             $url = self::$db
-                ->select("select url from __content_info where content_id = '{$id}' and languages_id={$languages_id} limit 1")
+                ->select("select url from __content_info where content_id = '{$id}' and languages_id={$languages_id} limit 1",$debug)
                 ->row('url');
         }
+
         if($languages_id == $def_lang['id']){
             return $url;
         }
 
-        $code = $def_lang['code'];
+        $code = self::$db->select("select code from __languages where id={$languages_id} limit 1")->row('code');
+
         if(empty($url)){
             return $code;
         }
@@ -185,6 +188,15 @@ class Parser extends Model
 
                 foreach($matches as $k=>$v){
                     if($k > 2){
+
+                        if(preg_match('/l=([0-9]+)/', $v, $m) !== false){
+
+                            if(!empty($m) && $m[1] > 0){
+                                $url = $self->getUrlById($id, $m[1], $def_lang, $home_id);
+                                continue;
+                            }
+                        }
+
 //                        $v = preg_replace('/p=([0-9]+)/u','/page/$1', $v);
                         $s = substr($v,0,1);
                         if($s == '?' || $s == '&'){

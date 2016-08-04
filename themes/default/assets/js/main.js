@@ -314,7 +314,7 @@ var App = {
                             if(typeof d.m != 'undefined'){
                                 d.e = typeof d.e == 'undefined' ? null : d.e;
                                 //engine.notify(d.m, d.t, 'success');
-                                alert(d.m);
+                                //alert(d.m);
                             }
 
                             if(typeof onSuccess == 'string'){

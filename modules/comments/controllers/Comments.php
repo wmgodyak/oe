@@ -111,7 +111,7 @@ class Comments extends Front
                 $data['id'] = $s;
                 $data['user'] = $user;
 
-                $mailer = new Mailer('comments/mail/comment', 'New comment', $data);
+                $mailer = new Mailer('modules/comments/mail/comment', 'New comment', $data);
 
                 if(!$mailer->send()) {
                     $m .= '<br>ERROR: '.$mailer->getErrorInfo();

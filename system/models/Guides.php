@@ -41,15 +41,18 @@ class Guides extends Model
               ")
             ->row();
 
-        $res['items'] = self::$db
-            ->select("
+        if(!empty($res)){
+
+            $res['items'] = self::$db
+                ->select("
                 select c.id, i.name, c.external_id
                 from __content c
                 join __content_info i on i.content_id=c.id and i.languages_id={$this->languages_id}
                 where c.parent_id = '{$res['id']}' and c.status = 'published'
               ")
-            ->all();
+                ->all();
 
+        }
         return $res;
     }
 

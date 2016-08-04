@@ -32,7 +32,7 @@ class Languages extends Model
 
     public function getDataByCode($code, $key= '*')
     {
-        return self::$db->select("select * from __languages where code={$code}")->row($key);
+        return self::$db->select("select * from __languages where code='{$code}'")->row($key);
     }
 
     /**

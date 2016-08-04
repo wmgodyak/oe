@@ -117,25 +117,25 @@ class Front extends core\Controller
             $this->request->isXhr()
             // || (isset($args['controller']) && $args['namespace'] != 'controllers\App' && $args['controller'] != 'App')
         ){
-//            echo 'Configure XHR or move it to model front ';
-            if( ! $this->languages_id){
-                $l = new Languages();
-                $lang = $l->getDefault();
-                $this->languages_id   = $lang['id'];
-                $this->languages_code = $lang['code'];
-
-                $a = [];
-                $a['app']['languages_id']   = $this->languages_id;
-                $a['app']['languages_code'] = $this->languages_code;
-
-                Session::set($a, $this->languages_id);
-            }
-
-            Request::getInstance()->param('languages_id', $this->languages_id);
-            Request::getInstance()->param('languages_code', $this->languages_code);
-
-            // assign translations to template
-            $this->template->assign('t', $this->t());
+            echo 'Configure XHR or move it to model front ';
+//            if( ! $this->languages_id){
+//                $l = new Languages();
+//                $lang = $l->getDefault();
+//                $this->languages_id   = $lang['id'];
+//                $this->languages_code = $lang['code'];
+//
+//                $a = [];
+//                $a['app']['languages_id']   = $this->languages_id;
+//                $a['app']['languages_code'] = $this->languages_code;
+//
+//                Session::set($a, $this->languages_id);
+//            }
+//
+//            Request::getInstance()->param('languages_id', $this->languages_id);
+//            Request::getInstance()->param('languages_code', $this->languages_code);
+//
+//            // assign translations to template
+//            $this->template->assign('t', $this->t());
         } else {
 
             if($this->settings['active'] == 0){
@@ -150,13 +150,13 @@ class Front extends core\Controller
 
             $page = $app->getPage();
 
-            $page['content'] = $this->template->fetchString($page['content']);
-
-            Request::getInstance()->param('page', $page);
-
             if (!$page) {
                 $this->e404();
             }
+
+            $page['content'] = $this->template->fetchString($page['content']);
+
+            Request::getInstance()->param('page', $page);
 
             if ($page['status'] != 'published') {
                 $a = Session::get('engine.admin');
@@ -214,6 +214,10 @@ class Front extends core\Controller
 
     private function initialize()
     {
+        $app = Session::get('app');
+
+        if(isset($app['languages_id'])) return;
+
         $l = new Languages();
         $lang = $l->getDefault();
         $this->languages_id   = $lang['id'];
@@ -223,7 +227,7 @@ class Front extends core\Controller
         $a['app']['languages_id']   = $this->languages_id;
         $a['app']['languages_code'] = $this->languages_code;
 
-        Session::set($a, $this->languages_id);
+        Session::set($a);
     }
 
     protected function getUrl($id)
