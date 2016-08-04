@@ -9,6 +9,7 @@
 namespace modules\translator\controllers\admin;
 use system\core\EventsHandler;
 use system\Engine;
+use system\models\Languages;
 
 defined("CPATH") or die();
 
@@ -83,8 +84,9 @@ class Translator extends Engine
         echo $this->translate($text, $from, $to);
     }
 
-    public function index()
+    public function index($id = null)
     {
+        $this->template->assign('id', $id);
         $this->template->assign('tables', $this->translator->getInfoTables());
         echo $this->template->fetch('translator/index');
     }
@@ -104,13 +106,99 @@ class Translator extends Engine
         // TODO: Implement delete() method.
     }
 
-    public function process($id)
+    public function process($languages_id)
     {
-        // TODO: Implement process() method.
+        $tables = $this->request->post('table');
+        if( ! $tables) return;
+
+        $res= array();
+
+        $def_lang_id = $this->languages_id;
+
+        if($languages_id == $def_lang_id) die;
+
+        foreach ($tables as $table) {
+            $col = array();
+            $tbl_info = $this->translator->describe($table);
+            // формую масив полів
+            foreach ($tbl_info as $row) {
+                $iv = array();
+                $iv['translate'] = 0;
+                if($row['Extra'] == 'auto_increment') continue;
+                $table_fields[$table]['iv'][] = $row['Field'];
+
+                if(preg_match('/varchar|text|longtext/i',$row['Type'])){
+                    $table_fields[$table]['to_tranlate'][] = $row['Field'];
+                    $iv['translate'] = 1;
+                }
+                $iv['field'] = $row['Field'];
+                $col[] = $iv;
+            }
+
+            $total = $this->translator->getTotalTableRecords($table, $def_lang_id);
+            $res[] = array(
+                'start' => 0,
+                'total' => $total,
+                'table' => $table,
+                'col'   => $col,
+                'from_lang' => $def_lang_id,
+                'to_lang'   => $languages_id
+            );
+        }
+
+        echo json_encode(array('t' => $res));die;
     }
 
     public function translateContent()
     {
+        $l = new Languages();
 
+        $table = $_POST['table'];
+        $start = (int) $_POST['start'];
+        $total = (int) $_POST['total'];
+        $col = $_POST['col'];
+        $from_lang = (int) $_POST['from_lang'];
+        $to_lang   = (int) $_POST['to_lang'];
+
+        $from = $l->getData($from_lang, 'code');
+        $to   = $l->getData($to_lang, 'code');
+
+        $iv = array();
+
+        $rowInfo = $this->translator->getTableRow($table, $from_lang, $start);
+
+        foreach ($col as $field) {
+            $value = $rowInfo[$field['field']];
+
+            if($field['field'] == 'languages_id') {
+                $value = $to_lang;
+                $field['translate'] = 0;
+            }
+
+            if($field['field'] == 'url') {
+                $field['translate'] = 0;
+            }
+
+            if($field['translate'] == 1) {
+                $value = $this->translate($value, $from, $to);
+            }
+
+            $iv[$field['field']] = $value;
+        }
+
+        $this->translator->insertTranslatedData($table, $iv);
+
+        $start++;
+
+        echo json_encode(
+            array(
+                'table' => $table,
+                'start' => $start,
+                'total' => $total,
+                'col'   => $col,
+                'from_lang' => $from_lang,
+                'to_lang'   => $to_lang
+            )
+        );die;
     }
 }

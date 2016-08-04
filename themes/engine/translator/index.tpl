@@ -1,10 +1,13 @@
 <p>Буде перекладено наступні таблиці:</p>
-
+<form action="module/run/translator/process/{$id}" method="post" id="translate">
 {foreach $tables as $k=>$table}
-    <h3 style="text-align: left;">{$table}</h3>
-    <div class="progress">
-        <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
-            <span class="sr-only">0% Complete</span>
-        </div>
-    </div>
+   <div id="t-{$table}" class="table-to-translate">
+       <h3 style="text-align: left;">{$table}</h3>
+       <div class="progress" id="progress-{$table}">
+           <div class="progress-bar" style="width:0%"></div>
+       </div>
+       <input type="hidden" name="table[]" value="{$table}">
+   </div>
 {/foreach}
+    <input type="hidden" name="token" value="{$token}">
+</form>

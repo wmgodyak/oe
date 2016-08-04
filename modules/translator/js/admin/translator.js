@@ -3,16 +3,17 @@ engine.translator = {
     {
         $(document).on('click', '.auto-translate-language', function(e)
         {
+            var id = $(this).data('id');
             engine.request.post({
-               url: 'module/run/translator/index',
-                data: {},
+               url: 'module/run/translator/index/'+id,
+               data: {},
                success: function(d)
                {
                    var bi = 'Вперед';
                    var buttons = {};
 
                    buttons[bi] =  function(){
-                       //$('#guidesForm').submit();
+                       $('#translate').submit();
                    };
 
                    var dialog = engine.dialog({
@@ -23,6 +24,68 @@ engine.translator = {
                        modal: true,
                        buttons: buttons
                    });
+
+                   $('#translate')
+                       .ajaxForm({
+                           success: function(d)
+                           {
+                               $(d.t).each(function(i,e){
+                                   translateTable(e.table, e.start, e.total, e.col, e.from_lang, e.to_lang);
+                               });
+                           },
+                           dataType: 'json'
+                       });
+
+                   function successTranslation(lang)
+                   {
+                       $('#translate-box').hide();
+                       //engine.languages.autoGenerateAlias(lang);
+                   }
+
+                   function translateTable(table, start, total, col, from_lang,to_lang)
+                   {
+                       var cnt = $('#t-' + table);
+                       if(total == 0 || start >= total) {
+                           cnt.hide();
+
+                           if($('.table-to-translate:visible').length == 0){
+                               successTranslation(from_lang);
+
+                               return false;
+                           }
+                           return false;
+                       }
+
+                       //cnt.find('.process').html('(<span class="s">'+ start +'</span> : <span class="t">'+ total +'</span>)');
+
+                       var percent =  100 / total, done = Math.round( start * percent ) ;
+                       $("#progress-"+table).find('div').css('width', done + '%').html('('+ start +'/'+ total +')');
+
+                       if(start < total){
+                           engine.request.post({
+                               url: 'module/run/translator/translateContent',
+                               data: {
+                                   table: table,
+                                   start: start,
+                                   total: total,
+                                   col  : col,
+                                   from_lang: from_lang,
+                                   to_lang  : to_lang
+                               },
+                               success: function(d){
+                                   setTimeout(function(){
+                                       translateTable(d.table, d.start, d.total, d.col, d.from_lang, d.to_lang);
+                                   }, 500);
+                               },
+                               dataType: 'json'
+                           });
+                           //setTimeout(function(){
+                           //    start++;
+                           //    translateTable(table, start, total, col, from_lang, to_lang);
+                           //}, 100);
+                       }
+                       return false;
+                   }
                }
             });
         });
