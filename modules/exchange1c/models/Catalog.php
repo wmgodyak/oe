@@ -64,7 +64,7 @@ class Catalog extends Model
 
     public function init()
     {
-        if( ! $this->auth()) return ['failure', "EX004. Wrong token"];
+//        if( ! $this->auth()) return ['failure', "EX004. Wrong token"];
 
         return ["zip={$this->config['zip']}", "file_limit={$this->config['file_limit']}"];
     }
@@ -86,7 +86,7 @@ class Catalog extends Model
 
     public function file()
     {
-        if( ! $this->auth()) return ['failure', "EX004. Wrong token"];
+//        if( ! $this->auth()) return ['failure', "EX004. Wrong token"];
         
         $file_info = pathinfo($this->request->get('filename', 's'));
 
@@ -193,7 +193,7 @@ class Catalog extends Model
                 break;
         }
 
-        return ['failure', "EX004. Wrong filename"];
+        return ['failure', "Wrong filename"];
     }
 
     private function parseCategories()
