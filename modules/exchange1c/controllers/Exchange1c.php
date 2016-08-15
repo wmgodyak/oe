@@ -46,7 +46,7 @@ class Exchange1c extends Front
 
         $user = [
             'login' => Settings::getInstance()->get('modules.Exchange1c.config.login'),
-            'pass'  => Settings::getInstance()->get('modules.Exchange1c.config.pass')
+            'password'  => Settings::getInstance()->get('modules.Exchange1c.config.pass')
         ];
 
         $this->config['user'] = $user;
@@ -107,6 +107,7 @@ class Exchange1c extends Front
      */
     private function callback(array $data)
     {
+        header("Content-type: text/html; charset=windows-1251");
         /*if(! $this->debug){
             header('Content-type: text/html; charset=cp1251');
         }*/

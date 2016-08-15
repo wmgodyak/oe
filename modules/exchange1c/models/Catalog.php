@@ -43,7 +43,15 @@ class Catalog extends Model
 
     public function checkauth()
     {
-        if (($this->config['user']['login'] == $this->login)  && ($this->config['user']['password'] == $this->password)) {
+        if (!isset($_SERVER['PHP_AUTH_USER'])) {
+            header('WWW-Authenticate: Basic realm="OYi.Engine"');
+            return ['failure', "EX000. Authentication Required."];
+        }
+
+        if (
+            ($this->config['user']['login'] == $this->login)
+            && ($this->config['user']['password'] == $this->password)
+        ) {
 
             $key  = session_name();
             $pass = TOKEN;
@@ -53,18 +61,17 @@ class Catalog extends Model
             Settings::getInstance()->set('1c_token', $pass);
 
             return ['success', $key, $pass];
-
         }
 
         Logger::error("Auth fail. L:{$this->login}. P:{$this->password}");
-        Logger::debug(var_export($_SERVER, 1));
+//        Logger::debug(var_export($_SERVER, 1));
 
         return ['failure', "EX003. Bad login or password."];
     }
 
     public function init()
     {
-//        if( ! $this->auth()) return ['failure', "EX004. Wrong token"];
+        if( ! $this->auth()) return ['failure', "EX004. Wrong token"];
 
         return ["zip={$this->config['zip']}", "file_limit={$this->config['file_limit']}"];
     }
@@ -86,7 +93,7 @@ class Catalog extends Model
 
     public function file()
     {
-//        if( ! $this->auth()) return ['failure', "EX004. Wrong token"];
+        if( ! $this->auth()) return ['failure', "EX004. Wrong token"];
         
         $file_info = pathinfo($this->request->get('filename', 's'));
 
@@ -158,7 +165,7 @@ class Catalog extends Model
 
     public function import()
     {
-//        if( ! $this->auth()) return ['failure', "EX004. Wrong token"];
+        if( ! $this->auth()) return ['failure', "EX004. Wrong token"];
 
         $filename = $this->request->get('filename', 's');
 

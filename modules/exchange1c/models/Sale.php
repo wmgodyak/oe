@@ -48,11 +48,11 @@ class Sale extends Model
 
     public function orders()
     {
-//        if( ! $this->auth()) return ['failure', "Wrong token"];
+        if( ! $this->auth()) return ['failure', "Wrong token"];
 
         $orders = self::$db
             ->select("
-                select o.id, o.external_id, o.oid, os.external_id as status, o.one_click,
+                select o.id, o.oid, os.external_id as status,
                  o.users_id as user_id, o.users_group_id, u.name as user_name, u.surname as user_surname, u.phone as user_phone, u.email as user_email,
                  cu.code, o.currency_rate, (select SUM(quantity * price) from __orders_products where orders_id=o.id) as amount,
                  o.comment, o.created, o.paid, o.paid_date, o.payment_id, o.delivery_id, o.delivery_cost, o.delivery_address
@@ -60,35 +60,41 @@ class Sale extends Model
                 join __orders_status os on os.id=o.status_id
                 join __users u on u.id=o.users_id
                 join __currency cu on cu.id=o.currency_id
-                where o.ex = 0 and o.status_id >= 6
+                where o.ex = 0
+                -- and o.status_id >= 6
                 order by o.id desc
             ")
             ->all();
 
-        header("Content-type: text/csv");
+        header("Content-type: text/csv; charset=windows-1251");
         header("Content-Disposition: attachment; filename=orders.csv");
         header("Pragma: no-cache");
         header("Expires: 0");
 
-        echo "id;external_id;oid;status;one_click;user_id;users_group_id;user_name;user_surname;user_phone;user_email;currency;currency_rate;amount;comment;created;paid;paid_date;payment_id;delivery_id;delivery_cost;delivery_address\n";
+        if(!empty($orders)){
 
-        $in = [];
-        foreach ($orders as $fields) {
-            echo implode(';', $fields), "\n";
-            $in[] = $fields['id'];
+            echo "oid;status;user_id;users_group_id;user_name;user_surname;user_phone;user_email;currency;currency_rate;amount;comment;created;paid;paid_date;payment_id;delivery_id;delivery_cost;delivery_address\n";
+
+            $in = [];
+            foreach ($orders as $fields) {
+                $in[] = $fields['id'];
+                unset($fields['id']);
+                echo implode(';', $fields), "\n";
+            }
+
+            $in = implode(',', $in);
+            file_put_contents($this->tmp_dir . 'oid.txt', $in);
+
+            Logger::info("Export orders: {$in}");
+
         }
-
-        $in = implode(',', $in);
-        file_put_contents($this->tmp_dir . 'oid.txt', $in);
-
-        Logger::info("Export orders: {$in}");
-
         die;
     }
 
     public function products()
     {
-//        if( ! $this->auth()) return ['failure', "Wrong token"];
+        if( ! $this->auth()) return ['failure', "Wrong token"];
+
         if( ! file_exists($this->tmp_dir . 'oid.txt')) {
             Logger::error("No orders");
             return ['failure', 'EX011. There are no orders'];
@@ -96,11 +102,17 @@ class Sale extends Model
 
         $in = file_get_contents($this->tmp_dir . 'oid.txt');
 
+        if(empty($in)){
+            Logger::error("No orders");
+            return ['failure', 'EX011. There are no orders'];
+        }
+
         $products = self::$db
             -> select("
-                select op.orders_id, op.external_id, op.products_id, p.sku, pi.name as products_name, op.quantity, op.price
+                select o.oid, op.products_id, p.sku, pi.name as products_name, op.quantity, op.price
                 from
                 __orders_products op
+                join __orders o on o.id=op.orders_id
                 join __content p on p.id=op.products_id
                 join __content_info pi on pi.content_id=op.products_id and pi.languages_id='{$this->languages_id}'
                 where op.orders_id in ($in)
@@ -108,12 +120,12 @@ class Sale extends Model
             ")
             -> all();
 
-        header("Content-type: text/csv");
+        header("Content-type: text/csv; charset=windows-1251");
         header("Content-Disposition: attachment; filename=orders_products.csv");
         header("Pragma: no-cache");
         header("Expires: 0");
 
-        echo "orders_id;external_id;products_id;sku;products_name;quantity;price\n";
+        echo "orders_id;products_id;sku;products_name;quantity;price\n";
 
         foreach ($products as $fields) {
             echo implode(';', $fields), "\n";
@@ -124,6 +136,8 @@ class Sale extends Model
 
     public function success()
     {
+        if( ! $this->auth()) return ['failure', "Wrong token"];
+
         if( ! file_exists($this->tmp_dir . 'oid.txt')) {
             Logger::error("No orders");
             return ['failure', 'EX012. There are no orders'];
@@ -142,7 +156,14 @@ class Sale extends Model
 
     public function checkauth()
     {
-        if (($this->config['user']['login'] == $this->login)  && ($this->config['user']['password'] == $this->password)) {
+        if (!isset($_SERVER['PHP_AUTH_USER'])) {
+            header('WWW-Authenticate: Basic realm="OYi.Engine"');
+            return ['failure', "EX000. Authentication Required."];
+        }
+        if (
+            ($this->config['user']['login'] == $this->login)
+            && ($this->config['user']['password'] == $this->password)
+        ) {
 
             $key  = session_name();
             $pass = TOKEN;
@@ -185,7 +206,8 @@ class Sale extends Model
 
     public function file()
     {
-//        if( ! $this->auth()) return ['failure', "EX004. Wrong token"];
+        return ['failure', "This action was disabled by administrator"];
+        if( ! $this->auth()) return ['failure', "EX004. Wrong token"];
 
         $file_info = pathinfo($this->request->get('filename', 's'));
 
@@ -279,7 +301,8 @@ class Sale extends Model
 
     public function import()
     {
-//        if( ! $this->auth()) return ['failure', "EX004. Wrong token"];
+        return ['failure', "This action was disabled by administrator"];
+        if( ! $this->auth()) return ['failure', "EX004. Wrong token"];
 
         $filename = $this->request->get('filename', 's');
 
