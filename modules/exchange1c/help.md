@@ -128,6 +128,52 @@ http://v8.1c.ru/edi/edi_stnd/131/
  Якщо замовлення створено на стороні сайту , то поле external_id буде пустим. 
  Воно буде заповнено значенням яке буе присвоєно йому в 1с.
  
+ **Оновлення валюти**
+ 
+  Оновлення валюти я зробив аналогічно до оновлення товарів / груп
+ 
+  1. Початок сеансу. Авторизація. 1с посилає запит на сайт по вказаному урл.
+  В параметрах запиту потрібно відправити логін і пароль
+  
+  http://e7.otakoyi.com/route/exchange1c/run?type=currency&mode=checkauth
+  
+  Логін: 1c-ex-user
+  Пароль: 2tsbrruj1ms11nk6gifc4r54g3
+  
+  
+  У відповідь сайт посилає:
+  success
+  
+  oyiengine
+  somesessioncode унікальний для однієї сесії
+  
+  , їх потрібно передавати в наступних запитах.
+  
+  2. Запит параметрів сайту. 
+  
+  http://e7.otakoyi.com/route/exchange1c/run?type=currency&mode=init
+  
+  Відповідь
+  zip=yes|no
+  file_limit=1024
+  , де file_limit - допустимий розмір файлу в байтах
+  
+  3. Завантаження файлу на сайт
+  
+  http://e7.otakoyi.com/route/exchange1c/run?type=currency&mode=file&filename=currency.csv
+   
+   де currency.csv назва файлу
+   вміст файлу передається у вигляді POST даних
+   
+   4. Завантаження даних 
+   
+  http://e7.otakoyi.com/route/exchange1c/run?type=currency&mode=import&filename=currency.csv
+  
+  Відповідь
+  success | failure
+   
+  Послідовність запитів.
+ 
  **Коди помилок**
  
  - EX001 - Виклик неіснуючої моделі.
