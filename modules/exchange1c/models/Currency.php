@@ -193,24 +193,21 @@ class Currency extends Model
 
         fclose($file_handle);
 
-
         array_walk($csv, function(&$a) use ($csv) {
             $a = array_combine($csv[0], $a);
         });
         array_shift($csv); # remove column header
 
-        $this->data = $csv;
-        d($this->data);
-//        foreach ($this->data as $cat) {
-//
-//            if(! $s) {
-//                Logger::error(implode("\n", $this->mImport->log));
-//                return ['failure', 'EX009. ' .implode("\n", $this->mImport->log)];
-//            }
-//        }
-        Logger::info(implode("\n", $this->mImport->log));
+        $currency = new \system\models\Currency();
+        foreach ($csv as $cu) {
+            $s = $currency->setRateByCode($cu['code'], $cu['rate']);
+            if(! $s) {
+                Logger::error($currency->getErrorMessage());
+                return ['failure', 'EX009. ' .$currency->getErrorMessage()];
+            }
+        }
 
-        return ['success', implode("\n", $this->mImport->log)];
+        return ['success'];
     }
 
     /**

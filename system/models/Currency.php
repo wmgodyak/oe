@@ -54,4 +54,9 @@ class Currency extends Model
     {
         return self::$db->select("select id from __currency where code = '$code' limit 1")->row('id');
     }
+
+    public function setRateByCode($code, $rate)
+    {
+        return self::$db->update('__currency', ['rate' => $rate], "code = '{$code}' limit 1");
+    }
 }
