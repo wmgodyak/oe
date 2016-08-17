@@ -106,7 +106,7 @@ class Cache
      * @param int $expired
      * @return mixed|null
      */
-    public function begin($key, $expired = 0)
+    public function issetBlock($key, $expired = 0)
     {
         $cached = $this->get($key);
 
@@ -121,7 +121,7 @@ class Cache
     /**
      * save buffer to cache
      */
-    public function end()
+    public function endBlock()
     {
         $value = ob_get_contents();
         $this->set($this->key, $value, $this->expired);

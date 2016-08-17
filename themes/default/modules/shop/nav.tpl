@@ -1,4 +1,4 @@
-{*{$app->cache->begin('shop.main.nav', 60*60)}*}
+{! $app->cache->issetBlock('shop.main.nav', 60*60)}
 <!-- begin sidebar -->
 <aside class="sidebar sidebar-collapse">
     <!-- begin m_goods-nav -->
@@ -38,4 +38,4 @@
 
 </aside>
 <!-- end sidebar -->
-{*{$app->cache->end()}*}
+{$app->cache->endBlock()}
