@@ -62,8 +62,14 @@ class Order extends \modules\order\models\Order
 
     }
 
+    /**
+     * @param $id
+     * @param $data
+     * @return bool
+     */
     public function update($id, $data)
     {
+        $data['edited'] = $this->now();
         return $this->updateRow('__orders', $id, $data);
     }
 }

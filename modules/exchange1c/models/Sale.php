@@ -53,15 +53,13 @@ class Sale extends Model
         $orders = self::$db
             ->select("
                 select o.id, o.oid, os.external_id as status,
-                 o.users_id as user_id, o.users_group_id, u.name as user_name, u.surname as user_surname, u.phone as user_phone, u.email as user_email,
+                 o.users_id as user_id,
                  cu.code, o.currency_rate, (select SUM(quantity * price) from __orders_products where orders_id=o.id) as amount,
                  o.comment, o.created, o.paid, o.paid_date, o.payment_id, o.delivery_id, o.delivery_cost, o.delivery_address
                 from __orders o
                 join __orders_status os on os.id=o.status_id
-                join __users u on u.id=o.users_id
                 join __currency cu on cu.id=o.currency_id
-                where o.ex = 0
-                -- and o.status_id >= 6
+                where (isnull(o.ex_date) or o.ex_date < o.edited) and o.status_id >= 6
                 order by o.id desc
             ")
             ->all();
@@ -73,7 +71,7 @@ class Sale extends Model
 
         if(!empty($orders)){
 
-            echo "oid;status;user_id;users_group_id;user_name;user_surname;user_phone;user_email;currency;currency_rate;amount;comment;created;paid;paid_date;payment_id;delivery_id;delivery_cost;delivery_address\n";
+            echo "oid;status;user_id;currency;currency_rate;amount;comment;created;paid;paid_date;payment_id;delivery_id;delivery_cost;delivery_address\n";
 
             $in = [];
             foreach ($orders as $fields) {
@@ -88,6 +86,34 @@ class Sale extends Model
             Logger::info("Export orders: {$in}");
 
         }
+        die;
+    }
+
+    public function customers()
+    {
+        if( ! $this->auth()) return ['failure', "Wrong token"];
+
+        $products = self::$db
+            -> select("
+                select u.id, u.group_id, u.name, u.surname, u.phone, u.email, u.barcode, u.created
+                from __orders o
+                join __users u on u.id=o.users_id
+                where (isnull(o.ex_date) or o.ex_date < o.edited) and o.status_id >= 6
+                order by u.id desc
+            ")
+            -> all();
+
+        header("Content-type: text/csv; charset=windows-1251");
+        header("Content-Disposition: attachment; filename=orders_customers.csv");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+
+        echo "id;group_id;name;surname;phone;email;barcode;created\n";
+
+        foreach ($products as $fields) {
+            echo implode(';', $fields), "\n";
+        }
+
         die;
     }
 
@@ -145,7 +171,7 @@ class Sale extends Model
 
         $in = file_get_contents($this->tmp_dir . 'oid.txt');
 
-        self::$db->update('__orders', ['ex' => 1, 'edited' => date('Y-m-d H:i:s')], " id in ($in)");
+        self::$db->update('__orders', ['ex_date' => date('Y-m-d H:i:s')], " id in ($in)");
 
         @unlink($this->tmp_dir . 'oid.txt');
 
