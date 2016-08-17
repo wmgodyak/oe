@@ -44,7 +44,7 @@
 
             <!-- begin logo -->
             <div class="logo">
-                <a href="1" class="logo__link">
+                <a {if $page.id <> 1 } href="1"{/if} class="logo__link">
                     <img src="{$theme_url}/assets/img/logo.png" alt="Світ Мобільних Аксесуарів" title="Світ Мобільних Аксесуарів" class="logo-icon">
                     <img src="{$theme_url}/assets/img/logo-text.png" alt="" class="logo-text">
                 </a>

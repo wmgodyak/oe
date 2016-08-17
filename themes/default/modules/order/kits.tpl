@@ -7,7 +7,7 @@
         <div class="content">
             <div class="item item1">
                 <div class="img-block">
-                    <div class="img" style="background-image: url('assets/img/TOVARS/1.jpg');">
+                    <div class="img" style="background-image: url('/themes/default/assets/img/TOVARS/1.jpg');">
 
                     </div>
                 </div>
@@ -22,7 +22,7 @@
             </div>
             <div class="item item2">
                 <div class="img-block">
-                    <div class="img" style="background-image: url('assets/img/TOVARS/2.jpg');">
+                    <div class="img" style="background-image: url('/themes/default/assets/img/TOVARS/2.jpg');">
 
                     </div>
                 </div>

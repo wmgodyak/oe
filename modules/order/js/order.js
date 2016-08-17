@@ -48,7 +48,7 @@ var Order = {
             }
 
             Order.cart.add(products_id, variants_id, 1, function(res){
-                $this.addClass('in').text(t_in);
+                $this.addClass('in active').text(t_in);
                 App.alert('Товар додано в кошик');
                 refreshBlock(res);
             });

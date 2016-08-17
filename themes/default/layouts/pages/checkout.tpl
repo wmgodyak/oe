@@ -37,7 +37,11 @@
                         {foreach $mod->order->cart->items() as $item}
                         <div class="goods-list__row">
                             <div class="item item1">
+                                {if isset($item.img.image)}
                                 <img src="{$item.img.path}thumbs/{$item.img.image}" alt="">
+                                {else}
+                                    <img src="/uploads/noimage.jpg" alt="">
+                                {/if}
                             </div>
                             <div class="item item2">
                                 <div class="name">

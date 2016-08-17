@@ -45,9 +45,9 @@
 
                        </span>
 
-                       <span class="m_special-offer"></span>
+                       {*<span class="m_special-offer"></span>*}
 
-                       <span class="m_hit"></span>
+                       {*<span class="m_hit"></span>*}
                    </span>
                         </div>
                     </div>
