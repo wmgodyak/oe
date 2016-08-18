@@ -34,14 +34,12 @@ class Files
         $value = file(DOCROOT . $this->path . $key);
 
         if(empty($value)){
-//            unlink(DOCROOT . $this->path . $key);
             return null;
         }
 
         $expired = array_shift($value);
 
         if($expired > 0 && $expired < time()) {
-//            unlink(DOCROOT . $this->path . $key);
             return null;
         }
 
