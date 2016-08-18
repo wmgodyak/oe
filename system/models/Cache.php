@@ -64,6 +64,8 @@ class Cache
             return unserialize($value);
         }
 
+        $value = "<!-- cached: $key >>> -->$value <!-- <<< cached -->";
+
         return $value;
     }
 
@@ -76,8 +78,6 @@ class Cache
     public function set($key, $value, $expired = 0)
     {
         $key = md5($this->id_prefix . $key);
-
-        $value = "<!-- cached >>> -->$value <!-- <<< cached -->";
 
         if(is_array($value)) $value = serialize($value);
 
@@ -110,12 +110,6 @@ class Cache
      */
     public function begin($key, $expired = 0)
     {
-        $cached = $this->get($key);
-
-        if($cached) {
-            return '________'.$cached. '_______';
-        }
-
         $this->key = $key;
         $this->expired = $expired;
 
@@ -137,5 +131,7 @@ class Cache
 
         $this->set($this->key, $value, $this->expired);
         ob_end_flush();
+        $this->key = null;
+        $this->expired = null;
     }
 }
