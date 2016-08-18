@@ -77,6 +77,8 @@ class Cache
     {
         $key = md5($this->id_prefix . $key);
 
+        $value = "<!-- cached >>> -->$value <!-- <<< cached -->";
+
         if(is_array($value)) $value = serialize($value);
 
         return $this->driver->set($key, $value, $expired);
@@ -121,11 +123,18 @@ class Cache
     }
 
     /**
-     * save buffer to cache
+     * @param bool $parse
      */
-    public function end()
+    public function end($parse = true)
     {
         $value = ob_get_contents();
+
+        if($parse){
+            $parser = new Parser($value);
+            $parser->makeFriendlyUrl();
+            $value  = $parser->getDocumentSource();
+        }
+
         $this->set($this->key, $value, $this->expired);
         ob_end_flush();
     }

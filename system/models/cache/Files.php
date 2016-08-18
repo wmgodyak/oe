@@ -7,6 +7,7 @@
  */
 
 namespace system\models\cache;
+
 /**
  * Class Files
  * @package system\models\cache
@@ -78,6 +79,28 @@ class Files
      */
     public function exists($key)
     {
-//        return $this->driver->exists($key);
+        if( ! file_exists(DOCROOT . $this->path . $key)) return false;
+
+        $value = file(DOCROOT . $this->path . $key);
+
+        if(empty($value)) return false;
+
+        $expired = array_shift($value);
+
+        if($expired > 0 && $expired < time()) return false;
+
+        return true;
+    }
+
+    public function flush()
+    {
+        if ($handle = opendir(DOCROOT . $this->path)) {
+            while (false !== ($entry = readdir($handle))) {
+                if ($entry != "." && $entry != ".."){
+                    unlink(DOCROOT . $this->path . $entry);
+                }
+            }
+            closedir($handle);
+        }
     }
 }

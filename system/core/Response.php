@@ -74,7 +74,6 @@ class Response
 
                 break;
             case 'frontend':
-//                throw new Exception("Треба тут поміняти підключення");
                 $parser = new Parser($this->body);
                 $body = $parser->getDocumentSource();
                 break;

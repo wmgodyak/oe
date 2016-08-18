@@ -1,4 +1,4 @@
-{if !$app->cache->get('shop.main.nav')}
+{if !$app->cache->exists('shop.main.nav')}
     {$app->cache->begin('shop.main.nav', 60*60)}
     <!-- begin sidebar -->
     <aside class="sidebar sidebar-collapse">
