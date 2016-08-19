@@ -92,6 +92,7 @@ FRONTEND
   - переробити фільтр як на титані
   - додати модуль gmap з fth
   - install php apc
+  -  cache manager
 
 
 

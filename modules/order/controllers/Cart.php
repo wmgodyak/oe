@@ -13,6 +13,7 @@ use modules\shop\models\products\Prices;
 use modules\shop\models\products\variants\ProductsVariantsPrices;
 use system\core\Session;
 use system\Front;
+use system\models\Settings;
 
 defined("CPATH") or die();
 
@@ -25,14 +26,23 @@ class Cart extends Front
     public $prices;
     public $variantsPrices;
     public $products;
+    private $user_group_id;
+    private $bonus_rate;
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->prices = new Prices();
+        $this->prices         = new Prices();
         $this->variantsPrices = new ProductsVariantsPrices();
-        $this->products = new Products('product');
+        $this->products       = new Products('product');
+
+        $user = Session::get('user');
+        $this->user_group_id = isset($user['group_id']) ?
+            $user['group_id'] :
+            Settings::getInstance()->get('modules.Shop.config.group_id');
+
+        $this->bonus_rate = Settings::getInstance()->get('modules.Shop.config.bonus_rate');
     }
 
     public function add()
@@ -87,17 +97,18 @@ class Cart extends Front
 
     public function items()
     {
-        $cart = Session::get('cart'); $user = Session::get('user');
-        $group_id = isset($user['group_id']) ? $user['group_id'] : 20;
+        $cart = Session::get('cart');
 
         foreach ($cart as $k=>$item) {
             $cart[$k] += $this->products->getData($item['products_id']);
             $cart[$k]['img'] = $this->images->cover($item['products_id']);
             if($item['has_variants']){
-                $cart[$k]['price'] = $this->variantsPrices->getPrice($item['variants_id'], $group_id);
+                $cart[$k]['price'] = $this->variantsPrices->getPrice($item['variants_id'], $this->user_group_id);
             } else {
-                $cart[$k]['price'] = $this->prices->get($item['products_id'], $group_id);
+                $cart[$k]['price'] = $this->prices->get($item['products_id'], $this->user_group_id);
             }
+
+            $cart[$k]['bonus'] = round($cart[$k]['quantity'] * $cart[$k]['price'] * $this->bonus_rate, 2);
         }
 
         return $cart;
@@ -106,16 +117,15 @@ class Cart extends Front
     public function total($json = true)
     {
         $amount = 0; $total = 0;
-        $cart = Session::get('cart'); $user = Session::get('user');
-        $group_id = isset($user['group_id']) ? $user['group_id'] : 20;
+        $cart = Session::get('cart');
 
         if(!empty($cart)){
             foreach ($cart as $item) {
                 $total  += $item['quantity'];
                 if($item['has_variants']){
-                    $amount += $this->variantsPrices->getPrice($item['variants_id'], $group_id) * $item['quantity'];
+                    $amount += $this->variantsPrices->getPrice($item['variants_id'], $this->user_group_id) * $item['quantity'];
                 } else {
-                    $amount += $this->prices->get($item['products_id'], $group_id) * $item['quantity'];
+                    $amount += $this->prices->get($item['products_id'], $this->user_group_id) * $item['quantity'];
                 }
             }
         }

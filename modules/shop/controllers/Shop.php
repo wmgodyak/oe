@@ -18,6 +18,7 @@ use modules\shop\models\SearchHistory;
 use system\core\Session;
 use system\Front;
 use system\models\Currency;
+use system\models\Settings;
 
 /**
  * Class shop
@@ -31,9 +32,10 @@ class Shop extends Front
 {
     private $products;
     private $categories;
-    private $ipp = 15;
+    private $ipp;
     private $total;
-    private $group_id = 5;
+    private $group_id;
+    private $bonus_rate;
     private $prices;
     private $currency;
 
@@ -43,6 +45,10 @@ class Shop extends Front
     public function __construct()
     {
         parent::__construct();
+
+        $this->group_id   = Settings::getInstance()->get('modules.Shop.config.group_id');
+        $this->ipp        = Settings::getInstance()->get('modules.Shop.config.ipp');
+        $this->bonus_rate = Settings::getInstance()->get('modules.Shop.config.bonus_rate');
 
         $this->products   = new Products('product');
         $this->categories = new Categories('products_categories');
@@ -78,6 +84,7 @@ class Shop extends Front
         $product['images']   = $this->images->get($product['id']);
         $product['price']    = $this->prices->get($product['id'], $this->group_id);
         $product['currency'] = $this->currency->getMeta($product['currency_id'], 'symbol');
+        $product['bonus']    = round($product['price'] * $this->bonus_rate, 2);
 
         $features = new \modules\shop\models\products\Features();
         $product['features'] = $features->get($product['id']);
@@ -157,31 +164,51 @@ class Shop extends Front
         $this->products->num = $this->ipp;
         $products = $this->products->get();
 
+        foreach ($products as $k=>$product) {
+            $products[$k]['bonus'] = round($products[$k]['price'] * $this->bonus_rate, 2);
+        }
+
         // save total posts count
         $this->total = $this->products->getTotal();
 
         return $products;
     }
 
-
+    /**
+     * @return mixed
+     */
     public function actionsProducts()
     {
         $this->products->start = 0;
         $this->products->num   = 30;
         $products = $this->products->get();
 
+        foreach ($products as $k=>$product) {
+            $products[$k]['bonus'] = round($products[$k]['price'] * $this->bonus_rate, 2);
+        }
+
         return $products;
     }
 
+    /**
+     * @return mixed
+     */
     public function lastProducts()
     {
         $this->products->start = 0;
         $this->products->num   = 30;
         $products = $this->products->get();
+
+        foreach ($products as $k=>$product) {
+            $products[$k]['bonus'] = round($products[$k]['price'] * $this->bonus_rate, 2);
+        }
+
         return $products;
     }
 
-
+    /**
+     * @return mixed
+     */
     public function foundTotal()
     {
         return $this->total;

@@ -11,6 +11,10 @@ namespace modules\delivery\models;
 use system\models\Languages;
 use system\models\Model;
 
+/**
+ * Class Delivery
+ * @package modules\delivery\models
+ */
 class Delivery extends Model
 {
     /**
@@ -31,6 +35,11 @@ class Delivery extends Model
                 ->select("select name, description from __delivery_info where delivery_id={$id} and languages_id={$language['id']} limit 1")
                 ->row();
         }
+
+        if(! empty($data['settings'])){
+            $data['settings'] = unserialize($data['settings']);
+        }
+
         return $data;
     }
 

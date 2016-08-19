@@ -12,6 +12,7 @@ use helpers\Pagination;
 use modules\shop\models\Categories;
 use modules\shop\models\Products;
 use system\Front;
+use system\models\Settings;
 
 /**
  * Class shop
@@ -20,16 +21,19 @@ use system\Front;
 class Search extends Front
 {
     private $products;
-    private $ipp = 15;
+    private $ipp;
     private $total;
-    private $group_id = 20;
+    private $group_id;
+    private $bonus_rate;
 
     public function __construct($products, $group_id)
     {
         parent::__construct();
 
         $this->products = $products;
-        $this->group_id = $group_id;
+        $this->group_id = Settings::getInstance()->get('modules.shop.config.group_id');
+        $this->ipp      = Settings::getInstance()->get('modules.shop.config.ipp');
+        $this->bonus_rate = Settings::getInstance()->get('modules.Shop.config.bonus_rate');
     }
 
     public function index(){}

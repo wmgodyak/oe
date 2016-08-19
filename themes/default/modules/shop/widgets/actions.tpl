@@ -31,9 +31,9 @@
                            {$item.price} {$item.symbol}
                        </span>
 
-                       {*<span class="product-item__bonus">*}
-                           {*Ваш СМА бонус: <span>+0грн</span>*}
-                       {*</span>*}
+                       <span class="product-item__bonus">
+                           Ваш СМА бонус: <span>+{$item.bonus}грн</span>
+                       </span>
 
                        <span class="product-item__activities">
 

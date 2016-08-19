@@ -21,6 +21,9 @@
             {if !isset($smarty.session.cart) || empty($smarty.session.cart)}
                 <p>Ваш кошик порожній. Нічого замовляти</p>
             {else}
+                {assign var='amount' value="0"}
+                {assign var='bonus' value="0"}
+                {*<pre>{print_r($settings)}</pre>*}
             <!-- begin aside -->
             <aside class="aside">
 
@@ -34,6 +37,7 @@
                         </div>
                     </div>
                     <div class="goods-list__main">
+
                         {foreach $mod->order->cart->items() as $item}
                         <div class="goods-list__row">
                             <div class="item item1">
@@ -50,11 +54,14 @@
                                 <div class="songle-price">
                                     {$item.price}  x   {$item.quantity}   =   {$item.price * $item.quantity} грн
                                 </div>
-                                <!-- div class="bonus">
-                                    <span class="red">Ваш СМА бонус: </span><span class="green">+2,58 грн</span>
-                                </div-->
+                                <div class="bonus">
+                                    <span class="red">Ваш СМА бонус: </span><span class="green">+{round($settings.modules.Shop.config.bonus_rate * $item.price * $item.quantity, 2)} грн</span>
+                                </div>
                             </div>
                         </div>
+
+                            {assign var='amount' value=$amount + $item.price * $item.quantity }
+                            {assign var='bonus' value=$bonus + round($settings.modules.Shop.config.bonus_rate * $item.price * $item.quantity, 2) }
                         {/foreach}
                     </div>
                 </div>
@@ -95,6 +102,7 @@
                         {*<td><input type="text"></td>*}
                     {*</tr>*}
                     {*<tr>*}
+                    <tr>
                         <td><label for="">Спосіб доставки*</label></td>
                         <td>
                             <div class="select">
@@ -106,19 +114,6 @@
                             </div>
                         </td>
                     </tr>
-                    {*<tr>*}
-                        {*<td><label for="">Точка видачі*</label></td>*}
-                        {*<td>*}
-                            {*<div class="select">*}
-                                {*<select name="" id="">*}
-                                    {*<option value=""></option>*}
-                                    {*<option value=""></option>*}
-                                    {*<option value=""></option>*}
-                                    {*<option value=""></option>*}
-                                {*</select>*}
-                            {*</div>*}
-                        {*</td>*}
-                    {*</tr>*}
                     <tr>
                         <td><label for="">Спосіб оплати*</label></td>
                         <td>
@@ -136,10 +131,10 @@
                 <div class="total-price-block">
                     <div class="left">
                         <div class="row-price">
-                            Разом до сплати: <span>946,00 грн</span>
+                            Разом до сплати: <span>{$amount} грн</span>
                         </div>
                         <div class="row-bonus">
-                            Ваш СМА бонус: <span>+28,38 грн</span>
+                            Ваш СМА бонус: <span>+{$bonus} грн</span>
                         </div>
                     </div>
                     <div class="right">

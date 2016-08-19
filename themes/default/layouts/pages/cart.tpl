@@ -52,6 +52,7 @@
             </div>
             <div class="goods-list__main">
                 <% amount = 0 %>
+                <% bonus  = 0 %>
                 <% items.forEach(function(item) { %>
                 <div class="goods-list__row">
                     <div class="item item1">
@@ -89,6 +90,7 @@
                     </div>
                 </div>
                 <% amount += item.quantity * item.price %>
+                <% bonus  += item.bonus %>
                 <% }); %>
             </div>
         </div>
@@ -98,9 +100,9 @@
                 <div class="row-price">
                     Разом до сплати: <span><%-amount%> грн</span>
                 </div>
-                <!-- div class="row-bonus">
-                    Ваш СМА бонус: <span>+28,38 грн</span>
-                </div -->
+                <div class="row-bonus">
+                    Ваш СМА бонус: <span>+<%- bonus %> грн</span>
+                </div>
             </div>
             <div class="right">
                 <button type="submit" class="btn md red">Оформити замовлення</button>

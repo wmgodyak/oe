@@ -91,9 +91,31 @@ var Order = {
          * Order
          */
 
+        var deliveryTpl = _.template('<tr>\
+        <td><label for="">Область</label></td>\
+        <td>\
+        <div class="select">\
+        </div>\
+        </td>\
+        </tr>');
+
         $('#user_phone').mask('+38(999)99-99-999');
         $("#order_delivery_id").change(function(){
             var id = $(this).find('option:selected').val();
+
+
+
+            // trigger to extended options
+            // область
+            App.request.post({
+                url: 'route/delivery/onSelect',
+                data: {delivery_id: id},
+                success: function(d)
+                {
+
+                }
+            });
+            // payment
             App.request.post({
                 url: 'route/delivery/getPayment',
                 data: {delivery_id: id},
@@ -105,13 +127,13 @@ var Order = {
                     });
                     $('#order_payment_id').html(out);
                 }
-            })
-        });
+            });
+        }).trigger('change');
 
         App.validateAjaxForm('#checkout', function (res) {
             if(res.s){
-                var url = typeof res.redirect == 'undefined' ? '/' : res.redirect;
-                self.location.href = url;
+                var u = typeof res.redirect == 'undefined' ? '/' : res.redirect;
+                self.location.href = u;
             }
         });
 

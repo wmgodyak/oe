@@ -9,6 +9,7 @@
 namespace modules\delivery\adapters;
 use system\core\Session;
 use system\Front;
+use system\models\Guides;
 
 /**
  * Class NovaPoshta
@@ -40,5 +41,19 @@ class NovaPoshta extends Front
         $this->np->getWarehouses();
 
         die('__ok__');
+    }
+
+    public function onSelect()
+    {
+        $out = null;
+        $guides = new Guides();
+        $action  = $this->request->post('action');
+        switch($action){
+            default:
+                $out = json_encode($guides->get('nova_poshta_warehouses'));
+                break;
+        }
+
+        return $out;
     }
 }

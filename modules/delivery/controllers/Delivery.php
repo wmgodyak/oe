@@ -25,6 +25,7 @@ class Delivery extends Front
     private $delivery;
     private $deliveryPayment;
 
+
     public function __construct()
     {
         parent::__construct();
@@ -50,5 +51,18 @@ class Delivery extends Front
     {
         $np = new NovaPoshta();
         $np->refresh();
+    }
+
+    public function onSelect()
+    {
+        $delivery_id = $this->request->post('delivery_id');
+        if(empty($delivery_id)) die;
+
+        $data = $this->delivery->getData($delivery_id);
+        if(empty($data['module'])) die;
+
+        $adapter = DeliveryFactory::create($data['module']);
+
+        echo $adapter->onSelect();die;
     }
 }
