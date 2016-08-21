@@ -64,6 +64,7 @@ class Order extends Engine
         $t = new DataTables2('orders');
 
         $t  -> ajax('module/run/order')
+            -> th('#', 'o.id', 1, 1, 'width: 30px')
             -> th($this->t('order.oid'), 'o.oid', 1, 1, 'width: 160px')
             -> th($this->t('order.status.status'), "osi.status", 1, 1, 'width:100px')
             -> th($this->t('order.username'), "concat(u.surname, ' ', u.name) as username", 1, 1)
@@ -89,6 +90,7 @@ class Order extends Engine
 
             $res = array();
             foreach ($t->getResults(false) as $i=>$row) {
+                $res[$i][] = $row['id'];
                 $res[$i][] = $row['oid'];
                 $res[$i][] = "<span class='label' style='background: {$row['bg_color']}; color:{$row['txt_color']}'>{$row['status']}</span>";
                 $res[$i][] = $row['username']

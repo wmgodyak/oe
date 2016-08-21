@@ -211,4 +211,26 @@ class Delivery extends Engine
     {
         $this->response->body(  $this->delivery->hide($id));
     }
+
+
+    public function getPayment()
+    {
+        $delivery_id = $this->request->post('delivery_id', 'i');
+        $payment = $this->delivery_payment->getPayment($delivery_id);
+
+        $this->response->body(['payment' => $payment])->asJSON();
+    }
+
+    public function onSelect()
+    {
+        $delivery_id = $this->request->post('delivery_id');
+        if(empty($delivery_id)) die;
+
+        $data = $this->delivery->getData($delivery_id);
+        if(empty($data['module'])) die;
+
+        $adapter = DeliveryFactory::create($data['module']);
+
+        echo $adapter->onSelect();die;
+    }
 }

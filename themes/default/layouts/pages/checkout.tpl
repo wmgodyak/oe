@@ -97,16 +97,11 @@
                     <tr>
                         <td colspan="2"><h3 class="head-red">Спосіб доставки та оплати:</h3></td>
                     </tr>
-                    {*<tr>*}
-                        {*<td><label for="">Ваше місто*</label></td>*}
-                        {*<td><input type="text"></td>*}
-                    {*</tr>*}
-                    {*<tr>*}
-                    <tr>
+                    <tr id="deliveryRow">
                         <td><label for="">Спосіб доставки*</label></td>
                         <td>
                             <div class="select">
-                                <select name="order[delivery_id]" id="order_delivery_id">
+                                <select name="data[delivery_id]" id="order_delivery_id">
                                     {foreach $mod->delivery->get() as $item}
                                         <option value="{$item.id}">{$item.name}</option>
                                     {/foreach}
@@ -118,13 +113,13 @@
                         <td><label for="">Спосіб оплати*</label></td>
                         <td>
                             <div class="select">
-                                <select name="order[payment_id]" id="order_payment_id"></select>
+                                <select name="data[payment_id]" id="order_payment_id"></select>
                             </div>
                         </td>
                     </tr>
                     <tr>
                         <td><label for="">Коментар до замовлення</label></td>
-                        <td><textarea name="order[comment]" cols="30" rows="10"></textarea></td>
+                        <td><textarea name="data[comment]" cols="30" rows="10"></textarea></td>
                     </tr>
                 </table>
 

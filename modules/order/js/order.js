@@ -87,38 +87,84 @@ var Order = {
             });
         });
 
-        /**
-         * Order
-         */
-
-        var deliveryTpl = _.template('<tr>\
-        <td><label for="">Область</label></td>\
-        <td>\
-        <div class="select">\
-        </div>\
-        </td>\
-        </tr>');
-
         $('#user_phone').mask('+38(999)99-99-999');
-        $("#order_delivery_id").change(function(){
-            var id = $(this).find('option:selected').val();
 
+        function onDeliveryChange()
+        {
+            var region_id = $("#delivery_region_id").find('option:selected').val(),
+                city_id   = $("#delivery_city_id").find('option:selected').val();
 
+            // clear previos select
+            console.log('remove prev meta');
+
+            $('#delivery_region_id_row').remove();
+            $('#delivery_city_id_row').remove();
+            $('#delivery_department_id_row').remove();
+
+            var delivery_id = $("#order_delivery_id").find('option:selected').val();
+
+            var stpl = _.template(
+                '<tr id="<%- id%>_row">\
+                    <td><label for="<%- id%>"><%- label %></label></td>\
+                    <td>\
+                        <div class="select">\
+                            <select name="<%-name%>" id="<%- id%>"><%=items%></select>\
+                        </div>\
+                    </td>\
+                </tr>'
+            );
 
             // trigger to extended options
-            // область
             App.request.post({
                 url: 'route/delivery/onSelect',
-                data: {delivery_id: id},
+                data: {
+                    delivery_id : delivery_id,
+                    region_id   : region_id,
+                    city_id     : city_id
+                },
+                dataType:'json',
                 success: function(d)
                 {
+                    var out = '';
 
+                    $(d.areas).each(function(c, e){
+                        var opt = '<option>--виберіть--</option>';
+                        $(e.items).each(function(k, item){
+                            opt += '<option '+ (item.id == region_id ? 'selected' : '') +' value="'+ item.id +'">'+ item.name +'</option>';
+                        });
+                        out += stpl({name: e.name, id: e.id, label: e.label, items: opt});
+                    });
+
+                    $(d.city).each(function(c, e){
+                        var opt = '<option>--виберіть--</option>';
+                        $(e.items).each(function(k, item){
+                            opt += '<option '+ (item.id == city_id ? 'selected' : '') +'  value="'+ item.id +'">'+ item.name +'</option>';
+                        });
+                        out += stpl({name: e.name, id: e.id, label: e.label, items: opt});
+                    });
+
+                    $(d.warehouses).each(function(c, e){
+                        var opt = '<option>--виберіть--</option>';
+                        $(e.items).each(function(k, item){
+                            opt += '<option value="'+ item.id +'">'+ item.name +'</option>';
+                        });
+                        out += stpl({name: e.name, id: e.id, label: e.label, items: opt});
+                    });
+
+                    $(out).insertAfter('#deliveryRow');
                 }
             });
+        }
+
+        $("#order_delivery_id").change(function(){
+
+            onDeliveryChange();
+
+            var delivery_id = $("#order_delivery_id").find('option:selected').val();
             // payment
             App.request.post({
                 url: 'route/delivery/getPayment',
-                data: {delivery_id: id},
+                data: {delivery_id: delivery_id},
                 success: function(d)
                 {
                     var out = '';
@@ -126,9 +172,13 @@ var Order = {
                         out += '<option value="'+ e.id +'">'+ e.name +'</option>'
                     });
                     $('#order_payment_id').html(out);
+
                 }
             });
         }).trigger('change');
+
+        $(document).on('change', '#delivery_region_id', function(){onDeliveryChange();});
+        $(document).on('change', '#delivery_city_id', function(){onDeliveryChange();});
 
         App.validateAjaxForm('#checkout', function (res) {
             if(res.s){

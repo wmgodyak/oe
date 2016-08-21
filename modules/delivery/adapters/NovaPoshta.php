@@ -38,22 +38,40 @@ class NovaPoshta extends Front
 
 //        $this->np->getAreas();
 //        $this->np->getCities();
-        $this->np->getWarehouses();
+//        $this->np->getWarehouses();
 
         die('__ok__');
     }
 
     public function onSelect()
     {
-        $out = null;
+        $out = [
+            'areas'      => ['label' => 'Область', 'name' => 'data[delivery_region_id]', 'id' => 'delivery_region_id', 'items' => []],
+            'city'       => ['label' => 'Місто', 'name' => 'data[delivery_city_id]', 'id' => 'delivery_city_id', 'items' => []],
+            'warehouses' => ['label' => 'Відділення', 'name' => 'data[delivery_department_id]', 'id' => 'delivery_department_id', 'items' => []]
+        ];
+
         $guides = new Guides();
-        $action  = $this->request->post('action');
-        switch($action){
-            default:
-                $out = json_encode($guides->get('nova_poshta_warehouses'));
-                break;
+
+        $delivery_id = $this->request->post('delivery_id', 'i');
+        $region_id   = $this->request->post('region_id', 'i');
+        $city_id     = $this->request->post('city_id', 'i');
+
+        if($delivery_id > 0){
+            if($delivery_id == 2) {
+                $wh = $guides->get('nova_poshta_warehouses');
+                $out['areas']['items'] = $wh['items'];
+            }
         }
 
-        return $out;
+        if($region_id > 0){
+            $out['city']['items'] = $guides->getItems($region_id);
+        }
+
+        if($city_id > 0){
+            $out['warehouses']['items'] = $guides->getItems($city_id);
+        }
+
+        return json_encode($out);
     }
 }

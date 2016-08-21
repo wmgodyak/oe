@@ -95,7 +95,7 @@ class Order extends Front
 
             if($s){
                 // register order
-                $order = $this->request->post('order');
+                $order = $this->request->post('data');
 
                 $order['comment'] = htmlspecialchars(strip_tags($order['comment']));
 
@@ -129,7 +129,7 @@ class Order extends Front
             }
         }
 
-        $this->response->body(['s'=>$s, 'i' => $m, 'redirect' => $this->getUrl(31)])->asJSON();
+        $this->response->body(['s'=>$s, 'i' => $m, 'redirect' => $this->getUrl(12)])->asJSON();
     }
 
     public function oneClick()

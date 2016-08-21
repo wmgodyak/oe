@@ -2,32 +2,27 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <label for="delivery_id" class="col-sm-3 control-label">Доставка</label>
+                <label for="order_delivery_id" class="col-sm-3 control-label">Доставка</label>
                 <div class="col-sm-9">
-                    <select name="data[delivery_id]" id="delivery_id" data-id="{$order.id}" class="form-control">
+                    <select name="data[delivery_id]" id="order_delivery_id" data-id="{$order.id}" class="form-control">
                         {foreach $delivery as $item}
                             <option {if $order.delivery_id == $item.id}selected{/if} value="{$item.id}">{$item.name}</option>
                         {/foreach}
                     </select>
                 </div>
             </div>
+            <div id="deliveryRow"></div>
             <div class="form-group">
                 <label for="delivery_cost" class="col-sm-3 control-label">Вартість доставки</label>
                 <div class="col-sm-9">
                     <input name="data[delivery_cost]" id="delivery_cost" class="form-control" value="{$order.delivery_cost}">
                 </div>
             </div>
-            <div class="form-group">
-                <label for="delivery_address" class="col-sm-3 control-label">Адреса доставки</label>
-                <div class="col-sm-9">
-                    <textarea name="data[delivery_address]" id="delivery_address" class="form-control">{$order.delivery_address}</textarea>
-                </div>
-            </div>
 
             <div class="form-group">
                 <label for="payment_id" class="col-sm-3 control-label">Оплата</label>
                 <div class="col-sm-9">
-                    <select name="data[payment_id]" id="payment_id_{$order.id}" class="form-control">
+                    <select name="data[payment_id]" id="order_payment_id" class="form-control">
                         {foreach $payment as $item}
                             <option value="{$item.id}" {if $order.payment_id==$item.id}selected{/if}>{$item.name}</option>
                         {/foreach}
@@ -111,7 +106,111 @@
     <input type="hidden" name="token" value="{$token}">
 </form>
 <script>
+    var o_delivery_region_id = {$order.delivery_region_id};
+    var o_delivery_city_id   = {$order.delivery_city_id};
+    var o_delivery_department_id   = {$order.delivery_department_id};
 
+    {literal}
+
+    function onDeliveryChange()
+    {
+        var region_id = $("#delivery_region_id").find('option:selected').val(),
+            city_id   = $("#delivery_city_id").find('option:selected').val();
+
+        if(typeof region_id != 'undefined' && region_id != '') o_delivery_region_id = region_id;
+        if(typeof city_id != 'undefined' && city_id != '') o_delivery_city_id = city_id;
+
+        var delivery_id = $("#order_delivery_id").find('option:selected').val();
+
+        var stpl = _.template(
+                '<div class="form-group" id="<%- id%>_row">\
+                    <label for="<%- id%>" class="col-sm-3 control-label"><%- label %></label>\
+                    <div class="col-sm-9">\
+                        <select class="form-control" name="<%-name%>" id="<%- id%>"><%=items%></select>\
+                    </div>\
+                </div>'
+        );
+
+        // trigger to extended options
+        engine.request.post({
+            url: 'module/run/delivery/onSelect',
+            data: {
+                delivery_id : delivery_id,
+                region_id   : o_delivery_region_id,
+                city_id     : o_delivery_city_id
+            },
+            dataType:'json',
+            success: function(d)
+            {
+                var out = '';
+
+                $(d.areas).each(function(c, e){
+                    var opt = '<option value="">--виберіть--</option>';
+                    $(e.items).each(function(k, item){
+                        opt += '<option '+ (item.id == o_delivery_region_id ? 'selected' : '') +' value="'+ item.id +'">'+ item.name +'</option>';
+                    });
+                    out += stpl({
+                        name: e.name, id: e.id, label: e.label, items: opt
+                    });
+                });
+
+                $(d.city).each(function(c, e){
+                    var opt = '<option value="">--виберіть--</option>';
+                    $(e.items).each(function(k, item){
+                        opt += '<option '+ (item.id == o_delivery_city_id ? 'selected' : '') +'  value="'+ item.id +'">'+ item.name +'</option>';
+                    });
+
+                    out += stpl({
+                        name: e.name, id: e.id, label: e.label, items: opt
+                    });
+                });
+
+                $(d.warehouses).each(function(c, e){
+                    var opt = '<option value="">--виберіть--</option>';
+                    $(e.items).each(function(k, item){
+                        opt += '<option '+ (item.id == o_delivery_department_id ? 'selected' : '') +' value="'+ item.id +'">'+ item.name +'</option>';
+                    });
+                    out += stpl({
+                        name: e.name, id: e.id, label: e.label, items: opt
+                    });
+                });
+
+                $("#deliveryRow").html(out);
+            }
+        });
+    }
+
+    $("#order_delivery_id").change(function(){
+
+        onDeliveryChange();
+
+        var delivery_id = $("#order_delivery_id").find('option:selected').val();
+        // payment
+        engine.request.post({
+            url: 'module/run/delivery/getPayment',
+            data: {
+                delivery_id: delivery_id
+            },
+            success: function(d)
+            {
+                var out = '';
+                $(d.payment).each(function(i,e){
+                    out += '<option value="'+ e.id +'">'+ e.name +'</option>'
+                });
+                $('#order_payment_id').html(out);
+
+            }
+        });
+    }).trigger('change');
+
+    $(document).on('change', '#delivery_region_id', function(){
+        onDeliveryChange();
+    });
+    $(document).on('change', '#delivery_city_id', function(){
+        onDeliveryChange();
+    });
+
+    {/literal}
     function setCustomerData(id){
         engine.request.post({
             url: 'module/run/order/customerData',

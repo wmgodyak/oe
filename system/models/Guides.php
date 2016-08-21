@@ -56,6 +56,18 @@ class Guides extends Model
         return $res;
     }
 
+    public function getItems($parent_id)
+    {
+        return  self::$db
+            ->select("
+                select c.id, i.name, c.external_id
+                from __content c
+                join __content_info i on i.content_id=c.id and i.languages_id='{$this->languages_id}'
+                where c.parent_id = '{$parent_id}' and c.status = 'published'
+              ")
+            ->all();
+    }
+
     public function create($data, $info)
     {
         $this->beginTransaction();
