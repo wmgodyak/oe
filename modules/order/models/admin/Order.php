@@ -31,6 +31,22 @@ class Order extends \modules\order\models\Order
     }
 
     /**
+     * @param $manager
+     * @return bool|string
+     */
+    public function createBlank($manager)
+    {
+        return $this->createRow
+        (
+            '__orders',
+            [
+                'manager_id' => $manager['id'],
+                'languages_id' => $this->languages_id
+            ]
+        );
+    }
+
+    /**
      * @param $id
      * @param $manager_id
      * @return bool
@@ -71,5 +87,16 @@ class Order extends \modules\order\models\Order
     {
         $data['edited'] = $this->now();
         return $this->updateRow('__orders', $id, $data);
+    }
+
+    public function getNewCount()
+    {
+        return self::$db
+            ->select("
+                select count(o.id) as t
+                from __orders_status s
+                join __orders o on o.status_id=s.id
+                where s.is_main=1")
+            ->row('t');
     }
 }

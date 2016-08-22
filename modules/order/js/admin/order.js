@@ -1,6 +1,10 @@
 engine.orders = {
     init: function()
     {
+        $(document).on('click', '.b-orders-create', function(){
+            engine.orders.create();
+        });
+
         $(document).on('click', '.b-orders-edit', function(){
             engine.orders.edit($(this).data('id'));
         });
@@ -26,6 +30,25 @@ engine.orders = {
             })
         });
 
+
+    },
+    create: function()
+    {
+        engine.request.get('module/run/order/create', function(res)
+        {
+           var d = engine.dialog({
+               title   : res.t,
+               content : res.m,
+               width: 900,
+               buttons: {
+                   'Зберегти': function ()
+                   {
+                       $('#orderForm').submit();
+                   }
+               }
+           });
+            $('#orderTabs').tabs();
+        });
     },
     edit: function(id)
     {
@@ -42,7 +65,6 @@ engine.orders = {
                    }
                }
            });
-            //engine.styleInputs();
             $('#orderTabs'+ id).tabs();
         });
     },

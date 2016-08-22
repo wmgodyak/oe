@@ -52,8 +52,10 @@ class Order extends Engine
 
     public function init()
     {
-        $this->assignToNav('Замовлення', 'module/run/order', 'fa-money', null, 100);
-        $this->assignToNav('Замовлення', 'module/run/order', 'fa-money', 'module/run/order', 1);
+        $t = $this->order->getNewCount();
+        $t = $t > 0 ? " <b class='badge white'>{$t}</b>" : '';
+        $this->assignToNav('Замовлення ' . $t, 'module/run/order', 'fa-money', null, 100);
+        $this->assignToNav('Замовлення ' . $t, 'module/run/order', 'fa-money', 'module/run/order', 1);
 
         $this->assignToNav('Статуси', 'module/run/order/status', 'fa-money', 'module/run/order', 1);
         $this->template->assignScript('modules/order/js/admin/order.js');
@@ -61,6 +63,15 @@ class Order extends Engine
 
     public function index()
     {
+        $this->appendToPanel
+        (
+            (string)Button::create
+            (
+                $this->t('common.button_create'),
+                ['class' => 'btn-md btn-primary b-orders-create']
+            )
+        );
+
         $t = new DataTables2('orders');
 
         $t  -> ajax('module/run/order')
@@ -124,7 +135,7 @@ class Order extends Engine
     }
     public function create()
     {
-        // TODO: Implement create() method.
+        $id = $this->order->createBlank($this->admin);
     }
 
     public function edit($id, $tab = null)
