@@ -19,6 +19,7 @@ class Status extends \system\models\Engine
                 select s.id, i.status
                 from __orders_status s
                 join __orders_status_info i on i.status_id=s.id and i.languages_id='{$this->languages_id}'
+                order by s.id asc
             ")
             ->all();
     }

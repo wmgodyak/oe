@@ -110,22 +110,24 @@ class Order extends Engine
                 $res[$i][] = $row['paid'] == 1 ? 'ТАК' : '';
                 $res[$i][] = date('d.m.Y H:i:s', strtotime($row['created']));
 
-                if($row['status_id'] != 4){
-                    $res[$i][] =
-                        (string)Button::create
-                        (
-                            Icon::create(Icon::TYPE_EDIT),
-                            ['class' => 'b-orders-edit btn-primary', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
-                        ) .
+                $b = [];
+                if($row['status_id'] != 11){
+                    $b[] = (string)Button::create
+                    (
+                        Icon::create(Icon::TYPE_EDIT),
+                        ['class' => 'b-orders-edit btn-primary', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
+                    );
+                }
+                if($row['status_id'] < 6 && $row['status_id'] != 4){
+                    $b[] =
                         (string)Button::create
                         (
                             Icon::create(Icon::TYPE_DELETE),
                             ['class' => 'b-orders-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
-                        )
-                    ;
-                } else {
-                    $res[$i][] = '';
+                        );
                 }
+
+                $res[$i][] = implode('', $b);
             }
 
             echo $t->render($res, $t->getTotal());return;
@@ -136,6 +138,8 @@ class Order extends Engine
     public function create()
     {
         $id = $this->order->createBlank($this->admin);
+
+        return $this->edit($id);
     }
 
     public function edit($id, $tab = null)
@@ -164,13 +168,19 @@ class Order extends Engine
                     $this->os->change($id, 3, $this->admin['id']);
                 }
 
+                // on created manager in admin panel
+                if(!empty($data['manager_id']) && $data['status_id'] == 1){
+                    $this->os->change($id, 3, $this->admin['id']);
+                }
+
+
                 $dt = date('d.m.Y H:i:s', strtotime($data['created']));
-                $t = "Редагування замовлення №{$data['oid']}. Від {$dt}";
+                $t = "Замовлення №{$data['oid']}. Від {$dt}";
                 $this->template->assign('id', $data['id']);
 
                 $m = $this->template->fetch('orders/form/index');
 
-                $this->response->body(['s' => $s, 'm' => $m, 't' => $t])->asJSON();
+                $this->response->body(['s' => $s, 'm' => $m, 't' => $t, 'id' => $id])->asJSON();
 
                 break;
         }
@@ -219,6 +229,10 @@ class Order extends Engine
 
         if(isset($data['paid']) && $oData['paid'] == 0 && $data['paid'] == 1){
             $data['paid_date'] = date('Y-m-d H:i:s');
+        }
+
+        if($data['users_id'] != $oData['users_id']){
+            $data['users_group_id'] = $this->users->getData($data['users_id'], 'group_id');
         }
 
         $this->order->update($id, $data);

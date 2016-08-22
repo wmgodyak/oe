@@ -29,15 +29,15 @@
                     </select>
                 </div>
             </div>
-            <div class="form-group">
+            {* <div class="form-group">
                 <label for="prepayment" class="col-sm-3 control-label">Передплата</label>
                 <div class="col-sm-9">
                     <input name="data[prepayment]" id="prepayment" class="form-control" value="{$order.prepayment}">
                 </div>
-            </div>
+            </div> *}
             <div class="form-group">
                 <label for="paid" class="col-md-3 control-label">Оплачено</label>
-                <div class="col-md-9">
+                <div class="col-md-9" style="text-align: left">
                     <input type="hidden"  name="data[paid]"  value="0" {if $order.paid == 1}disabled{/if}>
                     <input class="switch" type="checkbox" name="data[paid]" id="paid" {if $order.paid == 1}checked{/if} value="1">
                 </div>
@@ -48,7 +48,7 @@
                 <div class="col-sm-9">
                     <select name="data[status_id]" id="status_id" class="form-control">
                         {foreach $status as $item}
-                            <option value="{$item.id}" {if $order.status_id==$item.id}selected{/if}>{$item.status}</option>
+                            <option value="{$item.id}" {if $order.status_id > $item.id}disabled{/if} {if $order.status_id==$item.id}selected{/if}>{$item.status}</option>
                         {/foreach}
                     </select>
                 </div>
@@ -98,7 +98,7 @@
             <div class="form-group">
                 <label for="comment" class="col-sm-3 control-label">Коментар</label>
                 <div class="col-sm-9">
-                    <textarea name="data[comment]" id="comment" disabled class="form-control">{$order.comment}</textarea>
+                    <textarea name="data[comment]" id="comment" class="form-control">{$order.comment}</textarea>
                 </div>
             </div>
         </div>
@@ -106,14 +106,15 @@
     <input type="hidden" name="token" value="{$token}">
 </form>
 <script>
-    var o_delivery_region_id = {$order.delivery_region_id};
-    var o_delivery_city_id   = {$order.delivery_city_id};
-    var o_delivery_department_id   = {$order.delivery_department_id};
+    var o_delivery_region_id       = '{$order.delivery_region_id}';
+    var o_delivery_city_id         = '{$order.delivery_city_id}';
+    var o_delivery_department_id   = '{$order.delivery_department_id}';
 
     {literal}
 
     function onDeliveryChange()
     {
+        console.log('onDeliveryChange');
         var region_id = $("#delivery_region_id").find('option:selected').val(),
             city_id   = $("#delivery_city_id").find('option:selected').val();
 
@@ -223,6 +224,7 @@
                 $("#users_name").val(user.surname + ' ' + user.name);
                 $("#users_phone").val(user.phone);
                 $("#users_email").val(user.email);
+                $("#users_group").val(user.group_name);
             }
         });
     }

@@ -43,11 +43,25 @@ engine.orders = {
                buttons: {
                    'Зберегти': function ()
                    {
-                       $('#orderForm').submit();
+                       $('#orderForm' + res.id).submit();
                    }
                }
            });
-            $('#orderTabs').tabs();
+
+            $('#orderTabs'+res.id).tabs({
+                activate: function(event, ui){
+                    var i = ui.newTab.index();
+                    if(i > 0){
+                        var s = $('#orderForm' + res.id).serialize();
+                        //console.log(s);
+                        engine.request.post({
+                           url: 'module/run/order/process/'+res.id,
+                           data: s,
+                           success: function(){}
+                        });
+                    }
+                }
+            });
         });
     },
     edit: function(id)

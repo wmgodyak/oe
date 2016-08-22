@@ -93,7 +93,7 @@ FRONTEND
   - додати модуль gmap з fth
   - install php apc
   -  cache manager
-
+  - Друк замовлення в адмінці
 
 
 

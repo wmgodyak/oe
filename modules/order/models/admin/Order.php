@@ -8,8 +8,8 @@
 
 namespace modules\order\models\admin;
 
-
 use modules\users\models\Users;
+use system\models\Currency;
 
 defined("CPATH") or die();
 
@@ -21,13 +21,15 @@ class Order extends \modules\order\models\Order
 {
     private $status;
     private $users;
+    private $currency;
 
     public function __construct()
     {
         parent::__construct();
 
         $this->status = new OrdersStatus();
-        $this->users = new Users();
+        $this->users  = new Users();
+        $this->currency = new Currency();
     }
 
     /**
@@ -36,12 +38,17 @@ class Order extends \modules\order\models\Order
      */
     public function createBlank($manager)
     {
+        self::$db->delete('__orders', "status_id=1 and manager_id={$manager['id']}");
+        $c = $this->currency->getOnSiteMeta();
         return $this->createRow
         (
             '__orders',
             [
                 'manager_id' => $manager['id'],
-                'languages_id' => $this->languages_id
+                'oid'        => date('ymd-hmsi-'.$manager['id']),
+                'languages_id' => $this->languages_id,
+                'currency_id' => $c['id'],
+                'currency_rate' => $c['rate']
             ]
         );
     }
