@@ -12,5 +12,5 @@ defined("CPATH") or die();
 
 class Install
 {
-
+    public function init(){}
 }
