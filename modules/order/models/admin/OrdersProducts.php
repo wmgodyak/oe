@@ -43,11 +43,11 @@ class OrdersProducts extends \modules\order\models\OrdersProducts
     public function get($orders_id)
     {
         return self::$db->select("
-          select c.id, ci.name, op.quantity, op.price, op.id as opid
+          select op.products_id as id, ci.name, op.quantity, op.price, op.id as opid
           from __orders_products op
-          join __content c on c.id = op.products_id
-          join __currency cu on cu.id = c.currency_id
-          join __content_info ci on ci.content_id=c.id and ci.languages_id='{$this->languages_id}'
+          -- join __content c on c.id = op.products_id
+          -- join __currency cu on cu.id = c.currency_id
+          join __content_info ci on ci.content_id=op.products_id and ci.languages_id='{$this->languages_id}'
           where op.orders_id='{$orders_id}'
           ")->all();
     }

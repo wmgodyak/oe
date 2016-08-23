@@ -15,6 +15,7 @@ use modules\order\models\admin\OrdersProducts;
 use modules\order\models\admin\OrdersStatus;
 use modules\order\models\admin\StatusHistory;
 use system\core\DataTables2;
+use system\core\EventsHandler;
 use system\Engine;
 use system\models\Currency;
 use system\models\Users;
@@ -173,7 +174,6 @@ class Order extends Engine
                     $this->os->change($id, 3, $this->admin['id']);
                 }
 
-
                 $dt = date('d.m.Y H:i:s', strtotime($data['created']));
                 $t = "Замовлення №{$data['oid']}. Від {$dt}";
                 $this->template->assign('id', $data['id']);
@@ -239,6 +239,8 @@ class Order extends Engine
 
         if(isset($data['status_id']) && $oData['status_id'] != $data['status_id']){
             $this->os->change($id, $data['status_id'], $this->admin['id'], $this->request->post('s_comment', 's'));
+
+            EventsHandler::getInstance()->call('orders.change_status', [array_merge($oData, $data)]);
         }
 
         if($this->order->hasError()){

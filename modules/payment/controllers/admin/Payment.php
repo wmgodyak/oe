@@ -10,7 +10,7 @@ use modules\payment\models\DeliveryPayment;
 use system\core\DataTables2;
 use system\Engine;
 
-class payment extends Engine
+class Payment extends Engine
 {
     private $payment;
     private $delivery_payment;

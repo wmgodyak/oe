@@ -1,4 +1,4 @@
-
+{*
 <form action="">
     <table class="info">
         <tr>
@@ -15,3 +15,4 @@
         </tr>
     </table>
 </form>
+*}

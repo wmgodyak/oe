@@ -81,7 +81,10 @@ class Comments extends Front
         if(! $this->request->isPost()) die;
 
         $user = Session::get('user');
-        if(!$user) $this->response->sendError(403);
+        if(!$user){
+            $this->response->sendError(403);
+            die;
+        }
 
         $s=0; $i = array(); $m = '';
         $data = $this->request->post('data');

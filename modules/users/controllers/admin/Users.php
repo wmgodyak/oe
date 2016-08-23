@@ -8,6 +8,7 @@ use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
 use helpers\DateTime;
 use helpers\FormValidation;
+use system\core\DataFilter;
 use system\core\DataTables2;
 use system\Engine;
 
@@ -88,6 +89,9 @@ class Users extends Engine
 
             $res = array();
             foreach ($t->getResults(false) as $i=>$row) {
+
+                $row = DataFilter::apply('users.list.row', $row);
+
                 $res[$i][] = $row['id'];
                 $res[$i][] = $row['username'] .
                     ($row['status'] != 'active' ? "<br><label class='label label-danger'>{$s[$row['status']]}</label>" : '');
