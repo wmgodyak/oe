@@ -10,6 +10,9 @@ namespace modules\order\models;
 
 use modules\order\models\admin\OrdersStatus;
 use system\models\Model;
+use modules\users\models\Users;
+use system\models\Currency;
+
 
 defined("CPATH") or die();
 
@@ -19,13 +22,17 @@ defined("CPATH") or die();
  */
 class Order extends Model
 {
-    private $ordersStatus;
+    protected $status;
+    protected $users;
+    protected $currency;
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->ordersStatus = new OrdersStatus();
+        $this->status = new OrdersStatus();
+        $this->users  = new Users();
+        $this->currency = new Currency();
     }
 
     /**
@@ -34,11 +41,18 @@ class Order extends Model
      */
     public function create($data)
     {
-//        $data['status_id'] = isset($data['status_id']) ? $data['status_id'] : 1;
-        $id = $this->createRow('__orders', $data);
-//        $this->ordersStatus->change($id, $data['status_id']);
+        return $this->createRow('__orders', $data);
+    }
 
-        return $id;
+    /**
+     * @param $id
+     * @param $data
+     * @return bool
+     */
+    public function update($id, $data)
+    {
+        $data['edited'] = $this->now();
+        return $this->updateRow('__orders', $id, $data);
     }
 
     /**
@@ -99,4 +113,44 @@ class Order extends Model
             ->row('t');
     }
 
+    public function amount($orders_id)
+    {
+        $s = self::$db->select("select sum(quantity * price) as t from __orders_products where orders_id={$orders_id}")->row('t');
+        return $s;
+    }
+
+
+    /**
+     * @param $id
+     * @param string $key
+     * @return array|mixed
+     */
+    public function getData($id, $key = '*')
+    {
+        $order = $this->rowData('__orders', $id, $key);
+
+        if($key != '*')
+            return $order;
+
+        $order['user'] = $this->users->getData($order['users_id']);
+
+        return $order;
+    }
+
+    /**
+     * @param $oid
+     * @param string $key
+     * @return array|mixed
+     */
+    public function getDataByOID($oid, $key = '*')
+    {
+        $order = self::$db->select("select {$key} from __orders where oid = '{$oid}' limit 1")->row($key);
+
+        if($key != '*')
+            return $order;
+
+        $order['user'] = $this->users->getData($order['users_id']);
+
+        return $order;
+    }
 }

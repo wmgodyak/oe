@@ -24,6 +24,10 @@ class Payment extends Model
 
         if($key != '*') return $data;
 
+        if( ! empty($data['settings'])){
+            $data['settings'] = unserialize($data['settings']);
+        }
+
         $languages = new Languages();
 
         foreach ($languages->get() as $language) {

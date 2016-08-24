@@ -10,10 +10,11 @@ class PaymentFactory
 
     /**
      * @param $adapter
+     * @param null $settings
      * @return mixed
      * @throws \Exception
      */
-    public static function create($adapter)
+    public static function create($adapter, $settings = null)
     {
         $adapter = ucfirst($adapter);
         if (!class_exists( self::NS . $adapter)) {
@@ -22,7 +23,7 @@ class PaymentFactory
 
         $c = self::NS . $adapter;
 
-        return new $c;
+        return new $c($settings);
     }
 
     public static function getSettings($adapter)

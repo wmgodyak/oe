@@ -34,12 +34,12 @@ abstract class Controller {
         $this->load = Load::instance();
         $this->request = Request::getInstance();
 
-        if($this->request->isPost() && !isset($_SERVER['PHP_AUTH_USER'])) {
-            $token = $this->request->post('token');
-            if($token != TOKEN){
-                die('#1201. Invalid token.');
-            }
-        }
+//        if($this->request->isPost() && !isset($_SERVER['PHP_AUTH_USER'])) {
+//            $token = $this->request->post('token');
+//            if($token != TOKEN){
+//                die('#1201. Invalid token.');
+//            }
+//        }
     }
 
     /**

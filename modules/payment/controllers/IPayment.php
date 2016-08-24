@@ -10,6 +10,7 @@ namespace modules\payment\controllers;
 
 interface IPayment
 {
-    public function checkout();
+    public function __construct($settings = null);
+    public function checkout($order);
     public function callback();
 }

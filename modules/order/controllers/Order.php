@@ -14,6 +14,7 @@ use modules\order\models\OrdersProducts;
 use modules\order\models\Status;
 use modules\users\models\Users;
 use system\core\EventsHandler;
+use system\core\Logger;
 use system\core\Session;
 use system\Front;
 use system\models\Currency;
@@ -58,6 +59,28 @@ class Order extends Front
     {
         $this->template->assignScript('modules/order/js/order.js');
         EventsHandler::getInstance()->add('user.account.sidebar', [$this, 'history']);
+        EventsHandler::getInstance()->add('payment.callback.success', [$this, 'paymentCallbackSuccess']);
+    }
+
+    public function paymentCallbackSuccess($data)
+    {
+        Logger::info('Call \modules\order\controllers\Order::paymentCallback');
+
+        $order = $this->order->getDataByOID($data['order_id']);
+        if(empty($order)){
+            Logger::error('Wrong order id. #' . $data['order_id']);
+            return;
+        }
+
+        if( $order['paid'] == 1){
+            Logger::error('This order is payed');
+            return ;
+        }
+
+        $s = $this->order->update($order['id'], ['paid' => 1, 'paid_date' => date('Y-m-d H:i:s')]);
+        if($s){
+            Logger::info("Order: {$data['order_id']} paid successful. ");
+        }
     }
 
     public function checkout()

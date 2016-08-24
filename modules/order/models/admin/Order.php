@@ -8,9 +8,6 @@
 
 namespace modules\order\models\admin;
 
-use modules\users\models\Users;
-use system\models\Currency;
-
 defined("CPATH") or die();
 
 /**
@@ -19,18 +16,18 @@ defined("CPATH") or die();
  */
 class Order extends \modules\order\models\Order
 {
-    private $status;
-    private $users;
-    private $currency;
-
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->status = new OrdersStatus();
-        $this->users  = new Users();
-        $this->currency = new Currency();
-    }
+//    private $status;
+//    private $users;
+//    private $currency;
+//
+//    public function __construct()
+//    {
+//        parent::__construct();
+//
+//        $this->status = new OrdersStatus();
+//        $this->users  = new Users();
+//        $this->currency = new Currency();
+//    }
 
     /**
      * @param $manager
@@ -63,37 +60,9 @@ class Order extends \modules\order\models\Order
        return $this->status->change($id, 4, $manager_id);
     }
 
-    /**
-     * @param $id
-     * @param string $key
-     * @return array|mixed
-     */
-    public function getData($id, $key = '*')
-    {
-        $order = $this->rowData('__orders', $id, $key);
-
-        if($key != '*')
-            return $order;
-
-        $order['user'] = $this->users->getData($order['users_id']);
-
-        return $order;
-    }
-
     public function assignToManager($id, $manager_id)
     {
 
-    }
-
-    /**
-     * @param $id
-     * @param $data
-     * @return bool
-     */
-    public function update($id, $data)
-    {
-        $data['edited'] = $this->now();
-        return $this->updateRow('__orders', $id, $data);
     }
 
     public function getNewCount()

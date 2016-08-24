@@ -44,6 +44,7 @@ class UsersBonus extends Front
         if(! $user ) return null;
 
         $bonus = $this->ub->get($user['id']);
+        if(empty($bonus)) $bonus = 0;
 
         return  "<li><a>Мій СМА бонус: <b>{$bonus} грн.</b></a></li>";
     }

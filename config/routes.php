@@ -80,6 +80,7 @@ $routes = array();
 */
 //$routes[]  = array('/([^0-9A-Za-zА-Яа-яЁё]+)/?(.*)', 'system\Front', 'url');
 
+//$routes[]  = array('/route/([a-zA-Z0-9-_]+)/([a-zA-Z0-9-_]+)/?(.*)', 'system\Front', 'module/action/params');
 $routes[]  = array('/route/([a-zA-Z0-9-_]+)/([a-zA-Z0-9-_]+)/?(.*)', 'modules\:controller:action');
 
 //http://engine.loc/uk/oplata-ta-dostavka/filter/vendor=acer,lenovo;display=14,15-16;ram=ddr3

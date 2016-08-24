@@ -49,7 +49,7 @@ class Front extends core\Controller
      * init status
      * @var bool
      */
-    private static $initialized = false;
+    private static $initLangs = false;
 
     /**
      * all system settings
@@ -83,8 +83,8 @@ class Front extends core\Controller
         $this->theme= $theme;
         $this->template = Template::getInstance($theme);
 
-        if(!self::$initialized){
-            $this->initialize();
+        if(!self::$initLangs){
+            $this->initLangs();
         }
 
         $this->images   = new Images();
@@ -93,51 +93,24 @@ class Front extends core\Controller
 
         $this->languages_code = Session::get('app.languages_code');
 
-
         // to access custom modules
         $this->page = $this->template->getVars('page');
-
 
         $events = EventsHandler::getInstance();
 
         $this->template->assign('events', $events);
         $this->template->assign('settings', $this->settings);
+
+        if(! $this->request->param('doInit')){
+            $this->doInit();
+        }
     }
 
     public function index()
     {
-//        echo "App::init()\r\n"; $this->dump($_SESSION);
-        self::$initialized = true;
-
         $this->template->assign('base_url',    APPURL );
 
-        // init page
-//        $args = $this->request->param();
-
-        if(
-            $this->request->isXhr()
-            // || (isset($args['controller']) && $args['namespace'] != 'controllers\App' && $args['controller'] != 'App')
-        ){
-            echo 'Configure XHR or move it to model front ';
-//            if( ! $this->languages_id){
-//                $l = new Languages();
-//                $lang = $l->getDefault();
-//                $this->languages_id   = $lang['id'];
-//                $this->languages_code = $lang['code'];
-//
-//                $a = [];
-//                $a['app']['languages_id']   = $this->languages_id;
-//                $a['app']['languages_code'] = $this->languages_code;
-//
-//                Session::set($a, $this->languages_id);
-//            }
-//
-//            Request::getInstance()->param('languages_id', $this->languages_id);
-//            Request::getInstance()->param('languages_code', $this->languages_code);
-//
-//            // assign translations to template
-//            $this->template->assign('t', $this->t());
-        } else {
+        if(! $this->request->isXhr()){
 
             if($this->settings['active'] == 0){
                 $a = Session::get('engine.admin');
@@ -179,25 +152,7 @@ class Front extends core\Controller
             //assign page to template
             $this->template->assign('page', $page);
 
-            // load default translations
-//            Lang::getInstance($this->settings['app_theme_current'], $this->languages_code);
-
-            // init modules
-            $m = new Modules($this->theme, $this->languages_code);
-            $modules = $m->init();
-
-            // assign translations to template
-            $this->template->assign('t', $this->t());
-
-            // assign app
-            $app = new App();
-//                echo '<pre>'; var_dump($app->languages->get());die;
-            $this->template->assign('app', $app);
-            $this->template->assign('mod', $modules);
-
-            $this->template->assign('settings', $this->settings);
-
-            $this->template->assign('modules_scripts', $this->template->getScripts());
+            $this->doInit();
 
             $template_path = $this->settings['themes_path']
                 . $this->settings['app_theme_current'] . '/'
@@ -213,8 +168,30 @@ class Front extends core\Controller
         }
     }
 
-    private function initialize()
+    private function doInit()
     {
+        $this->request->param('doInit',1);
+        // assign translations to template
+        $this->template->assign('t', $this->t());
+
+        // init modules
+        $m = new Modules($this->theme, $this->languages_code);
+        $modules = $m->init();
+        $this->template->assign('mod', $modules);
+
+        // assign app
+        $app = new App();
+        $this->template->assign('app', $app);
+
+        $this->template->assign('languages_id', $this->languages_id);
+        $this->template->assign('settings', $this->settings);
+
+        $this->template->assign('modules_scripts', $this->template->getScripts());
+    }
+
+    private function initLangs()
+    {
+        self::$initLangs = true;
         $app = Session::get('app');
 
         if(isset($app['languages_id'])) return;
