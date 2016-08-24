@@ -66,7 +66,7 @@ class EventsHandler
      * @param bool $display
      * @return null|string
      */
-    public function call($action, $params = [], $display = true)
+    public function call($action, $params = null, $display = true)
     {
         if($this->debug) echo "<code>".$action . "</code><br>";
 
@@ -76,8 +76,21 @@ class EventsHandler
             if(is_array($callback) && isset($callback[1])){
                 if(is_callable($callback, true, $callable_name)){
                     if($this->debug)  echo $callable_name, '<br>';
-
+                    if($params && is_array($params)){
+                        $out .= call_user_func_array($callback, [$params]);
+                    } else if($params){
+                        $out .= call_user_func_array($callback, $params);
+                    } else {
+                        $out .= call_user_func($callback);
+                    }
+                }elseif(is_callable($callback, true, $callable_name)){
+                   if($params && is_array($params)){
+                    $out .= call_user_func_array($callback, [$params]);
+                } else if($params){
                     $out .= call_user_func_array($callback, $params);
+                } else {
+                    $out .= call_user_func($callback);
+                }
                 }
             }
         }

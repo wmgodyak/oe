@@ -8,6 +8,7 @@
 
 namespace modules\usersBonus\controllers;
 
+use system\core\EventsHandler;
 use system\Front;
 
 /**
@@ -17,8 +18,33 @@ use system\Front;
  */
 class UsersBonus extends Front
 {
+    private $ub;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->ub = new \modules\usersBonus\models\UsersBonus();
+    }
+
+    public function get($users_id)
+    {
+        return $this->ub->get($users_id);
+    }
+
     public function init()
     {
+        parent::init();
 
+        EventsHandler::getInstance()->add('user.profile.nav', [$this, 'myBonus']);
+    }
+
+    public function myBonus($user)
+    {
+        if(! $user ) return null;
+
+        $bonus = $this->ub->get($user['id']);
+
+        return  "<li><a>Бонус: {$bonus} грн.</a></li>";
     }
 }

@@ -36,7 +36,7 @@ class UsersBonus extends Engine
             {
                 $bonus = $this->ub->get($row['id']);
                 if($bonus > 0){
-                    $row['username'] .= "<br><span class='label label-success'>Бонус: {$bonus}</span>";
+                    $row['username'] .= "<br><span class='label label-success'>Бонус: {$bonus} грн.</span>";
                 }
                 return $row;
             }
