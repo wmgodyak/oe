@@ -7,5 +7,5 @@
             </div>
         </div>
     {/foreach}
-    {$events->call('content.intro', array($content))}
+    {$events->call('content.intro', $content)}
 </fieldset>

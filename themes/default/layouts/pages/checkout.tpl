@@ -90,7 +90,7 @@
                     </tr>
                     <tr>
                         <td><label for="">Електронна пошта*</label></td>
-                        <td colspan="2"><input type="email" {if isset($user)}disabled{/if} required name="user[email]" {if isset($user.email)}value="{$user.email}"{/if}></td>
+                        <td colspan="2"><input type="email" {if isset($user.email) && strpos($user.email,'one.click') == false}disabled{/if} required name="user[email]" {if isset($user.email)}value="{$user.email}"{/if}></td>
                     </tr>
                 </table>
                 <table class="info">

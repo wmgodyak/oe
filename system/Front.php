@@ -101,6 +101,7 @@ class Front extends core\Controller
         $events = EventsHandler::getInstance();
 
         $this->template->assign('events', $events);
+        $this->template->assign('settings', $this->settings);
     }
 
     public function index()

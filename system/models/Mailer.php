@@ -128,6 +128,8 @@ class Mailer
         $header = Settings::getInstance()->get('mail_header');
         $footer = Settings::getInstance()->get('mail_footer');
 
+        Template::getInstance()->assign('appurl', APPURL);
+        Template::getInstance()->assign('app', new App());
         Template::getInstance()->assign('data', $this->data);
 
         if($header != ''){
@@ -138,8 +140,9 @@ class Mailer
         }
 
         $body = $template->fetch($this->tpl);
-
-        $this->phpmailer->Body = $header . $body . $footer;
+        $parser = new Parser($header . $body . $footer);
+        $parser->makeFriendlyUrl();
+        $this->phpmailer->Body = $parser->getDocumentSource();
 
         // add address
 

@@ -17,6 +17,7 @@ use system\core\EventsHandler;
 use system\core\Session;
 use system\Front;
 use system\models\Currency;
+use system\models\Mailer;
 
 defined("CPATH") or die();
 
@@ -75,6 +76,8 @@ class Order extends Front
 
         if(FormValidation::hasErrors()){
             $m = FormValidation::getErrors();
+        } elseif($ui['email'] != $user['email'] && $this->users->issetEmail($user['email'], $ui['id'])) {
+            $m['user[email]'] = 'This email address used by other customer';
         } else {
 
             $this->order->beginTransaction();
@@ -100,7 +103,7 @@ class Order extends Front
                 $order['comment'] = htmlspecialchars(strip_tags($order['comment']));
 
                 $order['users_id']       = $ui['id'];
-                $order['oid']            = date('ymd-hms');
+                $order['oid']            = date('ymd-hmsi');
                 $order['languages_id']   = $this->languages_id;
                 $order['users_group_id'] = $ui['group_id'];
                 $order['status_id']      = $this->status->getMainId();
@@ -109,7 +112,9 @@ class Order extends Front
 
                 $orders_id = $this->order->create($order);
 
-                foreach ($this->cart->items() as $item) {
+                $order['products'] = $this->cart->items();
+
+                foreach ($order['products'] as $item) {
                     $this->ordersProducts->create
                     (
                         $orders_id,
@@ -123,6 +128,7 @@ class Order extends Front
                 if($s && ! $this->order->hasError()){
                     $this->order->commit();
                     $this->cart->clear();
+                    $this->notifyCustomer($order);
                 } else {
                     $this->order->rollback();
                 }
@@ -130,6 +136,14 @@ class Order extends Front
         }
 
         $this->response->body(['s'=>$s, 'i' => $m, 'redirect' => $this->getUrl(12)])->asJSON();
+    }
+
+    private function notifyCustomer($order)
+    {
+        $order['user'] = $this->users->getData($order['users_id']);
+        $mailer = new Mailer('modules/order/mail', 'Нове замовлення', $order);
+
+        return $mailer->send();
     }
 
     public function oneClick()
@@ -184,7 +198,7 @@ class Order extends Front
             $order = [];
             $order['one_click']      = 1;
             $order['users_id']       = $user['id'];
-            $order['oid']            = date('ymd-hms');
+            $order['oid']            = date('ymd-hmsi');
             $order['languages_id']   = $this->languages_id;
             $order['users_group_id'] = $user['group_id'];
             $order['status_id']      = $this->status->getMainId();
@@ -207,11 +221,19 @@ class Order extends Front
                     $price,
                     ($variants_id > 0 ? $variants_id : 0)
                 );
+
+                $order['products'] = [[
+                    'products_id' => $products_id,
+                    'price' => $price,
+                    'quantity' => 1,
+                    'variants_id' =>  ($variants_id > 0 ? $variants_id : 0)
+                ]];
             }
 
             if($s && ! $this->order->hasError()){
                 $this->order->commit();
                 $this->cart->clear();
+                $this->notifyCustomer($order);
             } else {
                 $this->order->rollback();
             }
@@ -252,6 +274,7 @@ class Order extends Front
         if(! $user) return '';
 
         $p = (int) $this->request->get('p', 'i');
+        $start = $start ? $start : $p;
         if($p){
             $start --;
 

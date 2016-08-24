@@ -52,4 +52,20 @@ class Page extends Model
     {
         return $this->info($id, 'name');
     }
+
+    public function content($id)
+    {
+        return $this->info($id, 'content');
+    }
+
+    public function intro($id)
+    {
+        return $this->info($id, 'intro');
+    }
+
+    public function title($id)
+    {
+        return $this->info($id, 'title');
+    }
+
 }

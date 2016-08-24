@@ -54,7 +54,7 @@ class Order extends Model
 
         $orders = self::$db
             ->select("
-                select o.id,o.oid, o.created, osi.status, o.paid
+                select o.id,o.oid, o.created, osi.status, o.paid, o.status_id,o.payment_id
                 from __orders o
                 join __orders_status_info osi on osi.status_id=o.status_id and osi.languages_id={$this->languages_id}
                 where o.users_id={$users_id}

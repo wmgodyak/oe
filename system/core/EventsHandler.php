@@ -72,25 +72,22 @@ class EventsHandler
 
         if(!isset(self::$events[$action])) return null;
         $out = '';
+
         foreach (self::$events[$action] as $callback) {
             if(is_array($callback) && isset($callback[1])){
                 if(is_callable($callback, true, $callable_name)){
                     if($this->debug)  echo $callable_name, '<br>';
                     if($params && is_array($params)){
                         $out .= call_user_func_array($callback, [$params]);
-                    } else if($params){
-                        $out .= call_user_func_array($callback, $params);
                     } else {
-                        $out .= call_user_func($callback);
+                        $out .= call_user_func($callback, $params);
                     }
                 }elseif(is_callable($callback, true, $callable_name)){
-                   if($params && is_array($params)){
-                    $out .= call_user_func_array($callback, [$params]);
-                } else if($params){
-                    $out .= call_user_func_array($callback, $params);
-                } else {
-                    $out .= call_user_func($callback);
-                }
+                    if($params && is_array($params)){
+                        $out .= call_user_func_array($callback, [$params]);
+                    } else {
+                        $out .= call_user_func($callback, $params);
+                    }
                 }
             }
         }

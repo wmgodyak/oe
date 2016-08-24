@@ -15,7 +15,7 @@ class Settings extends Model
 {
     public function get()
     {
-        $r = self::$db->select("select * from __settings")->all();
+        $r = self::$db->select("select * from __settings where display=1")->all();
         $res = [];
         foreach ($r as $item) {
             $res[$item['block']][$item['id']] = $item;

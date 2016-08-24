@@ -30,5 +30,5 @@
             </div>
         </div>
     {/foreach}
-    {$events->call('content.meta', array($content))}
+    {$events->call('content.meta', $content)}
 </fieldset>

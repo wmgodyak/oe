@@ -75,8 +75,9 @@ class Template
             $theme_url = APPURL . $theme ;
             $this->smarty->assign('theme_url', $theme_url);
             $this->smarty->assign('base_url', APPURL);
+            $this->smarty->assign('appurl',   APPURL);
             $this->smarty->assign('token',    TOKEN);
-            
+
             $this->theme_url = $theme_url;
             $this->theme_path = $theme_path;
             

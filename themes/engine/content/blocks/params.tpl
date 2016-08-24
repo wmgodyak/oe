@@ -51,5 +51,5 @@
         </div>
     </div>
     {/if}
-    {$events->call('content.params', array($content))}
+    {$events->call('content.params', $content)}
 </fieldset>

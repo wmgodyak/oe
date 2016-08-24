@@ -32,7 +32,12 @@
                 <div class="clearfix"></div>
             </div>
             {/foreach}
-            <div class="product-sum text-right">Разом до сплати: {$order.amount} грн</div>
+            <div class="product-sum text-right">
+                Разом до сплати: {$order.amount} грн
+                {if $order.pay == 0 && $order.status_id >= 6 && $order.status_id < 11 && in_array($order.payment_id, [2,3]) }
+                    <a class="btn md red" href="13;?oid={$order.oid}">Оплатити</a>
+                {/if}
+            </div>
         </div>
     </div>
     {/foreach}

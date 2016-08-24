@@ -41,7 +41,7 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'file', items : [ 'Maximize','-', 'Source'] },
 		'/',
 		{ name: 'basicstyles', items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
-		{ name: 'paragraph', items : [ 'NumberedList','BulletedList','-','-','Blockquote','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'] },
+		{ name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Blockquote','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'] },
 		{ name: 'styles', items : [ 'Format' ]},
 		{ name: 'colors', items : [ 'TextColor','BGColor' ] }
 	];

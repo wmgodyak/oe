@@ -45,6 +45,6 @@ class UsersBonus extends Front
 
         $bonus = $this->ub->get($user['id']);
 
-        return  "<li><a>Бонус: {$bonus} грн.</a></li>";
+        return  "<li><a>Мій СМА бонус: <b>{$bonus} грн.</b></a></li>";
     }
 }

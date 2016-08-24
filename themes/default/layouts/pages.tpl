@@ -21,10 +21,11 @@
 
             <!-- begin article-page__content -->
             <div class="article-page__content">
-
                 <h1>{$page.name}</h1>
-
-                <div class="text cms-content">{$page.content}</div>
+                <div class="text cms-content">
+                    {$page.content}
+                    {$events->call('layouts.pages.content')}
+                </div>
             </div>
             <!-- end article-page__content -->
 

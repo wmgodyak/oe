@@ -158,7 +158,7 @@ class Content extends Engine
 
         $s = $this->mContent->update($id);
         if($s){
-            EventsHandler::getInstance()->call('content.process', ['id' => $id]);
+            EventsHandler::getInstance()->call('content.process', $id);
         }
 
         if(! $s){
