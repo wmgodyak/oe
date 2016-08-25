@@ -39,6 +39,8 @@
                 {if $product.in_stock == 1}
                    <button class="btn sm red buy-one-click" data-has-variants="{$product.has_variants}" data-id="{$product.id}">Купити в 1 клік</button>
                    <span class="m_cart-indicator m_cart-indicator--out to-cart cart-product-{$product.id} {if isset($smarty.session.cart[$product.id])}in{/if}" data-id="{$product.id}" data-has-variants="{$product.has_variants}" title="В кошик"></span>
+                {else}
+                    <button class="btn sm  to-wait-list" data-has-variants="{$product.has_variants}" data-id="{$product.id}" title="Повідомте про появу">Повідомте</button>
                 {/if}
 
                <span class="m_hearth-like">

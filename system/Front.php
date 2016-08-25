@@ -94,6 +94,7 @@ class Front extends core\Controller
         $this->languages_code = Session::get('app.languages_code');
 
         // to access custom modules
+
         $this->page = $this->template->getVars('page');
 
         $events = EventsHandler::getInstance();
@@ -101,7 +102,7 @@ class Front extends core\Controller
         $this->template->assign('events', $events);
         $this->template->assign('settings', $this->settings);
 
-        if(! $this->request->param('doInit')){
+        if($this->request->param('controller') != '' &&  ! $this->request->param('doInit')){
             $this->doInit();
         }
     }
@@ -151,8 +152,11 @@ class Front extends core\Controller
 
             //assign page to template
             $this->template->assign('page', $page);
+            $this->page = $page;
 
-            $this->doInit();
+            if(! $this->request->param('doInit')){
+                $this->doInit();
+            }
 
             $template_path = $this->settings['themes_path']
                 . $this->settings['app_theme_current'] . '/'
@@ -170,8 +174,9 @@ class Front extends core\Controller
 
     private function doInit()
     {
-        $this->request->param('doInit',1);
+        $this->request->param('doInit', 1);
         // assign translations to template
+
         $this->template->assign('t', $this->t());
 
         // init modules

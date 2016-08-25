@@ -230,7 +230,7 @@
             <input id="name_<%-formID%>" name="data[name]" required type="text">
         </div>
         <div class="form-group">
-            <label for="phone_<%-formID%>">E-mail</label><br>
+            <label for="phone_<%-formID%>">E-mail</label>
             <input id="phone_<%-formID%>" required name="data[email]" type="email">
         </div>
         <input type="hidden" name="token" value="<%-token%>">
@@ -239,6 +239,26 @@
     {/literal}
     </form>
 </div>
+
+<script id="waitListTpl" type="text/template">
+    {literal}
+    <form id="waitList<%-formID%>" action="route/waitlist/create" method="post">
+        <p>Введіть свою електронну пошту і ми вас повідомимо, коли товар з'явиться в наявності</p>
+        <p>&nbsp;</p>
+        <div class="form-group">
+            <label for="name_<%-formID%>">Ваше Ім'я:</label>
+            <input id="name_<%-formID%>" name="data[name]" required type="text">
+        </div>
+        <div class="form-group">
+            <label for="phone_<%-formID%>">E-mail:</label>
+            <input id="phone_<%-formID%>" required name="data[email]" type="email">
+        </div>
+        <input type="hidden" name="token" value="<%-token%>">
+        <input type="hidden" name="data[products_id]" value="<%-products_id%>">
+        <input type="hidden" name="data[variants_id]" value="<%-variants_id%>">
+    {/literal}
+    </form>
+</script>
 <script type="text/template" id="callbackTpl">
     {literal}
     <form id="callbackForm" action="route/callbacks/process" method="post">

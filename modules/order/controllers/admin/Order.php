@@ -55,10 +55,10 @@ class Order extends Engine
     {
         $t = $this->order->getNewCount();
         $t = $t > 0 ? " <b class='badge white'>{$t}</b>" : '';
-        $this->assignToNav('Замовлення ' . $t, 'module/run/order', 'fa-money', null, 100);
-        $this->assignToNav('Замовлення ' . $t, 'module/run/order', 'fa-money', 'module/run/order', 1);
+//        $this->assignToNav('Замовлення ' . $t, 'module/run/order', 'fa-money', null, 100);
+        $this->assignToNav('Замовлення ' . $t, 'module/run/order', 'fa-money', 'module/run/shop', 1);
 
-        $this->assignToNav('Статуси', 'module/run/order/status', 'fa-money', 'module/run/order', 1);
+        $this->assignToNav('Статуси замовлень', 'module/run/order/status', 'fa-money', 'settings', 1);
         $this->template->assignScript('modules/order/js/admin/order.js');
     }
 
