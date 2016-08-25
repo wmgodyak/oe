@@ -1,7 +1,10 @@
 <?php
 namespace modules\gmap\controllers\admin;
 
+use helpers\bootstrap\Button;
+use system\core\Session;
 use system\models\Languages;
+use system\models\Settings;
 
 defined('CPATH') or die();
 
@@ -31,9 +34,17 @@ class Gmap extends \system\Engine
 
     public function index()
     {
+        $this->appendToPanel((string)Button::create
+        (
+            "Додати маркер",
+            ['class' => 'btn-md', 'onclick'=> 'gmap.loadForm()']
+        )
+        );
+
         $items = $this->model->get();
         $this->template->assign(array(
-            'items'=>json_encode($items)
+            'items'        => json_encode($items),
+            'gmap_api_key' => Settings::getInstance()->get('modules.Gmap.config.api_key')
         ));
         $this->output($this->template->fetch('gmap/map'));
     }

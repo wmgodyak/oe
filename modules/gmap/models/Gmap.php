@@ -24,8 +24,8 @@ class Gmap extends Model
     public function get()
     {
         return self::$db->select("
-                Select g.*,i.name from __gps g
-                join __gps_info i on g.id=i.gps_id and i.e_languages_id={$this->languages_id}
+                Select g.*, i.name from __gps g
+                join __gps_info i on g.id=i.gps_id and i.e_languages_id='{$this->languages_id}'
                 ORDER by abs(g.id)
             ")->all();
     }

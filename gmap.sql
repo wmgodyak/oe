@@ -1,40 +1,8 @@
--- phpMyAdmin SQL Dump
--- version 4.0.10deb1
--- http://www.phpmyadmin.net
---
--- Хост: localhost
--- Время создания: Авг 25 2016 г., 00:49
--- Версия сервера: 5.5.50-0ubuntu0.14.04.1
--- Версия PHP: 5.5.9-1ubuntu4.17
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-
---
--- База данных: `admin_fth`
---
-
--- --------------------------------------------------------
-
---
--- Структура таблицы `e_gps`
---
-
 CREATE TABLE IF NOT EXISTS `e_gps` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `value` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=51 ;
-
---
--- Дамп данных таблицы `e_gps`
---
 
 INSERT INTO `e_gps` (`id`, `value`) VALUES
 (34, '50.4501, 30.523400000000038'),
@@ -71,9 +39,6 @@ CREATE TABLE IF NOT EXISTS `e_gps_info` (
   KEY `fk_gps_info_e_languages1_idx` (`e_languages_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=81 ;
 
---
--- Дамп данных таблицы `e_gps_info`
---
 
 INSERT INTO `e_gps_info` (`id`, `gps_id`, `e_languages_id`, `name`) VALUES
 (47, 34, 1, 'Київ, Україна'),
@@ -111,17 +76,6 @@ INSERT INTO `e_gps_info` (`id`, `gps_id`, `e_languages_id`, `name`) VALUES
 (79, 50, 1, 'Веллінґтон, Нова Зеландія'),
 (80, 50, 2, 'Wellington, New Zealand');
 
---
--- Ограничения внешнего ключа сохраненных таблиц
---
-
---
--- Ограничения внешнего ключа таблицы `e_gps_info`
---
 ALTER TABLE `e_gps_info`
   ADD CONSTRAINT `fk_gps_info_e_languages1` FOREIGN KEY (`e_languages_id`) REFERENCES `e_languages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_gps_info_gps1` FOREIGN KEY (`gps_id`) REFERENCES `e_gps` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
