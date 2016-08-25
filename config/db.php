@@ -10,8 +10,6 @@
  * otakoyi_e7 та пароль для tnkjt27r
  * admin_e7 cUic8y9EeA
  * http://95.85.26.23/phpmyadmin/
- *
- *
  */
 
 $db = [
@@ -33,7 +31,7 @@ if($_SERVER['REMOTE_ADDR'] == '127.0.0.1'){
         'db'       => 'engine',
         'prefix'   => 'e_',
         'user'     => 'root',
-        'pass'     => 'dell',
+        'pass'     => 'hp',
         'port'     => 3306,
         'charset'  => 'utf8',
         'debug'    => true
