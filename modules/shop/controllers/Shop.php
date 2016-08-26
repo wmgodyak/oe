@@ -71,6 +71,7 @@ class Shop extends Front
     public function init()
     {
         $this->template->assignScript("modules/shop/js/jquery.ajaxSearch.js");
+        $this->template->assignScript("modules/shop/js/jquery.cookie-min.js");
         $this->template->assignScript("modules/shop/js/shop.js");
         if($this->page['type'] == 'product'){
             $this->product();
@@ -262,5 +263,24 @@ class Shop extends Front
         $sh->add($q);
         header('Content-Type: application/javascript');
         die;
+    }
+
+    public function viewed()
+    {
+        if( ! isset($_COOKIE['viewed'])) return [];
+
+//        $a = explode(',', $_COOKIE['viewed']);
+        $in = $_COOKIE['viewed'];
+
+        $this->products->start = 0;
+        $this->products->num   = 30;
+        $this->products->where(" c.id in ($in)");
+        $products = $this->products->get();
+
+        foreach ($products as $k=>$product) {
+            $products[$k]['bonus'] = round($products[$k]['price'] * $this->bonus_rate, 2);
+        }
+
+        return $products;
     }
 }

@@ -44,6 +44,20 @@ var Shop = {
             minChars:2,
             dataType: 'json'
         });
+    },
+    viewed: function(id)
+    {
+        var v = [];
+        var a = $.cookie('viewed');
+        if(typeof a != 'undefined') {
+            v = a.split(',')
+        }
+
+        if(jQuery.inArray(id, v) == -1){
+            v.push(id);
+        }
+
+        $.cookie('viewed', v.join());
     }
 };
 

@@ -174,15 +174,17 @@ class Front extends core\Controller
 
     private function doInit()
     {
+//        echo '<<<< doInit >>>>';
         $this->request->param('doInit', 1);
         // assign translations to template
 
-        $this->template->assign('t', $this->t());
 
         // init modules
         $m = new Modules($this->theme, $this->languages_code);
         $modules = $m->init();
         $this->template->assign('mod', $modules);
+
+        $this->template->assign('t', $this->t());
 
         // assign app
         $app = new App();

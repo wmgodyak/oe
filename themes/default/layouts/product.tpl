@@ -5,8 +5,6 @@
  * Date: 2016-07-07T14:05:29+03:00
  * @name Магазин / товари
  *}
-
-
 {include file="chunks/head.tpl"}
 <!-- begin wrapper -->
 <div class="wrapper">
@@ -103,6 +101,13 @@
                             >{if isset($smarty.session.cart[$product.id])}В кошику{else}Купити{/if}</button>
                             <button class="btn sm white-red buy-one-click" data-has-variants="{$product.has_variants}" data-id="{$product.id}">Купити в 1 клік</button>
                         </div>
+                        {else}
+                        <div class="bnt-row">
+                            <button class="btn sm to-wait-list"
+                                    data-id="{$product.id}"
+                                    data-has-variants="{$product.has_variants}"
+                                    title="Повідомте про появу">Повідомте про появу</button>
+                            </div>
                         {/if}
                         {$events->call('shop.product.buy.after', array($product))}
                         {assign var='avRate' value=$mod->comments->getAverageRating($product.id)|ceil}
@@ -119,6 +124,7 @@
                                 {$commentsTotal} відгуки
                             </span>
                         </span>
+                        {if $product.description !=''}
                         <div class="row">
                             <div class="short">
                                 <div class="wrap">
@@ -127,6 +133,7 @@
                                 </div>
                             </div>
                         </div>
+                        {/if}
                     </div>
                 </div>
 
@@ -190,7 +197,7 @@
                         </div>
                     </div>
                 </div>
-                {*
+
                 <div class="promotion-banner">
                     <div class="heading">
                         Разом дешевше!
@@ -255,7 +262,8 @@
                         </div>
                     </div>
                 </div>
-                *}
+                <div class="clear" style="height: 50px;"></div>
+                {include file="modules/shop/widgets/viewed.tpl"}
             </div>
             <!-- end single-product-page__content -->
 
@@ -365,5 +373,9 @@
     <!-- end article-page -->
 
 </div>
+{$events->call('shop.product.footer', $product)}
 <!-- end wrapper -->
 {include file="chunks/footer.tpl"}
+<script>
+    Shop.viewed({$product.id});
+</script>
