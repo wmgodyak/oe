@@ -46,7 +46,7 @@ class UsersBonus extends Engine
     public function calcBonus($data)
     {
         $status = Settings::getInstance()->get('modules.UsersBonus.config.status_id');
-        if($data['status_id'] == $status && $data['pay'] == 1){
+        if($data['status_id'] == $status && $data['paid'] == 1){
             $op = new OrdersProducts();
             $amount = $op->amount($data['id']);
             $rate   = Settings::getInstance()->get('modules.Shop.config.bonus_rate');

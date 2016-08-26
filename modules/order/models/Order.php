@@ -55,6 +55,11 @@ class Order extends Model
         return $this->updateRow('__orders', $id, $data);
     }
 
+    public function paid($id)
+    {
+        return $this->update($id, ['paid' => 1]);
+    }
+
     /**
      * @param $users_id
      * @param int $start

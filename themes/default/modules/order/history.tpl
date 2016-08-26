@@ -9,6 +9,9 @@
                 <li class="center-block">{date('d.m.Y H:i:s', strtotime($order.created))}</li>
                 <li class="right-block">
                     <span class="text-right">Статус: </span><span class="green">{$order.status}</span>
+                    {if $order.paid}
+                        <br><span style="color: red;">Оплачено</span>
+                    {/if}
                 </li>
                 <li class="clearfix"></li>
             </ul>
@@ -34,7 +37,7 @@
             {/foreach}
             <div class="product-sum text-right">
                 Разом до сплати: {$order.amount} грн
-                {if $order.pay == 0 && $order.status_id >= 6 && $order.status_id < 11 && in_array($order.payment_id, [2,3]) }
+                {if $order.paid == 0 && $order.status_id >= 6 && $order.status_id < 11 && in_array($order.payment_id, [2,3]) }
                     <a class="btn md red" href="13;?oid={$order.oid}">Оплатити</a>
                 {/if}
             </div>

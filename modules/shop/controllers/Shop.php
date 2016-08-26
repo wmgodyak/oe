@@ -182,6 +182,7 @@ class Shop extends Front
     {
         $this->products->start = 0;
         $this->products->num   = 30;
+        $this->products->where(" c.in_stock=1");
         $products = $this->products->get();
 
         foreach ($products as $k=>$product) {
@@ -198,6 +199,7 @@ class Shop extends Front
     {
         $this->products->start = 0;
         $this->products->num   = 30;
+        $this->products->where(" c.in_stock=1");
         $products = $this->products->get();
 
         foreach ($products as $k=>$product) {
