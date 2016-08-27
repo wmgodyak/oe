@@ -82,6 +82,11 @@ engine.shop = {
                    engine.shop.categories.edit(node_id);
                 }
             )
+            .setContextMenu('edit1', 'Редагування', 'fa-pencil', function(o){
+                   var node_id= o.reference[0].id;
+                   self.location.href="module/run/shop/categories/edit/"+node_id;
+                }
+            )
             .setContextMenu('children', 'Список підкатегорій', 'fa-list', function(o){
                     var node_id= o.reference[0].id;
                     self.location.href='module/run/shop/categories/index/'+node_id;
@@ -124,6 +129,7 @@ engine.shop = {
         engine.shop.products.features.init();
         engine.shop.products.variants.init();
         engine.shop.import.init();
+        engine.shop.accessories();
     },
     categories: {
         before: function()
@@ -866,6 +872,147 @@ engine.shop = {
                 }
             });
         }
+    },
+    accessories: function()
+    {
+        var renderCategories = function(items){
+            var tmpl = _.template($('#acc_categories_tpl').html());
+            $("#acc_categories_list").html(tmpl({items: items}));
+        };
+        engine.request.post({
+            url: 'module/run/shop/accessories/getCategories',
+            data:{
+                products_categories_id: $('#content_id').val()
+            },
+            success: function(res)
+            {
+                renderCategories(res.items);
+            }
+        });
+
+        $(document).on('click', '.b-accessories-categories-edit', function(e){
+            e.preventDefault();
+
+            var id = $(this).data('id');
+            var categories_id = $(this).data('categories_id');
+            engine.request.post({
+                url: 'module/run/shop/accessories/edit/'+id,
+                data:{
+                    categories_id: categories_id
+                },
+                success: function(res)
+                {
+                    engine.dialog({
+                        title: 'Налаштування категорії',
+                        content:res,
+                        width: 600
+                    });
+
+
+                    var renderFeatures = function(id, items){
+                        var tmpl = _.template($('#acc_categories_features_tpl').html());
+                        $("#acc_categories_features_list").html(tmpl({items: items}));
+
+
+                        $('.b-accessories-categories-features-delete').click(function(e){
+                            e.preventDefault();
+
+                            var aid = $(this).data('id');
+                            engine.request.post({
+                                url: 'module/run/shop/accessories/deleteFeatures/'+aid,
+                                data:{
+                                    products_accessories_id: id
+                                },
+                                success: function(res)
+                                {
+                                    renderFeatures(id, res.items);
+                                }
+                            });
+                        });
+                    };
+
+                    engine.request.post({
+                        url: 'module/run/shop/accessories/getFeatures',
+                        data:{
+                            products_accessories_id: id
+                        },
+                        success: function(res)
+                        {
+                            renderFeatures(id, res.items);
+                        }
+                    });
+
+                    $("#acc_categories_features").on('change', function(){
+                        var features_id = $(this).find('option:selected').val();
+                        engine.request.post({
+                            url: 'module/run/shop/accessories/createFeatures',
+                            data:{
+                                features_id: features_id,
+                                products_accessories_id: id
+                            },
+                            success: function(res)
+                            {
+                                renderFeatures(id, res.items);
+                            }
+                        });
+                    });
+                }
+            });
+        });
+
+
+        $(document).on('click', '.b-accessories-categories-delete', function(e){
+            e.preventDefault();
+
+            var id = $(this).data('id');
+            var d = engine.confirm('Дійсно видалити?', function(){
+
+                engine.request.post({
+                    url: 'module/run/shop/accessories/delete/'+id,
+                    data:{
+                        products_categories_id: $('#content_id').val()
+                    },
+                    success: function(res)
+                    {
+                        d.dialog('close');
+                        renderCategories(res.items);
+                    }
+                });
+            });
+        });
+
+        $("#acc_categories").select2({
+            placeholder: "ід категорії або назву",
+            minimumInputLength: 3,
+            ajax: {
+                url: "module/run/shop/accessories/searchCategories",
+                dataType: 'json',
+                quietMillis: 250,
+                type: 'POST',
+                data: function (params) {
+                    return {
+                        q           : params.term, // search term
+                        page        : params.page,
+                        token       : TOKEN
+                    };
+                }
+            }
+        }).on("select2:selecting", function(e) {
+            engine.request.post({
+                url: 'module/run/shop/accessories/create',
+                data:{
+                    categories_id : e.params.args.data.id,
+                    token         : TOKEN,
+                    products_categories_id: $('#content_id').val()
+                },
+                success: function(res)
+                {
+                    if(res.s){
+                        renderCategories(res.items);
+                    }
+                }
+            });
+        });
     }
 };
 

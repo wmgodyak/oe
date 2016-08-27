@@ -7,6 +7,7 @@
  */
 
 namespace modules\shop\controllers\admin;
+//use modules\shop\controllers\admin\categories\Accessories;
 use system\core\EventsHandler;
 use system\Engine;
 
@@ -16,6 +17,11 @@ use system\Engine;
  */
 class Shop extends Engine
 {
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     /**
      * @throws \system\core\exceptions\Exception
      */
@@ -29,6 +35,8 @@ class Shop extends Engine
 
         $this->template->assignScript("modules/shop/js/admin/shop.js");
         EventsHandler::getInstance()->add('content.main',[$this, 'catMeta']);
+
+        $this->accessories('init');
     }
 
     public function catMeta($content)
@@ -107,6 +115,7 @@ class Shop extends Engine
 
         return call_user_func_array(array($controller, $action), $params);
     }
+
     public function import()
     {
         include "Import.php";
@@ -119,6 +128,20 @@ class Shop extends Engine
         }
 
         $controller  = new Import();
+
+        return call_user_func_array(array($controller, $action), $params);
+    }
+
+    public function accessories()
+    {
+        $params = func_get_args();
+
+        $action = 'index';
+        if(!empty($params)){
+            $action = array_shift($params);
+        }
+
+        $controller  = new categories\Accessories();
 
         return call_user_func_array(array($controller, $action), $params);
     }
