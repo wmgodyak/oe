@@ -183,6 +183,7 @@ class Shop extends Front
     {
         $this->products->start = 0;
         $this->products->num   = 30;
+        $this->products->clearQuery();
         $this->products->where(" c.in_stock=1");
         $products = $this->products->get();
 
@@ -200,6 +201,7 @@ class Shop extends Front
     {
         $this->products->start = 0;
         $this->products->num   = 30;
+        $this->products->clearQuery();
         $this->products->where(" c.in_stock=1");
         $products = $this->products->get();
 
@@ -277,6 +279,8 @@ class Shop extends Front
 
         $this->products->start = 0;
         $this->products->num   = 30;
+        $this->products->clearQuery();
+        $this->products->debug(0);
         $this->products->where(" c.id in ($in)");
         $products = $this->products->get();
 
@@ -292,12 +296,23 @@ class Shop extends Front
         $acc = new Accessories();
         $r = $acc->get($products_id);
 
+        if(empty($r)) return [];
+
+        $this->products->debug();
+        $this->products->clearQuery();
         $this->products->start = 0;
         $this->products->num   = 60;
         $this->products->where(" c.in_stock = 1");
 
+        $cat_in = [];
+
         foreach ($r as $cat) {
-            $this->products->join("join  __content_relationship accpc on accpc.categories_id={$cat['id']} and accpc.content_id=c.id");
+            $cat_in[] = $cat['id'];
+
+            if($cat['isfolder']){
+                $cat_in = array_merge($cat_in, $acc->getSubcategoriesId($cat['id']));
+            }
+
             if(empty($cat['features'])) continue;
 
             foreach ($cat['features'] as $feature) {
@@ -306,7 +321,9 @@ class Shop extends Front
             }
         }
 
-//        $this->products->where(" c.id in ($in)");
+        $in = implode(',', $cat_in);
+        $this->products->join("join  __content_relationship accpc on accpc.categories_id in ({$in}) and accpc.content_id=c.id");
+
         $products = $this->products->get();
 
         foreach ($products as $k=>$product) {

@@ -17,7 +17,7 @@ class Products extends Content
 {
     private $group_id = 5;
     private $currency;
-
+    private $debug = 0;
     /**
      * Products constructor.
      * @param $type
@@ -40,6 +40,19 @@ class Products extends Content
     private $where    = [];
     private $order_by = [];
     private $join     = [];
+
+    public function debug($status = 1)
+    {
+        $this->debug = $status;
+
+        return $this;
+    }
+
+    public function clearQuery()
+    {
+        $this->where = [];
+        $this->join = [];
+    }
 
     public function where($q)
     {
@@ -210,7 +223,7 @@ class Products extends Content
           where c.status ='published' {$w}
           {$ob}
           limit {$this->start}, {$this->num}
-          ")->all();
+          ", $this->debug)->all();
 
         return $items;
     }
