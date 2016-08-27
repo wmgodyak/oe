@@ -298,7 +298,7 @@ class Shop extends Front
 
         if(empty($r)) return [];
 
-        $this->products->debug();
+//        $this->products->debug();
         $this->products->clearQuery();
         $this->products->start = 0;
         $this->products->num   = 60;
