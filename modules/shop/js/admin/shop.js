@@ -879,6 +879,28 @@ engine.shop = {
             var tmpl = _.template($('#acc_categories_tpl').html());
             $("#acc_categories_list").html(tmpl({items: items}));
         };
+
+
+        var renderCategoriesFeaturesValues = function(aid, items){
+            var tmpl = _.template($('#acc_categories_features_values_tpl').html());
+            $("#acc_categories_features_values_list").html(tmpl({items: items}));
+
+            $('.b-accessories-categories-features-values-delete').click(function(){
+                var values_id = $(this).data('id');
+                engine.request.post({
+                    url: 'module/run/shop/accessories/deleteFeaturesValues/'+aid,
+                    data:{
+                        id: aid,
+                        values_id:values_id
+                    },
+                    success: function(res)
+                    {
+                        renderCategoriesFeaturesValues(aid, res.items);
+                    }
+                });
+            });
+        };
+
         engine.request.post({
             url: 'module/run/shop/accessories/getCategories',
             data:{
@@ -902,17 +924,62 @@ engine.shop = {
                 },
                 success: function(res)
                 {
-                    engine.dialog({
+                   var d = engine.dialog({
                         title: 'Налаштування категорії',
                         content:res,
                         width: 600
                     });
 
 
-                    var renderFeatures = function(id, items){
+                    var renderFeatures = function(products_accessories_id, items){
                         var tmpl = _.template($('#acc_categories_features_tpl').html());
                         $("#acc_categories_features_list").html(tmpl({items: items}));
 
+
+                        $('.b-accessories-categories-features-edit').click(function(e){
+                            e.preventDefault();
+
+                            var aid = $(this).data('id');
+                            var features_id = $(this).data('features_id');
+
+                            engine.request.post({
+                                url: 'module/run/shop/accessories/editFeatures/'+aid,
+                                data:{
+                                    features_id: features_id
+                                },
+                                success: function(res)
+                                {
+                                    var ff = engine.dialog({
+                                       title: 'налаштування властивості',
+                                       content: res,
+                                        width: 500,
+                                        modal: true
+                                    });
+
+                                    engine.request.get('module/run/shop/accessories/getSelectedValues/'+aid, function(res)
+                                    {
+                                        renderCategoriesFeaturesValues(aid, res.items);
+                                    });
+
+                                    $('#acc_categories_features_values').change(function(){
+                                        var val = $(this).find('option:selected').val();
+                                        engine.request.post({
+                                            url: 'module/run/shop/accessories/setValue',
+                                            data:{
+                                                id: aid,
+                                                products_accessories_id: products_accessories_id,
+                                                features_id: features_id,
+                                                value: val
+                                            },
+                                            success: function(res)
+                                            {
+                                                renderCategoriesFeaturesValues(aid, res.items);
+                                            }
+                                        });
+                                    });
+                                }
+                            });
+                        });
 
                         $('.b-accessories-categories-features-delete').click(function(e){
                             e.preventDefault();
@@ -921,11 +988,11 @@ engine.shop = {
                             engine.request.post({
                                 url: 'module/run/shop/accessories/deleteFeatures/'+aid,
                                 data:{
-                                    products_accessories_id: id
+                                    products_accessories_id: products_accessories_id
                                 },
                                 success: function(res)
                                 {
-                                    renderFeatures(id, res.items);
+                                    renderFeatures(products_accessories_id, res.items);
                                 }
                             });
                         });

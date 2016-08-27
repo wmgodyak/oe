@@ -22,7 +22,7 @@
         <div class="col-md-4">
             {if $form_display_blocks.params}
                 {include "content/blocks/params.tpl"}
-                {*{$events->call('content.params.after', $content)}*}
+                {$events->call('content.params.after', $content)}
             {/if}
             {if $form_display_blocks.features}
                 {include "content/blocks/features.tpl"}

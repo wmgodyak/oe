@@ -24,7 +24,7 @@
                 <td><%- item.features_id %></td>
                 <td style="text-align: left;"><%- item.name %></td>
                 <td style="width: 100px;">
-                    <button type="button" class="btn b-accessories-categories-features-edit" title="Властивості" data-id="<%- item.id %>" data-category="<%-item.features_id%>"><i class="fa fa-cog"></i></button>
+                    <button type="button" class="btn b-accessories-categories-features-edit" title="Властивості" data-id="<%- item.id %>" data-features_id="<%-item.features_id%>"><i class="fa fa-cog"></i></button>
                     <button type="button" class="btn btn-danger b-accessories-categories-features-delete" title="Видалити" data-id="<%- item.id %>"><i class="fa fa-remove"></i></button>
                 </td>
             </tr>

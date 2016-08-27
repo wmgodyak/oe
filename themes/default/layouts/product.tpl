@@ -263,6 +263,7 @@
                     </div>
                 </div>
                 <div class="clear" style="height: 50px;"></div>
+                {include file="modules/shop/widgets/accessories.tpl"}
                 {include file="modules/shop/widgets/viewed.tpl"}
             </div>
             <!-- end single-product-page__content -->

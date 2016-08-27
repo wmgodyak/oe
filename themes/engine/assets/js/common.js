@@ -114,6 +114,10 @@ var engine = {
     },
     dialog: function(args)
     {
+        if(typeof args.close == 'undefined'){
+            args.close = function( event, ui ) { $(this).dialog('destroy').remove(); };
+        }
+
         return $('<div></div>')
             .attr('id', 'modal' + Date.now())
             .html(args.content)
@@ -136,9 +140,7 @@ var engine = {
                     click   : success
                 }
             ],
-            close: function() {
-                console.log('dialog close ok.');
-            }
+            close : function( event, ui ) { $(this).dialog('destroy').remove(); }
         });
     },
     alert: function(msg)
@@ -151,7 +153,8 @@ var engine = {
             modal: true,
             buttons: {
                 "Ok": function(){$(this).dialog('close');}
-            }
+            },
+            close : function( event, ui ) { $(this).dialog('destroy').remove(); }
         });
     },
     notify: function(msg, status)

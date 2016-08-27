@@ -24,7 +24,7 @@ http://v8.1c.ru/edi/edi_stnd/131/
  1. Початок сеансу. Авторизація. 1с посилає запит на сайт по вказаному урл.
  В параметрах запиту потрібно відправити логін і пароль
  
- http://e7.otakoyi.com/route/exchange1c/run?type=catalog&mode=checkauth
+ http://e7.otakoyi.com.ua/route/exchange1c/run?type=catalog&mode=checkauth
  
  Логін: 1c-ex-user
  Пароль: 2tsbrruj1ms11nk6gifc4r54g3
@@ -40,7 +40,7 @@ http://v8.1c.ru/edi/edi_stnd/131/
  
  2. Запит параметрів сайту. 
  
- http://e7.otakoyi.com/route/exchange1c/run?type=catalog&mode=init
+ http://e7.otakoyi.com.ua/route/exchange1c/run?type=catalog&mode=init
  
  Відповідь
  zip=yes|no
@@ -49,8 +49,8 @@ http://v8.1c.ru/edi/edi_stnd/131/
  
  3. Завантаження файлу на сайт
  
- http://e7.otakoyi.com/route/exchange1c/run?type=catalog&mode=file&filename=kategorii.csv
- http://e7.otakoyi.com/route/exchange1c/run?type=catalog&mode=file&filename=tovaru.csv
+ http://e7.otakoyi.com.ua/route/exchange1c/run?type=catalog&mode=file&filename=kategorii.csv
+ http://e7.otakoyi.com.ua/route/exchange1c/run?type=catalog&mode=file&filename=tovaru.csv
   
   де kategorii.csv назва файлу
   вміст файлу передається у вигляді POST даних
@@ -60,8 +60,8 @@ http://v8.1c.ru/edi/edi_stnd/131/
   
   4. Завантаження даних 
   
- http://e7.otakoyi.com/route/exchange1c/run?type=catalog&mode=import&filename=kategorii.csv
- http://e7.otakoyi.com/route/exchange1c/run?type=catalog&mode=import&filename=tovaru.csv
+ http://e7.otakoyi.com.ua/route/exchange1c/run?type=catalog&mode=import&filename=kategorii.csv
+ http://e7.otakoyi.com.ua/route/exchange1c/run?type=catalog&mode=import&filename=tovaru.csv
  
  Відповідь
  success | failure
@@ -79,15 +79,15 @@ http://v8.1c.ru/edi/edi_stnd/131/
   
    1. Початок сеансу. 
    
-   http://e7.otakoyi.com/route/exchange1c/run?type=sale&mode=checkauth
+   http://e7.otakoyi.com.ua/route/exchange1c/run?type=sale&mode=checkauth
    
    2. Запит параметрів сайту. 
-   http://e7.otakoyi.com/route/exchange1c/run?type=sale&mode=init
+   http://e7.otakoyi.com.ua/route/exchange1c/run?type=sale&mode=init
    
    3. Отримання замовлень з сайту
    
    - список замовлень 
-   http://e7.otakoyi.com/route/exchange1c/run?type=sale&mode=orders
+   http://e7.otakoyi.com.ua/route/exchange1c/run?type=sale&mode=orders
    
    у відповідь ви отримаєте дані в форматі .csv
 
@@ -95,30 +95,30 @@ http://v8.1c.ru/edi/edi_stnd/131/
    id;external_id;oid;status;one_click;user_id;users_group_id;user_name;user_surname;user_phone;user_email;currency;currency_rate;amount;comment;created;paid;paid_date;payment_id;delivery_id;delivery_cost;delivery_address
    
    - список товарів в замовленнях
-   http://e7.otakoyi.com/route/exchange1c/run?type=sale&mode=products
+   http://e7.otakoyi.com.ua/route/exchange1c/run?type=sale&mode=products
    
    orders_id,external_id,products_id,sku,products_name,quantity,price
    
    Примітка. Після завантаження замовлень, ідправте запит на сайт з mode=success 
    
    - замовлення збережено
-   http://e7.otakoyi.com/route/exchange1c/run?type=sale&mode=success
+   http://e7.otakoyi.com.ua/route/exchange1c/run?type=sale&mode=success
    
    це означатиме що замовлення цспішно завантажені.
     Система відмітить дані замовлення і не буде відправляти в майбутньому
     
    4. Завантаження файлу з замовленнями на сайт
    
- http://e7.otakoyi.com/route/exchange1c/run?type=sale&mode=file&filename=orders.csv
- http://e7.otakoyi.com/route/exchange1c/run?type=sale&mode=file&filename=orders_products.csv
+ http://e7.otakoyi.com.ua/route/exchange1c/run?type=sale&mode=file&filename=orders.csv
+ http://e7.otakoyi.com.ua/route/exchange1c/run?type=sale&mode=file&filename=orders_products.csv
   
   де orders.csv назва файлу з замовленнями
   orders_products.csv - товари в замовленні
   
   5. Завантаження даних 
   
- http://e7.otakoyi.com/route/exchange1c/run?type=sale&mode=import&filename=orders.csv
- http://e7.otakoyi.com/route/exchange1c/run?type=sale&mode=import&filename=orders_products.csv
+ http://e7.otakoyi.com.ua/route/exchange1c/run?type=sale&mode=import&filename=orders.csv
+ http://e7.otakoyi.com.ua/route/exchange1c/run?type=sale&mode=import&filename=orders_products.csv
  
  Примітка. Завантажте два файли на сайт: orders.csv потім orders_products.csv , тоді запускайте import
  
@@ -135,7 +135,7 @@ http://v8.1c.ru/edi/edi_stnd/131/
   1. Початок сеансу. Авторизація. 1с посилає запит на сайт по вказаному урл.
   В параметрах запиту потрібно відправити логін і пароль
   
-  http://e7.otakoyi.com/route/exchange1c/run?type=currency&mode=checkauth
+  http://e7.otakoyi.com.ua/route/exchange1c/run?type=currency&mode=checkauth
   
   Логін: 1c-ex-user
   Пароль: 2tsbrruj1ms11nk6gifc4r54g3
@@ -151,7 +151,7 @@ http://v8.1c.ru/edi/edi_stnd/131/
   
   2. Запит параметрів сайту. 
   
-  http://e7.otakoyi.com/route/exchange1c/run?type=currency&mode=init
+  http://e7.otakoyi.com.ua/route/exchange1c/run?type=currency&mode=init
   
   Відповідь
   zip=yes|no
@@ -160,14 +160,14 @@ http://v8.1c.ru/edi/edi_stnd/131/
   
   3. Завантаження файлу на сайт
   
-  http://e7.otakoyi.com/route/exchange1c/run?type=currency&mode=file&filename=currency.csv
+  http://e7.otakoyi.com.ua/route/exchange1c/run?type=currency&mode=file&filename=currency.csv
    
    де currency.csv назва файлу
    вміст файлу передається у вигляді POST даних
    
    4. Завантаження даних 
    
-  http://e7.otakoyi.com/route/exchange1c/run?type=currency&mode=import&filename=currency.csv
+  http://e7.otakoyi.com.ua/route/exchange1c/run?type=currency&mode=import&filename=currency.csv
   
   Відповідь
   success | failure

@@ -28,8 +28,9 @@ class Accessories extends Engine
         EventsHandler::getInstance()->add('content.main.after', [$this, 'index']);
     }
 
-    public function index()
+    public function index($content = null)
     {
+        if( !isset($content['type']) || $content['type'] != 'products_categories') return null;
         return $this->template->fetch('shop/categories/accessories/index');
     }
 
@@ -144,6 +145,54 @@ class Accessories extends Engine
         }
     }
 
+    public function editFeatures($products_accessories_id)
+    {
+        $features_id = $this->request->post('features_id', 'i');
+
+        $values = $this->accessories->features->getValues($features_id);
+        $this->template->assign('values', $values);
+        $this->response->body($this->template->fetch('shop/categories/accessories/editFeatures'));
+    }
+
+    public function setValue()
+    {
+        $value = $this->request->post('value', 'i');
+        $id    = $this->request->post('id', 'i');
+
+        if($id && $value){
+            $s = $this->accessories->features->setValue($id, $value);
+           if($s){
+              $this->getSelectedValues($id);
+           }
+        }
+    }
+
+    /**
+     * @param $id
+     */
+    public function getSelectedValues($id)
+    {
+        $items = $this->accessories->features->getSelectedValues($id);
+        $this->response->body(['items' => $items])->asJSON();
+    }
+
+    /**
+     * @param $id
+     */
+    public function deleteFeaturesValues($id)
+    {
+        $value = $this->request->post('values_id', 'i');
+        if($id && $value){
+           $s = $this->accessories->features->deleteFeaturesValues($id, $value);
+           if($s){
+              $this->getSelectedValues($id);
+           }
+        }
+    }
+
+    /**
+     * @param $id
+     */
     public function process($id)
     {
         // TODO: Implement process() method.

@@ -12,6 +12,7 @@ use helpers\Pagination;
 use modules\shop\models\Categories;
 use modules\shop\models\categories\Features;
 use modules\shop\models\Products;
+use modules\shop\models\products\Accessories;
 use modules\shop\models\products\Prices;
 use modules\shop\models\products\variants\ProductsVariants;
 use modules\shop\models\SearchHistory;
@@ -277,6 +278,35 @@ class Shop extends Front
         $this->products->start = 0;
         $this->products->num   = 30;
         $this->products->where(" c.id in ($in)");
+        $products = $this->products->get();
+
+        foreach ($products as $k=>$product) {
+            $products[$k]['bonus'] = round($products[$k]['price'] * $this->bonus_rate, 2);
+        }
+
+        return $products;
+    }
+
+    public function accessories($products_id)
+    {
+        $acc = new Accessories();
+        $r = $acc->get($products_id);
+
+        $this->products->start = 0;
+        $this->products->num   = 60;
+        $this->products->where(" c.in_stock = 1");
+
+        foreach ($r as $cat) {
+            $this->products->join("join  __content_relationship accpc on accpc.categories_id={$cat['id']} and accpc.content_id=c.id");
+            if(empty($cat['features'])) continue;
+
+            foreach ($cat['features'] as $feature) {
+                $in = $feature['values'] != '' ? "and acccf{$cat['id']}.values_id in ({$feature['values']}) " : '';
+                $this->products->join("join __content_features acccf{$cat['id']} on acccf{$cat['id']}.content_id=c.id and acccf{$cat['id']}.features_id = {$feature['id']} {$in}");
+            }
+        }
+
+//        $this->products->where(" c.id in ($in)");
         $products = $this->products->get();
 
         foreach ($products as $k=>$product) {

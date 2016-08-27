@@ -7,8 +7,8 @@
  */
 
 namespace modules\shop\controllers\admin;
-//use modules\shop\controllers\admin\categories\Accessories;
 use system\core\EventsHandler;
+use system\core\exceptions\Exception;
 use system\Engine;
 
 /**
@@ -36,6 +36,7 @@ class Shop extends Engine
         $this->template->assignScript("modules/shop/js/admin/shop.js");
         EventsHandler::getInstance()->add('content.main',[$this, 'catMeta']);
 
+        $this->categories('init');
         $this->accessories('init');
     }
 
@@ -70,8 +71,6 @@ class Shop extends Engine
 
     public function categories()
     {
-        include "Categories.php";
-
         $params = func_get_args();
 
         $action = 'index';

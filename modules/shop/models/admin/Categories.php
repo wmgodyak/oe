@@ -1,20 +1,18 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: wg
- * Date: 24.06.16
- * Time: 21:34
+ * OYiEngine 7
+ * @author Volodymyr Hodiak mailto:support@otakoi.com
+ * @copyright Copyright (c) 2015 Otakoyi.com
+ * Date: 27.08.16 : 12:54
  */
 
-namespace modules\shop\models;
 
-use system\models\Content;
+namespace modules\shop\models\admin;
 
-/**
- * Class Categories
- * @package modules\shop\models
- */
-class Categories extends Content
+
+defined("CPATH") or die();
+
+class Categories extends \modules\shop\models\Categories
 {
     /**
      * @param int $parent_id
@@ -29,7 +27,7 @@ class Categories extends Content
           from __content c
           join __content_types ct on ct.type = '{$this->type}' and ct.id=c.types_id
           join __content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
-          where c.parent_id='{$parent_id}' and c.status in ('published')
+          where c.parent_id='{$parent_id}' and c.status in ('published', 'hidden')
           ")->all();
 
         if($level > 0){

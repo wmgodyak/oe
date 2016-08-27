@@ -7,7 +7,7 @@ use helpers\bootstrap\Link;
 use modules\shop\controllers\admin\products\Features;
 use modules\shop\controllers\admin\products\Variants;
 use modules\shop\models\admin\Prices;
-use modules\shop\models\Categories;
+use modules\shop\models\admin\Categories;
 use system\components\content\controllers\Content;
 use system\core\DataTables2;
 use system\core\EventsHandler;
@@ -333,10 +333,9 @@ class Products extends Content
     {
         $ct = $this->contentTypes->getData($content['types_id'], 'type');
         if(!in_array($ct, $this->allowed_types)) return '';
-
         $this->template->assign('selected_categories', $this->relations->getCategories($content['id']));
         $this->template->assign('main_categories_id', $this->relations->getMainCategoriesId($content['id']));
-        $this->template->assign('categories', $this->categories->get(0, 1));
+        $this->template->assign('categories', $this->categories->get(0, 30));
 
         return $this->template->fetch('shop/select_categories');
     }
