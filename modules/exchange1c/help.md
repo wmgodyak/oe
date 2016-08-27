@@ -95,6 +95,7 @@ http://v8.1c.ru/edi/edi_stnd/131/
    id;external_id;oid;status;one_click;user_id;users_group_id;user_name;user_surname;user_phone;user_email;currency;currency_rate;amount;comment;created;paid;paid_date;payment_id;delivery_id;delivery_cost;delivery_address
    
    - список товарів в замовленнях
+   http://e7.otakoyi.com.ua/route/exchange1c/run?type=sale&mode=customers
    http://e7.otakoyi.com.ua/route/exchange1c/run?type=sale&mode=products
    
    orders_id,external_id,products_id,sku,products_name,quantity,price

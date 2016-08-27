@@ -5,6 +5,7 @@ use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
 use helpers\bootstrap\Link;
 use modules\shop\controllers\admin\products\Features;
+use modules\shop\controllers\admin\products\Kits;
 use modules\shop\controllers\admin\products\Variants;
 use modules\shop\models\admin\Prices;
 use modules\shop\models\admin\Categories;
@@ -312,6 +313,7 @@ class Products extends Content
 
         EventsHandler::getInstance()->add('content.main.after', [new Variants(), 'index']);
         EventsHandler::getInstance()->add('content.main.after', [new Features(), 'index']);
+        EventsHandler::getInstance()->add('content.main.after', [new Kits(), 'index']);
 
 
         $this->template->assign('sidebar', $this->template->fetch('shop/categories/tree'));
@@ -378,6 +380,19 @@ class Products extends Content
         }
 
         $controller  = new products\Variants();
+
+        return call_user_func_array(array($controller, $action), $params);
+    }
+
+    public function kits($action = 'index')
+    {
+        $params = func_get_args();
+
+        if(!empty($params)){
+            $action = array_shift($params);
+        }
+
+        $controller  = new products\Kits();
 
         return call_user_func_array(array($controller, $action), $params);
     }

@@ -58,3 +58,35 @@ CREATE TABLE IF NOT EXISTS `e_products_accessories_features` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
   ENGINE = InnoDB;
+
+
+  CREATE TABLE IF NOT EXISTS `e_kits` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `products_id` INT(10) UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`, `products_id`),
+  INDEX `fk_kits_e_content1_idx` (`products_id` ASC),
+  CONSTRAINT `fk_kits_e_content1`
+    FOREIGN KEY (`products_id`)
+    REFERENCES `e_content` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS `e_kits_products` (
+  `id` INT NOT NULL,
+  `kits_id` INT UNSIGNED NOT NULL,
+  `products_id` INT(10) UNSIGNED NOT NULL,
+  `discount` TINYINT(3) UNSIGNED NULL,
+  PRIMARY KEY (`id`, `kits_id`, `products_id`),
+  INDEX `fk_kits_products_kits1_idx` (`kits_id` ASC),
+  INDEX `fk_kits_products_e_content1_idx` (`products_id` ASC),
+  CONSTRAINT `fk_kits_products_kits1`
+    FOREIGN KEY (`kits_id`)
+    REFERENCES `e_kits` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_kits_products_e_content1`
+    FOREIGN KEY (`products_id`)
+    REFERENCES `e_content` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;

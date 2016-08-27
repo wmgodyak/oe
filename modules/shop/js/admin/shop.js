@@ -130,6 +130,7 @@ engine.shop = {
         engine.shop.products.variants.init();
         engine.shop.import.init();
         engine.shop.accessories();
+        engine.shop.kits();
     },
     categories: {
         before: function()
@@ -1079,6 +1080,94 @@ engine.shop = {
                     }
                 }
             });
+        });
+    },
+    kits: function()
+    {
+        var products_id = $('#content_id').val();
+
+        var renderKits = function(items)
+        {
+            var tmpl = _.template($('#kits_tpl').html());
+            $("#kits_list").html(tmpl({items: items}));
+        };
+
+        engine.request.get('module/run/shop/products/kits/get/'+ products_id, function(res){
+            renderKits(res.items);
+        });
+
+        $(document).on('click', '.b-kits-edit', function(){
+            var kits_id = $(this).data('id');
+            engine.request.get('module/run/shop/products/kits/eit/'+ kits_id, function(res) {
+
+                var dialog = engine.dialog({
+                    title: 'Налаштування комплекту',
+                    content: res,
+                    width: 600
+                });
+            });
+        });
+
+        $(document).on('click', '.b-kits-add', function(){
+             engine.request.get('module/run/shop/products/kits/create/'+ products_id, function(res){
+
+                 var dialog = engine.dialog({
+                    title: 'Створення комплекту',
+                    content: res,
+                    width: 600,
+                    buttons: {
+                        'Зберегти': function () {
+                            $('#productsKitsForm').submit();
+                        }
+                    }
+                 });
+
+                 engine.validateAjaxForm('#productsKitsForm', function(d){
+                     if(d.s){
+                         renderKits(d.items);
+                         dialog.dialog('destroy').remove();
+                     } else {
+                         engine.showFormErrors('#productsKitsForm', d.i);
+                     }
+                 });
+
+                 /*
+                                  $("#select_products").select2({
+                                      placeholder: "пошук по ID SKU або назві",
+                                      minimumInputLength: 3,
+                                      ajax: {
+                                          url: "module/run/shop/kits/searchProducts",
+                                          dataType: 'json',
+                                          quietMillis: 250,
+                                          type: 'POST',
+                                          data: function (params) {
+                                              return {
+                                                  q           : params.term, // search term
+                                                  page        : params.page,
+                                                  token       : TOKEN
+                                              };
+                                          }
+                                      }
+                                  }).on("select2:selecting", function(e) {
+                                      engine.request.post({
+                                          url: 'module/run/shop/kits/create',
+                                          data:{
+                                              products_id : e.params.args.data.id,
+                                              token         : TOKEN,
+                                              products_categories_id: $('#content_id').val()
+                                          },
+                                          success: function(res)
+                                          {
+                                              if(res.s){
+                                                  renderCategories(res.items);
+                                              }
+                                          }
+                                      });
+                                  });
+                 */
+
+
+             });
         });
     }
 };

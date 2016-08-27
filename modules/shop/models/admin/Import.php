@@ -146,7 +146,7 @@ class Import extends Model
             return false;
         }
 
-        $this->log[] = "Створено #$content_id $name. ";
+//        $this->log[] = "Створено #$content_id $name. ";
         $this->commit();
 
         return true;
@@ -280,7 +280,7 @@ class Import extends Model
             return false;
         }
 
-        $this->log[] = "Створено #$content_id $name. ";
+//        $this->log[] = "Створено #$content_id $name. ";
         $this->commit();
 
         return true;
@@ -297,11 +297,12 @@ class Import extends Model
         $image = null
     )
     {
+        if(empty($ex_id)) return false;
+
         $id = $this->getContentIdByExID($ex_id);
 
         if($id){
             return  $this->updateProductsParams($id, $data, $prices);
-//            return;
         }
 
         $category_id = 0;
@@ -390,7 +391,7 @@ class Import extends Model
             return false;
         }
 
-        $this->log[] = "Створено #$content_id {$info['name']}. ";
+//        $this->log[] = "Створено #$content_id {$info['name']}. ";
 
         $this->commit();
 
@@ -416,7 +417,7 @@ class Import extends Model
         );
 
         foreach ($prices as $group_id => $price) {
-            $this->productsPrices->updateRow($id, $group_id, $price);
+            $this->productsPrices->update($id, $group_id, $price);
         }
 
         return ! $this->hasError();

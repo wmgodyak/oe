@@ -10,6 +10,7 @@
  * otakoyi_e7 та пароль для tnkjt27r
  * admin_e7 cUic8y9EeA
  * http://95.85.26.23/phpmyadmin/
+ * /public_html/logs/1c/exchange-2016-08-27.log
  */
 
 $db = [
