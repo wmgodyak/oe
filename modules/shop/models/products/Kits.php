@@ -18,6 +18,15 @@ defined("CPATH") or die();
  */
 class Kits extends Model
 {
+    public $products;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->products = new KitsProducts();
+    }
+
     public function create()
     {
         $data = $this->request->post('data');
@@ -27,5 +36,10 @@ class Kits extends Model
     public function get($products_id)
     {
         return self::$db->select("select id, name from __kits where products_id={$products_id}")->all();
+    }
+
+    public function delete($id)
+    {
+        return $this->deleteRow('__kits', $id);
     }
 }

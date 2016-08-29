@@ -157,9 +157,9 @@ var engine = {
             close : function( event, ui ) { $(this).dialog('destroy').remove(); }
         });
     },
-    notify: function(msg, status)
+    notify: function(msg, status, cnt)
     {
-        var c = $('.inline-notifications'), icon;
+        var c = typeof cnt == 'undefined' ? $('.inline-notifications') : $(cnt), icon;
         switch (status){
             case 'success':
                 icon = 'check-circle';

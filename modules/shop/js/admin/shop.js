@@ -1092,18 +1092,74 @@ engine.shop = {
             $("#kits_list").html(tmpl({items: items}));
         };
 
+        var renderKitsProducts = function(kits_id, items)
+        {
+            var tmpl = _.template($('#kits_products_tpl').html());
+            $("#kits_products_list").html(tmpl({items: items}));
+
+            $('.b-kits-products-delete').click(function(){
+                var id = $(this).data('id');
+                var dd = engine.confirm('Дійсно видалити позицію?', function(){
+                    engine.request.get('module/run/shop/products/kits/deleteProduct/'+ id + '/'+kits_id, function(res){
+                        renderKitsProducts(kits_id, res.items);
+                    });
+                    dd.dialog('destroy').remove();
+                });
+            });
+
+            engine.validateAjaxForm('#kitsDiscount', function(d){
+                if(d.s){
+                    engine.notify('Дані оновлено', 'success', '.kits-notifications')
+                }
+            });
+        };
+
         engine.request.get('module/run/shop/products/kits/get/'+ products_id, function(res){
             renderKits(res.items);
         });
 
-        $(document).on('click', '.b-kits-edit', function(){
+        $(document).on('click', '.b-kits-products', function(){
             var kits_id = $(this).data('id');
-            engine.request.get('module/run/shop/products/kits/eit/'+ kits_id, function(res) {
+            engine.request.get('module/run/shop/products/kits/products/'+ kits_id, function(res) {
 
                 var dialog = engine.dialog({
                     title: 'Налаштування комплекту',
                     content: res,
                     width: 600
+                });
+                engine.request.get('module/run/shop/products/kits/getProducts/'+ kits_id, function(res){
+                    renderKitsProducts(kits_id, res.items);
+                });
+                alert($("#select_products").length);
+                $("#select_products").select2({
+                    placeholder: "пошук по ID SKU або назві",
+                    minimumInputLength: 3,
+                    ajax: {
+                        url: "module/run/shop/products/kits/searchProducts",
+                        dataType: 'json',
+                        quietMillis: 250,
+                        type: 'POST',
+                        data: function (params) {
+                            return {
+                                q           : params.term, // search term
+                                page        : params.page,
+                                token       : TOKEN
+                            };
+                        }
+                    }
+                }).on("select2:selecting", function(e) {
+                    engine.request.post({
+                        url: 'module/run/shop/products/kits/addProduct',
+                        data:{
+                            products_id : e.params.args.data.id,
+                            token         : TOKEN,
+                            kits_id: kits_id
+                        },
+                        success: function(res)
+                        {
+                            renderKitsProducts(kits_id, res.items);
+                        }
+                    });
                 });
             });
         });
@@ -1130,44 +1186,16 @@ engine.shop = {
                          engine.showFormErrors('#productsKitsForm', d.i);
                      }
                  });
-
-                 /*
-                                  $("#select_products").select2({
-                                      placeholder: "пошук по ID SKU або назві",
-                                      minimumInputLength: 3,
-                                      ajax: {
-                                          url: "module/run/shop/kits/searchProducts",
-                                          dataType: 'json',
-                                          quietMillis: 250,
-                                          type: 'POST',
-                                          data: function (params) {
-                                              return {
-                                                  q           : params.term, // search term
-                                                  page        : params.page,
-                                                  token       : TOKEN
-                                              };
-                                          }
-                                      }
-                                  }).on("select2:selecting", function(e) {
-                                      engine.request.post({
-                                          url: 'module/run/shop/kits/create',
-                                          data:{
-                                              products_id : e.params.args.data.id,
-                                              token         : TOKEN,
-                                              products_categories_id: $('#content_id').val()
-                                          },
-                                          success: function(res)
-                                          {
-                                              if(res.s){
-                                                  renderCategories(res.items);
-                                              }
-                                          }
-                                      });
-                                  });
-                 */
-
-
              });
+        });
+        $(document).on('click', '.b-kits-delete', function(){
+            var kits_id = $(this).data('id');
+            var dd = engine.confirm('Дійсно видалити комплект?', function(){
+                engine.request.get('module/run/shop/products/kits/delete/'+ kits_id + '/'+products_id, function(res){
+                    renderKits(res.items);
+                });
+                dd.dialog('destroy').remove();
+            });
         });
     }
 };

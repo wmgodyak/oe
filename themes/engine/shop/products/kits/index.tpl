@@ -19,7 +19,7 @@
                     <td><%- item.id %></td>
                     <td><%- item.name %></td>
                     <td style="width: 100px;">
-                        <button type="button" class= "b-kits-edit btn" title="Вибрати товари" data-id="<%- item.id %>"><i class="fa fa-cog"></i></button>
+                        <button type="button" class= "b-kits-products btn" title="Вибрати товари" data-id="<%- item.id %>"><i class="fa fa-cog"></i></button>
                         <button type="button" class="btn btn-danger b-kits-delete" title="Видалити" data-id="<%- item.id %>"><i class="fa fa-remove"></i></button>
                     </td>
                 </tr>

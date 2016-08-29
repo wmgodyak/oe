@@ -19,6 +19,7 @@ defined("CPATH") or die();
 class Kits extends Engine
 {
     private $kits;
+
     public function __construct()
     {
         parent::__construct();
@@ -57,14 +58,80 @@ class Kits extends Engine
 
     public function edit($id)
     {
-        $this->response->body($this->template->fetch('shop/products/kits/edit'));
+        // TODO: Implement edit() method.
     }
-    public function delete($id)
+
+    public function products($id)
     {
-        // TODO: Implement delete() method.
+        $this->template->assign('kits_id', $id);
+        $this->response->body($this->template->fetch('shop/products/kits/products'));
     }
-    public function process($id)
+
+    /**
+     *
+     */
+    public function searchProducts()
     {
-        // TODO: Implement process() method.
+        $q = $this->request->post('q', 's');
+
+        $items = [];
+        if(!empty($q)){
+            $items = $this->kits->products->searchProducts($q);
+            foreach ($items as $k=>$item) {
+                $items[$k]['text'] = "#{$item['id']} {$item['name']}";
+            }
+        }
+
+        $res = array(
+            'total_count'        => $this->kits->products->searchTotal(),
+            'incomplete_results' => false,
+            'results'            => $items
+        );
+
+        echo json_encode($res);
     }
+
+    public function addProduct()
+    {
+        $kits_id = $this->request->post('kits_id', 'i');
+        $products_id = $this->request->post('products_id', 'i');
+
+        if($kits_id && $products_id){
+            $s = $this->kits->products->create($kits_id, $products_id);
+            if($s){
+                $this->getProducts($s);
+            }
+        }
+    }
+
+    public function getProducts($kits_id)
+    {
+        $this->response->body(['items' => $this->kits->products->get($kits_id)])->asJSON();
+    }
+
+    public function deleteProduct($id, $kits_id)
+    {
+        if($kits_id && $id){
+            $s = $this->kits->products->delete($id);
+            if($s){
+                $this->getProducts($kits_id);
+            }
+        }
+    }
+
+    public function delete($id, $products_id=null)
+    {
+        $s = $this->kits->delete($id);
+        if($s){
+            $this->response->body(['items' => $this->kits->get($products_id)])->asJSON();
+        }
+    }
+
+    public function setDiscount()
+    {
+        $s = $this->kits->products->setDiscount();
+        $this->response->body(['s' => $s])->asJSON();
+    }
+
+    public function process($id){}
 }
