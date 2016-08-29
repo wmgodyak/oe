@@ -49,7 +49,6 @@ class Order extends Front
 
         $this->users  = new Users();
         $this->cart   = new Cart();
-        $this->kits   = new Kits();
         $this->order  = new \modules\order\models\Order();
         $this->status = new Status();
         $this->ordersProducts = new OrdersProducts();
@@ -233,9 +232,9 @@ class Order extends Front
             $orders_id = $this->order->create($order);
             if($orders_id > 0){
                 if($variants_id > 0){
-                    $price = $this->cart->variantsPrices->getPrice($orders_id, $user['group_id']);
+                    $price = $this->cart->products->variantsPrices->getPrice($orders_id, $user['group_id']);
                 } else {
-                    $price = $this->cart->prices->get($products_id, $user['group_id']);
+                    $price = $this->cart->products->prices->get($products_id, $user['group_id']);
                 }
 
                 $s += $this->ordersProducts->create
@@ -279,24 +278,7 @@ class Order extends Front
         return call_user_func_array(array($this->cart, $action), $params);
     }
 
-    public function kits()
-    {
-        $params = func_get_args();
-        $action = 'index';
-
-        if(!empty($params)){
-            $action = array_shift($params);
-        }
-
-        return call_user_func_array(array($this->kits, $action), $params);
-    }
-
-//    public function kits($tpl = 'modules/order/kits')
-//    {
-//        return $this->template->fetch($tpl);
-//    }
-
-    private $total = 0;
+    private $h_total = 0;
     private $ipp   = 5;
 
     /**
@@ -323,7 +305,7 @@ class Order extends Front
         }
 
         $this->template->assign('orders', $this->order->history($user['id'], $start, $num));
-        $this->total = $this->order->total($user['id']);
+        $this->h_total = $this->order->total($user['id']);
 
         return $this->template->fetch($tpl);
     }
@@ -339,7 +321,7 @@ class Order extends Front
 
         $url = $this->page['id'] . ';';
 
-        Pagination::init($this->total, $this->ipp, $p, $url);
+        Pagination::init($this->h_total, $this->ipp, $p, $url);
 
         $this->template->assign('pagination', Pagination::getPages());
         return $this->template->fetch($tpl);

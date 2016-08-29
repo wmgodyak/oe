@@ -23,7 +23,7 @@
                 <div class="heading">{$page.name}</div>
                 <form action="9" id="cartItems"></form>
                 {*<pre>{print_r($mod->order->cart->items())}</pre>*}
-                <script>var cItems = {json_encode($mod->order->cart->items(), true)}</script>
+                <script>var cItems = {json_encode($mod->order->cart->products(), true)}</script>
                 {include file="modules/shop/widgets/new.tpl"}
             </div>
 

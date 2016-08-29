@@ -3,17 +3,23 @@ var Order = {
         var $blockCart = $('#blockCart');
         var tmplCart = _.template($('#tplCart').html());
 
-        function refreshBlock(res)
+        function refreshBlock()
         {
-            $blockCart.html(tmplCart({
-                total: res.total,
-                amount: res.amount
-            }));
+            App.request.post(
+                {
+                    url: 'route/order/ajaxCart/total',
+                    success: function(res){
+                        $blockCart.html(tmplCart({
+                            total: res.total,
+                            amount: res.amount
+                        }));
+                    },
+                    dataType: 'json'
+                }
+            );
         }
 
-        Order.cart.getTotal(function(res){
-            refreshBlock(res);
-        });
+        refreshBlock();
 
         $(document).on('change', '.product-variant', function(){
              var product_id = $(this).data('id'),
@@ -47,28 +53,28 @@ var Order = {
                 variants_id = $('#variants_'+products_id).find('option:selected').val();
             }
 
-            Order.cart.add(products_id, variants_id, 1, function(res){
+            Order.cart.products.add(products_id, variants_id, 1, function(res){
                 $this.addClass('in active').text(t_in);
                 App.alert('Товар додано в кошик');
                 refreshBlock(res);
             });
         });
 
-        function cartForm(items)
+        function cartForm(products, kits)
         {
-            items = $.map(items, function(value, index) {
+            products = $.map(products, function(value, index) {
                 return [value];
             });
 
             //console.log(items);
             var $cartItems = $("#cartItems");
-            $cartItems.html( _.template($('#cartTemplate').html())({items: items}));
+            $cartItems.html( _.template($('#cartTemplate').html())({items: products}));
 
             $(document).on('click', '.cart-delete-item', function(){
                 var id = $(this).data('id');
-                Order.cart.delete(id, function(res){
+                Order.cart.products.delete(id, function(res){
                     refreshBlock(res.total);
-                    cartForm(res.items);
+                    cartForm(res.products, res.kits);
                 });
             });
 
@@ -81,9 +87,9 @@ var Order = {
         $(document).on('change', '.cart-item-quantity', function(){
             var id = $(this).data('id'), quantity = this.value;
 
-            Order.cart.update(id,quantity, function(res){
-                refreshBlock(res.total);
-                cartForm(res.items);
+            Order.cart.products.update(id,quantity, function(res){
+                refreshBlock();
+                cartForm(res.products, res.kits);
             });
         });
 
@@ -239,7 +245,24 @@ var Order = {
             $('.phone-mask').mask('+38(999)99-99-999');
         });
 
-        this.kits.init();
+        $(document).on('click', '.to-cart-kit', function(e){
+            e.preventDefault();
+
+            var $this = $(this), kits_id = $this.data('id'),
+                t_in = $this.data('in')
+                ;
+
+            if($this.hasClass('in')) {
+                self.location.href=$('.cart__link:first').attr('href');
+                return;
+            }
+
+            Order.kits.add(kits_id, function(res){
+                $this.addClass('in active').text(t_in);
+                App.alert('Комплект додано в кошик');
+                refreshBlock();
+            });
+        });
     },
     oneClick: function(products_id, variants_id, phone, name, onSuccess)
     {
@@ -258,56 +281,7 @@ var Order = {
         );
     },
     cart : {
-        /**
-         *
-         * @param products_id
-         * @param variants_id
-         * @param quantity
-         * @param onSuccess
-         */
-        add: function(products_id, variants_id, quantity, onSuccess)
-        {
-            App.request.post(
-                {
-                    url: 'route/order/ajaxCart/add',
-                    data:{
-                        products_id : products_id,
-                        variants_id : variants_id,
-                        quantity    : quantity
-                    },
-                    success: onSuccess,
-                    dataType: 'json'
-                }
-            );
-        },
-        update: function(id, qtt, onSuccess)
-        {
-            App.request.post(
-                {
-                    url: 'route/order/ajaxCart/update',
-                    data:{
-                        id : id,
-                        quantity : qtt
-                    },
-                    success: onSuccess,
-                    dataType: 'json'
-                }
-            );
-        },
-        delete: function(id, onSuccess)
-        {
-            App.request.post(
-                {
-                    url: 'route/order/ajaxCart/delete',
-                    data:{
-                        id : id
-                    },
-                    success: onSuccess,
-                    dataType: 'json'
-                }
-            );
-        },
-        getTotal: function(onSuccess)
+        total: function(onSuccess)
         {
             App.request.post(
                 {
@@ -316,83 +290,103 @@ var Order = {
                     dataType: 'json'
                 }
             );
-        }
-    },
-    kits : {
-        init: function()
-        {
-            $(document).on('click', '.to-cart-kit', function(e){
-                e.preventDefault();
-
-                var $this = $(this), kits_id = $this.data('id'),
-                    t_in = $this.data('in')
-                    ;
-
-                if($this.hasClass('in')) {
-                    self.location.href=$('.cart__link:first').attr('href');
-                    return;
-                }
-
-                Order.kits.add(kits_id, function(res){
-                    $this.addClass('in active').text(t_in);
-                    App.alert('Комплект додано в кошик');
-                    refreshBlock(res);
-                });
-            });
         },
-        /**
-         * @param kits_id
-         * @param onSuccess
-         */
-        add: function(kits_id, onSuccess)
-        {
-            App.request.post(
-                {
-                    url: 'route/order/kits/add',
-                    data:{
-                        kits_id : kits_id
-                    },
-                    success: onSuccess,
-                    dataType: 'json'
-                }
-            );
+        products: {
+            /**
+             *
+             * @param products_id
+             * @param variants_id
+             * @param quantity
+             * @param onSuccess
+             */
+            add: function(products_id, variants_id, quantity, onSuccess)
+            {
+                App.request.post(
+                    {
+                        url: 'route/order/ajaxCart/add/products',
+                        data:{
+                            products_id : products_id,
+                            variants_id : variants_id,
+                            quantity    : quantity
+                        },
+                        success: onSuccess,
+                        dataType: 'json'
+                    }
+                );
+            },
+            update: function(id, qtt, onSuccess)
+            {
+                App.request.post(
+                    {
+                        url: 'route/order/ajaxCart/update/products',
+                        data:{
+                            id : id,
+                            quantity : qtt
+                        },
+                        success: onSuccess,
+                        dataType: 'json'
+                    }
+                );
+            },
+            delete: function(id, onSuccess)
+            {
+                App.request.post(
+                    {
+                        url: 'route/order/ajaxCart/delete/products',
+                        data:{
+                            id : id
+                        },
+                        success: onSuccess,
+                        dataType: 'json'
+                    }
+                );
+            }
         },
-        update: function(id, qtt, onSuccess)
-        {
-            App.request.post(
-                {
-                    url: 'route/order/kits/update',
-                    data:{
-                        id : id,
-                        quantity : qtt
-                    },
-                    success: onSuccess,
-                    dataType: 'json'
-                }
-            );
-        },
-        delete: function(id, onSuccess)
-        {
-            App.request.post(
-                {
-                    url: 'route/order/kits/delete',
-                    data:{
-                        id : id
-                    },
-                    success: onSuccess,
-                    dataType: 'json'
-                }
-            );
-        },
-        total: function(onSuccess)
-        {
-            App.request.post(
-                {
-                    url: 'route/order/kits/total',
-                    success: onSuccess,
-                    dataType: 'json'
-                }
-            );
+        kits : {
+            /**
+             * @param kits_id
+             * @param onSuccess
+             */
+            add: function(kits_id, onSuccess)
+            {
+                App.request.post(
+                    {
+                        url: 'route/order/ajaxKits/add',
+                        data:{
+                            kits_id : kits_id
+                        },
+                        success: onSuccess,
+                        dataType: 'json'
+                    }
+                );
+            },
+            update: function(id, qtt, onSuccess)
+            {
+                App.request.post(
+                    {
+                        url: 'route/order/ajaxKits/update',
+                        data:{
+                            id : id,
+                            quantity : qtt
+                        },
+                        success: onSuccess,
+                        dataType: 'json'
+                    }
+                );
+            },
+            delete: function(id, onSuccess)
+            {
+                App.request.post(
+                    {
+                        url: 'route/order/ajaxKits/delete',
+                        data:{
+                            id : id
+                        },
+                        success: onSuccess,
+                        dataType: 'json'
+                    }
+                );
+            }
         }
     }
 };
