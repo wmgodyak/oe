@@ -238,6 +238,8 @@ var Order = {
 
             $('.phone-mask').mask('+38(999)99-99-999');
         });
+
+        this.kits.init();
     },
     oneClick: function(products_id, variants_id, phone, name, onSuccess)
     {
@@ -310,6 +312,83 @@ var Order = {
             App.request.post(
                 {
                     url: 'route/order/ajaxCart/total',
+                    success: onSuccess,
+                    dataType: 'json'
+                }
+            );
+        }
+    },
+    kits : {
+        init: function()
+        {
+            $(document).on('click', '.to-cart-kit', function(e){
+                e.preventDefault();
+
+                var $this = $(this), kits_id = $this.data('id'),
+                    t_in = $this.data('in')
+                    ;
+
+                if($this.hasClass('in')) {
+                    self.location.href=$('.cart__link:first').attr('href');
+                    return;
+                }
+
+                Order.kits.add(kits_id, function(res){
+                    $this.addClass('in active').text(t_in);
+                    App.alert('Комплект додано в кошик');
+                    refreshBlock(res);
+                });
+            });
+        },
+        /**
+         * @param kits_id
+         * @param onSuccess
+         */
+        add: function(kits_id, onSuccess)
+        {
+            App.request.post(
+                {
+                    url: 'route/order/kits/add',
+                    data:{
+                        kits_id : kits_id
+                    },
+                    success: onSuccess,
+                    dataType: 'json'
+                }
+            );
+        },
+        update: function(id, qtt, onSuccess)
+        {
+            App.request.post(
+                {
+                    url: 'route/order/kits/update',
+                    data:{
+                        id : id,
+                        quantity : qtt
+                    },
+                    success: onSuccess,
+                    dataType: 'json'
+                }
+            );
+        },
+        delete: function(id, onSuccess)
+        {
+            App.request.post(
+                {
+                    url: 'route/order/kits/delete',
+                    data:{
+                        id : id
+                    },
+                    success: onSuccess,
+                    dataType: 'json'
+                }
+            );
+        },
+        total: function(onSuccess)
+        {
+            App.request.post(
+                {
+                    url: 'route/order/kits/total',
                     success: onSuccess,
                     dataType: 'json'
                 }

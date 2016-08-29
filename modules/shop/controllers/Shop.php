@@ -359,7 +359,6 @@ class Shop extends Front
             }
         }
 
-//        d($items);die;
         return $items;
     }
 }

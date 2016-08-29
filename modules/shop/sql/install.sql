@@ -90,3 +90,49 @@ CREATE TABLE IF NOT EXISTS `e_kits_products` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `e_orders_kits` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `orders_id` INT(10) UNSIGNED NOT NULL,
+  `kits_id` INT(10) UNSIGNED NOT NULL,
+  `kits_products_id` INT(10) UNSIGNED NOT NULL,
+  `kits_products_price` DECIMAL(10,2) UNSIGNED NULL,
+  `quantity` TINYINT UNSIGNED NULL,
+  PRIMARY KEY (`id`, `orders_id`, `kits_id`, `kits_products_id`),
+  INDEX `fk_e_orders_kits_e_orders1_idx` (`orders_id` ASC),
+  INDEX `fk_e_orders_kits_e_kits1_idx` (`kits_id` ASC, `kits_products_id` ASC),
+  CONSTRAINT `fk_e_orders_kits_e_orders1`
+    FOREIGN KEY (`orders_id`)
+    REFERENCES `e_orders` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_e_orders_kits_e_kits1`
+    FOREIGN KEY (`kits_id` , `kits_products_id`)
+    REFERENCES `e_kits` (`id` , `products_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+CREATE TABLE IF NOT EXISTS `e_orders_kits_products` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `orders_kits_id` INT UNSIGNED NOT NULL,
+  `kits_products_id` INT(11) UNSIGNED NOT NULL,
+  `kits_products_kits_id` INT(10) UNSIGNED NOT NULL,
+  `kits_products_products_id` INT(10) UNSIGNED NOT NULL,
+  `price_original` DECIMAL(10,2) NULL,
+  `discount` TINYINT(3) NULL,
+  `price` DECIMAL(10,2) NULL,
+  PRIMARY KEY (`id`, `orders_kits_id`, `kits_products_id`, `kits_products_kits_id`, `kits_products_products_id`),
+  INDEX `fk_e_orders_kits_products_e_orders_kits1_idx` (`orders_kits_id` ASC),
+  INDEX `fk_e_orders_kits_products1_e_kits_products1_idx` (`kits_products_id` ASC, `kits_products_kits_id` ASC, `kits_products_products_id` ASC),
+  CONSTRAINT `fk_e_orders_kits_products_e_orders_kits1`
+  FOREIGN KEY (`orders_kits_id`)
+  REFERENCES `e_orders_kits` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_e_orders_kits_products1_e_kits_products1`
+  FOREIGN KEY (`kits_products_id` , `kits_products_kits_id` , `kits_products_products_id`)
+  REFERENCES `e_kits_products` (`id` , `kits_id` , `products_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+  ENGINE = InnoDB

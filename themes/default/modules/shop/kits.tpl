@@ -49,7 +49,7 @@
                     та платіть дешевше
                 </div>
                 <div class="btn-row">
-                    <button class="btn md red">Купити комплект</button>
+                    <button class="btn md red to-cart-kit {if isset($smarty.session.kits[$kit.id])}in{/if}" data-id="{$kit.id}" data-in="В кошику">{if isset($smarty.session.kits[$kit.id])}В кошику{else}Купити комплект{/if}</button>
                 </div>
             </div>
         </div>

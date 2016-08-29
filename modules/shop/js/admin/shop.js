@@ -1104,6 +1104,7 @@ engine.shop = {
                 var dd = engine.confirm('Дійсно видалити позицію?', function(){
                     engine.request.get('module/run/shop/products/kits/deleteProduct/'+ id + '/'+kits_id, function(res){
                         renderKitsProducts(kits_id, res.items);
+                        renderKits();
                     });
                     dd.dialog('destroy').remove();
                 });
@@ -1133,7 +1134,6 @@ engine.shop = {
                     renderKitsProducts(kits_id, res.items);
                 });
 
-                console.log('what a fuck');
                 $("#select_products"+kits_id).select2({
                     placeholder: "пошук по ID SKU або назві",
                     minimumInputLength: 3,
@@ -1195,7 +1195,7 @@ engine.shop = {
             var kits_id = $(this).data('id');
             var dd = engine.confirm('Дійсно видалити комплект?', function(){
                 engine.request.get('module/run/shop/products/kits/delete/'+ kits_id + '/'+products_id, function(res){
-                    renderKits(res.items);
+                    renderKits();
                 });
                 dd.dialog('destroy').remove();
             });

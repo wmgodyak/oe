@@ -34,6 +34,7 @@ class Order extends Front
 {
     private $users;
     public  $cart;
+    public  $kits;
     private $order;
     private $status;
     private $ordersProducts;
@@ -46,9 +47,10 @@ class Order extends Front
     {
         parent::__construct();
 
-        $this->users = new Users();
-        $this->cart = new Cart();
-        $this->order = new \modules\order\models\Order();
+        $this->users  = new Users();
+        $this->cart   = new Cart();
+        $this->kits   = new Kits();
+        $this->order  = new \modules\order\models\Order();
         $this->status = new Status();
         $this->ordersProducts = new OrdersProducts();
 
@@ -277,10 +279,22 @@ class Order extends Front
         return call_user_func_array(array($this->cart, $action), $params);
     }
 
-    public function kits($tpl = 'modules/order/kits')
+    public function kits()
     {
-        return $this->template->fetch($tpl);
+        $params = func_get_args();
+        $action = 'index';
+
+        if(!empty($params)){
+            $action = array_shift($params);
+        }
+
+        return call_user_func_array(array($this->kits, $action), $params);
     }
+
+//    public function kits($tpl = 'modules/order/kits')
+//    {
+//        return $this->template->fetch($tpl);
+//    }
 
     private $total = 0;
     private $ipp   = 5;

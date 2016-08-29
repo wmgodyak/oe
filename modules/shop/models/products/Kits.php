@@ -36,4 +36,10 @@ class Kits extends Model
         return $items;
     }
 
+    public function getData($id)
+    {
+        $data = self::$db->select("select id, products_id, name from __kits where id='{$id}' limit 1")->row();
+        $data['products'] = $this->products->get($id);
+        return $data;
+    }
 }
