@@ -24,7 +24,7 @@ class Kits extends Engine
     {
         parent::__construct();
 
-        $this->kits = new \modules\shop\models\products\Kits();
+        $this->kits = new \modules\shop\models\admin\products\Kits();
     }
 
     public function init()

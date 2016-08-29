@@ -13,6 +13,7 @@ use modules\shop\models\Categories;
 use modules\shop\models\categories\Features;
 use modules\shop\models\Products;
 use modules\shop\models\products\Accessories;
+use modules\shop\models\products\Kits;
 use modules\shop\models\products\Prices;
 use modules\shop\models\products\variants\ProductsVariants;
 use modules\shop\models\SearchHistory;
@@ -331,5 +332,34 @@ class Shop extends Front
         }
 
         return $products;
+    }
+
+    public function kits($products_id)
+    {
+        $kits = new Kits();
+
+        $items = $kits->get($products_id);
+
+        foreach ($items as $i=>$row) {
+
+            $items[$i]['amount']      = 0;
+            $items[$i]['original_amount'] = 0;
+            $items[$i]['save_amount'] = 0;
+
+            foreach ($row['products'] as $k=>$product) {
+                $items[$i]['products'][$k]['img'] = $this->images->cover($product['products_id']);
+
+                $items[$i]['products'][$k]['original_price'] = $this->prices->get($product['products_id'], $this->group_id);
+                $items[$i]['products'][$k]['price']          = $items[$i]['products'][$k]['original_price'] - ($items[$i]['products'][$k]['original_price'] / 100 * $product['discount']);
+                $items[$i]['products'][$k]['save_price']     = $items[$i]['products'][$k]['original_price'] - $items[$i]['products'][$k]['price'];
+
+                $items[$i]['amount']          += round($items[$i]['products'][$k]['price'], 2);
+                $items[$i]['original_amount'] += round($items[$i]['products'][$k]['original_price'], 2);
+                $items[$i]['save_amount']     += round($items[$i]['products'][$k]['save_price'], 2);
+            }
+        }
+
+//        d($items);die;
+        return $items;
     }
 }

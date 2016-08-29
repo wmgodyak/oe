@@ -16,6 +16,7 @@ use system\models\Model;
  */
 class KitsProducts extends Model
 {
+
     /**
      * @param $kits_id
      * @param $products_id

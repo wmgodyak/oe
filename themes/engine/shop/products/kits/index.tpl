@@ -1,12 +1,11 @@
 <fieldset>
     <legend>
-        Комплекти
+        Комплекти для {$content.info[$languages[0].id].name}
         <a href="javascript:;" class="b-kits-add"><i class="fa-plus-circle fa" title="Додати"></i></a>
     </legend>
     <div id="kits_list"></div>
     {literal}
         <script type="text/template" id="kits_tpl">
-
             <% if(items.length) { %>
             <table class="table-bordered table">
                 <tr>

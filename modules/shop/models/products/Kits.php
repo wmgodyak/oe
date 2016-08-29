@@ -27,12 +27,6 @@ class Kits extends Model
         $this->products = new KitsProducts();
     }
 
-    public function create()
-    {
-        $data = $this->request->post('data');
-        return parent::createRow('__kits', $data);
-    }
-
     public function get($products_id)
     {
         $items = self::$db->select("select id, name from __kits where products_id={$products_id}")->all();
@@ -42,8 +36,4 @@ class Kits extends Model
         return $items;
     }
 
-    public function delete($id)
-    {
-        return $this->deleteRow('__kits', $id);
-    }
 }
