@@ -1,7 +1,7 @@
 <div class="form-group">
     <label for="prepayment" class="col-sm-3 control-label">Виберіть товар</label>
     <div class="col-sm-9">
-        <select id="select_products" class="form-control"></select>
+        <select id="select_products{$kits_id}" class="form-control no-s2"></select>
     </div>
 </div>
 
@@ -22,7 +22,7 @@
             <tr>
                 <td><%- item.id %></td>
                 <td><%- item.name %></td>
-                <td><input type="text" required name="discount[<%- item.id %>]" value="<%- item.discount %>" class="form-control"></td>
+                <td><input type="text" required name="discount[<%- item.id %>]" value="<%- item.discount %>" class="form-control" onchange="this.value=parseInt(this.value); if(this.value == 'NaN') this.value = ''"></td>
                 <td style="width: 100px;">
                     <button type="button" class="btn btn-danger b-kits-products-delete" title="Видалити" data-id="<%- item.id %>"><i class="fa fa-remove"></i></button>
                 </td>

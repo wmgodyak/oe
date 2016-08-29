@@ -1086,10 +1086,12 @@ engine.shop = {
     {
         var products_id = $('#content_id').val();
 
-        var renderKits = function(items)
+        var renderKits = function()
         {
-            var tmpl = _.template($('#kits_tpl').html());
-            $("#kits_list").html(tmpl({items: items}));
+            engine.request.get('module/run/shop/products/kits/get/'+ products_id, function(res){
+                var tmpl = _.template($('#kits_tpl').html());
+                $("#kits_list").html(tmpl({items: res.items}));
+            });
         };
 
         var renderKitsProducts = function(kits_id, items)
@@ -1110,13 +1112,12 @@ engine.shop = {
             engine.validateAjaxForm('#kitsDiscount', function(d){
                 if(d.s){
                     engine.notify('Дані оновлено', 'success', '.kits-notifications')
+                    renderKits();
                 }
             });
         };
 
-        engine.request.get('module/run/shop/products/kits/get/'+ products_id, function(res){
-            renderKits(res.items);
-        });
+        renderKits();
 
         $(document).on('click', '.b-kits-products', function(){
             var kits_id = $(this).data('id');
@@ -1127,11 +1128,13 @@ engine.shop = {
                     content: res,
                     width: 600
                 });
+
                 engine.request.get('module/run/shop/products/kits/getProducts/'+ kits_id, function(res){
                     renderKitsProducts(kits_id, res.items);
                 });
-                alert($("#select_products").length);
-                $("#select_products").select2({
+
+                console.log('what a fuck');
+                $("#select_products"+kits_id).select2({
                     placeholder: "пошук по ID SKU або назві",
                     minimumInputLength: 3,
                     ajax: {
@@ -1180,7 +1183,7 @@ engine.shop = {
 
                  engine.validateAjaxForm('#productsKitsForm', function(d){
                      if(d.s){
-                         renderKits(d.items);
+                         renderKits();
                          dialog.dialog('destroy').remove();
                      } else {
                          engine.showFormErrors('#productsKitsForm', d.i);

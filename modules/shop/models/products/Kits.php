@@ -35,7 +35,11 @@ class Kits extends Model
 
     public function get($products_id)
     {
-        return self::$db->select("select id, name from __kits where products_id={$products_id}")->all();
+        $items = self::$db->select("select id, name from __kits where products_id={$products_id}")->all();
+        foreach ($items as $k=> $item) {
+            $items[$k]['products'] = $this->products->get($item['id']);
+        }
+        return $items;
     }
 
     public function delete($id)

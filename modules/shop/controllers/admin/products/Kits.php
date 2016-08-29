@@ -99,7 +99,7 @@ class Kits extends Engine
         if($kits_id && $products_id){
             $s = $this->kits->products->create($kits_id, $products_id);
             if($s){
-                $this->getProducts($s);
+                $this->getProducts($kits_id);
             }
         }
     }
