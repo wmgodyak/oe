@@ -102,12 +102,12 @@ class Kits extends Front
         if(empty($cart)) return null;
 
         foreach ($cart as $k=>$item) {
+            $cart[$k] = $this->kits->getData($item['kits_id']);
 
 //            $cart[$k]['amount']      = 0;
 //            $cart[$k]['original_amount'] = 0;
             $cart[$k]['save_amount'] = 0;
 
-            $cart[$k] = $this->kits->getData($item['kits_id']);
             $cart[$k]['quantity'] = $item['quantity'];
             $cart[$k]['product'] = $this->products->getData($cart[$k]['products_id']);
             $cart[$k]['product']['price'] = $this->prices->get($cart[$k]['products_id'], $this->user_group_id);

@@ -38,34 +38,78 @@
                     </div>
                     <div class="goods-list__main">
 
-                        {foreach $mod->order->cart->items() as $item}
-                        <div class="goods-list__row">
-                            <div class="item item1">
-                                {if isset($item.img.image)}
-                                <img src="{$item.img.path}thumbs/{$item.img.image}" alt="">
-                                {else}
-                                    <img src="/uploads/noimage.jpg" alt="">
-                                {/if}
+                        {foreach $mod->order->cart->products() as $item}
+                            <div class="goods-list__row">
+                                <div class="item item1">
+                                    {if isset($item.img.image)}
+                                    <img src="{$item.img.path}thumbs/{$item.img.image}" alt="">
+                                    {else}
+                                        <img src="/uploads/noimage.jpg" alt="">
+                                    {/if}
+                                </div>
+                                <div class="item item2">
+                                    <div class="name">
+                                        <a href="{$item.id}">{$item.name}</a>
+                                    </div>
+                                    <div class="songle-price">
+                                        {$item.price}  x   {$item.quantity}   =   {$item.price * $item.quantity} грн
+                                    </div>
+                                    <div class="bonus">
+                                        <span class="red">Ваш СМА бонус: </span><span class="green">+{round($settings.modules.Shop.config.bonus_rate * $item.price * $item.quantity, 2)} грн</span>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="item item2">
-                                <div class="name">
-                                    <a href="{$item.id}">{$item.name}</a>
-                                </div>
-                                <div class="songle-price">
-                                    {$item.price}  x   {$item.quantity}   =   {$item.price * $item.quantity} грн
-                                </div>
-                                <div class="bonus">
-                                    <span class="red">Ваш СМА бонус: </span><span class="green">+{round($settings.modules.Shop.config.bonus_rate * $item.price * $item.quantity, 2)} грн</span>
-                                </div>
-                            </div>
-                        </div>
 
                             {assign var='amount' value=$amount + $item.price * $item.quantity }
                             {assign var='bonus' value=$bonus + round($settings.modules.Shop.config.bonus_rate * $item.price * $item.quantity, 2) }
                         {/foreach}
                     </div>
                 </div>
-
+                {foreach $mod->order->cart->kits() as $kit}
+                    {*<pre>{print_r($kit)}</pre>*}
+                    <div class="promotion-banner" style="float: none; width: 100%; padding: 0">
+                        <div class="promotion-banner-wrap">
+                            <div class="content">
+                                <div class="item item1">
+                                    <div class="img-block">
+                                        <div class="img" style="background-image: url('{$kit.product.img}');"></div>
+                                    </div>
+                                    <div class="name">{$kit.product.name}</div>
+                                    <div class="price-row">
+                                        <div class="price">{$kit.product.price} грн</div>
+                                    </div>
+                                </div>
+                                {foreach $kit.products as $item}
+                                <div class="item item2">
+                                    <div class="img-block">
+                                        <div class="img" style="background-image: url('{$item.img}');"></div>
+                                    </div>
+                                    <div class="name">{$item.name}</div>
+                                    <div class="price-row">
+                                        <div class="old-price">{$item.original_price} грн</div>
+                                        <div class="price">{$item.price} грн</div>
+                                    </div>
+                                </div>
+                                {/foreach}
+                                <div class="equals">
+                                    <div class="row">
+                                        <div class="new-price">
+                                            {round($kit.amount,2)} грн
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="old-price">
+                                            {round($kit.original_amount,2)} грн
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div><br></div>
+                    {assign var='amount' value=$amount + $kit.amount}
+                    {assign var='bonus' value=$bonus + round($settings.modules.Shop.config.bonus_rate * $kit.amount, 2) }
+                {/foreach}
             </aside>
 
             <!-- end aside -->
@@ -126,7 +170,7 @@
                 <div class="total-price-block">
                     <div class="left">
                         <div class="row-price">
-                            Разом до сплати: <span>{$amount} грн</span>
+                            Разом до сплати: <span>{round($amount, 2)} грн</span>
                         </div>
                         <div class="row-bonus">
                             Ваш СМА бонус: <span>+{$bonus} грн</span>
@@ -138,12 +182,8 @@
                 </div>
                 <input type="hidden" name="token" value="{$token}">
             </form>
-
-            {$mod->order->kits()}
-
             {/if}
         </div>
-
     </div>
     <!-- end cart-page -->
 </div>

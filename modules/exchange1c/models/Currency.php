@@ -96,6 +96,26 @@ class Currency extends Model
         return false;
     }
 
+   public function update()
+   {
+       if( ! $this->auth()) return ['failure', "EX004. Wrong token"];
+
+       $code = $this->request->get('code');
+       $rate = $this->request->get('rate');
+
+       if($code && $rate){
+           $currency = new \system\models\Currency();
+           $s = $currency->setRateByCode($code, $rate);
+           if(! $s) {
+               Logger::error($currency->getErrorMessage());
+               return ['failure', 'EX009. ' .$currency->getErrorMessage()];
+           }
+           return ['success'];
+       }
+
+       return ['failure', 'Wrong currency code or rate'];
+   }
+
     public function file()
     {
         if( ! $this->auth()) return ['failure', "EX004. Wrong token"];

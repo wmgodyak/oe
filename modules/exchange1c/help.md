@@ -160,6 +160,11 @@ http://v8.1c.ru/edi/edi_stnd/131/
   , де file_limit - допустимий розмір файлу в байтах
   
   3. Завантаження файлу на сайт
+
+  3.a спрощене оновлення валюти
+  http://e7.otakoyi.com.ua/route/exchange1c/run?type=currency&mode=checkauth
+  http://e7.otakoyi.com.ua/route/exchange1c/run?type=currency&mode=update&code=uah&rate=26.5
+  
   
   http://e7.otakoyi.com.ua/route/exchange1c/run?type=currency&mode=file&filename=currency.csv
    
