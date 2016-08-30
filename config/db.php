@@ -8,15 +8,18 @@
 
 /*
  * otakoyi_e7 та пароль для tnkjt27r
-*/
+ * admin_e7 cUic8y9EeA
+ * http://95.85.26.23/phpmyadmin/
+ * /public_html/logs/1c/exchange-2016-08-27.log
+ */
 
 $db = [
     'type'     => 'mysql',
-    'host'     => 'otakoyi.mysql.ukraine.com.ua',
-    'db'       => 'otakoyi_e7',
+    'host'     => 'localhost',
+    'db'       => 'admin_e7',
     'prefix'   => 'e_',
-    'user'     => 'otakoyi_e7',
-    'pass'     => 'tnkjt27r',
+    'user'     => 'admin_e7',
+    'pass'     => 'cUic8y9EeA',
     'port'     => 3306,
     'charset'  => 'utf8',
     'debug'    => true

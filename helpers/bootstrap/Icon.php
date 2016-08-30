@@ -30,6 +30,7 @@ abstract class IconBuilder
     const TYPE_BAN          = 'fa-ban';
     const TYPE_REPLY        = 'fa-reply';
     const TYPE_RESTORE      = 'fa-repeat';
+    const TYPE_SETTINGS     = 'fa-cog';
 
     protected $type;
     protected $white;

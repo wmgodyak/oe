@@ -1,0 +1,47 @@
+/* Wrapper
+-----------------------------------------------------------------------------*/
+.wrapper {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+}
+
+/* Header
+-----------------------------------------------------------------------------*/
+
+/* Container
+-----------------------------------------------------------------------------*/
+.container {
+  @include container(1170px);
+  padding:  0 15px;
+}
+
+/* Footer
+-----------------------------------------------------------------------------*/
+
+/* Helpers
+-----------------------------------------------------------------------------*/
+.visible {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.display-block{
+  display: block !important;
+}
+
+.display-none {
+  display: none !important;
+}
+
+.scroll-lock {
+  overflow: visible !important;
+  width: 100% !important;
+  height: 100% !important;
+  body {
+    overflow: hidden !important;
+  }
+}
+.clearfix {
+  @include clearfix();
+}

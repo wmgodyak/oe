@@ -1,0 +1,54 @@
+-- phpMyAdmin SQL Dump
+-- version 4.0.10deb1
+-- http://www.phpmyadmin.net
+--
+-- Хост: localhost
+-- Время создания: Авг 15 2016 г., 11:23
+-- Версия сервера: 5.5.49-0ubuntu0.14.04.1
+-- Версия PHP: 5.5.9-1ubuntu4.17
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+--
+-- База данных: `engine`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `e_callbacks`
+--
+
+CREATE TABLE IF NOT EXISTS `e_callbacks` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `users_id` int(10) unsigned DEFAULT NULL,
+  `phone` varchar(20) NOT NULL,
+  `name` varchar(45) NOT NULL,
+  `comment` text,
+  `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `ip` char(16) NOT NULL,
+  `status` enum('processed','spam','new') NOT NULL DEFAULT 'new',
+  `manager_id` int(11) DEFAULT NULL,
+  `updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
+
+--
+-- Дамп данных таблицы `e_callbacks`
+--
+
+INSERT INTO `e_callbacks` (`id`, `users_id`, `phone`, `name`, `comment`, `created`, `ip`, `status`, `manager_id`, `updated`) VALUES
+(1, NULL, '+38(222)22-22-222', 'asas', NULL, '2016-07-16 16:38:57', '127.0.0.1', 'spam', 2, '0000-00-00 00:00:00'),
+(2, NULL, '+38(121)21-21-212', 'Ваа', NULL, '2016-07-16 16:39:49', '127.0.0.1', 'new', NULL, '0000-00-00 00:00:00'),
+(3, NULL, '+38(067)67-36-669', 'Жорік', 'asdasd', '2016-07-16 16:43:02', '127.0.0.1', 'processed', 2, '2016-07-16 16:47:17');
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
