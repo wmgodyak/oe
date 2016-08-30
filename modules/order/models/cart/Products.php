@@ -60,9 +60,15 @@ class Products extends Front
                 'has_variants' => $variants_id > 0
             ];
 
-        Session::set(['cart' => ['products' => $cart]]);
+//        Session::set(['cart' => ['products' => $cart]]);
 
-        return $this->total();
+        if(! isset($_SESSION['cart'])){
+            $_SESSION['cart'] = [];
+        }
+
+        $_SESSION['cart']['products'] = $cart;
+
+        return true;
     }
 
     public function update()
@@ -75,10 +81,10 @@ class Products extends Front
             $cart[$id]['quantity'] = $quantity;
         }
 
-        Session::set(['cart' => ['products' => $cart]]);
+//        Session::set(['cart' => ['products' => $cart]]);
+        $_SESSION['cart']['products'] = $cart;
 
         return true;
-//        return ['s' => 1, 'total' => $this->total(false), 'items' => $this->items()];
     }
 
     public function delete()
@@ -88,16 +94,17 @@ class Products extends Front
 
         if(isset($cart[$id])) unset($cart[$id]);
 
-        Session::set(['cart' => ['products' => $cart]]);
+//        Session::set(['cart' => ['products' => $cart]]);
+
+        $_SESSION['cart']['products'] = $cart;
 
         return true;
-
-//        $this->response->body(['s' => 1, 'total' => $this->total(false), 'items' => $this->items()])->asJSON();
     }
 
     public function items()
     {
         $cart = Session::get('cart.products');
+        if(empty($cart)) return null;
 
         foreach ($cart as $k=>$item) {
             $cart[$k] += $this->products->getData($item['products_id']);

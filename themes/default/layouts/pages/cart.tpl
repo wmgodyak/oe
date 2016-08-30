@@ -23,8 +23,8 @@
                 <div class="heading">{$page.name}</div>
                 <form action="9" id="cartItems"></form>
                 {*<pre>{print_r($mod->order->cart->items())}</pre>*}
-                <script>var cItems = {json_encode($mod->order->cart->products(), true)}</script>
-                {include file="modules/shop/widgets/new.tpl"}
+                <script>var cItems = {json_encode($mod->order->cart->products(), true)}; var cKits = {json_encode($mod->order->cart->kits())};</script>
+                {*{include file="modules/shop/widgets/new.tpl"}*}
             </div>
 
             <aside class="aside">{include file="chunks/sidebar.tpl"}</aside>
@@ -37,6 +37,10 @@
 {include file="chunks/footer.tpl"}
 {literal}
     <script type="text/template" id="cartTemplate">
+
+        <% amount = 0 %>
+        <% bonus  = 0 %>
+
         <% if( items.length ) { %>
         <div class="goods-list">
             <div class="goods-list__top-row">
@@ -44,15 +48,13 @@
                     Товар
                 </div>
                 <div class="item item2">
-                    Кількість:
+                    Кількість
                 </div>
                 <div class="item item3">
-                    Загальна сума:
+                    Сума
                 </div>
             </div>
             <div class="goods-list__main">
-                <% amount = 0 %>
-                <% bonus  = 0 %>
                 <% items.forEach(function(item) { %>
                 <div class="goods-list__row">
                     <div class="item item1">
@@ -95,6 +97,71 @@
             </div>
         </div>
 
+        <% } %>
+        <% if( kits.length) { %>
+        <% console.log(kits); %>
+        <div class="promotion-banner">
+            <div class="heading">
+                Комплект
+            </div>
+            <% kits.forEach(function(item){  %>
+
+            <div class="promotion-banner-wrap">
+                <div class="content">
+                    <div class="item item1">
+                        <div class="img-block">
+                            <div class="img" style="background-image: url('<%- item.product.img %>');"></div>
+                        </div>
+                        <div class="name"><%- item.product.name %></div>
+                        <div class="price-row">
+                            <div class="price"><%- item.product.price %> грн.</div>
+                        </div>
+                    </div>
+                    <% item.products.forEach(function(product){ %>
+                    <div class="item item2">
+                        <div class="img-block">
+                            <div class="img" style="background-image: url('<%- product.img %>');"></div>
+                        </div>
+                        <div class="name"><%- product.name %></div>
+                        <div class="price-row">
+                            <div class="old-price"><%- product.original_price %> грн</div>
+                            <div class="price"><%- product.price %> грн</div>
+                        </div>
+                    </div>
+                    <% }); %>
+                    <div class="equals">
+                        <div class="row">
+                            <div class="new-price">
+                                <%- item.amount %> грн
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="old-price">
+                                <%- item.original_amount %> грн
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="result-block">
+                    <div class="wrap">
+                        <span>Ви економите <%- item.save_amount %> грн.</span>
+                        <div class="text">
+                            Замовляйте комплекти
+                            та платіть дешевше
+                        </div>
+                        <div class="btn-row">
+                            <button class="btn red ">Видалити</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class=""><br></div>
+            <% amount += item.amount %>
+            <% }); %>
+        </div>
+        <% } %>
+
+        <% if (amount > 0) { %>
         <div class="total-price-block">
             <div class="left">
                 <div class="row-price">

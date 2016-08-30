@@ -62,13 +62,24 @@ var Order = {
 
         function cartForm(products, kits)
         {
-            products = $.map(products, function(value, index) {
-                return [value];
-            });
+            if(typeof products != 'undefined' && products != null){
 
-            //console.log(items);
+                products = $.map(products, function(value, index) {
+                    return [value];
+                });
+
+            }
+
+            if(typeof kits != 'undefined' && kits != null){
+
+                kits = $.map(kits, function(value, index) {
+                    return [value];
+                });
+
+            }
+            //console.log(kits);
             var $cartItems = $("#cartItems");
-            $cartItems.html( _.template($('#cartTemplate').html())({items: products}));
+            $cartItems.html( _.template($('#cartTemplate').html())({items: products, kits: kits}));
 
             $(document).on('click', '.cart-delete-item', function(){
                 var id = $(this).data('id');
@@ -80,14 +91,12 @@ var Order = {
 
         }
 
-        if(typeof cItems != 'undefined'){
-            cartForm(cItems);
-        }
+        cartForm(cItems, cKits);
 
         $(document).on('change', '.cart-item-quantity', function(){
             var id = $(this).data('id'), quantity = this.value;
 
-            Order.cart.products.update(id,quantity, function(res){
+            Order.cart.products.update(id, quantity, function(res){
                 refreshBlock();
                 cartForm(res.products, res.kits);
             });
@@ -257,7 +266,7 @@ var Order = {
                 return;
             }
 
-            Order.kits.add(kits_id, function(res){
+            Order.cart.kits.add(kits_id, function(res){
                 $this.addClass('in active').text(t_in);
                 App.alert('Комплект додано в кошик');
                 refreshBlock();
@@ -351,7 +360,7 @@ var Order = {
             {
                 App.request.post(
                     {
-                        url: 'route/order/ajaxKits/add',
+                        url: 'route/order/ajaxCart/add/kits',
                         data:{
                             kits_id : kits_id
                         },
@@ -364,7 +373,7 @@ var Order = {
             {
                 App.request.post(
                     {
-                        url: 'route/order/ajaxKits/update',
+                        url: 'route/order/ajaxCart/update/kits',
                         data:{
                             id : id,
                             quantity : qtt
@@ -378,7 +387,7 @@ var Order = {
             {
                 App.request.post(
                     {
-                        url: 'route/order/ajaxKits/delete',
+                        url: 'route/order/ajaxCart/delete/kits',
                         data:{
                             id : id
                         },

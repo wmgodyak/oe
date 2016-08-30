@@ -54,7 +54,7 @@ class Cart extends Front
     public function update($adapter)
     {
         $s = $this->{$adapter}->update();
-        $this->response->body(['s' => $s, 'products' => $this->products(), 'kits' => []])->asJSON();
+        $this->response->body(['s' => $s, 'products' => $this->products(), 'kits' => $this->kits()])->asJSON();
     }
 
     /**
@@ -63,7 +63,7 @@ class Cart extends Front
     public function delete($adapter)
     {
         $s = $this->{$adapter}->delete();
-        $this->response->body(['s' => $s, 'products' => $this->products(), 'kits' => []])->asJSON();
+        $this->response->body(['s' => $s, 'products' => $this->products(), 'kits' => $this->kits()])->asJSON();
     }
 
     public function products()
