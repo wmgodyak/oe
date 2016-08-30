@@ -77,9 +77,12 @@ var Order = {
                 });
 
             }
-            //console.log(kits);
             var $cartItems = $("#cartItems");
-            $cartItems.html( _.template($('#cartTemplate').html())({items: products, kits: kits}));
+            $cartItems.html( _.template($('#cartTemplate').html())({
+                items: products,
+                kits: kits,
+                bonus_rate: window.bonus_rate
+            }));
 
             $(document).on('click', '.cart-delete-item', function(){
                 var id = $(this).data('id');
@@ -88,10 +91,17 @@ var Order = {
                     cartForm(res.products, res.kits);
                 });
             });
+            $(document).on('click', '.b-cart-kits-delete', function(){
+                var id = $(this).data('id');
+                Order.cart.kits.delete(id, function(res){
+                    refreshBlock(res.total);
+                    cartForm(res.products, res.kits);
+                });
+            });
 
         }
 
-        cartForm(cItems, cKits);
+        cartForm(window.cItems, window.cKits);
 
         $(document).on('change', '.cart-item-quantity', function(){
             var id = $(this).data('id'), quantity = this.value;
@@ -110,7 +120,7 @@ var Order = {
                 city_id   = $("#delivery_city_id").find('option:selected').val();
 
             // clear previos select
-            console.log('remove prev meta');
+            //console.log('remove prev meta');
 
             $('#delivery_region_id_row').remove();
             $('#delivery_city_id_row').remove();

@@ -99,6 +99,7 @@ class Kits extends Front
     public function items()
     {
         $cart = Session::get('cart.kits');
+        if(empty($cart)) return null;
 
         foreach ($cart as $k=>$item) {
 
