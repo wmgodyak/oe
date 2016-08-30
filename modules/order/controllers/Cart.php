@@ -85,6 +85,12 @@ class Cart extends Front
         $amount += $p_total['amount'];
         $total  += $p_total['total'];
 
-        $this->response->body(['amount' => $amount, 'total' => $total])->asJSON();
+        $k_total = $this->kits->total();
+        $total  += $k_total['total'];
+        $amount += $k_total['amount'];
+
+        $this->response->body(['amount' => round($amount, 2), 'total' => $total])->asJSON();
     }
+
+
 }

@@ -138,18 +138,21 @@ class Kits extends Front
     public function total()
     {
         $amount = 0; $total = 0;
-        $cart = Session::get('cart.kits');
 
-//        if(!empty($cart)){
-//            foreach ($cart as $item) {
-//                $total  += $item['quantity'];
-//                if($item['has_variants']){
-//                    $amount += $this->variantsPrices->getPrice($item['variants_id'], $this->user_group_id) * $item['quantity'];
-//                } else {
-//                    $amount += $this->prices->get($item['kits_id'], $this->user_group_id) * $item['quantity'];
-//                }
-//            }
-//        }
+        $cart = Session::get('cart.kits');
+        if(!empty($cart)){
+            foreach ($cart as $k=>$item) {
+                $data = $this->kits->getData($item['kits_id']);
+                $total  += $item['quantity'];
+                $amount += $this->prices->get($data['products_id'], $this->user_group_id);
+//                echo $this->prices->get($data['products_id'], $this->user_group_id), "\n";
+                foreach ( $data['products'] as $i=>$product) {
+                    $price = $this->prices->get($product['products_id'], $this->user_group_id);
+                    $amount += $price - ( $price / 100 * $product['discount'] );
+//                    echo $this->prices->get($product['products_id'], $this->user_group_id), "\n";
+                }
+            }
+        }
 
         return ['amount' => $amount, 'total' => $total];
     }

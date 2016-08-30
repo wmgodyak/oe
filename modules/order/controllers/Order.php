@@ -10,6 +10,7 @@ namespace modules\order\controllers;
 
 use helpers\FormValidation;
 use helpers\Pagination;
+use modules\order\models\OrdersKits;
 use modules\order\models\OrdersProducts;
 use modules\order\models\Status;
 use modules\users\models\Users;
@@ -40,6 +41,8 @@ class Order extends Front
     private $ordersProducts;
     private $currency;
 
+    private $ordersKits;
+
 //    public $delivery;
 //    public $payment;
 
@@ -54,6 +57,8 @@ class Order extends Front
         $this->ordersProducts = new OrdersProducts();
 
         $this->currency = new Currency();
+
+        $this->ordersKits = new OrdersKits();
     }
 
     public function init()
@@ -136,7 +141,7 @@ class Order extends Front
 
                 $orders_id = $this->order->create($order);
 
-                $order['products'] = $this->cart->items();
+                $order['products'] = $this->cart->products();
 
                 foreach ($order['products'] as $item) {
                     $this->ordersProducts->create
@@ -147,6 +152,33 @@ class Order extends Front
                         $item['price'],
                         (isset($item['variants_id']) ? $item['variants_id'] : 0)
                     );
+                }
+
+                $order['kits'] = $this->cart->kits();
+
+                foreach ($order['kits'] as $kit) {
+                    $orders_kits_id = $this->ordersKits->create
+                    (
+                        $orders_id,
+                        $kit['id'],
+                        $kit['product']['id'],
+                        $kit['product']['price'],
+                        $kit['quantity']
+                    );
+                    if($orders_kits_id > 0){
+                        foreach ($kit['products'] as $product) {
+                            $this->ordersKits->products->create
+                            (
+                                $orders_kits_id,
+                                $product['id'],
+                                $kit['id'],
+                                $product['products_id'],
+                                $product['original_price'],
+                                $product['discount'],
+                                $product['price']
+                            );
+                        }
+                    }
                 }
 
                 if($s && ! $this->order->hasError()){
