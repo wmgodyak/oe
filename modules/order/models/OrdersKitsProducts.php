@@ -53,4 +53,18 @@ class OrdersKitsProducts extends Model
             ]
         );
     }
+
+    public function get($orders_kits_id)
+    {
+        return self::$db
+            ->select("
+                  select kp.kits_products_products_id as id, c.sku, kp.price_original, kp.discount, kp.price, p.name
+                  from __orders_kits_products kp
+                  join __content c on c.id= kp.kits_products_products_id
+                  join __content_info p on p.content_id = kp.kits_products_products_id and p.languages_id='{$this->languages_id}'
+                  where kp.orders_kits_id = '{$orders_kits_id}'
+                  ")
+            ->all();
+    }
+
 }

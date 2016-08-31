@@ -25,6 +25,7 @@ class Order extends Model
     protected $status;
     protected $users;
     protected $currency;
+    public    $kits;
 
     public function __construct()
     {
@@ -33,6 +34,8 @@ class Order extends Model
         $this->status = new OrdersStatus();
         $this->users  = new Users();
         $this->currency = new Currency();
+
+        $this->kits = new OrdersKits();
     }
 
     /**
@@ -83,7 +86,6 @@ class Order extends Model
             ->all();
 
         foreach ($orders as $k=>$order) {
-            $total = 0;
             $orders[$k]['products'] =
                 self::$db
                     ->select("
@@ -96,12 +98,15 @@ class Order extends Model
 
             foreach ($orders[$k]['products'] as $i=>$product) {
                 $orders[$k]['products'][$i]['amount'] = $product['quantity'] * $product['price'];
-                $total += $orders[$k]['products'][$i]['amount'];
+//                $total += $orders[$k]['products'][$i]['amount'];
                 if($product['variants_id'] > 0){
                     $orders[$k]['products'][$i]['variant_name']= $variants->makeName($product['variants_id']);
                 }
             }
-            $orders[$k]['amount'] = $total;
+
+            $orders[$k]['kits'] = $this->kits->get($order['id']);
+
+            $orders[$k]['amount'] = $this->amount($order['id']);
         }
 
         return $orders;
@@ -120,7 +125,19 @@ class Order extends Model
 
     public function amount($orders_id)
     {
-        $s = self::$db->select("select sum(quantity * price) as t from __orders_products where orders_id={$orders_id}")->row('t');
+        $s = self::$db->select("select sum(quantity * price) as t from __orders_products where orders_id='{$orders_id}'")
+            ->row('t');
+
+        $kits = self::$db->select("select id, quantity, kits_products_price
+                                  from __orders_kits
+                                  where orders_id='{$orders_id}'
+        ")->all();
+
+        foreach ($kits as $kit) {
+            $kp = self::$db->select("select sum(price) as t from e_orders_kits_products where orders_kits_id={$kit['id']}")
+                ->row('t');
+            $s += $kit['quantity'] * ( $kit['kits_products_price'] + $kp ) ;
+        }
         return $s;
     }
 

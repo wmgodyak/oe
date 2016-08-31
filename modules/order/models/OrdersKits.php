@@ -49,4 +49,28 @@ class OrdersKits extends Model
             ]
         );
     }
+
+    public function get($orders_id)
+    {
+        $kits = self::$db
+            ->select("
+              select ok.id, ok.kits_id, ok.kits_products_id as product_id, p.name as product_name, ok.kits_products_price, ok.quantity
+              from __orders_kits ok
+              join __content_info p on p.content_id = ok.kits_products_id and p.languages_id = '{$this->languages_id}'
+              where ok.orders_id='{$orders_id}' limit 1 ")
+            ->all();
+
+        foreach ($kits as $k=>$kit) {
+            $am = $kit['kits_products_price'];
+
+            $kits[$k]['products'] = $this->products->get($kit['id']);
+            foreach ($kits[$k]['products'] as $product) {
+                $am += $product['price'];
+            }
+
+            $kits[$k]['amount'] = $am * $kit['quantity'];
+        }
+
+        return $kits;
+    }
 }

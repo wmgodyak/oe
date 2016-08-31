@@ -16,18 +16,14 @@ defined("CPATH") or die();
  */
 class Order extends \modules\order\models\Order
 {
-//    private $status;
-//    private $users;
-//    private $currency;
-//
-//    public function __construct()
-//    {
-//        parent::__construct();
-//
-//        $this->status = new OrdersStatus();
-//        $this->users  = new Users();
-//        $this->currency = new Currency();
-//    }
+    public $products;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->products = new OrdersProducts();
+    }
 
     /**
      * @param $manager
@@ -75,4 +71,5 @@ class Order extends \modules\order\models\Order
                 where s.is_main=1")
             ->row('t');
     }
+
 }

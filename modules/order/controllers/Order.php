@@ -142,41 +142,46 @@ class Order extends Front
                 $orders_id = $this->order->create($order);
 
                 $order['products'] = $this->cart->products();
+                if(!empty($order['products'])){
 
-                foreach ($order['products'] as $item) {
-                    $this->ordersProducts->create
-                    (
-                        $orders_id,
-                        $item['products_id'],
-                        $item['quantity'],
-                        $item['price'],
-                        (isset($item['variants_id']) ? $item['variants_id'] : 0)
-                    );
+                    foreach ($order['products'] as $item) {
+                        $this->ordersProducts->create
+                        (
+                            $orders_id,
+                            $item['products_id'],
+                            $item['quantity'],
+                            $item['price'],
+                            (isset($item['variants_id']) ? $item['variants_id'] : 0)
+                        );
+                    }
                 }
 
                 $order['kits'] = $this->cart->kits();
 
-                foreach ($order['kits'] as $kit) {
-                    $orders_kits_id = $this->ordersKits->create
-                    (
-                        $orders_id,
-                        $kit['id'],
-                        $kit['product']['id'],
-                        $kit['product']['price'],
-                        $kit['quantity']
-                    );
-                    if($orders_kits_id > 0){
-                        foreach ($kit['products'] as $product) {
-                            $this->ordersKits->products->create
-                            (
-                                $orders_kits_id,
-                                $product['id'],
-                                $kit['id'],
-                                $product['products_id'],
-                                $product['original_price'],
-                                $product['discount'],
-                                $product['price']
-                            );
+                if(! empty($order['kits'])){
+
+                    foreach ($order['kits'] as $kit) {
+                        $orders_kits_id = $this->ordersKits->create
+                        (
+                            $orders_id,
+                            $kit['id'],
+                            $kit['product']['id'],
+                            $kit['product']['price'],
+                            $kit['quantity']
+                        );
+                        if($orders_kits_id > 0){
+                            foreach ($kit['products'] as $product) {
+                                $this->ordersKits->products->create
+                                (
+                                    $orders_kits_id,
+                                    $product['id'],
+                                    $kit['id'],
+                                    $product['products_id'],
+                                    $product['original_price'],
+                                    $product['discount'],
+                                    $product['price']
+                                );
+                            }
                         }
                     }
                 }

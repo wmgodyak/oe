@@ -2,6 +2,12 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
+                <label for="amount" class="col-sm-3 control-label">Сума</label>
+                <div class="col-sm-9">
+                    <input id="amount" value="{$order.amount}" readonly class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
                 <label for="order_delivery_id" class="col-sm-3 control-label">Доставка</label>
                 <div class="col-sm-9">
                     <select name="data[delivery_id]" id="order_delivery_id" data-id="{$order.id}" class="form-control">

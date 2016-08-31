@@ -114,6 +114,9 @@ var engine = {
     },
     dialog: function(args)
     {
+        if(typeof args.height == 'undefined'){
+            args.height = 'auto';
+        }
         if(typeof args.close == 'undefined'){
             args.close = function( event, ui ) { $(this).dialog('destroy').remove(); };
         }

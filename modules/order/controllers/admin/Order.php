@@ -11,7 +11,7 @@ namespace modules\order\controllers\admin;
 use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
 use modules\delivery\models\DeliveryPayment;
-use modules\order\models\admin\OrdersProducts;
+//use modules\order\models\admin\OrdersProducts;
 use modules\order\models\admin\OrdersStatus;
 use modules\order\models\admin\StatusHistory;
 use system\core\DataTables2;
@@ -29,7 +29,7 @@ defined("CPATH") or die();
 class Order extends Engine
 {
     private $order;
-    private $orderProducts;
+//    private $orderProducts;
     private $currency;
     private $deliveryPayment;
     private $ordersStatus;
@@ -42,7 +42,7 @@ class Order extends Engine
         parent::__construct();
 
         $this->order = new \modules\order\models\admin\Order();
-        $this->orderProducts = new OrdersProducts();
+//        $this->orderProducts = new OrdersProducts();
         $this->currency = new Currency();
         $this->deliveryPayment = new DeliveryPayment();
         $this->ordersStatus = new \modules\order\models\admin\Status();
@@ -107,7 +107,8 @@ class Order extends Engine
                 $res[$i][] = "<span class='label' style='background: {$row['bg_color']}; color:{$row['txt_color']}'>{$row['status']}</span>";
                 $res[$i][] = $row['username']
                     . ($row['one_click'] ? " <label class='label label-info'>Один клік</label>" : "");
-                $res[$i][] = $this->orderProducts->amount($row['id']);
+//                $res[$i][] = $this->orderProducts->amount($row['id']);
+                $res[$i][] = $this->order->amount($row['id']);
                 $res[$i][] = $row['paid'] == 1 ? 'ТАК' : '';
                 $res[$i][] = date('d.m.Y H:i:s', strtotime($row['created']));
 
@@ -152,6 +153,7 @@ class Order extends Engine
 
         switch($tab){
             case 'info':
+                $data['amount'] = $this->order->amount($id);
                 $this->editInfo($data);
                 break;
             case 'products':
@@ -206,10 +208,13 @@ class Order extends Engine
 
     private function editProducts($order)
     {
-        $this->template->assign('products', $this->orderProducts->get($order['id']));
-        $this->template->assign('amount', $this->orderProducts->amount($order['id']));
+        $this->template->assign('kits', $this->order->kits->get($order['id']));
+        $this->template->assign('products', $this->order->products->get($order['id']));
+        $this->template->assign('amount', $this->order->products->amount($order['id']));
         $this->template->assign('order', $order);
-        echo $this->template->fetch('orders/form/products');
+        echo
+        $this->template->fetch('orders/form/kits') .
+        $this->template->fetch('orders/form/products');
     }
 
     public function delete($id)

@@ -1,5 +1,4 @@
-{*<pre>{print_r($amount)}</pre>*}
-{*<pre>{print_r($products)}</pre>*}
+{if  $products|count}
 <table class="table">
     <thead>
         <tr>
@@ -28,7 +27,7 @@
     </tr>
     </tbody>
 </table>
-
+{/if}
 <div class="form-group">
     <label for="prepayment" class="col-sm-3 control-label">Додайте товар</label>
     <div class="col-sm-9">
