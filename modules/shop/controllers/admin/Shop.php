@@ -34,17 +34,9 @@ class Shop extends Engine
         $this->assignToNav('Імпорт', 'module/run/shop/import', 'fa-shopping-cart', 'module/run/shop');
 
         $this->template->assignScript("modules/shop/js/admin/shop.js");
-        EventsHandler::getInstance()->add('content.main',[$this, 'catMeta']);
 
         $this->categories('init');
         $this->accessories('init');
-    }
-
-    public function catMeta($content)
-    {
-        if(isset($content['type']) && $content['type'] == 'products_categories') {
-            return $this->template->fetch('shop/categories/meta');
-        }
     }
 
     public function index($parent_id=0)

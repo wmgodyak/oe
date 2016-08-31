@@ -1,36 +1,27 @@
-{function name=renderSelectMultiple}
-    {foreach $items as $item}
-        {if $item.isfolder}
-            <optgroup label="{$item.name}">
-                {call renderSelectMultiple items=$item.items parent=$item.name selected=$selected}
-            </optgroup>
-        {else}
-            <option {if in_array($item.id, $selected)}selected{/if} value="{$item.id}">{if $parent}{$parent} / {/if}{$item.name}</option>
-        {/if}
-    {/foreach}
-{/function}
-{function name=renderSelect}
-    {foreach $items as $item}
-        <option {if $item.id ==$selected }selected{/if} value="{$item.id}">#{$item.id} {if $parent}{$parent} / {/if}{$item.name}</option>
-        {if $item.items|count}
-            {call renderSelect items=$item.items parent= "{if $parent != ''}{$parent} / {/if}{$item.name}" selected=$selected}
-        {/if}
-    {/foreach}
-{/function}
 <div class="form-group">
-    <label for="main_categories_id" class="col-md-2 control-label">{$t.shop.main_category}</label>
+    <label for="product_main_categories_id" class="col-md-2 control-label">
+        {$t.shop.main_category}
+    </label>
     <div class="col-md-10">
-        <select name="main_categories_id" id="main_categories_id" class="form-control" required>
-            {call renderSelect items=$categories selected=$main_categories_id parent=''}
-        </select>
+        <p class="form-control-static">
+            <a href="module/run/shop/categories/edit/{$main_category.id}" id="a_main_cat_id" target="_blank">{$main_category.name}</a>
+            <a href="javascript:;" title="Змінити" class="shop-product-change-main-category" data-id="{$main_category.id}"><i class="fa fa-pencil"></i></a>
+        </p>
+        <input type="hidden" name="main_categories_id" id="inp_main_categories_id">
     </div>
 </div>
 
 <div class="form-group">
     <label for="categories" class="col-md-2 control-label">Дод. категорії</label>
     <div class="col-md-10">
-        <select name="categories[]" multiple id="categories" class="form-control" required>
-            {call renderSelectMultiple items=$categories selected=$selected_categories parent=''}
-        </select>
+        <p class="form-control-static" id="sp_selected_categories">
+            {foreach $selected_categories as $cat}
+                <span class="badge badge-info">
+                <a href="module/run/shop/categories/edit/{$cat.id}" target="_blank">{$cat.name}</a>
+                <a href="javascript:;" title="Змінити" class="shop-product-delete-category" data-id="{$cat.id}"><i class="fa fa-remove"></i></a>
+                </span>
+            {/foreach}
+            <a href="javascript:;" title="Додати" class="shop-product-add-category" data-id="{$cat.id}"><i class="fa fa-plus-circle"></i></a>
+        </p>
     </div>
 </div>

@@ -415,7 +415,7 @@ var engine = {
 
                 return this;
             },
-            init: function()
+            init: function(select_node_callback)
             {
                 var $tree = $('#' + id);
 
@@ -425,13 +425,19 @@ var engine = {
                 }
 
                 $tree.jstree(config);
-                $tree.on('click', 'a', function(e) {
-                    e.preventDefault();
-                    var treeLink = $(this).attr("href");
-                    if (treeLink !== "#"){
-                        self.location.href = treeLink;
-                    }
-                });
+
+                if( typeof select_node_callback == 'undefined'){
+
+                    $tree.on('click', 'a', function(e) {
+                        e.preventDefault();
+                        var treeLink = $(this).attr("href");
+                        if (treeLink !== "#"){
+                            self.location.href = treeLink;
+                        }
+                    });
+                } else {
+                    $tree.bind("select_node.jstree", select_node_callback);
+                }
 
                 if(typeof moveCallback != 'undefined'){
                     $tree.bind("move_node.jstree", moveCallback);
@@ -2644,7 +2650,7 @@ engine.mailTemplates = {
 engine.styleInputs = function()
 {
     $("select:not(.no-s2)").select2();
-    var $input = $('input');
+    var $input = $('input:not(.no-style-me)');
     if($input.length){
         $input.each(function(i){
             if($(this).hasClass('styled')) return ;

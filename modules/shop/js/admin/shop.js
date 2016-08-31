@@ -125,6 +125,156 @@ engine.shop = {
             })
             .init();
 
+
+        $(document).on
+        (
+            'click',
+            '.shop-product-change-main-category',
+            function()
+            {
+                var product_id = $("#content_id").val();
+                var id = $(this).data('id'), mainCatA = $('#a_main_cat_id');
+
+                engine.request.post({
+                    url: 'module/run/shop/products/categoriesTree/html',
+                    data: {
+                        selected: [id],
+                        products_id: product_id
+                    },
+                    success: function(res){
+                        var bi = t.common.button_save;
+                        var buttons = {};
+
+                        buttons[bi] =  function(){
+                            $('#sp_cat_form').submit();
+                        };
+
+                        var dialog = engine.dialog({
+                            content: res,
+                            title: "Вибір категорії",
+                            autoOpen: true,
+                            width: 750,
+                            modal: true,
+                            buttons: buttons
+                        });
+
+                        var inp_selected_nodes = $("#selected_nodes");
+
+                        var $catTree = new engine.tree('sp_cat_tree');
+                        $catTree
+                            .setUrl('module/run/shop/products/categoriesTree/json')
+                            //.setPlugin('checkbox')
+                            .init(function(event,data){
+                                var n = data.selected;
+                                event.preventDefault();
+
+                                console.log(n);
+                                inp_selected_nodes.val(n.join(','))
+                            });
+
+                        engine.validateAjaxForm('#sp_cat_form', function(d){
+                            if(d.s){
+                                mainCatA.attr('href', d.cat.href).attr('data-id', d.cat.id).html(d.cat.name);
+                                dialog.dialog('destroy').remove();
+                            }
+                        });
+                    },
+                    dataType: 'html'
+                });
+
+            }
+        );
+
+        $(document).on('click', '.shop-product-delete-category', function(e){
+            e.preventDefault();
+            var categories_id = $(this).data('id'), product_id = $("#content_id").val();
+            engine.request.post({
+                url: 'module/run/shop/products/categoriesTree/remove',
+                data: {
+                    products_id: product_id,
+                    categories_id: categories_id
+                },
+                success: function(d){
+                    var out = '';
+                    if(d.cat.length){
+                        d.cat.forEach(function(a){
+                            out +='<span class="badge badge-info">';
+                            out += '<a href="module/run/shop/categories/edit/'+ a.id+'" target="_blank">'+ a.name +'</a>';
+                            out += '<a href="javascript:;" title="Змінити" class="shop-product-delete-category" data-id="'+ a.id+'"><i class="fa fa-remove"></i></a>';
+                            out += '</span>';
+                        })
+                    }
+                    out += '<a href="javascript:;" title="Додати" class="shop-product-add-category" data-id="{$cat.id}"><i class="fa fa-plus-circle"></i></a>';
+                    $('#sp_selected_categories').html(out);
+                }
+            })
+        });
+
+        $(document).on
+        (
+            'click',
+            '.shop-product-add-category',
+            function()
+            {
+                var product_id = $("#content_id").val();
+
+                engine.request.post({
+                    url: 'module/run/shop/products/categoriesTree/html',
+                    data: {
+                        products_id: product_id
+                    },
+                    success: function(res){
+                        var bi = t.common.button_save;
+                        var buttons = {};
+
+                        buttons[bi] =  function(){
+                            $('#sp_cat_form').submit();
+                        };
+
+                        var dialog = engine.dialog({
+                            content: res,
+                            title: "Вибір категорії",
+                            autoOpen: true,
+                            width: 750,
+                            modal: true,
+                            buttons: buttons
+                        });
+
+                        var inp_selected_nodes = $("#selected_nodes");
+
+                        var $catTree = new engine.tree('sp_cat_tree');
+                        $catTree
+                            .setUrl('module/run/shop/products/categoriesTree/json')
+                            //.setPlugin('checkbox')
+                            .init(function(event,data){
+                                var n = data.selected;
+                                event.preventDefault();
+                                inp_selected_nodes.val(n.join(','))
+                            });
+
+                        engine.validateAjaxForm('#sp_cat_form', function(d){
+                            if(d.s){
+                                var out = '';
+                                if(d.cat.length){
+                                    d.cat.forEach(function(a){
+                                        out +='<span class="badge badge-info">';
+                                        out += '<a href="module/run/shop/categories/edit/'+ a.id+'" target="_blank">'+ a.name +'</a>';
+                                        out += '<a href="javascript:;" title="Змінити" class="shop-product-delete-category" data-id="'+ a.id+'"><i class="fa fa-remove"></i></a>';
+                                        out += '</span>';
+                                    })
+                                }
+                                out += '<a href="javascript:;" title="Додати" class="shop-product-add-category" data-id="{$cat.id}"><i class="fa fa-plus-circle"></i></a>';
+                                $('#sp_selected_categories').html(out);
+                                dialog.dialog('destroy').remove();
+                            }
+                        });
+                    },
+                    dataType: 'html'
+                });
+
+            }
+        );
+
         engine.shop.categories.features.init();
         engine.shop.products.features.init();
         engine.shop.products.variants.init();
@@ -669,58 +819,6 @@ engine.shop = {
             render: function(selected)
             {
                 var cnt = $('#products_variants_cnt'), features = CFV;//, res = [],
-                //var row = [];
-                //
-                //for(var i = 0; i < features.length; i++ ){
-                //    if(selected.contains(parseInt(features[i].id))){
-                //        row.push(features[i].name);
-                //    }
-                //}
-                //
-                //res.push(row);
-                //
-                //for(i = 0; i < features.length; i++ ){
-                //    row[i] = [];
-                //    if(selected.contains(parseInt(features[i].id))){
-                //        for(var c=0;c<features[i].items.length; c++){
-                //            row[i].push(features[i].items[c]);
-                //        }
-                //    }
-                //
-                //    res.push(row);
-                //}
-
-
-                //var tr = [];
-                //for(var i = 0; i < features.length; i++ ){
-                //    var row = [];
-                //    for(var c=0;c<features[i].items.length; i++){
-                //        row.push()
-                //    }
-                //}
-
-
-
-                //res.th = []; res.tr = [];
-                //for(var i = 0; i < features.length; i++ ){
-                //    //console.log(features[i]);
-                //    var row = [];
-                //    res.th.push(features[i].name);
-                //    for(var c=0;c< features[i].items.length; c++){
-                //        //res.tr[features[i].id].push(features[i].items[c])
-                //
-                //    }
-                //
-                //    //row.name= features[i].name;
-                //    //res.push(row);
-                //}
-                /*
-                 * <% for(var i=0;i < features.length; i++) {  %>
-                 <% if(selected.contains(parseInt(features[i].id)) != false) { %>
-                 <th><%= features[i].name %></th>
-                 <% } %>
-                 <% } %>
-                 * */
                 var tmpl = _.template($('#variantsTbl').html());
                 var d = tmpl({features: features, selected: selected});
                 cnt.html(d);

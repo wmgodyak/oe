@@ -96,6 +96,8 @@ FRONTEND
   - додати модуль gmap з fth
   - модуль аксесуарів
 
+  https://raw.githubusercontent.com/es-shims/es5-shim/master/es5-sham.min.js
+
 
 http://prnt.sc/cclvfc
 
