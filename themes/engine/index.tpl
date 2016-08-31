@@ -8,6 +8,7 @@
     <link href="{$theme_url}assets/css/vendor/style.css" rel="stylesheet">
     <link href="{$theme_url}assets/css/vendor/jquery.materialripple.css" rel="stylesheet">
     <link href="{$theme_url}assets/css/vendor/bootstrap.min.css" rel="stylesheet">
+    <link href="{$theme_url}assets/css/vendor/jquery.mCustomScrollbar.css" rel="stylesheet">
     <link href="{$theme_url}assets/css/style.css?v={$version}" rel="stylesheet">
     <script src="{$theme_url}assets/js/vendor/jquery-1.11.3.min.js"></script>
 </head>
@@ -62,6 +63,7 @@
 <script src="{$theme_url}assets/js/vendor/charCount.js"></script>
 <script src="{$theme_url}assets/js/vendor/dropzone.min.js"></script>
 <script src="{$theme_url}assets/js/vendor/jquery.nestable.js"></script>
+<script src="{$theme_url}assets/js/vendor/jquery.mCustomScrollbar.js"></script>
 <script src="/vendor/ckeditor/ckeditor.js"></script>
 <script>
     var TOKEN = '{$token}', ONLINE = 0, t = {json_encode($t)}, CONTROLLER = '{$controller}', ACTION = '{$action}';

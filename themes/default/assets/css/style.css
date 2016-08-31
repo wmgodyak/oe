@@ -1092,7 +1092,6 @@ body {
   position: absolute;
   height: 0;
   opacity: 0;
-  transition: 1s;
   left: 100%;
   top: 0;
   width: 650px;
@@ -1108,7 +1107,6 @@ body {
     position: relative;
     width: 100%;
     margin: 10px;
-    white-space: nowrap;
     overflow: hidden; }
   .sub-menu .single-category {
     display: inline-block;
@@ -1131,7 +1129,8 @@ body {
     border-bottom: 1px solid #ee4d4d;
     border-top: 1px solid #fff;
     color: #666666;
-    transition: all 0.35s ease; }
+    transition: all 0.35s ease;
+    font: 16px/18px "Roboto-Light", sans-serif; }
     .sub-menu .text-head:hover {
       color: #ee4d4d;
       border-top: 1px solid #ee4d4d; }
@@ -1158,6 +1157,9 @@ body {
       opacity: 1; }
       .sub-menu .single-category {
         width: 100%; } }
+
+.goods-nav__item {
+  position: relative; }
 
 .btn {
   display: inline-block;
@@ -1230,7 +1232,8 @@ body {
     border-left: 0;
     background: #ffffff;
     box-shadow: none;
-    border-radius: 0; }
+    border-radius: 0;
+    overflow: hidden; }
     .jq-selectbox.jqselect .jq-selectbox__select .jq-selectbox__select-text {
       font-family: "Roboto-Light", sans-serif;
       font-size: 14px;
@@ -1296,6 +1299,9 @@ body {
       content: ''; }
   .input-group input[type='checkbox']:checked + label:before {
     background-color: #f04d4d; }
+
+.tel-search__bottom .jq-selectbox__select-text {
+  width: 90% !important; }
 
 /* Wrapper
 -----------------------------------------------------------------------------*/

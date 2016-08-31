@@ -235,7 +235,22 @@ var App = {
         if($('.m_goods-nav').length == 0) return;
         if ( $(window).width() > 1170 ) {
             $('.goods-nav__item').hover(function () {
-                $(this).children('.sub-menu').toggleClass('active')
+                $(this).children('.sub-menu').addClass('active');
+            }, function(){
+                $(this).children('.sub-menu').removeClass('active');
+            });
+            function autoHeight(items){
+                var maxHeight, heights;
+                heights = items.map(function () {
+                    return $(this).innerHeight();
+                }).get();
+                maxHeight = Math.max.apply(null, heights);
+                items.css({
+                    height: maxHeight
+                });
+            };
+            $('.goods-nav__item ').each(function(){
+                autoHeight( $(this).find('li') );
             });
             try{
 
@@ -254,7 +269,7 @@ var App = {
                 }
                 $(this).next().slideToggle(300);
             });
-        }
+        };
     },
 
     /**

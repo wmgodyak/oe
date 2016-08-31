@@ -423,16 +423,16 @@ var engine = {
 
                 $tree.jstree(config);
                 $tree.on('click', 'a', function(e) {
-                        e.preventDefault();
-                        var treeLink = $(this).attr("href");
-                        if (treeLink !== "#"){
-                            self.location.href = treeLink;
-                        }
-                    });
-
-                    if(typeof moveCallback != 'undefined'){
-                        $tree.bind("move_node.jstree", moveCallback);
+                    e.preventDefault();
+                    var treeLink = $(this).attr("href");
+                    if (treeLink !== "#"){
+                        self.location.href = treeLink;
                     }
+                });
+
+                if(typeof moveCallback != 'undefined'){
+                    $tree.bind("move_node.jstree", moveCallback);
+                }
 
 
                     //$tree.delegate('a', 'contextmenu', function(e) {
@@ -441,16 +441,54 @@ var engine = {
                     //    $('.jstree a').removeClass('jstree-clicked');
                     //    $('li#'+id).find('a:first').addClass('jstree-clicked');
                     //});
+
+                //$tree.bind('ready.jstree', function(){
+                //    //debugger;
+                //    setTimeout(function(){
+                //        $('.jstree-container-ul').mCustomScrollbar({
+                //            axis: 'y',
+                //            advanced: {
+                //                updateOnContentResize: true
+                //            }
+                //        });
+                //    }, 1000);
+                //});
             }
         };
+    },
+
+    fixedBreadcrumbs: function() {
+        var h = $('.dashboard-heading'),
+            w = $(window);
+        if( w.scrollTop() >  h.outerHeight()){
+            h.addClass('h-fixed');
+        }else{
+            h.removeClass('h-fixed');
+        }
+    },
+    mCustomScroll:function() {
+        var nav = $('.main-navigation .first-level');
+        nav.mCustomScrollbar({
+            axis: 'y',
+            advanced: {
+                updateOnContentResize: true
+            }
+        });
     }
 };
 
+$(window).resize(function(){
+    engine.mCustomScroll();
+});
+$(document).scroll(function(){
+    engine.fixedBreadcrumbs();
+});
 $(document).ready(function(){
     engine.init();
     engine.toggleSidebar();
     engine.toggleNav();
     engine.admin.init();
+    engine.mCustomScroll();
 });
 
 engine.admin = {
@@ -2107,6 +2145,7 @@ engine.languages = {
             buttons[bi] =  function(){
                 $('#form').submit();
             };
+            debugger;
             var dialog = engine.dialog({
                 content: d,
                 title: t.languages.create_title,

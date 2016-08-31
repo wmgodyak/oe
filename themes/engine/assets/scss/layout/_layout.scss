@@ -63,7 +63,7 @@
 
 .dashboard-content{
   .content-wrapper{
-    padding: 20px 30px 30px 30px;
+    padding: 48px 30px 30px 30px;
     min-height: 100vh;
   }
   footer{
@@ -214,67 +214,6 @@
   }
 }
 
-.pages-tree{
-  margin: 0 0 0 -7px;
-  ul{
-    li{
-      i{
-        background: #fff;
-      }
-      a{
-        @include text(14px, 18px);
-        color: $color-3;
-        transition: all 0.25s ease;
-        padding: 0 4px;
-        max-width: 85%;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-        &.jstree-clicked{
-          border: none;
-          background: #2FC7F7;
-          color: #fff;
-        }
-        &:hover{
-          border: none;
-          background: #2FC7F7;
-          color: #fff;
-        }
-      }
-      &.jstree-closed{
-        & > .jstree-ocl{
-          background: url(../img/icons/32.png)  -4px -2px $sidebar-bg;
-        }
-      }
-      &.jstree-open{
-        & > .jstree-ocl{
-          background: url(../img/icons/32.png)  -40px -2px $sidebar-bg;
-        }
-        & > a{
-          & > .jstree-themeicon{
-            background-position: -112px -83px;
-          }
-        }
-      }
-      &.jstree-leaf{
-        background-position: -186px 0;
-        & > a{
-          & > .jstree-themeicon{
-            display: none;
-          }
-        }
-        .jstree-ocl{
-          background-position: -79px 0;
-        }
-      }
-    }
-  }
-  .jstree-default .jstree-open > .jstree-ocl{
-    background: #fff;
-  }
-
-}
-
 .vakata-context{
   border: 1px solid rgba(0, 0, 0, 0.15);
   border-radius: 4px;
@@ -314,15 +253,30 @@
     }
   }
 }
-
+ul.first-level {
+  height: calc(100% - 65px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
 .dashboard-heading{
   @include clear();
-  padding: 16px 20px;
+  //padding: 12px 20px;
+  padding: 0 20px;
   background-color: #fff;
   box-shadow: 0 1px 4px 0 rgba(0, 55, 75, 0.2);
-  width: auto;
-  margin: -20px -30px 0 -30px;
-  height: 76px;
+  //width: auto;
+  //height: 76px;
+  margin: 0px -30px 0 -30px;
+  height: 48px;
+  line-height: 48px;
+
+  top:0;
+  position: fixed;
+  width: calc(100% - 360px);
+  z-index: 1;
+  &.h-fixed{
+    @include vendor(animation, showHeader .5s ease);
+  }
   .dashboard-title{
     display: inline-block;
     float: left;
@@ -335,10 +289,20 @@
       font-size: 22px;
       padding: 0 8px 0 0;
     }
+    h1{
+      font-size:14px;
+      line-height: 18px;
+    }
   }
   .btn-group{
     display: inline-block;
     float: right;
+    .btn.btn-md {
+      height: 26px;
+      line-height: 26px;
+      padding: 0 10px;
+      font-size: 16px;
+    }
   }
   .btn-link{ border:0!important; }
 }
@@ -381,6 +345,9 @@
       margin: 0 10px;
       display: inline-block;
       max-width: 250px;
+      @include response(max, 1280){
+        max-width:150px;
+      }
     }
   }
   .dataTables_paginate,
@@ -450,7 +417,8 @@
     }
     .label-info{
       font-size: 12px;
-      color: #737373;
+      //color: #737373;
+      color: #2d3e50;
     }
   }
   th{
@@ -509,6 +477,7 @@
 .ui-dialog{
   background: #fff;
   z-index: 102;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
   .ui-dialog-titlebar{
     cursor: move;
     //text-align: left;
@@ -1121,7 +1090,8 @@
 
 .label {
   display: inline;
-  padding: .2em .6em .3em;
+  //padding: .2em .6em .3em;
+  padding: .2em .6em .2em;
   font-size: 75%;
   font-weight: bold;
   line-height: 1;
@@ -1172,7 +1142,10 @@
 }
 
 .label-info {
-  background-color: #a5c8e5
+  //background-color: #a5c8e5;
+  margin-top: 5px;
+  display: inline-block;
+  background-color: rgba(165, 200, 229, 0.37);
 }
 
 .label-info[href]:hover, .label-info[href]:focus {
@@ -1222,8 +1195,51 @@
     width: 80%;
   }
 }
-
 .btn-group .btn {
   font-size:12px;
 }
 .progress{height:20px;margin-bottom:20px;overflow:hidden;background-color:#f5f5f5;border-radius:4px;-webkit-box-shadow:inset 0 1px 2px rgba(0,0,0,.1);box-shadow:inset 0 1px 2px rgba(0,0,0,.1)}.progress-bar{float:left;width:0;height:100%;font-size:12px;line-height:20px;color:#fff;text-align:center;background-color:#337ab7;-webkit-box-shadow:inset 0 -1px 0 rgba(0,0,0,.15);box-shadow:inset 0 -1px 0 rgba(0,0,0,.15);-webkit-transition:width .6s ease;-o-transition:width .6s ease;transition:width .6s ease}.progress-bar-striped,.progress-striped .progress-bar{background-image:-webkit-linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);background-image:-o-linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);background-image:linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);-webkit-background-size:40px 40px;background-size:40px 40px}.progress-bar.active,.progress.active .progress-bar{-webkit-animation:progress-bar-stripes 2s linear infinite;-o-animation:progress-bar-stripes 2s linear infinite;animation:progress-bar-stripes 2s linear infinite}.progress-bar-success{background-color:#5cb85c}.progress-striped .progress-bar-success{background-image:-webkit-linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);background-image:-o-linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);background-image:linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent)}.progress-bar-info{background-color:#5bc0de}.progress-striped .progress-bar-info{background-image:-webkit-linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);background-image:-o-linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);background-image:linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent)}.progress-bar-warning{background-color:#f0ad4e}.progress-striped .progress-bar-warning{background-image:-webkit-linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);background-image:-o-linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);background-image:linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent)}.progress-bar-danger{background-color:#d9534f}.progress-striped .progress-bar-danger{background-image:-webkit-linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);background-image:-o-linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);background-image:linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent)}
+.row-filter{
+  @include clearfix;
+  .form-group{
+    float:left;
+    width:14%;
+    @include response(max, 1400){
+      padding: 0 5px;
+    }
+    & > label{
+      margin-bottom: 5px;
+      display: inline-block;
+    }
+    &.wrap-price{
+      width:28%;
+      input{
+        width:calc(50% - 10px);
+        &:last-child{
+          margin-left:15px;
+        }
+      }
+    }
+    &.btn-group{
+      width:16%;
+      margin-top:30px;
+      padding:0;
+      //@include response(max, 1400){
+      //  margin-top:34px;
+      //}
+      .btn {
+        height:32px;
+        line-height: 32px;
+        //font-size:14px;
+        &:first-child {
+          margin: 0;
+        }
+      }
+    }
+  }
+}
+.products_variants_cnt {
+  input {
+    width: 100px;
+  }
+}

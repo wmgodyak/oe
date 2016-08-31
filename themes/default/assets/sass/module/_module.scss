@@ -1100,7 +1100,6 @@
   position: absolute;
   height: 0;
   opacity: 0;
-  transition: 1s;
   left: 100%;
   top:0;
   width: 650px;
@@ -1117,7 +1116,7 @@
     position: relative;
     width: 100%;
     margin: 10px;
-    white-space: nowrap;
+    //white-space: nowrap;
     overflow: hidden;
   }
   .single-category {
@@ -1145,6 +1144,8 @@
     border-top: 1px solid #fff;
     color: $font-dark-grey;
     transition: all 0.35s ease;
+
+    font: 16px/18px "Roboto-Light", sans-serif;
     &:hover {
       color: $font-red;
       border-top: 1px solid $font-red;
