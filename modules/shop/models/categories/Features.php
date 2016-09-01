@@ -83,7 +83,7 @@ class Features extends \system\models\Features
 
     private function makeValueUrl($feature, $value, $categories_id)
     {
-        $url = $categories_id . ';filter/';
+        $url = $categories_id ;
 
         $sp = $this->selected_features;
 
@@ -99,10 +99,14 @@ class Features extends \system\models\Features
             $sp[$feature['code']][] = $value['id'];
         }
 
-        $i=0;
+        $i=0; $f_url = '';
         foreach ($sp as $f => $v) {
-            $url .= ($i > 0 ? ';': '') . "$f-" . implode(',' , $v);
+            $f_url .= ($i > 0 ? ';': '') . "$f-" . implode(',' , $v);
             $i++;
+        }
+
+        if(!empty($f_url)){
+            $url .= ';filter/' . $f_url;
         }
 
         return $url;

@@ -275,6 +275,11 @@ class ContentFeatures extends Engine
         return $id;
     }
 
+    /**
+     * todo deprecated
+     * @deprecated
+     * @return bool|string
+     */
     public function createValue()
     {
         $data = $this->request->post('data');

@@ -573,7 +573,8 @@ engine.shop = {
                 });
 
                 $(document).on('click', '.b-spf-select', function(){
-                    var parent_id = $(this).data('parent'), categories_id = $('#main_categories_id').find('option:selected').val();
+                    var parent_id = $(this).data('parent'), categories_id = $('#inp_main_categories_id').val();
+                    //console.log(categories_id, products_id, parent_id);return;
                     $features.select(categories_id, products_id, parent_id);
                 });
 

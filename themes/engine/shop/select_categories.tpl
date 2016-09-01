@@ -7,7 +7,7 @@
             <a href="module/run/shop/categories/edit/{$main_category.id}" id="a_main_cat_id" target="_blank">{$main_category.name}</a>
             <a href="javascript:;" title="Змінити" class="shop-product-change-main-category" data-id="{$main_category.id}"><i class="fa fa-pencil"></i></a>
         </p>
-        <input type="hidden" name="main_categories_id" id="inp_main_categories_id">
+        <input type="hidden" name="main_categories_id" id="inp_main_categories_id" value="{$main_category.id}">
     </div>
 </div>
 
