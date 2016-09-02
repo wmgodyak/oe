@@ -974,6 +974,7 @@ engine.shop = {
     },
     accessories: function()
     {
+        if($('#content_id').length == 0) return;
         var renderCategories = function(items){
             var tmpl = _.template($('#acc_categories_tpl').html());
             $("#acc_categories_list").html(tmpl({items: items}));
@@ -1182,6 +1183,7 @@ engine.shop = {
     },
     kits: function()
     {
+        if($('#content_id').length == 0) return;
         var products_id = $('#content_id').val();
 
         var renderKits = function()

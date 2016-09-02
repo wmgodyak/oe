@@ -19,7 +19,7 @@ class DataFilter
      */
     public static function apply($param, $value)
     {
-        if(!isset(self::$filters[$param])) return null;
+        if(!isset(self::$filters[$param])) return $value;
 
         foreach (self::$filters[$param] as $callback) {
             if(is_array($callback) && isset($callback[1])){
