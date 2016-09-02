@@ -1,9 +1,9 @@
-{if !$app->cache->exists('shop.main.nav')}
-    {$app->cache->begin('shop.main.nav', 60*60)}
+{*{if !$app->cache->exists('shop.main.nav')}*}
+    {*{$app->cache->begin('shop.main.nav', 60*60)}*}
     <!-- begin sidebar -->
     <aside class="sidebar sidebar-collapse">
         <!-- begin m_goods-nav -->
-        <nav class="m_goods-nav">
+        <nav class="m_goods-nav {if $page.id > 1 }collapse{/if}">
             <div class="goods-nav__header">
                 <a href="javascript:;">КАТАЛОГ ТОВАРІВ</a>
             </div>
@@ -39,7 +39,7 @@
 
     </aside>
     <!-- end sidebar -->
-    {$app->cache->end()}
-{else}
-    {$app->cache->get('shop.main.nav')}
-{/if}
+    {*{$app->cache->end()}*}
+{*{else}*}
+    {*{$app->cache->get('shop.main.nav')}*}
+{*{/if}*}

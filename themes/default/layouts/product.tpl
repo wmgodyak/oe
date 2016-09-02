@@ -159,7 +159,7 @@
                             {$product.content}
                             {$events->call('shop.product.content', array($product))}
 
-                            {include file="chunks/product_preferences.tpl"}
+                            {include file="modules/shop/product_preferences.tpl"}
                         </div>
                         <div class="tab tab2 cms-content">
                             {*<pre>{print_r($product.features)}</pre>*}
