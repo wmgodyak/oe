@@ -20,8 +20,9 @@
 
             <!-- begin aside -->
             <aside class="aside">
-                {$mod->shop->filter()}
                 {include file="modules/shop/nav.tpl"}
+                <div class="clear"><br></div>
+                {$mod->shop->filter()}
             </aside>
             <!-- end aside -->
 

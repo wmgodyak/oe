@@ -60,6 +60,7 @@
           border-color: $bg-red;
           color: $font-red;
           .sub-menu {
+            border:1px solid #bebebe;
             display: block;
             width: 650px;
           }
@@ -216,6 +217,15 @@
           height: 19px;
         }
       }
+    }
+  }
+}
+.shop-sub-nav {
+  padding-top:20px;
+  a {
+    font-size:16px;
+    &:hover{
+      border-bottom: 1px solid $font-red;
     }
   }
 }
@@ -1095,6 +1105,7 @@
 
 //Menu
 .sub-menu {
+  border:1px solid #bebebe;
   display: block;
   overflow: hidden;
   position: absolute;
@@ -1134,7 +1145,7 @@
     border-bottom: 1px solid #fff;
     &:hover {
       color: $font-red;
-      border-bottom: 1px solid $font-red;
+      //border-bottom: 1px solid $font-red;
     }
   }
   .text-head {
@@ -1148,7 +1159,7 @@
     font: 16px/18px "Roboto-Light", sans-serif;
     &:hover {
       color: $font-red;
-      border-top: 1px solid $font-red;
+      //border-top: 1px solid $font-red;
     }
   }
 

@@ -239,6 +239,7 @@ var App = {
             }, function(){
                 $(this).children('.sub-menu').removeClass('active');
             });
+
             function autoHeight(items){
                 var maxHeight, heights;
                 heights = items.map(function () {
@@ -249,9 +250,11 @@ var App = {
                     height: maxHeight
                 });
             };
+
             $('.goods-nav__item ').each(function(){
                 autoHeight( $(this).find('li') );
             });
+
             try{
 
                 var grid = document.getElementsByClassName('my-grid');
@@ -262,16 +265,16 @@ var App = {
             {
                 console.log(err);
             }
-        }else {
+        } else {
             $('.goods-nav__link').on('click', function () {
                 if(false == $(this).siblings().is(':visible')) {
                     $('.sub-menu').slideUp(300);
                 }
                 $(this).next().slideToggle(300);
             });
-        };
-        if($('.m_goods-nav').hasClass('.collapse')){
-            alert(1);
+        }
+
+        if($('.m_goods-nav').hasClass('collapse')){
             $(".goods-nav__header > a").click(function(e){
                 var $a = $(this);
                 if($a.hasClass('active')){
@@ -281,6 +284,21 @@ var App = {
                 } else {
                     $('.goods-nav__list').slideDown(400, function(){
                         $a.addClass('active');
+
+                        $('.goods-nav__item ').each(function(){
+                            autoHeight( $(this).find('li') );
+                        });
+
+                        try{
+
+                            var grid = document.getElementsByClassName('my-grid');
+                            for (var i = 0; i <= grid.length; i++){
+                                waterfall(grid[i]);
+                            }
+                        } catch (err)
+                        {
+                            console.log(err);
+                        }
                     });
                 }
                 e.preventDefault();

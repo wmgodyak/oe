@@ -225,6 +225,7 @@ body {
         border-color: #f04d4d;
         color: #ee4d4d; }
         .m_goods-nav .goods-nav__list .goods-nav__item .goods-nav__link:hover .sub-menu {
+          border: 1px solid #bebebe;
           display: block;
           width: 650px; }
         .m_goods-nav .goods-nav__list .goods-nav__item .goods-nav__link:hover:before {
@@ -327,6 +328,13 @@ body {
       background-position: -101px -60px;
       width: 18px;
       height: 19px; }
+
+.shop-sub-nav {
+  padding-top: 20px; }
+  .shop-sub-nav a {
+    font-size: 16px; }
+    .shop-sub-nav a:hover {
+      border-bottom: 1px solid #ee4d4d; }
 
 .m_banner-slider {
   position: relative;
@@ -1087,6 +1095,7 @@ body {
     width: 100% !important; }
 
 .sub-menu {
+  border: 1px solid #bebebe;
   display: block;
   overflow: hidden;
   position: absolute;
@@ -1121,8 +1130,7 @@ body {
     font-size: 15px;
     border-bottom: 1px solid #fff; }
     .sub-menu .link:hover {
-      color: #ee4d4d;
-      border-bottom: 1px solid #ee4d4d; }
+      color: #ee4d4d; }
   .sub-menu .text-head {
     display: block;
     padding: 8px 0;
@@ -1132,8 +1140,7 @@ body {
     transition: all 0.35s ease;
     font: 16px/18px "Roboto-Light", sans-serif; }
     .sub-menu .text-head:hover {
-      color: #ee4d4d;
-      border-top: 1px solid #ee4d4d; }
+      color: #ee4d4d; }
   @media only screen and (max-width: 1170px) {
     .sub-menu {
       position: relative;
