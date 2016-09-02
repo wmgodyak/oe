@@ -50,6 +50,47 @@ class Features extends Model
         return $items;
     }
 
+    public function createValue($admin_id)
+    {
+        $data = $this->request->post('data');
+        $info = $this->request->post('info');
+
+        $this->beginTransaction();
+
+        $data['owner_id'] = $admin_id;
+
+        if(!isset($data['code']) || empty($data['code'])){
+            $data['code'] = md5($admin_id . 'x' . microtime());
+        }
+
+        $id = $this->createRow('__features', $data);
+
+        if($this->hasError()){
+            $this->rollback();
+            return false;
+        }
+
+        foreach ($info as $languages_id=> $item) {
+            $item['languages_id']    = $languages_id;
+            $item['features_id']     = $id;
+            $this->createRow('__features_info', $item);
+        }
+
+        if($this->hasError()){
+            $this->rollback();
+            return false;
+        }
+
+        if($this->hasError()){
+            $this->rollback();
+            return false;
+        }
+
+        $this->commit();
+
+        return $id;
+    }
+
     /**
      * @param $parent_id
      * @param int $content_id

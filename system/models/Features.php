@@ -121,7 +121,11 @@ class Features extends Model
     {
         if($this->getData($id, 'type') == 'folder') return false;
 
-        return $this->deleteRow('__features', $id);
+        $s = $this->deleteRow('__features', $id);
+        if($s){
+            self::$db->delete('__features', "parent_id={$id}");
+        }
+        return $s;
     }
 
     /**
