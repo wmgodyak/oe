@@ -94,8 +94,8 @@ class Users extends Front
     public function logout()
     {
         Session::delete('user');
-        $url = $this->getUrl(1);
-        $this->redirect( APPURL . $url);
+//        $url = $this->getUrl(1);
+        $this->redirect( APPURL);
     }
 
     public function fp()

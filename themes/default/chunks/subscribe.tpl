@@ -5,7 +5,7 @@
     </div>
     <div class="discount__content">
         <div class="discount__img-block">
-            <div class="discount__img" style="background-image: url('assets/img/discount-widget/img1.png');"></div>
+            <div class="discount__img" style="background-image: url('{$theme_url}assets/img/discount-widget/img1.png');"></div>
         </div>
         <div class="discount__heading2">
             Отримайте знижку!

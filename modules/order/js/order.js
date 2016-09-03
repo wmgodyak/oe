@@ -40,11 +40,11 @@ var Order = {
 
             var $this = $(this), products_id = $this.data('id'), variants_id = 0,
                 hasVariants = $this.data('has-variants'),
-                t_in = $this.data('in'),
-                t_bye = $this.data('bye')
+                t_in = $this.data('in')
+                //t_bye = $this.data('bye')
                 ;
 
-            if($this.hasClass('in')) {
+            if($this.hasClass('m_cart-indicator__in')) {
                 self.location.href=$('.cart__link:first').attr('href');
                 return;
             }
@@ -54,8 +54,12 @@ var Order = {
             }
 
             Order.cart.products.add(products_id, variants_id, 1, function(res){
-                $this.addClass('in active').text(t_in);
-                App.alert('Товар додано в кошик');
+                $this.addClass('m_cart-indicator__in');
+                if(! $this.hasClass('m_cart-indicator')){
+                    $this.text(t_in);
+                }
+                //App.alert('Товар додано в кошик');
+                $.notify('Товар додано в кошик', 'success');
                 refreshBlock(res);
             });
         });
@@ -216,7 +220,7 @@ var Order = {
             var $this = $(this), products_id = $this.data('id'),  formID = 'ocf_' + products_id, variants_id = 0,
                 hasVariants = $this.data('has-variants');
 
-            if($this.hasClass('in')) {
+            if($this.hasClass('m_cart-indicator__in')) {
                 self.location.href=$('.cart__link:first').attr('href');
                 return;
             }
@@ -271,13 +275,13 @@ var Order = {
                 t_in = $this.data('in')
                 ;
 
-            if($this.hasClass('in')) {
+            if($this.hasClass('m_cart-indicator__in')) {
                 self.location.href=$('.cart__link:first').attr('href');
                 return;
             }
 
             Order.cart.kits.add(kits_id, function(res){
-                $this.addClass('in active').text(t_in);
+                $this.addClass('m_cart-indicator__in').text(t_in);
                 App.alert('Комплект додано в кошик');
                 refreshBlock();
             });

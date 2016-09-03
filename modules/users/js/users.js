@@ -13,8 +13,8 @@ App.users = {
                $(res).appendTo('.header__activities');
 
                 App.validateAjaxForm('#usersLogin', function () {
-                    location.reload(true);
-                    //self.location.href = $('#usersLogin').data('href');
+                    //location.reload(true);
+                    self.location.href = $('#usersLogin').data('href');
                 });
             });
         });

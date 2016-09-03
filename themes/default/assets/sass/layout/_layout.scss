@@ -1744,6 +1744,15 @@
   float: left;
   width: 37.5%;
   padding: 15px 15px 0;
+  &.one-sb-sl{
+    width:74%;
+    .orders .product .img {
+      width:15%;
+      & > img {
+        width:60%;
+      }
+    }
+  }
   .info {
     width: 100%;
     color: $font-dark-grey;

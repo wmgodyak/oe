@@ -1,12 +1,10 @@
 <fieldset class="gallery-uploader">
     <legend>{$t.contentImages.image}
-    <a href="javascript:;" class="add insert">
+    <a href="javascript:;" class="add insert" title="{$t.common.create}">
         <i class="fa fa-plus-circle"></i>
-        <span>{$t.common.create}</span>
     </a>
-    <a href="javascript:;" class="add finished">
+    <a href="javascript:;" class="add finished" title="{$t.contentImages.remove}">
         <i class="fa fa-minus-circle"></i>
-        <span>{$t.contentImages.remove}</span>
     </a>
     </legend>
     <div class="list-group">

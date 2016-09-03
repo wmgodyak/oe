@@ -8,7 +8,6 @@
 
 <!-- become l_footer -->
 <footer class="l_footer">
-
     <!-- begin footer__main -->
     <div class="footer__main">
         <div class="container">
@@ -164,6 +163,7 @@
 <script src='{$theme_url}/assets/js/vendor/owl.carousel.min.js'></script>
 <script src='{$theme_url}/assets/js/vendor/jquery.barrating.min.js'></script>
 <script src='{$theme_url}/assets/js/vendor/waterfall.min.js'></script>
+<script src='{$theme_url}/assets/js/vendor/notify.js'></script>
 <script src="{$theme_url}/assets/js/main.js"></script>
 <!-- end scripts -->
 {if isset($modules_scripts)}
@@ -187,7 +187,7 @@
             <% if(total) { %>
             <div class="cart__price">
                 товарів на суму
-                <span><%- amount %></span>
+                <span><%- amount %> грн.</span>
             </div>
             <% } else { %>
                 <div class="cart__price">

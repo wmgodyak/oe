@@ -331,10 +331,59 @@ body {
 
 .shop-sub-nav {
   padding-top: 20px; }
-  .shop-sub-nav a {
-    font-size: 16px; }
-    .shop-sub-nav a:hover {
-      border-bottom: 1px solid #ee4d4d; }
+  .shop-sub-nav h2 {
+    color: #666666;
+    font: 16px/20px "Roboto-Regular", sans-serif; }
+  .shop-sub-nav ul {
+    width: 23%;
+    float: left; }
+    .shop-sub-nav ul li {
+      display: block;
+      padding: 0 5px 10px 0; }
+      .shop-sub-nav ul li a {
+        color: #f04d4d;
+        font: 16px/18px "Roboto-Regular", sans-serif; }
+        .shop-sub-nav ul li a:hover {
+          border-bottom: 1px solid #ee4d4d; }
+  .shop-sub-nav:after {
+    display: table;
+    content: ''; }
+
+.ui-widget-header {
+  background-color: #fff;
+  font: 18px/20px "Roboto-Regular", sans-serif;
+  color: #000;
+  border: 0;
+  text-align: center; }
+  .ui-widget-header .ui-dialog-titlebar-close .ui-icon-closethick {
+    background-image: url("/themes/default/assets/img/ui/ui-icons_ffffff_256x240.png"); }
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default, .ui-button, html .ui-button.ui-state-disabled:hover, html .ui-button.ui-state-disabled:active {
+  background-color: #f04d4d;
+  font: 14px/18px "Roboto-Regular", sans-serif;
+  color: #fff;
+  border: 0; }
+
+.ui-widget .form-group {
+  margin-bottom: 10px; }
+
+.ui-widget .form-group > label {
+  color: #666;
+  display: block;
+  margin-bottom: 5px; }
+
+.ui-widget input {
+  display: block;
+  height: 30px;
+  width: 100%;
+  padding: 0 10px;
+  border: 1px solid #bebebe;
+  font: 14px/28px "Roboto-Light", sans-serif;
+  color: #666666; }
+
+.ui-widget .form-group .error {
+  color: red;
+  font-size: 12px; }
 
 .m_banner-slider {
   position: relative;
@@ -2994,6 +3043,12 @@ body {
   float: left;
   width: 37.5%;
   padding: 15px 15px 0; }
+  .profile-content.one-sb-sl {
+    width: 74%; }
+    .profile-content.one-sb-sl .orders .product .img {
+      width: 15%; }
+      .profile-content.one-sb-sl .orders .product .img > img {
+        width: 60%; }
   .profile-content .info {
     width: 100%;
     color: #666666;

@@ -1,7 +1,7 @@
 <div class="modal-login modal">
     <h2>Вхід в інтернет-магазин</h2>
     <div class="form-block">
-        <form action="route/users/login" class="form-login" method="post" id="usersLogin">
+        <form action="route/users/login" class="form-login" data-href="28" method="post" id="usersLogin">
             <div class="form-group">
                 <label for="email-modal">Електронна пошта:</label>
                 <input id="email-modal" name="data[email]" type="email">

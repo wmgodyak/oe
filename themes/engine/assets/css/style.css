@@ -262,8 +262,8 @@ fieldset {
     clear: both; }
   fieldset legend {
     position: relative;
-    font-size: 20px;
-    line-height: 44px;
+    font-size: 18px;
+    line-height: 36px;
     color: #1e3c50;
     font-family: "RobotoLight";
     font-weight: bold;
@@ -271,8 +271,8 @@ fieldset {
     display: block;
     float: left;
     width: 100%;
-    padding: 0 30px;
-    margin: 0 0 15px 0; }
+    padding: 0 20px;
+    margin: 0 0 10px 0; }
   fieldset .toggle-arrow {
     position: absolute;
     top: 6px;
@@ -303,8 +303,10 @@ fieldset {
       min-height: 32px; }
       .select2 span.selection .select2-selection .select2-selection__rendered {
         text-align: left;
-        line-height: 32px;
-        padding: 0 34px 0 12px;
+        line-height: 20px;
+        white-space: nowrap;
+        overflow: hidden;
+        padding: 4px 34px 4px 12px;
         font-size: 14px;
         font-family: "RobotoLight"; }
       .select2 span.selection .select2-selection .select2-selection__arrow {
@@ -937,8 +939,8 @@ ul.first-level {
     display: inline-block;
     float: right; }
     .dashboard-heading .btn-group .btn.btn-md {
-      height: 26px;
-      line-height: 26px;
+      height: 28px;
+      line-height: 28px;
       padding: 0 10px;
       font-size: 16px; }
   .dashboard-heading .btn-link {

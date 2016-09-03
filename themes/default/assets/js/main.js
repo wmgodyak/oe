@@ -433,6 +433,9 @@ var App = {
     },
     dialog: function(args)
     {
+        if(typeof args.close == 'undefined'){
+            args.close = function( event, ui ) { $(this).dialog('destroy').remove(); };
+        }
         return $('<div></div>')
             .attr('id', 'modal' + Date.now())
             .html(args.content)

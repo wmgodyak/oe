@@ -206,106 +206,17 @@
 
             <!-- begin asider -->
             <aside class="asider">
-
                 <div class="terms">
-
                     <div class="top-line">
                         <div class="text">АРТИКУЛ ТОВАРУ:</div>
                         <span class="number">{$product.sku}</span>
                     </div>
-
-                    <div class="content">
-                        <div class="heading">
-                            Доставка, оплата, гарантії
-                        </div>
-
-                        <div class="info-block">
-                            <div class="block-heading">
-                                Доставка, оплата, гарантії
-                            </div>
-                            <div class="text">
-                                <ul>
-                                    <li>Кур’єром по місту — 40 грн</li>
-                                    <li>Від 250 — безкоштовно</li>
-                                    <li>Пункт видачі — м. Львів,
-                                        вул. Наукова 7а, офіс №124</li>
-                                    <li>Поштовими службами
-                                        «Нова Пошта» та «Укрпошта»</li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="info-block">
-                            <div class="block-heading">
-                                Оплата:
-                            </div>
-                            <div class="text cms-content">
-                                <ul>
-                                    <li>Кур’єру при доставці товару</li>
-                                    <li>Продавцю при самовивезенні</li>
-                                    <li>На картку ПриватБанку</li>
-                                    <li>При отриманні товару у
-                                        відділеннях «Нової Пошти»</li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="info-block">
-                            <div class="block-heading">
-                                Гарантії:
-                            </div>
-                            <div class="text">
-                               <span class="span1">
-                                   У випадку помилки і доставки
-                                   товару що не відповідає
-                                   замовленому (пересорт, недостача
-                                   тощо), покупець повинен
-                                   повідомити про це продавця
-                                   протягом 2 робочих днів!
-                               </span>
-                                <span class="span2">
-                                    Дізнатись більше можна <a href="#">ТУТ</a>
-                                </span>
-                            </div>
-                        </div>
-
-                    </div>
-
+                    {include file="chunks/delivery.tpl"}
                 </div>
-
-                <div class="m_discount-widget">
-                    <div class="discount__heading1">
-                        Ви у нас вперше?
-                    </div>
-                    <div class="discount__content">
-                        <div class="discount__img-block">
-                            <div class="discount__img" style="background-image: url('{$theme_url}assets/img/discount-widget/img1.png');"></div>
-                        </div>
-                        <div class="discount__heading2">
-                            Отримайте знижку!
-                        </div>
-                        <div class="discount__text">
-                            Введіть свою електронну скриньку
-                            та отримайте знижку у нашому
-                            інтернет магазині, а також будьте
-                            завжди в курсі наших новин.
-                        </div>
-                        <form action="#">
-                            <div class="input-group">
-                                <input type="email" placeholder="Введіть свій e-mail">
-                            </div>
-                            <div class="btn-row">
-                                <button class="btn md red">Хочу знижку</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
+                {include file="chunks/subscribe.tpl"}
             </aside>
             <!-- end asider -->
-
         </div>
-
     </div>
     <!-- end article-page -->
 

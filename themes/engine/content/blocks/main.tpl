@@ -5,10 +5,10 @@
         <label class="col-md-2 control-label">{$t.common.lang}</label>
         <div class="btn-group col-md-6" id="switchLanguages" role="group">
             {foreach $languages as $i=>$lang}
-                {if $i == 0}{assign var='mainLang' value=$lang }{/if}
+                {if $lang.is_main == 1}{assign var='mainLang' value=$lang }{/if}
                 <button type="button" class="btn {if $i == 0}btn-primary{/if}" data-code="{$lang.code}">{$lang.code}</button>
             {/foreach}
-            {$events->call('content.main.languages.switcher', array($mainLang))}
+            {$events->call('content.main.languages.switcher', $mainLang)}
         </div>
     </div>
     {/if}
