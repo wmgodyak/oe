@@ -1,4 +1,4 @@
-<div class="product__item">
+<div class="product__item" data-id="{$product.id}">
     <span class="product__link">
         <span class="m_product-item">
            <a  href="{$product.id}" title="{$product.title}" class="product-item__img-row">
@@ -53,4 +53,6 @@
            </span>
        </span>
     </span>
+
+    {if isset($custom_actions)}{$custom_actions}{/if}
 </div>

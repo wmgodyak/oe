@@ -10,6 +10,7 @@ namespace modules\wishlist\controllers;
 
 use helpers\FormValidation;
 use modules\users\models\Users;
+use system\core\EventsHandler;
 use system\core\Session;
 use system\Front;
 
@@ -41,6 +42,7 @@ class Wishlist extends Front
     public function init()
     {
         $this->template->assignScript('modules/wishlist/js/wishlist.js');
+        EventsHandler::getInstance()->add('user.account.content', [$this, 'index']);
     }
 
     public function get()
@@ -48,9 +50,12 @@ class Wishlist extends Front
         return $this->wishlist->get();
     }
 
-    public function index()
+    public function index($page = null)
     {
+        if($page['id'] != 27) return null;
 
+        $this->template->assign('wishlists', $this->wishlist->get());
+        return $this->template->fetch('modules/wishlist/index');
     }
 
    public function create()
@@ -146,9 +151,9 @@ class Wishlist extends Front
     {
         $id = $this->request->post('id', 'i');
         $wl = Session::get('wishlist');
-        if(isset($wl[$id])) unset($wl[$id]);
-
-        echo $this->wishlistProducts->delete($id);
+        if(isset($wl[$id])){
+            unset($wl[$id]);
+            echo $this->wishlistProducts->delete($id);
+        }
     }
-
 }

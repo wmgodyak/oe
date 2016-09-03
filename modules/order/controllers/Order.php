@@ -328,7 +328,8 @@ class Order extends Front
     {
         $user = Session::get('user');
         if(! $user) return '';
-
+        $start = (int)$start;
+        $num   = (int)$num;
         $p = (int) $this->request->get('p', 'i');
         $start = $start ? $start : $p;
         if($p){

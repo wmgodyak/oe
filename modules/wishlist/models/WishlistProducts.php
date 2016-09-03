@@ -42,9 +42,9 @@ class WishlistProducts extends Model
 
     public function get($wishlist_id)
     {
-
+        $this->products->clearQuery();
         $this->products->fields('wp.id as wp_products_id');
-
+//        $this->products->debug(1);
         $this->products->join("join __wishlist_products wp on wp.wishlist_id='{$wishlist_id}' and wp.products_id=c.id");
         return $this->products->get();
     }

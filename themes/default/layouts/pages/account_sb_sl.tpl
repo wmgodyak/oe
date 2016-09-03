@@ -22,7 +22,7 @@
                 <div class="bs-callout bs-callout-danger">
                     <p>Увійдіть або зареєструйтесь, щоб продовжити</p>
                 </div>
-                {else}
+            {else}
                 <!-- begin aside -->
                 <aside class="aside">
                     {include file="modules/users/profile_nav.tpl"}
@@ -30,7 +30,7 @@
                 <!-- end aside -->
 
                 <!--Begin content of profile-->
-                <div class="profile-content {if $page.id == 31} one-sb-sl{/if}">
+                <div class="profile-content one-sb-sl">
 
                     {if $page.id == 26 || $page.id==28}
 
@@ -39,21 +39,13 @@
 
                         {$mod->users->changePassword()}
 
-                        {elseif $page.id == 31}
+                    {elseif $page.id == 31}
                         {$mod->order->history()}
                         {$mod->order->pagination()}
                     {/if}
 
                     {$events->call('user.account.content', $page)}
                 </div>
-                <!--End profile content-->
-                {if $page.id != 31}
-                <!--Begin right aside orders-->
-                    <aside class="aside-right">
-                        {$events->call('user.account.sidebar')}
-                    </aside>
-                <!--End right aside-->
-                {/if}
             {/if}
         </div>
 

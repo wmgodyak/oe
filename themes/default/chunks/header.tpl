@@ -21,7 +21,7 @@
 
                 <!-- begin wish-list -->
                 <div class="wish-list">
-                    <a class="wish-list__link" id="wishlistLink" href="12">Лист бажань</a>
+                    <a class="wish-list__link" id="wishlistLink" href="27">Лист бажань</a>
                 </div>
                 <!-- end wish-list -->
 

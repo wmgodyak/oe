@@ -1252,3 +1252,67 @@
     }
   }
 }
+.m_wishlist {
+  h2{
+    font:23px/23px "Roboto-Medium", sans-serif;
+    color: #666666;
+  }
+  .product__item{
+    position: relative;
+  }
+  .wishlist-delete-item {
+    position: absolute;
+    top:0;right:0;
+    display: block;
+    width: 17px;
+    height: 17px;
+    margin: 20px auto 0;
+    cursor: pointer;
+    &:after,
+    &:before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: url("../img/close-sprite.png") no-repeat;
+      content: '';
+      transition: opacity 0.35s ease;
+      @include respond-to(xs) {
+        display: none;
+      }
+    }
+    &:before {
+      background-position: 0 -19px;
+    }
+    &:after {
+      background-position: 0 0;
+      opacity: 0;
+    }
+    &:hover {
+      &:before {
+        opacity: 0;
+      }
+      &:after {
+        opacity: 1;
+      }
+    }
+    @include respond-to(xs) {
+      width: auto;
+      height: auto;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    span {
+      display: none;
+      font: 14px/20px $fontRegular;
+      color: $font-red;
+      white-space: nowrap;
+      border-bottom: 1px solid $bg-red;
+      @include respond-to(xs) {
+        display: inline-block;
+      }
+    }
+  }
+}

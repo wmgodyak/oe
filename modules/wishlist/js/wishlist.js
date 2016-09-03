@@ -42,6 +42,7 @@ var Wishlist = {
                            d.dialog('close');
                            $this.addClass('hearth-like__link--liked');
                            wLink.addClass('active');
+                           $.notify('Товар додано в список бажань. Ви можете переглянути список в своєму профілі');
                        }
                    });
                    return;
@@ -49,7 +50,15 @@ var Wishlist = {
                //alert('Process to add to wish list');
                $this.addClass('hearth-like__link--liked');
                wLink.addClass('active');
+               $.notify("Товар додано в список бажань.\n Ви можете переглянути список в своєму профілі");
            });
+        });
+
+        $(document).on('click', '.wishlist-delete-item', function(e){
+            var id = $(this).data('id');
+            Wishlist.delete(id, function(){
+                location.reload(true);
+            });
         });
     },
     add: function(products_id, variants_id, onSuccess)
@@ -66,14 +75,13 @@ var Wishlist = {
             }
         );
     },
-    delete: function(products_id, variants_id, onSuccess)
+    delete: function(id, onSuccess)
     {
         App.request.post(
             {
                 url  : 'route/wishlist/delete',
                 data : {
-                    products_id : products_id,
-                    variants_id : variants_id
+                    id : id
                 },
                 success  : onSuccess,
                 dataType : 'json'

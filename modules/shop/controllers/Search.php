@@ -31,8 +31,8 @@ class Search extends Front
         parent::__construct();
 
         $this->products = $products;
-        $this->group_id = Settings::getInstance()->get('modules.shop.config.group_id');
-        $this->ipp      = Settings::getInstance()->get('modules.shop.config.ipp');
+        $this->group_id = Settings::getInstance()->get('modules.Shop.config.group_id');
+        $this->ipp      = Settings::getInstance()->get('modules.Shop.config.ipp');
         $this->bonus_rate = Settings::getInstance()->get('modules.Shop.config.bonus_rate');
     }
 
