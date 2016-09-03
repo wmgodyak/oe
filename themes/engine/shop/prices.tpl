@@ -49,7 +49,7 @@
                 <tr>
                     <td>Ціна</td>
                     {foreach $groups as $g}
-                        <td><input type="text" name="prices[{$g.id}]" class="form-control" onchange="this.value = parseFloat(this.value); if(this.value == 'NaN') this.value = '';" required value="{if isset($prices[$g.id])}{$prices[$g.id]}{/if}"></td>
+                        <td><input type="text" {* name="prices[{$g.id}]" required  *} readonly class="form-control" onchange="this.value = parseFloat(this.value); if(this.value == 'NaN') this.value = '';" value="{if isset($prices[$g.id])}{$prices[$g.id]}{/if}"></td>
                     {/foreach}
                     <td>
 
