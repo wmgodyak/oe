@@ -56,7 +56,7 @@ class Languages extends Engine
                 $res[$i][] = $row['code'];
                 $res[$i][] = ($row['is_main'] == 1 ? "<label class='label'>ТАК</label>" : "");
                 $res[$i][] =
-                    ($row['is_main'] == 0 ? EventsHandler::getInstance()->call('system.languages.list.actions', ['language' => $row], false) : "") .
+                    ($row['is_main'] == 0 ? EventsHandler::getInstance()->call('system.languages.list.actions', $row, false) : "") .
                     (string)Button::create
                     (
                         Icon::create(Icon::TYPE_EDIT),
