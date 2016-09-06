@@ -29,11 +29,13 @@ class Content extends Model
      * Content constructor.
      * @param $type
      */
-    public function __construct($type)
+    public function __construct($type = null)
     {
         parent::__construct();
 
-        $this->setTypeAndSubtype($type);
+        if($type){
+            $this->setTypeAndSubtype($type);
+        }
 
         $languages = new Languages();
         $this->languages = $languages->get();
@@ -52,25 +54,8 @@ class Content extends Model
             throw new \Exception('Невірний тип контенту');
         }
 
-        $this->types_id = $type['id'];
+        $this->types_id    = $type['id'];
         $this->subtypes_id = $type['id'];
-        return;
-
-        if($type['isfolder'] == 0){
-            $this->subtypes_id = $type['id'];
-        } else {
-            $subtype = self::$db
-                ->select("select id, isfolder from __content_types where parent_id='{$type['id']}' and is_main=1 limit 1")
-                ->row();
-
-            if(empty($subtype)){
-                $this->subtypes_id = $type['id'];
-            }
-        }
-
-        if(empty($this->subtypes_id)){
-            throw new Exception("SubtypesID cannot be empty");
-        }
     }
 
     /**

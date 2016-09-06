@@ -17,6 +17,7 @@ use modules\shop\models\products\Kits;
 use modules\shop\models\products\Prices;
 use modules\shop\models\products\variants\ProductsVariants;
 use modules\shop\models\SearchHistory;
+use system\core\DataFilter;
 use system\core\Session;
 use system\Front;
 use system\models\Currency;
@@ -162,9 +163,14 @@ class Shop extends Front
             $start = $start * $this->ipp;
         }
 
+        $this->products->categories_in = DataFilter::apply('module.shop.products.categories_in', $this->products->categories_in);
+
+        $categories_id = DataFilter::apply('module.shop.products.categories_id', $categories_id);
         $this->products->categories_id = $categories_id;
+
         $this->products->start = $start;
         $this->products->num = $this->ipp;
+
         $products = $this->products->get();
 
         foreach ($products as $k=>$product) {

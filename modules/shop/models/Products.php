@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: wg
- * Date: 23.06.16
- * Time: 23:12
- */
 
 namespace modules\shop\models;
 
@@ -36,6 +30,7 @@ class Products extends Content
     public $start = 0;
     public $num = 15;
     public $categories_id = 0;
+    public $categories_in = [];
 
     private $where    = [];
     private $order_by = [];
@@ -169,15 +164,16 @@ class Products extends Content
         return $this;
     }
 
-
-
     /**
      * @return mixed
      * @throws \system\core\exceptions\Exception
      */
     public function get()
     {
-        if($this->categories_id > 0){
+
+        if( !empty($this->categories_in)){
+            $this->join("join __content_relationship cr on cr.content_id=c.id and cr.categories_id in (". implode(',', $this->categories_in) .")");
+        } else if($this->categories_id > 0){
             if($this->isfolder($this->categories_id)){
                 $in = $this->categoriesChildrenID($this->categories_id);
                 if(! empty($in)){
