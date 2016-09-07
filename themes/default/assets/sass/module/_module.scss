@@ -874,6 +874,12 @@
       font: 18px/22px $fontMedium;
       color: $font-dark-grey;
     }
+    a.b-comments-subscribe{
+      margin-left: 1em;
+      font: 16px/22px $fontMedium;
+      color: #ee4d4d;
+      border-bottom:1px dotted #f04d4d;
+    }
   }
   form {
     padding: 25px 0 0 0;

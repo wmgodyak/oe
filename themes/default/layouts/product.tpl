@@ -109,7 +109,7 @@
                                     title="Повідомте про появу">Повідомте про появу</button>
                             </div>
                         {/if}
-                        {$events->call('shop.product.buy.after', array($product))}
+                        {$events->call('shop.product.buy.after', $product)}
                         {assign var='avRate' value=$mod->comments->getAverageRating($product.id)|ceil}
                         {assign var='commentsTotal' value=$mod->comments->getTotal($product.id)}
                         <span class="row comment-row">
@@ -124,6 +124,23 @@
                                 {$commentsTotal} відгуки
                             </span>
                         </span>
+                        {if $product.features|count}
+                            <div class="sp-short-features">
+                                <ul>
+                                    {foreach $product.features as $item}
+                                        <li>
+                                            <span>{$item.name}: </span>
+                                                {if $item.values|count}
+                                                    {foreach $item.values as $i=>$v}
+                                                        {$v.name} {if isset($item.values[$i + 1])},{/if}
+                                                    {/foreach}
+                                                {/if}
+                                            .
+                                        </li>
+                                    {/foreach}
+                                </ul>
+                            </div>
+                        {/if}
                         {if $product.description !=''}
                         <div class="row">
                             <div class="short">
@@ -140,10 +157,12 @@
                 <div class="item-info-tabs">
                     <div class="info-tabs__top">
                         <ul>
+                            {if $product.content != ''}
                             <li class="active">
                                 <a href="javascript:;">{$t.shop.product.tab_description}</a>
                             </li>
-                            <li>
+                            {/if}
+                            <li{if $product.content == ''} class="active"{/if}>
                                 <a href="javascript:;">{$t.shop.product.tab_features}</a>
                             </li>
                             <li>
@@ -155,31 +174,51 @@
                         </ul>
                     </div>
                     <div class="info-tabs__main">
+                        {if $product.content != ''}
                         <div class="tab active tab1 cms-content clearfix">
                             {$product.content}
-                            {$events->call('shop.product.content', array($product))}
-
-                            {include file="modules/shop/product_preferences.tpl"}
+                            {$events->call('shop.product.content', $product)}
+                            {*{include file="modules/shop/product_preferences.tpl"}*}
                         </div>
+                        {/if}
                         <div class="tab tab2 cms-content">
                             {*<pre>{print_r($product.features)}</pre>*}
-                            <table class="table">
-                                {foreach $product.features as $item}
-                                <tr>
-                                    <td>{$item.name}</td>
-                                    <td>
-                                        {if $item.values|count}
-                                            {foreach $item.values as $v}
-                                                {$v.name}
-                                            {/foreach}
-                                        {/if}
-                                    </td>
-                                </tr>
+                            <div class="sp-features">
+                                {assign var='features' value=array_chunk($product.features, 4)}
+                                {foreach $features as $a}
+                                    <ul>
+                                        {foreach $a as $i=>$item}
+                                            <li {if $i == 0}class="first"{/if}>
+                                                <span>{$item.name}</span>
+                                                <b>
+                                                    {if $item.values|count}
+                                                        {foreach $item.values as $v}
+                                                            {$v.name}
+                                                        {/foreach}
+                                                    {/if}
+                                                </b>
+                                            </li>
+                                        {/foreach}
+                                    </ul>
                                 {/foreach}
-                            </table>
+                               {* <table class="table features">
+                                    {foreach $product.features as $i=>$item}
+                                        <tr {if $i == 0}class="first"{/if}>
+                                            <td style="width: 40%;">{$item.name}</td>
+                                            <td>
+                                                {if $item.values|count}
+                                                    {foreach $item.values as $v}
+                                                        {$v.name}
+                                                    {/foreach}
+                                                {/if}
+                                            </td>
+                                        </tr>
+                                    {/foreach}
+                                </table> *}
+                            </div>
                         </div>
                         <div class="tab tab3 cms-content">
-                            {$mod->comments->display($product.id)}
+                            <div class="sp-comments">{$mod->comments->display($product.id)}</div>
                         </div>
                         <div class="tab tab4 cms-content">
                             {assign var ='video_1' value=$app->contentMeta->get($product.id, 'video_1', true)}

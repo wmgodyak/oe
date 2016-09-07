@@ -110,16 +110,16 @@ class Products extends Content
         $sort = $this->request->get('sort', 's');
         switch($sort){
             case 'cheap':
-                $this->orderBy('pp.price asc');
+                $this->orderBy('available desc, pp.price asc');
                 break;
             case 'expensive':
-                $this->orderBy('pp.price desc');
+                $this->orderBy('available desc, pp.price desc');
                 break;
             case 'in-stock':
                 $this->orderBy('c.in_stock = 1');
                 break;
             default: //popular
-                $this->orderBy('c.id desc');
+                $this->orderBy('available desc, c.id desc');
                 break;
         }
     }
@@ -209,7 +209,8 @@ class Products extends Content
             WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id = {$cu_main['id']} THEN pp.price * {$cu_on_site['rate']}
             WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id <> {$cu_main['id']} THEN pp.price / cu.rate * {$cu_on_site['rate']}
             END, 2 ) as price,
-           pp.price as pprice, '{$cu_on_site['symbol']}' as symbol {$sel}
+           pp.price as pprice, '{$cu_on_site['symbol']}' as symbol {$sel},
+           IF(c.in_stock = 1, 1, 0) as available
           from __content c
           join __products_prices pp on pp.content_id=c.id and pp.group_id={$this->group_id}
           {$j}
