@@ -1,4 +1,4 @@
-{assign var="sorting" value=$app->guides->get('shop.sorting')}
+{assign var="sorting" value=$app->guides->get('shop.sorting', 'position')}
 {if $sorting|count}
 <div class="sort">
     {*{d($sorting)}*}

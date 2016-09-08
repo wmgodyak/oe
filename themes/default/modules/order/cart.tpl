@@ -39,7 +39,7 @@
                             <%- item.price%> грн.
                         </div>
                         <div class="code">
-                            код товару: <%- item.sku%>
+                            Артикул товару: <%- item.sku%>
                         </div>
                     </div>
                     <div class="item item3">

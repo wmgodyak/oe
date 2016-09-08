@@ -53,4 +53,9 @@ class WishlistProducts extends Model
     {
         return $this->deleteRow('__wishlist_products', $id);
     }
+
+    public function getData($id, $key = '*')
+    {
+        return $this->rowData('__wishlist_products', $id, $key);
+    }
 }

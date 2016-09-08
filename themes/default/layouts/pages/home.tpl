@@ -32,6 +32,8 @@
             {include file="modules/shop/widgets/actions.tpl"}
             {include file="modules/shop/widgets/new.tpl"}
 
+            {include file="modules/shop/widgets/viewed.tpl"}
+
         </div>
 
     </div>

@@ -62,7 +62,7 @@
         @include clearfix();
         margin-top: 10px;
         float: left;
-        margin-left:45px;
+        margin-left:35px;
         @include respond-to(sm) {
           display: none;
         }

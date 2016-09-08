@@ -30,7 +30,7 @@ class Guides extends Model
         }
     }
 
-    public function get($key)
+    public function get($key, $order = null)
     {
         $res = self::$db
             ->select("
@@ -42,13 +42,27 @@ class Guides extends Model
             ->row();
 
         if(!empty($res)){
-
+            $ob = '';
+            if($order){
+                switch($order){
+                    case 'id':
+                        $ob = "order by abs(c.id) asc";
+                        break;
+                    case 'position':
+                        $ob = "order by abs(c.position) asc";
+                        break;
+                    case 'name':
+                        $ob = "order by i.name asc";
+                        break;
+                }
+            }
             $res['items'] = self::$db
                 ->select("
                 select c.id, i.name, c.external_id
                 from __content c
                 join __content_info i on i.content_id=c.id and i.languages_id={$this->languages_id}
                 where c.parent_id = '{$res['id']}' and c.status = 'published'
+                {$ob}
               ")
                 ->all();
 

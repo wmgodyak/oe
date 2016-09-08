@@ -151,9 +151,11 @@ class Wishlist extends Front
     {
         $id = $this->request->post('id', 'i');
         $wl = Session::get('wishlist');
-        if(isset($wl[$id])){
-            unset($wl[$id]);
+        $products_id = $this->wishlistProducts->getData($id, 'products_id');
+        if(isset($wl[$products_id])){
+            unset($wl[$products_id]);
             echo $this->wishlistProducts->delete($id);
+            Session::set('wishlist', $wl);
         }
     }
 }
