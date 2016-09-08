@@ -22,7 +22,7 @@ class Modules
     private $lang;
     private $mode;
 
-    public function __construct($theme, $lang, $mode = 'frontend')
+    public function __construct($theme = null, $lang = null, $mode = 'frontend')
     {
         $this->theme = $theme;
         $this->lang  = $lang;
@@ -47,7 +47,9 @@ class Modules
 
                 $_module = lcfirst($module);
 
-                $this->assignLang($_module);
+                if($this->theme && $this->lang){
+                    $this->assignLang($_module);
+                }
 
                 $config = $this->readConfig($_module, (isset($params['config']) ? $params['config'] : []));
 

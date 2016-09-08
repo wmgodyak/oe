@@ -204,28 +204,26 @@ class Modules extends Engine
 
     public function edit($id = null)
     {
-        $s=0; $t=null; $m=null;
+        $s=0; $t=null; $m=null; $config = null;
         $module =  $this->request->post('module');
         $modules = Settings::getInstance()->get('modules');
         if(isset($modules[$module])){
+
             $_module = lcfirst($module);
             $t = 'Налаштування модуля';
             $path = DOCROOT . "modules/{$_module}/config.ini";
-            if( !file_exists($path)){
-                $m = "Цей модуль немає налаштувань";
-            } else {
+            if (file_exists($path)) {
                 $s=1;
-
                 $config = parse_ini_file($path);
                 $s_config = isset($modules[$module]['config']) ? $modules[$module]['config'] : [];
                 $config = array_merge($config, $s_config);
 
-                $this->template->assign('module', $module);
-                $this->template->assign('config', $config);
-                $m = $this->template->fetch('modules/config');
             }
 
         }
+        $this->template->assign('config', $config);
+        $this->template->assign('module', $module);
+        $m = $this->template->fetch('modules/config');
 
         $this->response->body(['s' => $s, 't' => $t, 'm' => $m])->asJSON();
     }

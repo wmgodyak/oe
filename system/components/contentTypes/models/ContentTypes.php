@@ -137,9 +137,4 @@ class ContentTypes extends \system\models\ContentTypes
     {
         return self::$db->select("select * from __content_images_sizes order by id asc")->all();
     }
-
-    public function get($parent_id)
-    {
-        return self::$db->select("select id, name from __content_types where parent_id={$parent_id} order by id asc")->all();
-    }
 }

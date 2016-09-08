@@ -75,7 +75,6 @@ class Content extends Model
 
         $d['type'] = $this->getContentType($id);
 
-
         if(!empty($d['settings'])){
             $d['settings'] = unserialize($d['settings']);
         }

@@ -166,15 +166,15 @@ abstract class Engine extends Controller
 
         $this->initSystemComponents();
 
-        $m = new Modules($this->theme, $lang, 'backend');
-        $this->modules = $m->init();
-
         $app = new App();
-        $this->template->assign('app', $app);
+        Template::getInstance()->assign('app', $app);
+
         // assign events
         $events = EventsHandler::getInstance();
+        Template::getInstance()->assign('events', $events);
 
-        $this->template->assign('events', $events);
+        $m = new Modules($this->theme, $lang, 'backend');
+        $this->modules = $m->init();
 
 //        $this->dump(Lang::getInstance($this->theme, $lang)->t());die;
         $this->template->assign('t', Lang::getInstance($this->theme, $lang)->t());

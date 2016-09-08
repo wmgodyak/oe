@@ -6,12 +6,14 @@
  * Date: 29.06.16 : 10:52
  */
 
-
 namespace system\models;
-
 
 defined("CPATH") or die();
 
+/**
+ * Class ContentTypes
+ * @package system\models
+ */
 class ContentTypes extends Engine
 {
     /**
@@ -65,6 +67,18 @@ class ContentTypes extends Engine
                 content_types_id    = {$types_id} and
                 content_subtypes_id = {$subtypes_id}
                 order by abs(fc.position) asc
+                ")
+            ->all();
+    }
+
+    public function get($parent_id = 0)
+    {
+        return self::$db
+            ->select("
+                select id, name, parent_id, isfolder
+                from __content_types
+                where parent_id={$parent_id}
+                order by is_main desc
                 ")
             ->all();
     }

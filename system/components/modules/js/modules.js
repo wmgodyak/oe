@@ -110,11 +110,11 @@ engine.modules = {
                 var bi = t.common.button_save;
                 var buttons = {};
 
-                if(res.s){
+                //if(res.s){
                     buttons[bi] =  function(){
                         $('#modulesForm').submit();
                     };
-                }
+                //}
 
                 var dialog = engine.dialog({
                     content: res.m,

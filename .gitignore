@@ -6,3 +6,4 @@ robots.txt
 __components
 vendor/filemanager/
 vendor/sxd/
+sitemap*.xml
