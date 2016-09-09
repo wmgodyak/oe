@@ -1,13 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: wg
- * Date: 24.06.16
- * Time: 21:19
- */
-
 namespace system\models;
+use system\core\exceptions\Exception;
 
+/**
+ * Class ContentRelationship
+ * @package system\models
+ */
 class ContentRelationship extends Model
 {
     /**
@@ -68,7 +66,7 @@ class ContentRelationship extends Model
      */
     public function getCategories($content_id, $is_main = null)
     {
-        $w = $is_main ? "and is_main={$is_main}" : null;
+        $w = $is_main !== null ? "and is_main={$is_main}" : null;
         return self::$db
             ->select("select categories_id from __content_relationship where content_id={$content_id} {$w}")
             ->all('categories_id');
@@ -93,21 +91,22 @@ class ContentRelationship extends Model
     /**
      * @param $content_id
      * @param null $categories_id
-     * @throws \system\core\exceptions\Exception
+     * @return bool
+     * @throws Exception
      */
     public function saveMainCategory($content_id, $categories_id = null)
     {
-        self::$db->delete
-        (
-            '__content_relationship',
-            " content_id={$content_id} and is_main = 1 limit 1"
-        );
-
         if(!$categories_id){
             $categories_id = $this->request->post('main_categories_id', 'i');
         }
 
-        if($categories_id){
+        if($content_id > 0 && $categories_id > 0) {
+
+            self::$db->delete
+            (
+                '__content_relationship',
+                " content_id={$content_id} and is_main = 1 limit 1"
+            );
             $this->create($content_id, $categories_id, 1);
         }
 
@@ -124,7 +123,7 @@ class ContentRelationship extends Model
         if( !$categories){
             $categories = $this->request->post('categories');
         }
-        $selected = $this->getCategories($content_id);
+        $selected = $this->getCategories($content_id, 0);
         if($categories){
             foreach ($categories as $k=>$categories_id) {
 

@@ -416,8 +416,8 @@ class Products extends Content
      */
     public function contentProcess($id)
     {
-        $this->relations->saveContentCategories($id);
-        $this->relations->saveMainCategory($id);
+//        $this->relations->saveContentCategories($id);
+//        $this->relations->saveMainCategory($id);
 
         return $this->features('contentProcess', $id);
     }

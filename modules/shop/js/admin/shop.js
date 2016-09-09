@@ -175,6 +175,7 @@ engine.shop = {
                         engine.validateAjaxForm('#sp_cat_form', function(d){
                             if(d.s){
                                 mainCatA.attr('href', d.cat.href).attr('data-id', d.cat.id).html(d.cat.name);
+                                $('#inp_main_categories_id').val(d.cat.id)
                                 dialog.dialog('destroy').remove();
                             }
                         });
