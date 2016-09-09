@@ -63,6 +63,7 @@ class Sitemap extends Front
 
         file_put_contents($path, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<sitemapindex xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">", FILE_APPEND);
         foreach ($this->types as $type) {
+            if($type['data']['parent_id'] > 0) continue;
             file_put_contents($path,  "
     <sitemap>
         <loc>{$host}sitemap-{$type['data']['type']}.xml</loc>
