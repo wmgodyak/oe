@@ -31,9 +31,9 @@ class Blog extends Front
     private $tags;
     private $postViews;
 
-    private $ipp = 5;
+    private $ipp   = 5;
     private $total = 0;
-    public $commentsEnabled = true; // todo check if module comments is installed
+    public  $commentsEnabled = true; // todo check if module comments is installed
     private $comments;
 
     public function __construct()

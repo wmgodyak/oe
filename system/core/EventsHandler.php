@@ -115,4 +115,15 @@ class EventsHandler
         echo '<pre>'; print_r(self::$events);
     }
 
+    public function getEvents()
+    {
+        return self::$events;
+    }
+
+    public function getEventCallbacks($action)
+    {
+        if(!isset(self::$events[$action])) return null;
+
+        return self::$events[$action];
+    }
 }

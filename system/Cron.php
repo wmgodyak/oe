@@ -15,7 +15,6 @@ class Cron// extends Front
         $m = new Modules();
         $m->init();
         EventsHandler::getInstance()->call('system.cron.run');
-//        echo 'done';
     }
 
     public function __destruct()

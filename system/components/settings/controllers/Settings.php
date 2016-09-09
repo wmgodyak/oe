@@ -3,6 +3,7 @@
 namespace system\components\settings\controllers;
 
 use helpers\bootstrap\Button;
+use system\core\EventsHandler;
 use system\Engine;
 
 defined("CPATH") or die();
@@ -46,6 +47,10 @@ class Settings extends Engine
         foreach ($dirs as $k=>$v) {
             $dir_perm[$v] = is_writable(DOCROOT . $v);
         }
+
+//        $e = EventsHandler::getInstance()->getEventCallbacks('system.cron.run');
+//        $e = EventsHandler::getInstance()->getEvents();
+//        d($e);die;
 
         $this->template->assign('dir_perm', $dir_perm);
         $this->template->assign('sys_info', $sys_info);

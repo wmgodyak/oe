@@ -7,6 +7,7 @@
                     {assign var="item_name" value="tab_$group"}
                     <li><a href="{$com_url}#{$group}">{$t.settings[$item_name]}</a></li>
                 {/foreach}
+                <li><a href="{$com_url}#cron">Cron</a></li>
             </ul>
             {foreach $items as $group=>$item}
                 <div id="{$group}">
@@ -27,6 +28,15 @@
                     {/foreach}
                 </div>
             {/foreach}
+            <div id="cron">
+                <p>Список модулів які викликаються через cron</p>
+                {*<div class="form-group">*}
+                    {*<label for="settings_cron" class="control-label col-md-3">aassas</label>*}
+                    {*<div class="col-md-9">*}
+                        {*<input type="text" class="form-control" name="settings[cron]" id="settings_cron" value="" required>*}
+                    {*</div>*}
+                {*</div>*}
+            </div>
         </div>
         <div class="clearfix"></div>
     </div>

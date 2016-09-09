@@ -68,7 +68,6 @@ engine.shop = {
 
         $('#categories').select2();
 
-
         var $tree = new engine.tree('shopCategories');
         $tree
             .setUrl('module/run/shop/categories/tree')
@@ -111,9 +110,7 @@ engine.shop = {
                 }
             )
             .move(function(e, data){
-                console.log(data);
-
-                engine.request.product({
+                engine.request.post({
                     url : 'module/run/shop/categories/move',
                     data: {
                         id: data.node.id,
