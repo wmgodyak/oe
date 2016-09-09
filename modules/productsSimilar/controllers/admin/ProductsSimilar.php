@@ -1,7 +1,10 @@
 <?php
 namespace modules\productsSimilar\controllers\admin;
 
+use system\core\EventsHandler;
 use system\Engine;
+use system\models\ContentFeatures;
+use system\models\ContentRelationship;
 
 /**
  * Class ProductsSimilar
@@ -9,19 +12,48 @@ use system\Engine;
  */
 class ProductsSimilar extends Engine
 {
+    private $relations;
+    private $contentFeatures;
+    private $similar;
+
     public function __construct()
     {
         parent::__construct();
+
+        $this->similar = new \modules\productsSimilar\models\admin\ProductsSimilar();
+        $this->relations = new ContentRelationship();
+
+        $this->contentFeatures = new ContentFeatures();
     }
 
     public function init()
     {
         parent::init();
+        EventsHandler::getInstance()->add('content.params.after', [$this, 'index'], 50);
+        $this->template->assignScript('modules/productsSimilar/js/admin/productsSimilar.js');
     }
 
     public function index()
     {
-        // TODO: Implement index() method.
+        return $this->template->fetch('productsSimilar/index');
+    }
+
+    public function getFeatures($products_id)
+    {
+        $category_id = $this->relations->getMainCategoriesId($products_id);
+        if(empty($category_id)){
+            return "Помилка. Ви не вибрали основну категорію. Виберіть основну категорію і натисніть зберегти. ";
+        }
+
+        $features = $this->contentFeatures->get($category_id);
+        $this->template->assign('features', $features);
+        $this->template->assign('products_id', $products_id);
+        $this->response->body($this->template->fetch('productsSimilar/select'));
+    }
+
+    public function getSelected($products_id)
+    {
+        $this->response->body(['items' => $this->similar->getFeatures($products_id)])->asJSON();
     }
 
     public function create()
@@ -34,10 +66,11 @@ class ProductsSimilar extends Engine
     }
     public function delete($id)
     {
-        // TODO: Implement delete() method.
+        echo $this->similar->delete($id);
     }
+
     public function process($id)
     {
-        // TODO: Implement process() method.
+        $this->response->body(['s' => $this->similar->update($id)])->asJSON();
     }
 }
