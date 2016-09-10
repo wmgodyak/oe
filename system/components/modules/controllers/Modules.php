@@ -69,7 +69,7 @@ class Modules extends Engine
 
             foreach ($modules as $i=>$module) {
 
-                $res[$i][] = $module['name'];
+                $res[$i][] = isset($module['name']) ? $module['name'] : $module['module'];
                 $res[$i][] =
                     (isset($module['description']) ? $module['description'] .'<br>' : '')
                     . '<small>'

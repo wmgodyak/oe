@@ -1292,13 +1292,36 @@ body {
       width: 100px;
       color: #ee4d4d;
       border: 1px solid #f1f1f1;
-      padding: 2px; }
+      padding: 2px;
+      margin-bottom: 3px; }
       .products-similar .products .item img, .products-similar .products .item span {
         display: block;
         text-align: center;
         line-height: 13px; }
       .products-similar .products .item:hover {
         border: 1px solid #f04d4d; }
+
+.shop-posts {
+  padding-top: 10px; }
+  .shop-posts .item {
+    margin-bottom: 10px;
+    border-bottom: 1px dotted #f1f1f1;
+    padding: 10px; }
+    .shop-posts .item .title {
+      font: 18px/21px "Roboto-Regular", sans-serif;
+      margin-bottom: 10px;
+      color: #ee4d4d; }
+      .shop-posts .item .title a {
+        color: #ee4d4d; }
+    .shop-posts .item .intro {
+      margin-bottom: 5px;
+      font: 12px/16px "Roboto-Light", sans-serif;
+      color: #666666; }
+    .shop-posts .item a.more {
+      display: block;
+      text-align: right;
+      font: 13px/16px "Roboto-Light", sans-serif;
+      color: #ee4d4d; }
 
 .goods-nav__item {
   position: relative; }
@@ -2778,6 +2801,14 @@ body {
             transition: all 0.35s ease; }
             .single-product-page .asider .terms .content .info-block .text span a:hover {
               border-color: transparent; }
+  .single-product-page .asider .side__header {
+    margin: 0 0 10px;
+    width: 100%;
+    background-color: #f04d4d;
+    text-align: center; }
+    .single-product-page .asider .side__header span {
+      font: 16px/35px "Roboto-Regular", sans-serif;
+      color: #fff; }
 
 .cart-page {
   *zoom: 1; }

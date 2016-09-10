@@ -23,6 +23,7 @@
                 {include file="modules/shop/nav.tpl"}
                 <div class="clear"><br></div>
                 {$mod->shop->filter()}
+                {$events->call('shop.categories.sidebar', $page)}
             </aside>
             <!-- end aside -->
 

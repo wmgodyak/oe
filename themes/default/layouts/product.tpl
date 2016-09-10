@@ -240,7 +240,8 @@
                     </div>
                     {include file="chunks/delivery.tpl"}
                 </div>
-                {include file="chunks/subscribe.tpl"}
+                {*{include file="chunks/subscribe.tpl"}*}
+                {$events->call('shop.product.sidebar', $product)}
             </aside>
             <!-- end asider -->
         </div>

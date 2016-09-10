@@ -1371,6 +1371,16 @@
         }
       }
     }
+    .side__header {
+      margin: 0 0 10px;
+      width: 100%;
+      background-color: $bg-red;
+      text-align: center;
+      span {
+        font: 16px/35px $fontRegular;
+        color: $font-white;
+      }
+    }
   }
 }
 .cart-page {
