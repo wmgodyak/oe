@@ -143,7 +143,9 @@ class ContentImagesSizes extends Engine
             -> all('img');
 
         foreach ($items as $i=>$src) {
-            @unlink(DOCROOT. $src);
+            if(file_exists(DOCROOT. $src)){
+                @unlink(DOCROOT. $src);
+            }
         }
 
         return self::$db->delete('__content_images_sizes', " id={$id} limit 1");
@@ -196,7 +198,7 @@ class ContentImagesSizes extends Engine
         $r = self::$db
             -> select
             ("
-                  select ci.path, ci.image, cis.size, cis.width, cis.height,cis.quality, ci.content_id
+                  select ci.path, ci.image, cis.size, cis.width, cis.height,cis.quality, cis.watermark,cis.watermark_position, ci.content_id
                   from __content_types_images_sizes ctis
                   join __content c on c.subtypes_id=ctis.types_id and c.status='published'
                   join __content_images_sizes cis on cis.id=ctis.images_sizes_id
@@ -212,6 +214,7 @@ class ContentImagesSizes extends Engine
 
         include_once DOCROOT . "vendor/acimage/AcImage.php";
 
+        $watermark_src = Settings::getInstance()->get('watermark_src');
         $source = Settings::getInstance()->get('content_images_source_dir');
 
         foreach ($r as $item) {
@@ -235,16 +238,23 @@ class ContentImagesSizes extends Engine
 
             if($item['width'] == 0) {
                 $img->resizeByHeight($item['height']);
-                $img->save(DOCROOT . $image_dest);
             } elseif($item['height'] == 0 ) {
                 $img->resizeByWidth($item['width']);
-                $img->save(DOCROOT . $image_dest);
             } elseif($item['width'] == $item['height']){
                 Image::createSquare($image_src, DOCROOT . $image_dest, $item['width'] , $item['quality']);
+                continue;
             } else {
                 $img->resize($item['width'], $item['height']);
-                $img->save(DOCROOT . $image_dest);
             }
+
+            if($item['watermark'] == 1 && $watermark_src != ''){
+                $w_img = DOCROOT . $watermark_src;
+                if(file_exists($w_img)){
+                    $img->drawLogo($w_img, $item['watermark_position']);
+                }
+            }
+
+            $img->save(DOCROOT . $image_dest);
         }
 
         return true;

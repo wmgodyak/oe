@@ -31,7 +31,7 @@
                         <div class="product-slider1">
                             {if $product.images|count > 0}
                                 {foreach $product.images as $k=>$img}
-                                    <div class="slider1-item" style="background-image: url('/{$img.path}source/{$img.image}');"></div>
+                                    <div class="slider1-item" style="background-image: url('/{$img.path}product/{$img.image}');"></div>
                                 {/foreach}
                                 {else}
                                 <div class="slider1-item" style="background-image: url('/uploads/noimage.jpg');"></div>

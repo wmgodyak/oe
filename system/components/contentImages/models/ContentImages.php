@@ -50,7 +50,7 @@ class ContentImages extends Model
         return self::$db
             ->select
             ("
-                select s.size, s.width, s.height,s.quality
+                select s.*
                 from __content c
                 join __content_types_images_sizes cs on cs.types_id=c.types_id
                 join __content_images_sizes s on s.id=cs.images_sizes_id
@@ -110,7 +110,7 @@ class ContentImages extends Model
 
         foreach ($sizes as $size) {
             $path = str_replace('//', '/', DOCROOT . $dir . $data['path'] .  $size . '/' . $data['image']);
-            @unlink($path);
+            if(file_exists($path)) @unlink($path);
         }
 
         $this->deleteRow('__content_images', $id);

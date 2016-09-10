@@ -150,7 +150,8 @@ class ContentImages extends Engine
                         'size' => rtrim($source_dir, '/'),
                         'width' => $sz[0],
                         'height' => $sz[1],
-                        'quality' => $this->quality
+                        'quality' => $this->quality,
+                        'watermark' => 0
                     ];
             }
 
@@ -164,7 +165,8 @@ class ContentImages extends Engine
                         'size'   => rtrim($thumb_dir, '/'),
                         'width'  => $tz[0],
                         'height' => $tz[1],
-                        'quality' => $this->quality
+                        'quality' => $this->quality,
+                        'watermark' => 0
                     ];
             }
 
@@ -172,8 +174,9 @@ class ContentImages extends Engine
 
             if(!empty($sizes)){
                 foreach($sizes as $size){
-                    $size['width']  = (int)$size['width'];
-                    $size['height'] = (int)$size['height'];
+
+                    $size['width']   = (int)$size['width'];
+                    $size['height']  = (int)$size['height'];
                     $size['quality'] = (int)$size['quality'];
 
                     if(empty($size['width']) && empty($size['height'])) {
@@ -191,16 +194,23 @@ class ContentImages extends Engine
 
                     if($size['width'] == 0) {
                         $img->resizeByHeight($size['height']);
-                        $img->save($size_path . $fname);
                     } elseif($size['height'] == 0 ) {
                         $img->resizeByWidth($size['width']);
-                        $img->save($size_path . $fname);
                     } elseif($size['width'] == $size['height']){
                         Image::createSquare($source_im, $size_path .'/'. $fname, $size['width'] );
+                        continue;
                     } else {
                         $img->resize($size['width'], $size['height']);
-                        $img->save($size_path . $fname);
                     }
+
+                    if($size['watermark'] == 1 && $this->settings['watermark_src'] != ''){
+                        $w_img = DOCROOT . $this->settings['watermark_src'];
+                        if(file_exists($w_img)){
+                            $img->drawLogo($w_img, $size['watermark_position']);
+                        }
+                    }
+
+                    $img->save($size_path . $fname);
                 }
             }
 

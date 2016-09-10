@@ -1669,6 +1669,14 @@ engine.contentImagesSizes = {
 
             $('#content_types').select2();
 
+            $("#data_watermark").change(function(){
+                if($(this).is(':checked')){
+                    $('.watermark-settings').show();
+                } else {
+                    $('.watermark-settings').hide();
+                }
+            });
+
             engine.validateAjaxForm('#form', function(d){
                 if(d.s){
                     engine.refreshDataTable('contentImagesSizesList');
@@ -1702,6 +1710,13 @@ engine.contentImagesSizes = {
                 });
 
                 $('#content_types').select2();
+                $("#data_watermark").change(function(){
+                   if($(this).is(':checked')){
+                       $('.watermark-settings').show();
+                   } else {
+                       $('.watermark-settings').hide();
+                   }
+                });
 
                 engine.validateAjaxForm('#form', function(d){
                     if(d.s){
