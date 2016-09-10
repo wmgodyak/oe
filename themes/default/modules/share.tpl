@@ -11,9 +11,9 @@
             ПОДІЛИТИСЯ З ДРУЗЯМИ У СОЦМЕРЕЖАХ:
         </div>
         <div class="social-row">
-            <a href="#" class="share-icon vk"></a>
-            <a href="#" class="share-icon fb"></a>
-            <a href="#" class="share-icon ok"></a>
+            <a href="javascript:;" class="share-icon vk share-link" data-href="{$page.id}" data-title="{$page.title}" data-img="{$app->images->cover($page.id, 'source')}"></a>
+            <a href="javascript:;" class="share-icon fb share-link" data-href="{$product.id}"></a>
+            <a href="javascript:;" class="share-icon ok share-link" data-href="{$product.id}"></a>
         </div>
     </div>
 </div>

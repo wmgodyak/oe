@@ -6,7 +6,7 @@
  * @name head
  *}
 <!DOCTYPE html>
-<html>
+<html data-id="{$page.id}" data-type="{$page.types_id}" data-template="{$page.template}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: wg
- * Date: 09.07.16
- * Time: 19:39
- */
 namespace modules\share\controllers;
 
 use system\core\EventsHandler;
@@ -20,6 +14,10 @@ use system\Front;
  */
 class Share extends Front
 {
+    /**
+     * for vk https://vk.com/dev/widget_share
+     * @return string
+     */
     public function index()
     {
         return $this->template->fetch('modules/share');
@@ -28,5 +26,6 @@ class Share extends Front
     public function init()
     {
         EventsHandler::getInstance()->add('shop.product.buy.after', [$this, 'index']);
+        $this->template->assignScript('modules/share/js/share.js');
     }
 }
