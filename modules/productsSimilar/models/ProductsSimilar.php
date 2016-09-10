@@ -22,6 +22,9 @@ class ProductsSimilar extends Model
     public function getProducts($product)
     {
         $categories_id = $this->relations->getMainCategoriesId($product['id']);
+
+        if(empty($categories_id)) return null;
+
         $features = self::$db
             ->select("
                 select ps.features_id as id, i.name
