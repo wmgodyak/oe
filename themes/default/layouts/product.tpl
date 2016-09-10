@@ -141,6 +141,7 @@
                                 </ul>
                             </div>
                         {/if}
+                        {$events->call('shop.product.features.after', $product)}
                         {if $product.description !=''}
                         <div class="row">
                             <div class="short">
@@ -151,6 +152,7 @@
                             </div>
                         </div>
                         {/if}
+                        {$events->call('shop.product.description.after', $product)}
                     </div>
                 </div>
 
@@ -201,20 +203,6 @@
                                         {/foreach}
                                     </ul>
                                 {/foreach}
-                               {* <table class="table features">
-                                    {foreach $product.features as $i=>$item}
-                                        <tr {if $i == 0}class="first"{/if}>
-                                            <td style="width: 40%;">{$item.name}</td>
-                                            <td>
-                                                {if $item.values|count}
-                                                    {foreach $item.values as $v}
-                                                        {$v.name}
-                                                    {/foreach}
-                                                {/if}
-                                            </td>
-                                        </tr>
-                                    {/foreach}
-                                </table> *}
                             </div>
                         </div>
                         <div class="tab tab3 cms-content">

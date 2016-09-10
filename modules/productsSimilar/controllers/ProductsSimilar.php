@@ -8,6 +8,7 @@
 
 namespace modules\productsSimilar\controllers;
 
+use system\core\EventsHandler;
 use system\Front;
 
 /**
@@ -20,5 +21,26 @@ use system\Front;
  */
 class ProductsSimilar extends Front
 {
+    private $mSimilar;
 
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->mSimilar = new \modules\productsSimilar\models\ProductsSimilar();
+    }
+
+
+    public function init()
+    {
+        parent::init();
+
+        EventsHandler::getInstance()->add('shop.product.buy.after', [$this, 'similar']);
+    }
+
+    public function similar($product)
+    {
+        $this->template->assign('similar', $this->mSimilar->getProducts($product));
+        return $this->template->fetch('modules/productsSimilar/index');
+    }
 }

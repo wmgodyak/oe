@@ -1,11 +1,11 @@
 $(document).ready(function(){
     if($('#productsSimilar').length == 0) return;
 
-    var products_id = $('#content_id').val();
+    var categories_id = $('#content_id').val();
 
     var getSelected = function()
     {
-        engine.request.get('module/run/productsSimilar/getSelected/' + products_id, function(res){
+        engine.request.get('module/run/productsSimilar/getSelected/' + categories_id, function(res){
             var cnt = $('#s_p_similar_list');
             var tmpl = _.template($('#p_similar_tpl').html());
             var d = tmpl({items: res.items});
@@ -14,7 +14,7 @@ $(document).ready(function(){
     };
     getSelected();
     $(document).on('click', '.b-sp-similar-sel-f', function(){
-       engine.request.get('module/run/productsSimilar/getFeatures/'+products_id, function(res){
+       engine.request.get('module/run/productsSimilar/getFeatures/'+categories_id, function(res){
           var pw = engine.dialog({
              title: 'Виберіть властивості',
              content: res,

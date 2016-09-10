@@ -11,6 +11,7 @@
 </fieldset>
 {literal}
 <script type="text/template" id="acc_categories_tpl">
+    <% if(items.length) { %>
     <table class="table-bordered table">
         <tr>
             <th>ID</th>
@@ -43,5 +44,8 @@
         </tr>
         <% }); %>
     </table>
+    <% } else { %>
+        <p style="text-align: center;">Нічого не вибрано</p>
+    <% } %>
 </script>
 {/literal}

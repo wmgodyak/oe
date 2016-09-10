@@ -1322,3 +1322,43 @@
     }
   }
 }
+
+.products-similar{
+  font-family: $fontRegular;
+  color:#666;
+  &:after {
+    clear:both;
+    display: table;
+    content: '';
+  }
+  .title{
+    font-size: 14px;
+    margin-bottom:10px;
+  }
+  .feature{
+    font-size: 13px;
+    margin-bottom: 5px;
+  }
+  .products{
+    font-size: 12px;
+    margin-bottom: 15px;
+
+    .item {
+      display: inline-block;
+      width:100px;
+      color: $font-red;
+      border: 1px solid #f1f1f1;
+      padding: 2px;
+
+      img, span {
+        display: block;
+        text-align: center;
+        line-height:13px;
+      }
+      &:hover{
+        border: 1px solid $bg-red;
+      }
+    }
+  }
+
+}

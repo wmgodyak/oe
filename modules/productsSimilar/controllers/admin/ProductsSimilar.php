@@ -33,27 +33,30 @@ class ProductsSimilar extends Engine
         $this->template->assignScript('modules/productsSimilar/js/admin/productsSimilar.js');
     }
 
-    public function index()
+    public function index($content = null)
     {
+        if($content['type'] != 'products_categories') return null;
+
         return $this->template->fetch('productsSimilar/index');
     }
 
-    public function getFeatures($products_id)
+    public function getFeatures($categories_id)
     {
-        $category_id = $this->relations->getMainCategoriesId($products_id);
-        if(empty($category_id)){
-            return "Помилка. Ви не вибрали основну категорію. Виберіть основну категорію і натисніть зберегти. ";
-        }
+//        $categories_id = $this->relations->getMainCategoriesId($products_id);
+//        if(empty($categories_id)){
+//            return "Помилка. Ви не вибрали основну категорію. Виберіть основну категорію і натисніть зберегти. ";
+//        }
 
-        $features = $this->contentFeatures->get($category_id);
+        $features = $this->contentFeatures->get($categories_id);
+        $this->template->assign('selected', $this->similar->getSelectedFeaturesId($categories_id));
         $this->template->assign('features', $features);
-        $this->template->assign('products_id', $products_id);
+        $this->template->assign('categories_id', $categories_id);
         $this->response->body($this->template->fetch('productsSimilar/select'));
     }
 
-    public function getSelected($products_id)
+    public function getSelected($categories_id)
     {
-        $this->response->body(['items' => $this->similar->getFeatures($products_id)])->asJSON();
+        $this->response->body(['items' => $this->similar->getFeatures($categories_id)])->asJSON();
     }
 
     public function create()
