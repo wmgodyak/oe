@@ -2,6 +2,7 @@
 
 namespace modules\exchange1c\models;
 
+use modules\order\models\Order;
 use modules\order\models\Status;
 use system\core\Logger;
 use system\models\Model;
@@ -50,11 +51,13 @@ class Sale extends Model
     {
         if( ! $this->auth()) return ['failure', "Wrong token"];
 
+        $mo = new Order();
+
         $orders = self::$db
             ->select("
-                select o.id, o.oid, os.external_id as status,
+                select DISTINCT o.id, o.oid, os.external_id as status,
                  o.users_id as user_id,
-                 cu.code, o.currency_rate, (select SUM(quantity * price) from __orders_products where orders_id=o.id) as amount,
+                 cu.code, o.currency_rate,
                  o.comment, o.created, o.paid, o.paid_date, o.payment_id, o.delivery_id, o.delivery_cost, o.delivery_address
                 from __orders o
                 join __orders_status os on os.id=o.status_id
@@ -63,6 +66,10 @@ class Sale extends Model
                 order by o.id desc
             ")
             ->all();
+
+        foreach ($orders as $k=>$order) {
+            $orders[$k]['amount'] = $mo->amount($order['id']);
+        }
 
         header("Content-type: text/csv; charset=windows-1251");
         header("Content-Disposition: attachment; filename=orders.csv");
@@ -145,6 +152,50 @@ class Sale extends Model
                 order by op.orders_id desc
             ")
             -> all();
+
+        $kits = self::$db
+            ->select("
+                select ok.id, ok.kits_products_id, ok.kits_products_price, ok.quantity, p.sku, pi.name as products_name, o.oid
+                from __orders_kits ok
+                join __orders o on o.id=ok.orders_id
+                join __content p on p.id=ok.kits_products_id
+                join __content_info pi on pi.content_id=p.id and pi.languages_id='{$this->languages_id}'
+                where ok.orders_id in ({$in})
+            ")
+            ->all();
+
+        foreach ($kits as $kit) {
+            $products[] = [
+                'oid'           => $kit['oid'],
+                'products_id'   => $kit['kits_products_id'],
+                'sku'           => $kit['sku'],
+                'products_name' => $kit['products_name'],
+                'quantity'      => $kit['quantity'],
+                'price'         => $kit['kits_products_price']
+            ];
+
+            // get kits produts
+            $kp = self::$db
+                ->select("
+                    select p.id, p.sku, kp.price, pi.name
+                    from __orders_kits_products kp
+                    join __content p on p.id=kp.kits_products_products_id
+                    join __content_info pi on pi.content_id=p.id and pi.languages_id='{$this->languages_id}'
+                    where kp.orders_kits_id = {$kit['id']}
+                ")
+                ->all();
+
+            foreach ($kp as $p) {
+                $products[] = [
+                    'oid'           => $kit['oid'],
+                    'products_id'   => $p['id'],
+                    'sku'           => $kit['sku'],
+                    'products_name' => $p['name'],
+                    'quantity'      => $kit['quantity'],
+                    'price'         => $p['price']
+                ];
+            }
+        }
 
         header("Content-type: text/csv; charset=windows-1251");
         header("Content-Disposition: attachment; filename=orders_products.csv");
