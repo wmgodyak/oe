@@ -92,23 +92,26 @@
                         {/if}
 
                         {if $product.in_stock == 1}
-                        <div class="bnt-row">
-                            <button class="btn sm red buy-btn to-cart cart-product-{$product.id} {if isset($smarty.session.cart[$product.id])}in{/if}"
-                                    data-id="{$product.id}"
-                                    data-has-variants="{$product.has_variants}"
-                                    data-in="В кошику"
-                                    data-bye="Купити"
-                            >{if isset($smarty.session.cart[$product.id])}В кошику{else}Купити{/if}</button>
-                            <button class="btn sm white-red buy-one-click" data-has-variants="{$product.has_variants}" data-id="{$product.id}">Купити в 1 клік</button>
-                        </div>
+                            <div class="bnt-row">
+                                <button class="btn sm red buy-btn to-cart cart-product-{$product.id} {if isset($smarty.session.cart[$product.id])}in{/if}"
+                                        data-id="{$product.id}"
+                                        data-has-variants="{$product.has_variants}"
+                                        data-in="В кошику"
+                                        data-bye="Купити"
+                                >{if isset($smarty.session.cart[$product.id])}В кошику{else}Купити{/if}</button>
+                                <button class="btn sm white-red buy-one-click" data-has-variants="{$product.has_variants}" data-id="{$product.id}">Купити в 1 клік</button
+                            </div>
                         {else}
-                        <div class="bnt-row">
-                            <button class="btn sm to-wait-list"
-                                    data-id="{$product.id}"
-                                    data-has-variants="{$product.has_variants}"
-                                    title="Повідомте про появу">Повідомте про появу</button>
+                            <div class="bnt-row">
+                                <button class="btn sm to-wait-list"
+                                        data-id="{$product.id}"
+                                        data-has-variants="{$product.has_variants}"
+                                        title="Повідомте про появу">Повідомте про появу</button>
                             </div>
                         {/if}
+                        <div class="comparison-link">
+                            <a href="15;?cat={$product.categories_id}" style="margin-left: 5px;" class=" to-comparison {if isset($smarty.session.comparison[$product.id])}in{/if}" data-in="У порівнянні" data-cat="{$product.categories_id}" data-id="{$product.id}">{if isset($smarty.session.comparison[$product.id])}У порівнянні{else}Додати в порівняння{/if}</a>
+                        </div>
                         {$events->call('shop.product.buy.after', $product)}
                         {assign var='avRate' value=$mod->comments->getAverageRating($product.id)|ceil}
                         {assign var='commentsTotal' value=$mod->comments->getTotal($product.id)}

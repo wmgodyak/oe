@@ -40,6 +40,9 @@
                    <span class="hearth-like__link wishlist-add {if isset($smarty.session.wishlist[$item.id])}hearth-like__link--liked{/if}" data-id="{$item.id}" data-has-variants="{$item.has_variants}"></span>
                </span>
 
+                <span class="comparison-link">
+                    <a href="15;?cat={$item.categories_id}" style="margin-left: 5px;" class=" to-comparison {if isset($smarty.session.comparison[$item.id])}in{/if}" data-in="У порівнянні" data-cat="{$item.categories_id}" data-id="{$item.id}">{if isset($smarty.session.comparison[$item.id])}У порівнянні{else}Додати в порівняння{/if}</a>
+                </span>
            </span>
 
            {*<span class="m_special-offer"></span>*}

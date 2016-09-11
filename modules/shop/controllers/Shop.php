@@ -13,6 +13,7 @@ use modules\shop\models\Categories;
 use modules\shop\models\categories\Features;
 use modules\shop\models\Products;
 use modules\shop\models\products\Accessories;
+use modules\shop\models\products\Comparison;
 use modules\shop\models\products\Kits;
 use modules\shop\models\products\Prices;
 use modules\shop\models\products\variants\ProductsVariants;
@@ -20,6 +21,7 @@ use modules\shop\models\SearchHistory;
 use system\core\DataFilter;
 use system\core\Session;
 use system\Front;
+use system\models\ContentRelationship;
 use system\models\Currency;
 use system\models\Settings;
 
@@ -45,6 +47,9 @@ class Shop extends Front
     public $search;
     public $variants;
 
+    public $comparison;
+    private $relations;
+
     public function __construct()
     {
         parent::__construct();
@@ -64,6 +69,10 @@ class Shop extends Front
         $this->search = new Search($this->products , $this->group_id );
 
         $this->variants = new ProductsVariants();
+
+        $this->comparison = new Comparison();
+
+        $this->relations = new ContentRelationship();
     }
 
     public function index()
@@ -85,6 +94,7 @@ class Shop extends Front
     {
         $product = $this->page;
 
+        $product['categories_id']   = $this->relations->getMainCategoriesId($product['id']);
         $product['images']   = $this->images->get($product['id']);
         $product['price']    = $this->prices->get($product['id'], $this->group_id);
         $product['currency'] = $this->currency->getMeta($product['currency_id'], 'symbol');
@@ -174,6 +184,7 @@ class Shop extends Front
         $products = $this->products->get();
 
         foreach ($products as $k=>$product) {
+            $products[$k]['categories_id']   = $this->relations->getMainCategoriesId($product['id']);
             $products[$k]['bonus'] = round($products[$k]['price'] * $this->bonus_rate, 2);
         }
 
@@ -191,10 +202,12 @@ class Shop extends Front
         $this->products->start = 0;
         $this->products->num   = 30;
         $this->products->clearQuery();
+        $this->products->join("join __content_relationship cra on cra.content_id=c.id and cra.is_main=1");
         $this->products->where(" c.in_stock=1");
         $products = $this->products->get();
 
         foreach ($products as $k=>$product) {
+            $products[$k]['categories_id'] = $this->relations->getMainCategoriesId($product['id']);
             $products[$k]['bonus'] = round($products[$k]['price'] * $this->bonus_rate, 2);
         }
 
@@ -213,6 +226,7 @@ class Shop extends Front
         $products = $this->products->get();
 
         foreach ($products as $k=>$product) {
+            $products[$k]['categories_id']   = $this->relations->getMainCategoriesId($product['id']);
             $products[$k]['bonus'] = round($products[$k]['price'] * $this->bonus_rate, 2);
         }
 
@@ -366,5 +380,17 @@ class Shop extends Front
         }
 
         return $items;
+    }
+
+    public function comparison()
+    {
+        $params = func_get_args();
+        $action = 'index';
+
+        if(!empty($params)){
+            $action = array_shift($params);
+        }
+
+        return call_user_func_array(array($this->comparison, $action), $params);
     }
 }

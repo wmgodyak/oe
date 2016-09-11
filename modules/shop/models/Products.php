@@ -203,7 +203,7 @@ class Products extends Content
         $cu_main    = $this->currency->getMainMeta();
 
         $items =  self::$db->select("
-          select SQL_CALC_FOUND_ROWS  c.id, c.isfolder, ci.name, ci.title, c.in_stock, c.has_variants,
+          select SQL_CALC_FOUND_ROWS  c.id, ci.name, ci.title, c.in_stock, c.has_variants,
            ROUND( CASE
             WHEN c.currency_id = {$cu_on_site['id']} THEN pp.price
             WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id = {$cu_main['id']} THEN pp.price * {$cu_on_site['rate']}

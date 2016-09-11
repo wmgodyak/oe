@@ -44,6 +44,50 @@ var Shop = {
             minChars:2,
             dataType: 'json'
         });
+
+        $(document).on('click', '.to-comparison', function(e){
+
+            var $this = $(this);
+
+            if($this.hasClass('in')) {
+                return true;
+            }
+
+            var id = $this.data('id'), cat_id = $this.data('cat');
+            if(cat_id == '') {
+                alert('Empty categories id');
+                return false;
+            }
+            App.request.post({
+                url: 'route/shop/comparison/add',
+                data: {
+                    categories_id : cat_id,
+                    products_id   : id
+                },
+                success: function(res){
+                    if(res){
+                        $.notify('Товар додано в порівняння', 'success');
+                        $this.addClass('in');
+                        $this.text($this.data('in'));
+                    }
+                }
+            });
+
+            e.preventDefault();
+        });
+
+        $(document).on('click', '.b-comparison-del', function(e){
+            var id = $(this).data('id');
+            App.request.post({
+                url: 'route/shop/comparison/delete',
+                data: {
+                    id: id
+                },
+                success: function(res){
+                    location.reload(true);
+                }
+            });
+        });
     },
     viewed: function(id)
     {

@@ -490,7 +490,7 @@ body {
   .m_goods-multiple-carousel .owl-stage-outer {
     overflow: hidden; }
     .m_goods-multiple-carousel .owl-stage-outer .owl-item {
-      height: 360px;
+      height: 400px;
       float: left; }
   .m_goods-multiple-carousel .owl-nav {
     position: absolute;
@@ -1322,6 +1322,37 @@ body {
       text-align: right;
       font: 13px/16px "Roboto-Light", sans-serif;
       color: #ee4d4d; }
+
+.comparison-link {
+  display: block;
+  padding-top: 5px; }
+  .comparison-link .to-comparison {
+    font: 13px/16px "Roboto-Light", sans-serif;
+    color: #ee4d4d; }
+
+.comparison a {
+  color: #ee4d4d; }
+.comparison .categories {
+  padding: 20px;
+  font: 16px/20px "Roboto-Light", sans-serif; }
+  .comparison .categories a {
+    margin-left: 1em; }
+    .comparison .categories a.active {
+      border-bottom: 1px solid; }
+.comparison .item {
+  position: relative;
+  padding-bottom: 30px;
+  height: 230px; }
+  .comparison .item img {
+    display: block;
+    max-width: 120px; }
+  .comparison .item .price {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: block;
+    font-size: 16px;
+    font-weight: bold; }
 
 .goods-nav__item {
   position: relative; }

@@ -1,13 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: wg
- * Date: 03.07.16
- * Time: 0:37
- */
 
 namespace system\models;
-
+/**
+ * Class ContentFeatures
+ * @package system\models
+ */
 class ContentFeatures extends Model
 {
     /**

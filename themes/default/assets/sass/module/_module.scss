@@ -405,7 +405,7 @@
   .owl-stage-outer {
     overflow: hidden;
     .owl-item {
-      height: 360px;
+      height: 400px;
       float: left;
     }
   }
@@ -1388,6 +1388,46 @@
       text-align: right;
       font: 13px/16px "Roboto-Light", sans-serif;
       color: $font-red;
+    }
+  }
+}
+.comparison-link {
+  display: block;
+  padding-top:5px;
+  .to-comparison {
+    font: 13px/16px "Roboto-Light", sans-serif;
+    color: $font-red;
+  }
+}
+.comparison{
+  a {
+    color: $font-red;
+  }
+  .categories{
+    padding: 20px;
+    font: 16px/20px "Roboto-Light", sans-serif;
+    a {
+      margin-left:1em;
+      &.active{
+        border: 1px solid $bg-red;
+      }
+    }
+  }
+  .item{
+    position: relative;
+    padding-bottom:30px;
+    height: 230px;
+    img {
+      display: block;
+      max-width:120px;
+    }
+    .price{
+      position: absolute;
+      bottom: 0;
+      left:0;
+      display: block;
+      font-size:16px;
+      font-weight: bold;
     }
   }
 }
