@@ -4,6 +4,9 @@ namespace modules\shopExport\controllers\admin;
 
 use system\core\EventsHandler;
 use system\Engine;
+use system\models\Currency;
+use system\models\Languages;
+use system\models\UsersGroup;
 
 /**
  * Class ShopExport
@@ -38,6 +41,14 @@ class ShopExport extends Engine
             closedir($handle);
         }
         $this->template->assign('adapters', $adapters);
+
+        $ug = new UsersGroup();
+        $this->template->assign('users_group', $ug->getItems(0));
+
+        $cu = new Currency();
+        $this->template->assign('currency', $cu->get());
+        $l = new Languages();
+        $this->template->assign('langs', $l->get());
         return $this->template->fetch('modules/shopExport/config');
     }
 
