@@ -46,6 +46,7 @@ class Categories extends Content
 
         $this->features('init');
         EventsHandler::getInstance()->add('content.main',[$this, 'catMeta']);
+        EventsHandler::getInstance()->add('content.params',[$this, 'params']);
     }
 
     /**
@@ -56,6 +57,16 @@ class Categories extends Content
     {
         if(isset($content['type']) && $content['type'] == 'products_categories') {
             return $this->template->fetch('shop/categories/meta');
+        }
+    }
+    /**
+     * @param $content
+     * @return string
+     */
+    public function params($content)
+    {
+        if(isset($content['type']) && $content['type'] == 'products_categories') {
+            return $this->template->fetch('shop/categories/params');
         }
     }
 

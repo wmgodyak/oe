@@ -436,6 +436,7 @@ class Content extends Model
           join __content_types ct on ct.type = '{$type}' and ct.id=c.types_id
           join __content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
           where c.parent_id='{$parent_id}' and c.status in ('published', 'hidden')
+          order by abs(c.position) asc
           ")->all();
     }
 }

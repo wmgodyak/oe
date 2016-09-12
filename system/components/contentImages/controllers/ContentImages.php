@@ -206,7 +206,7 @@ class ContentImages extends Engine
                     if($size['watermark'] == 1 && $this->settings['watermark_src'] != ''){
                         $w_img = DOCROOT . $this->settings['watermark_src'];
                         if(file_exists($w_img)){
-                            $img->drawLogo($w_img, $size['watermark_position']);
+                            $img->drawLogo($w_img, (int)$size['watermark_position']);
                         }
                     }
 
