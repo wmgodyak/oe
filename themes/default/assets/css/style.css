@@ -1338,7 +1338,7 @@ body {
   .comparison .categories a {
     margin-left: 1em; }
     .comparison .categories a.active {
-      border-bottom: 1px solid; }
+      border: 1px solid #f04d4d; }
 .comparison .item {
   position: relative;
   padding-bottom: 30px;
