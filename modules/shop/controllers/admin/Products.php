@@ -39,7 +39,7 @@ class Products extends Content
 
         $this->form_action = "module/run/shop/products/process/";
         // hide custom block
-        $this->form_display_blocks['intro']    = false;
+        $this->form_display_blocks['intro']    = true;
         $this->form_display_params['parent']   = false;
         $this->form_display_params['owner']    = false;
         $this->form_display_params['pub_date'] = false;
@@ -63,10 +63,18 @@ class Products extends Content
 
         $video = new Video();
         EventsHandler::getInstance()->add('content.params.after', [$video, 'index']);
+        EventsHandler::getInstance()->add('content.intro.before', [$this, 'intro']);
         EventsHandler::getInstance()->add('content.process', [$video, 'process']);
 
     }
 
+    public function intro($content)
+    {
+        $ct = $this->contentTypes->getData($content['types_id'], 'type');
+        if(!in_array($ct, $this->allowed_types)) return '';
+
+        return $this->template->fetch('shop/products/intro');
+    }
 
     /**
      * @param $content

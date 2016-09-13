@@ -26,7 +26,7 @@
             <div class="form-group">
                 <label for="content_in_stock" class="col-md-4 control-label">Наявність</label>
                 <div class="col-md-8">
-                    <select name="content[in_stock]" id="content_in_stock" class="form-control">
+                    <select {* name="content[in_stock]" *} disabled="" id="content_in_stock" class="form-control">
                         <option {if $content.in_stock==1}selected{/if} value="1">в наявності</option>
                         <option {if $content.in_stock==2}selected{/if} value="2">під замовлення</option>
                         <option {if $content.in_stock==0}selected{/if} value="0">немає</option>
@@ -53,7 +53,7 @@
                     {/foreach}
                     <td>
 
-                        <select name="content[currency_id]" id="content_currency" class="form-control">
+                        <select {* name="content[currency_id]" *} disabled="" id="content_currency" class="form-control">
                             {foreach $currency as $c}
                                 <option {if $content.currency_id==$c.id}selected{/if} value="{$c.id}">{$c.code}</option>
                             {/foreach}

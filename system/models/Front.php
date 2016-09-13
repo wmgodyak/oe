@@ -72,7 +72,7 @@ class Front extends Model
             $page = self::$db
                 ->select("
                 select c.*,
-                i.languages_id, i.name,i.title,i.h1,i.url,i.keywords, i.description,i.content,
+                i.languages_id, i.name,i.title,i.h1,i.url,i.keywords, i.description,i.content, i.intro,
                  l.code as languages_code,
                  UNIX_TIMESTAMP(c.created) as created
                 from __content_info i
@@ -87,7 +87,7 @@ class Front extends Model
             // інформація про сторінку
             $page = self::$db
                 ->select("
-                select c.*,i.languages_id, i.name,i.h1,i.title,i.url,i.keywords, i.description,i.content,
+                select c.*,i.languages_id, i.name,i.h1,i.title,i.url,i.keywords, i.description,i.content, i.intro,
                  l.code as languages_code,
                  UNIX_TIMESTAMP(c.created) as created
                 from __content_info i

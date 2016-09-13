@@ -35,7 +35,7 @@ use system\models\Settings;
  */
 class Shop extends Front
 {
-    private $products;
+    public $products;
     private $categories;
     private $ipp;
     private $total;
@@ -93,7 +93,6 @@ class Shop extends Front
     private function product()
     {
         $product = $this->page;
-
         $product['categories_id']   = $this->relations->getMainCategoriesId($product['id']);
         $product['images']   = $this->images->get($product['id']);
         $product['price']    = $this->prices->get($product['id'], $this->group_id);

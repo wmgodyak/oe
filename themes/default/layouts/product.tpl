@@ -101,6 +101,9 @@
                                 >{if isset($smarty.session.cart[$product.id])}В кошику{else}Купити{/if}</button>
                                 <button class="btn sm white-red buy-one-click" data-has-variants="{$product.has_variants}" data-id="{$product.id}">Купити в 1 клік</button
                             </div>
+                            <div class="comparison-link">
+                                <a href="15;?cat={$product.categories_id}" style="margin-left: 5px;" class=" to-comparison {if isset($smarty.session.comparison[$product.id])}in{/if}" data-in="У порівнянні" data-cat="{$product.categories_id}" data-id="{$product.id}">{if isset($smarty.session.comparison[$product.id])}У порівнянні{else}Додати в порівняння{/if}</a>
+                            </div>
                         {else}
                             <div class="bnt-row">
                                 <button class="btn sm to-wait-list"
@@ -109,53 +112,57 @@
                                         title="Повідомте про появу">Повідомте про появу</button>
                             </div>
                         {/if}
-                        <div class="comparison-link">
-                            <a href="15;?cat={$product.categories_id}" style="margin-left: 5px;" class=" to-comparison {if isset($smarty.session.comparison[$product.id])}in{/if}" data-in="У порівнянні" data-cat="{$product.categories_id}" data-id="{$product.id}">{if isset($smarty.session.comparison[$product.id])}У порівнянні{else}Додати в порівняння{/if}</a>
-                        </div>
                         {$events->call('shop.product.buy.after', $product)}
+                        {include file="modules/shop/similar.tpl"}
+
                         {assign var='avRate' value=$mod->comments->getAverageRating($product.id)|ceil}
-                        {assign var='commentsTotal' value=$mod->comments->getTotal($product.id)}
-                        <span class="row comment-row">
-                            <span class="m_star-rating">
-                               <select class="star-rating read-only">
-                                   {for $i=1;$i<=5; $i++ }
-                                       <option {if $avRate == $i}selected{/if} value="{$i}">{$i}</option>
-                                   {/for}
-                               </select>
-                           </span>
-                            <span class="coment-counter">
-                                {$commentsTotal} відгуки
+                        {if $avRate > 0}
+                            {assign var='commentsTotal' value=$mod->comments->getTotal($product.id)}
+                            <span class="row comment-row">
+                                <span class="m_star-rating">
+                                   <select class="star-rating read-only">
+                                       {for $i=1;$i<=5; $i++ }
+                                           <option {if $avRate == $i}selected{/if} value="{$i}">{$i}</option>
+                                       {/for}
+                                   </select>
+                               </span>
+                                <span class="coment-counter">
+                                    {$commentsTotal} відгуки
+                                </span>
                             </span>
-                        </span>
-                        {if $product.features|count}
-                            <div class="sp-short-features">
-                                <ul>
-                                    {foreach $product.features as $item}
-                                        <li>
-                                            <span>{$item.name}: </span>
-                                                {if $item.values|count}
-                                                    {foreach $item.values as $i=>$v}
-                                                        {$v.name} {if isset($item.values[$i + 1])},{/if}
-                                                    {/foreach}
-                                                {/if}
-                                            .
-                                        </li>
-                                    {/foreach}
-                                </ul>
-                            </div>
                         {/if}
-                        {$events->call('shop.product.features.after', $product)}
-                        {if $product.description !=''}
-                        <div class="row">
-                            <div class="short">
-                                <div class="wrap">
-                                    <span>{$t.shop.product.description}:</span>
-                                    {$product.description}
+                        {if $app->contentMeta->get($product.id, 'en_short_desc', true) == 1}
+                            {if $product.intro !=''}
+                                <div class="row">
+                                    <div class="short">
+                                        <div class="wrap">
+                                            <span>{$t.shop.product.description}:</span>
+                                            {$product.intro}
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
+                            {/if}
+                            {$events->call('shop.product.description.after', $product)}
+                        {else}
+                            {if $product.features|count}
+                                <div class="row">
+                                    <div class="short">
+                                        <div class="wrap">
+                                            <span>{$t.shop.product.description}:</span>
+                                            {foreach $product.features as $item}
+                                                    {$item.name}:
+                                                    {if $item.values|count}
+                                                        {foreach $item.values as $i=>$v}
+                                                            {$v.name} {if isset($item.values[$i + 1])},{/if}
+                                                        {/foreach}.
+                                                    {/if}
+                                            {/foreach}
+                                        </div>
+                                    </div>
+                                </div>
+                            {/if}
+                            {$events->call('shop.product.features.after', $product)}
                         {/if}
-                        {$events->call('shop.product.description.after', $product)}
                     </div>
                 </div>
 

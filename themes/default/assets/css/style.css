@@ -1286,20 +1286,25 @@ body {
     margin-bottom: 5px; }
   .products-similar .products {
     font-size: 12px;
-    margin-bottom: 15px; }
+    margin-bottom: 30px; }
     .products-similar .products .item {
       display: inline-block;
       width: 100px;
+      height: 140px;
+      float: left;
       color: #ee4d4d;
       border: 1px solid #f1f1f1;
       padding: 2px;
-      margin-bottom: 3px; }
+      margin: 2px; }
       .products-similar .products .item img, .products-similar .products .item span {
         display: block;
         text-align: center;
         line-height: 13px; }
-      .products-similar .products .item:hover {
+      .products-similar .products .item:hover, .products-similar .products .item.active {
         border: 1px solid #f04d4d; }
+    .products-similar .products:after {
+      display: table;
+      content: ''; }
 
 .shop-posts {
   padding-top: 10px; }

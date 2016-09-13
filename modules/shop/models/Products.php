@@ -235,6 +235,19 @@ class Products extends Content
         return $items;
     }
 
+    /**
+     * @param $start
+     * @param $num
+     * @return $this
+     */
+    public function limit($start, $num)
+    {
+        $this->start = $start;
+        $this->num   = $num;
+
+        return $this;
+    }
+
     public function getTotal()
     {
         return self::$db->select('SELECT FOUND_ROWS() as t')->row('t');
@@ -299,5 +312,20 @@ class Products extends Content
             }
         }
         return $in;
+    }
+
+    public function similar($product)
+    {
+        if(empty($product['features'])) return null;
+        $this->clearQuery();
+        $this->where("crm.categories_id = {$product['categories_id']}");
+        foreach ($product['features'] as $feature) {
+            $this->join("join __content_features cf{$feature['id']} on cf{$feature['id']}.features_id={$feature['id']}
+                and cf{$feature['id']}.content_id=c.id
+                ");
+        }
+
+        $this->limit(0, 9);
+        return $this->get();
     }
 }

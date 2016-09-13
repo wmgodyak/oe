@@ -1341,24 +1341,31 @@
   }
   .products{
     font-size: 12px;
-    margin-bottom: 15px;
+    margin-bottom: 30px;
 
     .item {
       display: inline-block;
       width:100px;
+      min-height:120px;
+      float: left;
       color: $font-red;
       border: 1px solid #f1f1f1;
       padding: 2px;
-      margin-bottom:3px;
+      margin:2px;
 
       img, span {
         display: block;
         text-align: center;
         line-height:13px;
       }
-      &:hover{
+      &:hover,&.active {
         border: 1px solid $bg-red;
       }
+    }
+
+    &:after{
+      display: table;
+      content: '';
     }
   }
 
