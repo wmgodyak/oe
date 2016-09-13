@@ -17,8 +17,8 @@
         <p class="form-control-static" id="sp_selected_categories">
             {foreach $selected_categories as $cat}
                 <span class="badge badge-info">
-                <a href="module/run/shop/categories/edit/{$cat.id}" target="_blank">{$cat.name}</a>
-                <a href="javascript:;" title="Змінити" class="shop-product-delete-category" data-id="{$cat.id}"><i class="fa fa-remove"></i></a>
+                    <a href="module/run/shop/categories/edit/{$cat.id}" target="_blank">{$cat.name}</a>
+                    <a href="javascript:;" title="Змінити" class="shop-product-delete-category" data-id="{$cat.id}"><i class="fa fa-remove"></i></a>
                 </span>
             {/foreach}
             <a href="javascript:;" title="Додати" class="shop-product-add-category" data-id="{$cat.id}"><i class="fa fa-plus-circle"></i></a>

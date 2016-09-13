@@ -9,7 +9,8 @@ use system\models\Currency;
 
 class Products extends Content
 {
-    private $group_id = 5;
+    public  $group_id = 5;
+    public  $currency_id = 0;
     private $currency;
     private $debug = 0;
     /**
@@ -184,7 +185,10 @@ class Products extends Content
             }
         }
 
-        $this->search();
+        $q = $this->request->get('q', 's');
+        if($q){
+            $this->search();
+        }
 
         if($this->hasError()){
             return false;
@@ -199,19 +203,25 @@ class Products extends Content
 
         $sel = empty($this->sel_fields) ? '' : ','.implode(',', $this->sel_fields);
 
-        $cu_on_site = $this->currency->getOnSiteMeta();
+        if(empty($this->currency_id)){
+            $cu_on_site = $this->currency->getOnSiteMeta();
+        } else {
+            $cu_on_site = $this->currency->getMeta($this->currency_id);
+        }
+
         $cu_main    = $this->currency->getMainMeta();
 
         $items =  self::$db->select("
-          select SQL_CALC_FOUND_ROWS  c.id, ci.name, ci.title, c.in_stock, c.has_variants,
+          select SQL_CALC_FOUND_ROWS  c.id, ci.name, ci.title, c.in_stock, c.has_variants, crm.categories_id, ci.description, ci.url,
            ROUND( CASE
             WHEN c.currency_id = {$cu_on_site['id']} THEN pp.price
             WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id = {$cu_main['id']} THEN pp.price * {$cu_on_site['rate']}
             WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id <> {$cu_main['id']} THEN pp.price / cu.rate * {$cu_on_site['rate']}
             END, 2 ) as price,
-           pp.price as pprice, '{$cu_on_site['symbol']}' as symbol {$sel},
+           pp.price as pprice, '{$cu_on_site['symbol']}' as symbol, '{$cu_on_site['code']}' as currency_code {$sel},
            IF(c.in_stock = 1, 1, 0) as available
           from __content c
+          join __content_relationship crm on crm.content_id=c.id and crm.is_main = 1
           join __products_prices pp on pp.content_id=c.id and pp.group_id={$this->group_id}
           {$j}
           join __currency cu on cu.id = c.currency_id

@@ -4,6 +4,7 @@ namespace modules\fixes\controllers;
 
 use helpers\Translit;
 use system\core\DB;
+use system\core\exceptions\Exception;
 use system\Front;
 
 class Fixes extends Front
@@ -36,7 +37,12 @@ class Fixes extends Front
 
         foreach ($r as $item) {
             $url = Translit::str2url($item['name']);
-            $this->db->update('__content_info', ['url' => $url], " id={$item['id']} limit 1",1);
+            try {
+                $this->db->update('__content_info', ['url' => $url], " id={$item['id']} limit 1");
+            } catch(Exception $e){
+                $this->db->update('__content_info', ['url' => $url . '-' . $item['id']], " id={$item['id']} limit 1");
+            }
+
         }
 
         $p++;
