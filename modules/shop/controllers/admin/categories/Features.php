@@ -131,6 +131,7 @@ class Features extends Engine
 
         $parent_id = $this->request->post('parent_id', 'i');
 
+        $this->template->assign('action', 'create');
         $this->template->assign('content_id', $content_id);
         $this->template->assign('data', ['parent_id' => $parent_id]);
         echo $this->template->fetch('shop/categories/features/create');
@@ -146,9 +147,19 @@ class Features extends Engine
     {
         echo $this->features->delete($id);
     }
-    public function edit($id)
+    public function edit($id = null)
     {
-        // TODO: Implement edit() method.
+        if($this->request->post('action') == 'edit'){
+            $id = $this->request->post('id', 'i');
+            $this->features->update($id);
+            $this->response->body(['s' => ! $this->featuresContent->hasError()])->asJSON();
+            return null;
+        }
+        $id = $this->request->post('id', 'i');
+        $this->template->assign('data', $this->features->getData($id));
+
+        $this->template->assign('action', 'edit');
+        echo $this->template->fetch('shop/categories/features/create');
     }
     public function process($id)
     {

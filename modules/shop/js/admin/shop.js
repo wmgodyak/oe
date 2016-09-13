@@ -401,6 +401,11 @@ engine.shop = {
                     $features.select(content_id, parent_id);
                 });
 
+                $(document).on('click', '.scf-edit', function(){
+                    var content_id = $('#shopCategoriesFeatures').data('id');
+                    var id = $(this).data('id');
+                    $features.edit(id, content_id);
+                });
                 $(document).on('click', '.scf-remove', function(){
                     var id = $(this).data('id');
                     $features.delete(id);
@@ -486,6 +491,57 @@ engine.shop = {
                         var pw = engine.dialog({
                             content: res,
                             title: 'Створення властивості',
+                            autoOpen: true,
+                            width: 750,
+                            modal: true,
+                            buttons: {
+                                "Зберегти": function(){
+                                    $('#formContentFeatures').submit();
+                                }
+                            }
+                        });
+                        engine.validateAjaxForm('#formContentFeatures', function(res){
+                            if(res.s > 0){
+                                pw.dialog('close').remove();
+                                engine.shop.categories.features.getSelected(content_id);
+                            }
+                        });
+
+                        $('.cf-feature-select').select2();
+
+                        $('#data_folder')
+                            .change(function(){
+                                if($(this).is(':checked')){
+                                    $('.fg-show-filter, .fg-multiple, .fg-required').removeAttr('checked').hide();
+                                } else{
+                                    $('.fg-show-filter, .fg-multiple, .fg-required').show();
+                                }
+                            });
+
+                        var inp = $('.f-info-name:first'), lang = inp.data('lang'), code = $('#f_data_code');
+                        var ce = code.val() == '';
+                        inp.keyup(function(){
+                            var text = this.value;
+                            if(ce) {
+                                text = engine.content.translit(text, lang);
+                                text = text.replace(/-/g, '_');
+                                code.val(text);
+                            }
+                        });
+                    }
+                });
+            },
+            edit: function(id, content_id)
+            {
+                engine.request.post({
+                    url: 'module/run/shop/categories/features/edit',
+                    data: {
+                        id: id
+                    },
+                    success: function(res){
+                        var pw = engine.dialog({
+                            content: res,
+                            title: 'Редагування властивості',
                             autoOpen: true,
                             width: 750,
                             modal: true,
