@@ -21,7 +21,7 @@
             </span>
 
            <a  href="{$product.id}" title="{$product.title}" class="product-item__name">
-               {$product.name} {$product.pprice}
+               {$product.name}
            </a>
 
            <span class="product-item__price">
@@ -41,19 +41,18 @@
             {/if}
            <span class="product-item__activities">
                 {if $product.in_stock == 1}
-                   <button class="btn sm red buy-one-click" data-has-variants="{$product.has_variants}" data-id="{$product.id}">Купити в 1 клік</button>
-                   <span class="m_cart-indicator m_cart-indicator--out to-cart cart-product-{$product.id} {if isset($smarty.session.cart.products[$product.id])}m_cart-indicator__in{/if}" data-id="{$product.id}" data-has-variants="{$product.has_variants}" title="В кошик"></span>
+                   <button title="Введіть ім'я і телефон, деталі уточнимо по телефону" class="btn sm red buy-one-click" data-has-variants="{$product.has_variants}" data-id="{$product.id}">Купити в 1 клік</button>
+                   <span class="m_cart-indicator m_cart-indicator--out to-cart cart-product-{$product.id} {if isset($smarty.session.cart.products[$product.id])}m_cart-indicator__in{/if}" data-id="{$product.id}" data-has-variants="{$product.has_variants}" title="{if isset($smarty.session.cart.products[$product.id])}Вже в кошику{else}Додати в кошик{/if}"></span>
                 {else}
                     <button class="btn sm  to-wait-list" data-has-variants="{$product.has_variants}" data-id="{$product.id}" title="Повідомте про появу">Повідомте</button>
                 {/if}
-
                <span class="m_hearth-like">
-                   <span class="hearth-like__link wishlist-add {if isset($smarty.session.wishlist[$product.id])}hearth-like__link--liked{/if}" data-id="{$product.id}" data-has-variants="{$product.has_variants}" ></span>
+                   <span title="Додати в список улюблених" class="hearth-like__link wishlist-add {if isset($smarty.session.wishlist[$product.id])}hearth-like__link--liked{/if}" data-id="{$product.id}" data-has-variants="{$product.has_variants}" ></span>
                </span>
            </span>
 
             <span class="comparison-link">
-                <a href="15;?cat={$product.categories_id}" style="margin-left: 5px;" class=" to-comparison {if isset($smarty.session.comparison[$product.id])}in{/if}" data-in="У порівнянні" data-cat="{$product.categories_id}" data-id="{$product.id}">{if isset($smarty.session.comparison[$product.id])}У порівнянні{else}Додати в порівняння{/if}</a>
+                <a title="Додайте товар до порівняння" href="15;?cat={$product.categories_id}" class=" to-comparison {if isset($smarty.session.comparison[$product.id])}in{/if}" data-in="У порівнянні" data-cat="{$product.categories_id}" data-id="{$product.id}">{if isset($smarty.session.comparison[$product.id])}У порівнянні{else}Додати в порівняння{/if}</a>
             </span>
        </span>
     </span>

@@ -21,7 +21,7 @@
 
                 <!-- begin wish-list -->
                 <div class="wish-list">
-                    <a class="wish-list__link" id="wishlistLink" href="27">Лист бажань</a>
+                    <a class="wish-list__link" title="Переглянути список вибраних товарів" id="wishlistLink" href="27">Лист бажань</a>
                 </div>
                 <!-- end wish-list -->
 
@@ -44,7 +44,7 @@
 
             <!-- begin logo -->
             <div class="logo">
-                <a {if $page.id != 1 } href="1"{/if} class="logo__link">
+                <a  {if $page.id != 1 } href="1"{/if} class="logo__link">
                     <img src="{$theme_url}/assets/img/logo.png" alt="Світ Мобільних Аксесуарів" title="Світ Мобільних Аксесуарів" class="logo-icon">
                     <img src="{$theme_url}/assets/img/logo-text.png" alt="" class="logo-text">
                 </a>
@@ -64,7 +64,7 @@
             <!-- end tel-search -->
 
             <!-- begin cart -->
-            <div class="cart" id="blockCart"></div>
+            <div class="cart" id="blockCart" title="Переглянути кошик"></div>
             <!-- end cart -->
 
         </div>

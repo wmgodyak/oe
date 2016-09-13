@@ -268,13 +268,15 @@ class Users extends Front
             $data = $this->request->post('data'); $i=[]; $s = 0;
 
             FormValidation::setRule(['password', 'password_c'], FormValidation::REQUIRED);
-            FormValidation::setRule(['password'], FormValidation::PASSWORD);
+//            FormValidation::setRule(['password'], FormValidation::PASSWORD);
             FormValidation::run($data);
 
             if(FormValidation::hasErrors()){
                 $i = FormValidation::getErrors();
-            } elseif(!empty($data['password']) && ($data['password_c'] != $data['password'])){
-                $i[] = ["data[password_c]" => $this->t('admin_profile.e_pasw_equal')];
+            } elseif(strlen($data['password']) < 6){
+                $i[] = ["data[password_c]" => $this->t('users.e_pasw_length')];
+            } elseif($data['password_c'] != $data['password']){
+                $i[] = ["data[password_c]" => $this->t('users.e_pasw_equal')];
             }  else {
 
                 unset($data['password_c']);

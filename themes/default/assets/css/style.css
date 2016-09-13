@@ -1290,7 +1290,7 @@ body {
     .products-similar .products .item {
       display: inline-block;
       width: 100px;
-      height: 140px;
+      min-height: 120px;
       float: left;
       color: #ee4d4d;
       border: 1px solid #f1f1f1;
@@ -1343,7 +1343,7 @@ body {
   .comparison .categories a {
     margin-left: 1em; }
     .comparison .categories a.active {
-      border: 1px solid #f04d4d; }
+      border-bottom: 1px solid #f04d4d; }
 .comparison .item {
   position: relative;
   padding-bottom: 30px;
@@ -3914,7 +3914,7 @@ body {
         @media only screen and (max-width: 750px) {
           .contact-page__content .goods-list .goods-list__main .goods-list__row .item .total-price {
             text-align: center; } }
-    .contact-page__content .goods-list .goods-list__main .footer__contacts a {
+    .contact-page__content .goods-list .goods-list__main .footer__contacts a, .contact-page__content .goods-list .goods-list__main .footer__contacts span {
       position: relative;
       display: block;
       padding: 0 0 0 22px;
@@ -3922,10 +3922,10 @@ body {
       font: 14px/14px "Roboto-Light", sans-serif;
       color: #666666; }
       @media only screen and (max-width: 750px) {
-        .contact-page__content .goods-list .goods-list__main .footer__contacts a {
+        .contact-page__content .goods-list .goods-list__main .footer__contacts a, .contact-page__content .goods-list .goods-list__main .footer__contacts span {
           font-size: 12px;
           white-space: nowrap; } }
-      .contact-page__content .goods-list .goods-list__main .footer__contacts a:before {
+      .contact-page__content .goods-list .goods-list__main .footer__contacts a:before, .contact-page__content .goods-list .goods-list__main .footer__contacts span:before {
         position: absolute;
         left: 0;
         top: 0;
@@ -3934,18 +3934,18 @@ body {
         height: 14px;
         background: url("../img/contacts_icon.png") no-repeat;
         content: ''; }
-      .contact-page__content .goods-list .goods-list__main .footer__contacts a.ks:before {
+      .contact-page__content .goods-list .goods-list__main .footer__contacts a.ks:before, .contact-page__content .goods-list .goods-list__main .footer__contacts span.ks:before {
         background-position: -15px 0; }
-      .contact-page__content .goods-list .goods-list__main .footer__contacts a.vf:before {
+      .contact-page__content .goods-list .goods-list__main .footer__contacts a.vf:before, .contact-page__content .goods-list .goods-list__main .footer__contacts span.vf:before {
         background-position: 0 0; }
-      .contact-page__content .goods-list .goods-list__main .footer__contacts a.lc {
+      .contact-page__content .goods-list .goods-list__main .footer__contacts a.lc, .contact-page__content .goods-list .goods-list__main .footer__contacts span.lc {
         height: 11px;
         background-position: 0 0; }
-        .contact-page__content .goods-list .goods-list__main .footer__contacts a.lc:before {
+        .contact-page__content .goods-list .goods-list__main .footer__contacts a.lc:before, .contact-page__content .goods-list .goods-list__main .footer__contacts span.lc:before {
           background-position: 0 -16px; }
-      .contact-page__content .goods-list .goods-list__main .footer__contacts a.gm:before {
+      .contact-page__content .goods-list .goods-list__main .footer__contacts a.gm:before, .contact-page__content .goods-list .goods-list__main .footer__contacts span.gm:before {
         background-position: -30px -16px; }
-      .contact-page__content .goods-list .goods-list__main .footer__contacts a.sk:before {
+      .contact-page__content .goods-list .goods-list__main .footer__contacts a.sk:before, .contact-page__content .goods-list .goods-list__main .footer__contacts span.sk:before {
         height: 15px;
         background-position: -15px -15px; }
 

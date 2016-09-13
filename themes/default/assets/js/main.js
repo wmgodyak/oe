@@ -38,6 +38,7 @@ var App = {
 
         var createOptions = function (items, loop, nav, dots, autoplay) {
             return {
+                //rewindNav: true, todo fix it
                 items: items,
                 loop: loop,
                 nav: nav,

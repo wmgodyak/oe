@@ -31,19 +31,19 @@
                     </div>
                     <ul class="social__list">
                         <li class="social__item">
-                            <a href="#" class="social__link social__link--vk"></a>
+                            <a href="https://vk.com/cma.company" rel="nofollow" target="_blank" class="social__link social__link--vk"></a>
                         </li>
                         <li class="social__item">
-                            <a href="#" class="social__link social__link--fb"></a>
+                            <a href="https://www.facebook.com/people/%D0%A1%D0%B2%D1%96%D1%82-%D0%9C%D0%BE%D0%B1%D1%96%D0%BB%D1%8C%D0%BD%D0%B8%D1%85-%D0%90%D0%BA%D1%81%D0%B5%D1%81%D1%83%D0%B0%D1%80%D1%96%D0%B2/100011529574249" rel="nofollow" target="_blank" class="social__link social__link--fb"></a>
                         </li>
-                        <li class="social__item">
+                        {* <li class="social__item">
                             <a href="#" class="social__link social__link--ok"></a>
+                        </li> *}
+                        <li class="social__item">
+                            <a href="https://www.youtube.com/channel/UCFTB5AKaUZVDr-etBEic_Uw" target="_blank" rel="nofollow" class="social__link social__link--yt"></a>
                         </li>
                         <li class="social__item">
-                            <a href="#" class="social__link social__link--yt"></a>
-                        </li>
-                        <li class="social__item">
-                            <a href="#" class="social__link social__link--ig"></a>
+                            <a href="https://plus.google.com/+%D0%9A%D0%BE%D0%BC%D0%BF%D0%B0%D0%BD%D1%96%D1%8F%D0%A1%D0%9C%D0%90" rel="nofollow" target="_blank" class="social__link social__link--ig"></a>
                         </li>
                     </ul>
                 </div>

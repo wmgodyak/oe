@@ -1416,7 +1416,7 @@
     a {
       margin-left:1em;
       &.active{
-        border: 1px solid $bg-red;
+        border-bottom: 1px solid $bg-red;
       }
     }
   }
