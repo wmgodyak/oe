@@ -20,7 +20,7 @@ class Sitemap extends Engine
     {
         parent::init();
 
-        EventsHandler::getInstance()->add('content.params.after', [$this, 'params']);
+//        EventsHandler::getInstance()->add('content.params.after', [$this, 'params']);
         EventsHandler::getInstance()->add('system.modules.config.Sitemap', [$this, 'config']);
     }
 

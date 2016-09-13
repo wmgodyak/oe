@@ -83,6 +83,9 @@ class Blog extends Content
      */
     public function contentProcess($id)
     {
+        $type = $this->mContent->getContentType($id);
+        if($type != 'post') return;
+
         $this->relations->saveContentCategories($id);
     }
 

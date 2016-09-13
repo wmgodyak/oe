@@ -174,6 +174,7 @@ engine.shop = {
                                 mainCatA.attr('href', d.cat.href).attr('data-id', d.cat.id).html(d.cat.name);
                                 $('#inp_main_categories_id').val(d.cat.id)
                                 dialog.dialog('destroy').remove();
+                                engine.alert('Категорію збережено');
                             }
                         });
                     },
@@ -264,6 +265,7 @@ engine.shop = {
                                 out += '<a href="javascript:;" title="Додати" class="shop-product-add-category" data-id="{$cat.id}"><i class="fa fa-plus-circle"></i></a>';
                                 $('#sp_selected_categories').html(out);
                                 dialog.dialog('destroy').remove();
+                                engine.alert('Категорії збережено');
                             }
                         });
                     },
