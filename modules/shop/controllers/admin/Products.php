@@ -65,7 +65,16 @@ class Products extends Content
         EventsHandler::getInstance()->add('content.params.after', [$video, 'index']);
         EventsHandler::getInstance()->add('content.intro.before', [$this, 'intro']);
         EventsHandler::getInstance()->add('content.process', [$video, 'process']);
+        EventsHandler::getInstance()->add('content.params', [$this, 'params']);
 
+    }
+
+    public function params($content)
+    {
+        $ct = $this->contentTypes->getData($content['types_id'], 'type');
+        if(!in_array($ct, $this->allowed_types)) return '';
+
+        return $this->template->fetch('shop/products/params');
     }
 
     public function intro($content)

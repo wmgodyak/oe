@@ -58,6 +58,10 @@
                     <a title="Додайте товар до порівняння" href="15;?cat={$product.categories_id}" class=" to-comparison {if isset($smarty.session.comparison[$product.id])}in{/if}" data-in="У порівнянні" data-cat="{$product.categories_id}" data-id="{$product.id}">{if isset($smarty.session.comparison[$product.id])}У порівнянні{else}Додати в порівняння{/if}</a>
                 </span>
            </div>
+            {if $product.in_stock == 1}
+                {if $app->contentMeta->get($product.id, 'hit', true) == 1}<span class="m_hit"></span>{/if}
+                {if $app->contentMeta->get($product.id, 'bestseller', true) == 1}<span class="m_special-offer"></span>{/if}
+            {/if}
        </span>
     </span>
 

@@ -14,10 +14,11 @@
     {/if}
 
     <div class="form-group">
-        <label for="content_status" class="col-md-4 control-label">{*$t.common.status*} Опубліковано</label>
-        <div class="col-md-8">
+        <div class="col-md-12">
+            <label for="content_status">
             <input type="hidden" name="content[status]" value="hidden">
             <input class="switch" type="checkbox" name="content[status]" id="content_status" value="published" {if $content.status=='published'}checked{/if}>
+            Опубліковано</label>
         </div>
     </div>
     {if $form_display_params.owner}
