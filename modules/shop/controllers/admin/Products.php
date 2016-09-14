@@ -9,7 +9,7 @@ use modules\shop\controllers\admin\products\Features;
 use modules\shop\controllers\admin\products\Kits;
 use modules\shop\controllers\admin\products\Variants;
 use modules\shop\models\admin\Prices;
-use modules\shop\models\admin\Categories;
+use modules\shop\models\admin\Categories as Cat;
 use system\components\content\controllers\Content;
 use system\core\DataTables2;
 use system\core\EventsHandler;
@@ -46,7 +46,7 @@ class Products extends Content
         $this->form_display_blocks['features'] = false;
 
         $this->relations = new ContentRelationship();
-        $this->categories = new Categories('products_categories');
+        $this->categories = new Cat('products_categories');
         $this->contentTypes = new \system\models\ContentTypes();
         $this->prices = new Prices();
         $this->customersGroups = new UsersGroup();
@@ -114,9 +114,10 @@ class Products extends Content
             $s = false; $cat = null;
             $selected = $this->request->post('selected');
             $products_id = $this->request->post('products_id', 'i');
+            $is_main = $this->request->post('is_main', 'i');
             if(!empty($selected) && $products_id > 0){
                 $a = explode(',', $selected);
-                $is_main = count($a) == 1 ? 1 : 0;
+//                $is_main = count($a) == 1 ? 1 : 0;
 
                 if($is_main && $selected > 0){
                   $s = $this->relations->saveMainCategory($products_id, $selected);
@@ -133,6 +134,7 @@ class Products extends Content
 
         } elseif($action == 'html'){
             $this->template->assign('products_id', $this->request->post('products_id', 'i'));
+            $this->template->assign('is_main', $this->request->post('is_main', 'i'));
             echo $this->template->fetch('shop/categories_tree');
         } elseif($action == 'json') {
             $items = array();

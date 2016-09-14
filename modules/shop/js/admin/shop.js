@@ -136,7 +136,8 @@ engine.shop = {
                     url: 'module/run/shop/products/categoriesTree/html',
                     data: {
                         selected: [id],
-                        products_id: product_id
+                        products_id: product_id,
+                        is_main: 1
                     },
                     success: function(res){
                         var bi = t.common.button_save;
@@ -209,6 +210,7 @@ engine.shop = {
             })
         });
 
+// {"state":{"core":{"open":["37268","37949","38040","38053"],"scroll":{"left":0,"top":238},"selected":["38041","38042","38043","38059","38063","38072"]}},"ttl":false,"sec":1473851036788}
         $(document).on
         (
             'click',
@@ -216,11 +218,11 @@ engine.shop = {
             function()
             {
                 var product_id = $("#content_id").val();
-
                 engine.request.post({
                     url: 'module/run/shop/products/categoriesTree/html',
                     data: {
-                        products_id: product_id
+                        products_id: product_id,
+                        is_main: 0
                     },
                     success: function(res){
                         var bi = t.common.button_save;

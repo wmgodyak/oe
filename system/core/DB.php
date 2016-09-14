@@ -31,10 +31,10 @@ class DB extends \PDO {
     private $conf;
 
     /**
-     * Construct this Database object, extending the PDO object
-     * By the way, the PDO object is built into PHP by default
+     * DB constructor.
+     * @param null $conf
      */
-    public function __construct()
+    public function __construct($conf = null)
     {
         /**
          * set the (optional) options of the PDO connection. in this case, we set the fetch mode to
@@ -42,7 +42,10 @@ class DB extends \PDO {
          * For example, fetch mode FETCH_ASSOC would return results like this: $result["user_name] !
          * @see http://www.php.net/manual/en/pdostatement.fetch.php
          */
-        $conf = Config::getInstance()->get('db'); // todo переробити
+        if(! $conf){
+            $conf = Config::getInstance()->get('db');
+        }
+
         $this->conf = $conf;
 
         $this->db_name = $conf['db'];
