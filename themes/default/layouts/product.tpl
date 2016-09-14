@@ -28,23 +28,57 @@
                 <div class="item-main-info">
 
                     <div class="left">
-                        <div class="product-slider1">
+                        {*<div class="product-slider1">*}
+                            {*{if $product.images|count > 0}*}
+                                {*{foreach $product.images as $k=>$img}*}
+                                    {*<div class="slider1-item" style="background-image: url('/{$img.path}product/{$img.image}');"></div>*}
+                                {*{/foreach}*}
+                            {*{else}*}
+                                {*<div class="slider1-item" style="background-image: url('/uploads/noimage.jpg');"></div>*}
+                            {*{/if}*}
+                        {*</div>*}
+
+                        {*{if $product.images|count > 1}*}
+                        {*<div class="product-slider2">*}
+                            {*{foreach $product.images as $k=>$img}*}
+                                {*<div class="slider2-item" style="background-image: url('/{$img.path}thumbs/{$img.image}');"></div>*}
+                            {*{/foreach}*}
+                        {*</div>*}
+                        {*{/if}*}
+
+                        {*{print_r($product.images)}*}
+                        {*new slider*}
+
+                        <div class="product-slider">
                             {if $product.images|count > 0}
                                 {foreach $product.images as $k=>$img}
-                                    <div class="slider1-item" style="background-image: url('/{$img.path}product/{$img.image}');"></div>
+                                    <div class="product-slider-item">
+                                        <div class="wrap-img">
+                                            <img src="/{$img.path}product/{$img.image}" alt="/{$img.path}product/{$img.image}">
+                                        </div>
+                                    </div>
                                 {/foreach}
-                                {else}
-                                <div class="slider1-item" style="background-image: url('/uploads/noimage.jpg');"></div>
+                            {else}
+                                <div class="product-slider-item">
+                                    <div class="wrap-img">
+                                        <img src="/uploads/noimage.jpg" alt="">
+                                    </div>
+                                </div>
                             {/if}
                         </div>
 
                         {if $product.images|count > 1}
-                        <div class="product-slider2">
-                            {foreach $product.images as $k=>$img}
-                                <div class="slider2-item" style="background-image: url('/{$img.path}thumbs/{$img.image}');"></div>
-                            {/foreach}
-                        </div>
+                            <div class="product-thumb-slider">
+                                {foreach $product.images as $k=>$img}
+                                    <div class="product-thumb-item">
+                                        <div class="wrap-img">
+                                            <img src="/{$img.path}thumbs/{$img.image}" alt="">
+                                        </div>
+                                    </div>
+                                {/foreach}
+                            </div>
                         {/if}
+
                     </div>
 
                     <div class="right">

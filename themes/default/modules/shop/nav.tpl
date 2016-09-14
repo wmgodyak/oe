@@ -16,20 +16,22 @@
                     {if $cat.isfolder}
                     <div class="sub-menu">
                         <div class="content my-grid">
-                            {foreach $cat.items as $item}
-                            <div class="item">
-                                <ul class="single-category">
-                                    <li><a class="text-head" href="{$item.id}" title="{$item.title}">{$item.name}</a></li>
-                                    {if $item.isfolder}
-                                        {foreach $item.items as $k=>$sub}
-                                            {if $k < 6}
-                                            <li><a class="link" href="{$sub.id}" title="{$sub.title}">{$sub.name}</a></li>
-                                            {/if}
-                                        {/foreach}
-                                    {/if}
-                                </ul>
+                            <div class="row">
+                                {foreach $cat.items as $item}
+                                <div class="item">
+                                    <ul class="single-category">
+                                        <li><a class="text-head" href="{$item.id}" title="{$item.title}">{$item.name}</a></li>
+                                        {if $item.isfolder}
+                                            {foreach $item.items as $k=>$sub}
+                                                {if $k < 6}
+                                                <li><a class="link" href="{$sub.id}" title="{$sub.title}">{$sub.name}</a></li>
+                                                {/if}
+                                            {/foreach}
+                                        {/if}
+                                    </ul>
+                                </div>
+                                {/foreach}
                             </div>
-                            {/foreach}
                         </div>
                     </div>
                     {/if}

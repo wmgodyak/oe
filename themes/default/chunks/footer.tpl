@@ -87,17 +87,17 @@
 
                 <div class="footer__contacts">
 
-                    <a class="ks" href="#">
+                    <span class="ks" href="#">
                         +38 (097) 59 88 666
-                    </a>
+                    </span>
 
-                    <a class="vf" href="#">
+                    <span class="vf" href="#">
                         +38 (099) 25 88 666
-                    </a>
+                    </span>
 
-                    <a class="lc" href="#">
+                    <span class="lc" href="#">
                         +38 (063) 59 88 666
-                    </a>
+                    </span>
 
                     <a class="gm" href="#">
                         sma.lviv@gmail.com
@@ -164,6 +164,8 @@
 <script src='{$theme_url}/assets/js/vendor/jquery.barrating.min.js'></script>
 <script src='{$theme_url}/assets/js/vendor/waterfall.min.js'></script>
 <script src='{$theme_url}/assets/js/vendor/notify.js'></script>
+<script src='{$theme_url}/assets/js/vendor/slick.min.js'></script>
+<script src='{$theme_url}/assets/js/vendor/jquery.fancybox.pack.js'></script>
 <script src="{$theme_url}/assets/js/main.js"></script>
 <!-- end scripts -->
 {if isset($modules_scripts)}

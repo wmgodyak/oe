@@ -149,7 +149,8 @@
       .main-news__link {
         @include clearfix();
         display: block;
-        height: 160px;
+        //height: 160px;
+        height: 180px;
         background: $bg-gray;
         border: 1px solid $bg-gray;
         transition: all 0.35s ease;
@@ -193,14 +194,16 @@
           }
           .main-news__content-text {
             display: block;
-            padding: 13px 0 0;
-            font: 12px/14px $fontLight;
+            padding: 10px 0 0;
+            font: 12px/14px $fontRegular;
             color: $font-dark-grey;
+            max-height: 53px;
+            overflow: hidden;
           }
           .main-news__date {
             display: block;
-            padding: 13px 0 0;
-            font: 12px/18px $fontLight;
+            padding: 8px 0 0;
+            font: 12px/18px $fontRegular;
             color: $font-light-grey
           }
         }
@@ -300,7 +303,7 @@
           }
           .description {
             padding: 25px 0 0 0;
-            font: 12px/16px $fontLight;
+            font: 12px/16px $fontRegular;
             color: $font_dark-grey;
           }
         }
@@ -322,7 +325,7 @@
       }
       .content {
         padding: 14px 0 0;
-        font: 12px/16px $fontLight;
+        font: 12px/16px $fontRegular;
         color: $font-dark-grey;
       }
       .address-row {
@@ -568,11 +571,21 @@
           .label {
             display: block;
             padding: 8px 0 4px;
-            font: 14px/14px $fontLight;
+            font: 14px/14px $fontRegular;
             color: $font-dark-grey;
           }
           .row:first-of-type {
             padding-top: 6px;
+          }
+          a{
+            font: 16px $fontRegular;
+            color: $font-dark-grey;
+            display: inline-block;
+            padding:4px;
+            transition: all 0.35s ease;
+            &:hover{
+              color:$font-red;
+            }
           }
           .row:last-of-type .label {
             padding-bottom: 0;
@@ -852,7 +865,7 @@
         }
         .availability {
           padding: 15px 0 0;
-          font: 16px/17px $fontLight;
+          font: 16px/17px $fontRegular;
           color: $font-dark-grey;
           span {
             font: 16px/17px $fontMedium;
@@ -866,7 +879,7 @@
         }
         .bonus {
           padding: 7px 0 0;
-          font: 16px/17px $fontLight;
+          font: 16px/17px $fontRegular;
           color: $font-dark-grey;
           span {
             font-family: $fontMedium;
@@ -1023,7 +1036,7 @@
           }
           .coment-counter {
             float: left;
-            font: 14px/14px $fontLight;
+            font: 14px/14px $fontRegular;
             color: $font-dark-grey;
           }
         }
@@ -1035,7 +1048,7 @@
           .wrap {
             padding: 10px 10px 15px;
             background: $bg-gray;
-            font: 14px/17px $fontLight;
+            font: 14px/17px $fontRegular;
             color: $font-dark-grey;
             span {
               display: block;
@@ -1177,7 +1190,7 @@
           .name {
             width: 120px;
             margin: 13px auto 0;
-            font: 12px/12px $fontLight;
+            font: 12px/12px $fontRegular;
             color: $font-dark-grey;
             text-align: center;
           }
@@ -1189,7 +1202,7 @@
           .old-price {
             position: relative;
             display: inline-block;
-            font: 12px/12px $fontLight;
+            font: 12px/12px $fontRegular;
             color: $font-dark-grey;
             &:before {
               position: absolute;
@@ -1295,7 +1308,7 @@
         .text {
           display: inline-block;
           float: left;
-          font: 14px/35px $fontLight;
+          font: 14px/35px $fontRegular;
           color: $font-dark-grey;
           text-transform: uppercase;
         }
@@ -1331,7 +1344,7 @@
                 position: relative;
                 display: block;
                 padding: 0 0 0 8px;
-                font: 14px/18px $fontLight;
+                font: 14px/18px $fontRegular;
                 color: $font-dark-grey;
                 &:after {
                   position: absolute;
@@ -1348,7 +1361,7 @@
             }
             span {
               display: block;
-              font: 14px/16px $fontLight;
+              font: 14px/16px $fontRegular;
               color: $font-dark-grey;
               &.span1 {
                 padding-bottom: 16px;
@@ -1496,7 +1509,7 @@
               }
             }
             .code {
-              font: 14px/14px $fontLight;
+              font: 14px/14px $fontRegular;
               color: $font-light-grey;
               @include respond-to(xs) {
                 text-align: center;
@@ -1532,7 +1545,7 @@
                   width: 35px;
                   height: 30px;
                   border: 1px solid $bg_dark-grey;
-                  font: 18px/28px $fontLight;
+                  font: 18px/28px $fontRegular;
                   color: $font-dark-grey;
                   text-align: center;
                 }
@@ -1650,7 +1663,7 @@
         }
         .row-bonus {
           padding: 7px 0 0;
-          font: 16px/16px $fontLight;
+          font: 16px/16px $fontRegular;
           color: $font-dark-grey;
           @include respond-to(xs) {
             padding-top: 15px;
@@ -2011,7 +2024,7 @@
         }
         .row-bonus {
           padding: 7px 0 0;
-          font: 16px/16px $fontLight;
+          font: 16px/16px $fontRegular;
           color: $font-dark-grey;
           @include respond-to(xs) {
             padding-top: 15px;
@@ -2162,7 +2175,7 @@
               }
             }
             .code {
-              font: 14px/14px $fontLight;
+              font: 14px/14px $fontRegular;
               color: $font-light-grey;
               @include respond-to(xs) {
                 text-align: center;
@@ -2254,7 +2267,7 @@
         .name {
           width: 120px;
           margin: 13px auto 0;
-          font: 12px/12px $fontLight;
+          font: 12px/12px $fontRegular;
           color: $font-dark-grey;
           text-align: center;
         }
@@ -2266,7 +2279,7 @@
         .old-price {
           position: relative;
           display: inline-block;
-          font: 12px/12px $fontLight;
+          font: 12px/12px $fontRegular;
           color: $font-dark-grey;
           &:before {
             position: absolute;
@@ -2501,7 +2514,7 @@
             }
           }
           .code {
-            font: 14px/14px $fontLight;
+            font: 14px/14px $fontRegular;
             color: $font-light-grey;
             @include respond-to(xs) {
               text-align: center;
@@ -2524,7 +2537,7 @@
           display: block;
           padding: 0 0 0 22px;
           margin: 0 0 14px;
-          font: 14px/14px $fontLight;
+          font: 14px/14px $fontRegular;
           color: $font-dark-grey;
           @include respond-to(xs) {
             font-size: 12px;
@@ -2714,7 +2727,7 @@
     border-top: 1px solid #ddd;
     font-family: 'Roboto-Light';
     font-size:14px;
-    color: #666666;
+    color: #333;
   }
 
   & > thead > tr > th {
@@ -2801,7 +2814,7 @@ table.features tr.first > td {
       width: 100%;
       font-family: 'Roboto-Light';
       font-size:14px;
-      color: #666666;
+      color: #333;
       span , b {
         width: 50%;
         display: block;
@@ -2836,7 +2849,7 @@ table.features tr.first > td {
     list-style: none;
     display: inline;
     margin-right:5px;
-    font: 12px/14px $fontLight;
+    font: 12px/14px $fontRegular;
   }
 }
 .sp-comments {

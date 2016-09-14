@@ -12,6 +12,71 @@ var App = {
         this.mask();
         this.sidebar();
         this.menu();
+        this.closeModal();
+        this.slickSlide();
+    },
+    slickSlide: function(){
+        var big = $('.product-slider'),
+            thumb = $('.product-thumb-slider');
+        big.slick({
+            arrows: false,
+            dots: false,
+            draggable: true,
+            asNavFor: thumb,
+            slidesToShow: 1
+
+        });
+        thumb.slick({
+            arrows: false,
+            dots: false,
+            swap: false,
+            slidesToShow: 3,
+            asNavFor: big,
+            focusOnSelect: true
+        });
+        big.find('.wrap-img').on('click',function(){
+            var imageLinks = [];
+            var clickImageSrc = big.find('.slick-current img').attr('src');
+            var currentSrc = clickImageSrc;
+            var i = 0;
+            do {
+                if(i > 3){
+                    return false;
+                }
+                imageLinks.push(currentSrc);
+                currentSrc = big.find('.slick-slide:not(.slick-cloned) img[src="'+currentSrc+'"]').closest('.slick-slide').next().find('img').attr('src');
+                console.log(currentSrc);
+                if (typeof currentSrc == 'undefined') {
+                    currentSrc =  big.find('.slick-slide:not(.slick-cloned)').first().find('img').attr('src');
+                }
+                console.log(i);
+                i++;
+            } while (clickImageSrc != currentSrc);
+            console.log(imageLinks);
+
+            $.fancybox.open(imageLinks, {
+                autoDimision: true,
+                padding: 0,
+                margin: [0, 0, 0, 0],
+                maxHeight:'90%',
+                maxWidth:'80%',
+                helpers: {
+                    overlay: {
+                        css: {
+                            'background' : 'rgba(0, 0, 0, 0.8)'
+                        }
+                    }
+                }
+            });
+        });
+    },
+    closeModal: function(){
+        $(document).on('click', function (e){
+            var container = $(".modal-login");
+            if (!container.is(e.target) && container.has(e.target).length === 0){
+                container.remove();
+            }
+        });
     },
     formStyle: function () {
         var $searchSelect = $('.search-form select, .jq-select');
@@ -42,13 +107,14 @@ var App = {
                 items: items,
                 loop: loop,
                 nav: nav,
+                autoPlay : 100,
                 dots: dots,
                 autoplay: autoplay,
                 navText: ["",""]
             }
         };
 
-        var optionsBannerSlider = createOptions(1, false, true, true, true);
+        var optionsBannerSlider = createOptions(1, true, true, true, true);
 
         if ($bannerSlider.length) {
             $bannerSlider.owlCarousel(optionsBannerSlider);
@@ -57,11 +123,11 @@ var App = {
         var optionsGoodsSliderMult5 = null;
 
         if ( $(window).width() > 1170 ) {
-            optionsGoodsSliderMult5 = createOptions(5, false, true, false, false);
+            optionsGoodsSliderMult5 = createOptions(5, false, true, false, true);
         } else if ( $(window).width() >= 750 ) {
-            optionsGoodsSliderMult5 = createOptions(3, false, true, false, false);
+            optionsGoodsSliderMult5 = createOptions(3, false, true, false, true);
         } else {
-            optionsGoodsSliderMult5 = createOptions(1, false, true, false, false);
+            optionsGoodsSliderMult5 = createOptions(1, false, true, false, true);
         }
 
         if ($goodsSliderMult5.length) {
@@ -71,11 +137,11 @@ var App = {
         var optionsGoodsSliderMult4 = null;
 
         if ( $(window).width() > 1170 ) {
-            optionsGoodsSliderMult4 = createOptions(4, false, true, false, false);
+            optionsGoodsSliderMult4 = createOptions(4, false, true, false, true);
         } else if ( $(window).width() >= 750 ) {
-            optionsGoodsSliderMult4 = createOptions(3, false, true, false, false);
+            optionsGoodsSliderMult4 = createOptions(3, false, true, false, true);
         } else {
-            optionsGoodsSliderMult4 = createOptions(1, false, true, false, false);
+            optionsGoodsSliderMult4 = createOptions(1, false, true, false, true);
         }
 
         if ($goodsSliderMult4.length) {
@@ -86,7 +152,7 @@ var App = {
 
         var optionsSynchSlider1 = {
             items: 1,
-            slideSpeed : 1000,
+            slideSpeed : 300,
             nav: false,
             pagination: false,
             responsiveRefreshRate : 200
@@ -233,13 +299,19 @@ var App = {
     },
     menu: function (){
         if($('.m_goods-nav').length == 0) return;
-
-        if ( $(window).width() > 1170 ) {
+        function itemHover(){
             $('.goods-nav__item').hover(function () {
-                $(this).children('.sub-menu').addClass('active');
+                $('.goods-nav__item ').each(function(){
+                    autoHeight( $(this).find('.item') );
+                });
             }, function(){
-                $(this).children('.sub-menu').removeClass('active');
+                $('.goods-nav__item ').each(function(){
+                    $(this).find('.item').removeAttr('style');
+                });
             });
+        }
+        if ( $(window).width() > 1170 ) {
+            itemHover();
 
             function autoHeight(items){
                 var maxHeight, heights;
@@ -252,20 +324,18 @@ var App = {
                 });
             };
 
-            $('.goods-nav__item ').each(function(){
-                autoHeight( $(this).find('li') );
-            });
 
-            try{
 
-                var grid = document.getElementsByClassName('my-grid');
-                for (var i = 0; i <= grid.length; i++){
-                    waterfall(grid[i]);
-                }
-            } catch (err)
-            {
-                console.log(err);
-            }
+            //try{
+            //
+            //    var grid = document.getElementsByClassName('my-grid');
+            //    for (var i = 0; i <= grid.length; i++){
+            //        waterfall(grid[i]);
+            //    }
+            //} catch (err)
+            //{
+            //    console.log(err);
+            //}
         } else {
             $('.goods-nav__link').on('click', function () {
                 if(false == $(this).siblings().is(':visible')) {
@@ -278,6 +348,7 @@ var App = {
         if($('.m_goods-nav').hasClass('collapse')){
             $(".goods-nav__header > a").click(function(e){
                 var $a = $(this);
+                //itemHover();
                 if($a.hasClass('active')){
                     $('.goods-nav__list').slideUp(400, function(){
                         $a.removeClass('active');
@@ -286,16 +357,13 @@ var App = {
                     $('.goods-nav__list').slideDown(400, function(){
                         $a.addClass('active');
 
-                        $('.goods-nav__item ').each(function(){
-                            autoHeight( $(this).find('li') );
-                        });
 
                         try{
 
-                            var grid = document.getElementsByClassName('my-grid');
-                            for (var i = 0; i <= grid.length; i++){
-                                waterfall(grid[i]);
-                            }
+                            //var grid = document.getElementsByClassName('my-grid');
+                            //for (var i = 0; i <= grid.length; i++){
+                            //    waterfall(grid[i]);
+                            //}
                         } catch (err)
                         {
                             console.log(err);

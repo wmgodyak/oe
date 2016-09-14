@@ -9,7 +9,7 @@
       }
     }
     .main-nav {
-      @include span(7);
+      @include span(6);
       padding-top: 8px;
       padding-left: 15px;
       @include respond-to(sm) {
@@ -24,10 +24,10 @@
           float: left;
           margin-right: 26px;
           .main-nav__link {
-            font-family: $fontLight;
+            font-family: $fontRegular;
             font-size: 14px;
             line-height: 14px;
-            color: #666666;
+            color: #333;
             transition: color 0.35s ease;
             &:hover {
               color: #4b4b4b;
@@ -41,7 +41,7 @@
       @include span(6);
       height: 100%;
       padding: 10px 0 0 10px;
-      font: 14px/14px $fontLight;
+      font: 14px/14px $fontRegular;
       color: $font-dark-grey;
       @include respond-to(xs) {
         display: block;
@@ -50,7 +50,7 @@
     .header__activities {
       position: relative;
       @include clearfix();
-      @include span(5);
+      @include span(6);
       height: 100%;
       @include respond-to(sm) {
         @include span(4);
@@ -61,7 +61,7 @@
       .lang-switcher {
         @include clearfix();
         margin-top: 10px;
-        float: left;
+        float:right;
         margin-left:35px;
         @include respond-to(sm) {
           display: none;
@@ -70,10 +70,10 @@
           display: block;
           float: left;
           margin-right: 6px;
-          font-family: $fontLight;
+          font-family: $fontRegular;
           font-size: 14px;
           line-height: 14px;
-          color: #666666;
+          color: #333;
         }
         .lang-switcher__list {
           @include clearfix();
@@ -90,7 +90,7 @@
              display: block;
              width: 1px;
              height: 12px;
-             background-color: #666666;
+             background-color: #333;
              content: '';
            }
            &.lang-switcher__item--active {
@@ -105,20 +105,20 @@
            .lang-switcher__link {
              display: inline-block;
              border-bottom: 1px solid transparent;
-             font-family: $fontLight;
+             font-family: $fontRegular;
              font-size: 14px;
              line-height: 14px;
-             color: #666666;
+             color: #333;
              transition: border-color 0.35s ease;
              &:hover {
-               border-color: #666666;
+               border-color: #333;
              }
            }
          }
         }
       }
       .wish-list {
-        float: left;
+        float:right;
         margin-left: 48px;
         padding-top: 8px;
         @include respond-to(sm) {
@@ -131,7 +131,7 @@
           font-family: "Roboto-Light", sans-serif;
           font-size: 14px;
           line-height: 14px;
-          color: #666666;
+          color: #333;
           transition: color 0.35s ease;
           &:hover {
             color: #ff3333;
@@ -165,7 +165,7 @@
         }
       }
       .user-login {
-        float: left;
+        float:right;
         height: 100%;
         padding: 8px 20px 0;
         margin-left: 30px;
@@ -178,18 +178,21 @@
           white-space: nowrap;
         }
         .user-login__link {
-          font-family: $fontLight;
+          font-family: $fontRegular;
           font-size: 14px;
           line-height: 14px;
           color: #ffffff;
           border-bottom: 1px solid #fff;
           transition: border-color 0.35s ease;
+          span {
+            font-family: $fontMedium;
+          }
           &:hover {
             border-color: transparent;
           }
         }
         span {
-          font-family: $fontLight;
+          font-family: $fontRegular;
           font-size: 14px;
           line-height: 14px;
           color: #ffffff;
@@ -337,7 +340,7 @@
             font-family: $fontRegular;
             font-size: 16px;
             line-height: 16px;
-            color: #666666;
+            color: #333;
             &:first-child {
               margin-left: 0;
             }
@@ -385,10 +388,10 @@
               font-family: $fontRegular;
               font-size: 16px;
               line-height: 16px;
-              color: #666666;
+              color: #333;
               transition: all 0.35s ease;
               &:hover {
-                border-color: #666666;
+                border-color: #333;
               }
             }
             .hidden {
@@ -396,7 +399,7 @@
               font-family: $fontRegular;
               font-size: 16px;
               line-height: 16px;
-              color: #666666;
+              color: #333;
             }
           }
         }
@@ -416,8 +419,14 @@
       }
     }
     .cart {
+      display: block;
       @include span(2);
       padding: 0 15px;
+      &:hover{
+        .cart__link {
+          border-color: transparent!important;
+        }
+      }
       @include respond-to(sm) {
         @include clearfix();
         @include span(3);
@@ -464,7 +473,7 @@
           }
         }
         .cart__text {
-          padding-left: 18px;
+          padding-left: 16px;
           padding-top: 17px;
           float: left;
           .cart__header {
@@ -474,10 +483,10 @@
             color: #f04d4d;
           }
           .cart__price {
-            font-family: $fontLight;
+            font-family: $fontRegular;
             font-size: 12px;
             line-height: 18px;
-            color: #666666;
+            color: #333;
             text-align: center;
             span {
               display: block;
@@ -497,16 +506,16 @@
         }
        .cart__link {
          display: inline-block;
-         border-bottom: 1px solid #666666;
-         font-family: $fontLight;
+         border-bottom: 1px solid #333;
+         font-family: $fontRegular;
          font-size: 15px;
          line-height: 15px;
-         color: #666666;
+         color: #333;
          transition: all 0.35s ease;
          white-space: nowrap;
-         &:hover {
-           border-color: transparent;
-         }
+         //&:hover {
+         //  border-color: transparent;
+         //}
        }
       }
     }

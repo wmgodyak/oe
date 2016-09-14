@@ -34,6 +34,8 @@
     <link rel="stylesheet" href="{$theme_url}/assets/css/vendor/owl.theme.default.min.css">
     <link rel="stylesheet" href="{$theme_url}/assets/css/vendor/css-stars.css">
     <link rel="stylesheet" href="{$theme_url}/assets/css/vendor/plugins.css">
+    <link rel="stylesheet" href="{$theme_url}/assets/css/vendor/slick.css">
+    <link rel="stylesheet" href="{$theme_url}/assets/css/vendor/jquery.fancybox.css">
     <link rel="stylesheet" href="{$theme_url}/assets/css/style.css">
     <script>
         var TOKEN = '{$token}', LANG_ID={$page.languages_id * 1}, CONTENT_ID = {$page.id};

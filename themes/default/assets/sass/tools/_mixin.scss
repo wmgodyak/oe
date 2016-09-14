@@ -33,6 +33,19 @@
   }
 }
 
+@mixin vendor($property, $value...){
+  -webkit-#{$property}:$value;
+
+  -moz-#{$property}:$value;
+
+  -ms-#{$property}:$value;
+
+  -o-#{$property}:$value;
+
+  #{$property}:$value;
+
+}
+
 @mixin respond-to($name) {
   // If the key exists in the map
   @if map-has-key($breakpoints, $name) {
@@ -62,6 +75,18 @@
 
 @mixin respond-max($max){
   @media only screen and (max-width: $max) {
+    @content;
+  }
+}
+
+@mixin response($prefix, $media) {
+  @media only screen and ($prefix+-width: $media+px) {
+    @content;
+  }
+}
+
+@mixin response-to($media1, $media2) {
+  @media only screen and (min-width: $media1+px) and (max-width: $media2+px) {
     @content;
   }
 }

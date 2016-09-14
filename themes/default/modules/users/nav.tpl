@@ -8,7 +8,7 @@
     <!-- end login-block -->
 {else}
     <div class="user-login">
-        <a class="user-login__link" href="28" title="Перейти в особистий кабінет">{$t.users.b_profile}</a>
+        <a class="user-login__link" href="28" title="Перейти в особистий кабінет">{$t.users.b_profile} <span>{$user.name}</span></a>
         <a class="user-login__link" href="route/users/logout" title="Вилогінитись з профілю">{$t.users.b_logout}</a>
     </div>
 {/if}

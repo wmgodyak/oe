@@ -15,12 +15,12 @@
             </select>
         </div>
 
-        {*
+
         <div class="sort-btn-group">
             <button class="sort-btn sort-btn1"></button>
             <button class="sort-btn sort-btn2 sort-btn--active"></button>
         </div>
-        *}
+
         {if $smarty.get|count > 0}
             {foreach $smarty.get as $k=>$v}
                 {if $k != 'sort' && $k != 'p'}

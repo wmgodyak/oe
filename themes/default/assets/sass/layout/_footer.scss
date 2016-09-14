@@ -33,7 +33,7 @@
       }
       .footer__c-description {
         padding: 12px 0 20px;
-        font: 14px/16px $fontLight;
+        font: 14px/16px $fontRegular;
         color: $font-dark-grey;
         span {
           font-family: $fontMedium;
@@ -58,7 +58,7 @@
             padding: 0 0 16px;
             .footer-nav__link {
               display: block;
-              font: 14px/14px $fontLight;
+              font: 14px/14px $fontRegular;
               color: $font-dark-grey;
             }
           }
@@ -83,7 +83,7 @@
         span {
           display: block;
           padding: 0 0 15px;
-          font: 14px/14px $fontLight;
+          font: 14px/14px $fontRegular;
           color: $font-dark-grey;
           @include respond-to(xs) {
             line-height: 16px;
@@ -106,12 +106,12 @@
         color: $font-dark-grey;
       }
       .footer__contacts {
-        a {
+        a,span {
           position: relative;
           display: block;
           padding: 0 0 0 22px;
           margin: 0 0 14px;
-          font: 14px/14px $fontLight;
+          font: 14px/14px $fontRegular;
           color: $font-dark-grey;
           @include respond-to(xs) {
             font-size: 12px;
@@ -172,7 +172,7 @@
       }
       .footer__subscription {
         .text {
-          font: 14px/18px $fontLight;
+          font: 14px/18px $fontRegular;
           color: $font-dark-grey;
         }
         form {
@@ -185,14 +185,14 @@
               padding: 0 5px;
               border: 1px solid $bg_dark-grey;
               background: $bg-white;
-              font: 14px/23px $fontLight;
+              font: 14px/23px $fontRegular;
               color: $font-dark-grey;
               ::-webkit-input-placeholder,
               :-moz-placeholder,
               ::-moz-placeholder,
               :-ms-input-placeholder
               {
-                font: 14px/23px $fontLight;
+                font: 14px/23px $fontRegular;
                 color: $font-light-grey;
               }
             }
@@ -205,7 +205,7 @@
               padding: 0 19px;
               border: 1px solid $bg_dark-grey;
               background: $bg-gray;
-              font: 14px/23px $fontLight;
+              font: 14px/23px $fontRegular;
               color: $font-dark-grey;
               transition: all 0.35s ease;
               cursor: pointer;
@@ -227,7 +227,7 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font: 14px/14px $fontLight;
+      font: 14px/14px $fontRegular;
       color: $font-dark-grey;
       @include respond-to(xs) {
         white-space: nowrap;

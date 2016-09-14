@@ -17,7 +17,7 @@
             <!-- begin header__activities -->
             <div class="header__activities">
 
-                {include file="modules/languages/switcher.tpl"}
+                {$mod->users->nav()}
 
                 <!-- begin wish-list -->
                 <div class="wish-list">
@@ -25,7 +25,9 @@
                 </div>
                 <!-- end wish-list -->
 
-                {$mod->users->nav()}
+                {include file="modules/languages/switcher.tpl"}
+
+
 
             </div>
             <!-- end header__activities -->
@@ -64,7 +66,7 @@
             <!-- end tel-search -->
 
             <!-- begin cart -->
-            <div class="cart" id="blockCart" title="Переглянути кошик"></div>
+            <a href="cart" class="cart" id="blockCart" title="Переглянути кошик"></a>
             <!-- end cart -->
 
         </div>
