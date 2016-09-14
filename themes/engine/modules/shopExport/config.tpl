@@ -135,6 +135,7 @@
 
                     var inp_selected_nodes = $("#selected_nodes");
 
+                    $.jstree.defaults.state.key = 'jstree_msextr';
                     var $catTree = new engine.tree('syn_cat_tree');
                     $catTree
                             .setUrl('module/run/categorySynonym/tree')

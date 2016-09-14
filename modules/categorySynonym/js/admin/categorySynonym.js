@@ -55,7 +55,7 @@ $(document).ready(function(){
                 });
 
                 var inp_selected_nodes = $("#selected_nodes");
-
+                $.jstree.defaults.state.key = 'jstree_mcatsyn';
                 var $catTree = new engine.tree('syn_cat_tree');
                 $catTree
                     .setUrl('module/run/categorySynonym/tree')

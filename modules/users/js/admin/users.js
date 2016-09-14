@@ -34,6 +34,7 @@ engine.users = {
                 });
         });
 
+        $.jstree.defaults.state.key = 'jstree_ug';
         engine.users.group.tree = new engine.tree('usersGroups');
         engine.users.group.tree
             .setUrl('module/run/users/groups/tree')

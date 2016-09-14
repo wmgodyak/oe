@@ -67,7 +67,7 @@ engine.shop = {
         });
 
         $('#categories').select2();
-
+        $.jstree.defaults.state.key = 'jstree_spmc_';
         var $tree = new engine.tree('shopCategories');
         $tree
             .setUrl('module/run/shop/categories/tree')
@@ -122,7 +122,6 @@ engine.shop = {
             })
             .init();
 
-
         $(document).on
         (
             'click',
@@ -131,6 +130,7 @@ engine.shop = {
             {
                 var product_id = $("#content_id").val();
                 var id = $(this).data('id'), mainCatA = $('#a_main_cat_id');
+                $.jstree.defaults.state.key = 'jstree_spmc_' ;//+ product_id;
 
                 engine.request.post({
                     url: 'module/run/shop/products/categoriesTree/html',
@@ -157,7 +157,6 @@ engine.shop = {
                         });
 
                         var inp_selected_nodes = $("#selected_nodes");
-
                         var $catTree = new engine.tree('sp_cat_tree');
                         $catTree
                             .setUrl('module/run/shop/products/categoriesTree/json')
@@ -218,6 +217,7 @@ engine.shop = {
             function()
             {
                 var product_id = $("#content_id").val();
+                $.jstree.defaults.state.key = 'jstree_spc_' + product_id;
                 engine.request.post({
                     url: 'module/run/shop/products/categoriesTree/html',
                     data: {

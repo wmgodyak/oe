@@ -28,7 +28,8 @@ engine.guides = {
             var id = $(this).data('id');
             engine.guides.edit(id);
         });
-        
+
+        $.jstree.defaults.state.key = 'jstree_guides';
         var $tree = new engine.tree('guidesTree');
         $tree
             .setUrl('guides/tree')

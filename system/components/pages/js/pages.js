@@ -23,6 +23,8 @@ engine.pages = {
             self.location.href= "pages/create";
         });
         //console.log($('#treecc').html());
+
+        $.jstree.defaults.state.key = 'jstree_ptreecc';
         var $tree = new engine.tree('treecc');
         $tree
             .setUrl('pages/tree')

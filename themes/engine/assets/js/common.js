@@ -794,6 +794,7 @@ engine.admins = {
 
         if($('#usersGroup').length){
 
+            $.jstree.defaults.state.key = 'jstree_ug';
             engine.admins.group.tree = new engine.tree('usersGroup');
             engine.admins.group.tree
                 .setUrl('admins/groups/tree')

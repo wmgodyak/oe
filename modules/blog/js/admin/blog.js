@@ -29,6 +29,7 @@ engine.blog = {
         $('#categories').select2();
 
 
+        $.jstree.defaults.state.key = 'jstree_blog';
         var $tree = new engine.tree('blogCategories');
         $tree
             .setUrl('module/run/blog/categories/tree')
