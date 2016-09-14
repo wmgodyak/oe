@@ -3914,7 +3914,7 @@ body {
         @media only screen and (max-width: 750px) {
           .contact-page__content .goods-list .goods-list__main .goods-list__row .item .total-price {
             text-align: center; } }
-    .contact-page__content .goods-list .goods-list__main .footer__contacts a, .contact-page__content .goods-list .goods-list__main .footer__contacts span {
+    .contact-page__content .goods-list .goods-list__main .footer__contacts a {
       position: relative;
       display: block;
       padding: 0 0 0 22px;
@@ -3922,10 +3922,10 @@ body {
       font: 14px/14px "Roboto-Light", sans-serif;
       color: #666666; }
       @media only screen and (max-width: 750px) {
-        .contact-page__content .goods-list .goods-list__main .footer__contacts a, .contact-page__content .goods-list .goods-list__main .footer__contacts span {
+        .contact-page__content .goods-list .goods-list__main .footer__contacts a {
           font-size: 12px;
           white-space: nowrap; } }
-      .contact-page__content .goods-list .goods-list__main .footer__contacts a:before, .contact-page__content .goods-list .goods-list__main .footer__contacts span:before {
+      .contact-page__content .goods-list .goods-list__main .footer__contacts a:before {
         position: absolute;
         left: 0;
         top: 0;
@@ -3934,18 +3934,18 @@ body {
         height: 14px;
         background: url("../img/contacts_icon.png") no-repeat;
         content: ''; }
-      .contact-page__content .goods-list .goods-list__main .footer__contacts a.ks:before, .contact-page__content .goods-list .goods-list__main .footer__contacts span.ks:before {
+      .contact-page__content .goods-list .goods-list__main .footer__contacts a.ks:before {
         background-position: -15px 0; }
-      .contact-page__content .goods-list .goods-list__main .footer__contacts a.vf:before, .contact-page__content .goods-list .goods-list__main .footer__contacts span.vf:before {
+      .contact-page__content .goods-list .goods-list__main .footer__contacts a.vf:before {
         background-position: 0 0; }
-      .contact-page__content .goods-list .goods-list__main .footer__contacts a.lc, .contact-page__content .goods-list .goods-list__main .footer__contacts span.lc {
+      .contact-page__content .goods-list .goods-list__main .footer__contacts a.lc {
         height: 11px;
         background-position: 0 0; }
-        .contact-page__content .goods-list .goods-list__main .footer__contacts a.lc:before, .contact-page__content .goods-list .goods-list__main .footer__contacts span.lc:before {
+        .contact-page__content .goods-list .goods-list__main .footer__contacts a.lc:before {
           background-position: 0 -16px; }
-      .contact-page__content .goods-list .goods-list__main .footer__contacts a.gm:before, .contact-page__content .goods-list .goods-list__main .footer__contacts span.gm:before {
+      .contact-page__content .goods-list .goods-list__main .footer__contacts a.gm:before {
         background-position: -30px -16px; }
-      .contact-page__content .goods-list .goods-list__main .footer__contacts a.sk:before, .contact-page__content .goods-list .goods-list__main .footer__contacts span.sk:before {
+      .contact-page__content .goods-list .goods-list__main .footer__contacts a.sk:before {
         height: 15px;
         background-position: -15px -15px; }
 
