@@ -1131,12 +1131,12 @@
       }
       .content {
         @include clearfix();
-        @include span(6 of 9);
+        @include span(12);
         @include respond-to(xs) {
           @include span(12);
         }
         .item {
-          @include span(2 of 6);
+          @include span(3);
           position: relative;
           padding: 0 15px;
           @include respond-to(xs) {
@@ -1149,7 +1149,7 @@
           &:after {
             position: absolute;
             top: 42px;
-            right: -15px;
+            left: -15px;
             display: block;
             width: 30px;
             height: auto;
@@ -1164,16 +1164,16 @@
               bottom: 20px;
             }
           }
-          &.item1 {
+          &.item:not(:first-child) {
             &:after {
               content: '+';
             }
           }
-          &.item2 {
-            &:after {
-              content: '=';
-            }
-          }
+          //&.item2 {
+          //  &:after {
+          //    content: '=';
+          //  }
+          //}
           .img-block {
             width: 80px;
             height: 80px;
@@ -1222,7 +1222,20 @@
           }
         }
         .equals {
-          @include span(2 of 6);
+          @include span(3);
+          //@include span(2 of 6);
+          position: relative;
+          &:after {
+            content: '=';
+            position: absolute;
+            top: 42px;
+            left: -15px;
+            display: block;
+            width: 30px;
+            height: auto;
+            font: 50px/50px $fontRegular;
+            color: $font-red;
+          }
           @include respond-to(xs) {
             @include span(12);
           }
@@ -1259,7 +1272,9 @@
         }
       }
       .result-block {
-        @include span(3 of 9);
+        @include span(3);
+        padding: 0 15px;
+        //@include span(3 of 9);
         @include respond-to(xs) {
           @include span(12);
         }

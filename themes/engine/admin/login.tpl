@@ -17,8 +17,8 @@
                         <i class="fa fa-eye-slash"></i>
                     </div>
                 </div>
-                <div class="input-group">
-                    <label for="lang">{$t.admin.lang}</label>
+                <div class="input-group transformed">
+                    <label for="lang" class="l-lang">{$t.admin.lang}</label>
                     <select name="data[lang]" id="adminLang">
                         {foreach $langs as $code=>$lang}
                             <option {if $code == $s_lang}selected{/if} value="{$code}">{$lang}</option>

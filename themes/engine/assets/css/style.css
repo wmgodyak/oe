@@ -453,8 +453,9 @@ fieldset .form-group {
       color: #ff7163;
       display: inline-block;
       padding-top: 10px; }
-  .login button {
-    margin: 18px 0 0 0; }
+  .login button.btn {
+    margin: 18px 0 0 0;
+    padding: 0 40px; }
   .login label {
     will-change: transform;
     position: absolute;
@@ -482,6 +483,23 @@ fieldset .form-group {
       color: #fff;
       border: 2px solid #4fc1e9;
       box-shadow: 0 0 0 1px #4fc1e9 inset; }
+  .login .wrap-select label {
+    -webkit-transform: translateX(-144px);
+    -moz-transform: translateX(-144px);
+    -ms-transform: translateX(-144px);
+    -o-transform: translateX(-144px);
+    transform: translateX(-144px);
+    transform: translateX(-144px); }
+  .login .select2-container {
+    background: none; }
+  .login .select2 span.selection .select2-selection {
+    min-height: 45px; }
+    .login .select2 span.selection .select2-selection .select2-selection__rendered {
+      line-height: 43px;
+      padding: 0 34px 0 24px;
+      color: #fff;
+      font-size: 18px;
+      font-family: "GothaProLig"; }
 
 .ui-datepicker {
   box-shadow: 0 1px 8px 2px rgba(0, 55, 75, 0.4);
@@ -538,9 +556,16 @@ fieldset .form-group {
     color: #fff;
     background: #00c8f9; }
 
+.l-check {
+  display: inline-block;
+  vertical-align: middle;
+  padding-left: 10px; }
+
 .switcher {
   overflow: hidden;
-  display: inline-block; }
+  display: inline-block;
+  vertical-align: middle;
+  margin: 5px 0; }
   .switcher label {
     display: block; }
     .switcher label .switch {
@@ -671,24 +696,6 @@ fieldset .form-group {
         .bootstrap-tagsinput .tag [data-role="remove"]:hover:active {
           box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125); }
 
-.login .wrap-select label {
-  -webkit-transform: translateX(-144px);
-  -moz-transform: translateX(-144px);
-  -ms-transform: translateX(-144px);
-  -o-transform: translateX(-144px);
-  transform: translateX(-144px);
-  transform: translateX(-144px); }
-.login .select2-container {
-  background: none; }
-.login .select2 span.selection .select2-selection {
-  min-height: 45px; }
-  .login .select2 span.selection .select2-selection .select2-selection__rendered {
-    line-height: 43px;
-    padding: 0 34px 0 24px;
-    color: #fff;
-    font-size: 18px;
-    font-family: "GothaProLig"; }
-
 .log-in {
   width: 100%;
   height: 100vh;
@@ -742,6 +749,8 @@ fieldset .form-group {
     .sidebar .title i {
       padding: 0 10px 0 0; }
 
+.dashboard-content.sidebar-open .dashboard-heading {
+  width: calc(100% - 360px); }
 .dashboard-content .content-wrapper {
   padding: 48px 30px 30px 30px;
   min-height: 100vh; }
@@ -910,8 +919,13 @@ ul.first-level {
   line-height: 48px;
   top: 0;
   position: fixed;
-  width: calc(100% - 360px);
-  z-index: 1; }
+  width: calc(100% - 80px);
+  z-index: 1;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -ms-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease; }
   .dashboard-heading:after {
     display: table;
     content: '';
@@ -1138,7 +1152,8 @@ ul.first-level {
       outline: 0;
       border-radius: 3px; }
     .ui-tabs .ui-tabs-nav li.ui-state-active a {
-      background: #fff; }
+      background: #2d3e50;
+      color: #ffffff; }
 
 .alert {
   margin: 15px 0;
@@ -1695,7 +1710,7 @@ ul.first-level {
   .ui-tabs-vertical .ui-tabs-nav {
     padding: .2em .1em .2em .2em;
     float: left;
-    width: 15%; }
+    width: 20%; }
     .ui-tabs-vertical .ui-tabs-nav li {
       clear: left;
       width: 100%;
@@ -2003,7 +2018,7 @@ ul.first-level {
   cursor: pointer;
   color: #636384;
   font-size: 29px;
-  margin: 12px 12px 12px 0;
+  margin: 4px 12px 6px 0;
   transition: color 0.35s ease; }
   .show-value .fa-eye-slash {
     display: none; }

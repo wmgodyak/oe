@@ -62,6 +62,11 @@
 }
 
 .dashboard-content{
+  &.sidebar-open{
+    .dashboard-heading{
+      width: calc(100% - 360px);
+    }
+  }
   .content-wrapper{
     padding: 48px 30px 30px 30px;
     min-height: 100vh;
@@ -272,8 +277,9 @@ ul.first-level {
 
   top:0;
   position: fixed;
-  width: calc(100% - 360px);
+  width: calc(100% - 80px);
   z-index: 1;
+  @include vendor(transition, all .5s ease);
   &.h-fixed{
     @include vendor(animation, showHeader .5s ease);
   }
@@ -552,7 +558,8 @@ ul.first-level {
       }
       &.ui-state-active{
         a{
-          background: #fff;
+          background: #2d3e50;
+          color: #ffffff;
         }
       }
     }
@@ -1172,7 +1179,7 @@ ul.first-level {
   .ui-tabs-nav {
     padding: .2em .1em .2em .2em;
     float: left;
-    width: 15%;
+    width: 20%;
     li {
       clear: left;
       width: 100%;

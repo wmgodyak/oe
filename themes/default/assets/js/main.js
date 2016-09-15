@@ -14,61 +14,77 @@ var App = {
         this.menu();
         this.closeModal();
         this.slickSlide();
+        this.autoHeight();
+    },
+    autoHeight: function(){
+        function autoHeight(items){
+            var maxHeight, heights;
+            heights = items.map(function () {
+                return $(this).innerHeight();
+            }).get();
+            maxHeight = Math.max.apply(null, heights);
+            items.css({
+                height: maxHeight
+            });
+        };
+        autoHeight($('.promotion-banner-wrap .item,.promotion-banner-wrap .equals'));
     },
     slickSlide: function(){
         var big = $('.product-slider'),
             thumb = $('.product-thumb-slider');
-        big.slick({
-            arrows: false,
-            dots: false,
-            draggable: true,
-            asNavFor: thumb,
-            slidesToShow: 1
+        if(big.find('img').length > 1){
+            big.slick({
+                arrows: false,
+                dots: false,
+                draggable: true,
+                asNavFor: thumb,
+                slidesToShow: 1
 
-        });
-        thumb.slick({
-            arrows: false,
-            dots: false,
-            swap: false,
-            slidesToShow: 3,
-            asNavFor: big,
-            focusOnSelect: true
-        });
-        big.find('.wrap-img').on('click',function(){
-            var imageLinks = [];
-            var clickImageSrc = big.find('.slick-current img').attr('src');
-            var currentSrc = clickImageSrc;
-            var i = 0;
-            do {
-                if(i > 3){
-                    return false;
-                }
-                imageLinks.push(currentSrc);
-                currentSrc = big.find('.slick-slide:not(.slick-cloned) img[src="'+currentSrc+'"]').closest('.slick-slide').next().find('img').attr('src');
-                console.log(currentSrc);
-                if (typeof currentSrc == 'undefined') {
-                    currentSrc =  big.find('.slick-slide:not(.slick-cloned)').first().find('img').attr('src');
-                }
-                console.log(i);
-                i++;
-            } while (clickImageSrc != currentSrc);
-            console.log(imageLinks);
+            });
+            thumb.slick({
+                arrows: false,
+                dots: false,
+                swap: false,
+                slidesToShow: 3,
+                asNavFor: big,
+                focusOnSelect: true
+            });
+            big.find('.wrap-img').on('click',function(){
+                var imageLinks = [];
+                var clickImageSrc = big.find('.slick-current img').attr('src');
+                var currentSrc = clickImageSrc;
+                var i = 0;
+                do {
+                    if(i > 3){
+                        return false;
+                    }
+                    imageLinks.push(currentSrc);
+                    currentSrc = big.find('.slick-slide:not(.slick-cloned) img[src="'+currentSrc+'"]').closest('.slick-slide').next().find('img').attr('src');
+                    console.log(currentSrc);
+                    if (typeof currentSrc == 'undefined') {
+                        currentSrc =  big.find('.slick-slide:not(.slick-cloned)').first().find('img').attr('src');
+                    }
+                    console.log(i);
+                    i++;
+                } while (clickImageSrc != currentSrc);
+                console.log(imageLinks);
 
-            $.fancybox.open(imageLinks, {
-                autoDimision: true,
-                padding: 0,
-                margin: [0, 0, 0, 0],
-                maxHeight:'90%',
-                maxWidth:'80%',
-                helpers: {
-                    overlay: {
-                        css: {
-                            'background' : 'rgba(0, 0, 0, 0.8)'
+                $.fancybox.open(imageLinks, {
+                    autoDimision: true,
+                    padding: 0,
+                    margin: [0, 0, 0, 0],
+                    maxHeight:'90%',
+                    maxWidth:'80%',
+                    helpers: {
+                        overlay: {
+                            css: {
+                                'background' : 'rgba(0, 0, 0, 0.8)'
+                            }
                         }
                     }
-                }
+                });
             });
-        });
+        }
     },
     closeModal: function(){
         $(document).on('click', function (e){
@@ -122,12 +138,12 @@ var App = {
 
         var optionsGoodsSliderMult5 = null;
 
-        if ( $(window).width() > 1170 ) {
-            optionsGoodsSliderMult5 = createOptions(5, false, true, false, true);
-        } else if ( $(window).width() >= 750 ) {
-            optionsGoodsSliderMult5 = createOptions(3, false, true, false, true);
+        if ( $(window).width() >= 991 ) {
+            optionsGoodsSliderMult5 = createOptions(4, true, true, false, true);
+        } else if ( $(window).width() >= 767 ) {
+            optionsGoodsSliderMult5 = createOptions(2, true, true, false, true);
         } else {
-            optionsGoodsSliderMult5 = createOptions(1, false, true, false, true);
+            optionsGoodsSliderMult5 = createOptions(1, true, true, false, true);
         }
 
         if ($goodsSliderMult5.length) {
@@ -137,11 +153,11 @@ var App = {
         var optionsGoodsSliderMult4 = null;
 
         if ( $(window).width() > 1170 ) {
-            optionsGoodsSliderMult4 = createOptions(4, false, true, false, true);
-        } else if ( $(window).width() >= 750 ) {
-            optionsGoodsSliderMult4 = createOptions(3, false, true, false, true);
+            optionsGoodsSliderMult4 = createOptions(4, true, true, false, true);
+        } else if ( $(window).width() <= 750 ) {
+            optionsGoodsSliderMult4 = createOptions(3, true, true, false, true);
         } else {
-            optionsGoodsSliderMult4 = createOptions(1, false, true, false, true);
+            optionsGoodsSliderMult4 = createOptions(1, true, true, false, true);
         }
 
         if ($goodsSliderMult4.length) {

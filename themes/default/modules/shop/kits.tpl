@@ -40,16 +40,16 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="result-block">
-            <div class="wrap">
-                <span>Ви економите {$kit.save_amount} грн.</span>
-                <div class="text">
-                    Замовляйте комплекти
-                    та платіть дешевше
-                </div>
-                <div class="btn-row">
-                    <button class="btn md red to-cart-kit {if isset($smarty.session.cart.kits[$kit.id])}in{/if}" data-id="{$kit.id}" data-in="В кошику">{if isset($smarty.session.cart.kits[$kit.id])}В кошику{else}Купити комплект{/if}</button>
+            <div class="result-block">
+                <div class="wrap">
+                    <span>Ви економите {$kit.save_amount} грн.</span>
+                    <div class="text">
+                        Замовляйте комплекти
+                        та платіть дешевше
+                    </div>
+                    <div class="btn-row">
+                        <button class="btn md red to-cart-kit {if isset($smarty.session.cart.kits[$kit.id])}in{/if}" data-id="{$kit.id}" data-in="В кошику">{if isset($smarty.session.cart.kits[$kit.id])}В кошику{else}Купити комплект{/if}</button>
+                    </div>
                 </div>
             </div>
         </div>

@@ -53,15 +53,19 @@
                             {if $product.images|count > 0}
                                 {foreach $product.images as $k=>$img}
                                     <div class="product-slider-item">
-                                        <div class="wrap-img">
-                                            <img src="/{$img.path}product/{$img.image}" alt="/{$img.path}product/{$img.image}">
+                                        <div class="bl-table">
+                                            <div class="wrap-img">
+                                                <img src="/{$img.path}product/{$img.image}" alt="/{$img.path}product/{$img.image}">
+                                            </div>
                                         </div>
                                     </div>
                                 {/foreach}
                             {else}
                                 <div class="product-slider-item">
-                                    <div class="wrap-img">
-                                        <img src="/uploads/noimage.jpg" alt="">
+                                    <div class="bl-table">
+                                        <div class="wrap-img">
+                                            <img src="/uploads/noimage.jpg" alt="">
+                                        </div>
                                     </div>
                                 </div>
                             {/if}
