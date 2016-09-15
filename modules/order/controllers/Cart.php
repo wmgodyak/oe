@@ -89,6 +89,8 @@ class Cart extends Front
         $total  += $k_total['total'];
         $amount += $k_total['amount'];
 
+//        $amount = ceil($amount);
+
         $this->response->body(['amount' => round($amount, 2), 'total' => $total])->asJSON();
     }
 

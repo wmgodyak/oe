@@ -232,6 +232,10 @@ class Products extends Content
           limit {$this->start}, {$this->num}
           ", $this->debug)->all();
 
+        foreach ($items as $k=>$item) {
+            $items[$k]['price'] = ceil($item['price']);
+        }
+
         return $items;
     }
 

@@ -115,6 +115,8 @@ class Products extends Front
                 $cart[$k]['price'] = $this->prices->get($item['products_id'], $this->user_group_id);
             }
 
+            $cart[$k]['price'] = ceil($cart[$k]['price']);
+
             $cart[$k]['bonus'] = round($cart[$k]['quantity'] * $cart[$k]['price'] * $this->bonus_rate, 2);
         }
 
@@ -130,10 +132,12 @@ class Products extends Front
             foreach ($cart as $item) {
                 $total  += $item['quantity'];
                 if($item['has_variants']){
-                    $amount += $this->variantsPrices->getPrice($item['variants_id'], $this->user_group_id) * $item['quantity'];
+                    $price = $this->variantsPrices->getPrice($item['variants_id'], $this->user_group_id) * $item['quantity'];
                 } else {
-                    $amount += $this->prices->get($item['products_id'], $this->user_group_id) * $item['quantity'];
+                    $price = $this->prices->get($item['products_id'], $this->user_group_id) * $item['quantity'];
                 }
+                $price = ceil($price);
+                $amount +=$price;
             }
         }
 

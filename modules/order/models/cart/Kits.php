@@ -123,6 +123,8 @@ class Kits extends Front
                 $cart[$k]['products'][$i]['price']          = $cart[$k]['products'][$i]['original_price'] - ($cart[$k]['products'][$i]['original_price'] / 100 * $product['discount']);
                 $cart[$k]['products'][$i]['save_price']     = $cart[$k]['products'][$i]['original_price'] - $cart[$k]['products'][$i]['price'];
 
+                $cart[$k]['products'][$i]['price'] = ceil($cart[$k]['products'][$i]['price']);
+
                 $cart[$k]['amount'] += $cart[$k]['products'][$i]['price'];
                 $cart[$k]['original_amount'] += $cart[$k]['products'][$i]['original_price'];
 
