@@ -485,11 +485,13 @@
           .cart__price {
             font-family: $fontRegular;
             font-size: 12px;
-            line-height: 18px;
+            line-height: 16px;
             color: #333;
             text-align: center;
             span {
               display: block;
+              font-size:18px;
+              line-height:20px;
               font-family: $fontRegular;
             }
           }

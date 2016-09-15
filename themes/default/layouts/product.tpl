@@ -203,7 +203,7 @@
                         {/if}
                     </div>
                 </div>
-
+                <div class="clearfix"><br></div>
                 <div class="item-info-tabs">
                     <div class="info-tabs__top">
                         <ul>

@@ -99,11 +99,11 @@
                         +38 (063) 59 88 666
                     </span>
 
-                    <a class="gm" href="#">
+                    <a class="gm" href="mailto:sma.lviv@gmail.com">
                         sma.lviv@gmail.com
                     </a>
 
-                    <a class="sk" href="#">
+                    <a class="sk" href="skype:sma_lviv?call">
                         sma_lviv
                     </a>
 

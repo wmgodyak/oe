@@ -615,7 +615,7 @@ body {
 .m_social .social__heading {
   padding: 0 0 7px;
   font: 14px/16px "Roboto-Medium", sans-serif;
-  color: #333; }
+  color: #ee4d4d; }
 .m_social .social__list {
   *zoom: 1;
   display: block; }
@@ -4665,11 +4665,13 @@ table.features tr.first > td {
         .l_header .header__main .cart .cart__main .cart__text .cart__price {
           font-family: "Roboto-Regular", sans-serif;
           font-size: 12px;
-          line-height: 18px;
+          line-height: 16px;
           color: #333;
           text-align: center; }
           .l_header .header__main .cart .cart__main .cart__text .cart__price span {
             display: block;
+            font-size: 18px;
+            line-height: 20px;
             font-family: "Roboto-Regular", sans-serif; }
     .l_header .header__main .cart .cart__bottom {
       padding-top: 7px; }

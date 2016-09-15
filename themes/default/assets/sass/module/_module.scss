@@ -557,7 +557,8 @@
   .social__heading {
     padding: 0 0 7px;
     font: 14px/16px $fontMedium;
-    color: $font-dark-grey;
+    //color: $font-dark-grey;
+    color:#ee4d4d;
   }
   .social__list {
     @include clearfix();
