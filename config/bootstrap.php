@@ -204,18 +204,3 @@ if(! function_exists('array_chunk_part')){
     system\core\Session::init();
 
     if(!defined('TOKEN')) define('TOKEN', md5(\system\core\Session::id()));
-
-    // custom error handler
-//    $config = \system\core\Config::getInstance();
-//    if($config['core.debug']){
-//
-//    }
-
-    function on_error($num, $str, $file, $line) {
-        print "Encountered error $num in $file, line $line: $str\n";
-    }
-
-    set_error_handler("on_error");
-
-    // events
-    include_once "events.php";

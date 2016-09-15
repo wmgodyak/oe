@@ -10,30 +10,12 @@
                 <label for="pass-modal">Пароль:</label>
                 <input id="pass-modal" name="data[password]" class="alert" type="password">
             </div>
-            <a href="" class="link-red b-users-fp">Забули пароль?</a>
+            <a href="javascript:;" class="link-red b-users-fp">Забули пароль?</a>
             <input type="hidden" name="token" value="{$token}">
             <button type="submit" class="btn-red">Увійти</button>
             <button type="button" class="btn-clear close b-users-cancel">Скасувати</button>
         </form>
     </div>
-    <div class="social-intro">
-        <h3>Увійти як користувач</h3>
-        <a href="#" class="block">
-            <div class="icon"></div>
-            <div class="link">Вконтакте</div>
-            <div class="clearfix"></div>
-        </a>
-        <a href="#" class="block">
-            <div class="icon"></div>
-            <div class="link">Facebook</div>
-            <div class="clearfix"></div>
-        </a>
-        <a href="#" class="block">
-            <div class="icon"></div>
-            <div class="link">GooglePlus</div>
-            <div class="clearfix"></div>
-        </a>
-    </div>
-    <div class="clearfix"></div>
+    {$events->call('users.form.login')}
 
 </div>
