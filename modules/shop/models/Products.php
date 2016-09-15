@@ -209,9 +209,9 @@ class Products extends Content
             $cu_on_site = $this->currency->getMeta($this->currency_id);
         }
 
-        $cu_main    = $this->currency->getMainMeta();
+        $cu_main = $this->currency->getMainMeta();
 
-        $items =  self::$db->select("
+        $items = self::$db->select("
           select SQL_CALC_FOUND_ROWS  c.id, ci.name, ci.title, c.in_stock, c.has_variants, crm.categories_id, ci.description, ci.url,
            ROUND( CASE
             WHEN c.currency_id = {$cu_on_site['id']} THEN pp.price
@@ -236,6 +236,7 @@ class Products extends Content
             $items[$k]['price'] = ceil($item['price']);
         }
 
+        $this->clearQuery();
         return $items;
     }
 
@@ -259,26 +260,52 @@ class Products extends Content
 
     public function filteredCategories()
     {
-        if($this->categories_id > 0){
-            $this->join("join __content_relationship cr on cr.content_id=c.id and cr.categories_id = {$this->categories_id}");
+        $this->clearQuery();
+        $q = $this->request->get('q', 's');
+        if($q){
+            $this->search();
         }
-//        $j = empty($this->join) ? '' : implode("\r\n", $this->join);
+
         $w = empty($this->where) ? '' : 'and ' . implode(' and ', $this->where);
-        $j = empty($this->join) ? '' : implode("\r\n", $this->join);
 
         $items =  self::$db->select("
-          select DISTINCT cr.categories_id as id, ci.name, ci.title
+          select distinct crm.categories_id as id, ci.name, ci.title
           from __content c
-          {$j}
+          join __content_relationship crm on crm.content_id=c.id and crm.is_main = 1
           join __content_types ct on ct.type = '{$this->type}' and ct.id=c.types_id
-          join __content_relationship cr on cr.content_id=c.id
-          join __content_info ci on ci.content_id=cr.categories_id and ci.languages_id={$this->languages_id}
+          join __content_info ci on ci.content_id=crm.categories_id and ci.languages_id={$this->languages_id}
           where c.status ='published' {$w}
-          order by ci.name asc
-          limit {$this->start}, {$this->num}
+	      order by ci.name asc
+          limit 30
           ")->all();
 
-        return $items;
+        $res = [];
+
+        // get parentCategories
+        foreach ($items as $k=>$item) {
+
+            $cat = $this->getParentCategory($item['id']);
+
+            if(empty($cat)){
+                $res[$item['id']]['cat'] = $cat;
+                continue;
+            }
+
+            $res[$cat['id']]['cat'] = $cat;
+            $res[$cat['id']]['items'][] = $item;
+        }
+
+        return $res;
+    }
+
+    private function getParentCategory($id)
+    {
+        return self::$db->select("
+          select c.parent_id as id, ci.name, ci.title
+          from __content c
+          join __content_info ci on ci.content_id=c.parent_id and ci.languages_id={$this->languages_id}
+          where c.id={$id} and c.status ='published'
+	      ")->row();
     }
 
     /**

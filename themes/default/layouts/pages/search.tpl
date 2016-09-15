@@ -21,6 +21,8 @@
 
             <!-- begin aside -->
             <aside class="aside">
+                {assign var='categories' value=$mod->shop->search->categories()}
+                {if $categories|count}
                 <form>
                     <div class="filter-group">
                         <a class="toggle-link">
@@ -28,17 +30,27 @@
                         </a>
                         <div class="filter-group__content">
                             <div class="input-group">
-                                {foreach $mod->shop->search->categories() as $cat}
+                                {foreach $categories as $row}
                                     <div class="row">
                                         <label for="cf-15" >
-                                            <a href="{$cat.id};?q={urlencode($smarty.get.q)}">{$cat.name}</a>
+                                            <span {* href="{$row.cat.id};?q={urlencode($smarty.get.q)}" *} >{$row.cat.name}</span>
                                         </label>
                                     </div>
+                                    {if $row.items|count}
+                                        {foreach $row.items as $item}
+                                            <div class="row sub-cat" style="padding-left: 15px;">
+                                                <label for="cf-15" >
+                                                    <a href="{$item.id};?q={urlencode($smarty.get.q)}" style=" font-size: 14px;">{$item.name}</a>
+                                                </label>
+                                            </div>
+                                        {/foreach}
+                                    {/if}
                                 {/foreach}
                             </div>
                         </div>
                     </div>
                 </form>
+                {/if}
                 <div class="m_discount-widget">
                     <div class="discount__heading1">
                         Ви у нас вперше?

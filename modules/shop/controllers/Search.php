@@ -58,6 +58,7 @@ class Search extends Front
         $this->products->start = $start;
         $this->products->num = $this->ipp;
 
+//        $this->products->debug();
         $products = $this->products->get();
         if($this->products->hasError()){
             return false;

@@ -38,13 +38,14 @@
                 <!-- end product-page__top-line -->
                 {include file="modules/shop/subnav.tpl"}
                 {assign var='products' value= $mod->shop->products($page.id)}
+                {assign var='total' value= $mod->shop->foundTotal()}
                 <!-- begin product__list -->
                 <div class="product__list">
                     {if $products|count}
                         {assign var='products' value= array_chunk($products, 3)}
-                        {if isset($smarty.get.q) && !empty($smarty.get.q)}
-                            <h3>Знайдено {$mod->shop->foundTotal()} товарів</h3>
-                        {/if}
+                        {* {if isset($smarty.get.q) && !empty($smarty.get.q)}
+                            <h3>По запиту <strong>{$smarty.get.q}</strong> знайдено {$total} товарів</h3>
+                        {/if} *}
                         {foreach $products as $k=> $row}
                             <div class="row clearfix">
                                 {foreach $row as $product}
