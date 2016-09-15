@@ -37,7 +37,7 @@ class Features extends \modules\shop\models\categories\Features
               {$j}
               join __features_info fi on fi.features_id=f.id and fi.languages_id={$this->languages_id}
               where f.parent_id = {$parent_id}
-               and f.type in ('select', 'folder')
+               and f.type <> 'value'
                and f.status='published'
               order by {$ob}
            ")->all();
@@ -71,6 +71,11 @@ class Features extends \modules\shop\models\categories\Features
     {
         $in = implode(',', $features);
         return self::$db->delete('__features_content', " content_id={$content_id} and features_id in ({$in})");
+    }
+
+    public function getTypes()
+    {
+        return self::$db->enumValues('__features', 'type');
     }
 
 }

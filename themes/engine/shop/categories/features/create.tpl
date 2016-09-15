@@ -14,6 +14,18 @@
         </div>
     </div>
     <div class="form-group">
+        <label for="f_data_type" class="col-md-2 control-label">{$t.features.type}</label>
+        <div class="col-md-10">
+            <select name="data[type]" id="cf_data_type" class="form-control" >
+                {foreach $types as $k=>$type}
+                    {if $type != 'checkbox' &&  $type != 'value'}
+                    <option value="{$type}" {if isset($data.type) && $data.type == $type}selected{/if}  {if !isset($data.type) && $type == 'select'}selected{/if}>{$t.features["type_`$type`"]}</option>
+                    {/if}
+                {/foreach}
+            </select>
+        </div>
+    </div>
+    {* <div class="form-group">
         <div class="col-md-10 col-md-offset-2">
             <div class="checkbox">
                 <label>
@@ -22,7 +34,7 @@
                 </label>
             </div>
         </div>
-    </div>
+    </div> *}
 
     <div class="form-group fg-required">
         <div class="col-md-10 col-md-offset-2">
@@ -71,6 +83,7 @@
     <input type="hidden" name="action" value="{$action}">
     <input type="hidden" name="data[parent_id]" value="{$data.parent_id}">
     <input type="hidden" name="content_id" value="{$content_id}">
+    <input type="hidden" name="data[status]" value="published">
     {if isset($data.id)}
         <input type="hidden" name="id" value="{$data.id}">
     {/if}

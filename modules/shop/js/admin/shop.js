@@ -513,15 +513,23 @@ engine.shop = {
 
                         $('.cf-feature-select').select2();
 
-                        $('#data_folder')
-                            .change(function(){
-                                if($(this).is(':checked')){
-                                    $('.fg-show-filter, .fg-multiple, .fg-required').removeAttr('checked').hide();
-                                } else{
-                                    $('.fg-show-filter, .fg-multiple, .fg-required').show();
-                                }
-                            });
-
+                        //$('#data_folder')
+                        //    .change(function(){
+                        //        if($(this).is(':checked')){
+                        //            $('.fg-show-filter, .fg-multiple, .fg-required').removeAttr('checked').hide();
+                        //        } else{
+                        //            $('.fg-show-filter, .fg-multiple, .fg-required').show();
+                        //        }
+                        //    });
+                        $("#cf_data_type").change(function(){
+                            var type = $(this).find('option:selected').val();
+                            console.log(type);
+                            if(type == 'select'){
+                                $('.fg-show-filter, .fg-multiple, .fg-required').show();
+                            } else{
+                                $('.fg-show-filter, .fg-multiple, .fg-required').removeAttr('checked').hide();
+                            }
+                        });
                         var inp = $('.f-info-name:first'), lang = inp.data('lang'), code = $('#f_data_code');
                         var ce = code.val() == '';
                         inp.keyup(function(){

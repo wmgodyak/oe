@@ -133,6 +133,7 @@ class Features extends Engine
 
         $this->template->assign('action', 'create');
         $this->template->assign('content_id', $content_id);
+        $this->template->assign('types', $this->features->getTypes());
         $this->template->assign('data', ['parent_id' => $parent_id]);
         echo $this->template->fetch('shop/categories/features/create');
     }
