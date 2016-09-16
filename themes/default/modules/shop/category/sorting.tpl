@@ -17,8 +17,8 @@
 
 
         <div class="sort-btn-group">
-            <button class="sort-btn sort-btn1"></button>
-            <button class="sort-btn sort-btn2 sort-btn--active"></button>
+            <button class="sort-btn sort-btn1 shop-display-mode {if $smarty.session.display_mode == 'list'}sort-btn--active{/if}" data-mode="list"></button>
+            <button class="sort-btn sort-btn2 shop-display-mode {if $smarty.session.display_mode == 'grid'}sort-btn--active{/if}" data-mode="grid"></button>
         </div>
 
         {if $smarty.get|count > 0}

@@ -14,6 +14,20 @@ var Shop = {
             ls.focus();
         });
 
+        $(document).on('click', '.shop-display-mode', function(){
+            var mode = $(this).data('mode');
+            App.request.post({
+               url: 'route/shop/setDisplayMode',
+                data: {
+                    mode: mode
+                },
+                success: function()
+                {
+                    location.reload(true);
+                }
+            });
+        });
+
         $(document).on('submit', '#searchForm', function(){
             //alert(ls.val());
             App.request.get('route/shop/saveSearchQuery/' + ls.val())
