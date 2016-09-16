@@ -1,6 +1,6 @@
 {assign var='similar' value=$mod->shop->products->similar($product)}
 {*<pre>{print_r($similar)}</pre>*}
-{if $similar|count}
+{if $similar|count > 1}
     <div class="products-similar">
         <div class="title">Доступні інші варіанти:</div>
             <div class="products">

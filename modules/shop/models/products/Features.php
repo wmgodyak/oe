@@ -16,26 +16,20 @@ defined("CPATH") or die();
  */
 class Features extends \system\models\Features
 {
-    /**
-     * @param $products_id
-     * @param int $parent_id
-     * @return mixed
-     * @throws \system\core\exceptions\Exception
-     */
     public function get($categories_id, $products_id, $parent_id = 0)
     {
-        $features = self::$db
-            ->select("
-                select f.id, f.type, fi.name
-                from __content_features cf
-                join __features_content fc on fc.content_id={$categories_id} and fc.features_id=cf.features_id
-                join __features f on f.id = cf.features_id and f.status = 'published' and f.parent_id={$parent_id} and f.hide = 0
-                join __features_info fi on fi.features_id = cf.features_id and fi.languages_id = {$this->languages_id}
-                where cf.content_id={$products_id}
-                order by abs(fc.position) asc
-            ")
-            ->all();
+        // витягнути всі властивості для категорії
+        $q = "
+            select f.id, f.type, fi.name
+            from __features_content fc
+            join __features f on f.id = fc.features_id and f.status = 'published' and f.parent_id={$parent_id} and f.hide = 0
+            join __features_info fi on fi.features_id = f.id and fi.languages_id = {$this->languages_id}
+            where fc.content_id={$categories_id}
+            order by abs(fc.position) asc
+        ";
+        $features = self::$db->select($q)->all();
 
+        // витягнути значення для них відносно товару
         foreach ($features as $k=>$feature) {
             switch($feature['type']){
                 case 'select':
@@ -51,11 +45,11 @@ class Features extends \system\models\Features
                     break;
                 case 'text':
                 case 'textarea':
-                     $features[$k]['value'] = $this->getTextValues($feature['id'], $products_id, $this->languages_id);
+                    $features[$k]['value'] = $this->getTextValues($feature['id'], $products_id, $this->languages_id);
                     break;
                 case 'file':
                 case 'number':
-                     $features[$k]['value'] = $this->getTextValues($feature['id'], $products_id, 0);
+                    $features[$k]['value'] = $this->getTextValues($feature['id'], $products_id, 0);
                     break;
                 case 'folder':
                     $features[$k]['items'] = $this->get($products_id, $feature['id']);
