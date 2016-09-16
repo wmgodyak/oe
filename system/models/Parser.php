@@ -133,7 +133,7 @@ class Parser extends Model
      */
     public function makeFriendlyUrl()
     {
-        $home_id  = self::$db->select("select value from __settings where name='home_id' limit 1")->row('value');
+        $home_id  = Settings::getInstance()->get('home_id');
         $def_lang = self::$db->select("select id, code from __languages where is_main=1 limit 1")->row();
         $languages_id = $this->request->param('languages_id');
         $self = $this;
@@ -144,6 +144,7 @@ class Parser extends Model
 //        $pattern .= '?(filter/[a-z0-9_\-]+=[a-z0-9_\-;,=]+)?'; // @pavloslviv changed it
         $pattern .= '?(filter/[a-z0-9_;,\-]+\-[0-9;,]+)?';
         $pattern .= '?(\?([&a-z]+=[a-zA-Z0-9\.\-]+)*)?';
+        $pattern .= '?(\?([&a-z]+=[a-zA-Z0-9\.\-\%]+)*)?'; //http://engine.loc/8;?p=2&q=%D0%B2%D0%B8%D0%BC
         $pattern .= '?"@isu';
 //        return $this->ds;
         $this->ds = preg_replace_callback
