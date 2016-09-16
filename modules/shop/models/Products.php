@@ -212,7 +212,7 @@ class Products extends Content
         $cu_main = $this->currency->getMainMeta();
 
         $items = self::$db->select("
-          select SQL_CALC_FOUND_ROWS  c.id, ci.name, ci.title, c.in_stock, c.has_variants, crm.categories_id, ci.description, ci.url,
+          select SQL_CALC_FOUND_ROWS DISTINCT c.id, ci.name, ci.title, c.in_stock, c.has_variants, crm.categories_id, ci.description, ci.url,
            ROUND( CASE
             WHEN c.currency_id = {$cu_on_site['id']} THEN pp.price
             WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id = {$cu_main['id']} THEN pp.price * {$cu_on_site['rate']}
@@ -350,10 +350,12 @@ class Products extends Content
         if(empty($product['features'])) return null;
         $this->clearQuery();
         $this->where("crm.categories_id = {$product['categories_id']}");
+        $i=0;
         foreach ($product['features'] as $feature) {
-            $this->join("join __content_features cf{$feature['id']} on cf{$feature['id']}.features_id={$feature['id']}
-                and cf{$feature['id']}.content_id=c.id
+            $this->join("join __content_features cf{$i} on cf{$i}.features_id={$feature['id']}
+                and cf{$i}.content_id=c.id
                 ");
+            $i++;
         }
 
         $this->limit(0, 9);

@@ -393,4 +393,10 @@ class Shop extends Front
 
         return call_user_func_array(array($this->comparison, $action), $params);
     }
+
+    public function setDisplayMode()
+    {
+        $mode = $this->request->post('mode', 's');
+        Session::set('display_mode', $mode);
+    }
 }

@@ -83,40 +83,40 @@ class Fixes extends Front
             $entity_id = $dsn->select("select entity_id from catalog_product_entity where sku = '{$item['external_id']}' limit 1")->row('entity_id');
             if(empty($entity_id)) continue;
             // image
-            $image = null;
-            $path = "https://cma.lviv.ua/media/catalog/product/";
-            $im   = $this->getEntityVarchar($entity_id, 85, 0, $dsn);
-            if(!empty($im)){
-                $image = $path . $im;
-            }
+//            $image = null;
+//            $path = "https://cma.lviv.ua/media/catalog/product/";
+//            $im   = $this->getEntityVarchar($entity_id, 85, 0, $dsn);
+//            if(!empty($im)){
+//                $image = $path . $im;
+//            }
 
             // description
             $description = $this->getEntityText($entity_id, 73, 0, $dsn);
             $content     = $this->getEntityText($entity_id, 72, 0, $dsn);
 
-            $gallery = $this->getEntityMediaGallery($entity_id, $dsn);
+//            $gallery = $this->getEntityMediaGallery($entity_id, $dsn);
 
-            $s = $this->db->update('__content_info', ['description' => $description, 'content' => $content], "id={$item['id']} limit 1");
+            $s = $this->db->update('__content_info', ['description' => $description, 'content' => $content], "content_id={$item['id']} limit 1");
 
             if($s){
                 Logger::log("Updated {$item['id']}    mage_id:    {$entity_id}");
             }
 
-            if(!empty($image)){
-              $s =  $this->saveImage($image, $item['id']);
-              if($s){
-                Logger::log("Save cover image {$item['id']}    mage_id:    {$entity_id}    {$image}");
-              }
-            }
-
-            if(!empty($gallery)){
-                foreach ($gallery as $k=>$img) {
-                    $s =  $this->saveImage($path . $img['value'], $item['id']);
-                    if($s){
-                        Logger::log("Save gallery image {$item['id']}    mage_id:    {$entity_id}    {$path}{$img['value']}");
-                    }
-                }
-            }
+//            if(!empty($image)){
+//              $s =  $this->saveImage($image, $item['id']);
+//              if($s){
+//                Logger::log("Save cover image {$item['id']}    mage_id:    {$entity_id}    {$image}");
+//              }
+//            }
+//
+//            if(!empty($gallery)){
+//                foreach ($gallery as $k=>$img) {
+//                    $s =  $this->saveImage($path . $img['value'], $item['id']);
+//                    if($s){
+//                        Logger::log("Save gallery image {$item['id']}    mage_id:    {$entity_id}    {$path}{$img['value']}");
+//                    }
+//                }
+//            }
         }
 //        die;
         $p ++;
