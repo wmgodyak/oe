@@ -653,6 +653,13 @@ button {
   height: 60px;
   background: url("../img/action.png") no-repeat; }
 
+.m_bestseller {
+  display: block;
+  width: 38px;
+  height: 40px;
+  background: url("../img/bestseller.png") no-repeat;
+  background-size: cover; }
+
 .m_hit {
   display: block;
   height: 42px;
@@ -1160,6 +1167,9 @@ button {
     font: 14px/18px "Roboto-Regular", sans-serif;
     color: #333; }
   .m_product-item .product-item__name {
+    display: block;
+    height: 60px;
+    overflow: hidden;
     padding: 15px 0 0;
     font-family: "Roboto-Medium", sans-serif; }
     .m_product-item .product-item__name:hover {
@@ -2404,6 +2414,7 @@ button {
     .single-product-page .single-product-page__content .item-main-info:after {
       clear: both; }
     .single-product-page .single-product-page__content .item-main-info .left {
+      position: relative;
       width: 55.55556%;
       float: left;
       padding: 0 15px; }
@@ -2508,6 +2519,10 @@ button {
             background-position: -60px 0; }
             .single-product-page .single-product-page__content .item-main-info .left .product-slider2 .owl-nav .owl-next:before {
               background-position: -90px 0; }
+      .single-product-page .single-product-page__content .item-main-info .left .special-labels {
+        position: absolute;
+        top: 30px;
+        left: 30px; }
     .single-product-page .single-product-page__content .item-main-info .right {
       width: 44.44444%;
       float: left;

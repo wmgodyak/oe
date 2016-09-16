@@ -61,7 +61,8 @@
             {if $product.in_stock == 1}
                 <span class="wrap-label">
                     {if $app->contentMeta->get($product.id, 'hit', true) == 1}<span class="m_hit"></span>{/if}
-                    {if $app->contentMeta->get($product.id, 'bestseller', true) == 1}<span class="m_special-offer"></span>{/if}
+                    {*{if $app->contentMeta->get($product.id, 'bestseller', true) == 1}<span class="m_special-offer"></span>{/if}*}
+                    {if $app->contentMeta->get($product.id, 'bestseller', true) == 1}<span class="m_bestseller"></span>{/if}
                 </span>
             {/if}
        </span>

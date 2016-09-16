@@ -744,6 +744,7 @@
     .item-main-info {
       @include clearfix();
       .left {
+        position: relative; // wg for support action and hit labels
         @include span(5 of 9);
         padding: 0 15px;
         @include respond-to(sm) {
@@ -854,6 +855,11 @@
               }
             }
           }
+        }
+        .special-labels{
+          position: absolute;
+          top:30px;
+          left:30px;
         }
       }
       .right {

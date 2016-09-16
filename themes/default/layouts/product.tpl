@@ -48,6 +48,14 @@
                                 </div>
                             </div>
                         {/if}
+
+                    </div>
+
+                    <div class="special-labels">
+                        {if $app->contentMeta->get($product.id, 'hit', true) == 1}<span class="m_hit" title="Хіт продажів"></span>{/if}
+                        {*{if $app->contentMeta->get($item.id, 'bestseller', true) == 1}<span title="Супер ціна" class="m_special-offer"></span>{/if}*}
+                        {if $app->contentMeta->get($product.id, 'bestseller', true) == 1}<span title="Супер ціна" class="m_bestseller"></span>{/if}
+
                     </div>
 
                     {if $product.images|count > 1}
@@ -61,7 +69,6 @@
                             {/foreach}
                         </div>
                     {/if}
-
                 </div>
 
                 <div class="right">

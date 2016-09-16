@@ -9,7 +9,7 @@ use system\models\Currency;
 
 class Products extends Content
 {
-    public  $group_id = 5;
+    public  $group_id = 7;
     public  $currency_id = 0;
     private $currency;
     private $debug = 0;
@@ -211,6 +211,7 @@ class Products extends Content
         }
 
         $cu_main = $this->currency->getMainMeta();
+//        $this->debug();
 
         $items = self::$db->select("
           select SQL_CALC_FOUND_ROWS c.id, ci.name, ci.title, c.in_stock, c.has_variants, crm.categories_id, ci.description, ci.url,

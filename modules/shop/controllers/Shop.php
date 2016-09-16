@@ -105,6 +105,8 @@ class Shop extends Front
         if($product['has_variants']){
             $product['variants'] = $this->variants->get($product['id'], $this->group_id);
         }
+
+        $product['price'] = ceil($product['price']);
 //        d($product['features']);die;
 
         $this->template->assign('product', $product);

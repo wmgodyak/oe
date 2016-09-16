@@ -45,14 +45,11 @@
                 </span>
            </span>
 
-           {*<span class="m_special-offer"></span>*}
-
-           {*<span class="m_hit"></span>*}
-
            {if $item.in_stock == 1}
                <span class="wrap-label">
-                   {if $app->contentMeta->get($item.id, 'hit', true) == 1}<span class="m_hit"></span>{/if}
-                   {if $app->contentMeta->get($item.id, 'bestseller', true) == 1}<span class="m_special-offer"></span>{/if}
+                   {if $app->contentMeta->get($item.id, 'hit', true) == 1}<span class="m_hit" title="Хіт продажів"></span>{/if}
+                   {*{if $app->contentMeta->get($item.id, 'bestseller', true) == 1}<span title="Супер ціна" class="m_special-offer"></span>{/if}*}
+                   {if $app->contentMeta->get($item.id, 'bestseller', true) == 1}<span title="Супер ціна" class="m_bestseller"></span>{/if}
                </span>
            {/if}
        </span>
