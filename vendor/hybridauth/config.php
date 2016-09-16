@@ -11,51 +11,17 @@
 
 return
 		array(
-			"base_url" => "http://localhost/hybridauth-git/hybridauth/",
+			"base_url" => "http://e7.otakoyi.com.ua/vendor/hybridauth/",
 			"providers" => array(
-				// openid providers
-				"OpenID" => array(
-					"enabled" => true
-				),
-				"Yahoo" => array(
-					"enabled" => true,
-					"keys" => array("key" => "", "secret" => ""),
-				),
-				"AOL" => array(
-					"enabled" => true
-				),
-				"Google" => array(
-					"enabled" => true,
-					"keys" => array("id" => "", "secret" => ""),
-				),
 				"Facebook" => array(
 					"enabled" => true,
-					"keys" => array("id" => "", "secret" => ""),
+					"keys" => array(
+						"id" => "1763511677233254",
+						"secret" => "73ecc87b997e88cf248d5ebb6d3adb60"
+					),
 					"trustForwarded" => false
-				),
-				"Twitter" => array(
-					"enabled" => true,
-					"keys" => array("key" => "", "secret" => ""),
-					"includeEmail" => false
-				),
-				// windows live
-				"Live" => array(
-					"enabled" => true,
-					"keys" => array("id" => "", "secret" => "")
-				),
-				"LinkedIn" => array(
-					"enabled" => true,
-					"keys" => array("key" => "", "secret" => "")
-				),
-				"Foursquare" => array(
-					"enabled" => true,
-					"keys" => array("id" => "", "secret" => "")
-				),
+				)
 			),
-			// If you want to enable logging, set 'debug_mode' to true.
-			// You can also set it to
-			// - "error" To log only error messages. Useful in production
-			// - "info" To log info and error messages (ignore debug messages)
 			"debug_mode" => false,
 			// Path to file writable by the web server. Required if 'debug_mode' is not false
 			"debug_file" => "",
