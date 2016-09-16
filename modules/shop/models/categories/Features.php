@@ -40,7 +40,7 @@ class Features extends \system\models\Features
             self::$db->select("
               select f.id, fi.name, f.code,f.type
               from __features_content fc
-              join __features f on fc.features_id=f.id and f.status='published'
+              join __features f on fc.features_id=f.id and f.status='published' and f.on_filter=1
               join __features_info fi on fi.features_id=f.id and fi.languages_id='{$this->languages_id}'
               where fc.content_id='{$categories_id}'
               order by abs(fc.position) asc
