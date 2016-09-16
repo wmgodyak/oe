@@ -215,7 +215,7 @@
     .logo {
       @include span(3);
       position: relative;
-      padding: 13px 15px 0;
+      padding: 1px 15px 0;
       @include respond-to(sm) {
         @include span(2);
       }

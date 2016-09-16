@@ -30,6 +30,7 @@ class Products extends Content
 
     public $start = 0;
     public $num = 15;
+    private $total = 0;
     public $categories_id = 0;
     public $categories_in = [];
 
@@ -212,7 +213,7 @@ class Products extends Content
         $cu_main = $this->currency->getMainMeta();
 
         $items = self::$db->select("
-          select SQL_CALC_FOUND_ROWS DISTINCT c.id, ci.name, ci.title, c.in_stock, c.has_variants, crm.categories_id, ci.description, ci.url,
+          select SQL_CALC_FOUND_ROWS c.id, ci.name, ci.title, c.in_stock, c.has_variants, crm.categories_id, ci.description, ci.url,
            ROUND( CASE
             WHEN c.currency_id = {$cu_on_site['id']} THEN pp.price
             WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id = {$cu_main['id']} THEN pp.price * {$cu_on_site['rate']}
@@ -236,6 +237,7 @@ class Products extends Content
             $items[$k]['price'] = ceil($item['price']);
         }
 
+        $this->total = self::$db->select('SELECT FOUND_ROWS() as t')->row('t');
         $this->clearQuery();
         return $items;
     }
@@ -255,7 +257,8 @@ class Products extends Content
 
     public function getTotal()
     {
-        return self::$db->select('SELECT FOUND_ROWS() as t')->row('t');
+        return $this->total;
+//        return self::$db->select('SELECT FOUND_ROWS() as t')->row('t');
     }
 
     public function filteredCategories()

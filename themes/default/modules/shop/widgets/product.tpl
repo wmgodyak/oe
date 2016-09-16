@@ -3,7 +3,7 @@
     <div href="{$item.id}" title="{$item.title}" class="goods-multiple-slider__link">
        <span class="m_product-item">
            <a  href="{$item.id}"  class="product-item__img-row">
-               <img class="product-item__img" src="{$app->images->cover($item.id, 'psm')}" alt="{$item.title}">
+               <img class="product-item__img" src="{$app->images->cover($item.id, 'thumbs')}" alt="{$item.title}">
            </a>
 
            {assign var='avRate' value=$mod->comments->getAverageRating($item.id)|ceil}

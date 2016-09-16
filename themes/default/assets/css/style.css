@@ -4699,7 +4699,7 @@ table.features tr.first > td {
     width: 25%;
     float: left;
     position: relative;
-    padding: 13px 15px 0; }
+    padding: 1px 15px 0; }
     @media only screen and (max-width: 1170px) {
       .l_header .header__main .logo {
         width: 16.66667%;

@@ -2,7 +2,7 @@
     <span class="product__link">
         <span class="m_product-item">
            <a  href="{$product.id}" title="{$product.title}" class="product-item__img-row">
-                <img class="product-item__img" src="{$app->images->cover($product.id, 'psm')}" alt="{$product.title}">
+                <img class="product-item__img" src="{$app->images->cover($product.id, 'thumbs')}" alt="{$product.title}">
            </a>
            <div class="product-item_wrap-info">
                 <span class="row float-row clearfix">
