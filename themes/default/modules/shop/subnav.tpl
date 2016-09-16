@@ -1,8 +1,13 @@
 {if $page.isfolder}
     {assign var = 'subnav' value=$mod->shop->categories($page.id)}
+    {assign var = 'img' value=$app->images->cover($page.id, 'source')}
+
     {if $subnav|count}
        <div  class="shop-sub-nav">
-           {assign var= 'nav' value=array_chunk_part($subnav, 4)}
+           <div class="img">
+               <img src="{$img}" alt="">
+           </div>
+           {assign var= 'nav' value=array_chunk_part($subnav, 3)}
            {foreach $nav as $ul}
             <ul>
                 {foreach $ul as $i=>$cat}

@@ -110,16 +110,16 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="result-block">
-                    <div class="wrap">
-                        <span>Ви економите <%- item.save_amount %> грн.</span>
-                        <div class="text">
-                            Замовляйте комплекти
-                            та платіть дешевше
-                        </div>
-                        <div class="btn-row">
-                            <button class="btn red b-cart-kits-delete" type="button" data-id="<%- item.id %>">Видалити</button>
+                    <div class="result-block">
+                        <div class="wrap">
+                            <span>Ви економите <%- item.save_amount %> грн.</span>
+                            <div class="text">
+                                Замовляйте комплекти
+                                та платіть дешевше
+                            </div>
+                            <div class="btn-row">
+                                <button class="btn red md b-cart-kits-delete" type="button" data-id="<%- item.id %>">Видалити</button>
+                            </div>
                         </div>
                     </div>
                 </div>

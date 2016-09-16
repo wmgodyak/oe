@@ -1,9 +1,20 @@
 .cms-content {
-  h4 {
-    display: block;
-    padding: 15px 0;
-    font: 16px/22px $fontMedium;
+  h1,h2,h3,h4{
     color: $font-dark-grey;
+    margin: 15px 0;
+    display: block;
+  }
+  h1 {
+    font: 23px/30px $fontMedium;
+  }
+  h2 {
+    font: 20px/28px $fontMedium;
+  }
+  h3 {
+    font: 18px/24px $fontMedium;
+  }
+  h4 {
+    font: 16px/22px $fontMedium;
   }
   p {
     padding: 8px 0;
@@ -24,6 +35,46 @@
     &.img-right {
       float: right;
       padding-right: 0;
+    }
+  }
+  strong,b{
+    font-family: $fontBold;
+  }
+  a{
+    color:$font-red;
+    &:hover{
+      text-decoration: underline;
+    }
+  }
+  ul,ol{
+    margin-bottom:10px;
+    li{
+      position: relative;
+      font: 16px/22px $fontRegular;
+      color: #333;
+    }
+  }
+  ol {
+    margin-left:20px;
+    &, li {
+      list-style: decimal;
+    }
+
+  }
+  ul{
+    li{
+      padding-left: 20px;
+      &:before{
+        content: "";
+        width: 5px;
+        display: inline-block;
+        height: 5px;
+        border-radius: 50%;
+        background: #ee4d4d;
+        position: absolute;
+        top: 8px;
+        left: 5px;
+      }
     }
   }
 }

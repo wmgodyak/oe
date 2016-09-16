@@ -48,7 +48,8 @@
             <div class="logo">
                 <a  {if $page.id != 1 } href="1"{/if} class="logo__link">
                     <img src="{$theme_url}/assets/img/logo.png" alt="Світ Мобільних Аксесуарів" title="Світ Мобільних Аксесуарів" class="logo-icon">
-                    <img src="{$theme_url}/assets/img/logo-text.png" alt="" class="logo-text">
+                    {*<img src="{$theme_url}/assets/img/logo-text.png" alt="" class="logo-text">*}
+                    <img src="{$theme_url}/assets/img/main-logo.png" alt="Світ Мобільних Аксесуарів" class="logo-text">
                 </a>
                 <div class="side-menu-switcher">
                     <a href="#">

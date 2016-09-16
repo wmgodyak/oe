@@ -5,11 +5,11 @@
                 <div class="logo">
                     <img src="{$theme_url}assets/img/logo/logo.png">
                 </div>
-                <div class="input-group">
+                <div class="input-group transformed">
                     <label for="email">{$t.admin.email}</label>
                     <input type="email" name="data[email]" id="email" required>
                 </div>
-                <div class="input-group">
+                <div class="input-group transformed">
                     <label for="password">{$t.admin.password}</label>
                     <input type="password" name="data[password]" id="password">
                     <div class="show-value" id="show-pass">

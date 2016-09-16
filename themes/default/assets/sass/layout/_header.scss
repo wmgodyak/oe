@@ -215,7 +215,7 @@
     .logo {
       @include span(3);
       position: relative;
-      padding: 19px 15px 0;
+      padding: 13px 15px 0;
       @include respond-to(sm) {
         @include span(2);
       }
@@ -223,6 +223,7 @@
         @include span(4);
       }
       .logo__link {
+        display: block;
         @include clearfix();
         @include respond-to(sm) {
           display: inline-block;
@@ -233,6 +234,7 @@
           text-align: left;
         }
         img {
+          max-width: 100%;
           display: inline-block;
           font-size: 0;
           @include respond-to(sm) {
@@ -242,6 +244,9 @@
             float: left;
             @include respond-to(sm) {
               float: none;
+            }
+            @include response(min, 1171){
+              display: none;
             }
           }
           &.logo-text {
@@ -485,13 +490,11 @@
           .cart__price {
             font-family: $fontRegular;
             font-size: 12px;
-            line-height: 16px;
+            line-height: 18px;
             color: #333;
             text-align: center;
             span {
               display: block;
-              font-size:18px;
-              line-height:20px;
               font-family: $fontRegular;
             }
           }

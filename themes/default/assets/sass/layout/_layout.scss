@@ -616,6 +616,9 @@
         float: left;
         font: 23px/23px $fontMedium;
         color: $font-dark-grey;
+        @include respond-to(xs) {
+          line-height: 35px;
+        }
       }
       .sort {
         float: right;
@@ -906,6 +909,7 @@
             &.buy-btn {
               position: relative;
               padding-left: 45px;
+              padding-right:15px;
               &:before,
               &:after {
                 position: absolute;
@@ -1106,9 +1110,9 @@
           padding: 0 10px;
           margin: 20px 0 0;
           border: 1px solid $bg-dark-grey;
-          @include respond-to(xs) {
-            padding: 0;
-          }
+          //@include respond-to(xs) {
+          //  padding: 0;
+          //}
           img {
             max-width: 100%;
           }
@@ -1141,7 +1145,7 @@
           padding: 0 15px;
           @include respond-to(xs) {
             @include span(12);
-            padding: 0 0 80px;
+            padding: 40px 0;
           }
           &:first-of-type {
             padding-left: 0;
@@ -1157,11 +1161,11 @@
             color: $font-red;
             content: '';
             @include respond-to(xs) {
-              right:auto;
+              right: auto;
               left: 50%;
-              transform: translateX(-50%);
-              top: auto;
-              bottom: 20px;
+              margin-left: -15px;
+              top: -30px;
+              bottom: auto;
             }
           }
           &.item:not(:first-child) {
@@ -1235,9 +1239,17 @@
             height: auto;
             font: 50px/50px $fontRegular;
             color: $font-red;
+            @include respond-to(xs) {
+              right: auto;
+              left: 50%;
+              margin-left: -15px;
+              top: -30px;
+              bottom: auto;
+            }
           }
           @include respond-to(xs) {
             @include span(12);
+            padding: 40px 0;
           }
           .row {
             text-align: center;
@@ -1303,6 +1315,9 @@
             padding-top: 18px;
             button {
               white-space: nowrap;
+            }
+            @include respond-to(xs) {
+              text-align: center;
             }
           }
         }
@@ -1970,6 +1985,10 @@
       td {
         padding: 15px 5px;
         vertical-align: middle;
+        @include respond-to(xs) {
+          display: block;
+          padding: 5px;
+        }
         &:first-child {
           width: 180px;
           @include respond-to(xs) {
@@ -2233,7 +2252,7 @@
         padding: 0 15px;
         @include respond-to(xs) {
           @include span(12);
-          padding: 0 0 80px;
+          padding: 40px 0;
         }
         &:first-of-type {
           padding-left: 0;
@@ -2249,11 +2268,11 @@
           color: $font-red;
           content: '';
           @include respond-to(xs) {
-            right:auto;
+            right: auto;
             left: 50%;
-            transform: translateX(-50%);
-            top: auto;
-            bottom: 20px;
+            margin-left: -15px;
+            top: -30px;
+            bottom: auto;
           }
         }
         &.item1 {
@@ -2317,6 +2336,7 @@
         @include span(2 of 6);
         @include respond-to(xs) {
           @include span(12);
+          padding: 40px 0;
         }
         .row {
           text-align: center;
@@ -2869,4 +2889,223 @@ table.features tr.first > td {
 }
 .sp-comments {
   padding:15px 0;
+}
+.cart-page__content{
+  .promotion-banner {
+    //@include respond-to(xs) {
+    //  display: none;
+    //}
+    .heading {
+      margin: 0 0 12px;
+      font: 23px/23px $fontMedium;
+      color: $font-red;
+    }
+    .promotion-banner-wrap {
+      @include clearfix();
+      border: 1px solid $bg-red;
+      padding: 15px 0;
+    }
+    .content {
+      @include span(12);
+      @include clearfix();
+      .item {
+        @include span(3);
+        position: relative;
+        padding: 0 15px;
+        @include respond-to(xs) {
+          @include span(12);
+          padding: 40px 0;
+        }
+        &:first-of-type {
+          padding-left: 0;
+        }
+        &:after {
+          position: absolute;
+          top: 42px;
+          left: -15px;
+          display: block;
+          width: 30px;
+          height: auto;
+          font: 50px/50px $fontRegular;
+          color: $font-red;
+          content: '';
+          @include respond-to(xs) {
+            right: auto;
+            left: 50%;
+            margin-left: -15px;
+            top: -30px;
+            bottom: auto;
+          }
+        }
+        &.item:not(:first-child) {
+          &:after {
+            content: '+';
+          }
+        }
+        .img-block {
+          width: 80px;
+          height: 80px;
+          border: 1px solid $bg_dark-grey;
+          margin: 0 auto;
+          .img {
+            width: 100%;
+            height: 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+          }
+        }
+        .name {
+          width: 120px;
+          margin: 13px auto 0;
+          font: 12px/12px $fontRegular;
+          color: $font-dark-grey;
+          text-align: center;
+        }
+        .price-row {
+          width: 120px;
+          margin: 13px auto 0;
+          text-align: center;
+        }
+        .old-price {
+          position: relative;
+          display: inline-block;
+          font: 12px/12px $fontRegular;
+          color: $font-dark-grey;
+          &:before {
+            position: absolute;
+            top: 7px;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 1px;
+            background: $bg_dark-grey;
+            content: '';
+          }
+        }
+        .price {
+          display: inline-block;
+          font: 14px/14px $fontBold;
+          color: $font-red;
+        }
+      }
+      .equals {
+        @include span(3);
+        position: relative;
+        &:after {
+          content: '=';
+          position: absolute;
+          top: 42px;
+          left: -15px;
+          display: block;
+          width: 30px;
+          height: auto;
+          font: 50px/50px $fontRegular;
+          color: $font-red;
+          @include respond-to(xs) {
+            right: auto;
+            left: 50%;
+            margin-left: -15px;
+            top: -30px;
+            bottom: auto;
+          }
+        }
+        @include respond-to(xs) {
+          @include span(12);
+          padding: 40px 0;
+        }
+        .row {
+          text-align: center;
+        }
+        .new-price {
+          margin-top: 40px;
+          display: inline-block;
+          font: 23px/23px $fontBold;
+          color: $font-red;
+          @include respond-to(xs) {
+            padding-top: 0;
+            margin-top: 0;
+          }
+        }
+        .old-price {
+          margin-top: 6px;
+          display: inline-block;
+          position: relative;
+          font: 23px/23px $fontBold;
+          color: $font-light-grey;
+          &:after {
+            position: absolute;
+            top: 13px;
+            left: 0;
+            display: block;
+            width: 100%;
+            height: 1px;
+            background: $bg_dark-grey;
+            content: '';
+          }
+        }
+      }
+    }
+    .btn-row {
+      padding-top: 18px;
+      text-align: center;
+      .btn-red {
+        text-align: center;
+        background: transparent;
+        border: 1px solid $font-red;
+        width:140px;
+        padding: 6px;
+        color: $font-red;
+        font: 400 14px $fontRegular;
+        white-space: nowrap;
+        transition: .3s;
+        &:hover, &:focus {
+          background: $font-red;
+          cursor: pointer;
+          outline: none;
+          color: #fff;
+        }
+      }
+    }
+
+    .result-block {
+      @include span(3);
+      padding: 0 15px;
+      //@include span(3 of 9);
+      @include respond-to(xs) {
+        @include span(12);
+      }
+      .wrap {
+        max-width: 190px;
+        width: 100%;
+        margin: 0 auto;
+        span {
+          margin-top: 22px;
+          display: block;
+          font: 18px/18px $fontBold;
+          color: $font-red;
+          @include respond-to(xs) {
+            display: none;
+          }
+        }
+        .text {
+          margin-top: 3px;
+          font: 16px/18px $fontRegular;
+          color: $font-dark-grey;
+          @include respond-to(xs) {
+            display: none;
+          }
+        }
+        .btn-row {
+          padding-top: 18px;
+          button {
+            white-space: nowrap;
+          }
+          @include respond-to(xs) {
+            text-align: center;
+          }
+        }
+      }
+    }
+  }
 }

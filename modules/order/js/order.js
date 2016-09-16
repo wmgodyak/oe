@@ -88,6 +88,19 @@ var Order = {
                 bonus_rate: window.bonus_rate
             }));
 
+            (function(){
+                if( $(window).outerWidth() > 767 ) {
+                    var items = $('.promotion-banner-wrap .item,.promotion-banner-wrap .equals');
+                    var maxHeight, heights;
+                    heights = items.map(function () {
+                        return $(this).innerHeight();
+                    }).get();
+                    maxHeight = Math.max.apply(null, heights);
+                    items.css({
+                        height: maxHeight
+                    });
+                }
+            })();
             $(document).on('click', '.cart-delete-item', function(){
                 var id = $(this).data('id');
                 Order.cart.products.delete(id, function(res){
