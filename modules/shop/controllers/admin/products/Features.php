@@ -39,6 +39,7 @@ class Features extends Engine
             $categories_id = $this->contentRelations->getMainCategoriesId($content['id']);
         }
 
+        $this->template->assign('langs', $this->languages->get());
         $this->template->assign('features', $this->features->get($categories_id, $content['id']));
 
         if($this->request->isXhr()){

@@ -20,7 +20,7 @@
 {elseif $feature.type == 'select'}
     <div class="form-group">
         <label for="content_features" class="col-md-3 control-label">{$feature.name} {if !$feature.disable_values}<a data-parent="{$feature.id}" title="{$t.features.add_value}" class="b-cf-add-val" href="javascript:;"><i class="fa fa-plus-circle"></i></a>{/if}</label>
-        {if !$feature.disable_values}
+        {*{if !$feature.disable_values}*}
         <div class="col-md-9">
             <select name="content_features[{$feature.id}]{if $feature.multiple}[]{/if}" {if $feature.multiple}multiple{/if} id="content_features_{$feature.id}"  class="form-control cf-feature-select">
                 {foreach $feature.items as $item}
@@ -28,7 +28,7 @@
                 {/foreach}
             </select>
         </div>
-        {/if}
+        {*{/if}*}
     </div>
 {elseif $feature.type == 'file'}
     <div class="form-group">

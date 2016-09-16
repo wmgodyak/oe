@@ -29,25 +29,64 @@ class Features extends Model
     {
         $items =
             self::$db->select("
-              select f.id, fi.name, f.code,f.type, fc.id as fc_id, f.multiple
+              select f.id, fi.name, f.code, f.type, fc.id as fc_id, f.multiple
               from __features f
               join __features_content fc on fc.content_id='{$categories_id}' and fc.features_id=f.id
               join __features_info fi on fi.features_id=f.id and fi.languages_id='{$this->languages_id}'
               where f.parent_id = '{$parent_id}'
-               and f.type in ('select', 'folder')
+               -- and f.type in ('select', 'folder')
                and f.status='published'
               order by abs(fc.position) asc
            ")->all();
 
         foreach ($items as $k=>$item) {
-            if($item['type'] == 'folder'){
-                $items[$k]['items'] = $this->get($categories_id, $products_id, $item['id']);
-            } else {
-                $items[$k]['values'] = $this->getValues($item['id'], $products_id);
+            switch($item['type']){
+                case 'folder':
+                    $items[$k]['items'] = $this->get($categories_id, $products_id, $item['id']);
+                    break;
+                case 'select':
+                    $items[$k]['values'] = $this->getValues($item['id'], $products_id);
+                    break;
+                case 'text':
+                case 'textarea':
+                    $items[$k]['values'] = $this->getTextValues($item['id'], $products_id);
+                    break;
+                case 'file':
+                case 'number':
+                    $items[$k]['values'] = $this->getTextValues($item['id'], $products_id, 0);
+                    break;
             }
         }
-
         return $items;
+    }
+
+    /**
+     * @param $features_id
+     * @param $content_id
+     * @param int $languages_id
+     * @return array|mixed
+     * @throws \system\core\exceptions\Exception
+     */
+    public function getTextValues($features_id, $content_id, $languages_id = null)
+    {
+        $w = $languages_id ? " and languages_id = {$languages_id} limit 1" : '';
+        $q = self::$db->select("
+            select value, languages_id
+            from __content_features
+            where content_id={$content_id} and features_id={$features_id} {$w}
+            ");
+
+        if($languages_id !== null){
+            return  $q->row('value');
+        }
+
+        $res = [];
+
+        foreach ($q->all() as $item) {
+            $res[$item['languages_id']] = $item['value'];
+        }
+
+        return $res;
     }
 
     public function createValue($admin_id)
@@ -90,6 +129,7 @@ class Features extends Model
 
         return $id;
     }
+
 
     /**
      * @param $parent_id

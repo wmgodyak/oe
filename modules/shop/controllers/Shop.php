@@ -100,11 +100,12 @@ class Shop extends Front
         $product['bonus']    = round($product['price'] * $this->bonus_rate, 2);
 
         $features = new \modules\shop\models\products\Features();
-        $product['features'] = $features->get($product['id']);
+        $product['features'] = $features->get($product['categories_id'], $product['id']);
 
         if($product['has_variants']){
             $product['variants'] = $this->variants->get($product['id'], $this->group_id);
         }
+//        d($product['features']);die;
 
         $this->template->assign('product', $product);
     }

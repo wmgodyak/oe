@@ -187,13 +187,18 @@
                                     <div class="short">
                                         <div class="wrap">
                                             <span>{$t.shop.product.description}:</span>
-                                            {foreach $product.features as $item}
+                                            {foreach $product.features as $n=>$item}
+                                                {if $item.type != 'file' && $item.type != 'textarea'}
                                                     {$item.name}:
                                                     {if $item.values|count}
                                                         {foreach $item.values as $i=>$v}
                                                             {$v.name} {if isset($item.values[$i + 1])},{/if}
-                                                        {/foreach}.
+                                                        {/foreach}
+                                                    {elseif $item.value != ''}
+                                                        {$item.value}
                                                     {/if}
+                                                    {if isset($product.features[$n + 1])}/{/if}
+                                                {/if}
                                             {/foreach}
                                         </div>
                                     </div>
@@ -245,6 +250,12 @@
                                                         {foreach $item.values as $v}
                                                             {$v.name}
                                                         {/foreach}
+                                                    {elseif $item.value != ''}
+                                                        {if $item.type == 'file'}
+                                                            <a target="_blank" href="{$item.value}">{$item.value}</a>
+                                                            {else}
+                                                            {$item.value}
+                                                        {/if}
                                                     {/if}
                                                 </b>
                                             </li>
