@@ -3,7 +3,7 @@
     {foreach $providers as $provider => $params}
         {if $params.enabled}
             <a href="route/hybridAuth/auth/{$provider}" class="block">
-                <div class="icon"></div>
+                <div class="icon {$provider}"></div>
                 <div class="link">{$provider}</div>
                 <div class="clearfix"></div>
             </a>

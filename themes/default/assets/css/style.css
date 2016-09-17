@@ -5072,20 +5072,26 @@ table.features tr.first > td {
     .l_header .modal-login .social-intro .block {
       display: block;
       width: 150px;
-      height: 30px;
+      height: 32px;
       margin: 8px auto;
       background: #4A6D8C; }
       .l_header .modal-login .social-intro .block .icon {
         display: block;
         float: left;
         width: 35px;
-        height: 30px;
+        height: 32px;
         background: #5B82A5; }
+        .l_header .modal-login .social-intro .block .icon.Facebook {
+          background: url("../img/icons/facebook.png") no-repeat; }
+        .l_header .modal-login .social-intro .block .icon.Google {
+          background: url("../img/icons/google.png") no-repeat; }
+        .l_header .modal-login .social-intro .block .icon.Vkontakte {
+          background: url("../img/icons/vkontakte.png") no-repeat; }
       .l_header .modal-login .social-intro .block .link {
         float: left;
         width: 115px;
-        height: 30px;
-        text-align: center;
+        height: 32px;
+        text-align: left;
         color: #fff;
         padding: 7px;
         font: 400 14px "Roboto-Regular", sans-serif; }

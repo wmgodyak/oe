@@ -614,21 +614,30 @@
       .block {
         display: block;
         width: 150px;
-        height: 30px;
+        height: 32px;
         margin: 8px auto;
         background: $social-link;
         .icon {
           display: block;
           float: left;
           width:35px;
-          height: 30px;
-          background: $social-icon;
+          height: 32px;
+          background:  $social-icon;
+          &.Facebook{
+            background: url("../img/icons/facebook.png") no-repeat;
+          }
+          &.Google{
+            background: url("../img/icons/google.png") no-repeat;
+          }
+          &.Vkontakte{
+            background: url("../img/icons/vkontakte.png") no-repeat;
+          }
         }
         .link {
           float: left;
           width: 115px;
-          height: 30px;
-          text-align: center;
+          height: 32px;
+          text-align: left;
           color: #fff;
           padding: 7px;
           font: 400 14px $fontRegular;

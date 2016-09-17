@@ -25,12 +25,13 @@
             </div>
             <div class="goods-list__main">
                 <% items.forEach(function(item) { %>
+
                 <div class="goods-list__row">
-                    <div class="item item1">
-                        <% if ( item.img ) { %>
-                        <img src="<%- item.img%>">
+                    <div class="item item1" style="text-align: left;">
+                        <% if ( item.img.image ) { %>
+                        <img style="max-width: 160px; max-height:120px;" src="<%- item.img.path %>thumbs/<%- item.img.image %>">
                         <% } else { %>
-                        <img src="/uploads/noimage.jpg">
+                        <img style="max-width: 160px; max-height:120px" src="/uploads/noimage.jpg">
                         <% } %>
                     </div>
                     <div class="item item2">
@@ -44,8 +45,8 @@
                     </div>
                     <div class="item item3">
                         <div class="item-counter">
-                            <div class="column fl">
-                                <input style="width: 50px;" onchange="this.value = parseInt(this.value); if(typeof  this.value == 'undefined') this.value=1;" class="counter-mask cart-item-quantity" type="number" value="<%- item.quantity%>" data-id="<%=item.products_id%>">
+                            <div class="column fl" style="padding-top: 10px;">
+                                <input style="width: 50px; height: 30px; text-align: center; " onchange="this.value = parseInt(this.value); if(typeof  this.value == 'undefined') this.value=1;" class="counter-mask cart-item-quantity" type="number" value="<%- item.quantity%>" data-id="<%=item.products_id%>">
                             </div>
                         </div>
                     </div>
