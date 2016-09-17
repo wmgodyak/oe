@@ -81,7 +81,7 @@ class Comparison extends Model
         $features = new \modules\shop\models\products\Features();
 
         foreach ($products as $k=>$product) {
-            $products[$k]['features'] = $features->get($product['id']);
+            $products[$k]['features'] = $features->get($categories_id, $product['id']);
         }
 
         return $products;
