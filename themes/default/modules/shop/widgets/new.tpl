@@ -7,6 +7,7 @@
             <div class="goods-multiple-slider__name">{$t.shop.last_products}</div>
             <div class="goods-multiple-slider goods-multiple-slider--5">
                 {foreach $products as $item}
+                    {$item.new = 1}
                     {include file="modules/shop/widgets/product.tpl"}
                 {/foreach}
             </div>
