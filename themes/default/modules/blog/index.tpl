@@ -24,8 +24,7 @@
                 {include file="modules/blog/posts.tpl"}
             </div>
             <!-- end newspage__content -->
-
-            {include file="chunks/sidebar.tpl"}
+            {include file="modules/blog/sidebar.tpl"}
 
         </div>
 

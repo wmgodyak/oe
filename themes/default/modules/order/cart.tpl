@@ -149,7 +149,7 @@
         </div>
 
         <% } else { %>
-        <p>Ваш кошик порожній</p>
+        <div class="bs-callout bs-callout-danger"><p>Ваш кошик порожній</p></div>
         <% } %>
     </script>
 {/literal}

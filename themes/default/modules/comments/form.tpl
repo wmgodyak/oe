@@ -21,8 +21,8 @@
             <div class="social__sighin">
                 <span>Увійти за допомогою:</span>
                 <div class="comments__social">
-                    <a class="comments__social-link comments__social-link--vk" href="#"></a>
-                    <a class="comments__social-link comments__social-link--fb" href="#"></a>
+                    <a class="comments__social-link comments__social-link--vk" href="route/hybridAuth/auth/Vkontakte"></a>
+                    <a class="comments__social-link comments__social-link--fb" href="route/hybridAuth/auth/Facebook"></a>
                 </div>
             </div>
         {else}

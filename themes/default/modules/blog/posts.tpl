@@ -38,5 +38,5 @@
     </div>
     {$mod->blog->pagination()}
     {else}
-    <div class="no-records"><p>{$t.blog.no_records}</p></div>
+    <div class="bs-callout bs-callout-danger"><p>{$t.blog.no_records}</p></div>
 {/if}

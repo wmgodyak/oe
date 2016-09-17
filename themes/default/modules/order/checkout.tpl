@@ -1,7 +1,7 @@
 
 <div class="container clearfix">
     {if !isset($smarty.session.cart) || empty($smarty.session.cart)}
-        <p>Ваш кошик порожній. Нічого замовляти</p>
+        <div class="bs-callout bs-callout-danger"><p>Ваш кошик порожній. Нічого замовляти</p></div>
     {else}
         {assign var='amount' value="0"}
         {assign var='bonus' value="0"}
