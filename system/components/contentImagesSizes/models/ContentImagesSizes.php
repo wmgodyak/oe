@@ -250,6 +250,7 @@ class ContentImagesSizes extends Engine
             if($item['watermark'] == 1 && $watermark_src != ''){
                 $w_img = DOCROOT . $watermark_src;
                 if(file_exists($w_img)){
+                    \AcImage::setMaxProportionLogo(0.40);
                     $img->drawLogo($w_img, (int)$item['watermark_position']);
                 }
             }

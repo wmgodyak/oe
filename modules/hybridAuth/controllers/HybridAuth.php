@@ -8,10 +8,13 @@
 
 namespace modules\hybridAuth\controllers;
 
+use modules\users\controllers\Users;
 use system\core\EventsHandler;
-use system\Front;
+use system\core\Session;
 
 defined("CPATH") or die();
+include_once DOCROOT . "/vendor/hybridauth/Hybrid/Auth.php";
+include_once DOCROOT . "/vendor/hybridauth/Hybrid/Endpoint.php";
 
 /**
  * Class HybridAuth
@@ -21,23 +24,13 @@ defined("CPATH") or die();
  * @version 1.0.0
  * @package modules\hybridAuth\controllers
  */
-class HybridAuth extends Front
+class HybridAuth extends Users
 {
     private $config = array(
         // "base_url" the url that point to HybridAuth Endpoint (where index.php and config.php are found)
         "base_url" => '/vendor/hybridauth',//todo add appurl
 
         "providers" => array (
-            // google
-            "Google" => array ( // 'id' is your google client id
-               "enabled" => false,
-               "keys" => array (
-                   "id" => "",
-                   "secret" => ""
-               ),
-            ),
-
-         // facebook
             "Facebook" => array ( // 'id' is your facebook application id
                "enabled" => true,
                "keys" => array (
@@ -46,8 +39,6 @@ class HybridAuth extends Front
                ),
                "scope" => "email, user_about_me, user_birthday, user_hometown" // optional
             ),
-
-         // Vk
             "Vkontakte" => array ( // 'key' is your twitter application consumer key
                "enabled" => true,
                "keys" => array (
@@ -55,26 +46,31 @@ class HybridAuth extends Front
                    "secret" => "bQ05uA9EDUdmMdYRcqEu"
                )
             ),
-
-         // and so on ...
+            "Google" => array ( // 'key' is your twitter application consumer key
+                "enabled" => true,
+                "keys" => array (
+                    "id" => "530082045902-1r7its3k9jp0ohhua99sh9hp58ut9g07.apps.googleusercontent.com",
+                    "secret" => "PkYojlfBcyOrKhb9MA_Y2FrV"
+                )
+            )
       ),
-
       "debug_mode" => true ,
-
-      // to enable logging, set 'debug_mode' to true, then provide here a path of a writable file
       "debug_file" => "oauth.txt",
     );
+
+    private $ha;
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->config['base_url'] = APPURL . 'vendor/hybridauth';
+        $this->config['base_url'] = APPURL . "vendor/hybridauth/";
+
+        $this->ha = new \modules\hybridAuth\models\HybridAuth();
     }
 
     public function init()
     {
-        //$hybridauth = new Hybrid_Auth( $config );
         EventsHandler::getInstance()->add('users.form.login', [$this, 'displayProviders']);
     }
 
@@ -88,41 +84,57 @@ class HybridAuth extends Front
     {
         if( ! isset($this->config['providers'][$provider])) die;
 
-        include_once DOCROOT . "/vendor/hybridauth/Hybrid/Auth.php";
-        include_once DOCROOT . "/vendor/hybridauth/Hybrid/Endpoint.php";
-
-
-        try{
+        try {
             $hybridauth = new \Hybrid_Auth( $this->config );
 
             $adapter = $hybridauth->authenticate( $provider );
 
-            $user_profile = $adapter->getUserProfile();
-            d($user_profile);
-//            \Hybrid_Endpoint::process();
+            $profile = $adapter->getUserProfile();
+
+            if(!empty($profile)){
+                $id = $this->ha->auth($provider, $profile->identifier);
+                if($id > 0){
+                    $users_id = $this->ha->getUsersId($id);
+                    $user = $this->users->getData($users_id);
+                } else {
+                    // register user
+                    $user = [
+                        'email' => $profile->email,
+                        'name'  => $profile->firstName,
+                        'surname' => $profile->lastName,
+                        'avatar'  => $profile->photoURL,
+                        'group_id' => 7,
+                        'status'   => 'active'
+                    ];
+
+                    $u = $this->users->getUserByEmail($profile->email);
+
+                    if(!empty($u)){
+                        $user = $u;
+                    } else {
+                        $users_id = $this->users->create($user);
+                        $user['id'] = $users_id;
+                    }
+
+                    $this->ha->create($user['id'], $provider, $profile->identifier, $profile );
+                }
+
+                if($user['status'] == 'ban'){
+                    die($this->t('admin.e_login_ban'));
+                } elseif($user['status'] == 'deleted'){
+                    die($this->t('admin.e_login_deleted'));
+                } else {
+                    // login user
+                    $status = $this->users->setOnline($user);
+                    if($status){
+                        Session::set('user', $user);
+                        $this->redirect($this->getUrl(28));die;
+                    }
+                }
+            }
         }
         catch(\ Exception $e ){
             die( "<b>got an error!</b> " . $e->getMessage() );
         }
-//
-//        $hybridauth = new \Hybrid_Auth( $this->config );
-//
-//        $sm = $hybridauth->authenticate( $provider );
-//
-//        d($sm);die;
-//
-//        $user_profile = $sm->getUserProfile();
-//        d($user_profile);
-//die('done');
-//        echo "Hi there! " . $user_profile->displayName;
-//
-//        $twitter->setUserStatus( "Hello world!" );
-
-//        $user_contacts = $twitter->getUserContacts();
-    }
-
-    public function authOk()
-    {
-        d($_SESSION);
     }
 }

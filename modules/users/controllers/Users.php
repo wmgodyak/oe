@@ -17,7 +17,7 @@ use system\models\Mailer;
  */
 class Users extends Front
 {
-    private $users;
+    protected $users;
 
     public function __construct()
     {

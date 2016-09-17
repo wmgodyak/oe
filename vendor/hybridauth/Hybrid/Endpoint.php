@@ -189,6 +189,7 @@ class Hybrid_Endpoint {
 	 * @throws Hybrid_Exception
 	 */
 	protected function authInit() {
+		session_name('oyiengine');
 		if (!$this->initDone) {
 			$this->initDone = true;
 

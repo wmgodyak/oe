@@ -10,8 +10,21 @@ namespace system\models;
 
 defined('CPATH') or die();
 
+/**
+ * Class Users
+ * @package system\models
+ */
 class Users extends Model
 {
+    public $meta;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->meta = new UsersMeta();
+    }
+
     /**
      * @param $id
      * @return array|mixed

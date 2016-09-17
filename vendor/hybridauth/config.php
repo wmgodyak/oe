@@ -20,6 +20,20 @@ return
 						"secret" => "73ecc87b997e88cf248d5ebb6d3adb60"
 					),
 					"trustForwarded" => false
+				),
+				"Vkontakte" => array ( // 'key' is your twitter application consumer key
+					"enabled" => true,
+					"keys" => array (
+						"id" => "5629616",
+						"secret" => "bQ05uA9EDUdmMdYRcqEu"
+					)
+				),
+				"Google" => array ( // 'key' is your twitter application consumer key
+					"enabled" => true,
+					"keys" => array (
+						"id" => "530082045902-1r7its3k9jp0ohhua99sh9hp58ut9g07.apps.googleusercontent.com",
+						"secret" => "PkYojlfBcyOrKhb9MA_Y2FrV"
+					)
 				)
 			),
 			"debug_mode" => false,
