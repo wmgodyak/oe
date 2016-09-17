@@ -22,7 +22,7 @@
                 </span>
 
                <a  href="{$product.id}" title="{$product.title}" class="product-item__name">
-                   {$product.name}
+                   {shortText($product.name, 60)}
                </a>
                {*<span class="product-item_description">*}
                    {*Lorem ipsum dolor sit amet, consectetur adipisicing elit. Animi aperiam architecto, aspernatur deserunt dolorum excepturi facere harum illo illum incidunt laboriosam maiores nulla obcaecati quidem repellendus sequi suscipit velit voluptas.*}

@@ -189,6 +189,21 @@ if(! function_exists('array_chunk_part')){
     return false;
 }
 
+/**
+ * @param $text
+ * @param int $len
+ * @param string $dots
+ * @return string
+ */
+function shortText($text, $len = 60, $dots = " ...")
+{
+    $c = mb_strlen($text);
+
+    if($c <= $len) return $text;
+
+    return mb_substr($text, 0, $len, 'UTF-8') . $dots;
+}
+
     if(!defined('MPATH')) define('MPATH', 'models\\');
 
     $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? "https://" : "http://";

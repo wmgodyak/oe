@@ -17,7 +17,7 @@
            </span>
 
            <a  href="{$item.id}"  class="product-item__name">
-               {$item.name}
+               {shortText($item.name, 60)}
            </a>
 
            <span class="product-item__price">
