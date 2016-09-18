@@ -21,7 +21,7 @@ class ShopBlog extends Engine
         parent::__construct();
         $this->relations = new ContentRelationship();
         $this->content = new Content();
-        $this->shopBlog  =new \modules\shopBlog\models\admin\ShopBlog();
+        $this->shopBlog  = new \modules\shopBlog\models\admin\ShopBlog();
     }
 
     public function init()

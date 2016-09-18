@@ -28,8 +28,6 @@ class CategorySynonym extends Engine
     {
         parent::init();
 
-        $this->template->assignScript('modules/categorySynonym/js/admin/categorySynonym.js');
-
         EventsHandler::getInstance()->add('content.params.after', [$this, 'index']);
     }
 
@@ -37,6 +35,7 @@ class CategorySynonym extends Engine
     {
         if($content['type'] != 'products_categories') return null;
 
+        $this->template->assignScript('modules/categorySynonym/js/admin/categorySynonym.js');
         $this->template->assign('synonyms', $this->relations->getCategoriesFull($content['id']));
 
         return $this->template->fetch('modules/categorySynonym/index');

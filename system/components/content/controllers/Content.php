@@ -38,13 +38,15 @@ class Content extends Engine
             'intro'    => true,
             'main'     => true,
             'meta'     => true,
-            'params'   => true
+            'params'   => true,
+            'images'   => true
         ];
 
     protected $form_display_params =
         [
             'owner'    => true,
             'parent'   => true,
+            'position' => false,
             'pub_date' => true
         ];
 

@@ -34,6 +34,10 @@
                 {include "content/blocks/features.tpl"}
                 {$events->call('content.features.after', $content)}
             {/if}
+            {if $form_display_blocks.images}
+                {*{include "content/blocks/images.tpl"}*}
+                {$events->call('content.images', $content)}
+            {/if}
             {$events->call('content.sidebar.after', $content)}
         </div>
     </div>

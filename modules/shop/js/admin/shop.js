@@ -1250,7 +1250,7 @@ engine.shop = {
     },
     kits: function()
     {
-        if($('#content_id').length == 0) return;
+        if($('#kits_tpl').length == 0) return;
         var products_id = $('#content_id').val();
 
         var renderKits = function()

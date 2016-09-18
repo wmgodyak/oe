@@ -46,7 +46,7 @@ class ContentImages extends Engine
 
     public function init()
     {
-        EventsHandler::getInstance()->add('content.params.after',[$this, 'index']);
+        EventsHandler::getInstance()->add('content.images',[$this, 'index']);
         EventsHandler::getInstance()->add('trash.remove',[$this, 'remove']);
     }
 

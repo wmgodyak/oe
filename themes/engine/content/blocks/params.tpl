@@ -12,12 +12,13 @@
             </div>
         </div>
     {/if}
-
     <div class="form-group">
-        <label for="content_status" class="col-md-4 control-label">{*$t.common.status*} Опубліковано</label>
-        <div class="col-md-8">
-            <input type="hidden" name="content[status]" value="hidden">
-            <input class="switch" type="checkbox" name="content[status]" id="content_status" value="published" {if $content.status=='published'}checked{/if}>
+        <div class="col-md-12">
+            <label for="content_status" class="">
+                <input type="hidden" name="content[status]" value="hidden">
+                <input class="switch" type="checkbox" name="content[status]" id="content_status" value="published" {if $content.status=='published'}checked{/if}>
+                <span class="l-check">Опубліковано</span>
+            </label>
         </div>
     </div>
     {if $form_display_params.owner}
@@ -37,6 +38,14 @@
         <label for="content_parent_id" class="col-md-4 control-label">{$t.common.parent_id}</label>
         <div class="col-md-8">
             <input name="content[parent_id]" id="content_parent_id" class="form-control" value="{$content.parent_id}">
+        </div>
+    </div>
+    {/if}
+    {if $form_display_params.position}
+    <div class="form-group">
+        <label for="content_position" class="col-md-4 control-label">Позиція</label>
+        <div class="col-md-8">
+            <input name="content[position]" id="content_position"  class="form-control" value="{$content.position}">
         </div>
     </div>
     {/if}
