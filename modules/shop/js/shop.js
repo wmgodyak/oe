@@ -102,6 +102,16 @@ var Shop = {
                 }
             });
         });
+
+        $(document).on('change', '.sf-chb', function(){
+            var id= $(this).attr('id');
+            id = id.replace('f_', '');
+
+            var url = $('a#fa-' + id).attr('href');
+            if(typeof url == 'undefined') return false;
+            //console.log('change', id, url);
+            self.location.href=url;
+        });
     },
     viewed: function(id)
     {

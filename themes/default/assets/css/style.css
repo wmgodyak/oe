@@ -2239,6 +2239,12 @@ button {
         content: ''; }
       .product-page .aside form .filter-group .toggle-link.toggle-link--active:after {
         transform: translateY(-50%) rotate(180deg); }
+    .product-page .aside form .filter-group.reset {
+      text-align: center;
+      padding: 10px; }
+      .product-page .aside form .filter-group.reset a {
+        line-height: 20px;
+        color: #ee4d4d; }
     .product-page .aside form .filter-group .filter-group__content {
       *zoom: 1;
       padding: 0 4px 15px; }

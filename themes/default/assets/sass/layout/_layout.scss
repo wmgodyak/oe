@@ -560,6 +560,15 @@
             }
           }
         }
+
+        &.reset {
+          text-align: center;
+          padding:10px ;
+          a {
+            line-height: 20px;
+            color: $font-red;
+          }
+        }
         .filter-group__content {
           @include clearfix();
           padding: 0 4px 15px;

@@ -39,6 +39,15 @@ class Features extends Model
               order by abs(fc.position) asc
            ")->all();
 
+        if(empty($items)){
+            $cat_parent_id = self::$db
+                ->select("select parent_id from __content where id='{$categories_id}' limit 1")
+                ->row('parent_id');
+            if($cat_parent_id > 0){
+                return $this->get($cat_parent_id, $products_id, $parent_id);
+            }
+        }
+
         foreach ($items as $k=>$item) {
             switch($item['type']){
                 case 'folder':

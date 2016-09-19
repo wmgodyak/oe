@@ -132,11 +132,11 @@ class Products extends Content
         $maxp = $this->request->get('maxp', 'i');
 
         if($minp > 0 && $maxp > 0) {
-            $this->where("price between '{$minp}' and '{$maxp}'");
+            $this->where("price between {$minp} and {$maxp}");
         } elseif($minp > 0 && $maxp == 0){
-            $this->where(" price > '{$minp}'");
+            $this->where(" price > {$minp}");
         } elseif($minp == 0 && $maxp > 0){
-            $this->where(" price < '{$maxp}'");
+            $this->where(" price < {$maxp}");
         }
 
         // filter features
@@ -172,7 +172,6 @@ class Products extends Content
      */
     public function get()
     {
-
         if( !empty($this->categories_in)){
             $this->join("join __content_relationship cr on cr.content_id=c.id and cr.categories_id in (". implode(',', $this->categories_in) .")");
         } else if($this->categories_id > 0){
@@ -215,11 +214,11 @@ class Products extends Content
 
         $items = self::$db->select("
           select SQL_CALC_FOUND_ROWS c.id, ci.name, ci.title, c.in_stock, c.has_variants, crm.categories_id, ci.description, ci.url,
-           ROUND( CASE
-            WHEN c.currency_id = {$cu_on_site['id']} THEN pp.price
-            WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id = {$cu_main['id']} THEN pp.price * {$cu_on_site['rate']}
-            WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id <> {$cu_main['id']} THEN pp.price / cu.rate * {$cu_on_site['rate']}
-            END, 2 ) as price,
+            CASE
+              WHEN c.currency_id = {$cu_on_site['id']} THEN pp.price
+              WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id = {$cu_main['id']} THEN pp.price * {$cu_on_site['rate']}
+              WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id <> {$cu_main['id']} THEN pp.price / cu.rate * {$cu_on_site['rate']}
+            END as price,
            pp.price as pprice, '{$cu_on_site['symbol']}' as symbol, '{$cu_on_site['code']}' as currency_code {$sel},
            IF(c.in_stock = 1, 1, 0) as available
           from __content c

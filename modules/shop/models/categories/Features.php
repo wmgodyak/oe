@@ -20,6 +20,7 @@ class Features extends \system\models\Features
 {
     private $selected_features = [];
     private $currency;
+    private $original_cat_id = 0;
 
     public function __construct()
     {
@@ -28,6 +29,7 @@ class Features extends \system\models\Features
         $this->currency = new Currency();
     }
 
+
     /**
      * @param $categories_id
      * @return mixed
@@ -35,6 +37,10 @@ class Features extends \system\models\Features
      */
     public function get($categories_id)
     {
+        if($this->original_cat_id == 0){
+            $this->original_cat_id = $categories_id;
+        }
+
         $this->parseGetParams();
         $items =
             self::$db->select("
@@ -45,6 +51,17 @@ class Features extends \system\models\Features
               where fc.content_id='{$categories_id}'
               order by abs(fc.position) asc
            ")->all();
+
+        if(empty($items)){
+
+            $cat_parent_id = self::$db
+                ->select("select parent_id from __content where id='{$categories_id}' limit 1")
+                ->row('parent_id');
+
+            if($cat_parent_id > 0){
+                return $this->get($cat_parent_id);
+            }
+        }
 
         foreach ($items as $k=>$item) {
             if($item['type'] == 'folder'){
@@ -65,6 +82,9 @@ class Features extends \system\models\Features
      */
     private function getValues($feature, $categories_id)
     {
+       if($this->original_cat_id > 0 && $categories_id != $this->original_cat_id){
+           $categories_id = $this->original_cat_id;
+       }
        $items =  self::$db->select("
               select f.id, fi.name, f.code
               from  __features f
@@ -109,6 +129,11 @@ class Features extends \system\models\Features
             $url .= ';filter/' . $f_url;
         }
 
+        if(!empty($_GET)){
+            $qs = http_build_query($_GET);
+            $url .= '?' . $qs;
+        }
+
         return $url;
     }
 
@@ -149,15 +174,44 @@ class Features extends \system\models\Features
               select count(cf.id) as t
               from __content_relationship cr
               join __content_features cf on cf.content_id=cr.content_id and cf.values_id={$values_id}
-              where cr.categories_id={$categories_id}
+              where cr.categories_id='{$categories_id}'
               ")
             ->row('t');
     }
 
+    public function getSubcategoriesId($parent_id)
+    {
+        $in = [];
+
+        $r = self::$db
+            ->select("select id, isfolder from __content where parent_id={$parent_id} and status='published'")
+            ->all();
+
+        foreach ($r as $item) {
+            $in[] = $item['id'];
+            if($item['isfolder']){
+                $in = array_merge($in, $this->getSubcategoriesId($item['id']));
+            }
+        }
+
+        return $in;
+    }
+
     public function getMinMaxPrice($categories_id, $group_id)
     {
+        $isfolder = self::$db->select("select isfolder from __content where id={$categories_id} limit 1")
+            ->row('isfolder');
+
+        $in = [];
+
+        if($isfolder){
+            $in = $this->getSubcategoriesId($categories_id);
+        }
+
         $cu_on_site = $this->currency->getOnSiteMeta();
         $cu_main    = $this->currency->getMainMeta();
+
+        $w = $isfolder && !empty($in) ? "cr.categories_id in (". implode(',', $in) .")" : "cr.categories_id='{$categories_id}'";
 
         return self::$db
             ->select("
@@ -176,7 +230,7 @@ class Features extends \system\models\Features
               join __products_prices pp on pp.content_id=cr.content_id and pp.group_id={$group_id}
               join __content c on c.id=cr.content_id
               join __currency cu on cu.id = c.currency_id
-              where cr.categories_id={$categories_id}
+              where {$w}
               ")
             ->row();
     }
