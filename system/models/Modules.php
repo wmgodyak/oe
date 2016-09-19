@@ -47,7 +47,7 @@ class Modules
 
                 $_module = lcfirst($module);
 
-                if(! Permissions::canModule($_module, 'index')) continue;
+                if($this->mode == 'backend' &&  ! Permissions::canModule($_module, 'index')) continue;
 
 
                 if($this->theme && $this->lang){
