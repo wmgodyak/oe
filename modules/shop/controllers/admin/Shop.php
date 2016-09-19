@@ -10,6 +10,7 @@ namespace modules\shop\controllers\admin;
 use system\core\EventsHandler;
 use system\core\exceptions\Exception;
 use system\Engine;
+use system\models\Permissions;
 
 /**
  * Class shop
@@ -31,7 +32,9 @@ class Shop extends Engine
 
         $this->assignToNav('Категорії', 'module/run/shop/categories', 'fa-shopping-cart', 'module/run/shop');
         $this->assignToNav('Товари', 'module/run/shop/products', 'fa-shopping-cart', 'module/run/shop');
-        $this->assignToNav('Імпорт', 'module/run/shop/import', 'fa-shopping-cart', 'module/run/shop');
+        if(Permissions::canModule('shop', 'import')){
+            $this->assignToNav('Імпорт', 'module/run/shop/import', 'fa-shopping-cart', 'module/run/shop');
+        }
 
         $this->template->assignScript("modules/shop/js/admin/shop.js");
 

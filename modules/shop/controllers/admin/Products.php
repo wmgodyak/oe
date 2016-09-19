@@ -414,7 +414,7 @@ class Products extends Content
         )
         );
 
-        EventsHandler::getInstance()->add('content.main.after', [new Variants(), 'index']);
+//        EventsHandler::getInstance()->add('content.main.after', [new Variants(), 'index']);
         EventsHandler::getInstance()->add('content.main.after', [new Features(), 'index']);
         EventsHandler::getInstance()->add('content.main.after', [new Kits(), 'index']);
 
