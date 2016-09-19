@@ -52,6 +52,8 @@ class Exchange1c extends Front
         $this->config['user'] = $user;
 
         $this->config['owner_id'] = Settings::getInstance()->get('modules.Exchange1c.config.owner_id');
+        $this->config['new_products_cat_id'] = Settings::getInstance()->get('modules.Exchange1c.config.new_products_cat_id');
+        $this->config['new_products_cat_ex_id'] = Settings::getInstance()->get('modules.Exchange1c.config.new_products_cat_ex_id');
 
         // перевірка підтримки zip
         if (class_exists('ZipArchive')) {

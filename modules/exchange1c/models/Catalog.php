@@ -245,6 +245,11 @@ class Catalog extends Model
             $data = []; $info = []; $prices = [];
 
             $category_ex_id = $product[0];
+
+            if((int)$this->config['new_products_cat_id'] > 0){
+                $category_ex_id = $this->config['new_products_cat_ex_id'];
+            }
+
             $ex_id          = $product[1];
 
             $data['sku']         = $product[2];
