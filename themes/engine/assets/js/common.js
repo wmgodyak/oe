@@ -1023,7 +1023,7 @@ engine.admins = {
                             content: d,
                             title: t.admins_group.create_title,
                             autoOpen: true,
-                            width: 750,
+                            width: 900,
                             modal: true,
                             buttons: buttons
                         });
@@ -1061,7 +1061,7 @@ engine.admins = {
                         content: d,
                         title: t.admins_group.action_edit,
                         autoOpen: true,
-                        width: 750,
+                        width: 900,
                         modal: true,
                         buttons: buttons
                     });

@@ -115,18 +115,19 @@ abstract class Engine extends Controller
 
         if(!self::$initialized){
 
+            $controller = $this->request->param('controller');
+            $controller = lcfirst($controller);
+
             Permissions::set(Admin::data('permissions'));
-            if( $controller != 'Admin' && $action != 'login' ) {
-                $namespace = str_replace('controllers\engine\\','', $namespace);
-                if (!Permissions::check($namespace . $controller, $action)) {
-                    $this->permissionDenied();
+            if( ($controller != 'admin' && $action != 'login') && $controller != 'module' ) {
+                if (!Permissions::canComponent($controller, $action)) {
+
+                    Permissions::denied();
                 }
             }
 
             $this->_init();
 
-            $controller = $this->request->param('controller');
-            $controller = lcfirst($controller);
 
             $this->makeCrumbs($this->t($controller . '.action_index'), $controller);
         }
@@ -199,16 +200,6 @@ abstract class Engine extends Controller
         $this->template->assign('admin', Admin::data());
 
     }
-
-    private function permissionDenied()
-    {
-        $this->response->sendError(401);
-        if($this->request->isXhr()){
-            die;
-        }
-        echo $this->template->fetch('permission_denied'); die;
-    }
-
     /**
      * @param $name
      * @param $url
@@ -364,13 +355,14 @@ abstract class Engine extends Controller
             while (false !== ($module = readdir($handle))) {
                 if ($module == "." || $module == ".." || $module == 'content')  continue;
 
+                if(! Permissions::canComponent($module, 'index')) continue;
+
                 $c  = $ns .'\\'. $module . '\controllers\\' . ucfirst($module);
 
                 $path = str_replace("\\", "/", $c);
 
                 if(file_exists(DOCROOT . $path . '.php')) {
 
-//                    $this->assignModuleLang($module);
                     $controller = new $c;
                     $components->{$module} = $controller;
 

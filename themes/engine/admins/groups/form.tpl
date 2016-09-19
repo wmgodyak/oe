@@ -35,20 +35,19 @@
             </div>
         </div>
     </fieldset>
-    {*
     <fieldset id="custom_permissions" style="display: {if $data.permissions.full_access}none{else}block{/if}">
-        <legend>Виберіть доступ до компонентів</legend>
-
+        <legend>Доступ до компонентів</legend>
         {foreach $components as $component=>$a}
             <div class="form-group">
-                <label for="p_{$component}" class="col-md-3 control-label"><a class="gp-toggle-c-actions" data-id="{str_replace('\\','-',$component)}" href="javascript:void('Клік щоб вибрати все');">{$component}</a></label>
-                <div class="col-md-9">
+                <label for="p_{$component}" class="col-md-2 control-label"><a class="gp-toggle-c-actions" data-id="{$component}" href="javascript:void('Клік щоб вибрати все');">{if $t[$component].action_index == ''}{$component}{else}{$t[$component].action_index}{/if}</a></label>
+                <div class="col-md-10">
                     <div class="row">
-                        {foreach array_chunk($a, 3) as $k=>$row}
-                            <div class="col-md-4">
+                        {foreach array_chunk_part($a, 4) as $k=>$row}
+                            <div class="col-md-3">
                                 {foreach $row as $c=> $_action}
                                     <label class="checkbox" style="width: 100%;display: inline-block; ">
-                                        <input {if $data.permissions[$component] && in_array($_action, $data.permissions[$component])}checked{/if} type="checkbox" class="com {str_replace('\\','-',$component)}" id="{$component}_{$_action}" name="permissions[{$component}][]" value="{$_action}"> {$_action}
+                                        <input {if isset($data.permissions['components'][$component]) && in_array($_action, $data.permissions['components'][$component])}checked{/if} name="permissions[components][{$component}][]" value="{$_action}" type="checkbox" class="com {$component}">
+                                        {if $t[$component]["action_`$_action`"] == ''}{$_action}{else}{$t[$component]["action_`$_action`"]}{/if}
                                     </label>
                                 {/foreach}
                             </div>
@@ -58,7 +57,28 @@
             </div>
         {/foreach}
     </fieldset>
-    *}
+    <fieldset id="custom_permissions" style="display: {if $data.permissions.full_access}none{else}block{/if}">
+        <legend>Доступ до модулів</legend>
+        {foreach $modules as $module=>$a}
+            <div class="form-group">
+                <label for="p_{$module}" class="col-md-2 control-label"><a class="gp-toggle-c-actions" data-id="{$module}" href="javascript:void('Клік щоб вибрати все');">{if $t[$module].action_index == ''}{$module}{else}{$t[$module].action_index}{/if}</a></label>
+                <div class="col-md-10">
+                    <div class="row">
+                        {foreach array_chunk_part($a, 4) as $k=>$row}
+                            <div class="col-md-3">
+                                {foreach $row as $c=> $_action}
+                                    <label class="checkbox" style="width: 100%;display: inline-block; ">
+                                        <input {if isset($data.permissions['modules'][$module]) && in_array($_action, $data.permissions['modules'][$module])}checked{/if} name="permissions[modules][{$module}][]" value="{$_action}" type="checkbox" class="com {$module}">
+                                        {if $t[$module]["action_`$_action`"] == ''}{$_action}{else}{$t[$module]["action_`$_action`"]}{/if}
+                                    </label>
+                                {/foreach}
+                            </div>
+                        {/foreach}
+                    </div>
+                </div>
+            </div>
+        {/foreach}
+    </fieldset>
 
     <input type="hidden" name="action" value="{$action}">
     <input type="hidden" name="token" value="{$token}">

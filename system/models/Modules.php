@@ -47,6 +47,9 @@ class Modules
 
                 $_module = lcfirst($module);
 
+                if(! Permissions::canModule($_module, 'index')) continue;
+
+
                 if($this->theme && $this->lang){
                     $this->assignLang($_module);
                 }

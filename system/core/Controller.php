@@ -58,35 +58,6 @@ abstract class Controller {
         $this->storage[$index] = $value;
     }
 
-    /**
-     *	Getter method
-     *	@param string $index
-     *  @return array
-     */
-//    final public function __get($index)
-//    {
-//        return isset($this->storage[$index]) ? $this->storage[$index] : null;
-//    }
-
-    /**
-     * @param $var
-     * @param bool|false $use_var_dump
-     */
-    final public static function dump($var, $use_var_dump = false)
-    {
-        $func = $use_var_dump ? 'var_dump' : 'print_r';
-        echo '<pre>'; $func($var); echo '</pre>';
-    }
-
-    /**
-     * @param $var
-     * @param bool|false $use_var_dump
-     */
-    final public static function dDump($var, $use_var_dump = false)
-    {
-        self::dump($var, $use_var_dump); die;
-    }
-
     public function redirect($uri, $header = null)
     {
         switch($uri){

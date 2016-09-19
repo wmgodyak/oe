@@ -109,7 +109,7 @@ class ContentFeatures extends Model
                     break;
                 case 'select':
                     $selected = self::$db
-                        ->select("select values_id from __content_features where content_id={$content_id} and features_id={$features_id} ")
+                        ->select("select values_id from __content_features where content_id='{$content_id}' and features_id='{$features_id}' ")
                         ->all('values_id');
 
                     if($fdata['multiple']){
@@ -129,18 +129,20 @@ class ContentFeatures extends Model
                             }
                         }
                     } else {
-                        $aid = self::$db
-                            ->select("select id from __content_features where content_id={$content_id} and features_id={$features_id} and values_id={$a} limit 1")
-                            ->row('id');
+                        if(!empty($a)){
+                            $aid = self::$db
+                                ->select("select id from __content_features where content_id='{$content_id}' and features_id='{$features_id}' and values_id='{$a}' limit 1")
+                                ->row('id');
 
-                        if(empty($aid)){
-                            $this->createRow('__content_features', ['content_id' => $content_id, 'features_id' => $features_id, 'values_id' => $a]);
-                        }
+                            if(empty($aid)){
+                                $this->createRow('__content_features', ['content_id' => $content_id, 'features_id' => $features_id, 'values_id' => $a]);
+                            }
 
-                        $c = array_search($a, $selected);
+                            $c = array_search($a, $selected);
 
-                        if($c !== FALSE){
-                            unset($selected[$c]);
+                            if($c !== FALSE){
+                                unset($selected[$c]);
+                            }
                         }
                     }
 

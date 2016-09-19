@@ -11,6 +11,10 @@ namespace helpers;
 
 defined("CPATH") or die();
 
+/**
+ * Class PHPDocReader
+ * @package helpers
+ */
 class PHPDocReader
 {
     public static function getMeta($cls)

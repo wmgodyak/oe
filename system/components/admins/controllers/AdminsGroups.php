@@ -44,53 +44,77 @@ class AdminsGroups extends Engine
         $this->template->assign('data', $this->adminsGroup->getData($id));
         $this->template->assign('info', $this->adminsGroup->getInfo($id));
 
-//        $items = $this->getComponents();
-//        $items += $this->getPlugins();
-//        $this->template->assign('components', $items);
+        $this->template->assign('modules', $this->getModules());
+        $this->template->assign('components', $this->getSystemComponents());
 
         $this->response->body($this->template->fetch('admins/groups/form'));
+    }
+
+    private function getSystemComponents()
+    {
+        $res = [];
+        $dir = 'system/components/';
+        $blc = ['module', 'admin', 'install'];
+        $bla = ['init', '__construct', '__set', 'before', 'redirect'];
+
+        if ($handle = opendir($dir)) {
+            while (false !== ($c = readdir($handle))) {
+                if($c != '.' && $c != '..' && ! in_array($c, $blc)){
+
+                    $cl = ucfirst($c);
+                    $cc = str_replace('/','\\', "{$dir}{$c}/controllers/{$cl}");
+
+//                    echo "{$dir}{$c}/controllers/{$cl}<br>";
+
+                    $class = new \ReflectionClass($cc);
+                    foreach ($class->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
+
+                        if(in_array($method->name, $bla)) continue;
+
+                        $res[$c][] = $method->name;
+                    }
+                }
+            }
+            closedir($handle);
+        }
+        return $res;
+    }
+
+    private function getModules()
+    {
+        $res = [];
+        $dir = 'modules/';
+        $blc = ['module', 'admin', 'install'];
+        $bla = ['init', '__construct', '__set', 'before', 'redirect'];
+
+        if ($handle = opendir($dir)) {
+            while (false !== ($c = readdir($handle))) {
+                if($c != '.' && $c != '..' && ! in_array($c, $blc)){
+
+                    $cl = ucfirst($c);
+
+                    if(!file_exists("{$dir}{$c}/controllers/admin/{$cl}.php")) continue;
+
+                    $cc = str_replace('/','\\', "{$dir}{$c}/controllers/admin/{$cl}");
+
+                    $class = new \ReflectionClass($cc);
+                    foreach ($class->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
+
+                        if(in_array($method->name, $bla)) continue;
+
+                        $res[$c][] = $method->name;
+                    }
+                }
+            }
+            closedir($handle);
+        }
+        return $res;
     }
 
     public function delete($id)
     {
         return $this->adminsGroup->delete($id);
     }
-
-    private function getComponents()
-    {
-        $hide_components = ['DataTables', 'Lang', 'Plugin', 'Content', 'Permissions'];
-        $hide_actions = ['__construct', 'e_404', 'before', 'e404', '__set', '__get', 'dump', 'dDump', 'redirect','process','delete'];
-        $ns = '\controllers\engine\\';
-
-        $items = [];
-        $co = $this->adminsGroup->getComponents();
-        foreach ($co as $k=>$controller) {
-            if(strpos($controller, '/') === FALSE){
-                $controller = ucfirst($controller);
-            } else {
-                $a = explode('/', $controller);
-                $controller = ''; $c = count($a); $c --;
-                foreach ($a as $i=>$v) {
-                    if($i == $c) $v = ucfirst($v);
-                    $controller .=  ($i>0 ? '\\' : '') . "$v";
-                }
-            }
-
-            if(in_array($controller, $hide_components)) continue;
-
-            $class = new \ReflectionClass($ns . $controller);
-            $methods = $class->getMethods(\ReflectionMethod::IS_PUBLIC);
-
-            foreach ($methods as $method) {
-                if(in_array($method->name, $hide_actions)) continue;
-
-                $items[$controller][] = $method->name;
-            }
-        }
-
-        return $items;
-    }
-
 
     /**
      * @param int $id
@@ -111,14 +135,14 @@ class AdminsGroups extends Engine
             case 'create':
                 $s = $this->adminsGroup->create($data, $info);
                 if(! $s){
-                    $i[] = ["data[rang]" => $this->adminsGroup->getErrorCode() .' '. $this->adminsGroup->getErrorMessage()];
+                    $i[] = ["permissions[full_access]" => $this->adminsGroup->getErrorCode() .' '. $this->adminsGroup->getErrorMessage()];
                 }
                 break;
             case 'edit':
                 if( $id > 0 ){
                     $s = $this->adminsGroup->update($id, $data, $info);
                     if(! $s){
-                        $i[] = ["data[rang]" => $this->adminsGroup->getErrorCode() .' '. $this->adminsGroup->getErrorMessage()];
+                        $i[] = ["permissions[full_access]" => $this->adminsGroup->getErrorCode() .' '. $this->adminsGroup->getErrorMessage()];
                     }
                 }
                 break;

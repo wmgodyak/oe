@@ -7,12 +7,15 @@
             <label for="features_{$feature.id}" class="col-md-4 control-label">
                 {$feature.name}
                 {if $feature.type == 'select'}
-                <a class="spf-values-add" style="right: 30px" data-id="{$feature.id}" href="javascript:void(0)" title="Додати значення"><i class="fa fa-plus"></i></a>
+                    <a class="spf-values-add" style="right: 30px" data-id="{$feature.id}" href="javascript:void(0)" title="Додати значення"><i class="fa fa-plus"></i></a>
                 {/if}
             </label>
             <div class="col-md-8">
                 {if $feature.type == 'select'}
                 <select name="products_features[{$feature.id}]{if $feature.multiple}[]{/if}" {if $feature.multiple}multiple{/if} id="products_features_{$feature.id}"  class="form-control">
+                    {if $feature.multiple == 0}
+                        <option value="">виберіть</option>
+                    {/if}
                     {foreach $feature.values as $value}
                         <option {$value.selected} value="{$value.id}">{$value.name}</option>
                     {/foreach}
@@ -24,7 +27,7 @@
                 {elseif $feature.type == 'number'}
                     <input type="text" name="products_features[{$feature.id}]" id="products_features_{$feature.id}"  class="form-control"  value="{$feature.values}" />
                 {elseif $feature.type == 'textarea'}
-                    {foreach $langs as $lang}
+                    {foreach $languages as $lang}
                         <textarea name="products_features[{$feature.id}][{$lang.id}]" placeholder="{$lang.name}" {if $feature.required}required{/if} id="products_features_{$feature.id}_{$lang.id}"  class="form-control" >{$feature.values[$lang.id]}</textarea>
                     {/foreach}
                 {elseif $feature.type == 'file'}

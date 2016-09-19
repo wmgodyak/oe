@@ -26,12 +26,12 @@ class Images extends Model
             ->row();
 
         if(empty($image)) {
-            return "/uploads/noimage.jpg";
+            return "uploads/noimage.jpg";
         }
 
         if(!$size) return $image;
 
-        return $image['path'] . $size .'/'. $image['image'];
+        return APPURL . $image['path'] . $size .'/'. $image['image'];
     }
 
     /**
@@ -57,7 +57,7 @@ class Images extends Model
         if(!$size) return $items;
 
         foreach ($items as $k=>$item) {
-            $items[$k]['src'] = $item['path'] . $size . '/' . $item['image'];
+            $items[$k]['src'] = APPURL . $item['path'] . $size . '/' . $item['image'];
         }
 
         return $items;

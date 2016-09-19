@@ -160,7 +160,7 @@ class Features extends Model
               left join __features_content fc on fc.content_id={$categories_id} and fc.features_id=f.id
               join __features_info fi on fi.features_id=f.id and fi.languages_id={$this->languages_id}
               where f.parent_id = 0
-               and f.type in ('select', 'folder')
+              -- and f.type in ('select', 'folder')
                and f.status='published'
               order by abs(fc.position) asc
            ")->all();
