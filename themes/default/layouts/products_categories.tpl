@@ -38,7 +38,7 @@
                 <!-- end product-page__top-line -->
                 {include file="modules/shop/subnav.tpl"}
                 {assign var='products' value= $mod->shop->products($page.id)}
-                {assign var='total' value= $mod->shop->foundTotal()}
+                {*{assign var='total' value= $mod->shop->foundTotal()}*}
                 <!-- begin product__list -->
                 <div class="product__list {if $smarty.session.display_mode !=''}{$smarty.session.display_mode}{/if}">
                     {if $products|count}

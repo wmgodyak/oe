@@ -56,20 +56,20 @@ class ShopActions extends Content
         }
     }
 
-    public function index($parent_id=0)
+    public function index()
     {
         $this->appendToPanel
         (
             (string)Link::create
             (
                 $this->t('common.button_create'),
-                ['class' => 'btn-md btn-primary', 'href'=> 'module/run/shopActions/create' . ($parent_id? "/$parent_id" : '')]
+                ['class' => 'btn-md btn-primary', 'href'=> 'module/run/shopActions/create']
             )
         );
 
         $t = new DataTables2('content');
 
-        $t  -> ajax('module/run/shopActions/index/' . $parent_id)
+        $t  -> ajax('module/run/shopActions/index')
             -> orderDef(0, 'desc')
             -> th($this->t('common.id'), 'c.id', 1, 1, 'width: 60px')
             -> th($this->t('common.name'), 'ci.name', 1, 1)
@@ -78,19 +78,17 @@ class ShopActions extends Content
             -> th($this->t('common.tbl_func'), null, 0, 0, 'width: 180px')
         ;
 
-        $t->get('ci.url',null,null,null);
-        $t->get('c.status',null,null,null);
+        $t->get('ci.url', null, null, null);
+        $t->get('img.meta_v as image', null, null, null);
+        $t->get('c.status', null, null, null);
 
 
         if($this->request->isXhr()){
             $t  -> from('__content c')
                 -> join("__content_types ct on ct.type = '{$this->type}' and ct.id=c.types_id")
                 -> join("__content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}")
+                -> join("__content_meta img on img.content_id=c.id and img.meta_k='image_{$this->languages_id}'", 'left')
                 -> where("c.status in ('published', 'hidden')");
-
-            if($parent_id > 0){
-                $t->join("__content_relationship cr on cr.content_id=c.id and cr.categories_id={$parent_id}");
-            }
 
             $t-> execute();
 
@@ -101,6 +99,7 @@ class ShopActions extends Content
                 $status = $this->t($this->type .'.status_' . $row['status']);
                 $res[$i][] = $row['id'];
                 $res[$i][] =
+                    "<img src='{$row['image']}' style='max-height: 60px; max-width: 100px; float: left; margin-right: 1em;'>".
                     " <a class='status-{$row['status']}' title='{$status}' href='module/run/shopActions/edit/{$row['id']}'>{$row['name']}</a>"
                     . " <a href='/{$row['url']}' target='_blank'>{$icon_link}</a>"
                 ;

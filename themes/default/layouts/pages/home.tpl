@@ -13,14 +13,12 @@
 
     <!-- begin main -->
     <main class="main">
-
         <!-- begin container -->
         <div class="container clearfix">
             {include file="modules/shop/nav.tpl"}
-            {include file="modules/banners/home.tpl"}
+            {include file="modules/shopActions/home_banners.tpl"}
         </div>
         <!-- end container -->
-
     </main>
     <!-- end main -->
 

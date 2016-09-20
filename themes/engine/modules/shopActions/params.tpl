@@ -1,8 +1,8 @@
 <div class="form-group">
     <div class="col-md-12">
-        <label for="meta_rel" class="">
-            <input type="hidden" name="content_meta[rel]" value="0">
-            <input class="switch" type="checkbox" name="content_meta[rel]" id="meta_rel" value="1" {if $app->contentMeta->get($content.id, 'rel', true) == 1}checked{/if} >
+        <label for="meta_clickable" class="">
+            <input type="hidden" name="content_meta[clickable]" value="0">
+            <input class="switch" type="checkbox" name="content_meta[clickable]" id="meta_clickable" value="1" {if $app->contentMeta->get($content.id, 'clickable', true) == 1}checked{/if} >
             <span class="l-check">Клікабельний банер</span>
         </label>
     </div>

@@ -307,6 +307,11 @@
       background-position: center;
       background-size: cover;
 
+      a {
+        display: block;
+        width:100%;
+        height:330px;
+      }
     }
   }
   .owl-nav {
@@ -1585,6 +1590,55 @@
   &.autocomplete-selected {
     a {
       color: $font-red;
+    }
+  }
+}
+.action-content{
+  padding-bottom: 15px;
+  border-bottom: 1px solid #e9ebee;
+}
+.m_actions_countdown {
+  margin-bottom: 15px;
+  border-bottom: 1px solid #e9ebee;
+  padding-bottom: 15px;
+  margin-top: 15px;
+  .title{
+    font-size:16px;
+    display: table;
+    //float: left;
+    //width:35%;
+    margin-bottom: 15px;
+
+    span {
+      font-size:18px;
+      display: block;
+      font-weight:bold;
+    }
+  }
+  .timer div {
+    margin-bottom: 15px;
+    display: inline-block;
+    line-height: 23px;
+    text-align: center;
+
+    height: 47px;
+    width: 47px;
+    font-size: 21px;
+    background: #f04d4d;
+    color: #fff;
+    border:2px solid transparent;
+    &:first-child {
+      background: transparent;
+      color: #f04d4d;
+      border-color: #f04d4d;
+    }
+    span {
+      font-size: 12px;
+      color: white;
+      display: block;
+    }
+    &:first-child span {
+      color: #f04d4d;
     }
   }
 }
