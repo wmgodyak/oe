@@ -29,6 +29,16 @@ class Features extends \system\models\Features
         ";
         $features = self::$db->select($q)->all();
 
+        if(empty($features)){
+            $cat_parent_id = self::$db
+                ->select("select parent_id from __content where id='{$categories_id}' limit 1")
+                ->row('parent_id');
+
+            if($cat_parent_id > 0){
+                return $this->get($cat_parent_id, $products_id, $parent_id);
+            }
+        }
+
         // витягнути значення для них відносно товару
         foreach ($features as $k=>$feature) {
             switch($feature['type']){
