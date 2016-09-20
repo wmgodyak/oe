@@ -63,7 +63,7 @@ class ContentMeta extends Model
         }
 
         if($meta_k){
-            return self::$db->delete("__content_meta", "content_id='{$content_id} and meta_k='{$meta_k}' ");
+            return self::$db->delete("__content_meta", "content_id='{$content_id}' and meta_k='{$meta_k}' ");
         }
 
         return self::$db->delete("__content_meta", "content_id='{$content_id}");

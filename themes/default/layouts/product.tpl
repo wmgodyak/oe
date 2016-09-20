@@ -55,7 +55,7 @@
                         {if $app->contentMeta->get($product.id, 'hit', true) == 1}<span class="m_hit" title="Хіт продажів"></span>{/if}
                         {*{if $app->contentMeta->get($item.id, 'bestseller', true) == 1}<span title="Супер ціна" class="m_special-offer"></span>{/if}*}
                         {if $app->contentMeta->get($product.id, 'bestseller', true) == 1}<span title="Супер ціна" class="m_bestseller"></span>{/if}
-
+                        {if $app->contentMeta->get($product.id, 'sa_action', true) == 1}<span class="m_sa_action" title="Акція"></span>{/if}
                     </div>
 
                     {if $product.images|count > 1}
@@ -95,7 +95,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        {if $product.has_variants && $product.in_stock == 1}
+                        {* if $product.has_variants && $product.in_stock == 1}
                             <table>
                                 <tr>
                                     <th>Виб.</th>
@@ -113,8 +113,8 @@
                                 {/foreach}
                             </table>
                             {*<pre>{print_r($product.variants)}</pre>*}
-                            {*{else}*}
-                        {/if}
+                            {*{else}* }
+                        {/if *}
 
                         {if $product.in_stock == 1}
                             <div class="bnt-row">

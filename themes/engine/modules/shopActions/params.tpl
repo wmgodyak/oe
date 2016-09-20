@@ -61,22 +61,23 @@
     <label for="meta_place" class="col-md-4 control-label">Показувати на головній:</label>
     <div class="col-md-8">
         <select name="content_meta[place]" id="meta_place"  class="form-control">
-            <option value="none" {if $app->contentMeta->get($content.id, 'place', true) == 'none'}selected{/if}>Не показувати</option>
-            <option value="top"  {if $app->contentMeta->get($content.id, 'place', true) == 'top'}selected{/if}>Слайдер</option>
+            <option value="none"   {if $app->contentMeta->get($content.id, 'place', true) == 'none'}selected{/if}>Не показувати</option>
+            <option value="top"    {if $app->contentMeta->get($content.id, 'place', true) == 'top'}selected{/if}>Слайдер</option>
             <option value="bottom" {if $app->contentMeta->get($content.id, 'place', true) == 'bottom'}selected{/if}>Два блоки</option>
         </select>
     </div>
 </div>
 <div class="form-group">
-    <label for="sa_categories" class="col-md-4 control-label">Привязка до категорій: <a href="javascript:void(0);" class="sa-b-add-cat" title="Додати категорії"><i class="fa fa-plus-circle"></i></a></label>
+    <label for="sa_categories" class="col-md-4 control-label">Категорії: <a href="javascript:void(0);" class="sa-b-add-cat" title="Додати категорії"><i class="fa fa-plus-circle"></i></a></label>
     <div class="col-md-8">
         <p id="sa_categories_cnt"></p>
     </div>
 </div>
 <div class="form-group">
-    <label for="sa_products" class="col-md-4 control-label">Привязка до товарів:</label>
-    <div class="col-md-8">
+    <div class="col-md-12">
+        <p>Або виберіть товари:</p>
         <select id="sa_products" class="form-control no-s2"></select>
+        <br>
     </div>
     <div id="sa_products_cnt"></div>
 </div>

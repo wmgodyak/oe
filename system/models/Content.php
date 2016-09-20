@@ -439,4 +439,20 @@ class Content extends Model
           order by abs(c.position) asc
           ")->all();
     }
+
+    public function getSubcategoriesId($parent_id)
+    {
+        $in = [];
+
+        $r = self::$db->select("select id, isfolder from __content where parent_id={$parent_id} and status='published'")->all();
+
+        foreach ($r as $item) {
+            $in[] = $item['id'];
+            if($item['isfolder']){
+                $in = array_merge($in, $this->getSubcategoriesId($item['id']));
+            }
+        }
+
+        return $in;
+    }
 }

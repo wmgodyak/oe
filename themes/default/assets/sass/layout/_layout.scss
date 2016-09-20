@@ -775,6 +775,30 @@
     }
   }
 }
+.old-actions{
+  h2{
+    font-size:24px;
+    line-height:30px;
+  }
+  .item{
+    width:50%;
+    float: left;
+    a {
+      font: 16px $fontRegular;
+      color: $font-dark-grey;
+      display: inline-block;
+      padding:4px;
+      transition: all 0.35s ease;
+      &:hover{
+        color:$font-red;
+      }
+    }
+    img {
+      max-width:100%;
+      width:100%;
+    }
+  }
+}
 .single-product-page {
   .m_breadcrumbs {
     @include respond-to(xs) {

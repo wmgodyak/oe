@@ -32,14 +32,13 @@
                     {$events->call('layouts.actions.content')}
                 </div>
 
-                {assign var='products' value= $mod->shopActions->products(36918)}
-                {*{print_r($products)}*}
-                <!-- begin product__list -->
-                <div class="actions-products">
-                    <div style="clear: both;"><br></div>
-                    <h2>Акційні товари</h2>
-                    <div class="product__list {if $smarty.session.display_mode !=''}{$smarty.session.display_mode}{/if}">
-                        {if $products|count}
+                {assign var='products' value= $mod->shopActions->products($page.id)}
+                {if $products|count}
+                    <!-- begin product__list -->
+                    <div class="actions-products">
+                        <div style="clear: both;"><br></div>
+                        <h2>Акційні товари</h2>
+                        <div class="product__list {if $smarty.session.display_mode !=''}{$smarty.session.display_mode}{/if}">
                             {assign var='products' value= array_chunk($products, 3)}
                             {foreach $products as $k=> $row}
                                 <div class="row clearfix">
@@ -48,13 +47,29 @@
                                     {/foreach}
                                 </div>
                             {/foreach}
-                        {/if}
+                        </div>
                     </div>
-                </div>
+                    <!-- end product__list -->
+                    {$mod->shopActions->productsPagination()}
+                    <div class="clearfix"><br></div>
+                {/if}
 
-                <!-- end product__list -->
-
-                {$mod->shop->pagination()}
+                {assign var='old_actions' value=$mod->shopActions->old($page.id, 4)}
+                {if $old_actions|count}
+                    <div class="old-actions">
+                        <h2>Інші акції</h2>
+                        {foreach $old_actions as $a}
+                            <div class="item">
+                                <div class="title"><a href="{$a.url}">{$a.name}</a></div>
+                                {if $a.image != ''}
+                                <div class="img"><a href="{$a.url}"><img src="{$a.image}" alt=""></a></div>
+                                {/if}
+                            </div>
+                        {/foreach}
+                    </div>
+                    <div class="clearfix" style="clear: both;"><br></div>
+                    <div class="clearfix" style="clear: both;"><br></div>
+                {/if}
             </div>
             <!-- end article-page__content -->
             {include file="chunks/sidebar.tpl"}

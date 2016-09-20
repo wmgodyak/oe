@@ -50,6 +50,7 @@
                    {if $item.new} <span class="m_novelty"></span>{/if}
                    {if $app->contentMeta->get($item.id, 'bestseller', true) == 1}<span title="Супер ціна" class="m_bestseller"></span>{/if}
                    {if $app->contentMeta->get($item.id, 'hit', true) == 1}<span class="m_hit" title="Хіт продажів"></span>{/if}
+                   {if $app->contentMeta->get($item.id, 'sa_action', true) == 1}<span class="m_sa_action" title="Акція"></span>{/if}
                    {*{if $app->contentMeta->get($item.id, 'bestseller', true) == 1}<span title="Супер ціна" class="m_special-offer"></span>{/if}*}
                </span>
            {/if}

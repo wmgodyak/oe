@@ -27,7 +27,7 @@
 
         <div class="container">
 
-            {include file="modules/shop/widgets/actions.tpl"}
+            {include file="modules/shopActions/widget.tpl"}
             {include file="modules/shop/widgets/new.tpl"}
 
             {include file="modules/shop/widgets/viewed.tpl"}

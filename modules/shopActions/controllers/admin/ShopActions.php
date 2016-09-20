@@ -175,11 +175,19 @@ class ShopActions extends Content
     {
         $a = parent::process($id, false);
 
-        if($a['s']){
+        if($a['s']) {
             $a['m'] = sprintf($this->t('shopActions.update_success'), "module/run/shopActions", "module/run/shopActions/create");
+            $this->markProducts($id);
         }
 
         $this->response->body($a)->asJSON();
+    }
+
+    private function markProducts($actions_id)
+    {
+        $content = $this->request->post('content');
+        $action = $content['status'] == 'published' ? 1 : 0;
+        $this->shopActions->markProducts($actions_id, $action);
     }
 
     public function selectCategories($content_id)
