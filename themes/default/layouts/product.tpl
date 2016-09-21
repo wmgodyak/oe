@@ -175,7 +175,7 @@
                                         <div class="wrap">
                                             <span>{$t.shop.product.description}:</span>
                                             {foreach $product.features as $n=>$item}
-                                                {if $item.type != 'file' && $item.type != 'textarea'}
+                                                {if $item.type != 'file' && ( ($item.values|count) || !empty($item.value) )}
                                                     {$item.name}:
                                                     {if $item.values|count}
                                                         {foreach $item.values as $i=>$v}
@@ -184,7 +184,7 @@
                                                     {elseif $item.value != ''}
                                                         {$item.value}
                                                     {/if}
-                                                    {if isset($product.features[$n + 1])}/{/if}
+                                                    {if isset($product.features[$n + 1]) && ((isset($product.features[$n + 1].value) && $product.features[$n + 1].value != '') || isset($product.features[$n + 1].values) && $product.features[$n + 1].values != '')}/{/if}
                                                 {/if}
                                             {/foreach}
                                         </div>
@@ -202,14 +202,14 @@
                 <div class="item-info-tabs">
                     <div class="info-tabs__top">
                         <ul>
+                            <li class="active">
+                                <a href="javascript:;">{$t.shop.product.tab_features}</a>
+                            </li>
                             {if $product.content != ''}
-                                <li class="active">
+                                <li >
                                     <a href="javascript:;">{$t.shop.product.tab_description}</a>
                                 </li>
                             {/if}
-                            <li{if $product.content == ''} class="active"{/if}>
-                                <a href="javascript:;">{$t.shop.product.tab_features}</a>
-                            </li>
                             <li>
                                 <a href="javascript:;">{$t.shop.product.tab_comments} ({$commentsTotal*1})</a>
                             </li>
@@ -219,20 +219,14 @@
                         </ul>
                     </div>
                     <div class="info-tabs__main">
-                        {if $product.content != ''}
-                            <div class="tab active tab1 cms-content clearfix">
-                                {$product.content}
-                                {$events->call('shop.product.content', $product)}
-                                {*{include file="modules/shop/product_preferences.tpl"}*}
-                            </div>
-                        {/if}
-                        <div class="tab tab2 cms-content">
+                        <div class="tab tab2 active cms-content">
                             {*<pre>{print_r($product.features)}</pre>*}
                             <div class="sp-features">
                                 {assign var='features' value=array_chunk($product.features, 4)}
                                 {foreach $features as $a}
                                     <ul>
                                         {foreach $a as $i=>$item}
+                                            {if $item.values|count || $item.value != ''}
                                             <li {if $i == 0}class="first"{/if}>
                                                 <span>{$item.name}</span>
                                                 <b>
@@ -249,15 +243,25 @@
                                                     {/if}
                                                 </b>
                                             </li>
+                                            {/if}
                                         {/foreach}
                                     </ul>
                                 {/foreach}
                             </div>
                         </div>
+
+                        {if $product.content != ''}
+                            <div class="tab  tab1 cms-content clearfix">
+                                {$product.content}
+                                {$events->call('shop.product.content', $product)}
+                                {*{include file="modules/shop/product_preferences.tpl"}*}
+                            </div>
+                        {/if}
                         <div class="tab tab3 cms-content">
                             <div class="sp-comments">{$mod->comments->display($product.id)}</div>
                         </div>
                         <div class="tab tab4 cms-content">
+                            <p></p>
                             {assign var ='video_1' value=$app->contentMeta->get($product.id, 'video_1', true)}
                             {assign var ='video_2' value=$app->contentMeta->get($product.id, 'video_2', true)}
                             {assign var ='video_3' value=$app->contentMeta->get($product.id, 'video_3', true)}
@@ -275,8 +279,6 @@
                 </div>
                 {include file="modules/shop/kits.tpl"}
                 <div class="clear" style="height: 50px;"></div>
-                {include file="modules/shop/widgets/accessories.tpl"}
-                {include file="modules/shop/widgets/viewed.tpl"}
             </div>
         </div>
 
@@ -295,7 +297,12 @@
         <!-- end asider -->
     </div>
     <!-- end article-page -->
-
+    <div class="container">
+        {include file="modules/shop/widgets/accessories.tpl"}
+        {include file="modules/shop/widgets/viewed.tpl"}
+        <div><br></div>
+        <div><br></div>
+    </div>
 </div>
 {$events->call('shop.product.footer', $product)}
 <!-- end wrapper -->

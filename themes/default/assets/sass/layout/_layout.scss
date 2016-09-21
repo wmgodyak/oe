@@ -689,6 +689,7 @@
     }
     .row {
       .product__item {
+        border:1px solid transparent;
         @include span(3 of 9);
         padding: 10px 15px 10px;
         @include respond-to(sm) {
@@ -700,7 +701,7 @@
           padding-right: 0;
         }
         &:first-of-type {
-          padding-left: 0;
+          //padding-left: 0;
           @include respond-to(sm) {
             padding-left: 15px;
           }
@@ -723,6 +724,9 @@
             top: 5px;
             left: 11px;
           }
+        }
+        &:hover{
+          border-color: $bg-red;
         }
       }
     }

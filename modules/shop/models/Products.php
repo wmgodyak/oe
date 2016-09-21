@@ -226,9 +226,9 @@ class Products extends Content
           join __products_prices pp on pp.content_id=c.id and pp.group_id={$this->group_id}
           {$j}
           join __currency cu on cu.id = c.currency_id
-          join __content_types ct on ct.type = '{$this->type}' and ct.id=c.types_id
+          -- join __content_types ct on ct.type = '{$this->type}' and ct.id=c.types_id
           join __content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
-          where c.status ='published' {$w}
+          where c.types_id = 23 and c.status ='published' {$w}
           {$ob}
           limit {$this->start}, {$this->num}
           ", $this->debug)->all();
@@ -239,6 +239,77 @@ class Products extends Content
 
         $this->total = self::$db->select('SELECT FOUND_ROWS() as t')->row('t');
         $this->clearQuery();
+        return $items;
+    }
+
+    public function hits($start, $num)
+    {
+        if(empty($this->currency_id)){
+            $cu_on_site = $this->currency->getOnSiteMeta();
+        } else {
+            $cu_on_site = $this->currency->getMeta($this->currency_id);
+        }
+
+        $cu_main = $this->currency->getMainMeta();
+
+        $items = self::$db->select("
+          select c.id, ci.name, ci.title, c.in_stock, c.has_variants, crm.categories_id, ci.description, ci.url,
+            CASE
+              WHEN c.currency_id = {$cu_on_site['id']} THEN pp.price
+              WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id = {$cu_main['id']} THEN pp.price * {$cu_on_site['rate']}
+              WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id <> {$cu_main['id']} THEN pp.price / cu.rate * {$cu_on_site['rate']}
+            END as price,
+           pp.price as pprice, '{$cu_on_site['symbol']}' as symbol, '{$cu_on_site['code']}' as currency_code ,
+           IF(c.in_stock = 1, 1, 0) as available
+          from __content_meta cm
+          join __content c on c.types_id=23 and c.status ='published' and c.in_stock=1
+          join __content_relationship crm on crm.content_id=c.id and crm.is_main = 1
+          join __products_prices pp on pp.content_id=c.id and pp.group_id={$this->group_id}
+          join __currency cu on cu.id = c.currency_id
+          join __content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
+          where cm.meta_k='hit' and cm.meta_v = 1
+          limit {$start}, {$num}
+          ", $this->debug)->all();
+
+        foreach ($items as $k=>$item) {
+            $items[$k]['price'] = ceil($item['price']);
+        }
+
+        return $items;
+    }
+
+    public function last($start, $num = 30)
+    {
+        if(empty($this->currency_id)){
+            $cu_on_site = $this->currency->getOnSiteMeta();
+        } else {
+            $cu_on_site = $this->currency->getMeta($this->currency_id);
+        }
+
+        $cu_main = $this->currency->getMainMeta();
+
+        $items = self::$db->select("
+          select c.id, ci.name, ci.title, c.in_stock, c.has_variants, crm.categories_id, ci.description, ci.url,
+            CASE
+              WHEN c.currency_id = {$cu_on_site['id']} THEN pp.price
+              WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id = {$cu_main['id']} THEN pp.price * {$cu_on_site['rate']}
+              WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id <> {$cu_main['id']} THEN pp.price / cu.rate * {$cu_on_site['rate']}
+            END as price,
+           pp.price as pprice, '{$cu_on_site['symbol']}' as symbol, '{$cu_on_site['code']}' as currency_code ,
+           IF(c.in_stock = 1, 1, 0) as available
+          from __content c
+          join __content_relationship crm on crm.content_id=c.id and crm.is_main = 1
+          join __products_prices pp on pp.content_id=c.id and pp.group_id={$this->group_id}
+          join __currency cu on cu.id = c.currency_id
+          join __content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
+          where c.types_id=23 and c.status ='published' and c.in_stock=1
+          limit {$start}, {$num}
+          ", $this->debug)->all();
+
+        foreach ($items as $k=>$item) {
+            $items[$k]['price'] = ceil($item['price']);
+        }
+
         return $items;
     }
 

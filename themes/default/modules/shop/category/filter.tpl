@@ -23,27 +23,33 @@
     </div>
     {*<pre>{print_r($filter.prices)}</pre>*}
     {foreach $filter.features as $feature}
-    <div class="filter-group">
-        <a class="toggle-link" href="#">
-            {$feature.name}
-        </a>
-        <div class="filter-group__content">
-            <div class="input-group">
-                {foreach $feature.values as $val}
-                <div class="row">
-                    <input id="f_{$val.id}" class="sf-chb" {if $val.active}checked{/if} type="checkbox">
-                    <label for="f_{$val.id}" {if $val.active}class="active"{/if}>
-                        {if $val.total > 0}
-                        <a href="{$val.url}" id="fa-{$val.id}">{$val.name} ({$val.total})</a>
-                            {else}
-                            {$val.name} ({$val.total})
-                        {/if}
-                    </label>
+        {assign var='display_feature' value="0"}
+        {foreach $feature.values as $val}{if $val.total > 0}{$display_feature = 1}{break}{/if}{/foreach}
+        {if $display_feature}
+            <div class="filter-group">
+                <a class="toggle-link" href="javascript:;">
+                    {$feature.name}
+                </a>
+                <div class="filter-group__content">
+                    <div class="input-group">
+                        {foreach $feature.values as $val}
+                            {if $val.total > 0}
+                        <div class="row">
+                            <input id="f_{$val.id}" class="sf-chb" {if $val.active}checked{/if} type="checkbox">
+                            <label for="f_{$val.id}" {if $val.active}class="active"{/if}>
+                                {if $val.total > 0}
+                                <a href="{$val.url}" id="fa-{$val.id}">{$val.name} ({$val.total})</a>
+                                    {else}
+                                    {$val.name} ({$val.total})
+                                {/if}
+                            </label>
+                        </div>
+                            {/if}
+                        {/foreach}
+                    </div>
                 </div>
-                {/foreach}
             </div>
-        </div>
-    </div>
+        {/if}
     {/foreach}
     {if $filter.enabled}
     <div class="filter-group reset">

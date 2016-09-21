@@ -23,11 +23,14 @@
             <div class="article-page__content" style="width: 100%;">
                 <h1>{$page.name}</h1>
                 <div class="comparison">
-                    {assign var='products' value=$mod->shop->comparison->getProducts({$smarty.get.cat})}
-                    {if $products|count}
+                    {assign var='categories' value=$mod->shop->comparison->getCategories()}
+                    {assign var='category_id' value=$smarty.get.cat}
+                    {if $category_id == '' && isset($categories[0])}{assign var='category_id' value=$categories[0].id}{/if}
+                    {assign var='products' value=$mod->shop->comparison->getProducts({$category_id})}
+                    {if $categories|count && $products|count}
                         <div class="categories">
                             Категорії:
-                            {foreach $mod->shop->comparison->getCategories() as $cat}
+                            {foreach $categories as $cat}
                                 <a href="15;?cat={$cat.id}" {if $cat.id == $smarty.get.cat}class="active"{/if} title="{$cat.title}">{$cat.name}</a>
                             {/foreach}
                         </div>

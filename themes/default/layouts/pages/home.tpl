@@ -26,9 +26,9 @@
     <div class="main-goods">
 
         <div class="container">
-
-            {include file="modules/shopActions/widget.tpl"}
-            {include file="modules/shop/widgets/new.tpl"}
+            {include file="modules/shop/widgets/hits.tpl"}
+            {include file="modules/shop/widgets/last.tpl"}
+            {*{include file="modules/shopActions/widget.tpl"}*}
 
             {include file="modules/shop/widgets/viewed.tpl"}
 

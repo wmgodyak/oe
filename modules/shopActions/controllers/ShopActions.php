@@ -63,7 +63,7 @@ class ShopActions extends Front
         }
 
         if(!empty($url)) {
-            
+
             $v = $this->actions->meta->get($id, 'views', true);
             $this->actions->meta->update($id, 'views', ++ $v);
             $this->redirect($url);

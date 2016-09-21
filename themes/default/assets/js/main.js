@@ -70,7 +70,7 @@ var App = {
                     console.log(i);
                     i++;
                 } while (clickImageSrc != currentSrc);
-                console.log(imageLinks);
+                //console.log(imageLinks);
 
                 $.fancybox.open(imageLinks, {
                     autoDimision: true,
@@ -83,7 +83,8 @@ var App = {
                             css: {
                                 'background' : 'rgba(0, 0, 0, 0.8)'
                             }
-                        }
+                        },
+                        buttons	: {}
                     }
                 });
             });
@@ -333,6 +334,7 @@ var App = {
             itemHover();
 
             function autoHeight(items){
+                //return;
                 var maxHeight, heights;
                 heights = items.map(function () {
                     return $(this).innerHeight();

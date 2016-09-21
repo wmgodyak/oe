@@ -42,4 +42,5 @@ class Categories extends Content
 
         return $items;
     }
+
 }

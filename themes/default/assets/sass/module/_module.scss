@@ -1141,7 +1141,7 @@
   }
   .product-item__name{
     display: block;
-    height:60px;
+    height:53px;
     overflow: hidden;
     padding: 15px 0 0;
     font-family: $fontMedium;
@@ -1257,6 +1257,7 @@
         &:hover{
           color: $font-red;
         }
+        &.all{ color:#333; }
       }
       &:first-child{
         a{

@@ -199,36 +199,26 @@ class Shop extends Front
     /**
      * @return mixed
      */
-    public function actionsProducts()
+    public function lastProducts()
     {
-        $this->products->start = 0;
-        $this->products->num   = 30;
-        $this->products->clearQuery();
-        $this->products->join("join __content_relationship cra on cra.content_id=c.id and cra.is_main=1");
-        $this->products->where(" c.in_stock=1");
-        $products = $this->products->get();
-
+        $products = $this->products->last(0);
         foreach ($products as $k=>$product) {
-            $products[$k]['categories_id'] = $this->relations->getMainCategoriesId($product['id']);
+//            $products[$k]['categories_id']   = $this->relations->getMainCategoriesId($product['id']);
             $products[$k]['bonus'] = round($products[$k]['price'] * $this->bonus_rate, 2);
         }
 
         return $products;
     }
-
     /**
      * @return mixed
      */
-    public function lastProducts()
+    public function hits()
     {
-        $this->products->start = 0;
-        $this->products->num   = 30;
-        $this->products->clearQuery();
-        $this->products->where(" c.in_stock=1");
-        $products = $this->products->get();
+//        $this->products->debug();
+        $products = $this->products->hits(0, 30);
 
         foreach ($products as $k=>$product) {
-            $products[$k]['categories_id']   = $this->relations->getMainCategoriesId($product['id']);
+//            $products[$k]['categories_id']   = $this->relations->getMainCategoriesId($product['id']);
             $products[$k]['bonus'] = round($products[$k]['price'] * $this->bonus_rate, 2);
         }
 
