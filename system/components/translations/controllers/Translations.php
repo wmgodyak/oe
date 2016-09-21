@@ -69,7 +69,7 @@ class Translations extends Engine
         $this->template->assign('front', $this->languages->getDefault('code'));
         $this->template->assign('com_url', APPURL . 'engine/translations');
 
-        $this->output($this->template->fetch('translations/index'));
+        $this->output($this->template->fetch('system/translations/index'));
     }
 
     public function create()

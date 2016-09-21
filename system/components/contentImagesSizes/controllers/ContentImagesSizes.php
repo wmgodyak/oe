@@ -99,7 +99,7 @@ class ContentImagesSizes extends Engine
         $this->template->assign('types',$this->contentImagesSizes->getContentTypes(0));
         $this->template->assign('data', ['types' => []]);
         $this->template->assign('action', 'create');
-        $this->response->body($this->template->fetch('content/images/sizes/edit'))->asHtml();
+        $this->response->body($this->template->fetch('system/content/images/sizes/edit'))->asHtml();
     }
 
     public function edit($id)
@@ -107,7 +107,7 @@ class ContentImagesSizes extends Engine
         $this->template->assign('types',$this->contentImagesSizes->getContentTypes(0));
         $this->template->assign('data', $this->contentImagesSizes->getData($id));
         $this->template->assign('action', 'edit');
-        $this->response->body($this->template->fetch('content/images/sizes/edit'))->asHtml();
+        $this->response->body($this->template->fetch('system/content/images/sizes/edit'))->asHtml();
     }
 
     public function process($id= null)

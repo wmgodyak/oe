@@ -33,7 +33,7 @@ class AdminsGroups extends Engine
 //        $items = $this->getComponents();
 //        $items += $this->getPlugins();
 //        $this->template->assign('components', $items);
-        $this->response->body($this->template->fetch('admins/groups/form'));
+        $this->response->body($this->template->fetch('system/admins/groups/form'));
     }
 
     public function edit($id)
@@ -47,7 +47,7 @@ class AdminsGroups extends Engine
         $this->template->assign('modules', $this->getModules());
         $this->template->assign('components', $this->getSystemComponents());
 
-        $this->response->body($this->template->fetch('admins/groups/form'));
+        $this->response->body($this->template->fetch('system/admins/groups/form'));
     }
 
     private function getSystemComponents()

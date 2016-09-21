@@ -161,7 +161,7 @@ class Admin extends Engine {
         $this->template->assign('s_lang', $lang);
         $this->template->assign('langs', $langs);
 
-        $this->response->body($this->template->fetch('admin/login'));
+        $this->response->body($this->template->fetch('system/admin/login'));
     }
 
     /**
@@ -278,7 +278,7 @@ class Admin extends Engine {
         }
 
         $this->template->assign('ui', self::data());
-        $this->response->body($this->template->fetch('admin/edit_profile'))->render();
+        $this->response->body($this->template->fetch('system/admin/edit_profile'))->render();
     }
     public function index()
     {

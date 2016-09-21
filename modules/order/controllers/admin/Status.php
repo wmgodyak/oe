@@ -96,14 +96,14 @@ class Status extends Engine
     public function create()
     {
         $this->template->assign('action', 'create');
-        $this->response->body($this->template->fetch('orders/status/edit'))->asHtml();
+        $this->response->body($this->template->fetch('modules/orders/status/edit'))->asHtml();
     }
 
     public function edit($id)
     {
         $this->template->assign('data', $this->ordersStatus->getData($id));
         $this->template->assign('action', 'edit');
-        $this->response->body($this->template->fetch('orders/status/edit'))->asHtml();
+        $this->response->body($this->template->fetch('modules/orders/status/edit'))->asHtml();
     }
 
     public function process($id= null)

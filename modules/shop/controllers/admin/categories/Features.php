@@ -38,7 +38,7 @@ class Features extends Engine
     {
         if( !isset($content['type']) || $content['type'] != 'products_categories') return null;
         $this->template->assign('features', $this->features->get(0, $content['id'], true));
-        return $this->template->fetch('shop/categories/features/index');
+        return $this->template->fetch('modules/shop/categories/features/index');
     }
 
     /**
@@ -80,7 +80,7 @@ class Features extends Engine
 
         $this->template->assign('content_id', $content_id);
         $this->template->assign('features', $this->features->get(0, $content_id));
-        $this->response->body($this->template->fetch('shop/categories/features/select'));
+        $this->response->body($this->template->fetch('modules/shop/categories/features/select'));
 
         return;
     }
@@ -88,7 +88,7 @@ class Features extends Engine
     public function getSelected($content_id)
     {
         $this->template->assign('features', $this->features->get(0, $content_id, true));
-        echo $this->template->fetch('shop/categories/features/selected');
+        echo $this->template->fetch('modules/shop/categories/features/selected');
     }
 
     public function reorder()
@@ -135,7 +135,7 @@ class Features extends Engine
         $this->template->assign('content_id', $content_id);
         $this->template->assign('types', $this->features->getTypes());
         $this->template->assign('data', ['parent_id' => $parent_id]);
-        echo $this->template->fetch('shop/categories/features/create');
+        echo $this->template->fetch('modules/shop/categories/features/create');
     }
 
 
@@ -160,7 +160,7 @@ class Features extends Engine
         $this->template->assign('data', $this->features->getData($id));
 
         $this->template->assign('action', 'edit');
-        echo $this->template->fetch('shop/categories/features/create');
+        echo $this->template->fetch('modules/shop/categories/features/create');
     }
     public function process($id)
     {

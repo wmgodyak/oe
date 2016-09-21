@@ -74,7 +74,7 @@ class Products extends Content
         $ct = $this->contentTypes->getData($content['types_id'], 'type');
         if(!in_array($ct, $this->allowed_types)) return '';
 
-        return $this->template->fetch('shop/products/params');
+        return $this->template->fetch('modules/shop/products/params');
     }
 
     public function intro($content)
@@ -82,7 +82,7 @@ class Products extends Content
         $ct = $this->contentTypes->getData($content['types_id'], 'type');
         if(!in_array($ct, $this->allowed_types)) return '';
 
-        return $this->template->fetch('shop/products/intro');
+        return $this->template->fetch('modules/shop/products/intro');
     }
 
     /**
@@ -98,7 +98,7 @@ class Products extends Content
         $this->template->assign('main_category', $this->relations->getCategoriesFull($content['id'],1));
 //        $this->template->assign('categories', $this->categories->get(0, 30));
 
-        return $this->template->fetch('shop/select_categories');
+        return $this->template->fetch('modules/shop/select_categories');
     }
 
     public function categoriesTree($action = null)
@@ -144,7 +144,7 @@ class Products extends Content
         } elseif($action == 'html'){
             $this->template->assign('products_id', $this->request->post('products_id', 'i'));
             $this->template->assign('is_main', $this->request->post('is_main', 'i'));
-            echo $this->template->fetch('shop/categories_tree');
+            echo $this->template->fetch('modules/shop/categories_tree');
         } elseif($action == 'json') {
             $items = array();
             $parent_id = $this->request->get('id', 'i');
@@ -378,7 +378,7 @@ class Products extends Content
             return;
         }
 
-        $this->template->assign('sidebar', $this->template->fetch('shop/categories/tree'));
+        $this->template->assign('sidebar', $this->template->fetch('modules/shop/categories/tree'));
         $this->output( $this->filter($categories_id) . $t->init());
     }
 
@@ -393,7 +393,7 @@ class Products extends Content
         $this->template->assign('categories_id', $categories_id);
         $this->template->assign('currency', $this->currency->get());
         $this->template->assign('groups', $this->customersGroups->getItems(0, 0));
-        return $this->template->fetch('shop/products/filter');
+        return $this->template->fetch('modules/shop/products/filter');
     }
 
     public function create()
@@ -419,7 +419,7 @@ class Products extends Content
         EventsHandler::getInstance()->add('content.main.after', [new Kits(), 'index']);
 
 
-        $this->template->assign('sidebar', $this->template->fetch('shop/categories/tree'));
+        $this->template->assign('sidebar', $this->template->fetch('modules/shop/categories/tree'));
 
         parent::edit($id);
     }

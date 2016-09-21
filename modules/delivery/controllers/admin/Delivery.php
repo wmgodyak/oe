@@ -114,7 +114,7 @@ class Delivery extends Engine
         $this->template->assign('action', 'create');
         $this->template->assign('payment', $this->delivery_payment->getPayment());
         $this->template->assign('modules', $this->getModules());
-        $this->response->body($this->template->fetch('delivery/edit'))->asHtml();
+        $this->response->body($this->template->fetch('modules/delivery/edit'))->asHtml();
     }
 
     public function edit($id)
@@ -124,7 +124,7 @@ class Delivery extends Engine
         $this->template->assign('payment', $this->delivery_payment->getPayment());
         $this->template->assign('selected', $this->delivery_payment->getSelectedPayment($id));
         $this->template->assign('modules', $this->getModules());
-        $this->response->body($this->template->fetch('delivery/edit'))->asHtml();
+        $this->response->body($this->template->fetch('modules/delivery/edit'))->asHtml();
     }
 
     public function process($id= null)

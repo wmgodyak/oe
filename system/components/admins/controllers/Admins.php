@@ -51,7 +51,7 @@ class Admins extends Engine
 
         $t-> ajax('admins/index/'. $group_id);
 
-        $this->template->assign('sidebar', $this->template->fetch('admins/groups/tree'));
+        $this->template->assign('sidebar', $this->template->fetch('system/admins/groups/tree'));
         $this->output($t->init());
 
         if($this->request->isXhr()){
@@ -129,7 +129,7 @@ class Admins extends Engine
         $this->template->assign('action', 'create');
         $this->template->assign('data', ['avatar' => '']);
         $this->template->assign('groups', $this->admins->getGroups());
-        $this->response->body($this->template->fetch('admins/form'))->asHtml();
+        $this->response->body($this->template->fetch('system/admins/form'))->asHtml();
     }
 
     public function edit($id)
@@ -137,7 +137,7 @@ class Admins extends Engine
         $this->template->assign('groups', $this->admins->getGroups());
         $this->template->assign('data', $this->admins->getData($id));
         $this->template->assign('action', 'edit');
-        $this->response->body($this->template->fetch('admins/form'))->asHtml();
+        $this->response->body($this->template->fetch('system/admins/form'))->asHtml();
     }
 
     public function process($id= null)

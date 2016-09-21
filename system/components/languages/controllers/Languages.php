@@ -83,14 +83,14 @@ class Languages extends Engine
     {
         $this->template->assign('action', 'create');
         $this->template->assign('allowed', Lang::getInstance()->getAllowedLanguages());
-        $this->response->body($this->template->fetch('languages/edit'))->asHtml();
+        $this->response->body($this->template->fetch('system/languages/edit'))->asHtml();
     }
     public function edit($id)
     {
         $this->template->assign('data', $this->languages->getData($id));
         $this->template->assign('allowed', Lang::getInstance()->getAllowedLanguages());
         $this->template->assign('action', 'edit');
-        $this->response->body($this->template->fetch('languages/edit'))->asHtml();
+        $this->response->body($this->template->fetch('system/languages/edit'))->asHtml();
     }
 
     public function process($id= null)

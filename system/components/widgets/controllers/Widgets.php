@@ -163,7 +163,7 @@ class Widgets extends Engine
         $this->output
         (
             $t->init() .
-            $this->template->fetch('widgets/available')
+            $this->template->fetch('system/widgets/available')
         );
     }
 
@@ -243,7 +243,7 @@ class Widgets extends Engine
         $this->template->assign('widget', $widget);
         $this->template->assign('area', $area);
 
-        return $this->template->fetch('widgets/form');
+        return $this->template->fetch('system/widgets/form');
     }
 
     public function update()

@@ -36,7 +36,7 @@ class Banners extends Engine
     public function index()
     {
         $this->template->assign('places', $this->places->get());
-        $this->output($this->template->fetch('banners/index'));
+        $this->output($this->template->fetch('modules/banners/index'));
     }
 
     public function place($id, $results = null)
@@ -122,7 +122,7 @@ class Banners extends Engine
         $this->template->assign('action', 'create');
         $this->template->assign('place_id', $id);
         $this->template->assign('sizes', $this->banners->getPlaceSizes($id));
-        $this->response->body($this->template->fetch('banners/banner'))->asHtml();
+        $this->response->body($this->template->fetch('modules/banners/banner'))->asHtml();
     }
 
     public function edit($id)
@@ -131,7 +131,7 @@ class Banners extends Engine
         $this->template->assign('data', $data);
         $this->template->assign('sizes', $this->banners->getPlaceSizes($data['places_id']));
         $this->template->assign('action', 'edit');
-        $this->response->body($this->template->fetch('banners/banner'))->asHtml();
+        $this->response->body($this->template->fetch('modules/banners/banner'))->asHtml();
     }
 
     public function delete($id)

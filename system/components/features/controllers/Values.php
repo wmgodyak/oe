@@ -124,7 +124,7 @@ class Values extends Engine
         $data = ['parent_id' => $parent_id];
         $this->template->assign('data', $data);
         $this->template->assign('action', 'create');
-        $this->output($this->template->fetch('features/value'));
+        $this->output($this->template->fetch('system/features/value'));
     }
 
     public function edit($id){
@@ -132,7 +132,7 @@ class Values extends Engine
         unset($data['parent_id']);
         $this->template->assign('data', $data);
         $this->template->assign('action', 'edit');
-        $this->output($this->template->fetch('features/value'));
+        $this->output($this->template->fetch('system/features/value'));
     }
 
     public function process($id=null)

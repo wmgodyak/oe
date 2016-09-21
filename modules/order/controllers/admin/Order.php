@@ -180,7 +180,7 @@ class Order extends Engine
                 $t = "Замовлення №{$data['oid']}. Від {$dt}";
                 $this->template->assign('id', $data['id']);
 
-                $m = $this->template->fetch('orders/form/index');
+                $m = $this->template->fetch('modules/orders/form/index');
 
                 $this->response->body(['s' => $s, 'm' => $m, 't' => $t, 'id' => $id])->asJSON();
 
@@ -196,14 +196,14 @@ class Order extends Engine
         $this->template->assign('status', $this->ordersStatus->get());
         $this->template->assign('users', $this->users->get());
 
-        echo $this->template->fetch('orders/form/info');
+        echo $this->template->fetch('modules/orders/form/info');
     }
 
     private function editHistory($order)
     {
         $this->template->assign('order', $order);
         $this->template->assign('history', $this->history->history($order['id']));
-        echo $this->template->fetch('orders/form/history');
+        echo $this->template->fetch('modules/orders/form/history');
     }
 
     private function editProducts($order)
@@ -213,8 +213,8 @@ class Order extends Engine
         $this->template->assign('amount', $this->order->products->amount($order['id']));
         $this->template->assign('order', $order);
         echo
-        $this->template->fetch('orders/form/kits') .
-        $this->template->fetch('orders/form/products');
+        $this->template->fetch('modules/orders/form/kits') .
+        $this->template->fetch('modules/orders/form/products');
     }
 
     public function delete($id)
@@ -303,7 +303,7 @@ class Order extends Engine
 
     public function selectCustomer()
     {
-        $this->response->body(['t' => 'Виберіть кліеєнта', 'm' => $this->template->fetch('orders/form/select_customer')])->asJSON();
+        $this->response->body(['t' => 'Виберіть кліеєнта', 'm' => $this->template->fetch('modules/orders/form/select_customer')])->asJSON();
     }
 
     public function status()

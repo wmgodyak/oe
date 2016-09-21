@@ -26,7 +26,7 @@ class Tags extends Engine
     public function index($content = null)
     {
         $this->template->assign('posts_tags', $this->posts_tags->get($content['id']));
-        return $this->template->fetch('blog/tags');
+        return $this->template->fetch('modules/blog/tags');
     }
 
     public function create($id=0){}

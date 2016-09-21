@@ -43,11 +43,11 @@ class Features extends Engine
         $this->template->assign('features', $this->features->get($categories_id, $content['id']));
 
         if($this->request->isXhr()){
-            $this->response->body($this->template->fetch('shop/products/features/selected'));
+            $this->response->body($this->template->fetch('modules/shop/products/features/selected'));
             return null;
         }
 
-        return $this->template->fetch('shop/products/features/index');
+        return $this->template->fetch('modules/shop/products/features/index');
     }
 
     /**
@@ -68,7 +68,7 @@ class Features extends Engine
 
         $this->template->assign('features_id', $features_id);
         $this->template->assign('products_id', $products_id);
-        $this->response->body($this->template->fetch('shop/products/features/addValue'));
+        $this->response->body($this->template->fetch('modules/shop/products/features/addValue'));
     }
 
     public function contentProcess($id)
@@ -119,7 +119,7 @@ class Features extends Engine
 
         $this->template->assign('content_id', $content_id);
         $this->template->assign('features', $this->features->getAll($content_id));
-        $this->response->body($this->template->fetch('shop/categories/features/select'));
+        $this->response->body($this->template->fetch('modules/shop/categories/features/select'));
 
         return;
     }
@@ -127,7 +127,7 @@ class Features extends Engine
     public function getSelected($categories_id, $content_id)
     {
         $this->template->assign('features', $this->features->get($categories_id, $content_id));
-        echo $this->template->fetch('shop/products/features/selected');
+        echo $this->template->fetch('modules/shop/products/features/selected');
     }
 
     public function reorder()
@@ -172,7 +172,7 @@ class Features extends Engine
 
         $this->template->assign('content_id', $content_id);
         $this->template->assign('data', ['parent_id' => $parent_id]);
-        echo $this->template->fetch('shop/categories/features/create');
+        echo $this->template->fetch('modules/shop/categories/features/create');
     }
 
 

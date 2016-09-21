@@ -36,7 +36,7 @@ class Feedback extends Engine
 
     public function index()
     {
-        $this->output($this->template->fetch('feedback/index'));
+        $this->output($this->template->fetch('modules/feedback/index'));
     }
 
     public function tab($status)
@@ -133,7 +133,7 @@ class Feedback extends Engine
     {
         $this->template->assign('statuses', $this->mFeedback->getStatuses());
         $this->template->assign('data', $this->mFeedback->getData($id));
-        $this->response->body($this->template->fetch('feedback/form'))->asHtml();
+        $this->response->body($this->template->fetch('modules/feedback/form'))->asHtml();
     }
 
     public function process($id= null)
