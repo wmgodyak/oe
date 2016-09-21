@@ -17,6 +17,14 @@ defined("CPATH") or die();
  */
 class Modules extends Engine
 {
+    public $model;
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->model = new \system\components\modules\models\Modules();
+    }
+
     public function init()
     {
         $this->assignToNav('Модулі', 'modules', 'fa-cubes', 'settings');
@@ -154,23 +162,29 @@ class Modules extends Engine
     {
         $module = $this->request->post('module');
         $modules = Settings::getInstance()->get('modules');
+        $s = $this->model->install($module);
+        if($s){
+            $modules[$module] = ['status' => 'enabled'];
+            Settings::getInstance()->set('modules', $modules);
+        }
 
-        $modules[$module] = ['status' => 'enabled'];
-        Settings::getInstance()->set('modules', $modules);
-
-        $this->response->body(['s' => 1])->asJSON();
+        $this->response->body(['s' => $s])->asJSON();
     }
 
     public function uninstall()
     {
+        $s = false;
         $module = $this->request->post('module');
         $modules = Settings::getInstance()->get('modules');
         if(isset($modules[$module])){
-            unset($modules[$module]);
-            Settings::getInstance()->set('modules', $modules);
+            $s = $this->model->uninstall($module);
+            if($s){
+                unset($modules[$module]);
+                Settings::getInstance()->set('modules', $modules);
+            }
         }
 
-        $this->response->body(['s' => 1])->asJSON();
+        $this->response->body(['s' => $s])->asJSON();
     }
 
     public function enable()

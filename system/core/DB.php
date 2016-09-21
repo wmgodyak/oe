@@ -124,6 +124,11 @@ class DB extends \PDO {
         return self::$instance;
     }
 
+    public function getDbPrefix()
+    {
+        return $this->conf['prefix'];
+    }
+
     /**
      * close connection
      */
