@@ -57,7 +57,7 @@ class Sale extends Model
             ->select("
                 select DISTINCT o.id, o.oid, os.external_id as status,
                  o.users_id as user_id,
-                 cu.code, o.currency_rate,
+                 cu.code, o.currency_rate, 0 as amount,
                  o.comment, o.created, o.paid, o.paid_date, o.payment_id, o.delivery_id, o.delivery_cost, o.delivery_address
                 from __orders o
                 join __orders_status os on os.id=o.status_id
