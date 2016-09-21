@@ -19,11 +19,12 @@
             <div class="article-page__content">
                 <h1>{$page.name}</h1>
                 {if $app->contentMeta->get($page.id, 'counter', true) == 1}
+                    {assign var='expired' value=$app->contentMeta->get($page.id, 'expired', true)}
                     <div class="m_actions_countdown">
                         <div class="title">
                             Залишилось:
                         </div>
-                        <div id="a_timer" class="timer" data-expired='2016/09/22'></div>
+                        <div id="a_timer" class="timer" data-expired='{date('Y/m/d', strtotime($expired))}'></div>
                     </div>
                 {/if}
 
