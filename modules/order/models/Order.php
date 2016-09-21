@@ -47,6 +47,20 @@ class Order extends Model
         return $this->createRow('__orders', $data);
     }
 
+    public function getLastId()
+    {
+        return self::$db->select("select id from __orders order by abs(id) desc limit 1")->row('id');
+    }
+
+    public function makeOid()
+    {
+        $last_id = self::$db->select("select id from __orders order by abs(id) desc limit 1")->row('id');
+        if($last_id < 100){
+            $last_id = '0'. $last_id;
+        }
+        return date('dm-' . $last_id);
+    }
+
     /**
      * @param $id
      * @param $data

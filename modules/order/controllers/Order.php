@@ -126,13 +126,14 @@ class Order extends Front
             }
 
             if($s){
+
                 // register order
                 $order = $this->request->post('data');
 
                 $order['comment'] = htmlspecialchars(strip_tags($order['comment']));
 
                 $order['users_id']       = $ui['id'];
-                $order['oid']            = date('ymd-hmsi');
+                $order['oid']            = $this->order->makeOid();
                 $order['languages_id']   = $this->languages_id;
                 $order['users_group_id'] = $ui['group_id'];
                 $order['status_id']      = $this->status->getMainId();
@@ -254,12 +255,13 @@ class Order extends Front
         }
 
         if($s && !empty($user)){
+
             $this->order->beginTransaction();
             // register order
             $order = [];
             $order['one_click']      = 1;
             $order['users_id']       = $user['id'];
-            $order['oid']            = date('ymd-hmsi');
+            $order['oid']            = $this->order->makeOid();
             $order['languages_id']   = $this->languages_id;
             $order['users_group_id'] = $user['group_id'];
             $order['status_id']      = $this->status->getMainId();

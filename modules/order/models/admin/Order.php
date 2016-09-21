@@ -33,14 +33,15 @@ class Order extends \modules\order\models\Order
     {
         self::$db->delete('__orders', "status_id=1 and manager_id={$manager['id']}");
         $c = $this->currency->getOnSiteMeta();
+
         return $this->createRow
         (
             '__orders',
             [
-                'manager_id' => $manager['id'],
-                'oid'        => date('ymd-hmsi-'.$manager['id']),
-                'languages_id' => $this->languages_id,
-                'currency_id' => $c['id'],
+                'manager_id'    => $manager['id'],
+                'oid'           => $this->makeOid(),
+                'languages_id'  => $this->languages_id,
+                'currency_id'   => $c['id'],
                 'currency_rate' => $c['rate']
             ]
         );
