@@ -42,7 +42,7 @@ class Seo extends Engine
         $this->template->assign('data', $data);
         $this->template->assign('types', $types);
         $this->template->assign('com_url', APPURL . 'engine/seo');
-        $this->output($this->template->fetch('seo/index'));
+        $this->output($this->template->fetch('system/seo/index'));
     }
 
     public function create()

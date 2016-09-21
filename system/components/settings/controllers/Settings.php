@@ -57,7 +57,7 @@ class Settings extends Engine
         $this->template->assign('items', $this->mSettings->get());
         $this->template->assign('com_url', APPURL . 'engine/settings');
 
-        $this->output($this->template->fetch('settings/index'));
+        $this->output($this->template->fetch('system/settings/index'));
     }
 
     public function create()

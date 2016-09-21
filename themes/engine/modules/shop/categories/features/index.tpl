@@ -4,5 +4,5 @@
             <i class="fa fa-plus-circle"></i>
         </a>
     </legend>
-    <div id="content_features_0">{include file="shop/categories/features/selected.tpl"}</div>
+    <div id="content_features_0">{include file="modules/shop/categories/features/selected.tpl"}</div>
 </fieldset>

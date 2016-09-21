@@ -54,7 +54,7 @@ class ContentImages extends Engine
     {
         $this->template->assign('id', $content['id']);
         $this->template->assign('images', json_encode($this->ci->get($content['id'])));
-        return $this->template->fetch('content/images/upload');
+        return $this->template->fetch('system/content/images/upload');
     }
     public function create()
     {

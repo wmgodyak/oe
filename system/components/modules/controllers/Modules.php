@@ -25,7 +25,7 @@ class Modules extends Engine
 
     public function index()
     {
-        $this->output($this->template->fetch('modules/index'));
+        $this->output($this->template->fetch('system/modules/index'));
     }
 
     public function tab($status)
@@ -223,7 +223,7 @@ class Modules extends Engine
         }
         $this->template->assign('config', $config);
         $this->template->assign('module', $module);
-        $m = $this->template->fetch('modules/config');
+        $m = $this->template->fetch('system/modules/config');
 
         $this->response->body(['s' => $s, 't' => $t, 'm' => $m])->asJSON();
     }

@@ -46,7 +46,7 @@ class Gmap extends \system\Engine
             'items'        => json_encode($items),
             'gmap_api_key' => Settings::getInstance()->get('modules.Gmap.config.api_key')
         ));
-        $this->output($this->template->fetch('gmap/map'));
+        $this->output($this->template->fetch('modules/gmap/map'));
     }
 
     public function loadForm()
@@ -55,7 +55,7 @@ class Gmap extends \system\Engine
            'languages'=>$this->mLanguages->get(),
             'action' => 'create'
         ));
-        echo $this->template->fetch('gmap/form');
+        echo $this->template->fetch('modules/gmap/form');
     }
 
     public function create()
@@ -77,7 +77,7 @@ class Gmap extends \system\Engine
             'coords' => $this->model->getField($id,'value'),
             'id' => $id
         ));
-        echo $this->template->fetch('gmap/form');
+        echo $this->template->fetch('modules/gmap/form');
     }
 
     public function delete($id)

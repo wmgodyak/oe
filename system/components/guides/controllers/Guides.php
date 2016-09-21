@@ -37,7 +37,7 @@ class Guides extends Content
 //        echo $a, '   ', $this->type;
         if($this->type != $a) return '';
 
-        return $this->template->fetch('guides/main');
+        return $this->template->fetch('system/guides/main');
     }
 
     public function index($parent_id=0)
@@ -139,7 +139,7 @@ class Guides extends Content
         $this->template->assign('content', ['parent_id' => $parent_id]);
         $this->template->assign('action', 'create');
 
-        $this->response->body($this->template->fetch('guides/form'));
+        $this->response->body($this->template->fetch('system/guides/form'));
     }
 
     public function edit($id)
@@ -147,7 +147,7 @@ class Guides extends Content
         EventsHandler::getInstance()->add('content.main', [$this, 'main']);
         $this->template->assign('content', $this->mContent->getData($id));
         $this->template->assign('action', 'edit');
-        $this->response->body($this->template->fetch('guides/form'));
+        $this->response->body($this->template->fetch('system/guides/form'));
     }
 
     public function process($id = null)
@@ -212,7 +212,7 @@ class Guides extends Content
         }
 
         $this->template->assign('tree_icon', 'fa-file-text');
-        $sidebar = $this->template->fetch('guides/tree');
+        $sidebar = $this->template->fetch('system/guides/tree');
         $this->template->assign('sidebar', $sidebar);
     }
 

@@ -36,7 +36,7 @@ class Places extends Engine
     public function create()
     {
         $this->template->assign('action', 'create');
-        $this->response->body($this->template->fetch('banners/places/form'));
+        $this->response->body($this->template->fetch('modules/banners/places/form'));
     }
     public function edit($id)
     {

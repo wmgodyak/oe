@@ -107,7 +107,7 @@ class Nav extends Engine
 
         $this->template->assign('action', 'create');
         $this->template->assign('items', $this->nav->getItems(0));
-        $this->output($this->template->fetch('nav/form'));
+        $this->output($this->template->fetch('system/nav/form'));
     }
 
 
@@ -137,7 +137,7 @@ class Nav extends Engine
         $this->template->assign('data', $data);
         $this->template->assign('action', 'edit');
         $this->template->assign('items', $this->nav->getItems(0));
-        $this->output($this->template->fetch('nav/form'));
+        $this->output($this->template->fetch('system/nav/form'));
     }
 
     /**

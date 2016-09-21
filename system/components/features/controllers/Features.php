@@ -152,7 +152,7 @@ class Features extends Engine
 
         $this->template->assign('selected_content', $this->featuresContent->getSelectedContent($id));
         $this->template->assign('action', 'edit');
-        $this->output($this->template->fetch('features/form'));
+        $this->output($this->template->fetch('system/features/form'));
     }
 
     /**

@@ -30,7 +30,7 @@ class Categories extends Engine
 
     public function index()
     {
-        return $this->template->fetch('blog/categories/form');
+        return $this->template->fetch('modules/blog/categories/form');
     }
 
     /**
@@ -41,14 +41,14 @@ class Categories extends Engine
         $this->template->assign('content', ['parent_id' => $parent_id]);
         $this->template->assign('action', 'create');
 
-        $this->response->body($this->template->fetch('blog/categories/form'));
+        $this->response->body($this->template->fetch('modules/blog/categories/form'));
     }
 
     public function edit($id)
     {
         $this->template->assign('content', $this->categories->getData($id));
         $this->template->assign('action', 'edit');
-        $this->response->body($this->template->fetch('blog/categories/form'));
+        $this->response->body($this->template->fetch('modules/blog/categories/form'));
     }
 
     public function delete($id)

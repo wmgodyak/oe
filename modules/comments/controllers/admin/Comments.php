@@ -42,7 +42,7 @@ class Comments extends Engine
     public function dashboard()
     {
         $this->template->assign('items', $this->comments->getLatest());
-        return $this->template->fetch('comments/dashboard');
+        return $this->template->fetch('modules/comments/dashboard');
     }
 
     public function postComments($post)
@@ -51,12 +51,12 @@ class Comments extends Engine
 
         $this->template->assign('comments_total', $this->comments->getTotal($post['id']));
         $this->template->assign('comments', $this->comments->get($post['id']));
-        return $this->template->fetch('comments/post');
+        return $this->template->fetch('modules/comments/post');
     }
 
     public function index()
     {
-        $this->output($this->template->fetch('comments/index'));
+        $this->output($this->template->fetch('modules/comments/index'));
     }
 
     public function tab($status)
@@ -209,7 +209,7 @@ class Comments extends Engine
         }
 
         $this->template->assign('data', $this->comments->getData($id));
-        $this->response->body($this->template->fetch('comments/reply'))->asHtml();
+        $this->response->body($this->template->fetch('modules/comments/reply'))->asHtml();
     }
 
 
@@ -243,6 +243,6 @@ class Comments extends Engine
         }
 
         $this->template->assign('data', $this->comments->getData($id));
-        $this->response->body($this->template->fetch('comments/reply'))->asHtml();
+        $this->response->body($this->template->fetch('modules/comments/reply'))->asHtml();
     }
 }

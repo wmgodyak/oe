@@ -34,7 +34,7 @@ class Kits extends Engine
 
     public function index()
     {
-        return $this->template->fetch('shop/products/kits/index');
+        return $this->template->fetch('modules/shop/products/kits/index');
     }
 
     public function create($products_id = null)
@@ -48,7 +48,7 @@ class Kits extends Engine
 
         $this->template->assign('products_id', $products_id);
 
-        $this->response->body($this->template->fetch('shop/products/kits/create'));
+        $this->response->body($this->template->fetch('modules/shop/products/kits/create'));
     }
 
     public function get($products_id)
@@ -64,7 +64,7 @@ class Kits extends Engine
     public function products($id)
     {
         $this->template->assign('kits_id', $id);
-        $this->response->body($this->template->fetch('shop/products/kits/products'));
+        $this->response->body($this->template->fetch('modules/shop/products/kits/products'));
     }
 
     /**

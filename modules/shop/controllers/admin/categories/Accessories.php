@@ -31,7 +31,7 @@ class Accessories extends Engine
     public function index($content = null)
     {
         if( !isset($content['type']) || $content['type'] != 'products_categories') return null;
-        return $this->template->fetch('shop/categories/accessories/index');
+        return $this->template->fetch('modules/shop/categories/accessories/index');
     }
 
     public function searchCategories()
@@ -101,7 +101,7 @@ class Accessories extends Engine
         $features = $this->categoryFeatures->get(0, $categories_id);
         $this->template->assign('features', $features);
 
-        $this->response->body($this->template->fetch('shop/categories/accessories/edit'));
+        $this->response->body($this->template->fetch('modules/shop/categories/accessories/edit'));
     }
 
     public function delete($id)
@@ -151,7 +151,7 @@ class Accessories extends Engine
 
         $values = $this->accessories->features->getValues($features_id);
         $this->template->assign('values', $values);
-        $this->response->body($this->template->fetch('shop/categories/accessories/editFeatures'));
+        $this->response->body($this->template->fetch('modules/shop/categories/accessories/editFeatures'));
     }
 
     public function setValue()

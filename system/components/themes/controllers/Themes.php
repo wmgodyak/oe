@@ -73,7 +73,7 @@ class Themes extends Engine
         }
 
         $this->template->assign('items', $themes);
-        $content = $this->template->fetch('themes/index');
+        $content = $this->template->fetch('system/themes/index');
         $this->output($content);
     }
 
@@ -146,8 +146,8 @@ class Themes extends Engine
             }
         }
         $this->template->assign('theme', $theme);
-        $this->template->assign('sidebar', $this->template->fetch('themes/tree'));
-        $this->output($this->template->fetch('themes/edit'));
+        $this->template->assign('sidebar', $this->template->fetch('system/themes/tree'));
+        $this->output($this->template->fetch('system/themes/edit'));
     }
 
     public function updateSource()

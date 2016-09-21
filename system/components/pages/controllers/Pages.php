@@ -205,7 +205,7 @@ class Pages extends Content
         }
 
         $this->template->assign('tree_icon', 'fa-file-text');
-        $sidebar = $this->template->fetch('pages/tree');
+        $sidebar = $this->template->fetch('system/pages/tree');
         $this->template->assign('sidebar', $sidebar);
     }
 

@@ -88,7 +88,7 @@ class Translator extends Engine
     {
         $this->template->assign('id', $id);
         $this->template->assign('tables', $this->translator->getInfoTables());
-        echo $this->template->fetch('translator/index');
+        echo $this->template->fetch('modules/translator/index');
     }
 
     public function create()

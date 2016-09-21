@@ -60,7 +60,7 @@ class Blog extends Content
     public function dashboard()
     {
         $this->template->assign('items', $this->posts->get(0, 0, 3));
-        return $this->template->fetch('blog/dashboard');
+        return $this->template->fetch('modules/blog/dashboard');
     }
 
     /**
@@ -75,7 +75,7 @@ class Blog extends Content
         $this->template->assign('selected_categories', $this->relations->getCategories($content['id']));
         $this->template->assign('categories', $this->categories->get());
 
-        return $this->template->fetch('blog/select_categories');
+        return $this->template->fetch('modules/blog/select_categories');
     }
 
     /**
@@ -200,7 +200,7 @@ class Blog extends Content
             return;
         }
 
-        $this->template->assign('sidebar', $this->template->fetch('blog/categories/tree'));
+        $this->template->assign('sidebar', $this->template->fetch('modules/blog/categories/tree'));
         $this->output($t->init());
     }
 
@@ -225,7 +225,7 @@ class Blog extends Content
         $tags = new Tags();
         EventsHandler::getInstance()->add('content.params.after', [$tags, 'index']);
 
-        $this->template->assign('sidebar', $this->template->fetch('blog/categories/tree'));
+        $this->template->assign('sidebar', $this->template->fetch('modules/blog/categories/tree'));
         parent::edit($id);
     }
 

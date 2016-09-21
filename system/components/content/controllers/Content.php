@@ -26,7 +26,7 @@ class Content extends Engine
      */
     protected $type = null;
 
-    protected $form_template = 'content/default';
+    protected $form_template = 'system/content/default';
     protected $form_action   = '';
     protected $form_success  = '';
     protected $data = [];
@@ -138,7 +138,7 @@ class Content extends Engine
         foreach ($features as $feature) {
             $feature['disable_values'] = $disable_values;
             $this->template->assign('feature', $feature);
-            $out .= $this->template->fetch('contentFeatures/feature');
+            $out .= $this->template->fetch('system/contentFeatures/feature');
         }
 
         $this->template->assign('content_features', $out);

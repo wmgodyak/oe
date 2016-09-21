@@ -36,7 +36,7 @@ class Callbacks extends Engine
 
     public function index()
     {
-        $this->output($this->template->fetch('callbacks/index'));
+        $this->output($this->template->fetch('modules/callbacks/index'));
     }
 
     public function tab($status)
@@ -130,7 +130,7 @@ class Callbacks extends Engine
     {
         $this->template->assign('statuses', $this->mCallbacks->getStatuses());
         $this->template->assign('data', $this->mCallbacks->getData($id));
-        $this->response->body($this->template->fetch('callbacks/form'))->asHtml();
+        $this->response->body($this->template->fetch('modules/callbacks/form'))->asHtml();
     }
 
     public function process($id= null)

@@ -22,7 +22,7 @@ class Video extends Engine
 
     public function index()
     {
-        return $this->template->fetch('shop/products/video');
+        return $this->template->fetch('modules/shop/products/video');
     }
 
     public function create()

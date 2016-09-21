@@ -27,7 +27,7 @@ class Import extends Engine
     {
         $this->addBreadCrumb('Імпорт');
         $this->template->assign('adapters', $this->getAdapters());
-        return $this->output($this->template->fetch('shop/import/index'));
+        return $this->output($this->template->fetch('modules/shop/import/index'));
     }
 
 

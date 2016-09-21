@@ -42,7 +42,7 @@ class Content extends Engine
         $this->template->assign('types', $this->featuresContent->getContentTypes(0));
         $this->template->assign('action', 'process');
         $this->template->assign('features_id', $features_id);
-        $this->response->body($this->template->fetch('features/sel_content_types'))->asHtml();
+        $this->response->body($this->template->fetch('system/features/sel_content_types'))->asHtml();
     }
 
     public function getTypes($parent_id)

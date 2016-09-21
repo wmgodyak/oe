@@ -32,7 +32,7 @@ class Variants extends Engine
     {
         $this->template->assign('customers_group', $this->customersGroup->getItems(0));
         $this->template->assign('variants', $this->variants->get($content['id']));
-        return $this->template->fetch('shop/products/variants/index');
+        return $this->template->fetch('modules/shop/products/variants/index');
     }
 
     public function create($products_id = 0)
@@ -53,7 +53,7 @@ class Variants extends Engine
         $features = $this->contentFeatures->get($category_id);
         $this->template->assign('features', $features);
         $this->template->assign('content_id', $products_id);
-        $this->response->body($this->template->fetch('shop/products/variants/create'));
+        $this->response->body($this->template->fetch('modules/shop/products/variants/create'));
     }
 
     public function edit($id)
@@ -72,7 +72,7 @@ class Variants extends Engine
 
         $this->template->assign('customers_group', $this->customersGroup->getItems(0));
         $this->template->assign('variants', $this->variants->get($content_id));
-        $this->response->body($this->template->fetch('shop/products/variants/items'));
+        $this->response->body($this->template->fetch('modules/shop/products/variants/items'));
     }
 
     public function delete($variant_id)

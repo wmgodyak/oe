@@ -57,7 +57,7 @@ class Categories extends Content
     public function catMeta($content)
     {
         if(isset($content['type']) && $content['type'] == 'products_categories') {
-            return $this->template->fetch('shop/categories/meta');
+            return $this->template->fetch('modules/shop/categories/meta');
         }
     }
     /**
@@ -67,7 +67,7 @@ class Categories extends Content
     public function params($content)
     {
         if(isset($content['type']) && $content['type'] == 'products_categories') {
-            return $this->template->fetch('shop/categories/params');
+            return $this->template->fetch('modules/shop/categories/params');
         }
     }
 
@@ -177,7 +177,7 @@ class Categories extends Content
         }
 
 
-        $this->template->assign('sidebar', $this->template->fetch('shop/categories/tree'));
+        $this->template->assign('sidebar', $this->template->fetch('modules/shop/categories/tree'));
         $this->output($t->init());
     }
 
@@ -194,7 +194,7 @@ class Categories extends Content
             $this->template->assign('content', ['parent_id' => $parent_id]);
             $this->template->assign('action', 'create');
 
-            $this->response->body($this->template->fetch('shop/categories/form'));
+            $this->response->body($this->template->fetch('modules/shop/categories/form'));
             return '';
         }
 
@@ -208,7 +208,7 @@ class Categories extends Content
         if($this->request->isXhr()){
             $this->template->assign('content', $this->categories->getData($id));
             $this->template->assign('action', 'edit');
-            $this->response->body($this->template->fetch('shop/categories/form'));
+            $this->response->body($this->template->fetch('modules/shop/categories/form'));
             return '';
         }
 
@@ -221,7 +221,7 @@ class Categories extends Content
         )
         );
 
-        $this->template->assign('sidebar', $this->template->fetch('shop/categories/tree'));
+        $this->template->assign('sidebar', $this->template->fetch('modules/shop/categories/tree'));
 
 //        $cf = new categories\Features();
 //        EventsHandler::getInstance()->add('content.params.after', [$cf, 'index']);

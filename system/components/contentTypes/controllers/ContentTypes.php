@@ -151,7 +151,7 @@ class ContentTypes extends Engine
         $this->template->assign('imagesSizes', $this->contentTypes->getContentImagesSizes());
         $this->template->assign('content_types', $this->contentTypes->get(0));
         $this->template->assign('action', 'create');
-        $this->output($this->template->fetch('contentTypes/form'));
+        $this->output($this->template->fetch('system/contentTypes/form'));
     }
 
     /**
@@ -187,7 +187,7 @@ class ContentTypes extends Engine
         $this->template->assign('content_types', $this->contentTypes->get(0));
 
         $this->template->assign('action', 'edit');
-        $this->output($this->template->fetch('contentTypes/form'));
+        $this->output($this->template->fetch('system/contentTypes/form'));
     }
 
     /**

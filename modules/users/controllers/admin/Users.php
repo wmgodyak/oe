@@ -139,7 +139,7 @@ class Users extends Engine
         }
 
 
-        $this->template->assign('sidebar', $this->template->fetch('users/groups/tree'));
+        $this->template->assign('sidebar', $this->template->fetch('modules/users/groups/tree'));
         $this->output($t->init());
     }
 
@@ -148,7 +148,7 @@ class Users extends Engine
         $this->template->assign('action', 'create');
         $this->template->assign('data', ['avatar' => '']);
         $this->template->assign('groups', $this->usersGroup->get());
-        $this->response->body($this->template->fetch('users/form'))->asHtml();
+        $this->response->body($this->template->fetch('modules/users/form'))->asHtml();
     }
 
     public function edit($id)
@@ -156,7 +156,7 @@ class Users extends Engine
         $this->template->assign('groups', $this->usersGroup->get());
         $this->template->assign('data', $this->users->getData($id));
         $this->template->assign('action', 'edit');
-        $this->response->body($this->template->fetch('users/form'))->asHtml();
+        $this->response->body($this->template->fetch('modules/users/form'))->asHtml();
     }
 
     public function process($id= null)

@@ -33,7 +33,7 @@ class UsersGroup extends Engine
         $this->template->assign('data', ['parent_id' => $parent_id]);
         $this->template->assign('groups', $this->groups->get(0));
         $this->template->assign('languages', $this->languages->get());
-        $this->response->body($this->template->fetch('users/groups/form'));
+        $this->response->body($this->template->fetch('modules/users/groups/form'));
     }
 
     public function edit($id)
@@ -44,7 +44,7 @@ class UsersGroup extends Engine
         $this->template->assign('data', $this->groups->getData($id));
         $this->template->assign('info', $this->groups->getInfo($id));
 
-        $this->response->body($this->template->fetch('users/groups/form'));
+        $this->response->body($this->template->fetch('modules/users/groups/form'));
     }
 
     public function delete($id)

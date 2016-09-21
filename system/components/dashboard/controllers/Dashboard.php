@@ -24,7 +24,7 @@ class Dashboard extends Engine
 {
     public function index()
     {
-        $this->output($this->template->fetch('dashboard/index'));
+        $this->output($this->template->fetch('system/dashboard/index'));
     }
 
     public function init()

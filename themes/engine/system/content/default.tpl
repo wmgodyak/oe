@@ -4,22 +4,22 @@
         <div class="col-md-8">
             {if $form_display_blocks.main}
                 {$events->call('content.main.before', $content)}
-                {include "content/blocks/main.tpl"}
+                {include "system/content/blocks/main.tpl"}
                 {$events->call('content.main.after', $content)}
             {/if}
             {if $form_display_blocks.content}
                 {$events->call('content.content.before', $content)}
-                {include "content/blocks/content.tpl"}
+                {include "system/content/blocks/content.tpl"}
                 {$events->call('content.content.after', $content)}
             {/if}
             {if $form_display_blocks.intro}
                 {$events->call('content.intro.before', $content)}
-                {include "content/blocks/intro.tpl"}
+                {include "system/content/blocks/intro.tpl"}
                 {$events->call('content.intro.after', $content)}
             {/if}
             {if $form_display_blocks.meta}
                 {$events->call('content.meta.before', $content)}
-                {include "content/blocks/meta.tpl"}
+                {include "system/content/blocks/meta.tpl"}
                 {$events->call('content.meta.after', $content)}
             {/if}
         </div>
@@ -27,15 +27,15 @@
             {$events->call('content.sidebar.before', $content)}
             {if $form_display_blocks.params}
                 {$events->call('content.params.before', $content)}
-                {include "content/blocks/params.tpl"}
+                {include "system/content/blocks/params.tpl"}
                 {$events->call('content.params.after', $content)}
             {/if}
             {if $form_display_blocks.features}
-                {include "content/blocks/features.tpl"}
+                {include "system/content/blocks/features.tpl"}
                 {$events->call('content.features.after', $content)}
             {/if}
             {if $form_display_blocks.images}
-                {*{include "content/blocks/images.tpl"}*}
+                {*{include "system/content/blocks/images.tpl"}*}
                 {$events->call('content.images', $content)}
             {/if}
             {$events->call('content.sidebar.after', $content)}

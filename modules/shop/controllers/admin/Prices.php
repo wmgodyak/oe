@@ -39,7 +39,7 @@ class Prices extends Engine
         $this->template->assign('units',  $this->guides->get('units'));
         $this->template->assign('currency', $this->currency->get());
         $this->template->assign('prices', $this->prices->get($content['id']));
-        return $this->template->fetch('shop/prices');
+        return $this->template->fetch('modules/shop/prices');
     }
 
 
