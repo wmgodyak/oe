@@ -35,6 +35,14 @@
     </div>
 </div>
 {foreach $languages as $lang}
+<div class="form-group">
+    <label for="content_meta_url_{$lang.id}" class="col-md-4 control-label">Кастомний ({$lang.code}):</label>
+    <div class="col-md-8">
+        <input name="content_meta[url_{$lang.id}]" placeholder="необовязково" id="content_meta_url_{$lang.id}" class="form-control" value="{$app->contentMeta->get($content.id, "url_`$lang.id`", true)}">
+    </div>
+</div>
+{/foreach}
+{foreach $languages as $lang}
     <div class="form-group">
         <label for="meta_image_{$lang.id}" class="col-md-4 control-label">Зображення({$lang.code}) </label>
         <div class="col-md-8">

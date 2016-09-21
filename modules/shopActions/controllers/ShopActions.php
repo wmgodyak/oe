@@ -55,9 +55,15 @@ class ShopActions extends Front
     {
         if(! $id) die;
 
-        $url = $this->getUrl($id);
+        $url = $this->actions->meta->get($id, 'url_' . $this->languages_id, true);
+        $url = trim($url);
+
+        if(empty($url)){
+            $url = $this->getUrl($id);
+        }
 
         if(!empty($url)) {
+            
             $v = $this->actions->meta->get($id, 'views', true);
             $this->actions->meta->update($id, 'views', ++ $v);
             $this->redirect($url);
