@@ -1,7 +1,7 @@
 .idea/
-tmp/
+tmp/*
 logs/
-uploads/
+uploads/*
 robots.txt
 __components
 vendor/filemanager/
