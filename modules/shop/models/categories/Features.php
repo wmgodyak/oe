@@ -63,11 +63,13 @@ class Features extends \system\models\Features
             }
         }
 
+        $in = $this->getSubcategoriesId($categories_id);
+
         foreach ($items as $k=>$item) {
             if($item['type'] == 'folder'){
                 $items[$k]['items'] = $this->get($categories_id);
             } else{
-                $items[$k]['values'] = $this->getValues($item, $categories_id);
+                $items[$k]['values'] = $this->getValues($item, $categories_id, $in);
             }
         }
 
@@ -80,7 +82,7 @@ class Features extends \system\models\Features
      * @return mixed
      * @throws \system\core\exceptions\Exception
      */
-    private function getValues($feature, $categories_id)
+    private function getValues($feature, $categories_id, $subcategories = [])
     {
        if($this->original_cat_id > 0 && $categories_id != $this->original_cat_id){
            $categories_id = $this->original_cat_id;
@@ -95,7 +97,7 @@ class Features extends \system\models\Features
         foreach ($items as $k=>$item) {
             $items[$k]['active'] = isset($this->selected_features[$feature['code']]) && in_array($item['id'], $this->selected_features[$feature['code']]);
             $items[$k]['url']    = $this->makeValueUrl($feature, $item, $categories_id);
-            $items[$k]['total']  = $this->getValuesCount($item['id'], $categories_id);
+            $items[$k]['total']  = $this->getValuesCount($item['id'], $categories_id, $subcategories);
         }
 
         return $items;
@@ -164,17 +166,21 @@ class Features extends \system\models\Features
     /**
      * @param $values_id
      * @param $categories_id
+     * @param array $subcategories
      * @return array|mixed
-     * @throws \system\core\exceptions\Exception
      */
-    private function getValuesCount($values_id, $categories_id)
+    private function getValuesCount($values_id, $categories_id, $subcategories = [])
     {
+        $w = "cr.categories_id='{$categories_id}'";
+        if(!empty($subcategories)){
+            $w = "cr.categories_id in (". implode(',', $subcategories) .")";
+        }
         return self::$db
             ->select("
               select count(cf.id) as t
               from __content_relationship cr
               join __content_features cf on cf.content_id=cr.content_id and cf.values_id={$values_id}
-              where cr.categories_id='{$categories_id}'
+              where {$w}
               ")
             ->row('t');
     }
