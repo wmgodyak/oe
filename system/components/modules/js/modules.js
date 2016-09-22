@@ -49,6 +49,8 @@ engine.modules = {
             {
                 if(res.s){
                     engine.modules.reload();
+                } else {
+                    engine.alert(res.m);
                 }
             }
         });
