@@ -39,10 +39,15 @@ class Modules extends Model
             $dc = $this->getDirContents($dir);
             foreach ($dc as $k=>$item) {
                 if(is_dir($item)) continue;
+                $templates_files[$k]['orig'] = $item;
+
                 $item = str_replace($dir, '', $item);
-                $item = str_replace('default/', $theme_f . '/', $item);
-                $item = str_replace('engine/', $theme_b . '/', $item);
-                $templates_files[] = $item;
+                $item = str_replace('default/', $themes_path . $theme_f . '/', $item);
+                $item = str_replace('engine/', $themes_path . $theme_b . '/', $item);
+
+                $templates_files[$k]['dest'] = $item;
+
+
                 if(file_exists(DOCROOT . $themes_path . $item)){
                     $e = true;
                     $this->setError("File: {$themes_path}{$item} already exists");
@@ -50,11 +55,10 @@ class Modules extends Model
             }
 
             if($e){
-//                d($this->getError());
                 return false;
             }
+
         }
-        die;
 
         $file = DOCROOT . "modules/{$module}/sql/install.sql";
         if(file_exists($file)){
@@ -63,25 +67,80 @@ class Modules extends Model
             self::$db->exec($q);
 
             if($this->hasError()){
-//                echo $this->getErrorMessage();die;
+                $this->setError($this->getErrorMessage());
                 return false;
             }
         }
 
         if(!empty($templates_files)){
             foreach ($templates_files as $i=>$file) {
-                $path_parts = pathinfo('/www/htdocs/inc/lib.inc.php');
+                $path_parts = pathinfo($file['dest']);
                 if(!is_dir(DOCROOT . $path_parts['dirname'])){
-                    mkdir(DOCROOT . $path_parts['dirname'], 0777, true);
+                    if(!@mkdir(DOCROOT . $path_parts['dirname'], 0777, true)){
+
+                        $this->setError("Can`t create directory {$path_parts['dirname']}. Permission denied");
+                        return false;
+                    };
                 }
-//                copy()
+//                echo $file['orig'], ' -> ', DOCROOT . $file['dest'] , "\r\n";
+                if( ! @copy($file['orig'], DOCROOT . $file['dest'])){
+                    $this->setError("Can`t copy {$file['dest']}. Permission denied");
+                };
+            }
+        }
+//die;
+        return true;
+    }
+    /**
+     * @param $module
+     * @return bool
+     */
+    public function uninstall($module)
+    {
+        $module = lcfirst($module);
+
+        $themes_path = \system\models\Settings::getInstance()->get('themes_path');
+
+        $dir = DOCROOT . "modules/{$module}/themes/";
+
+        if(is_dir($dir)){
+            $e = false;
+            $dc = $this->getDirContents($dir);
+
+            foreach ($dc as $k=>$item) {
+                if(is_dir($item)) continue;
+
+                $item = str_replace($dir, '', $item);
+
+                if(file_exists(DOCROOT . $themes_path . $item)){
+                    if(! @unlink(DOCROOT . $themes_path . $item)){
+                       $this->setError("Can`t remove file {$themes_path}{$item}");
+                       $e = true;
+                   };
+                }
+            }
+
+            if($e){
+                return false;
+            }
+        }
+
+        $file = DOCROOT . "modules/{$module}/sql/uninstall.sql";
+        if(file_exists($file)){
+            $q = file_get_contents($file);
+            $q = str_replace('__', self::$db->getDbPrefix(), $q);
+            self::$db->exec($q);
+
+            if($this->hasError()){
+                $this->setError($this->getErrorMessage());
+                return false;
             }
         }
 
         return true;
     }
 
-     private function getDirContents($dir, &$results = array()){
+    private function getDirContents($dir, &$results = array()){
         $files = scandir($dir);
 
         foreach($files as $key => $value){
@@ -95,26 +154,5 @@ class Modules extends Model
         }
 
         return $results;
-    }
-    /**
-     * @param $module
-     * @return bool
-     */
-    public function uninstall($module)
-    {
-        $module = lcfirst($module);
-        $file = DOCROOT . "modules/{$module}/sql/uninstall.sql";
-        if(file_exists($file)){
-            $q = file_get_contents($file);
-            $q = str_replace('__', self::$db->getDbPrefix(), $q);
-            self::$db->exec($q);
-
-            if($this->hasError()){
-//                echo $this->getErrorMessage();die;
-                return false;
-            }
-        }
-
-        return true;
     }
 }

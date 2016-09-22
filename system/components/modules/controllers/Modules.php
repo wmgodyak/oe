@@ -160,20 +160,25 @@ class Modules extends Engine
 
     public function install()
     {
+        $m = null;
         $module = $this->request->post('module');
         $modules = Settings::getInstance()->get('modules');
         $s = $this->model->install($module);
         if($s){
             $modules[$module] = ['status' => 'enabled'];
             Settings::getInstance()->set('modules', $modules);
+        } else{
+            $m = $this->model->getError();
+            if(!empty($m)) $m = implode('<br>', $m);
+            $m = "<p style='text-align: left;'>Під час встановлення модуля виникла помилка.</p><p style='text-align: left; font-size: 12px;'>{$m}</p>";
         }
 
-        $this->response->body(['s' => $s])->asJSON();
+        $this->response->body(['s' => $s, 'm' => $m])->asJSON();
     }
 
     public function uninstall()
     {
-        $s = false;
+        $s = false; $m = null;
         $module = $this->request->post('module');
         $modules = Settings::getInstance()->get('modules');
         if(isset($modules[$module])){
@@ -181,10 +186,14 @@ class Modules extends Engine
             if($s){
                 unset($modules[$module]);
                 Settings::getInstance()->set('modules', $modules);
+            } else {
+                $m = $this->model->getError();
+                if(!empty($m)) $m = implode('<br>', $m);
+                $m = "<p style='text-align: left;'>Під час деінсталяції модуля виникла помилка.</p><p style='text-align: left; font-size: 12px;'>{$m}</p>";
             }
         }
 
-        $this->response->body(['s' => $s])->asJSON();
+        $this->response->body(['s' => $s, 'm' => $m])->asJSON();
     }
 
     public function enable()
