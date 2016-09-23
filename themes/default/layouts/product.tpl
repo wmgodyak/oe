@@ -219,7 +219,7 @@
                         </ul>
                     </div>
                     <div class="info-tabs__main">
-                        <div class="tab tab2 active cms-content">
+                        <div class="tab tab2 active">
                             {*<pre>{print_r($product.features)}</pre>*}
                             <div class="sp-features">
                                 {assign var='features' value=array_chunk($product.features, 4)}
@@ -257,7 +257,7 @@
                                 {*{include file="modules/shop/product_preferences.tpl"}*}
                             </div>
                         {/if}
-                        <div class="tab tab3 cms-content">
+                        <div class="tab tab3 ">
                             <div class="sp-comments">{$mod->comments->display($product.id)}</div>
                         </div>
                         <div class="tab tab4 cms-content">

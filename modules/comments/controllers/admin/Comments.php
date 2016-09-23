@@ -171,10 +171,12 @@ class Comments extends Engine
     {
         return $this->comments->spam($id);
     }
+
     public function restore($id)
     {
         return $this->comments->restore($id);
     }
+
     public function create()
     {
     }

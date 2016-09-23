@@ -35,12 +35,14 @@
                     </div>
                 </div>
             </div>
+            <div class="clearfix"><br></div>
             {if $item.isfolder}
                 {call renderComments items=$item.items offset=$offset+1}
             {/if}
         </li>
         {/foreach}
     </ul>
+    <div class="clearfix"></div>
 {/function}
 <div class="m_comments">
     <div class="comments__counter">
@@ -48,4 +50,5 @@
     </div>
     {include file="modules/comments/form.tpl"}
     {call renderComments items=$comments.items offset=0}
+    {*<pre>{print_r($comments)}</pre>*}
 </div>

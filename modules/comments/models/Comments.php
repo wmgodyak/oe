@@ -86,6 +86,12 @@ class Comments extends Model
      */
     public function create($data)
     {
+        if(isset($data['parent_id']) && $data['parent_id'] > 0){
+            $this->updateRow('__comments', $data['parent_id'], ['isfolder' => 1]);
+        }
+        if(! isset($data['skey'])){
+            $data['skey'] = md5(serialize($data));
+        }
         $data['ip'] = $_SERVER['REMOTE_ADDR'];
         return  self::$db->insert('__comments', $data);
     }

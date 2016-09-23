@@ -111,9 +111,10 @@ engine.comments = {
     {
         engine.request.get('./module/run/comments/approve/' + id, function(d){
             if(d > 0){
-                var $tabs = $('#tabs').tabs();
-                var selected = $tabs.tabs('option', 'active');
-                $("#tabs").tabs('load',selected);
+                //var $tabs = $('#tabs').tabs();
+                //var selected = $tabs.tabs('option', 'active');
+                //$("#tabs").tabs('load',selected);
+                location.reload(true);
             }
         });
         $(this).dialog('close').dialog('destroy').remove();
@@ -122,9 +123,10 @@ engine.comments = {
     {
         engine.request.get('./module/run/comments/restore/' + id, function(d){
             if(d > 0){
-                var $tabs = $('#tabs').tabs();
-                var selected = $tabs.tabs('option', 'active');
-                $("#tabs").tabs('load',selected);
+                //var $tabs = $('#tabs').tabs();
+                //var selected = $tabs.tabs('option', 'active');
+                //$("#tabs").tabs('load',selected);
+                location.reload(true);
             }
         });
         $(this).dialog('close').dialog('destroy').remove();
@@ -138,9 +140,10 @@ engine.comments = {
             {
                 engine.request.get('./module/run/comments/delete/' + id, function(d){
                     if(d > 0){
-                        var $tabs = $('#tabs').tabs();
-                        var selected = $tabs.tabs('option', 'active');
-                        $("#tabs").tabs('load',selected);
+                        //var $tabs = $('#tabs').tabs();
+                        //var selected = $tabs.tabs('option', 'active');
+                        //$("#tabs").tabs('load',selected);
+                        location.reload(true);
                     }
                 });
                 $(this).dialog('close').dialog('destroy').remove();
@@ -156,9 +159,10 @@ engine.comments = {
             {
                 engine.request.get('./module/run/comments/spam/' + id, function(d){
                     if(d > 0){
-                        var $tabs = $('#tabs').tabs();
-                        var selected = $tabs.tabs('option', 'active');
-                        $("#tabs").tabs('load',selected);
+                        //var $tabs = $('#tabs').tabs();
+                        //var selected = $tabs.tabs('option', 'active');
+                        //$("#tabs").tabs('load',selected);
+                        location.reload(true);
                     }
                 });
 
