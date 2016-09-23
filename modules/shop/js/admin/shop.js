@@ -623,6 +623,55 @@ engine.shop = {
         }
     },
     products:{
+        gaChangeCategory: function(d){
+            console.log(d);
+            $.jstree.defaults.state.key = 'jstree_spmcga_' ;//+ product_id;
+
+            engine.request.post({
+                url: 'module/run/shop/products/groupActions/changeMainCategory',
+                data: {
+                    products: d,
+                    is_main: 1
+                },
+                success: function(res){
+                    var bi = t.common.button_save;
+                    var buttons = {};
+
+                    buttons[bi] =  function(){
+                        $('#sp_cat_form').submit();
+                    };
+
+                    var dialog = engine.dialog({
+                        content: res,
+                        title: "Вибір категорії",
+                        autoOpen: true,
+                        width: 750,
+                        modal: true,
+                        buttons: buttons
+                    });
+
+                    var inp_selected_nodes = $("#selected_nodes");
+                    var $catTree = new engine.tree('sp_cat_tree');
+                    $catTree
+                        .setUrl('module/run/shop/products/groupActions/changeMainCategory/tree')
+                        .init(function(event,data){
+                            var n = data.selected;
+                            event.preventDefault();
+
+                            inp_selected_nodes.val(n.join(','))
+                        });
+
+                    engine.validateAjaxForm('#sp_cat_form', function(d){
+                        if(d.s){
+                            engine.refreshDataTable('content');
+                            dialog.dialog('destroy').remove();
+                            engine.alert('Операція завершена успішно.');
+                        }
+                    });
+                },
+                dataType: 'html'
+            });
+        },
         // engine.shop.products.features
         features : {
             init: function()

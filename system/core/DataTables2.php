@@ -343,9 +343,18 @@ class DataTables2
                     <thead>
                     <tr>\r\n";
 
-        if(!empty($this->group_actions)){
-            $html .= "<th style='width: 60px;'><input type='checkbox' class='dt-check-all''></th>\r\n";
-        }
+//        if(!empty($this->group_actions)){
+////            $html .= "<th style='width: 60px; z-index: 0'><input style='z-index: 1' type='checkbox' class='dt-check-all'></th>\r\n";
+//            $th = [
+//                'label'      => "<input style='z-index: 1' type='checkbox' class='dt-check-all'>",
+//                'col'        => null,
+//                'orderable'  => false,
+//                'searchable' => false,
+//                'style'      => null
+//            ];
+//
+//            $this->th = array_merge([$th], $this->th);
+//        }
 
         if(!empty($this->sortable)){
             $html .= "<th style='width: 60px;'><i class='fa fa-list'></i></th>\r\n";
@@ -424,15 +433,15 @@ class DataTables2
             array_unshift($this->cols, ['col' => null]);
         }
 
-        if(!empty($this->group_actions)){
-            array_unshift($this->cols, ['col' => null]);
-        }
+//        if(!empty($this->group_actions)){
+//            array_unshift($this->cols, ['col' => null]);
+//        }
 
 //        $this->dump($this->cols);
 
         foreach ($this->cols as $k=>$col) {
 
-           if($col['th'] == 0) continue;
+           if(!isset($col['th']) || $col['th'] == 0) continue;
 
            if(is_null($col['col'])){
                $idx[] = $k;
@@ -467,7 +476,7 @@ class DataTables2
 
         // set default order
 
-        if($this->sortable && !empty($this->group_actions)){
+        /*if($this->sortable && !empty($this->group_actions)){
             if(empty($this->order_defs)){
                 $this->order_defs['index'] = 2;
                 $this->order_defs['order'] = 'asc';
@@ -479,7 +488,7 @@ class DataTables2
                 $this->order_defs['index'] = 0;
                 $this->order_defs['order'] = 'asc';
             }
-        } else {
+        } else */{
             if(empty($this->order_defs)){
                 $this->order_defs['index'] = 1;
                 $this->order_defs['order'] = 'asc';
@@ -492,14 +501,14 @@ class DataTables2
 
         $in_init_functions = '';
         if(!empty($this->group_actions)){
-            $opt = '<label>Set action: <select id="tbl_group_actions" class="form-control" style="width: 300px;">';
-            $opt .= "<option value=\"\">no action</option>";
+            $opt = '<label>Action: <select id="tbl_group_actions" class="form-control" style="width: 200px;">';
+            $opt .= "<option value=\"\"> - </option>";
             foreach ($this->group_actions as $group_action) {
                 $opt .= "<option value=\"{$group_action['action']}\">{$group_action['label']}</option>";
             }
             $opt .= "</select> <button class=\"btn\" id=\"tbl_group_actions_submit\">Go</button></label>";
 
-            $in_init_functions .= "$('<div id=\"group_actions\" style=\"width: 360px;float:right;\">$opt</div>').css('opacity',0).insertAfter('.dataTables_filter');";
+            $in_init_functions .= "$('<div id=\"group_actions\" style=\"width: 360px; padding-top: 10px; float:right;\">$opt</div>').css('opacity',0).insertAfter('.dataTables_filter');";
         }
 
         if($this->sortable){
@@ -810,9 +819,9 @@ class DataTables2
                 array_unshift($row, '<i class="fa fa-list dt-reorder-icon" id="dt-'. $id .'"></i>');
             }
 
-            if(!empty($this->group_actions)){
-                array_unshift($row, '<input class=\'dt-chb\' value=\''. $id .'\' type=\'checkbox\' style=\'height: auto;\'>');
-            }
+//            if(!empty($this->group_actions)){
+//                array_unshift($row, '<input class=\'dt-chb\' value=\''. $id .'\' type=\'checkbox\' style=\'height: auto;\'>');
+//            }
 
             $_data[] = array_values($row);
         }

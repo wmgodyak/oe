@@ -204,8 +204,8 @@ class Products extends Content
         $t = new DataTables2('content');
 
         $t  -> ajax('module/run/shop/products/index/' . $categories_id, ['filter' => $_GET])
-//            ->orderDef(0, 'desc')
-//            -> th($this->t('common.id'), 'c.id', 1, 1, 'width: 60px')
+            ->orderDef(1, 'desc')
+            -> th("<input style='z-index: 1' type='checkbox' class='dt-check-all'>", null, 0, 0, 'width: 60px')
             -> th($this->t('shop.sky'), 'c.sku', 1, 1, 'width: 60px')
             -> th($this->t('common.name'), 'ci.name', 1, 1);
 
@@ -223,6 +223,10 @@ class Products extends Content
         $t->get("cu.symbol ", null, null, null);
 
         $t->get('pp.price as pprice', null, null, null);
+
+        $t->addGroupAction('Change main category', 'engine.shop.products.gaChangeCategory');
+
+
 //        $t->debug();
 
         if($this->request->isXhr()){
@@ -330,7 +334,7 @@ class Products extends Content
 
                 $prices = $this->prices->get($row['id'], $cu_on_site, $cu_main);
 
-//                $res[$i][] = $row['id'];
+                $res[$i][] = '<input class=\'dt-chb\' value=\''. $row['id'] .'\' type=\'checkbox\' style=\'height: auto;\'>';
                 $res[$i][] = $row['sku'];
                 $res[$i][] =
                     $img .
@@ -519,5 +523,32 @@ class Products extends Content
         $controller  = new products\Kits();
 
         return call_user_func_array(array($controller, $action), $params);
+    }
+
+    public function groupActions()
+    {
+        $controller = null; $action = 'index';
+
+        $ns = '\modules\shop\controllers\admin\products\groupActions\\';
+        $params = func_get_args();
+
+        if(!empty($params)){
+            $controller = array_shift($params);
+        }
+        if(!empty($params)){
+            $action = array_shift($params);
+        }
+
+        $controller = ucfirst($controller);
+
+        if (!class_exists( $ns . $controller)) {
+            throw new \Exception("Wrong action. {$controller} ");
+        }
+
+        $c = $ns . $controller;
+
+        $cc = new $c();
+
+        return call_user_func_array(array($cc, $action), $params);
     }
 }

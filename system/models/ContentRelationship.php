@@ -107,7 +107,7 @@ class ContentRelationship extends Model
      */
     public function saveMainCategory($content_id, $categories_id = null, $type = null)
     {
-        if(!$categories_id){
+        if(! $categories_id){
             $categories_id = $this->request->post('main_categories_id', 'i');
         }
 
