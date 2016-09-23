@@ -26,8 +26,10 @@
                     {assign var='categories' value=$mod->shop->comparison->getCategories()}
                     {assign var='category_id' value=$smarty.get.cat}
                     {if $category_id == '' && isset($categories[0])}{assign var='category_id' value=$categories[0].id}{/if}
-                    {assign var='products' value=$mod->shop->comparison->getProducts({$category_id})}
-                    {if $categories|count && $products|count}
+                    {if $category_id  > 0}
+                        {assign var='products' value=$mod->shop->comparison->getProducts({$category_id})}
+                    {/if}
+                    {if $categories|count}
                         <div class="categories">
                             Категорії:
                             {foreach $categories as $cat}

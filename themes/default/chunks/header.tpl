@@ -21,7 +21,7 @@
 
                 <!-- begin wish-list -->
                 <div class="comparison-list">
-                    <a class="comparison-list__link" title="Переглянути список вибраних товарів для порівняння" id="comparison_link" href="15">Порівняти товари</a>
+                    <a class="comparison-list__link" title="Переглянути список вибраних товарів для порівняння" id="comparison_link" href="15">Порівняння</a>
                 </div>
                 <div class="wish-list">
                     <a class="wish-list__link" title="Переглянути список вибраних товарів" id="wishlistLink" href="27">Лист бажань</a>

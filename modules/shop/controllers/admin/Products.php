@@ -31,12 +31,13 @@ class Products extends Content
     private $currency;
     private $customersGroups;
     private $group_id = 5;
-//    private $variants;
+    private $products;
 
     public function __construct()
     {
         parent::__construct('product');
 
+        $this->products = new \modules\shop\models\admin\Products();
         $this->form_action = "module/run/shop/products/process/";
         // hide custom block
         $this->form_display_blocks['intro']    = true;
@@ -258,17 +259,24 @@ class Products extends Content
             if(isset($filter['sku']) && strlen($filter['sku']) > 2){
                 $where[]= " c.sku like '{$filter['sku']}%'";
             }
-            if(isset($filter['status'])){
 
-                switch($filter['status']){
+            if(isset($filter['extra'])){
+
+                switch($filter['extra']){
                     case 'publsihed':
                         $where[] = " c.status = 'publsihed'";
                         break;
                     case 'hidden':
                         $where[] = " c.status = 'hidden'";
                         break;
+                    case 'noimage':
+                        $where[] = " c.id not in (select content_id from __content_images) ";
+                        break;
+                    case 'nocat':
+                        $where[] = " c.id not in (select content_id from __content_relationship) ";
+                        break;
                     default:
-                        $where[] = " c.status in ('published', 'hidden')";
+//                        $where[] = " c.status in ('published', 'hidden')";
                         break;
                 }
             } else{
@@ -311,7 +319,7 @@ class Products extends Content
 
                 $img = $this->images->cover($row['id'], 'thumbs');
 
-                $img = $img ? "<img style='max-width:30px; max-height: 30px; float:left; margin-right: 1em;' src='/{$img}'>" : "<i class='fa fa-file-image-o'></i>";
+                $img = $img ? "<img style='max-width:30px; max-height: 30px; float:left; margin-right: 1em;' src='{$img}'>" : "<i class='fa fa-file-image-o'></i>";
                 $icon_link = Icon::create('fa-external-link');
                 $status = $this->t($this->type .'.status_' . $row['status']);
 
@@ -379,7 +387,35 @@ class Products extends Content
         }
 
         $this->template->assign('sidebar', $this->template->fetch('modules/shop/categories/tree'));
-        $this->output( $this->filter($categories_id) . $t->init());
+//        $this->output( $this->filter($categories_id) . $t->init() . $this->filterActions($categories_id)); 
+        $this->output($this->filter($categories_id) . $t->init() . $this->filterActions($categories_id));
+    }
+
+
+    private function filterActions($categories_id)
+    {
+        $extra = $this->request->get('extra');
+        if(! $extra) return null;
+
+        $this->template->assign('categories_id', $categories_id);
+
+        return $this->template->fetch('modules/shop/products/filter_actions');
+    }
+
+    public function export($format, $categories_id)
+    {
+        $products = $this->products->export($categories_id);
+
+        header("Content-type: text/csv; charset=windows-1251");
+        header("Content-Disposition: attachment; filename=products.csv");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+
+        echo "id;sku;name;price;code;status;created;updated\n";
+        foreach ($products as $fields) {
+            echo implode(';', $fields), "\n";
+        }
+        die;
     }
 
     private function filter($categories_id)
