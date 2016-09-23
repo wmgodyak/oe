@@ -34,7 +34,7 @@ class Comparison extends Model
 
         $_SESSION['comparison'] = $cat;
 
-        echo 1;
+        echo count($cat);
     }
 
     public function delete()

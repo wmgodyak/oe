@@ -79,10 +79,11 @@ var Shop = {
                     products_id   : id
                 },
                 success: function(res){
-                    if(res){
+                    if(res > 0){
                         $.notify('Товар додано в порівняння', 'success');
                         $this.addClass('in');
                         $this.text($this.data('in'));
+                        $('.comparison-count').html('('+ res +')');
                     }
                 }
             });
