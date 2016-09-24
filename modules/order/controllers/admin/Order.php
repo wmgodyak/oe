@@ -18,6 +18,7 @@ use system\core\DataTables2;
 use system\core\EventsHandler;
 use system\Engine;
 use system\models\Currency;
+use system\models\Mailer;
 use system\models\Users;
 
 defined("CPATH") or die();
@@ -60,6 +61,20 @@ class Order extends Engine
 
         $this->assignToNav('Статуси замовлень', 'module/run/order/status', 'fa-money', 'settings', 1);
         $this->template->assignScript('modules/order/js/admin/order.js');
+
+        EventsHandler::getInstance()->add('orders.change_status', [$this, 'notifyCustomer']);
+    }
+
+    public function notifyCustomer($order)
+    {
+        if($order['status_id'] == 6 && in_array($order['payment_id'], [2,3])){
+            // notify customer
+            $order['user'] = $this->users->getData($order['users_id']);
+
+            $mailer = new Mailer('modules/orders/notify', 'Зміна статусу', $order);
+
+            $mailer->send();
+        }
     }
 
     public function index()
