@@ -1750,7 +1750,7 @@
 
     .owl-stage-outer .owl-item {
       padding: 20px 0;
-      height: 125px;
+      height: 100px;
 
       .item {
         overflow: hidden;
@@ -1760,10 +1760,21 @@
           float: left;
           margin-right:1em;
         }
-        span {
-           font-size:14px;
-           color: $font-red;
-         }
+        span{
+          &.name {
+            font-size:14px;
+            color: $font-red;
+            line-height: 18px;
+          }
+          &.price{
+            font-size:18px;
+            color: #000;
+          }
+          &:after{
+            display: table;
+            content: '';
+          }
+        }
       }
     }
   }

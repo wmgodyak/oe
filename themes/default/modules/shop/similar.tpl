@@ -10,7 +10,8 @@
                 {foreach $a as $item}
                     <a class="item {if $item.id==$product.id}active{/if}" href="{$item.id}" title="{$item.name}">
                         <img src="{$app->images->cover($item.id, 'thumbs')}" style="height:65px;" alt="">
-                        <span>{$item.name}</span>
+                        <span class="name">{$item.name}</span>
+                        <span class="price">{$item.price} {$t.shop.currency.uah}</span>
                     </a>
                 {/foreach}
             {/foreach}

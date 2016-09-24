@@ -424,6 +424,7 @@ class Products extends Content
         if(empty($product['features'])) return null;
         $this->clearQuery();
         $this->where("crm.categories_id = {$product['categories_id']}");
+        $this->where(" c.in_stock = 1");
         $i=0;
         foreach ($product['features'] as $feature) {
             $this->join("join __content_features cf{$i} on cf{$i}.features_id={$feature['id']}

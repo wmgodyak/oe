@@ -1607,7 +1607,7 @@ button {
       padding: 0 10px; }
     .m_products-similar .m_goods-multiple-carousel .owl-stage-outer .owl-item {
       padding: 20px 0;
-      height: 125px; }
+      height: 100px; }
       .m_products-similar .m_goods-multiple-carousel .owl-stage-outer .owl-item .item {
         overflow: hidden; }
         .m_products-similar .m_goods-multiple-carousel .owl-stage-outer .owl-item .item img {
@@ -1615,9 +1615,16 @@ button {
           height: 100%;
           float: left;
           margin-right: 1em; }
-        .m_products-similar .m_goods-multiple-carousel .owl-stage-outer .owl-item .item span {
+        .m_products-similar .m_goods-multiple-carousel .owl-stage-outer .owl-item .item span.name {
           font-size: 14px;
-          color: #ee4d4d; }
+          color: #ee4d4d;
+          line-height: 18px; }
+        .m_products-similar .m_goods-multiple-carousel .owl-stage-outer .owl-item .item span.price {
+          font-size: 18px;
+          color: #000; }
+        .m_products-similar .m_goods-multiple-carousel .owl-stage-outer .owl-item .item span:after {
+          display: table;
+          content: ''; }
 
 .btn {
   display: inline-block;
