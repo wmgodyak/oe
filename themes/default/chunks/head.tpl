@@ -21,7 +21,7 @@
     <title>{$page.title}</title>
     <meta name="description" content="{$page.description|escape}"/>
     <meta name="keywords" content="{{$page.keywords|escape}}" />
-    <meta name="author" content="{$page.author.name} {$page.author.surname}">
+    {*<meta name="author" content="{$page.author.name} {$page.author.surname}">*}
     <meta name="generator" content="OYi.Engine7">
 
     <link rel="icon" type="image/x-icon" href={$theme_url}assets/favicon.ico" />

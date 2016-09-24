@@ -167,6 +167,7 @@
 <script src='{$theme_url}/assets/js/vendor/slick.min.js'></script>
 <script src='{$theme_url}/assets/js/vendor/jquery.fancybox.pack.js'></script>
 <script src="{$theme_url}/assets/js/main.js"></script>
+{include file="chunks/translations.tpl"}
 <!-- end scripts -->
 {if isset($modules_scripts)}
     {foreach $modules_scripts as $k=>$script}

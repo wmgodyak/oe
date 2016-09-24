@@ -1,5 +1,5 @@
 <p>Вітаємо.<br />
-    Новий коментар до статі {$data.post_name}.<br />
+    Новий коментар до {$data.post_name}.<br />
     Ім&#39;я: {$data.user.name}<br />
     Email: {$data.user.email}<br />
     Коментар: {$data.message}<br />

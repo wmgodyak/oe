@@ -1,6 +1,7 @@
 .idea/
+html/
 tmp/*
-logs/
+logs/*
 uploads/*
 robots.txt
 __components

@@ -21,16 +21,14 @@
 
                 <!-- begin wish-list -->
                 <div class="comparison-list">
-                    <a class="comparison-list__link" title="Переглянути список вибраних товарів для порівняння" id="comparison_link" href="15"><span class="comparison-count">{if $smarty.session.comparison|count}({$smarty.session.comparison|count}){/if}</span> Порівняння</a>
+                    <a class="comparison-list__link" title="{$t.shop.comparison.link_title}" id="comparison_link" href="15"><span class="comparison-count">{if $smarty.session.comparison|count}({$smarty.session.comparison|count}){/if}</span> {$t.shop.comparison.link}</a>
                 </div>
                 <div class="wish-list">
-                    <a class="wish-list__link" title="Переглянути список вибраних товарів" id="wishlistLink" href="27">Лист бажань</a>
+                    <a class="wish-list__link" title="{$t.wishlist.link_title}" id="wishlistLink" href="27">{$t.wishlist.link}</a>
                 </div>
                 <!-- end wish-list -->
 
                 {include file="modules/languages/switcher.tpl"}
-
-
 
             </div>
             <!-- end header__activities -->
@@ -50,12 +48,11 @@
             <!-- begin logo -->
             <div class="logo">
                 <a  {if $page.id != 1 } href="1"{/if} class="logo__link">
-                    <img src="{$theme_url}/assets/img/logo.png" alt="Світ Мобільних Аксесуарів" title="Світ Мобільних Аксесуарів" class="logo-icon">
-                    {*<img src="{$theme_url}/assets/img/logo-text.png" alt="" class="logo-text">*}
-                    <img src="{$theme_url}/assets/img/main-logo.png" alt="Світ Мобільних Аксесуарів" class="logo-text">
+                    <img src="{$theme_url}/assets/img/logo.png" alt="{$app->page->title(1)}" title="{$app->page->title(1)}" class="logo-icon">
+                    <img src="{$theme_url}/assets/img/main-logo.png" alt="{$app->page->title(1)}" class="logo-text">
                 </a>
                 <div class="side-menu-switcher">
-                    <a href="#">
+                    <a href="javascript:;">
                         <span></span>
                     </a>
                 </div>
@@ -70,7 +67,7 @@
             <!-- end tel-search -->
 
             <!-- begin cart -->
-            <a href="cart" class="cart" id="blockCart" title="Переглянути кошик"></a>
+            <a href="cart" class="cart" id="blockCart" title="{$t.order.frontend.cart_view_title}"></a>
             <!-- end cart -->
 
         </div>
@@ -83,7 +80,7 @@
     <div class="header__xs">
         <div class="container">
             <form class="search-form" action="9">
-                <input type="text" required name="q" placeholder="Пошук по магазину">
+                <input type="text" required name="q" placeholder="{$t.shop.frontend.search_form_placeholder}">
                 <button class="search-btn" type="submit"></button>
             </form>
         </div>

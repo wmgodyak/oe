@@ -34,7 +34,7 @@
             063 123 12 21
         </li>
         <li class="tel__item tel__item--order-call ">
-            <a href="javascript:;" id="callback" title="Залиште свій телефон і ми залюбки вам перетелефонуємо.">{$t.common.callback_link}</a>
+            <a href="javascript:;" id="callback" title="{$t.callbacks.frontend.btn_title}">{$t.common.callback_link}</a>
         </li>
     </ul>
 </div>
