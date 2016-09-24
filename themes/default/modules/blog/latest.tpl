@@ -1,3 +1,5 @@
+{assign var='posts' value=$mod->blog->latestPosts(0, 0, 3)}
+{if $posts|count}
 <!-- begin main-articles -->
 <div class="main-articles">
 
@@ -6,7 +8,7 @@
         <div class="heading">{$t.blog.widget_title}</div>
         <a class="show-all-news" href="5">{$t.blog.widget_more}</a>
         <ul class="main-news__list">
-            {foreach $mod->blog->latestPosts(0, 0, 3) as $post}
+            {foreach $posts as $post}
             <li class="main-news__item">
                 <a class="main-news__link" href="{$post.id}" title="{$post.title}">
                         <span class="main-news__img-block">
@@ -20,7 +22,8 @@
                                 {$post.intro}
                             </span>
                             <span class="main-news__date">
-                                18 березня 2016
+                                {assign var='m' value={date('n', $post.created)}}
+                                {strftime('%d', $post.created)} {$t.month[date('n', $post.created)]} {strftime('%Y', $post.created)}
                             </span>
                         </span>
                 </a>
@@ -36,3 +39,4 @@
 
 </div>
 <!-- end main-articles -->
+{/if}

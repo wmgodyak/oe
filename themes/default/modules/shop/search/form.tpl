@@ -15,7 +15,7 @@
         <input id="shopLiveSearch" tabindex="1" type="text" required name="q" value="{if isset($smarty.get.q)}{$smarty.get.q}{/if}" placeholder="Пошук по сайту">
         <select class="jq-select" name="cat" id="search_cat">
             <option value="" data-href="">Усі категорії</option>
-            {call doCategories categories=$mod->shop->categories()}
+            {call doCategories categories=$mod->shop->categories(0)}
         </select>
         <button class="search-btn" type="submit"></button>
     </form>

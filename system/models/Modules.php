@@ -89,8 +89,9 @@ class Modules
     private function assignLang($module)
     {
         $modules_dir = 'modules';
+        $backend = $this->mode == 'backend' ? 'backend/' : '';
         $dir  =  $modules_dir .'/'. $module . '/lang';
-        $file = DOCROOT . $dir . '/' . $this->lang . '.ini';
+        $file = DOCROOT . $dir . '/' . $backend . $this->lang . '.ini';
 
         if(!file_exists( $file )) {
             return ;
