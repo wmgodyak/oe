@@ -9,6 +9,7 @@
 namespace modules\usersBonus\controllers;
 
 use system\core\EventsHandler;
+use system\core\Session;
 use system\Front;
 
 /**
@@ -37,6 +38,12 @@ class UsersBonus extends Front
         parent::init();
 
         EventsHandler::getInstance()->add('user.profile.nav', [$this, 'myBonus']);
+        $user = Session::get('user');
+
+        if(isset($user['id'])){
+            $user['bonus'] = $this->ub->get($user['id']);
+            Session::set('user', $user);
+        }
     }
 
     public function myBonus($user)

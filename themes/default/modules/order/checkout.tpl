@@ -151,7 +151,7 @@
             <div class="total-price-block">
                 <div class="left">
                     <div class="row-price">
-                        {$t.order.checkout.amount} <span>{round($amount, 2)}{$t.shop.currency.uah}</span>
+                        {$t.order.checkout.amount} <span><span id="oAmount">{round($amount, 2)}</span>{$t.shop.currency.uah}</span>
                     </div>
                     <div class="row-bonus">
                         {$t.shop.bonus} <span>+{$bonus}{$t.shop.currency.uah}</span>
@@ -165,3 +165,4 @@
         </form>
     {/if}
 </div>
+<script>var ub = {if isset($user.bonus)}{$user.bonus}{else}0{/if}</script>

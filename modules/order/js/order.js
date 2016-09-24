@@ -209,8 +209,13 @@ var Order = {
                 data: {delivery_id: delivery_id},
                 success: function(d)
                 {
+                    var amount = $('#oAmount').text();
+                    amount = parseInt(amount);
                     var out = '';
                     $(d.payment).each(function(i,e){
+                        if(e.id == 3 && ub < amount) {
+                            return;
+                        }
                         out += '<option value="'+ e.id +'">'+ e.name +'</option>'
                     });
                     $('#order_payment_id').html(out);
