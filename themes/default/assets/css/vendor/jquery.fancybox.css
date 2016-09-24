@@ -75,9 +75,9 @@
 	max-height: 100%;
 }
 
-/*#fancybox-loading, .fancybox-close, .fancybox-prev span, .fancybox-next span {*/
-	/*background-image: url('fancybox_sprite.png');*/
-/*}*/
+#fancybox-loading, .fancybox-close, .fancybox-prev span, .fancybox-next span {
+	background-image: url('/themes/default/assets/img/fancybox_sprite.png');
+}
 
 #fancybox-loading {
 	position: fixed;

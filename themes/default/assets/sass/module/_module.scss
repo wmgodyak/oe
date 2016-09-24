@@ -1735,3 +1735,36 @@
     }
   }
 }
+.m_products-similar {
+  padding: 30px 0;
+  .m_goods-multiple-carousel{
+    padding:0;
+
+    .goods-multiple-slider__name{
+      font-size:20px;
+      line-height:20px;
+      top:-12px;
+      left:15px;
+      padding: 0 10px;
+    }
+
+    .owl-stage-outer .owl-item {
+      padding: 20px 0;
+      height: 125px;
+
+      .item {
+        overflow: hidden;
+        img{
+          max-width:120px;
+          height: 100%;
+          float: left;
+          margin-right:1em;
+        }
+        span {
+           font-size:14px;
+           color: $font-red;
+         }
+      }
+    }
+  }
+}

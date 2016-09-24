@@ -1595,6 +1595,30 @@ button {
             .m_products-actions .m_goods-multiple-carousel .owl-stage-outer .owl-item .item.have-counter .counter .timer div:first-child span {
               color: #f04d4d; }
 
+.m_products-similar {
+  padding: 30px 0; }
+  .m_products-similar .m_goods-multiple-carousel {
+    padding: 0; }
+    .m_products-similar .m_goods-multiple-carousel .goods-multiple-slider__name {
+      font-size: 20px;
+      line-height: 20px;
+      top: -12px;
+      left: 15px;
+      padding: 0 10px; }
+    .m_products-similar .m_goods-multiple-carousel .owl-stage-outer .owl-item {
+      padding: 20px 0;
+      height: 125px; }
+      .m_products-similar .m_goods-multiple-carousel .owl-stage-outer .owl-item .item {
+        overflow: hidden; }
+        .m_products-similar .m_goods-multiple-carousel .owl-stage-outer .owl-item .item img {
+          max-width: 120px;
+          height: 100%;
+          float: left;
+          margin-right: 1em; }
+        .m_products-similar .m_goods-multiple-carousel .owl-stage-outer .owl-item .item span {
+          font-size: 14px;
+          color: #ee4d4d; }
+
 .btn {
   display: inline-block;
   cursor: pointer;
