@@ -15,9 +15,6 @@
     <div class="cart-page">
 
         {include file="modules/breadcrumbs.tpl"}
-
-
-
         <div class="container clearfix">
             <div class="cart-page__content">
                 <div class="heading">{$page.name}</div>

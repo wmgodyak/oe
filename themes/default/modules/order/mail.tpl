@@ -23,14 +23,14 @@
                         <td>
                             <a style="color:#2379DA" href="{$product.products_id}">{$app->page->name($product.products_id)}</a>
                             <br />
-                            {round($product.price * $product.quantity, 2)} грн.
+                            {round($product.price * $product.quantity, 2)}{$t.shop.currency.uah}
                             {assign var='amount' value= $amount + round($product.price * $product.quantity, 2)}
                         </td>
                      </tr>
                 {/foreach}
             </table>
         </div>
-        <p style="font-size:11pt;margin-top:4px;margin-bottom:4px">Загальна вартість замовлення: <strong>{$amount} грн.</strong></p>
+        <p style="font-size:11pt;margin-top:4px;margin-bottom:4px">Загальна вартість замовлення: <strong>{$amount}{$t.shop.currency.uah}</strong></p>
 		<p style="font-size:11pt;margin-top:4px;margin-bottom:30px">Якщо у вас виникли запитання щодо замовлення або робити інтернет-магазину, будь-ласка, зв’яжіться з нами: {$settings.company_phone} </p>
                 <p style="font-size:12pt;margin-top:24px;margin-bottom:6px">З повагою, команда {$settings.company_name}</p>
         <p

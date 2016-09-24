@@ -13,7 +13,7 @@
                 </div>
                 <div class="name">{$product.name}</div>
                 <div class="price-row">
-                    <div class="price">{$product.price} грн.</div>
+                    <div class="price">{$product.price}{$t.shop.currency.uah}</div>
                 </div>
             </div>
             {foreach $kit.products as $item}
@@ -42,7 +42,7 @@
             </div>
             <div class="result-block">
                 <div class="wrap">
-                    <span>Ви економите {$kit.save_amount} грн.</span>
+                    <span>Ви економите {$kit.save_amount}{$t.shop.currency.uah}</span>
                     <div class="text">
                         Замовляйте комплекти
                         та платіть дешевше

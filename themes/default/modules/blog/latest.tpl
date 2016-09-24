@@ -23,7 +23,7 @@
                             </span>
                             <span class="main-news__date">
                                 {assign var='m' value={date('n', $post.created)}}
-                                {strftime('%d', $post.created)} {$t.month[date('n', $post.created)]} {strftime('%Y', $post.created)}
+                                {date('d', $post.created)} {$t.month[$m]} {date('Y', $post.created)}
                             </span>
                         </span>
                 </a>

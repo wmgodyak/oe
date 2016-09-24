@@ -44,7 +44,7 @@
                                         <div class="item">
                                             <img  src="{$app->images->cover($product.id, 'product')}" alt="">
                                             <a href="{$product.id}" target="_blank">{$product.name}</a>
-                                            <span class="price">{$product.price} грн.</span>
+                                            <span class="price">{$product.price}{$t.shop.currency.uah}</span>
                                         </div>
                                     </td>
                                 {/foreach}

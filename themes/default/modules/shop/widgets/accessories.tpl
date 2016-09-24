@@ -1,6 +1,7 @@
-{*{if !$app->cache->exists('shop.main.actions')}*}
-{*{$app->cache->begin('shop.main.actions', 60*60)}*}
-{assign var='products' value=$mod->shop->accessories($product.id)}
+{assign var="nav_key" value="shop.products.accessories"}
+{if !$app->cache->exists($nav_key)}
+    {$app->cache->begin($nav_key, 3*60)}
+    {assign var='products' value=$mod->shop->accessories($product.id)}
 {if $products|count}
 <div class="m_goods-multiple-carousel" style="padding: 0 0 40px 0">
     <div class="goods-multiple-carousel__wrap">
@@ -13,7 +14,7 @@
     </div>
 </div>
 {/if}
-    {*{$app->cache->end()}*}
-{*{else}*}
-    {*{$app->cache->get('shop.main.actions')}*}
-{*{/if}*}
+    {$app->cache->end()}
+{else}
+    {$app->cache->get($nav_key)}
+{/if}

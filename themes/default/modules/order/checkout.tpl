@@ -1,7 +1,6 @@
-
 <div class="container clearfix">
     {if !isset($smarty.session.cart) || empty($smarty.session.cart)}
-        <div class="bs-callout bs-callout-danger"><p>Ваш кошик порожній. Нічого замовляти</p></div>
+        <div class="bs-callout bs-callout-danger"><p>{$t.order.cart.empty}</p></div>
     {else}
         {assign var='amount' value="0"}
         {assign var='bonus' value="0"}
@@ -12,10 +11,10 @@
             <div class="goods-list">
                 <div class="goods-list__top-row">
                     <div class="item item1">
-                        Склад замовлення:
+                        {$t.order.checkout.title}
                     </div>
                     <div class="item item-right">
-                        <a href="10" class="edit">Змінити замовлення</a>
+                        <a href="10" class="edit">{$t.order.checkout.edit}</a>
                     </div>
                 </div>
                 <div class="goods-list__main">
@@ -34,10 +33,10 @@
                                     <a href="{$item.id}">{$item.name}</a>
                                 </div>
                                 <div class="songle-price">
-                                    {$item.price}  x   {$item.quantity}   =   {$item.price * $item.quantity} грн
+                                    {$item.price}  x   {$item.quantity}   =   {$item.price * $item.quantity}{$t.shop.currency.uah}
                                 </div>
                                 <div class="bonus">
-                                    <span class="red">Ваш СМА бонус: </span><span class="green">+{round($settings.modules.Shop.config.bonus_rate * $item.price * $item.quantity, 2)} грн</span>
+                                    <span class="red">{$t.shop.bonus} </span><span class="green">+{round($settings.modules.Shop.config.bonus_rate * $item.price * $item.quantity, 2)}{$t.shop.currency.uah}</span>
                                 </div>
                             </div>
                         </div>
@@ -58,7 +57,7 @@
                                 </div>
                                 <div class="name">{$kit.product.name}</div>
                                 <div class="price-row">
-                                    <div class="price">{$kit.product.price} грн</div>
+                                    <div class="price">{$kit.product.price}{$t.shop.currency.uah}</div>
                                 </div>
                             </div>
                             {foreach $kit.products as $item}
@@ -68,20 +67,20 @@
                                     </div>
                                     <div class="name">{$item.name}</div>
                                     <div class="price-row">
-                                        <div class="old-price">{$item.original_price} грн</div>
-                                        <div class="price">{$item.price} грн</div>
+                                        <div class="old-price">{$item.original_price}{$t.shop.currency.uah}</div>
+                                        <div class="price">{$item.price}{$t.shop.currency.uah}</div>
                                     </div>
                                 </div>
                             {/foreach}
                             <div class="equals">
                                 <div class="row">
                                     <div class="new-price">
-                                        {round($kit.amount,2)} грн
+                                        {round($kit.amount,2)}{$t.shop.currency.uah}
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="old-price">
-                                        {round($kit.original_amount,2)} грн
+                                        {round($kit.original_amount,2)}{$t.shop.currency.uah}
                                     </div>
                                 </div>
                             </div>
@@ -98,33 +97,33 @@
         <form id="checkout" method="post" action="route/order/checkout" class="order-page__content">
 
             <div class="heading">
-                Оформити замовлення
+                {$t.order.checkout.heading}
             </div>
 
             <table class="info">
                 <tr>
-                    <td colspan="3"><h3 class="head-red">Ваші контактні дані:</h3></td>
+                    <td colspan="3"><h3 class="head-red">{$t.order.checkout.userinfo}</h3></td>
                 </tr>
                 <tr>
-                    <td><label for="">Ваше ім’я*</label></td>
-                    <td><input tabindex="1" type="text" placeholder="Введіть ім’я" autofocus required name="user[name]" {if isset($user.name)}value="{$user.name}"{/if}></td>
-                    <td><input tabindex="2" type="text" placeholder="Введіть прізвище" required name="user[surname]" {if isset($user.surname)}value="{$user.surname}"{/if}></td>
+                    <td><label for="">{$t.order.checkout.uname}</label></td>
+                    <td><input tabindex="1" type="text" placeholder="{$t.order.checkout.unameph}" autofocus required name="user[name]" {if isset($user.name)}value="{$user.name}"{/if}></td>
+                    <td><input tabindex="2" type="text" placeholder="{$t.order.checkout.usurnameph}" required name="user[surname]" {if isset($user.surname)}value="{$user.surname}"{/if}></td>
                 </tr>
                 <tr>
-                    <td><label for="">Номер телефону</label></td>
+                    <td><label for="">{$t.order.checkout.uphone}</label></td>
                     <td colspan="2"><input tabindex="3" type="text" placeholder="38( 063 ) 12 - 34 - 567" id="user_phone" required name="user[phone]" {if isset($user.phone)}value="{$user.phone}"{/if}></td>
                 </tr>
                 <tr>
-                    <td><label for="">Електронна пошта*</label></td>
+                    <td><label for="">{$t.order.checkout.uemail}</label></td>
                     <td colspan="2"><input  tabindex="4" type="email" {if isset($user.email) && strpos($user.email,'one.click') == false}disabled{/if} required name="user[email]" {if isset($user.email)}value="{$user.email}"{/if}></td>
                 </tr>
             </table>
             <table class="info">
                 <tr>
-                    <td colspan="2"><h3 class="head-red">Спосіб доставки та оплати:</h3></td>
+                    <td colspan="2"><h3 class="head-red">{$t.order.checkout.delivery}</h3></td>
                 </tr>
                 <tr id="deliveryRow">
-                    <td><label for="">Спосіб доставки*</label></td>
+                    <td><label for="">{$t.order.checkout.delivery_method}</label></td>
                     <td>
                         <div class="select">
                             <select tabindex="5" name="data[delivery_id]" id="order_delivery_id">
@@ -136,7 +135,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td><label for="">Спосіб оплати*</label></td>
+                    <td><label for="">{$t.order.checkout.payment_method}</label></td>
                     <td>
                         <div class="select">
                             <select name="data[payment_id]" id="order_payment_id"></select>
@@ -144,7 +143,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td><label for="">Коментар до замовлення</label></td>
+                    <td><label for="">{$t.order.checkout.comment}</label></td>
                     <td><textarea name="data[comment]" cols="30" rows="10"></textarea></td>
                 </tr>
             </table>
@@ -152,14 +151,14 @@
             <div class="total-price-block">
                 <div class="left">
                     <div class="row-price">
-                        Разом до сплати: <span>{round($amount, 2)} грн</span>
+                        {$t.order.checkout.amount} <span>{round($amount, 2)}{$t.shop.currency.uah}</span>
                     </div>
                     <div class="row-bonus">
-                        Ваш СМА бонус: <span>+{$bonus} грн</span>
+                        {$t.shop.bonus} <span>+{$bonus}{$t.shop.currency.uah}</span>
                     </div>
                 </div>
                 <div class="right">
-                    <button type="submit" class="btn md red">Оформити замовлення</button>
+                    <button type="submit" class="btn md red">{$t.order.checkout.buy}</button>
                 </div>
             </div>
             <input type="hidden" name="token" value="{$token}">

@@ -1,5 +1,7 @@
-{*{if !$app->cache->exists('shop.main.new')}*}
-{*{$app->cache->begin('shop.main.new', 60*60)}*}
+{assign var="nav_key" value="shop.main.latest"}
+{if !$app->cache->exists($nav_key)}
+{$app->cache->begin($nav_key, 3*60)}
+
 {assign var='products' value=$mod->shop->lastProducts()}
 {if $products|count}
     <div class="m_goods-multiple-carousel">
@@ -14,7 +16,7 @@
         </div>
     </div>
 {/if}
-    {*{$app->cache->end()}*}
-{*{else}*}
-    {*{$app->cache->get('shop.main.new')}*}
-{*{/if}*}
+    {$app->cache->end()}
+{else}
+    {$app->cache->get($nav_key)}
+{/if}

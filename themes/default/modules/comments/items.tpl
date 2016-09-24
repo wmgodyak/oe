@@ -30,7 +30,7 @@
                             <a class="comments__dislike comment-dislike" href="javascript:void(0);" data-id="{$item.skey}">{$item.dislikes}</a>
                         </div>
                         {if isset($user.id)}
-                        <a class="comments__answer comment-reply" href="javascript:void(0);" data-id="{$item.id}">Відповісти</a>
+                        <a class="comments__answer comment-reply" href="javascript:void(0);" data-id="{$item.id}">{$t.comemnts.reply}</a>
                         {/if}
                     </div>
                 </div>
@@ -46,7 +46,7 @@
 {/function}
 <div class="m_comments">
     <div class="comments__counter">
-        <span>{$comments.total} коментарі {if $user.id}<a href="javascript:void(0);" data-id="{$page.id}" class="b-comments-subscribe" data-s="Слідкувати" data-us="Відписатись">Слідкувати</a>{/if}</span>
+        <span>{sprintf($t.comments.totalc,$comments.total)} {if $user.id}<a href="javascript:void(0);" data-id="{$page.id}" class="b-comments-subscribe" data-s="Слідкувати" data-us="Відписатись">Слідкувати</a>{/if}</span>
     </div>
     {include file="modules/comments/form.tpl"}
     {call renderComments items=$comments.items offset=0}

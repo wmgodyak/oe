@@ -52,10 +52,10 @@
                     </div>
 
                     <div class="special-labels">
-                        {if $app->contentMeta->get($product.id, 'hit', true) == 1}<span class="m_hit" title="Хіт продажів"></span>{/if}
+                        {if $app->contentMeta->get($product.id, 'hit', true) == 1}<span class="m_hit" title="{$t.shop.label_hit}"></span>{/if}
                         {*{if $app->contentMeta->get($item.id, 'bestseller', true) == 1}<span title="Супер ціна" class="m_special-offer"></span>{/if}*}
-                        {if $app->contentMeta->get($product.id, 'bestseller', true) == 1}<span title="Супер ціна" class="m_bestseller"></span>{/if}
-                        {if $app->contentMeta->get($product.id, 'sa_action', true) == 1}<span class="m_sa_action" title="Акція"></span>{/if}
+                        {if $app->contentMeta->get($product.id, 'bestseller', true) == 1}<span title="{$t.shop.label_best_price}" class="m_bestseller"></span>{/if}
+                        {if $app->contentMeta->get($product.id, 'sa_action', true) == 1}<span class="m_sa_action" title="{$t.shop.label_action}"></span>{/if}
                     </div>
 
                     {if $product.images|count > 1}
@@ -86,12 +86,12 @@
                     </div>
                     <div class="row">
                         <div class="price">
-                            {$product.price} грн.
+                            {$product.price}{$t.shop.currency.uah}
                         </div>
                     </div>
                     <div class="row">
                         <div class="bonus">
-                            Ваш СМА бонус: <span>+{$product.bonus} грн.</span>
+                            {$t.shop.bonus} <span>+{$product.bonus}{$t.shop.currency.uah}</span>
                         </div>
                     </div>
                     <div class="row">
@@ -121,20 +121,20 @@
                                 <button class="btn sm red buy-btn to-cart cart-product-{$product.id} {if isset($smarty.session.cart[$product.id])}in{/if}"
                                         data-id="{$product.id}"
                                         data-has-variants="{$product.has_variants}"
-                                        data-in="В кошику"
-                                        data-bye="Купити"
-                                >{if isset($smarty.session.cart[$product.id])}В кошику{else}Купити{/if}</button>
-                                <button class="btn sm white-red buy-one-click" data-has-variants="{$product.has_variants}" data-id="{$product.id}">Купити в 1 клік</button
+                                        data-in="{$t.order.cart.in}"
+                                        data-bye="{$t.order.buy}"
+                                >{if isset($smarty.session.cart[$product.id])}{$t.order.cart.in}{else}{$t.order.buy}{/if}</button>
+                                <button class="btn sm white-red buy-one-click" data-has-variants="{$product.has_variants}" data-id="{$product.id}">{$t.order.one_click.buy}</button>
                             </div>
                             <div class="comparison-link">
-                                <a href="15;?cat={$product.categories_id}" style="margin-left: 5px;" class=" to-comparison {if isset($smarty.session.comparison[$product.id])}in{/if}" data-in="У порівнянні" data-cat="{$product.categories_id}" data-id="{$product.id}">{if isset($smarty.session.comparison[$product.id])}У порівнянні{else}Додати в порівняння{/if}</a>
+                                <a href="15;?cat={$product.categories_id}" style="margin-left: 5px;" class=" to-comparison {if isset($smarty.session.comparison[$product.id])}in{/if}" data-in="{$t.shop.comparison.in}" data-cat="{$product.categories_id}" data-id="{$product.id}">{if isset($smarty.session.comparison[$product.id])}{$t.shop.comparison.in}{else}{$t.shop.comparison.add}{/if}</a>
                             </div>
                         {else}
                             <div class="bnt-row">
                                 <button class="btn sm to-wait-list"
                                         data-id="{$product.id}"
                                         data-has-variants="{$product.has_variants}"
-                                        title="Повідомте про появу">Повідомте про появу</button>
+                                        title="{$t.waitlist.btn}">{$t.waitlist.btn}</button>
                             </div>
                         {/if}
                         {$events->call('shop.product.buy.after', $product)}
@@ -152,7 +152,7 @@
                                </select>
                            </span>
                             <span class="coment-counter">
-                                {$commentsTotal} відгуки
+                                {sprintf($t.comments.total, $commentsTotal)}
                             </span>
                         </span>
                         {/if}
@@ -197,7 +197,7 @@
                 </div>
             </div>
             <!-- end single-product-page__content -->
-         </div>
+         {*</div>*}
             <div class="row">
                 <div class="item-info-tabs">
                     <div class="info-tabs__top">

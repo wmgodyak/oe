@@ -47,7 +47,7 @@
                                     </div>
                                     <div class="name">{$product.name}</div>
                                     <div class="price-row">
-                                        <div class="price">{$product.price} грн.</div>
+                                        <div class="price">{$product.price}{$t.shop.currency.uah}</div>
                                     </div>
                                 </div>
                                 {foreach $kit.products as $item}

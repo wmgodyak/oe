@@ -1,3 +1,7 @@
+{assign var="nav_key" value="shopActions.home"}
+{if !$app->cache->exists($nav_key)}
+{$app->cache->begin($nav_key, 3*60)}
+
 <!-- begin banners -->
 <div class="banners">
     <div class="row">
@@ -18,3 +22,8 @@
     </div>
 </div>
 <!-- end banners -->
+
+    {$app->cache->end()}
+{else}
+    {$app->cache->get($nav_key)}
+{/if}

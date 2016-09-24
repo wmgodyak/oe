@@ -5,7 +5,7 @@
         </div>
 
         <div class="comments__textarea-block input-group">
-            Оцініть:
+            {$t.comments.rate}
             <select {if !$user}disabled{/if} id="rate" name="data[rate]">
                 {for $i=1;$i<=5; $i++ }
                     <option value="{$i}">{$i}</option>
@@ -19,7 +19,7 @@
     <div class="row clearfix">
         {if !$user}
             <div class="social__sighin">
-                <span>Увійти за допомогою:</span>
+                <span>{$t.comments.hauth}</span>
                 <div class="comments__social">
                     <a class="comments__social-link comments__social-link--vk" href="route/hybridAuth/auth/Vkontakte"></a>
                     <a class="comments__social-link comments__social-link--fb" href="route/hybridAuth/auth/Facebook"></a>
@@ -28,12 +28,12 @@
         {else}
             <div class="social__sighin">
                 <div class="comments__social">
-                    <p>Вітаємо, {$user.name}. <a href="route/users/logout">Вийти</a></p>
+                    <p>{$t.comments.welcome}{$user.name}. <a href="route/users/logout">{$t.comments.logout}</a></p>
                 </div>
             </div>
         {/if}
         <div class="social__submit">
-            <button type="submit" class="btn md disabled-gray">Коментувати</button>
+            <button type="submit" class="btn md disabled-gray">{$t.comments.write}</button>
         </div>
         <input type="hidden" name="data[content_id]" value="{$page.id}">
         <input type="hidden" name="data[parent_id]" id="cParent" value="0">

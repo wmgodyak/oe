@@ -54,8 +54,8 @@ class HybridAuth extends Users
                 )
             )
       ),
-      "debug_mode" => true ,
-      "debug_file" => "oauth.txt",
+//      "debug_mode" => true ,
+//      "debug_file" => "oauth.txt",
     );
 
     private $ha;

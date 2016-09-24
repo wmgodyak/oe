@@ -24,7 +24,7 @@
                     <a class="comparison-list__link" title="{$t.shop.comparison.link_title}" id="comparison_link" href="15"><span class="comparison-count">{if $smarty.session.comparison|count}({$smarty.session.comparison|count}){/if}</span> {$t.shop.comparison.link}</a>
                 </div>
                 <div class="wish-list">
-                    <a class="wish-list__link" title="{$t.wishlist.link_title}" id="wishlistLink" href="27">{$t.wishlist.link}</a>
+                    <a class="wish-list__link {if $smarty.session.wishlist|count}active{/if}" title="{$t.wishlist.link_title}" id="wishlistLink" href="27">{$t.wishlist.link}</a>
                 </div>
                 <!-- end wish-list -->
 
@@ -67,7 +67,7 @@
             <!-- end tel-search -->
 
             <!-- begin cart -->
-            <a href="cart" class="cart" id="blockCart" title="{$t.order.frontend.cart_view_title}"></a>
+            <a href="cart" class="cart" id="blockCart" title="{$t.order.cart_view_title}"></a>
             <!-- end cart -->
 
         </div>
@@ -80,7 +80,7 @@
     <div class="header__xs">
         <div class="container">
             <form class="search-form" action="9">
-                <input type="text" required name="q" placeholder="{$t.shop.frontend.search_form_placeholder}">
+                <input type="text" required name="q" placeholder="{$t.shop.search_form_placeholder}">
                 <button class="search-btn" type="submit"></button>
             </form>
         </div>

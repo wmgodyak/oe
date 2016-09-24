@@ -31,10 +31,6 @@ class Users extends Front
         parent::init();
 
         $this->template->assignScript("modules/users/js/users.js");
-//        echo "Init " . __CLASS__ . "\r\n";
-        // todo manual authorize user
-//        $user = $this->users->getUserByEmail('m@otakoyi.com');
-//        Session::set('user', $user);
         $this->template->assign('user', Session::get('user'));
     }
 
@@ -147,14 +143,9 @@ class Users extends Front
 
     public function newPsw($skey=null)
     {
+        if(! $skey) return;
 
-        if(!empty($skey)){
-            $user = $this->users->getUserBySkey($skey);
-            if(! $user){
-                die('wrong key');
-            }
-            $this->template->assign('user', $user);
-        }
+        $user = $this->users->getUserBySkey($skey);
 
         if($this->request->isPost()){
             $data = $this->request->post('data'); $i=[]; $s = 0;
@@ -183,6 +174,11 @@ class Users extends Front
             $this->template->assign('status', $s);
             $this->template->assign('errors', $i);;
         }
+
+        if(! $user){
+            die('wrong key');
+        }
+        $this->template->assign('user', $user);
 
 //        $this->template->assign('page', ['title' => $this->t('users.new_psw_title')]);
         $this->response->body($this->template->fetch('modules/users/new_psw'));

@@ -1,5 +1,3 @@
-{*{if !$app->cache->exists('shop.main.actions')}*}
-{*{$app->cache->begin('shop.main.actions', 60*60)}*}
 {assign var='products' value=$mod->shop->viewed()}
 {if $products|count}
 <div class="viewed-products m_goods-multiple-carousel" {if $page.id != 1} style="padding: 0"{/if}>
@@ -13,7 +11,3 @@
     </div>
 </div>
 {/if}
-    {*{$app->cache->end()}*}
-{*{else}*}
-    {*{$app->cache->get('shop.main.actions')}*}
-{*{/if}*}

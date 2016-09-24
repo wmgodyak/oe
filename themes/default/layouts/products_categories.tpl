@@ -54,7 +54,7 @@
                             </div>
                         {/foreach}
                     {else}
-                        <p>Немає товарів</p>
+                        <div class="bs-callout bs-callout-danger"><p>{$t.shop.no_products}</p></div>
                     {/if}
                 </div>
                 <!-- end product__list -->

@@ -1,3 +1,6 @@
+<div class="footer__heading">
+    {$t.theme.info}
+</div>
 <div class="footer-nav">
     <ul class="footer-nav__list">
         {foreach $app->nav->get('bottom') as $item}

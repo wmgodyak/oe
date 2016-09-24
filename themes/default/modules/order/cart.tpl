@@ -14,13 +14,13 @@
         <div class="goods-list">
             <div class="goods-list__top-row">
                 <div class="item item1">
-                    Товар
+                    <%- translations.order.cart.product %>
                 </div>
                 <div class="item item2">
-                    Кількість
+                    <%- translations.order.cart.qtt %>
                 </div>
                 <div class="item item3">
-                    Сума
+                    <%- translations.order.cart.amount %>
                 </div>
             </div>
             <div class="goods-list__main">
@@ -37,10 +37,10 @@
                     <div class="item item2">
                         <div class="name"><%- item.name%></div>
                         <div class="songle-price">
-                            <%- item.price%> грн.
+                            <%- item.price%><%- translations.shop.currency.uah %>
                         </div>
                         <div class="code">
-                            Артикул товару: <%- item.sku%>
+                            <%- translations.order.cart.sku %> <%- item.sku %>
                         </div>
                     </div>
                     <div class="item item3">
@@ -52,12 +52,12 @@
                     </div>
                     <div class="item item4">
                         <div class="total-price">
-                            <%- item.quantity * item.price%> грн.
+                            <%- item.quantity * item.price %> <%- translations.shop.currency.uah %>
                         </div>
                     </div>
                     <div class="item item5">
                         <a class="delate-item cart-delete-item" data-id="<%=item.products_id%>" href="javascript:;">
-                            <span>Видалити з кошика</span>
+                            <span><%- translations.order.cart.remove %></span>
                         </a>
                     </div>
                 </div>
@@ -72,7 +72,7 @@
         <% console.log(kits); %>
         <div class="promotion-banner">
             <div class="heading">
-                Комплект
+                <%- translations.order.cart.kit %>
             </div>
             <% kits.forEach(function(item){  %>
 
@@ -84,7 +84,7 @@
                         </div>
                         <div class="name"><%- item.product.name %></div>
                         <div class="price-row">
-                            <div class="price"><%- item.product.price %> грн.</div>
+                            <div class="price"><%- item.product.price %><%- translations.shop.currency.uah %></div>
                         </div>
                     </div>
                     <% item.products.forEach(function(product){ %>
@@ -102,24 +102,21 @@
                     <div class="equals">
                         <div class="row">
                             <div class="new-price">
-                                <%- item.amount %> грн
+                                <%- item.amount %> <%- translations.shop.currency.uah %>
                             </div>
                         </div>
                         <div class="row">
                             <div class="old-price">
-                                <%- item.original_amount %> грн
+                                <%- item.original_amount %> <%- translations.shop.currency.uah %>
                             </div>
                         </div>
                     </div>
                     <div class="result-block">
                         <div class="wrap">
-                            <span>Ви економите <%- item.save_amount %> грн.</span>
-                            <div class="text">
-                                Замовляйте комплекти
-                                та платіть дешевше
-                            </div>
+                            <span><%- translations.order.cart.kit_discount_amount %> <%- item.save_amount %> <%- translations.shop.currency.uah %></span>
+                            <div class="text"><%- translations.order.cart.kit_comment %></div>
                             <div class="btn-row">
-                                <button class="btn red md b-cart-kits-delete" type="button" data-id="<%- item.id %>">Видалити</button>
+                                <button class="btn red md b-cart-kits-delete" type="button" data-id="<%- item.id %>"><%- translations.order.cart.kit_remove %></button>
                             </div>
                         </div>
                     </div>
@@ -137,19 +134,18 @@
         <div class="total-price-block">
             <div class="left">
                 <div class="row-price">
-                    Разом до сплати: <span><%-amount%> грн</span>
+                    <%- translations.order.cart.total %> <span><%-amount%> грн</span>
                 </div>
                 <div class="row-bonus">
-                    Ваш СМА бонус: <span>+<%- bonus.toFixed(2) %> грн</span>
+                    <%- translations.shop.bonus %> <span>+<%- bonus.toFixed(2) %> грн</span>
                 </div>
             </div>
             <div class="right">
-                <button type="submit" class="btn md red">Оформити замовлення</button>
+                <button type="submit" class="btn md red"><%- translations.order.cart.b_checkout %></button>
             </div>
         </div>
-
         <% } else { %>
-        <div class="bs-callout bs-callout-danger"><p>Ваш кошик порожній</p></div>
+        <div class="bs-callout bs-callout-danger"><p><%- translations.order.cart.empty %></p></div>
         <% } %>
     </script>
 {/literal}

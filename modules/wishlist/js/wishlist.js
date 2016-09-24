@@ -24,7 +24,7 @@ var Wishlist = {
            Wishlist.add(products_id, variants_id, function(res){
                if(res.s == 0 && res.a == 'login'){
                    var d = App.dialog({
-                       title: 'Додавання в список бажань',
+                       title: translations.wishlist.form_title,
                        content: _.template($('#wishlistCreateTpl').html())({
                            products_id: products_id,
                            variants_id:variants_id,

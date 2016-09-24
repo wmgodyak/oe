@@ -1,7 +1,7 @@
-{*{assign var="nav_key" value="shop.main.nav"}*}
-{*{assign var="nav_key" value=$nav_key + $page.types_id}*}
-{*{if !$app->cache->exists($nav_key)}*}
-    {*{$app->cache->begin($nav_key, 3*60)}*}
+{assign var="nav_key" value="shop.main.nav"}
+{assign var="nav_key" value=$nav_key + $page.types_id}
+{if !$app->cache->exists($nav_key)}
+    {$app->cache->begin($nav_key, 3*60)}
     <!-- begin sidebar -->
     <aside class="sidebar sidebar-collapse">
         <!-- begin m_goods-nav -->
@@ -42,7 +42,7 @@
         <!-- end m_goods-nav -->
     </aside>
     <!-- end sidebar -->
-    {*{$app->cache->end()}*}
-{*{else}*}
-    {*{$app->cache->get($nav_key)}*}
-{*{/if}*}
+    {$app->cache->end()}
+{else}
+    {$app->cache->get($nav_key)}
+{/if}

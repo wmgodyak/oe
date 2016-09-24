@@ -22,7 +22,7 @@
                     {assign var='expired' value=$app->contentMeta->get($page.id, 'expired', true)}
                     <div class="m_actions_countdown">
                         <div class="title">
-                            Залишилось:
+                            {$t.shopActions.counter_title}
                         </div>
                         <div id="a_timer" class="timer" data-expired='{date('Y/m/d', strtotime($expired))}'></div>
                     </div>
@@ -75,10 +75,8 @@
             <!-- end article-page__content -->
             {include file="chunks/sidebar.tpl"}
         </div>
-
     </div>
     <!-- end article-page -->
-
 </div>
 <!-- end wrapper -->
 {include file="chunks/footer.tpl"}

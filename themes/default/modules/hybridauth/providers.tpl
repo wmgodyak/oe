@@ -1,5 +1,5 @@
 <div class="social-intro">
-    <h3>Увійти як користувач</h3>
+    <h3>{$t.hybridAuth.login_as}</h3>
     {foreach $providers as $provider => $params}
         {if $params.enabled}
             <a href="route/hybridAuth/auth/{$provider}" class="block">

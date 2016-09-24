@@ -1,4 +1,3 @@
-
 <form id="feedback" method="post" class="form" action="route/feedback/process">
     <div class="form-group">
         <label for="fb_data_name">{$t.feedback.name}</label>
