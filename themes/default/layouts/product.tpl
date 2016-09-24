@@ -22,7 +22,8 @@
             <div class="single-product-page__content">
 
                 <div class="heading">
-                    <h1>{$product.name}</h1>
+                    <h1>{$product.name}{if $smarty.session.engine.admin.id > 0}&nbsp;<a title="Редагувати в адмінстративній частині" target="_blank" href="/engine/module/run/shop/products/edit/{$page.id}">
+                            <img src="{$theme_url}/assets/img/pencil.png" alt=""></a>{/if}</h1>
                 </div>
 
                 <div class="item-main-info">

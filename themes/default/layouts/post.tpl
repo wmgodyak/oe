@@ -21,7 +21,8 @@
             <!-- begin article-page__content -->
             <div class="article-page__content">
 
-                <h1>{$post.name}</h1>
+                <h1>{$post.name}{if $smarty.session.engine.admin.id > 0}&nbsp;<a title="Редагувати в адмінстративній частині" target="_blank" href="/engine/module/run/blog/edit/{$page.id}">
+                        <img src="{$theme_url}/assets/img/pencil.png" alt=""></a>{/if}</h1>
 
                 <span class="m_article-info">
                     <span class="article-info__date">

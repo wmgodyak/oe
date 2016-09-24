@@ -21,7 +21,8 @@
 
             <!-- begin article-page__content -->
             <div class="article-page__content">
-                <h1>{$page.name}</h1>
+                <h1>{$page.name}{if $smarty.session.engine.admin.id > 0}&nbsp;<a title="Редагувати в адмінстративній частині" target="_blank" href="/engine/pages/edit/{$page.id}">
+                            <img src="{$theme_url}/assets/img/pencil.png" alt=""></a>{/if}</h1>
                 <div class="text cms-content">
                     {$page.content}
                     {$events->call('layouts.pages.content')}

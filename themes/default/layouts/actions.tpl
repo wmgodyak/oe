@@ -17,7 +17,8 @@
         <div class="container">
             <!-- begin article-page__content -->
             <div class="article-page__content">
-                <h1>{$page.name}</h1>
+                <h1>{$page.name}{if $smarty.session.engine.admin.id > 0}&nbsp;<a title="Редагувати в адмінстративній частині" target="_blank" href="/engine/module/run/shopActions/edit/{$page.id}">
+                        <img src="{$theme_url}/assets/img/pencil.png" alt=""></a>{/if}</h1>
                 {if $app->contentMeta->get($page.id, 'counter', true) == 1}
                     {assign var='expired' value=$app->contentMeta->get($page.id, 'expired', true)}
                     <div class="m_actions_countdown">
