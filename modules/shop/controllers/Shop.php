@@ -85,8 +85,24 @@ class Shop extends Front
         $this->template->assignScript("modules/shop/js/jquery.ajaxSearch.js");
         $this->template->assignScript("modules/shop/js/jquery.cookie-min.js");
         $this->template->assignScript("modules/shop/js/shop.js");
+
         if($this->page['type'] == 'product'){
             $this->product();
+        }
+
+        if($this->page['type'] == 'products_categories'){
+            $features = new Features();
+            $meta = $features->makeMeta();
+            if($meta){
+                $page = $this->template->getVars('page');
+                foreach ($meta as $feature) {
+                    $v = implode(', ', $feature['values']);
+                    $page['title']       .= " {$feature['name']} - {$v} ";
+                    $page['keywords']    .= " {$feature['name']} - {$v}, ";
+                    $page['description'] .= " {$feature['name']} - {$v}. ";
+                }
+                $this->template->assign('page', $page);
+            }
          }
     }
 

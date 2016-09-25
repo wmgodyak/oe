@@ -158,6 +158,26 @@ class Features extends \system\models\Features
         return $this->selected_features;
     }
 
+    public function makeMeta()
+    {
+        $res = [];
+        $selected = $this->parseGetParams();
+        if(empty($selected)) return null;
+
+        foreach ($selected as $key => $values) {
+            $features_id = $this->getIDByCode($key);
+            $name = $this->getName($features_id);
+            $v_names = [];
+            foreach ($values as $k=>$values_id) {
+                $v_names[] = $this->getName($values_id);
+            }
+
+            $res[] = ['name' => $name, 'values' => $v_names];
+        }
+
+        return $res;
+    }
+
     public function getFormAction()
     {
         return $_SERVER['REQUEST_URI'];
