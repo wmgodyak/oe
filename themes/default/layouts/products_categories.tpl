@@ -32,7 +32,7 @@
 
                 <!-- begin product-page__top-line -->
                 <div class="product-page__top-line">
-                    <div class="title">{$page.title}</div>
+                    <div class="title">{$page.name}</div>
                     {include file="modules/shop/category/sorting.tpl"}
                 </div>
                 <!-- end product-page__top-line -->
