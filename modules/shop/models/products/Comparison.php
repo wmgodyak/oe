@@ -56,7 +56,20 @@ class Comparison extends Model
 
         $cf = new ContentFeatures();
 
-        return $cf->get($categories_id);
+        $items = $cf->get($categories_id);
+
+        if(empty($items)){
+
+            $cat_parent_id = self::$db
+                ->select("select parent_id from __content where id='{$categories_id}' limit 1")
+                ->row('parent_id');
+
+            if($cat_parent_id > 0){
+                return $this->getFeatures($cat_parent_id);
+            }
+        }
+
+        return $items;
     }
 
     public function getProducts($categories_id)

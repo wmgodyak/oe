@@ -42,8 +42,8 @@
                                 {foreach $products as $product}
                                     <td>
                                         <div class="item">
-                                            <img  src="{$app->images->cover($product.id, 'product')}" alt="">
-                                            <a href="{$product.id}" target="_blank">{$product.name}</a>
+                                            <div class="img"><img  src="{$app->images->cover($product.id, 'product')}" alt=""></div>
+                                            <a href="{$product.id}" title="{$product.name}" target="_blank">{$product.name}</a>
                                             <span class="price">{$product.price}{$t.shop.currency.uah}</span>
                                         </div>
                                     </td>

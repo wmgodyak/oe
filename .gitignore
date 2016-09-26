@@ -8,3 +8,4 @@ __components
 vendor/filemanager/
 vendor/sxd/
 sitemap*.xml
+config/db.php

@@ -1504,9 +1504,18 @@
     position: relative;
     padding-bottom:30px;
     height: 230px;
-    img {
-      display: block;
+    max-width:150px;
+    overflow: hidden;
+    word-wrap: break-word;
+
+    .img {
+      height: 130px;
       max-width:120px;
+      text-align: center;
+      img{
+        max-width:100%;
+        max-height:125px;
+      }
     }
     .price{
       position: absolute;
@@ -1515,6 +1524,11 @@
       display: block;
       font-size:16px;
       font-weight: bold;
+    }
+    a{
+      display: block;
+      overflow: hidden;
+      height: 60px ;
     }
   }
 }
