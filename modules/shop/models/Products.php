@@ -253,7 +253,7 @@ class Products extends Content
         $cu_main = $this->currency->getMainMeta();
 
         $items = self::$db->select("
-          select c.id, ci.name, ci.title, c.in_stock, c.has_variants, crm.categories_id, ci.description, ci.url,
+          select DISTINCT c.id, ci.name, ci.title, c.in_stock, c.has_variants, crm.categories_id, ci.description, ci.url,
             CASE
               WHEN c.currency_id = {$cu_on_site['id']} THEN pp.price
               WHEN c.currency_id <> {$cu_on_site['id']} and c.currency_id = {$cu_main['id']} THEN pp.price * {$cu_on_site['rate']}
