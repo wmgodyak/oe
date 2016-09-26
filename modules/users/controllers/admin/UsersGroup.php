@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: wg
- * Date: 27.06.16
- * Time: 23:30
- */
 
 namespace modules\users\controllers\admin;
 

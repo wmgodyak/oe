@@ -1,5 +1,8 @@
 <?php
 
+namespace modules\newsletter\controllers;
+
+defined("CPATH") or die();
 /**
  * Class Newsletter
  * @name Розсилка новин

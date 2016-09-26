@@ -1,7 +1,6 @@
 engine.users = {
     init: function()
     {
-        console.log('Init users');
         $(document).on('click', '.b-users-create', function(){
             engine.users.create();
         });
@@ -68,8 +67,6 @@ engine.users = {
                 });
             })
             .init();
-
-
     },
     create: function()
     {

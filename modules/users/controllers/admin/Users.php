@@ -271,7 +271,7 @@ class Users extends Engine
         $params = func_get_args();
         $action = array_shift($params);
 
-        $controller  = new usersGroup();
+        $controller  = new UsersGroup();
 
         call_user_func_array(array($controller, $action), $params);
     }
