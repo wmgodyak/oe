@@ -120,7 +120,7 @@
 
     function onDeliveryChange()
     {
-        console.log('onDeliveryChange');
+//        console.log('onDeliveryChange');
         var region_id = $("#delivery_region_id").find('option:selected').val(),
             city_id   = $("#delivery_city_id").find('option:selected').val();
 
@@ -192,6 +192,7 @@
         onDeliveryChange();
 
         var delivery_id = $("#order_delivery_id").find('option:selected').val();
+        var payment_id = $('#order_payment_id').find('option:selected').val();
         // payment
         engine.request.post({
             url: 'module/run/delivery/getPayment',
@@ -202,7 +203,7 @@
             {
                 var out = '';
                 $(d.payment).each(function(i,e){
-                    out += '<option value="'+ e.id +'">'+ e.name +'</option>'
+                    out += '<option '+ (payment_id == e.id ? 'selected' : '') +' value="'+ e.id +'">'+ e.name +'</option>'
                 });
                 $('#order_payment_id').html(out);
 

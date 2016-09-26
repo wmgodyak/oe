@@ -13,22 +13,24 @@ engine.orders = {
             engine.orders.delete($(this).data('id'));
         });
 
-        $(document).on('change', '#delivery_id', function(){
-            var id = $(this).data('id');
-            var delivery_id = $(this).find('option:selected').val();
-            engine.request.post({
-                url  : '/route/delivery/getPayment',
-                data : {delivery_id: delivery_id},
-                success: function(d)
-                {
-                    var out = '';
-                    $(d.payment).each(function(i,e){
-                        out += '<option value="'+ e.id +'">'+ e.name +'</option>'
-                    });
-                    $('#payment_id_'+id).html(out);
-                }
-            })
-        });
+        //$(document).on('change', '#order_delivery_id', function(){
+        //    var id = $(this).data('id');
+        //    var payment_id = $('#payment_id_'+id).find('option:selected').val();
+        //    alert(payment_id);
+        //    var delivery_id = $(this).find('option:selected').val();
+        //    engine.request.post({
+        //        url  : '/route/delivery/getPayment',
+        //        data : {delivery_id: delivery_id, payment_id : payment_id},
+        //        success: function(d)
+        //        {
+        //            var out = '';
+        //            $(d.payment).each(function(i,e){
+        //                out += '<option value="'+ e.id +'">'+ e.name +'</option>'
+        //            });
+        //            $('#payment_id_'+id).html(out);
+        //        }
+        //    })
+        //});
 
 
     },
