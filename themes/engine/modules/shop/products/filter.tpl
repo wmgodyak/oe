@@ -34,7 +34,11 @@
                 <option value="published" {if $smarty.get.extra == 'published'}selected{/if}>Опубліковані</option>
                 <option value="hidden" {if $smarty.get.extra == 'hidden'}selected{/if}>Приховані</option>
                 <option value="noimage" {if $smarty.get.extra == 'noimage'}selected{/if}>Без фото</option>
+                <option value="vsimage" {if $smarty.get.extra == 'vsimage'}selected{/if}>З фото</option>
                 <option value="nocat" {if $smarty.get.extra == 'nocat'}selected{/if}>Без кат.</option>
+                <option value="in_stock_1" {if $smarty.get.extra == 'in_stock_1'}selected{/if}>В наявності</option>
+                <option value="in_stock_2" {if $smarty.get.extra == 'in_stock_2'}selected{/if}>Під зам.</option>
+                <option value="in_stock_0" {if $smarty.get.extra == 'in_stock_0'}selected{/if}>Немає в наявн.</option>
             </select>
         </div>
         {if $features|count}
@@ -55,5 +59,16 @@
             <a href="module/run/shop/products{if $categories_id > 0}/index/{$categories_id}{/if}" class="btn" type="reset">Скинути</a>
         </div>
     </div>
+        <div class="row">
+            <div class="form-group">
+                <label for="status">Наявність</label>
+                <select name="in_stock" id="in_stock" class="form-control">
+                    <option value="">Виберіть</option>
+                    <option value="1" {if $smarty.get.in_stock == '1'}selected{/if}>В наявності</option>
+                    <option value="2" {if $smarty.get.in_stock == '2'}selected{/if}>Під зам.</option>
+                    <option value="0" {if $smarty.get.in_stock == '0'}selected{/if}>Немає в наявн.</option>
+                </select>
+            </div>
+        </div>
     </form>
 </fieldset>

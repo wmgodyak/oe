@@ -264,6 +264,11 @@ class Products extends Content
                 $where[]= " c.sku like '{$filter['sku']}%'";
             }
 
+            if(isset($filter['in_stock']) && $filter['in_stock'] != ''){
+                $filter['in_stock'] = (int)$filter['in_stock'];
+                $where[] = " c.in_stock = {$filter['in_stock']}";
+            }
+
             if(isset($filter['extra'])){
 
                 switch($filter['extra']){
@@ -275,6 +280,9 @@ class Products extends Content
                         break;
                     case 'noimage':
                         $where[] = " c.id not in (select content_id from __content_images) ";
+                        break;
+                    case 'vsimage':
+                        $where[] = " c.id in (select content_id from __content_images) ";
                         break;
                     case 'nocat':
                         $where[] = " c.id not in (select content_id from __content_relationship) ";
