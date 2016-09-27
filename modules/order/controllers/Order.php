@@ -190,7 +190,9 @@ class Order extends Front
                 if($s && ! $this->order->hasError()){
                     $this->order->commit();
                     $this->cart->clear();
+                    $order['user'] = $ui;
                     $this->notifyCustomer($order);
+                    $this->notifyAdmin($order);
                 } else {
                     $this->order->rollback();
                 }
@@ -201,6 +203,15 @@ class Order extends Front
     }
 
     private function notifyCustomer($order)
+    {
+        $order['user'] = $this->users->getData($order['users_id']);
+        $mailer = new Mailer('modules/order/mail', 'Нове замовлення', $order);
+        $mailer->addAddress($order['user']['email'], $order['user']['name']);
+
+        return $mailer->send();
+    }
+
+    private function notifyAdmin($order)
     {
         $order['user'] = $this->users->getData($order['users_id']);
         $mailer = new Mailer('modules/order/mail', 'Нове замовлення', $order);
@@ -296,7 +307,7 @@ class Order extends Front
             if($s && ! $this->order->hasError()){
                 $this->order->commit();
                 $this->cart->clear();
-                $this->notifyCustomer($order);
+                $a = $this->notifyAdmin($order);
             } else {
                 $this->order->rollback();
             }

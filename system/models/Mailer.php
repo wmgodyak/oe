@@ -83,6 +83,7 @@ class Mailer
      */
     public function addAddress($address, $name = '')
     {
+        $this->has_address = true;
         if(strpos($address, ',')){
             $a = explode(',', $address);
             foreach ($a as $k=>$e) {
