@@ -18,17 +18,26 @@
                         <div class="content my-grid">
                             <div class="row">
                                 {foreach $mod->shop->categories($cat.id) as $item}
-                                <div class="item">
-                                    <ul class="single-category">
-                                        <li><a class="text-head" href="{$item.id}" title="{$item.title}">{$item.name}</a></li>
-                                        {if $item.isfolder}
-                                            {foreach $mod->shop->categories($item.id) as $k=>$sub}
-                                                {if $k < 6}
-                                                <li><a class="link" href="{$sub.id}" title="{$sub.title}">{$sub.name}</a></li>
-                                                {/if}
-                                            {/foreach}
-                                        {/if}
-                                    </ul>
+                                <div class="item {if $item.isfolder}item-sub{/if}">
+                                    <div class="single-category">
+                                        <div class="text-head" >
+                                            <a href="{$item.id}" title="{$item.title}">{$item.name}</a>
+                                        </div>
+                                        <div class="wrap-row">
+                                            <div class="wrap-img">
+                                                <img src="{$theme_url}assets/img/weather.jpg" alt="">
+                                            </div>
+                                            {if $item.isfolder}
+                                                <div class="item-sub-list">
+                                                    {foreach $mod->shop->categories($item.id) as $k=>$sub}
+                                                        {if $k < 6}
+                                                        <a class="link" href="{$sub.id}" title="{$sub.title}" rel="{$theme_url}assets/img/noimage.jpg">{$sub.name}</a>
+                                                        {/if}
+                                                    {/foreach}
+                                                </div>
+                                            {/if}
+                                        </div>
+                                    </div>
                                 </div>
                                 {/foreach}
                             </div>
