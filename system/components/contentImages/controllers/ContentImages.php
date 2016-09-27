@@ -138,7 +138,7 @@ class ContentImages extends Engine
 
             $image_tmp  = $image['tmp_name'][0];
 
-            $sizes = $this->ci->getSizes($content_id);
+            $sizes = [];
 
             // source size
             $source_dir = Settings::getInstance()->get('content_images_source_dir');
@@ -168,6 +168,10 @@ class ContentImages extends Engine
                         'quality' => $this->quality,
                         'watermark' => 0
                     ];
+            }
+
+            foreach ($this->ci->getSizes($content_id) as $item) {
+                $sizes[] = $item;
             }
 
             $source_im = DOCROOT . $path . $source_dir . $fname;
