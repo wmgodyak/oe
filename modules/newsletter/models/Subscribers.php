@@ -3,6 +3,7 @@
 namespace modules\newsletter\models;
 
 use modules\newsletter\models\subscribers\Meta;
+use modules\newsletter\models\subscribers\GroupSubscribers;
 use system\models\Model;
 
 /**
@@ -11,15 +12,32 @@ use system\models\Model;
  */
 class Subscribers extends Model
 {
-    protected $meta;
+    public $meta;
+    public $groups_subscribers;
 
     public function __construct()
     {
         parent::__construct();
 
         $this->meta = new Meta();
+        $this->groups_subscribers = new GroupSubscribers();
     }
 
+    /**
+     * @param $email
+     * @return bool
+     */
+    public function is($email)
+    {
+        return self::$db
+            ->select("select id from __newsletter_subscribers where email = '{$email}' limit 1")
+            ->row('id') > 0;
+    }
+
+    public function getData($id, $key= '*')
+    {
+        return $this->rowData('__newsletter_subscribers', $id, $key);
+    }
 
     /**
      * @param $data
@@ -43,6 +61,11 @@ class Subscribers extends Model
         }
 
         return $this->createRow('__newsletter_subscribers', $data);
+    }
+
+    public function confirm($code)
+    {
+        return self::$db->update('__newsletter_subscribers', ['status' => 'confirmed'], " code = '{$code}' limit 1");
     }
 
     /**

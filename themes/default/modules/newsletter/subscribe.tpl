@@ -16,13 +16,14 @@
             інтернет магазині, а також будьте
             завжди в курсі наших новин.
         </div>
-        <form action="#">
+        <form action="route/newsletter/subscribe" method="post" class="newsletter-subscribe">
             <div class="input-group">
-                <input type="email" placeholder="Введіть свій e-mail">
+                <input type="email" placeholder="{$t.newsletter.label_email}" required name="data[email]">
             </div>
             <div class="btn-row">
                 <button class="btn md red">Хочу знижку</button>
             </div>
+            <input type="hidden" name="data[form]" value="footer">
         </form>
     </div>
 </div>

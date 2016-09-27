@@ -1,21 +1,18 @@
-
 <div class="footer__heading">
-    Підписка
+    {$t.newsletter.block_title}
 </div>
 
 <div class="footer__subscription">
     <div class="text">
-        Підпишіться на розсилку від СМА та
-        отримуйте завжди свіжі новини, акції
-        та пропозиції на свою електронну
-        скриньку.
+        {$t.newsletter.block_text}
     </div>
-    <form action="#" onsubmit="alert('Ви не вибрали систему воронки продаж.'); return false;">
+    <form action="route/newsletter/subscribe" method="post" class="newsletter-subscribe">
         <div class="input-row">
-            <input type="email" placeholder="введіть ваш  e-mail">
+            <input type="email" placeholder="{$t.newsletter.label_email}" required name="data[email]">
         </div>
         <div class="btn-row">
-            <button>Підписатись</button>
+            <button>{$t.newsletter.button}</button>
         </div>
+        <input type="hidden" name="data[form]" value="footer">
     </form>
 </div>

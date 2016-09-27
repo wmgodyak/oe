@@ -24,6 +24,7 @@
                 <div class="clear"><br></div>
                 {$mod->shop->filter()}
                 {$events->call('shop.categories.sidebar', $page)}
+                {include file="themes/default/modules/newsletter/subscribe.tpl"}
             </aside>
             <!-- end aside -->
 
