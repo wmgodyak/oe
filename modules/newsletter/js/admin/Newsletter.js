@@ -42,6 +42,80 @@ $(document).ready(function(){
 
 engine.newsletter = {
     subscribers: {
+        deleteSelected: function(items)
+        {
+           var dialog = engine.confirm('Confirm delete selected subscribers', function(){
+                engine.request.post({
+                    url: 'module/run/newsletter/subscribers/deleteSelected',
+                    data: {items: items},
+                    success: function(res){
+                        engine.refreshDataTable('newsletter_subscribers');
+                        dialog.dialog('close');
+                        engine.alert('Success');
+                    }
+                });
+            });
+        },
+        moveToGroup: function(items)
+        {
+            engine.request.post({
+                url: 'module/run/newsletter/subscribers/moveToGroup',
+                data: {items: items},
+                success: function(res){
+                   var dialog = engine.dialog({
+                       title: 'Move to group',
+                       content: res,
+                       width: 500,
+                       buttons: {
+                           move: function(){
+                               $("#moveToGroupForm").submit();
+                           }
+                       }
+                    });
+
+
+                    engine.validateAjaxForm('#moveToGroupForm', function(d){
+                        if(d.s){
+                            engine.alert('Success');
+                            dialog.dialog('close');
+                            dialog.dialog('destroy').remove()
+                        }
+                    });
+                },
+                dataType: 'html'
+            });
+
+        },
+        copyToGroup: function(items)
+        {
+            engine.request.post({
+                url: 'module/run/newsletter/subscribers/copyToGroup',
+                data: {items: items},
+                success: function(res){
+                   var dialog = engine.dialog({
+                       title: 'Move to group',
+                       content: res,
+                       width: 500,
+                       buttons: {
+                           copy: function(){
+                               $("#copyToGroupForm").submit();
+                           }
+                       }
+                    });
+
+
+                    engine.validateAjaxForm('#copyToGroupForm', function(d){
+                        if(d.s){
+                            engine.alert('Success');
+                            dialog.dialog('close');
+                            dialog.dialog('destroy').remove()
+                        }
+                    });
+                },
+                dataType: 'html'
+            });
+
+        },
         group: {
             create: function()
             {

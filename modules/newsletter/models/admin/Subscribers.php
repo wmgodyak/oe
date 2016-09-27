@@ -1,9 +1,26 @@
 <?php
 
 namespace modules\newsletter\models\admin;
+use modules\newsletter\models\subscribers\Groups;
+use modules\newsletter\models\subscribers\GroupSubscribers;
 
+/**
+ * Class Subscribers
+ * @package modules\newsletter\models\admin
+ */
 class Subscribers extends \modules\newsletter\models\Subscribers
 {
+    public $groups;
+    public $groups_subscribers;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->groups = new Groups();
+        $this->groups_subscribers = new GroupSubscribers();
+    }
+
     public function export($group_id)
     {
         $join = "";

@@ -9,7 +9,7 @@
        <div  class="shop-sub-nav">
         {if $img != '/uploads/noimage.jpg'}
            <div class="img">
-               <img src="{$img}" alt="">
+               <img src="{$img}" alt="" style="max-width: 100px; max-height:100px;">
            </div>
         {/if}
            {assign var= 'nav' value=array_chunk_part($subnav, $col)}

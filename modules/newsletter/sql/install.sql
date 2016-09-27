@@ -79,3 +79,5 @@ CREATE TABLE IF NOT EXISTS `e_newsletter_campaigns_info` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
   ENGINE = InnoDB;
+
+ALTER TABLE `__newsletter_subscribers_group_subscribers` ADD UNIQUE( `group_id`, `subscribers_id`);
