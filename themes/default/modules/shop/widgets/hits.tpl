@@ -1,6 +1,6 @@
-{*{assign var="nav_key" value="shop.home.hits"}*}
-{*{if !$app->cache->exists($nav_key)}*}
-    {*{$app->cache->begin($nav_key, 3*60)}*}
+{assign var="nav_key" value="shop.home.hits"}
+{if !$app->cache->exists($nav_key)}
+    {$app->cache->begin($nav_key, 6*60)}
 
     {assign var='products' value=$mod->shop->hits()}
     {if $products|count}
@@ -16,7 +16,7 @@
             </div>
         </div>
     {/if}
-{*{$app->cache->end()}*}
-{*{else}*}
-{*{$app->cache->get($nav_key)}*}
-{*{/if}*}
+    {$app->cache->end()}
+{else}
+    {$app->cache->get($nav_key)}
+{/if}

@@ -1,7 +1,7 @@
-{assign var="nav_key" value="shop.main.nav"}
-{assign var="nav_key" value=$nav_key + $page.types_id}
-{if !$app->cache->exists($nav_key)}
-    {$app->cache->begin($nav_key, 3*60)}
+{*{assign var="nav_key" value="shop.main.nav"}*}
+{*{assign var="nav_key" value=$nav_key + $page.types_id}*}
+{*{if !$app->cache->exists($nav_key)}*}
+    {*{$app->cache->begin($nav_key, 3*60)}*}
     <!-- begin sidebar -->
     <aside class="sidebar sidebar-collapse">
         <!-- begin m_goods-nav -->
@@ -25,13 +25,16 @@
                                         </div>
                                         <div class="wrap-row">
                                             <div class="wrap-img">
-                                                <img src="{$theme_url}assets/img/weather.jpg" alt="">
+                                                <img src="{$app->images->cover($item.id, 'cat')}" alt="{$item.name}">
                                             </div>
                                             {if $item.isfolder}
                                                 <div class="item-sub-list">
                                                     {foreach $mod->shop->categories($item.id) as $k=>$sub}
                                                         {if $k < 6}
-                                                        <a class="link" href="{$sub.id}" title="{$sub.title}" rel="{$theme_url}assets/img/noimage.jpg">{$sub.name}</a>
+                                                            <a class="link" href="{$sub.id}" title="{$sub.title}" rel="{$app->images->cover($sub.id, 'cat')}">{$sub.name}</a>
+                                                        {/if}
+                                                        {if $k == 6}
+                                                            <a class="link" href="{$item.id}" title="{$item.title}" rel="{$app->images->cover($item.id, 'cat')}">Переглянути всі</a>
                                                         {/if}
                                                     {/foreach}
                                                 </div>
@@ -51,7 +54,7 @@
         <!-- end m_goods-nav -->
     </aside>
     <!-- end sidebar -->
-    {$app->cache->end()}
-{else}
-    {$app->cache->get($nav_key)}
-{/if}
+    {*{$app->cache->end()}*}
+{*{else}*}
+    {*{$app->cache->get($nav_key)}*}
+{*{/if}*}

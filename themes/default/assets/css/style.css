@@ -1248,8 +1248,8 @@ button {
       .sub-menu .content .item .wrap-row {
         margin: 0 -5px; }
       .sub-menu .content .item .wrap-img img {
-        width: 70px;
-        height: 70px; }
+        max-width: 90px;
+        max-height: 90px; }
       .sub-menu .content .item .wrap-img, .sub-menu .content .item .item-sub-list {
         padding: 0 5px; }
       .sub-menu .content .item .item-sub-list {
@@ -1318,7 +1318,7 @@ button {
     width: 100%;
     transition: all 0.35s ease;
     border-bottom: 1px solid #fff;
-    font-size: 12px;
+    font-size: 13px;
     line-height: 14px;
     padding: 0 0 4px 0;
     color: #777; }
@@ -1331,7 +1331,7 @@ button {
       display: block;
       color: #333;
       transition: all 0.35s ease;
-      font: 12px/16px "Roboto-Medium", sans-serif; }
+      font: 14px/16px "Roboto-Medium", sans-serif; }
       .sub-menu .text-head a:hover {
         color: #ee4d4d; }
   @media only screen and (max-width: 1170px) {

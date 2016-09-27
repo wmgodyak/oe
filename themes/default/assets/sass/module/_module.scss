@@ -1255,8 +1255,8 @@
       }
       .wrap-img{
         img {
-          width: 70px;
-          height: 70px;
+          max-width: 90px;
+          max-height: 90px;
         }
       }
       .wrap-img,.item-sub-list{
@@ -1351,7 +1351,7 @@
     //color: $font-dark-grey;
     transition: all 0.35s ease;
     border-bottom: 1px solid #fff;
-    font-size: 12px;
+    font-size: 13px;
     line-height: 14px;
     padding: 0 0 4px 0;
     color: #777;
@@ -1371,7 +1371,7 @@
       color: $font-dark-grey;
       transition: all 0.35s ease;
 
-      font: 12px/16px $fontMedium;
+      font: 14px/16px $fontMedium;
       &:hover {
         color: $font-red;
         //border-top: 1px solid $font-red;
