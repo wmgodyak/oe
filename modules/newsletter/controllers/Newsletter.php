@@ -86,6 +86,18 @@ class Newsletter extends \system\Front
             echo "<p>{$m}</p>";
             echo "<script>setTimeout(function(){self.location.href='/'}, 2000);</script>";
         }
+    }
 
+    public function unsubscribe($code = null)
+    {
+        if(empty($code)) die;
+
+        if( ! $this->subscribers->unsubscribe($code)){
+            echo $this->t('newsletter.unsubscribe_error');
+        } else {
+            $m = $this->t('newsletter.unsubscribe_success');
+            echo "<p>{$m}</p>";
+            echo "<script>setTimeout(function(){self.location.href='/'}, 2000);</script>";
+        }
     }
 }

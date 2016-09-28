@@ -67,6 +67,10 @@ class Subscribers extends Model
     {
         return self::$db->update('__newsletter_subscribers', ['status' => 'confirmed'], " code = '{$code}' limit 1");
     }
+    public function unsubscribe($code)
+    {
+        return self::$db->delete('__newsletter_subscribers', " code = '{$code}' limit 1");
+    }
 
     /**
      * @param $id
