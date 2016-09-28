@@ -1,6 +1,6 @@
 {assign var="nav_key" value="shop.main.latest"}
 {if !$app->cache->exists($nav_key)}
-{$app->cache->begin($nav_key, 3*60)}
+{$app->cache->begin($nav_key, 60*60)}
 
 {assign var='products' value=$mod->shop->lastProducts()}
 {if $products|count}

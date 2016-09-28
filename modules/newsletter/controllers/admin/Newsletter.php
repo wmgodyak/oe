@@ -14,7 +14,9 @@ class Newsletter extends \system\Engine
     {
         parent::init();
 
-        $this->assignToNav('Підписники', 'module/run/newsletter/subscribers', 'fa-list-alt');
+        $this->assignToNav('Підписники', 'module/run/newsletter', 'fa-list-alt');
+        $this->assignToNav('Кампанії', 'module/run/newsletter/campaigns', 'fa-list-alt', 'module/run/newsletter');
+        $this->assignToNav('Контакти', 'module/run/newsletter/subscribers', 'fa-list-alt', 'module/run/newsletter');
         $this->template->assignScript('modules/newsletter/js/admin/Newsletter.js');
     }
 
@@ -32,7 +34,19 @@ class Newsletter extends \system\Engine
         return call_user_func_array(array($controller, $action), $params);
     }
 
+    public function campaigns()
+    {
+        $action = 'index';
+        $params = func_get_args();
 
+        if(!empty($params)){
+            $action = array_shift($params);
+        }
+
+        $controller  = new newsletter\Campaigns();
+
+        return call_user_func_array(array($controller, $action), $params);
+    }
 
     public function index()
     {

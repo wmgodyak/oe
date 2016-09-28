@@ -1,6 +1,6 @@
 {if $page.isfolder}
     {assign var = 'subnav' value=$mod->shop->categories($page.id)}
-    {assign var = 'img' value=$app->images->cover($page.id, 'cat')}
+    {assign var = 'img' value=$app->images->cover($page.id, 'catsm')}
     {assign var='col' value=3}
 
     {if $img == '/uploads/noimage.jpg'}{assign var='col' value=4}{/if}

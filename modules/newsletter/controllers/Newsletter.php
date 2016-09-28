@@ -10,7 +10,7 @@ use system\models\Settings;
 defined("CPATH") or die();
 /**
  * Class Newsletter
- * @name Розсилка новин
+ * @name Newsletter
  */
 class Newsletter extends \system\Front
 {
@@ -61,7 +61,7 @@ class Newsletter extends \system\Front
             if($subscriber_id > 0){
                 $sData  = $this->subscribers->getData($subscriber_id);
                 $mailer = new Mailer('modules/newsletter/mail/confirm', 'Підтвердіть e-mail', $sData);
-//
+                $mailer->addAddress($data['email']);
                 if(!$mailer->send()) {
                     $m = '<br>ERROR: '.$mailer->getErrorInfo();
                 } else {

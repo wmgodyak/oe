@@ -38,6 +38,28 @@ $(document).ready(function(){
             }
         );
     });
+    $(document).on('click', '.b-newsletter-campaigns-delete', function(){
+        var id = $(this).data('id');
+        var dialog = engine.confirm
+        (
+            'Confirm delete campaigns',
+            function()
+            {
+                engine.request.get(
+                    'module/run/newsletter/campaigns/delete/' + id,
+                    function(d)
+                    {
+                        if(d > 0){
+                            engine.refreshDataTable('newsletter_campaigns');
+                            dialog.dialog('close');
+                            dialog.dialog('destroy').remove()
+                        }
+                    }
+                );
+
+            }
+        );
+    });
 });
 
 engine.newsletter = {
