@@ -6,6 +6,7 @@ use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
 use helpers\bootstrap\Link;
 use helpers\FormValidation;
+use system\core\DataFilter;
 use system\core\DataTables2;
 use system\Engine;
 
@@ -43,15 +44,15 @@ class Campaigns extends Engine
             -> th('Name', 'name', true, true)
             -> th('Sender Name', 'sender_name', false, true)
             -> th('Sender Email', 'sender_email', false, true)
-            -> th($this->t('common.func'), null, false, false)
+            -> th($this->t('common.func'), null, false, false, 'width:200px;')
         ;
 
+        $t-> get('status');
         $t-> ajax('module/run/newsletter/campaigns');
 
         if($this->request->isXhr()){
 
             $t-> from('__newsletter_campaigns');
-            $t-> get('status');
             $t-> execute();
 
             if(! $t){
@@ -62,25 +63,78 @@ class Campaigns extends Engine
             $res = array();
             foreach ($t->getResults(false) as $i=>$row) {
 
-//                $row = DataFilter::apply('newsletter.campaigns.list.row', $row);
+                $row = DataFilter::apply('newsletter.campaigns.list.row', $row);
+
+                $label = "";
+                switch($row['status']){
+                    case 'in_progress':
+                        $q = $this->campaigns->queues->progressCount($row['id']);
+                        $label = "<br><span class='label label-info'>In progress... ({$q['sent']}/{$q['total']})</span>";
+                        break;
+                    case 'completed':
+                        $label = "<br><span class='label label-success'>Completed</span>";
+                        break;
+                    case 'paused':
+                        $q = $this->campaigns->queues->progressCount($row['id']);
+                        $label = "<br><span class='label label-danger'>Paused({$q['sent']}/{$q['total']})</span>";
+                        break;
+                }
+
 
                 $res[$i][] = $row['id'];
-                $res[$i][] = $row['name'];
+                $res[$i][] = $row['name'] . ($row['status'] != 'new' ? $label : "");
                 $res[$i][] = $row['sender_name'];
                 $res[$i][] = $row['sender_email'];
 
                 $b = [];
-                $b[] = (string)Link::create
-                (
-                    Icon::create(Icon::TYPE_EDIT),
-                    ['class' => 'btn-primary', 'href' => "module/run/newsletter/campaigns/edit/{$row['id']}", 'title' => $this->t('common.title_edit')]
-                );
 
-                $b[] = (string)Button::create
-                (
-                    Icon::create(Icon::TYPE_DELETE),
-                    ['class' => 'b-newsletter-campaigns-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
-                );
+                if($row['status'] == 'new' || $row['status'] == 'completed'){
+
+                    $b[] = (string)Button::create
+                    (
+                        Icon::create('fa-play'),
+                        ['class' => 'b-newsletter-campaigns-run', 'data-id' => $row['id'], 'title' => 'Run']
+                    );
+
+                    $b[] = (string)Link::create
+                    (
+                        Icon::create(Icon::TYPE_EDIT),
+                        ['class' => 'btn-primary', 'href' => "module/run/newsletter/campaigns/edit/{$row['id']}", 'title' => $this->t('common.title_edit')]
+                    );
+
+                    $b[] = (string)Button::create
+                    (
+                        Icon::create(Icon::TYPE_DELETE),
+                        ['class' => 'b-newsletter-campaigns-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+                    );
+
+                } elseif($row['status'] == 'in_progress'){
+
+                    $b[] = (string)Button::create
+                    (
+                        Icon::create('fa-pause'),
+                        ['class' => 'b-newsletter-campaigns-pause', 'data-id' => $row['id'], 'title' => 'Pause']
+                    );
+                    $b[] = (string)Button::create
+                    (
+                        Icon::create('fa-stop'),
+                        ['class' => 'b-newsletter-campaigns-stop', 'data-id' => $row['id'], 'title' => 'Stop and cancel']
+                    );
+
+                } elseif($row['status'] == 'paused'){
+
+                    $b[] = (string)Button::create
+                    (
+                        Icon::create('fa-play'),
+                        ['class' => 'b-newsletter-campaigns-run', 'data-id' => $row['id'], 'title' => 'Run']
+                    );
+                    $b[] = (string)Button::create
+                    (
+                        Icon::create('fa-stop'),
+                        ['class' => 'b-newsletter-campaigns-stop', 'data-id' => $row['id'], 'title' => 'Stop and cancel']
+                    );
+                }
+
 
                 $res[$i][] = implode('', $b);
             }
@@ -108,6 +162,7 @@ class Campaigns extends Engine
             )
         );
         $this->template->assign('action', 'create');
+        $this->template->assign('groups', $this->campaigns->groups->get());
         $this->output($this->template->fetch('modules/newsletter/campaigns/form'));
     }
 
@@ -129,6 +184,7 @@ class Campaigns extends Engine
             )
         );
         $this->template->assign('data', $this->campaigns->getData($id));
+        $this->template->assign('groups', $this->campaigns->groups->get());
         $this->template->assign('action', 'edit');
         $this->output($this->template->fetch('modules/newsletter/campaigns/form'));
     }
@@ -159,9 +215,19 @@ class Campaigns extends Engine
                 case 'edit':
                     $id = $this->request->post('id', 'i');
                     $s = $this->campaigns->update($id, $data);
+                    if($s){
+                        $this->campaigns->subscribers_groups->deleteByCampaigns($id);
+                    }
                     break;
             }
-
+            if($s){
+                $groups = $this->request->post('groups');
+                if($groups){
+                    foreach($groups as $k=>$group_id){
+                        $this->campaigns->subscribers_groups->create($id, $group_id);
+                    }
+                }
+            }
         }
 
         if($this->campaigns->hasError()){
@@ -169,5 +235,24 @@ class Campaigns extends Engine
         }
 
         $this->response->body(['s'=>$s, 'i' => $i, 'm' => $m])->asJSON();
+    }
+
+    public function run($id)
+    {
+        if(empty($id)) die;
+
+        echo $this->campaigns->run($id);
+    }
+    public function stop($id)
+    {
+        if(empty($id)) die;
+
+        echo $this->campaigns->stop($id);
+    }
+    public function pause($id)
+    {
+        if(empty($id)) die;
+
+        echo $this->campaigns->pause($id);
     }
 }

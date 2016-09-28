@@ -8,6 +8,9 @@
 
 namespace modules\newsletter\models\admin;
 
+use modules\newsletter\models\admin\campaigns\Queues;
+use modules\newsletter\models\admin\campaigns\SubscribersGroups;
+use modules\newsletter\models\subscribers\Groups;
 use system\models\Model;
 
 defined("CPATH") or die();
@@ -19,12 +22,20 @@ defined("CPATH") or die();
 class Campaigns extends Model
 {
     private $info;
+    public $groups;
+    public $subscribers_groups;
+    public $queues;
+    private $subscribers;
 
     public function __construct()
     {
         parent::__construct();
 
         $this->info = new CampaignsInfo();
+        $this->groups = new Groups();
+        $this->subscribers_groups = new SubscribersGroups();
+        $this->queues = new Queues();
+        $this->subscribers = new Subscribers();
     }
 
     public function getData($id, $key= '*')
@@ -36,6 +47,8 @@ class Campaigns extends Model
             foreach ($this->info->get($id) as $item) {
                 $res['info'][$item['languages_id']] = $item;
             }
+
+            $res['groups'] = $this->subscribers_groups->get($id);
         }
 
         return $res;
@@ -108,6 +121,48 @@ class Campaigns extends Model
      */
     public function delete($id)
     {
-        return $this->deleteRow('__newsletter_campaigns', $id);
+        $s = $this->deleteRow('__newsletter_campaigns', $id);
+        if($s){
+            $this->queues->clear($id);
+        }
+        return $s;
+    }
+
+    public function run($id)
+    {
+        $this->beginTransaction();
+        $s = self::$db->update('__newsletter_campaigns', ['status' => 'in_progress'], "id={$id} limit 1");
+
+        $this->queues->clear($id);
+
+        if($this->hasError()){
+            $this->rollback();
+            return false;
+        }
+
+        $groups = $this->subscribers_groups->get($id);
+
+        foreach ($groups as $k=>$group_id) {
+            $subscribers = $this->subscribers->getByGroupID($group_id);
+            if(empty($subscribers)) continue;
+
+            foreach ($subscribers as $subscriber) {
+                $this->queues->create($id, $subscriber['id']);
+            }
+        }
+
+        $this->commit();
+        return $s;
+    }
+
+    public function pause($id)
+    {
+        return self::$db->update('__newsletter_campaigns', ['status' => 'paused'], "id={$id} limit 1");
+    }
+
+    public function stop($id)
+    {
+        $this->queues->clear($id);
+        return self::$db->update('__newsletter_campaigns', ['status' => 'new'], "id={$id} limit 1");
     }
 }

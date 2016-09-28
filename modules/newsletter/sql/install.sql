@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS `__newsletter_subscribers` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `languages_id` TINYINT(3) UNSIGNED NOT NULL,
   `email` VARCHAR(45) NULL,
   `status` ENUM('unconfirmed', 'confirmed', 'ban') NULL DEFAULT 'unconfirmed',
   `code` VARCHAR(45) NULL,
@@ -56,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `__newsletter_campaigns` (
   `name` VARCHAR(255) NULL,
   `sender_name` VARCHAR(45) NULL DEFAULT NULL,
   `sender_email` VARCHAR(45) NULL DEFAULT NULL ,
-  `status` ENUM('new','in_progress','completed') NULL DEFAULT 'new',
+  `status` ENUM('new','in_progress','completed','paused') NULL DEFAULT 'new',
   PRIMARY KEY (`id`)
   )
   ENGINE = InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
@@ -106,8 +107,7 @@ CREATE TABLE IF NOT EXISTS `__newsletter_queues` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `campaigns_id` INT(10) UNSIGNED NOT NULL,
   `subscribers_id` INT(10) UNSIGNED NOT NULL,
-  `processed` TINYINT(1) UNSIGNED NULL,
-  `sent` TINYINT(1) UNSIGNED NULL,
+  `sent` TINYINT(1) UNSIGNED NULL DEFAULT 0,
   `sent_at` TIMESTAMP NULL DEFAULT NULL,
   PRIMARY KEY (`id`, `campaigns_id`, `subscribers_id`),
   INDEX `fk_e_newsletter_queues_newsletter_campaigns1_idx` (`campaigns_id` ASC),
@@ -125,3 +125,5 @@ CREATE TABLE IF NOT EXISTS `__newsletter_queues` (
   ENGINE = InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 ALTER TABLE `__newsletter_subscribers_group_subscribers` ADD UNIQUE( `group_id`, `subscribers_id`);
+ALTER TABLE `__newsletter_queues` ADD UNIQUE( `campaigns_id`, `subscribers_id`);
+ALTER TABLE `__newsletter_queues` ADD INDEX(`sent`);

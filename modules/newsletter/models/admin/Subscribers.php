@@ -33,4 +33,16 @@ class Subscribers extends \modules\newsletter\models\Subscribers
                 ")
             ->all();
     }
+
+    public function getByGroupID($group_id)
+    {
+        return self::$db
+            ->select("
+                select s.id, s.email, s.status, s.created, s.confirmdate
+                from __newsletter_subscribers_group_subscribers gs
+                join __newsletter_subscribers s on gs.subscribers_id=s.id and s.status = 'confirmed'
+                where gs.group_id={$group_id}
+                ")
+            ->all();
+    }
 }

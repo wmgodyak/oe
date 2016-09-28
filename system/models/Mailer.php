@@ -29,6 +29,7 @@ class Mailer
     private $data;
     private $has_address = false;
     private $tpl  = null;
+    private $body = null;
 
     public function __construct($tpl, $subject, $data = null, $isHtml = true)
     {
@@ -71,7 +72,7 @@ class Mailer
      * @return bool
      * @throws \phpmailerException
      */
-    private function setFrom($address, $name = '', $auto = true)
+    public function setFrom($address, $name = '', $auto = true)
     {
         return $this->phpmailer->setFrom($address, $name, $auto);
     }
@@ -115,6 +116,13 @@ class Mailer
         return $this;
     }
 
+    public function body($body)
+    {
+        $this->body = $body;
+
+        return $this;
+    }
+
     /**
      * @return bool
      * @throws \Exception
@@ -140,7 +148,16 @@ class Mailer
             $footer = $template->fetch($footer);
         }
 
-        $body = $template->fetch($this->tpl);
+        if(empty($this->tpl) && empty($this->body)){
+            throw new Exception("Empty mail body");
+        }
+
+        if(empty($this->tpl)){
+            $body = $template->fetchString($this->body);
+        } else {
+            $body = $template->fetch($this->tpl);
+        }
+
         $parser = new Parser($header . $body . $footer);
         $parser->makeFriendlyUrl();
         $this->phpmailer->Body = $parser->getDocumentSource();
@@ -152,7 +169,7 @@ class Mailer
             $this->addAddress($this->settings['to']);
         }
 
-        if($this->settings['smtp_on'] == 0) {
+        if($this->settings['smtp_on'] == 0 && empty($this->settings['from'])) {
             $this->setFrom($this->settings['from'], $this->settings['name']);
         }
 

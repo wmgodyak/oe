@@ -60,6 +60,8 @@ class Subscribers extends Model
             $data['ip'] = $ip;
         }
 
+        $data['languages_id'] = $this->languages_id;
+
         return $this->createRow('__newsletter_subscribers', $data);
     }
 

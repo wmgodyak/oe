@@ -60,6 +60,60 @@ $(document).ready(function(){
             }
         );
     });
+
+    $(document).on('click', '.b-newsletter-campaigns-run', function(e){
+        e.preventDefault();
+        var id = $(this).data('id');
+
+        engine.request.get(
+            'module/run/newsletter/campaigns/run/' + id,
+            function(d)
+            {
+                if(d > 0){
+                    engine.refreshDataTable('newsletter_campaigns');
+                    dialog.dialog('close');
+                    dialog.dialog('destroy').remove()
+                }
+            }
+        );
+    });
+    $(document).on('click', '.b-newsletter-campaigns-stop', function(e){
+        e.preventDefault();
+        var id = $(this).data('id');
+        var dialog = engine.confirm
+        (
+            'Cancel campaign?',
+            function()
+            {
+                engine.request.get(
+                    'module/run/newsletter/campaigns/stop/' + id,
+                    function(d)
+                    {
+                        if(d > 0){
+                            engine.refreshDataTable('newsletter_campaigns');
+                            dialog.dialog('close');
+                            dialog.dialog('destroy').remove()
+                        }
+                    }
+                );
+
+            }
+        );
+    });
+
+    $(document).on('click', '.b-newsletter-campaigns-pause', function(e){
+        e.preventDefault();
+        var id = $(this).data('id');
+        engine.request.get(
+            'module/run/newsletter/campaigns/pause/' + id,
+            function(d)
+            {
+                if(d > 0){
+                    engine.refreshDataTable('newsletter_campaigns');
+                }
+            }
+        );
+    });
 });
 
 engine.newsletter = {

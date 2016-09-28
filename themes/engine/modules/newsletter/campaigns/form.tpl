@@ -23,6 +23,16 @@
                         <input name="data[sender_email]" id="data_sender_email" type="email" required class="form-control" value="{$data.sender_email}">
                     </div>
                 </div>
+                <div class="form-group">
+                    <label for="data_sender_email" class="col-md-3 control-label">Subscribers groups</label>
+                    <div class="col-md-9">
+                        <select name="groups[]" multiple id="groups" required class="form-control">
+                            {foreach $groups as $group}
+                                <option value="{$group.id}" {if $data.groups && in_array($group.id, $data.groups)}selected{/if}>{$group.name}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+                </div>
             </fieldset>
             <fieldset>
                 <legend>Message</legend>
