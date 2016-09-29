@@ -15,7 +15,15 @@ $(document).ready(function(){
             }
         )
         .init();
-    
+
+    $(document).on('change', '#data_smtp', function(){
+       if($(this).is(':checked')){
+           $('.check-smtp').attr('readonly', true).removeAttr('required');
+       } else {
+           $('.check-smtp').removeAttr('readonly').attr('required', true);
+       }
+    });
+
     $(document).on('click', '.b-newsletter-subscribers-group-create', function(){
         engine.newsletter.subscribers.group.create();
     });

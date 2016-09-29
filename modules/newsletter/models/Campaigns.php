@@ -34,7 +34,9 @@ class Campaigns extends Model
 //        d($subscribers);die;
         foreach ($subscribers as $subscriber) {
             $mailer = new Mailer(null, $campaign['info'][$subscriber['languages_id']]['subject']);
-            $mailer->setFrom($campaign['sender_email'], $campaign['sender_name']);
+            if($campaign['smtp'] == 0){
+                $mailer->setFrom($campaign['sender_email'], $campaign['sender_name']);
+            }
             $mailer->body($campaign['info'][$subscriber['languages_id']]['htmlbody']);
             $mailer->addAddress($subscriber['email']);
             $s = $mailer->send();
@@ -55,7 +57,7 @@ class Campaigns extends Model
     {
         $res = self::$db
             ->select("
-                select id, sender_name, sender_email
+                select id, sender_name, sender_email, smtp
                 from __newsletter_campaigns
                 where status = 'in_progress'
             ")

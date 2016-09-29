@@ -211,6 +211,7 @@ class Campaigns extends Engine
             switch($this->request->post('action')){
                 case 'create':
                     $s = $this->campaigns->create($data);
+                    $id = $s;
                     break;
                 case 'edit':
                     $id = $this->request->post('id', 'i');

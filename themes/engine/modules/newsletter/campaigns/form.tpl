@@ -11,16 +11,29 @@
                         <input name="data[name]" id="data_name" class="form-control" required value="{$data.name}">
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <div class="form-group">
+                            <div class="col-md-12">
+                                <label for="data_smtp" class="">
+                                    <input type="hidden" name="data[smtp]" value="0">
+                                    <input class="switch" type="checkbox" name="data[smtp]" id="data_smtp" value="1" {if $data.smtp==1 }checked{/if}>
+                                    <span class="l-check">Use SMTP</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label for="data_sender_name" class="col-md-3 control-label">Sender Name</label>
                     <div class="col-md-9">
-                        <input name="data[sender_name]" id="data_sender_name" class="form-control" required value="{$data.sender_name}">
+                        <input name="data[sender_name]" id="data_sender_name" class="form-control check-smtp" required value="{$data.sender_name}">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="data_sender_email" class="col-md-3 control-label">Sender Email</label>
                     <div class="col-md-9">
-                        <input name="data[sender_email]" id="data_sender_email" type="email" required class="form-control" value="{$data.sender_email}">
+                        <input name="data[sender_email]" id="data_sender_email" type="email" required class="form-control  check-smtp" value="{$data.sender_email}">
                     </div>
                 </div>
                 <div class="form-group">

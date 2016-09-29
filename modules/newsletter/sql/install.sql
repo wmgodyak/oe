@@ -33,6 +33,8 @@ CREATE TABLE IF NOT EXISTS `__newsletter_subscribers_group` (
   PRIMARY KEY (`id`))
   ENGINE = InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
+INSERT INTO `__newsletter_subscribers_group` (`id`, `name`) VALUES (NULL, 'New');
+
 CREATE TABLE IF NOT EXISTS `__newsletter_subscribers_group_subscribers` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `group_id` INT UNSIGNED NOT NULL,
@@ -55,6 +57,7 @@ CREATE TABLE IF NOT EXISTS `__newsletter_subscribers_group_subscribers` (
 CREATE TABLE IF NOT EXISTS `__newsletter_campaigns` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NULL,
+  `smtp` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT  '0',
   `sender_name` VARCHAR(45) NULL DEFAULT NULL,
   `sender_email` VARCHAR(45) NULL DEFAULT NULL ,
   `status` ENUM('new','in_progress','completed','paused') NULL DEFAULT 'new',
