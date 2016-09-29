@@ -113,6 +113,19 @@ var Shop = {
             //console.log('change', id, url);
             self.location.href=url;
         });
+
+        var subnavCatIM = $('.sub-nav-cat-img'), defIm = subnavCatIM.attr('src');
+        var chancgeIm = function(src)
+        {
+            subnavCatIM.attr('src', src);
+        }
+
+        $('.subnav-link').hover(function(){
+           var im = $(this).data('img');
+            chancgeIm(im);
+        }, function(){
+            chancgeIm(defIm);
+        });
     },
     viewed: function(id)
     {

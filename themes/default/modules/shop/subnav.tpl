@@ -3,20 +3,20 @@
     {assign var = 'img' value=$app->images->cover($page.id, 'catsm')}
     {assign var='col' value=3}
 
-    {if $img == '/uploads/noimage.jpg'}{assign var='col' value=4}{/if}
+    {*{if $img == '/uploads/noimage.jpg'}{assign var='col' value=4}{/if}*}
 
     {if $subnav|count}
        <div  class="shop-sub-nav">
-        {if $img != '/uploads/noimage.jpg'}
+        {*{if $img != '/uploads/noimage.jpg'}*}
            <div class="img">
-               <img src="{$img}" alt="" style="max-width: 100px; max-height:100px;">
+               <img src="{$img}" alt="" class="sub-nav-cat-img" style="max-width: 100px; max-height:100px;">
            </div>
-        {/if}
+        {*{/if}*}
            {assign var= 'nav' value=array_chunk_part($subnav, $col)}
            {foreach $nav as $ul}
             <ul>
                 {foreach $ul as $i=>$cat}
-                    <li><a href="{$cat.id}" title="{$cat.title}">{$cat.name}</a></li>
+                    <li><a data-img="{$app->images->cover($cat.id, 'catsm')}" class="subnav-link" href="{$cat.id}" title="{$cat.title}">{$cat.name}</a></li>
                 {/foreach}
             </ul>
            {/foreach}
