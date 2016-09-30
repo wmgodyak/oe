@@ -15,6 +15,8 @@ class ContentMeta extends Model
      */
     public function create($content_id, $meta_k, $meta_v)
     {
+        if(empty($meta_v)) return false;
+
         return $this->createRow
         (
             '__content_meta',
