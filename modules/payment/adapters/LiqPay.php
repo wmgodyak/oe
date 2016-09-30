@@ -58,8 +58,8 @@ class LiqPay implements IPayment
         Logger::info('LiqPay callback >>>');
 
 
-        $_POST['data'] = 'eyJhY3Rpb24iOiJwYXkiLCJwYXltZW50X2lkIjoyMzEwMDU5MTcsInN0YXR1cyI6IndhaXRfYWNjZXB0IiwidmVyc2lvbiI6MywidHlwZSI6ImJ1eSIsInBheXR5cGUiOiJsaXFwYXkiLCJwdWJsaWNfa2V5IjoiaTg2NzgxOTAxNTQiLCJhY3FfaWQiOjQxNDk2Mywib3JkZXJfaWQiOiIxNjA4MjQtMDUwODQ2NTYiLCJsaXFwYXlfb3JkZXJfaWQiOiJDT082UlI4SzE0NzIwNTA3MjMyODQ5MjQiLCJkZXNjcmlwdGlvbiI6IlBheW1lbnQgb3JkZXIgMTYwODI0LTA1MDg0NjU2LiAiLCJzZW5kZXJfcGhvbmUiOiIzODA2NzY3MzYyNDIiLCJzZW5kZXJfZmlyc3RfbmFtZSI6ItCS0L7Qu9C+0LTQuNC80LjRgCIsInNlbmRlcl9sYXN0X25hbWUiOiLQk9C+0LTRj9C6Iiwic2VuZGVyX2NhcmRfbWFzazIiOiI0MTQ5NDkqMDYiLCJzZW5kZXJfY2FyZF9iYW5rIjoicGIiLCJzZW5kZXJfY2FyZF90eXBlIjoidmlzYSIsInNlbmRlcl9jYXJkX2NvdW50cnkiOjgwNCwiaXAiOiIxOTQuNDQuODQuMTI3IiwiYW1vdW50IjoxLjAsImN1cnJlbmN5IjoiVUFIIiwic2VuZGVyX2NvbW1pc3Npb24iOjAuMCwicmVjZWl2ZXJfY29tbWlzc2lvbiI6MC4wMywiYWdlbnRfY29tbWlzc2lvbiI6MC4wLCJhbW91bnRfZGViaXQiOjEuMCwiYW1vdW50X2NyZWRpdCI6MS4wLCJjb21taXNzaW9uX2RlYml0IjowLjAsImNvbW1pc3Npb25fY3JlZGl0IjowLjAzLCJjdXJyZW5jeV9kZWJpdCI6IlVBSCIsImN1cnJlbmN5X2NyZWRpdCI6IlVBSCIsInNlbmRlcl9ib251cyI6MC4wLCJhbW91bnRfYm9udXMiOjAuMCwiYXV0aGNvZGVfZGViaXQiOiI0OTQwMzEiLCJycm5fZGViaXQiOiIwMDA0NDMzNDM2MTEiLCJtcGlfZWNpIjoiNyIsImlzXzNkcyI6ZmFsc2UsImNyZWF0ZV9kYXRlIjoxNDcyMDUwNzE4MjYxLCJ0cmFuc2FjdGlvbl9pZCI6MjMxMDA1OTE3fQ==';
-        $_POST['signature'] = 'aB0b11LKVJ3Qk4YwFiaWPZ47oKs=';
+//        $_POST['data'] = 'eyJhY3Rpb24iOiJwYXkiLCJwYXltZW50X2lkIjoyMzEwMDU5MTcsInN0YXR1cyI6IndhaXRfYWNjZXB0IiwidmVyc2lvbiI6MywidHlwZSI6ImJ1eSIsInBheXR5cGUiOiJsaXFwYXkiLCJwdWJsaWNfa2V5IjoiaTg2NzgxOTAxNTQiLCJhY3FfaWQiOjQxNDk2Mywib3JkZXJfaWQiOiIxNjA4MjQtMDUwODQ2NTYiLCJsaXFwYXlfb3JkZXJfaWQiOiJDT082UlI4SzE0NzIwNTA3MjMyODQ5MjQiLCJkZXNjcmlwdGlvbiI6IlBheW1lbnQgb3JkZXIgMTYwODI0LTA1MDg0NjU2LiAiLCJzZW5kZXJfcGhvbmUiOiIzODA2NzY3MzYyNDIiLCJzZW5kZXJfZmlyc3RfbmFtZSI6ItCS0L7Qu9C+0LTQuNC80LjRgCIsInNlbmRlcl9sYXN0X25hbWUiOiLQk9C+0LTRj9C6Iiwic2VuZGVyX2NhcmRfbWFzazIiOiI0MTQ5NDkqMDYiLCJzZW5kZXJfY2FyZF9iYW5rIjoicGIiLCJzZW5kZXJfY2FyZF90eXBlIjoidmlzYSIsInNlbmRlcl9jYXJkX2NvdW50cnkiOjgwNCwiaXAiOiIxOTQuNDQuODQuMTI3IiwiYW1vdW50IjoxLjAsImN1cnJlbmN5IjoiVUFIIiwic2VuZGVyX2NvbW1pc3Npb24iOjAuMCwicmVjZWl2ZXJfY29tbWlzc2lvbiI6MC4wMywiYWdlbnRfY29tbWlzc2lvbiI6MC4wLCJhbW91bnRfZGViaXQiOjEuMCwiYW1vdW50X2NyZWRpdCI6MS4wLCJjb21taXNzaW9uX2RlYml0IjowLjAsImNvbW1pc3Npb25fY3JlZGl0IjowLjAzLCJjdXJyZW5jeV9kZWJpdCI6IlVBSCIsImN1cnJlbmN5X2NyZWRpdCI6IlVBSCIsInNlbmRlcl9ib251cyI6MC4wLCJhbW91bnRfYm9udXMiOjAuMCwiYXV0aGNvZGVfZGViaXQiOiI0OTQwMzEiLCJycm5fZGViaXQiOiIwMDA0NDMzNDM2MTEiLCJtcGlfZWNpIjoiNyIsImlzXzNkcyI6ZmFsc2UsImNyZWF0ZV9kYXRlIjoxNDcyMDUwNzE4MjYxLCJ0cmFuc2FjdGlvbl9pZCI6MjMxMDA1OTE3fQ==';
+//        $_POST['signature'] = 'aB0b11LKVJ3Qk4YwFiaWPZ47oKs=';
 
 
         if (! $_POST) {
@@ -89,7 +89,12 @@ class LiqPay implements IPayment
         } else {
             // log success
             Logger::log('Callback signature OK');
-
+            if($this->settings['sandbox'] && in_array($data['status'], ['sandbox', 'success', 'wait_accept'])) {
+                Logger::log('Call event: payment.callback.success');
+                EventsHandler::getInstance()->call('payment.callback.success', $data);
+                Logger::log("Order {$data['order_id']} processed as success full sale on sandbox mode");
+                return;
+            }
             switch ($data['status']) {
                 case 'sandbox':
                 case 'success':
@@ -98,24 +103,10 @@ class LiqPay implements IPayment
                     Logger::log("Order {$data['order_id']} processed as success full sale");
                     break;
                 default:
-                    $err_msg= "При оплате заказа  {$data['order_id']}  получен статус {$data['status']}.
-
-                            Возможные значения:
-                            success - успешный платеж
-                            failure - неуспешный платеж
-                            wait_secure - платеж на проверке
-                            wait_accept - Деньги с клиента списаны, но магазин еще не прошел проверку
-                            wait_lc - Аккредитив. Деньги с клиента списаны, ожидается подтверждение доставки товара
-                            processing - Платеж обрабатывается
-                            sandbox - тестовый платеж
-                            subscribed - Подписка успешно оформлена
-                            unsubscribed - Подписка успешно деактивирована
-                            reversed - Возврат клиенту после списания
-                            cash_wait - Ожидание оплаты счета клиентом в терминале
-
+                    $err_msg = "При оплате заказа  {$data['order_id']}  получен статус {$data['status']}.
                      Подробнее о статусах: https://www.liqpay.com/ru/doc#callback ";
                     Logger::log($err_msg);
-                    mail('support@otakoyi.com', 'LiqPay Callback Error', $err_msg);
+//                    mail('support@otakoyi.com', 'LiqPay Callback Error', $err_msg);
             }
 
         }
