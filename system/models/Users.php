@@ -49,7 +49,9 @@ class Users extends Model
      */
     public function create($data)
     {
-        $data['password'] = $this->cryptPassword($data['password']);
+        if(isset($data['password'])){
+            $data['password'] = $this->cryptPassword($data['password']);
+        }
         return self::$db->insert('__users', $data);
     }
 

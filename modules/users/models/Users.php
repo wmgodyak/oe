@@ -60,4 +60,17 @@ class Users extends \system\models\Users
         return $s;
     }
 
+    public function export($group_id = 0)
+    {
+        $w = $group_id > 0 ? " where group_id={$group_id}" : '';
+        return self::$db
+            ->select("
+            select u.id, u.group_id, u.name, u.surname, u.email, u.phone, u.created, u.status
+            from __users u
+            join __users_group g on u.group_id=g.id and g.backend=0
+             {$w}
+            ")
+            ->all();
+    }
+
 }

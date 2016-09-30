@@ -15,6 +15,7 @@ class UsersMeta extends Model
      */
     public function create($users_id, $meta_k, $meta_v)
     {
+        if($meta_v == '') return false;
         return $this->createRow
         (
             '__users_meta',

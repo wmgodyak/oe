@@ -6,6 +6,7 @@ namespace modules\users\controllers\admin;
 
 use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
+use helpers\bootstrap\Link;
 use helpers\DateTime;
 use helpers\FormValidation;
 use system\core\DataFilter;
@@ -35,14 +36,26 @@ class Users extends Engine
         $this->template->assignScript("modules/users/js/admin/users.js");
     }
 
-
-
     /**
      * @param null $group_id
      * @return array|null|string
      */
     public function index($group_id = null)
     {
+        $this->appendToPanel
+        (
+            (string)Button::create
+            (
+                $this->t('common.import'), ['class' => 'btn-md b-users-import']
+            )
+        );
+        $this->appendToPanel
+        (
+            (string)Link::create
+            (
+                $this->t('common.export'), ['class' => 'btn-md', 'href' => "module/run/users/export/{$group_id}"]
+            )
+        );
         $this->appendToPanel
         (
             (string)Button::create
@@ -274,5 +287,37 @@ class Users extends Engine
         $controller  = new UsersGroup();
 
         call_user_func_array(array($controller, $action), $params);
+    }
+
+    public function import()
+    {
+        $action = 'index';
+        $params = func_get_args();
+
+        if(!empty($params)){
+            $action = array_shift($params);
+        }
+
+        $controller  = new Import();
+
+        return call_user_func_array(array($controller, $action), $params);
+    }
+
+    public function export($group_id = 0)
+    {
+        $subscribers = $this->users->export($group_id);
+        header("Content-type: text/csv; charset=windows-1251");
+        header("Content-Disposition: attachment; filename=users.csv");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+
+        echo "id;group_id;name;surname;email;phone;created;status\n";
+        foreach ($subscribers as $fields) {
+            foreach ($fields as $k=>$v) {
+                $fields[$k] = str_replace(';', ',', $v);
+            }
+            echo implode(';', $fields), "\n";
+        }
+        die;
     }
 }

@@ -67,6 +67,11 @@ engine.users = {
                 });
             })
             .init();
+
+        $(document).on('click', '.b-users-import', function(){
+            engine.users.im.uploadForm();
+        });
+
     },
     create: function()
     {
@@ -330,6 +335,80 @@ engine.users = {
                     );
                 }
             );
+        }
+    },
+    im: {
+        uploadForm: function()
+        {
+            engine.request.get('module/run/users/import', function(res){
+                var dialog = engine.dialog({
+                    title: 'Імпорт клієнтів',
+                    content: res,
+                    width: 500,
+                    buttons: {
+                        'Вперед' : function()
+                        {
+                            $('#usersImportUploadForm').submit();
+                        }
+                    }
+                });
+
+                engine.validateAjaxForm
+                (
+                    '#usersImportUploadForm',
+                    function(d){
+                        if(d.s){
+                            dialog.dialog('close');
+                            engine.users.im.customize(d.f);
+                        }
+                    }
+                );
+            });
+        },
+
+        customize: function(file)
+        {
+            engine.request.get('module/run/users/import/customize/' + file, function(res){
+                if(res.s){
+                    var dialog = engine.dialog({
+                        title: 'Імпорт клієнтів. Крок 2.',
+                        content: res.i,
+                        width: 650,
+                        buttons: {
+                            'Далі' : function()
+                            {
+                                $('#usersImportCustomizeForm').submit();
+                            }
+                        }
+                    });
+
+                    engine.validateAjaxForm
+                    (
+                        '#usersImportCustomizeForm',
+                        function(d){
+                            if(d.s){
+                                engine.refreshDataTable('users');
+                                dialog.dialog('close');
+
+                                engine.dialog({
+                                   title: 'Інформація',
+                                   content: "<div style='height: 500px; overflow-y: scroll; text-align: left;'>Імпорт завершено. Імпортовано " + d.res.inserted + ". <br> Лог:  <p style='font-size: 12px;'>" + d.res.error + "</p></div>",
+                                   width: 750
+                                });
+                            }
+                        }
+                    );
+
+                    $(".csv-conf").change(function(){
+                        var v = $(this).find('option:selected').val(), col = $(this).data('id');
+                        if(v == 'meta'){
+                            $('.meta-col-'+col).show();
+                        } else {
+                            $('.meta-col-'+col).hide();
+                        }
+                    });
+                }
+            });
         }
     }
 };
