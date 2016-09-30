@@ -3,6 +3,7 @@ namespace modules\newsletter\controllers\admin\newsletter;
 
 use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
+use modules\newsletter\controllers\admin\newsletter\subscribers\Import;
 use system\core\DataFilter;
 use system\core\DataTables2;
 use system\Engine;
@@ -34,6 +35,13 @@ class Subscribers extends Engine
             (string)Button::create
             (
                 'Import from Users', ['class' => 'btn-md btn-primary b-newsletter-subscribers-import-from-users']
+            )
+        );
+        $this->appendToPanel
+        (
+            (string)Button::create
+            (
+                'Import from CSV', ['class' => 'btn-md btn-primary b-newsletter-subscribers-import']
             )
         );
 
@@ -224,5 +232,20 @@ class Subscribers extends Engine
        $s = $this->subscribers->importFromContacts();
 
         echo $s ? 1 : 0;
+    }
+
+
+    public function import()
+    {
+        $action = 'index';
+        $params = func_get_args();
+
+        if(!empty($params)){
+            $action = array_shift($params);
+        }
+
+        $controller  = new Import();
+
+        return call_user_func_array(array($controller, $action), $params);
     }
 }
