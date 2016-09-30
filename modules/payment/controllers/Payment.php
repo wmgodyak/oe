@@ -42,9 +42,9 @@ class Payment extends Front
         $settings = Settings::getInstance()->get('modules.Payment.config');
 
         if($this->request->isPost()){
-            Logger::init('payment', 'payment');
-            Logger::info('Export POST: '. var_export($_POST, 1));
-            die;
+//            Logger::init('payment', 'payment');
+//            Logger::info('Export POST: '. var_export($_POST, 1));
+//            die;
         }
 
         if($this->page['id'] != $settings['checkout_page_id']) return null;
@@ -57,6 +57,7 @@ class Payment extends Front
         $currency = new Currency();
 
         $order   = $mOrder->getDataByOID($oid);
+        if(empty($order)) return null;
         $order['amount']   = $mOrder->amount($order['id']);
         $order['currency'] = $currency->getMeta($order['currency_id']);
         $order['description'] = "Payment order {$order['oid']}. ";

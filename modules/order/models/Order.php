@@ -181,7 +181,7 @@ class Order extends Model
     public function getDataByOID($oid, $key = '*')
     {
         $order = self::$db->select("select {$key} from __orders where oid = '{$oid}' limit 1")->row($key);
-
+        if(empty($order)) return null;
         if($key != '*')
             return $order;
 
