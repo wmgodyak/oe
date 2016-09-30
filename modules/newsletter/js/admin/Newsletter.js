@@ -122,6 +122,15 @@ $(document).ready(function(){
             }
         );
     });
+
+    $(document).on('click', '.b-newsletter-subscribers-import-from-users', function(){
+        engine.request.get('module/run/newsletter/subscribers/importFromContacts', function(d){
+            if(d > 0) {
+                engine.alert('Контакти оновлено!');
+                engine.refreshDataTable('newsletter_campaigns');
+            }
+        });
+    });
 });
 
 engine.newsletter = {

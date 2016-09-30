@@ -18,8 +18,9 @@ class Queues extends Model
     public function getNotSentSubscribers($campaigns_id, $limit = 30)
     {
         return self::$db
-            ->select("
-                select q.id, s.email, s.languages_id
+            ->select
+            ("
+                select q.id, q.subscribers_id, s.email, s.languages_id
                 from __newsletter_queues q
                 join __newsletter_subscribers s on s.id = q.subscribers_id
                 where q.campaigns_id = {$campaigns_id} and q.sent = 0

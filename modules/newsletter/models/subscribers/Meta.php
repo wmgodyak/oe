@@ -101,8 +101,8 @@ class Meta extends Model
                 ->select("select id, meta_k, meta_v from __newsletter_subscribers_meta where subscribers_id='{$subscribers_id}'")
                 ->all();
             foreach ($r as $row) {
-                if(! isset($meta_v[$row['meta_k']])) $meta_v[$row['meta_k']] = [];
-                $meta_v[$row['meta_k']][$row['id']] = (isSerialized($row['meta_v'])) ? unserialize($row['meta_v']) : $row['meta_v'];
+//                if(! isset($meta_v[$row['meta_k']])) $meta_v[$row['meta_k']] = [];
+                $meta_v[$row['meta_k']] = (isSerialized($row['meta_v'])) ? unserialize($row['meta_v']) : $row['meta_v'];
             }
         }
 

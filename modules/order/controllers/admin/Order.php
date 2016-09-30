@@ -105,6 +105,8 @@ class Order extends Engine
             -> get('o.one_click', null, 0, 0)
             -> get('os.bg_color', null, 0, 0)
             -> get('os.txt_color', null, 0, 0)
+            -> get('o.paid', null, 0, 0)
+            -> get('o.paid_date', null, 0, 0)
         ;
 
         if($this->request->isXhr()){
@@ -119,7 +121,9 @@ class Order extends Engine
             foreach ($t->getResults(false) as $i=>$row) {
                 $res[$i][] = $row['id'];
                 $res[$i][] = $row['oid'];
-                $res[$i][] = "<span class='label' style='background: {$row['bg_color']}; color:{$row['txt_color']}'>{$row['status']}</span>";
+                $res[$i][] = "<span class='label' style='background: {$row['bg_color']}; color:{$row['txt_color']}'>{$row['status']}</span>"
+                    . ($row['paid'] == 1 ? "<br><span class='label label-success'  >Оплачено. {$row['paid_date']}</span>" : '')
+                ;
                 $res[$i][] = $row['username']
                     . ($row['one_click'] ? " <label class='label label-info'>Один клік</label>" : "");
 //                $res[$i][] = $this->orderProducts->amount($row['id']);

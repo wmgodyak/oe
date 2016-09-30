@@ -60,7 +60,9 @@ class Subscribers extends Model
             $data['ip'] = $ip;
         }
 
-        $data['languages_id'] = $this->languages_id;
+        if(!isset($data['languages_id'])){
+            $data['languages_id'] = $this->languages_id;
+        }
 
         return $this->createRow('__newsletter_subscribers', $data);
     }
@@ -91,5 +93,43 @@ class Subscribers extends Model
     public function delete($id)
     {
         return $this->deleteRow('__newsletter_subscribers', $id);
+    }
+
+    public function importFromContacts()
+    {
+        $conf = [
+            5 => 2,
+            6 => 3,
+            7 => 4,
+            8 => 5
+        ];
+
+        $in = "5,6,7,8";
+
+        foreach (self::$db->select("select group_id, languages_id, email, name, surname from __users where group_id in ({$in}) ")->all() as $item) {
+            if($this->is($item['email'])) continue;
+
+            $users_id = $this->create([
+               'email'        => $item['email'],
+               'languages_id' => $item['languages_id'],
+                'status'      => 'confirmed',
+                'form'        => 'users'
+            ]);
+
+            if($users_id > 0){
+
+                // set meta
+                $this->meta->create($users_id, 'name', $item['name']);
+                $this->meta->create($users_id, 'surname', $item['surname']);
+                $this->meta->create($users_id, 'group_id', $item['group_id']);
+
+                // assign to group
+                if(!isset($conf[$item['group_id']])) continue;
+                $this->groups_subscribers->create($conf[$item['group_id']], $users_id);
+
+            }
+        }
+
+        return !$this->hasError();
     }
 }

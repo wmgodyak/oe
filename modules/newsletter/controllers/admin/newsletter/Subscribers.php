@@ -29,13 +29,13 @@ class Subscribers extends Engine
 //        }
 //        die;
 
-//        $this->appendToPanel
-//        (
-//            (string)Button::create
-//            (
-//                $this->t('common.button_create'), ['class' => 'btn-md btn-primary b-newsletter-subscribers-create']
-//            )
-//        );
+        $this->appendToPanel
+        (
+            (string)Button::create
+            (
+                'Import from Users', ['class' => 'btn-md btn-primary b-newsletter-subscribers-import-from-users']
+            )
+        );
 
         $t = new DataTables2('newsletter_subscribers');
 
@@ -217,5 +217,12 @@ class Subscribers extends Engine
     public function process($id)
     {
         // TODO: Implement process() method.
+    }
+
+    public function importFromContacts()
+    {
+       $s = $this->subscribers->importFromContacts();
+
+        echo $s ? 1 : 0;
     }
 }

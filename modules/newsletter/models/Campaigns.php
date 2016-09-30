@@ -3,18 +3,21 @@
 namespace modules\newsletter\models;
 
 use modules\newsletter\models\campaigns\Queues;
+use modules\newsletter\models\subscribers\Meta;
 use system\models\Mailer;
 use system\models\Model;
 
 class Campaigns extends Model
 {
     private $queue;
+    private $meta;
 
     public function __construct()
     {
         parent::__construct();
 
         $this->queue = new Queues();
+        $this->meta = new Meta();
     }
 
     public function cron()
@@ -33,7 +36,9 @@ class Campaigns extends Model
 
 //        d($subscribers);die;
         foreach ($subscribers as $subscriber) {
-            $mailer = new Mailer(null, $campaign['info'][$subscriber['languages_id']]['subject']);
+            if(empty($subscriber['languages_id'])) $subscriber['languages_id'] = $this->languages_id;
+            $subscriber['meta'] = $this->meta->get($subscriber['subscribers_id']);
+            $mailer = new Mailer(null, $campaign['info'][$subscriber['languages_id']]['subject'], $subscriber);
             if($campaign['smtp'] == 0){
                 $mailer->setFrom($campaign['sender_email'], $campaign['sender_name']);
             }
