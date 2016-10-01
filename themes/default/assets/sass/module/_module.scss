@@ -655,6 +655,12 @@
             background-position: -100px -25px;
           }
         }
+        &.social__link--tw {
+          background-position: -125px 0;
+          &:before {
+            background-position: -125px -25px;
+          }
+        }
       }
     }
   }
