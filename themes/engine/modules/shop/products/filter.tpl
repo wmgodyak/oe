@@ -47,7 +47,7 @@
                     <label for="f{$feature.id}">{$feature.name}</label>
                     <select name="f[{$feature.id}][]" id="f{$feature.id}" multiple>
                         {foreach $feature.values as $v}
-                            <option {if in_array($v.id, $smarty.get.f[$feature.id])}selected{/if} value="{$v.id}">{$v.name}</option>
+                            <option {if isset($smarty.get.f) && in_array($v.id, $smarty.get.f[$feature.id])}selected{/if} value="{$v.id}">{$v.name}</option>
                         {/foreach}
                     </select>
                 </div>
