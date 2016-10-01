@@ -198,7 +198,7 @@ class Categories extends Content
             return '';
         }
 
-        $id = parent::create(0);
+        $id = parent::create($parent_id);
 
         return $this->edit($id);
     }
