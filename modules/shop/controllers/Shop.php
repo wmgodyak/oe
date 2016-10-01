@@ -201,7 +201,7 @@ class Shop extends Front
         $this->products->start = $start;
         $this->products->num = $this->ipp;
 
-        $this->products->debug();
+//        $this->products->debug();
 
         $products = $this->products->get();
 

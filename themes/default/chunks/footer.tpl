@@ -27,10 +27,10 @@
                             <a href="https://vk.com/cma.company" rel="nofollow" target="_blank" class="social__link social__link--vk"></a>
                         </li>
                         <li class="social__item">
-                            <a href="https://www.facebook.com/people/%D0%A1%D0%B2%D1%96%D1%82-%D0%9C%D0%BE%D0%B1%D1%96%D0%BB%D1%8C%D0%BD%D0%B8%D1%85-%D0%90%D0%BA%D1%81%D0%B5%D1%81%D1%83%D0%B0%D1%80%D1%96%D0%B2/100011529574249" rel="nofollow" target="_blank" class="social__link social__link--fb"></a>
+                            <a href="https://www.facebook.com/CMA.Company" rel="nofollow" target="_blank" class="social__link social__link--fb"></a>
                         </li>
                          <li class="social__item">
-                            <a href="#" class="social__link social__link--ok"></a>
+                            <a href="https://ok.ru/svtmoblnik" class="social__link social__link--ok"></a>
                         </li>
                         <li class="social__item">
                             <a href="https://www.youtube.com/channel/UCFTB5AKaUZVDr-etBEic_Uw" target="_blank" rel="nofollow" class="social__link social__link--yt"></a>
@@ -39,7 +39,7 @@
                             <a href="https://www.instagram.com/cma.lviv/" rel="nofollow" target="_blank" class="social__link social__link--ig"></a>
                         </li>
                         <li class="social__item">
-                            <a href="https://twitter.com/LVIV6" rel="nofollow" target="_blank" class="social__link social__link--tw"></a>
+                            <a href="https://twitter.com/CMA_Company" rel="nofollow" target="_blank" class="social__link social__link--tw"></a>
                         </li>
                     </ul>
                 </div>

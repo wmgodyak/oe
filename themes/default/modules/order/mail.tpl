@@ -7,8 +7,11 @@
         <h3 style="font-size:15pt;margin-top:12px;margin-bottom:12px;font-weight:bold">
             Ваше замовлення прийняте. Для підтвердження замовлення наш менеджер зв'яжеться з вами найближчим часом.
         </h3>
-        <p style="font-size:11pt;margin-top:12px;margin-bottom:12px">Замовленню присвоєний номер: <strong>{$order.oid}</strong></p>
+        <p style="font-size:11pt;margin-top:12px;margin-bottom:12px">Замовленню присвоєний номер: <strong>{$data.oid}</strong></p>
         <p style="font-size:11pt;margin-top:12px;margin-bottom:4px">Статус замовлення ви можете відстежити в особистому кабінеті </p>
+        {if $data.payment_id==2}
+            <p>Після перевірки замовлення менеджером, ви зможете його оплатити з особистого кабінету або по посиланню, яке вам прийде на пошту.</p>
+        {/if}
         <div style="border-top:1px dotted #D3D4D3;border-bottom:1px dotted
 #D3D4D3;padding-top:2px;padding-bottom:2px;margin-top:10px;margin-bottom:30px">
             <p style="font-size:11pt;margin-top:12px;margin-bottom:12px;font-weight:bold">Деталі замовлення:</p>

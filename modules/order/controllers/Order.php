@@ -250,7 +250,7 @@ class Order extends Front
 
                     $user['email'] = str_replace(['+','(',')','-'], [], $user['phone']) . '@one.click';
 
-                    $users_id = $this->users->register($user);
+                    $users_id = $this->users->register($user, false);
 
                     if($this->users->hasError()){
                         $m = $this->users->getError();
@@ -259,7 +259,7 @@ class Order extends Front
                         $user = $this->users->getData($users_id);
                         $s=1;
                     }
-                } else{
+                } else {
                     $user = $u;
                 }
             }
@@ -313,7 +313,7 @@ class Order extends Front
             }
         }
 
-        $this->response->body(['s'=>$s > 0, 'i' => $m, 'redirect' => $this->getUrl(31)])->asJSON();
+        $this->response->body(['s'=>$s > 0, 'i' => $m])->asJSON();//'redirect' => $this->getUrl(31)
     }
 
     public function ajaxCart()

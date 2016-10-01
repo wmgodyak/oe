@@ -21,7 +21,13 @@ class Users extends \system\models\Users
         return self::$db->update('__users', ['sessid' => session_id(), 'lastlogin' => date('Y-m-d H:i:s')], " id = {$user['id']} limit 1");
     }
 
-    public function register($data)
+    /**
+     * @param $data
+     * @param bool $auth
+     * @return bool|string
+     * @throws \Exception
+     */
+    public function register($data, $auth = true)
     {
         $s = false;
 
@@ -44,7 +50,7 @@ class Users extends \system\models\Users
 
             $s = $this->create($data);
 
-            if($s){
+            if($s && $auth){
                 $data['id'] = $s;
                 Session::set('user', $data);
             }
