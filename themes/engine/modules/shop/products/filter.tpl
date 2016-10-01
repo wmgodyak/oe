@@ -36,9 +36,9 @@
                 <option value="noimage" {if $smarty.get.extra == 'noimage'}selected{/if}>Без фото</option>
                 <option value="vsimage" {if $smarty.get.extra == 'vsimage'}selected{/if}>З фото</option>
                 <option value="nocat" {if $smarty.get.extra == 'nocat'}selected{/if}>Без кат.</option>
-                <option value="in_stock_1" {if $smarty.get.extra == 'in_stock_1'}selected{/if}>В наявності</option>
-                <option value="in_stock_2" {if $smarty.get.extra == 'in_stock_2'}selected{/if}>Під зам.</option>
-                <option value="in_stock_0" {if $smarty.get.extra == 'in_stock_0'}selected{/if}>Немає в наявн.</option>
+                {*<option value="in_stock_1" {if $smarty.get.extra == 'in_stock_1'}selected{/if}>В наявності</option>*}
+                {*<option value="in_stock_2" {if $smarty.get.extra == 'in_stock_2'}selected{/if}>Під зам.</option>*}
+                {*<option value="in_stock_0" {if $smarty.get.extra == 'in_stock_0'}selected{/if}>Немає в наявн.</option>*}
             </select>
         </div>
         {if $features|count}

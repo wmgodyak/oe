@@ -206,8 +206,9 @@ class Products extends Content
         $t  -> ajax('module/run/shop/products/index/' . $categories_id, ['filter' => $_GET])
             ->orderDef(1, 'desc')
             -> th("<input style='z-index: 1' type='checkbox' class='dt-check-all'>", null, 0, 0, 'width: 60px')
-            -> th($this->t('shop.sky'), 'c.sku', 1, 1, 'width: 60px')
-            -> th($this->t('common.name'), 'ci.name', 1, 1);
+            -> th($this->t('shop.products.sku'), 'c.sku', 1, 1, 'width: 60px')
+            -> th($this->t('common.name'), 'ci.name', 1, 1)
+            -> th($this->t('shop.products.stock'), 'c.in_stock', 0, 1);
 
             foreach ($this->customersGroups->getItems(0, 0) as $group) {
                 $t -> th($group['name'], 'c.created', 0, 0, 'width: 160px');
@@ -342,6 +343,13 @@ class Products extends Content
 
                 $prices = $this->prices->get($row['id'], $cu_on_site, $cu_main);
 
+                $in_stock = [
+                  0 => "Немає",
+                  1 => "В наявн.",
+                  2 => "Під зам.",
+                ];
+
+
                 $res[$i][] = '<input class=\'dt-chb\' value=\''. $row['id'] .'\' type=\'checkbox\' style=\'height: auto;\'>';
                 $res[$i][] = $row['sku'];
                 $res[$i][] =
@@ -351,6 +359,7 @@ class Products extends Content
                     . ($row['has_variants'] ?  '<br><abbr>'. $variantsCount .' варіанти</abbr>' : '')
                 ;
 //                $cu = $this->prices->getProductCurrency($row['id']);
+                $res[$i][] = $in_stock[$row['in_stock']];
                 foreach ($this->customersGroups->getItems(0, 0) as $group) {
                     $res[$i][] =
 //                    "<span style='margin-right: 1em;'><input class='form-control' value='". (isset($prices[$group['id']]) ? $prices[$group['id']] : 0) ."'></span>"
