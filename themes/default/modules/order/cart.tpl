@@ -46,7 +46,7 @@
                     <div class="item item3">
                         <div class="item-counter">
                             <div class="column fl" style="padding-top: 10px;">
-                                <input style="width: 50px; height: 30px; text-align: center; " onchange="this.value = parseInt(this.value); if(typeof  this.value == 'undefined') this.value=1;" class="counter-mask cart-item-quantity" type="number" value="<%- item.quantity%>" data-id="<%=item.products_id%>">
+                                <input style="width: 50px; height: 30px; text-align: center; " onchange="this.value = parseInt(this.value); if(typeof  this.value == 'undefined') this.value=1; if(this.value > <%-item.max_qtt %>) { this.value=<%-item.max_qtt %>; return false;} " class="counter-mask cart-item-quantity" type="number" value="<%- item.quantity%>" data-id="<%=item.products_id%>">
                             </div>
                         </div>
                     </div>

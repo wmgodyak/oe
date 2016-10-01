@@ -107,7 +107,8 @@ class Products extends Front
         if(empty($cart)) return null;
 
         foreach ($cart as $k=>$item) {
-            $cart[$k] += $this->products->getData($item['products_id']);
+            $pdata = $this->products->getData($item['products_id'], "c.id, c.sku, c.currency_id, c.quantity as max_qtt, c.has_variants, c.in_stock");
+            $cart[$k] += $pdata;
             $cart[$k]['img'] = $this->images->cover($item['products_id']);
             if($item['has_variants']){
                 $cart[$k]['price'] = $this->variantsPrices->getPrice($item['variants_id'], $this->user_group_id);
@@ -119,7 +120,6 @@ class Products extends Front
 
             $cart[$k]['bonus'] = round($cart[$k]['quantity'] * $cart[$k]['price'] * $this->bonus_rate, 2);
         }
-
         return $cart;
     }
 
