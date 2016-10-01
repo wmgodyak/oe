@@ -12,6 +12,7 @@ use helpers\FormValidation;
 use system\core\DataFilter;
 use system\core\DataTables2;
 use system\Engine;
+use system\models\Permissions;
 
 /**
  * Class users
@@ -42,28 +43,34 @@ class Users extends Engine
      */
     public function index($group_id = null)
     {
-        $this->appendToPanel
-        (
-            (string)Button::create
-            (
-                $this->t('common.import'), ['class' => 'btn-md b-users-import']
-            )
-        );
-        $this->appendToPanel
-        (
-            (string)Link::create
-            (
-                $this->t('common.export'), ['class' => 'btn-md', 'href' => "module/run/users/export/{$group_id}"]
-            )
-        );
-        $this->appendToPanel
-        (
-            (string)Button::create
-            (
-                $this->t('common.button_create'), ['class' => 'btn-md btn-primary b-users-create']
-            )
-        );
+        if(Permissions::canModule('users', 'import')){
 
+            $this->appendToPanel
+            (
+                (string)Button::create
+                (
+                    $this->t('common.import'), ['class' => 'btn-md b-users-import']
+                )
+            );
+        }
+        if(Permissions::canModule('users', 'export')) {
+            $this->appendToPanel
+            (
+                (string)Link::create
+                (
+                    $this->t('common.export'), ['class' => 'btn-md', 'href' => "module/run/users/export/{$group_id}"]
+                )
+            );
+        }
+        if(Permissions::canModule('users', 'create')) {
+            $this->appendToPanel
+            (
+                (string)Button::create
+                (
+                    $this->t('common.button_create'), ['class' => 'btn-md btn-primary b-users-create']
+                )
+            );
+        }
         $t = new DataTables2('users');
 
         $t
