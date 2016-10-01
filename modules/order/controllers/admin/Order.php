@@ -19,6 +19,7 @@ use system\core\EventsHandler;
 use system\Engine;
 use system\models\Currency;
 use system\models\Mailer;
+use system\models\Permissions;
 use system\models\Users;
 
 defined("CPATH") or die();
@@ -114,8 +115,12 @@ class Order extends Engine
             $t  -> from('__orders o')
                 -> join('__users u on u.id=o.users_id')
                 -> join("__orders_status os on os.id=o.status_id")
-                -> join("__orders_status_info osi on osi.status_id=o.status_id and osi.languages_id={$this->languages_id}")
-                -> execute();
+                -> join("__orders_status_info osi on osi.status_id=o.status_id and osi.languages_id={$this->languages_id}");
+
+            if(!Permissions::fullAccess()){
+                $t->where(" ( ISNULL(o.manager_id) or o.manager_id = {$this->admin['id']} ) ");
+            }
+            $t    -> execute();
 
             $res = array();
             foreach ($t->getResults(false) as $i=>$row) {

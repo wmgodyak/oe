@@ -29,6 +29,11 @@ class Permissions
         self::$permissions = $permissions;
     }
 
+    public static function fullAccess()
+    {
+        return isset(self::$permissions['full_access']) && self::$permissions['full_access'] == 1;
+    }
+
     /**
      * @param $controller
      * @param $action
