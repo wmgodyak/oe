@@ -29,6 +29,12 @@
                     </div>
                 {/if}
 
+                {assign var='img' value=$app->contentMeta->get($page.id, "image_`$page.languages_id`", true)}
+                {if $img != ''}
+                    <img src="{$img}" style="max-width: 100%;" alt="">
+                {/if}
+                <div style="height: 20px;"></div>
+                {include file="themes/default/modules/share.tpl"}
                 <div class="text cms-content action-content">
                     {$page.content}
                     {$events->call('layouts.actions.content')}

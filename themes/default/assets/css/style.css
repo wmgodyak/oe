@@ -2906,43 +2906,6 @@ button {
             opacity: 0; }
           .single-product-page .single-product-page__content .item-main-info .right .m_hearth-like .hearth-like__link.hearth-like__link--liked:after {
             opacity: 1; }
-      .single-product-page .single-product-page__content .item-main-info .right .share {
-        padding: 17px 0; }
-        @media only screen and (max-width: 1170px) {
-          .single-product-page .single-product-page__content .item-main-info .right .share {
-            padding-top: 35px; } }
-        @media only screen and (max-width: 750px) {
-          .single-product-page .single-product-page__content .item-main-info .right .share {
-            padding-top: 17px; } }
-        .single-product-page .single-product-page__content .item-main-info .right .share .heading {
-          padding: 0 0 6px;
-          font: 12px/17px "Roboto-Regular", sans-serif;
-          color: #333; }
-        .single-product-page .single-product-page__content .item-main-info .right .share .social-row {
-          *zoom: 1; }
-          .single-product-page .single-product-page__content .item-main-info .right .share .social-row:before, .single-product-page .single-product-page__content .item-main-info .right .share .social-row:after {
-            content: "";
-            display: table; }
-          .single-product-page .single-product-page__content .item-main-info .right .share .social-row:after {
-            clear: both; }
-          .single-product-page .single-product-page__content .item-main-info .right .share .social-row .share-icon {
-            display: block;
-            width: 35px;
-            height: 35px;
-            float: left;
-            margin-left: 10px;
-            background: url("../img/share-sprite.png") no-repeat;
-            transition: all 0.35s ease; }
-            .single-product-page .single-product-page__content .item-main-info .right .share .social-row .share-icon:hover {
-              opacity: 0.7; }
-            .single-product-page .single-product-page__content .item-main-info .right .share .social-row .share-icon:first-of-type {
-              margin-left: 0; }
-            .single-product-page .single-product-page__content .item-main-info .right .share .social-row .share-icon.vk {
-              background-position: 0 0; }
-            .single-product-page .single-product-page__content .item-main-info .right .share .social-row .share-icon.fb {
-              background-position: 0 -41px; }
-            .single-product-page .single-product-page__content .item-main-info .right .share .social-row .share-icon.ok {
-              background-position: 0 -84px; }
       .single-product-page .single-product-page__content .item-main-info .right .comment-row {
         *zoom: 1;
         padding-top: 20px; }
@@ -3292,6 +3255,44 @@ button {
     .single-product-page .asider .side__header span {
       font: 16px/35px "Roboto-Regular", sans-serif;
       color: #fff; }
+
+.m_share {
+  padding: 17px 0; }
+  @media only screen and (max-width: 1170px) {
+    .m_share {
+      padding-top: 35px; } }
+  @media only screen and (max-width: 750px) {
+    .m_share {
+      padding-top: 17px; } }
+  .m_share .heading {
+    padding: 0 0 6px;
+    font: 12px/17px "Roboto-Regular", sans-serif;
+    color: #333; }
+  .m_share .social-row {
+    *zoom: 1; }
+    .m_share .social-row:before, .m_share .social-row:after {
+      content: "";
+      display: table; }
+    .m_share .social-row:after {
+      clear: both; }
+    .m_share .social-row .share-icon {
+      display: block;
+      width: 35px;
+      height: 35px;
+      float: left;
+      margin-left: 10px;
+      background: url("../img/share-sprite.png") no-repeat;
+      transition: all 0.35s ease; }
+      .m_share .social-row .share-icon:hover {
+        opacity: 0.7; }
+      .m_share .social-row .share-icon:first-of-type {
+        margin-left: 0; }
+      .m_share .social-row .share-icon.vk {
+        background-position: 0 0; }
+      .m_share .social-row .share-icon.fb {
+        background-position: 0 -41px; }
+      .m_share .social-row .share-icon.ok {
+        background-position: 0 -84px; }
 
 .cart-page {
   *zoom: 1; }

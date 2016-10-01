@@ -7,7 +7,7 @@
     <div class="row">
         <div class="m_banner-slider">
             {foreach $mod->shopActions->getBanners('top') as $item}
-                <div class="slide" style="background-image: url('{$item.image}');">{if $item.clickable}<a href="{$item.url}"></a>{/if}</div>
+                <div class="slide" style="background-image: url('{$item.image}');">{if $item.clickable}<a href="{$item.url}" title=" title="{$item.title}""></a>{/if}</div>
             {/foreach}
         </div>
     </div>
@@ -15,7 +15,7 @@
         {foreach $mod->shopActions->getBanners('bottom', 2) as $item}
             <div class="m_small-banner">
                 <div class="wrap" style="background-image: url('{$item.image}');">
-                    {if $item.clickable}<a href="{$item.url}" class="btn md white-red">{$t.shopActions.more}</a>{/if}
+                    {if $item.clickable}<a href="{$item.url}" title=" title="{$item.title}"" class="btn md white-red">{$t.shopActions.more}</a>{/if}
                 </div>
             </div>
         {/foreach}

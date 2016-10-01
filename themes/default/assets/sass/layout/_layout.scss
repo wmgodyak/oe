@@ -1080,47 +1080,6 @@
             }
           }
         }
-        .share {
-          padding: 17px 0;
-          @include respond-to(sm) {
-            padding-top: 35px;
-          }
-          @include respond-to(xs) {
-            padding-top: 17px;
-          }
-          .heading {
-            padding: 0 0 6px;
-            font: 12px/17px $fontRegular;
-            color: $font-dark-grey;
-          }
-          .social-row{
-            @include clearfix();
-            .share-icon {
-              display: block;
-              width: 35px;
-              height: 35px;
-              float: left;
-              margin-left: 10px;
-              background: url("../img/share-sprite.png") no-repeat;
-              transition: all 0.35s ease;
-              &:hover {
-                opacity: 0.7;
-              }
-              &:first-of-type {
-                margin-left: 0;
-              }
-              &.vk {
-                background-position: 0 0;
-              }
-              &.fb {
-                background-position: 0 -41px;
-              }
-              &.ok {
-                background-position: 0 -84px;
-              }
-            }
-          }
-        }
         .comment-row {
           @include clearfix();
           padding-top: 20px;
@@ -1414,6 +1373,7 @@
       }
     }
   }
+
   .asider {
     @include span(3);
     padding: 0 15px;
@@ -1512,6 +1472,48 @@
       span {
         font: 16px/35px $fontRegular;
         color: $font-white;
+      }
+    }
+  }
+}
+
+.m_share {
+  padding: 17px 0;
+  @include respond-to(sm) {
+    padding-top: 35px;
+  }
+  @include respond-to(xs) {
+    padding-top: 17px;
+  }
+  .heading {
+    padding: 0 0 6px;
+    font: 12px/17px $fontRegular;
+    color: $font-dark-grey;
+  }
+  .social-row{
+    @include clearfix();
+    .share-icon {
+      display: block;
+      width: 35px;
+      height: 35px;
+      float: left;
+      margin-left: 10px;
+      background: url("../img/share-sprite.png") no-repeat;
+      transition: all 0.35s ease;
+      &:hover {
+        opacity: 0.7;
+      }
+      &:first-of-type {
+        margin-left: 0;
+      }
+      &.vk {
+        background-position: 0 0;
+      }
+      &.fb {
+        background-position: 0 -41px;
+      }
+      &.ok {
+        background-position: 0 -84px;
       }
     }
   }

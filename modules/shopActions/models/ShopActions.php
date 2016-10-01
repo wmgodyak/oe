@@ -98,7 +98,7 @@ class ShopActions extends Model
 
         $items = self::$db
             ->select("
-              select c.id, ci.name, img.meta_v as image, CONCAT('route/shopActions/click/', c.id) as url,
+              select c.id, ci.name, ci.title, img.meta_v as image, CONCAT('route/shopActions/click/', c.id) as url,
                DATE_FORMAT(STR_TO_DATE(xp.meta_v, '%d.%m.%Y'), '%Y/%m/%d') as expired,
                co.meta_v as counter
               from __content c
