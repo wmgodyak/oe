@@ -96,7 +96,7 @@ class Products extends Content
             $val = addcslashes($val, '"\'');
             if(empty($val)) continue;
 
-            $where[] = " (c.sku like '{$val}%' or ci.name like '%{$val}%' ) ";
+            $where[] = " (c.sku like '{$val}%' or ci.keywords like '%{$val}%' or ci.name like '%{$val}%' or ci.content like '%{$val}%' ) ";
         }
 
         if(empty($where)){
