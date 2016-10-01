@@ -24,10 +24,10 @@ class DataFilter
         foreach (self::$filters[$param] as $callback) {
             if(is_array($callback) && isset($callback[1])){
                 if(is_callable($callback, true, $callable_name)){
-                    $value = call_user_func_array($callback, is_array($value) ? [$value] : $value);
+                    $value = call_user_func_array($callback, is_array($value) ? $value : [$value]);
                 }
             } elseif(is_callable($callback, true, $callable_name)){
-                $value = call_user_func_array($callback, is_array($value) ? [$value] : $value);
+                $value = call_user_func_array($callback, is_array($value) ? $value : [$value]);
             }
         }
 
