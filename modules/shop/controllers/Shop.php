@@ -140,6 +140,7 @@ class Shop extends Front
     public function filter($tpl = 'modules/shop/category/filter')
     {
         $categories_id = $this->page['id'];
+        $categories_id = DataFilter::apply('module.shop.products.categories_id', $categories_id);
 
         $features = new Features();
 
@@ -177,6 +178,7 @@ class Shop extends Front
      */
     public function categories($parent_id = 0, $level = 0)
     {
+        $parent_id = DataFilter::apply('module.shop.products.categories_id', $parent_id);
         return $this->categories->get($parent_id, $level);
     }
 
@@ -198,6 +200,8 @@ class Shop extends Front
 
         $this->products->start = $start;
         $this->products->num = $this->ipp;
+
+        $this->products->debug();
 
         $products = $this->products->get();
 

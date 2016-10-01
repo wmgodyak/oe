@@ -1,12 +1,13 @@
-{if $page.isfolder}
+{*{if $page.isfolder}*}
     {assign var = 'subnav' value=$mod->shop->categories($page.id)}
-    {assign var = 'img' value=$app->images->cover($page.id, 'catsm')}
-    {assign var='col' value=3}
 
     {*{if $img == '/uploads/noimage.jpg'}{assign var='col' value=4}{/if}*}
 
     {if $subnav|count}
-       <div  class="shop-sub-nav">
+        {assign var = 'img' value=$app->images->cover($page.id, 'catsm')}
+        {assign var='col' value=3}
+
+        <div  class="shop-sub-nav">
         {*{if $img != '/uploads/noimage.jpg'}*}
            <div class="img">
                <img src="{$img}" alt="" class="sub-nav-cat-img" style="max-width: 100px; max-height:100px;">
@@ -23,4 +24,4 @@
        </div>
         <div class="clearfix" style="clear: both;display: table;"></div>
     {/if}
-{/if}
+{*{/if}*}

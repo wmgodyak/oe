@@ -18,16 +18,31 @@ class CategorySynonym extends Front
 {
     public function init()
     {
-        $content_id = $this->page['id'];
+//        $content_id = $this->page['id'];
+//        DataFilter::add
+//        (
+//            'module.shop.products.categories_in',
+//            function($in) use ($content_id)
+//            {
+//                $relations = new ContentRelationship();
+//                $in += $relations->getCategories($content_id);
+//
+//                return $in;
+//            }
+//        );
         DataFilter::add
         (
-            'module.shop.products.categories_in',
-            function($in) use ($content_id)
+            'module.shop.products.categories_id',
+            function($categories_id)
             {
-                $relations = new ContentRelationship();
-                $in += $relations->getCategories($content_id);
 
-                return $in;
+                $relations = new ContentRelationship();
+                $a = $relations->getCategories($categories_id);
+                if(!empty($a)){
+                    $categories_id = end($a);
+                }
+
+                return $categories_id;
             }
         );
     }

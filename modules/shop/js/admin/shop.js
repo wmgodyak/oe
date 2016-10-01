@@ -81,6 +81,11 @@ engine.shop = {
                    engine.shop.categories.edit(node_id);
                 }
             )
+            .setContextMenu('create1', 'Створити', 'fa-file', function(o){
+                   var node_id= o.reference[0].id;
+                   self.location.href="module/run/shop/categories/create/"+node_id;
+                }
+            )
             .setContextMenu('edit1', 'Редагування', 'fa-pencil', function(o){
                    var node_id= o.reference[0].id;
                    self.location.href="module/run/shop/categories/edit/"+node_id;
