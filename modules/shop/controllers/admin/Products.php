@@ -495,6 +495,16 @@ class Products extends Content
 //        $this->relations->saveContentCategories($id);
 //        $this->relations->saveMainCategory($id);
 
+        $meta = $this->request->post('content_meta');
+        if($meta){
+            foreach ($meta as $meta_k=>$meta_v) {
+                if(is_array($meta_v )) continue;
+
+                if(empty($meta_v)){
+                    $this->mContent->meta->delete($id, $meta_k);
+                }
+            }
+        }
         return $this->features('contentProcess', $id);
     }
 

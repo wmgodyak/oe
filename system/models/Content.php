@@ -23,7 +23,7 @@ class Content extends Model
     protected $types_id;
     protected $subtypes_id;
     protected $languages;
-    protected $meta;
+    public $meta;
 
     /**
      * Content constructor.

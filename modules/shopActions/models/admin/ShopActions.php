@@ -75,12 +75,14 @@ class ShopActions extends Model
         if(!empty($p_in)){
             $products = array_merge($products, $p_in);
         }
+        if(!empty($products)){
 
-        foreach ($products as $product) {
-            if($action == 1){
-                $this->meta->update($product['id'], 'sa_action', $action);
-            } else {
-                $this->meta->delete($product['id'], 'sa_action', $action);
+            foreach ($products as $product) {
+                if($action == 1){
+                    $this->meta->update($product['id'], 'sa_action', $action);
+                } else {
+                    $this->meta->delete($product['id'], 'sa_action', $action);
+                }
             }
         }
     }
