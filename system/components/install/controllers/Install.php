@@ -12,7 +12,17 @@ defined("CPATH") or die();
 
 class Install
 {
+    private $install;
+
+    public function __construct()
+    {
+        $this->install = new \system\components\install\models\Install();
+    }
+
     public function init(){}
 
-    public function index(){}
+    public function index()
+    {
+        var_dump($this->install->go());
+    }
 }
