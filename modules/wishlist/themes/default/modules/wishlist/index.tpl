@@ -1,8 +1,8 @@
-{*{d($products)}*}
+
 <div class="m_wishlist">
 {if $wishlists|count}
     {foreach $wishlists as $wishlist}
-        <h2 class="title">{$wishlist.name}</h2>
+        {*<h2 class="title">{$wishlist.name}</h2>*}
         {assign var='products' value= array_chunk($wishlist.products, 3)}
         {if $products|count}
             <div class="product-page">
@@ -20,15 +20,11 @@
                     </div>
                 </div>
             </div>
-        {else}
-            <div class="bs-callout bs-callout-danger">
-                <p>Список порожній</p>
-            </div>
         {/if}
     {/foreach}
 {else}
     <div class="bs-callout bs-callout-danger">
-        <p>Список порожній</p>
+        <p>{$t.wishlist.empty}</p>
     </div>
 {/if}
 </div>

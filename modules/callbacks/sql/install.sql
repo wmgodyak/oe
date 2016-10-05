@@ -1,13 +1,14 @@
 CREATE TABLE IF NOT EXISTS `__callbacks` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `users_id` int(10) unsigned DEFAULT NULL,
-  `phone` varchar(20) NOT NULL,
-  `name` varchar(45) NOT NULL,
-  `comment` text,
-  `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `ip` char(16) NOT NULL,
-  `status` enum('processed','spam','new') NOT NULL DEFAULT 'new',
-  `manager_id` int(11) DEFAULT NULL,
-  `updated` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `users_id` INT(10) UNSIGNED NULL DEFAULT NULL,
+  `phone` VARCHAR(20) NOT NULL,
+  `name` VARCHAR(45) NOT NULL,
+  `comment` TEXT NULL DEFAULT NULL,
+  `created` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+  `ip` CHAR(16) NOT NULL,
+  `status` ENUM('processed','spam','new') NOT NULL DEFAULT 'new',
+  `manager_id` INT(11) NULL DEFAULT NULL,
+  `updated` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;

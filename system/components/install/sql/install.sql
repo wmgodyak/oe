@@ -56,8 +56,9 @@ INSERT INTO `__settings` (`id`, `name`, `value`, `block`, `type`, `required`, `d
   (49, 'seo', 'a:6:{s:5:"guide";a:1:{i:1;a:4:{s:5:"title";s:0:"";s:8:"keywords";s:0:"";s:11:"description";s:0:"";s:2:"h1";s:0:"";}}s:5:"pages";a:1:{i:1;a:4:{s:5:"title";s:34:"{title} {delimiter} {company_name}";s:8:"keywords";s:37:"{keywords} {delimiter} {company_name}";s:11:"description";s:13:"{description}";s:2:"h1";s:4:"{h1}";}}s:4:"post";a:1:{i:1;a:4:{s:5:"title";s:67:"{title} {delimiter}  {category} {delimiter} блог {company_name}";s:8:"keywords";s:46:"{keywords} {delimiter} блог {company_name}";s:11:"description";s:49:"{description} {delimiter} блог {company_name}";s:2:"h1";s:4:"{h1}";}}s:16:"posts_categories";a:1:{i:1;a:4:{s:5:"title";s:67:"{title} {delimiter}  {category} {delimiter} блог {company_name}";s:8:"keywords";s:46:"{keywords} {delimiter} блог {company_name}";s:11:"description";s:46:"{keywords} {delimiter} блог {company_name}";s:2:"h1";s:4:"{h1}";}}s:7:"product";a:1:{i:1;a:4:{s:5:"title";s:58:"{title} {delimiter}  {category} {delimiter} {company_name}";s:8:"keywords";s:37:"{keywords} {delimiter} {company_name}";s:11:"description";s:37:"{keywords} {delimiter} {company_name}";s:2:"h1";s:4:"{h1}";}}s:19:"products_categories";a:1:{i:1;a:4:{s:5:"title";s:59:"{title} {delimiter}  {category} {delimiter}  {company_name}";s:8:"keywords";s:37:"{keywords} {delimiter} {company_name}";s:11:"description";s:37:"{keywords} {delimiter} {company_name}";s:2:"h1";s:4:"{h1}";}}}', '', '', 0, NULL),
   (50, 'home_id', '1', 'common', 'text', 1, 1),
   (51, 'widgets', '', 'common', 'text', 1, 1),
-  (52, 'modules', 'a:16:{s:8:"Feedback";a:2:{s:6:"status";s:7:"enabled";s:6:"config";N;}s:9:"Callbacks";a:2:{s:6:"status";s:7:"enabled";s:6:"config";N;}s:8:"Comments";a:2:{s:6:"status";s:7:"enabled";s:6:"config";N;}s:8:"Currency";a:2:{s:6:"status";s:7:"enabled";s:6:"config";N;}s:7:"Payment";a:2:{s:6:"status";s:7:"enabled";s:6:"config";N;}s:5:"Users";a:2:{s:6:"status";s:7:"enabled";s:6:"config";a:1:{s:14:"guest_group_id";s:2:"20";}}s:7:"Banners";a:2:{s:6:"status";s:7:"enabled";s:6:"config";N;}s:5:"Share";a:2:{s:6:"status";s:7:"enabled";s:6:"config";N;}s:8:"Wishlist";a:2:{s:6:"status";s:7:"enabled";s:6:"config";N;}s:5:"Order";a:2:{s:6:"status";s:7:"enabled";s:6:"config";N;}s:4:"Shop";a:2:{s:6:"status";s:7:"enabled";s:6:"config";N;}s:8:"Delivery";a:2:{s:6:"status";s:7:"enabled";s:6:"config";N;}s:4:"Blog";a:2:{s:6:"status";s:7:"enabled";s:6:"config";N;}s:11:"Breadcrumbs";a:2:{s:6:"status";s:7:"enabled";s:6:"config";N;}s:10:"Translator";a:2:{s:6:"status";s:7:"enabled";s:6:"config";a:1:{s:14:"yandex_api_key";s:84:"trnsl.1.1.20160801T104913Z.0e8a37efcb64c68e.def844cd4be23efbd672ba795aca9451d7423ffb";}}s:10:"Exchange1c";a:2:{s:6:"status";s:7:"enabled";s:6:"config";a:5:{s:8:"owner_id";s:2:"19";s:5:"login";s:10:"1c-ex-user";s:4:"pass";s:26:"2tsbrruj1ms11nk6gifc4r54g3";s:14:"users_group_id";s:1:"5";s:12:"languages_id";s:1:"1";}}}', 'common', 'text', 1, NULL),
-  (53, 'translator', 'yandex', 'content', 'text', 1, 1);
+  (52, 'modules', '', 'common', 'text', 1, NULL),
+  (53, 'watermark_src', '/uploads/watermark.png', 'images', 'text', 1, NULL),
+  ;
 
 CREATE TABLE IF NOT EXISTS `__languages` (
   `id` TINYINT(3) UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -100,14 +101,14 @@ CREATE TABLE IF NOT EXISTS `__users_group_info` (
   `name` VARCHAR(100) NOT NULL,
   PRIMARY KEY (`id`, `group_id`, `languages_id`),
   INDEX `fk_users_group_info_languages1_idx` (`languages_id` ASC),
-  INDEX `fk_e_users_group_info_e_users_group_idx` (`group_id` ASC),
-  INDEX `fk_e_users_group_info_e_languages1_idx` (`languages_id` ASC),
-  CONSTRAINT `fk_e_users_group_info_e_users_group`
+  INDEX `fk_users_group_info_users_group_idx` (`group_id` ASC),
+  INDEX `fk_users_group_info_languages1_idx` (`languages_id` ASC),
+  CONSTRAINT `fk_users_group_info_users_group`
     FOREIGN KEY (`group_id`)
     REFERENCES `__users_group` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `fk_e_users_group_info_e_languages1`
+  CONSTRAINT `fk_users_group_info_languages1`
     FOREIGN KEY (`languages_id`)
     REFERENCES `__languages` (`id`)
     ON DELETE CASCADE
@@ -139,16 +140,33 @@ CREATE TABLE IF NOT EXISTS `__users` (
   UNIQUE INDEX `phone` (`phone` ASC, `email` ASC),
   INDEX `status` (`status` ASC),
   INDEX `skey` (`skey` ASC),
-  INDEX `fk_e_users_e_languages1_idx` (`languages_id` ASC),
-  INDEX `fk_e_users_e_users_group1_idx` (`group_id` ASC),
-  CONSTRAINT `fk_e_users_e_languages1`
+  INDEX `fk_users_languages1_idx` (`languages_id` ASC),
+  INDEX `fk_users_users_group1_idx` (`group_id` ASC),
+  CONSTRAINT `fk_users_languages1`
     FOREIGN KEY (`languages_id`)
     REFERENCES `__languages` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `fk_e_users_e_users_group1`
+  CONSTRAINT `fk_users_users_group1`
     FOREIGN KEY (`group_id`)
     REFERENCES `__users_group` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 1
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE IF NOT EXISTS `__users_meta` (
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `users_id` INT(11) UNSIGNED NOT NULL,
+  `meta_k` VARCHAR(45) NULL DEFAULT NULL,
+  `meta_v` TEXT NULL DEFAULT NULL,
+  PRIMARY KEY (`id`, `users_id`),
+  INDEX `meta_k` (`meta_k` ASC),
+  INDEX `fk_users_meta_users_idx` (`users_id` ASC),
+  CONSTRAINT `fk_users_meta_users`
+    FOREIGN KEY (`users_id`)
+    REFERENCES `e_users` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
@@ -221,14 +239,14 @@ CREATE TABLE IF NOT EXISTS `__content_info` (
   `content` TEXT NULL DEFAULT NULL,
   PRIMARY KEY (`id`, `content_id`, `languages_id`),
   UNIQUE INDEX `languages_id` (`url` ASC),
-  INDEX `fk_e_content_info_e_content1_idx` (`content_id` ASC),
-  INDEX `fk_e_content_info_e_languages1_idx` (`languages_id` ASC),
-  CONSTRAINT `fk_e_content_info_e_content1`
+  INDEX `fk_content_info_content1_idx` (`content_id` ASC),
+  INDEX `fk_content_info_languages1_idx` (`languages_id` ASC),
+  CONSTRAINT `fk_content_info_content1`
   FOREIGN KEY (`content_id`)
   REFERENCES `__content` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `fk_e_content_info_e_languages1`
+  CONSTRAINT `fk_content_info_languages1`
   FOREIGN KEY (`languages_id`)
   REFERENCES `__languages` (`id`)
     ON DELETE CASCADE
@@ -244,8 +262,8 @@ CREATE TABLE IF NOT EXISTS `__content_meta` (
   `meta_v` TEXT NULL DEFAULT NULL,
   PRIMARY KEY (`id`, `content_id`),
   INDEX `meta_k` (`meta_k` ASC),
-  INDEX `fk_e_content_meta_e_content1_idx` (`content_id` ASC),
-  CONSTRAINT `fk_e_content_meta_e_content1`
+  INDEX `fk_content_meta_content1_idx` (`content_id` ASC),
+  CONSTRAINT `fk_content_meta_content1`
   FOREIGN KEY (`content_id`)
   REFERENCES `__content` (`id`)
     ON DELETE CASCADE
@@ -259,17 +277,18 @@ CREATE TABLE IF NOT EXISTS `__content_relationship` (
   `content_id` INT(10) UNSIGNED NOT NULL,
   `categories_id` INT(10) UNSIGNED NOT NULL,
   `is_main` TINYINT(1) UNSIGNED NULL DEFAULT NULL,
+  `type` VARCHAR(30) NULL DEFAULT NULL,
   PRIMARY KEY (`id`, `content_id`, `categories_id`),
   INDEX `fk_content_relationship_content2_idx` (`categories_id` ASC),
   INDEX `is_main` (`is_main` ASC),
-  INDEX `fk_e_content_relationship_e_content1_idx` (`content_id` ASC),
-  INDEX `fk_e_content_relationship_e_content2_idx` (`categories_id` ASC),
-  CONSTRAINT `fk_e_content_relationship_e_content1`
+  INDEX `fk_content_relationship_content1_idx` (`content_id` ASC),
+  INDEX `fk_content_relationship_content2_idx` (`categories_id` ASC),
+  CONSTRAINT `fk_content_relationship_content1`
   FOREIGN KEY (`content_id`)
   REFERENCES `__content` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `fk_e_content_relationship_e_content2`
+  CONSTRAINT `fk_content_relationship_content2`
   FOREIGN KEY (`categories_id`)
   REFERENCES `__content` (`id`)
     ON DELETE CASCADE
@@ -287,8 +306,8 @@ CREATE TABLE IF NOT EXISTS `__content_images` (
   `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`, `content_id`),
   INDEX `position` (`position` ASC),
-  INDEX `fk_e_content_images_e_content1_idx` (`content_id` ASC),
-  CONSTRAINT `fk_e_content_images_e_content1`
+  INDEX `fk_content_images_content1_idx` (`content_id` ASC),
+  CONSTRAINT `fk_content_images_content1`
   FOREIGN KEY (`content_id`)
   REFERENCES `__content` (`id`)
     ON DELETE CASCADE
@@ -315,14 +334,14 @@ CREATE TABLE IF NOT EXISTS `__nav_items` (
   PRIMARY KEY (`id`, `nav_id`, `content_id`),
   INDEX `fk_nav_items_nav1_idx` (`nav_id` ASC),
   INDEX `position` (`position` ASC),
-  INDEX `fk_e_nav_items_e_content_idx` (`content_id` ASC),
-  INDEX `fk_e_nav_items_e_nav1_idx` (`nav_id` ASC),
-  CONSTRAINT `fk_e_nav_items_e_content`
+  INDEX `fk_nav_items_content_idx` (`content_id` ASC),
+  INDEX `fk_nav_items_nav1_idx` (`nav_id` ASC),
+  CONSTRAINT `fk_nav_items_content`
   FOREIGN KEY (`content_id`)
   REFERENCES `__content` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `fk_e_nav_items_e_nav1`
+  CONSTRAINT `fk_nav_items_nav1`
   FOREIGN KEY (`nav_id`)
   REFERENCES `__nav` (`id`)
     ON DELETE CASCADE
@@ -357,14 +376,14 @@ CREATE TABLE IF NOT EXISTS `__features_info` (
   `languages_id` TINYINT(3) UNSIGNED NOT NULL,
   `name` VARCHAR(255) NULL DEFAULT NULL,
   PRIMARY KEY (`id`, `features_id`, `languages_id`),
-  INDEX `fk_e_features_info_e_languages_idx` (`languages_id` ASC),
-  INDEX `fk_e_features_info_e_features1_idx` (`features_id` ASC),
-  CONSTRAINT `fk_e_features_info_e_languages`
+  INDEX `fk_features_info_languages_idx` (`languages_id` ASC),
+  INDEX `fk_features_info_features1_idx` (`features_id` ASC),
+  CONSTRAINT `fk_features_info_languages`
   FOREIGN KEY (`languages_id`)
   REFERENCES `__languages` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `fk_e_features_info_e_features1`
+  CONSTRAINT `fk_features_info_features1`
   FOREIGN KEY (`features_id`)
   REFERENCES `__features` (`id`)
     ON DELETE CASCADE
@@ -382,14 +401,14 @@ CREATE TABLE IF NOT EXISTS `__features_content` (
   `position` TINYINT(3) UNSIGNED NULL DEFAULT NULL,
   PRIMARY KEY (`id`, `features_id`, `content_types_id`, `content_subtypes_id`, `content_id`),
   UNIQUE INDEX `features_id` (`content_subtypes_id` ASC, `content_id` ASC),
-  INDEX `fk_e_features_content_e_features1_idx` (`features_id` ASC),
-  INDEX `fk_e_features_content_e_content_types1_idx` (`content_types_id` ASC),
-  CONSTRAINT `fk_e_features_content_e_features1`
+  INDEX `fk_features_content_features1_idx` (`features_id` ASC),
+  INDEX `fk_features_content_content_types1_idx` (`content_types_id` ASC),
+  CONSTRAINT `fk_features_content_features1`
   FOREIGN KEY (`features_id`)
   REFERENCES `__features` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `fk_e_features_content_e_content_types1`
+  CONSTRAINT `fk_features_content_content_types1`
   FOREIGN KEY (`content_types_id`)
   REFERENCES `__content_types` (`id`)
     ON DELETE CASCADE
@@ -404,17 +423,17 @@ CREATE TABLE IF NOT EXISTS `__content_features` (
   `content_id` INT(10) UNSIGNED NOT NULL,
   `values_id` INT(10) UNSIGNED NULL DEFAULT NULL,
   `languages_id` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
-  `value` VARCHAR(255) NULL DEFAULT NULL,
+  `value` TEXT NULL DEFAULT NULL,
   PRIMARY KEY (`id`, `features_id`, `content_id`),
   UNIQUE INDEX `content_id` (`values_id` ASC, `languages_id` ASC),
-  INDEX `fk_e_content_features_e_content1_idx` (`content_id` ASC),
-  INDEX `fk_e_content_features_e_features1_idx` (`features_id` ASC),
-  CONSTRAINT `fk_e_content_features_e_content1`
+  INDEX `fk_content_features_content1_idx` (`content_id` ASC),
+  INDEX `fk_content_features_features1_idx` (`features_id` ASC),
+  CONSTRAINT `fk_content_features_content1`
   FOREIGN KEY (`content_id`)
   REFERENCES `__content` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-  CONSTRAINT `fk_e_content_features_e_features1`
+  CONSTRAINT `fk_content_features_features1`
   FOREIGN KEY (`features_id`)
   REFERENCES `__features` (`id`)
     ON DELETE CASCADE
@@ -440,8 +459,8 @@ CREATE TABLE IF NOT EXISTS `__content_types_images_sizes` (
   `types_id` TINYINT(3) UNSIGNED NOT NULL,
   `images_sizes_id` TINYINT(3) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`, `types_id`, `images_sizes_id`),
-  INDEX `fk_e_content_types_images_sizes_e_content_images_sizes1_idx` (`images_sizes_id` ASC),
-  CONSTRAINT `fk_e_content_types_images_sizes_e_content_images_sizes1`
+  INDEX `fk_content_types_images_sizes_content_images_sizes1_idx` (`images_sizes_id` ASC),
+  CONSTRAINT `fk_content_types_images_sizes_content_images_sizes1`
   FOREIGN KEY (`images_sizes_id`)
   REFERENCES `__content_images_sizes` (`id`)
     ON DELETE CASCADE

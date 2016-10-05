@@ -1,1 +1,1 @@
-DROP TABLE __callbacks;
+DROP TABLE IF EXISTS __callbacks;

@@ -1,3 +1,3 @@
-DROP TABLE __comments_likers;
-DROP TABLE __comments_subscribers;
-DROP TABLE __comments;
+DROP TABLE IF EXISTS __comments_likers;
+DROP TABLE IF EXISTS __comments_subscribers;
+DROP TABLE IF EXISTS __comments;

@@ -1,2 +1,1 @@
-delete from __currency;
-DROP TABLE __currency;
+DROP TABLE IF EXISTS __currency;
