@@ -1,2 +1,0 @@
-ALTER TABLE `e_content_relationship` ADD `type_id` TINYINT(3) UNSIGNED NULL DEFAULT NULL AFTER `is_main`, ADD INDEX (`type_id`);
-ALTER TABLE `e_content_relationship` CHANGE `type_id` `types_id` TINYINT(3) UNSIGNED NULL DEFAULT NULL;

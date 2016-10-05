@@ -1,2 +1,0 @@
-DROP TABLE IF EXISTS __gps;
-DROP TABLE IF EXISTS __gps_info;
