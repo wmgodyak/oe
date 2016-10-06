@@ -38,12 +38,6 @@ class Config
             }
             closedir($handle);
         }
-
-//        echo '<pre>';print_r(self::$data);die('<< CONFIG');
-
-        if(!isset(self::$data['db'])){
-            header('Location: /install'); die();   
-        }
     }
 
     private function __clone()
@@ -66,8 +60,8 @@ class Config
      * @param null $key
      * @return array
      */
-    public function get($key=null){
-
+    public function get($key=null)
+    {
         if($key){
 
             $data = '';
@@ -95,7 +89,7 @@ class Config
             }
         }
 
-        return $key ? self::$data[$key] : self::$data;
+        return $key ? isset(self::$data[$key]) ? self::$data[$key] : null : self::$data;
     }
 
     /**

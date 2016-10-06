@@ -138,26 +138,20 @@ class Route
             $path = str_replace("\\", "/", $c);
 
             if(!file_exists(DOCROOT . $path . '.php'))
-                die('Controller not found:' . DOCROOT . $path . '.php');
+                die('Controller not found:' . $path . '.php');
         }
 
         $controller = new $c;
 
         if(!is_callable(array($controller, $action))){
-            die('Action '. $action .' is not callable: ' . DOCROOT . $path . '.php');
+            die('Action '. $action .' is not callable: ' . $path . '.php');
         }
-
-//        Event::fire($c, 'before'.ucfirst($action), $params);
 
         if(!empty($params)){
-//            call_user_func_array(array($controller, 'before'), $params);
             $res = call_user_func_array(array($controller, $action), $params);
         } else {
-//            call_user_func(array($controller, 'before'));
             $res = call_user_func(array($controller, $action));
         }
-
-//        Event::fire($c, 'after' . ucfirst($action), $params);
 
         if($res){
             Response::getInstance()->body($res);

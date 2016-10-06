@@ -7,6 +7,8 @@
  */
 namespace system;
 
+use system\components\install\controllers\Install;
+use system\core\Config;
 use system\core\EventsHandler;
 use system\core\exceptions\Exception;
 use system\core\Lang;
@@ -74,6 +76,13 @@ class Front extends core\Controller
 
         // response
         $this->response = Response::getInstance();
+
+        $config = Config::getInstance();
+        if($config->get('db') == null){
+            $installer = new Install();
+            $installer->index();
+            die;
+        }
 
         // settings
         $this->settings = Settings::getInstance()->get();

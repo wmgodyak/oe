@@ -17,7 +17,6 @@ abstract class Controller {
 
     protected $storage;
 
-    protected $load;
     protected $request;
     /**
      * error handler
@@ -31,7 +30,6 @@ abstract class Controller {
     public function __construct()
     {
         $this->sys_name = base64_decode('T1lpLkVuZ2luZSA2');
-        $this->load = Load::instance();
         $this->request = Request::getInstance();
 
 //        if($this->request->isPost() && !isset($_SERVER['PHP_AUTH_USER'])) {

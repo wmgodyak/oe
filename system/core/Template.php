@@ -45,7 +45,7 @@ class Template
 
         // load config
         $config = Config::getInstance()->get('smarty');
-        $settings = Settings::getInstance()->get();
+//        $settings = Settings::getInstance()->get();
 
         // init smarty
         $this->smarty = new \Smarty();
@@ -57,7 +57,7 @@ class Template
         $this->smarty->error_reporting = E_ALL & ~E_NOTICE;
 
         // get theme
-        $theme = $settings['themes_path'] . $theme . '/';
+        $theme = "themes/{$theme}/";
 
         $this->smarty->setCompileDir(DOCROOT . '/tmp/' . $theme . '/');
         $this->smarty->setTemplateDir(DOCROOT . $theme. '/');

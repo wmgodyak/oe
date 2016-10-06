@@ -8,11 +8,9 @@
 
 namespace system\components\install\models;
 
-use system\models\Model;
-
 defined("CPATH") or die();
 
-class Install extends Model
+class Install
 {
     public function go()
     {

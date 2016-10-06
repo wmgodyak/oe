@@ -11,7 +11,6 @@ CREATE TABLE IF NOT EXISTS `__settings` (
   ENGINE = InnoDB
   AUTO_INCREMENT = 1
   DEFAULT CHARACTER SET = utf8;
-
 INSERT INTO `__settings` (`id`, `name`, `value`, `block`, `type`, `required`, `display`) VALUES
   (1, 'autofil_title', '1', 'common', 'text', 1, 1),
   (2, 'autofill_url', '1', 'common', 'text', 1, 1),
@@ -57,9 +56,7 @@ INSERT INTO `__settings` (`id`, `name`, `value`, `block`, `type`, `required`, `d
   (50, 'home_id', '1', 'common', 'text', 1, 1),
   (51, 'widgets', '', 'common', 'text', 1, 1),
   (52, 'modules', '', 'common', 'text', 1, NULL),
-  (53, 'watermark_src', '/uploads/watermark.png', 'images', 'text', 1, NULL),
-  ;
-
+  (53, 'watermark_src', '/uploads/watermark.png', 'images', 'text', 1, NULL);
 CREATE TABLE IF NOT EXISTS `__languages` (
   `id` TINYINT(3) UNSIGNED NOT NULL AUTO_INCREMENT,
   `code` CHAR(2) NOT NULL,
@@ -71,10 +68,8 @@ CREATE TABLE IF NOT EXISTS `__languages` (
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8;
-
 INSERT INTO `__languages` (`id`, `code`, `name`, `is_main`) VALUES
   (1, 'uk', 'УКР', 1);
-
 CREATE TABLE IF NOT EXISTS `__users_group` (
   `id` TINYINT(3) UNSIGNED NOT NULL AUTO_INCREMENT,
   `parent_id` TINYINT(3) UNSIGNED NOT NULL,
@@ -90,10 +85,8 @@ CREATE TABLE IF NOT EXISTS `__users_group` (
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8;
-
 INSERT INTO `__users_group` (`id`, `parent_id`, `isfolder`, `backend`, `permissions`, `position`) VALUES
   (1, 0, 0, 1, 'a:1:{s:11:"full_access";s:1:"1";}', 1);
-
 CREATE TABLE IF NOT EXISTS `__users_group_info` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `group_id` TINYINT(3) UNSIGNED NOT NULL,
@@ -102,7 +95,6 @@ CREATE TABLE IF NOT EXISTS `__users_group_info` (
   PRIMARY KEY (`id`, `group_id`, `languages_id`),
   INDEX `fk_users_group_info_languages1_idx` (`languages_id` ASC),
   INDEX `fk_users_group_info_users_group_idx` (`group_id` ASC),
-  INDEX `fk_users_group_info_languages1_idx` (`languages_id` ASC),
   CONSTRAINT `fk_users_group_info_users_group`
     FOREIGN KEY (`group_id`)
     REFERENCES `__users_group` (`id`)
@@ -116,10 +108,8 @@ CREATE TABLE IF NOT EXISTS `__users_group_info` (
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8;
-
 INSERT INTO `__users_group_info` (`id`, `group_id`, `languages_id`, `name`) VALUES
   (1, 1, 1, 'Адміністратори');
-
 CREATE TABLE IF NOT EXISTS `__users` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `languages_id` TINYINT(3) UNSIGNED NOT NULL,
@@ -155,7 +145,6 @@ CREATE TABLE IF NOT EXISTS `__users` (
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8;
-
 CREATE TABLE IF NOT EXISTS `__users_meta` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `users_id` INT(11) UNSIGNED NOT NULL,
@@ -166,14 +155,12 @@ CREATE TABLE IF NOT EXISTS `__users_meta` (
   INDEX `fk_users_meta_users_idx` (`users_id` ASC),
   CONSTRAINT `fk_users_meta_users`
     FOREIGN KEY (`users_id`)
-    REFERENCES `e_users` (`id`)
+    REFERENCES `__users` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8;
-
-
 CREATE TABLE IF NOT EXISTS `__content_types` (
   `id` TINYINT(3) UNSIGNED NOT NULL AUTO_INCREMENT,
   `parent_id` TINYINT(3) UNSIGNED NULL DEFAULT '0',
@@ -189,12 +176,9 @@ CREATE TABLE IF NOT EXISTS `__content_types` (
   ENGINE = InnoDB
   AUTO_INCREMENT = 1
   DEFAULT CHARACTER SET = utf8;
-
 INSERT INTO `__content_types` (`id`, `parent_id`, `isfolder`, `type`, `name`, `is_main`, `settings`) VALUES
   (1, 0, 1, 'pages', 'Pages', 1, NULL),
   (2, 0, 0, 'guide', 'Guides', NULL, NULL);
-
-
 CREATE TABLE IF NOT EXISTS `__content` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `types_id` TINYINT(3) UNSIGNED NOT NULL,
@@ -224,7 +208,6 @@ CREATE TABLE IF NOT EXISTS `__content` (
   ENGINE = InnoDB
   AUTO_INCREMENT = 1
   DEFAULT CHARACTER SET = utf8;
-
 CREATE TABLE IF NOT EXISTS `__content_info` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `content_id` INT(10) UNSIGNED NOT NULL,
@@ -254,7 +237,6 @@ CREATE TABLE IF NOT EXISTS `__content_info` (
   ENGINE = InnoDB
   AUTO_INCREMENT = 1
   DEFAULT CHARACTER SET = utf8;
-
 CREATE TABLE IF NOT EXISTS `__content_meta` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `content_id` INT(10) UNSIGNED NOT NULL,
@@ -271,7 +253,6 @@ CREATE TABLE IF NOT EXISTS `__content_meta` (
   ENGINE = InnoDB
   AUTO_INCREMENT = 1
   DEFAULT CHARACTER SET = utf8;
-
 CREATE TABLE IF NOT EXISTS `__content_relationship` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `content_id` INT(10) UNSIGNED NOT NULL,
@@ -282,7 +263,6 @@ CREATE TABLE IF NOT EXISTS `__content_relationship` (
   INDEX `fk_content_relationship_content2_idx` (`categories_id` ASC),
   INDEX `is_main` (`is_main` ASC),
   INDEX `fk_content_relationship_content1_idx` (`content_id` ASC),
-  INDEX `fk_content_relationship_content2_idx` (`categories_id` ASC),
   CONSTRAINT `fk_content_relationship_content1`
   FOREIGN KEY (`content_id`)
   REFERENCES `__content` (`id`)
@@ -296,7 +276,6 @@ CREATE TABLE IF NOT EXISTS `__content_relationship` (
   ENGINE = InnoDB
   AUTO_INCREMENT = 1
   DEFAULT CHARACTER SET = utf8;
-
 CREATE TABLE IF NOT EXISTS `__content_images` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `content_id` INT(10) UNSIGNED NOT NULL,
@@ -315,7 +294,6 @@ CREATE TABLE IF NOT EXISTS `__content_images` (
   ENGINE = InnoDB
   AUTO_INCREMENT = 1
   DEFAULT CHARACTER SET = utf8;
-
 CREATE TABLE IF NOT EXISTS `__nav` (
   `id` TINYINT(3) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) CHARACTER SET 'utf8' COLLATE 'utf8_bin' NOT NULL,
@@ -325,7 +303,6 @@ CREATE TABLE IF NOT EXISTS `__nav` (
   ENGINE = InnoDB
   AUTO_INCREMENT = 1
   DEFAULT CHARACTER SET = utf8;
-
 CREATE TABLE IF NOT EXISTS `__nav_items` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `nav_id` TINYINT(3) UNSIGNED NOT NULL,
@@ -335,7 +312,6 @@ CREATE TABLE IF NOT EXISTS `__nav_items` (
   INDEX `fk_nav_items_nav1_idx` (`nav_id` ASC),
   INDEX `position` (`position` ASC),
   INDEX `fk_nav_items_content_idx` (`content_id` ASC),
-  INDEX `fk_nav_items_nav1_idx` (`nav_id` ASC),
   CONSTRAINT `fk_nav_items_content`
   FOREIGN KEY (`content_id`)
   REFERENCES `__content` (`id`)
@@ -349,7 +325,6 @@ CREATE TABLE IF NOT EXISTS `__nav_items` (
   ENGINE = InnoDB
   AUTO_INCREMENT = 1
   DEFAULT CHARACTER SET = utf8;
-
 CREATE TABLE IF NOT EXISTS `__features` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `parent_id` INT(10) UNSIGNED NULL DEFAULT NULL,
@@ -369,7 +344,6 @@ CREATE TABLE IF NOT EXISTS `__features` (
   ENGINE = InnoDB
   AUTO_INCREMENT = 1
   DEFAULT CHARACTER SET = utf8;
-
 CREATE TABLE IF NOT EXISTS `__features_info` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `features_id` INT(10) UNSIGNED NOT NULL,
@@ -391,7 +365,6 @@ CREATE TABLE IF NOT EXISTS `__features_info` (
   ENGINE = InnoDB
   AUTO_INCREMENT = 1
   DEFAULT CHARACTER SET = utf8;
-
 CREATE TABLE IF NOT EXISTS `__features_content` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `features_id` INT(10) UNSIGNED NOT NULL,
@@ -416,7 +389,6 @@ CREATE TABLE IF NOT EXISTS `__features_content` (
   ENGINE = InnoDB
   AUTO_INCREMENT = 1
   DEFAULT CHARACTER SET = utf8;
-
 CREATE TABLE IF NOT EXISTS `__content_features` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `features_id` INT(10) UNSIGNED NOT NULL,
@@ -441,7 +413,6 @@ CREATE TABLE IF NOT EXISTS `__content_features` (
   ENGINE = InnoDB
   AUTO_INCREMENT = 1
   DEFAULT CHARACTER SET = utf8;
-
 CREATE TABLE IF NOT EXISTS `__content_images_sizes` (
   `id` TINYINT(3) UNSIGNED NOT NULL AUTO_INCREMENT,
   `size` VARCHAR(16) NOT NULL,
@@ -453,7 +424,6 @@ CREATE TABLE IF NOT EXISTS `__content_images_sizes` (
   ENGINE = InnoDB
   AUTO_INCREMENT = 1
   DEFAULT CHARACTER SET = utf8;
-
 CREATE TABLE IF NOT EXISTS `__content_types_images_sizes` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `types_id` TINYINT(3) UNSIGNED NOT NULL,
@@ -468,5 +438,3 @@ CREATE TABLE IF NOT EXISTS `__content_types_images_sizes` (
   ENGINE = InnoDB
   AUTO_INCREMENT = 1
   DEFAULT CHARACTER SET = utf8;
-
-
