@@ -36,35 +36,37 @@ class Modules
         $active = Settings::getInstance()->get('modules');
 
         $admin = $this->mode == 'backend' ? '\admin' : '';
+        if(!empty($active)){
 
-        foreach ($active as $module=>$params) {
-            if($params['status'] != 'enabled') continue;
-            $c  = $modules_dir .'\\'. lcfirst($module) . '\controllers'.$admin.'\\' . ucfirst($module);
+            foreach ($active as $module=>$params) {
+                if($params['status'] != 'enabled') continue;
+                $c  = $modules_dir .'\\'. lcfirst($module) . '\controllers'.$admin.'\\' . ucfirst($module);
 
-            $path = str_replace("\\", "/", $c);
+                $path = str_replace("\\", "/", $c);
 
-            if(file_exists(DOCROOT . $path . '.php')) {
+                if(file_exists(DOCROOT . $path . '.php')) {
 
-                $_module = lcfirst($module);
+                    $_module = lcfirst($module);
 
-                if($this->mode == 'backend' &&  ! Permissions::canModule($_module, 'index')) continue;
+                    if($this->mode == 'backend' &&  ! Permissions::canModule($_module, 'index')) continue;
 
 
-                if($this->theme && $this->lang){
-                    $this->assignLang($_module);
+                    if($this->theme && $this->lang){
+                        $this->assignLang($_module);
+                    }
+
+                    $config = $this->readConfig($_module, (isset($params['config']) ? $params['config'] : []));
+
+                    $active[$module]['config'] = $config;
+
+                    $controller = new $c;
+                    // assign config to module
+                    $controller->config = $config;
+
+                    $modules->{$_module} = $controller;
+
+                    call_user_func(array($controller, 'init'));
                 }
-
-                $config = $this->readConfig($_module, (isset($params['config']) ? $params['config'] : []));
-
-                $active[$module]['config'] = $config;
-
-                $controller = new $c;
-                // assign config to module
-                $controller->config = $config;
-
-                $modules->{$_module} = $controller;
-
-                call_user_func(array($controller, 'init'));
             }
         }
 
