@@ -52,19 +52,22 @@ class Modules extends Engine
             if($status == 'all'){
                 $modules = $this->availableModules();
             } elseif($status == 'enabled'){
-                foreach ($installed_modules as $module=> $status) {
-                    $_module = [];
-                    $c  = $modules_dir .'\\'. lcfirst($module) . '\controllers\\' . ucfirst($module);
-                    $path = str_replace("\\", "/", $c);
+                if(!empty($installed_modules)){
 
-                    if(file_exists(DOCROOT . $path . '.php')) {
-                        $meta = PHPDocReader::getMeta($c);
-                        $_module['module'] = $module;
-                        $_module['status'] = $status;
-                        $_module += $meta;
-                        $modules[] = $_module;
+                    foreach ($installed_modules as $module=> $status) {
+                        $_module = [];
+                        $c  = $modules_dir .'\\'. lcfirst($module) . '\controllers\\' . ucfirst($module);
+                        $path = str_replace("\\", "/", $c);
+
+                        if(file_exists(DOCROOT . $path . '.php')) {
+                            $meta = PHPDocReader::getMeta($c);
+                            $_module['module'] = $module;
+                            $_module['status'] = $status;
+                            $_module += $meta;
+                            $modules[] = $_module;
+                        }
+
                     }
-
                 }
             } elseif($status == 'disabled'){
                 $modules = $this->availableModules();
