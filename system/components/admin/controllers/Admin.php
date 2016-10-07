@@ -124,6 +124,7 @@ class Admin extends Engine {
                             if(empty($a)){
                                 self::data('avatar', '/uploads/avatars/0.png');
                             }
+                            Session::set('backend_lang', $data['lang']);
                             setcookie('fail', '', time() - 60);
                         } else{
                             $inp[] = ['data[password]' => $this->mAdmin->getDBError()];
@@ -144,21 +145,7 @@ class Admin extends Engine {
         }
 
         // витягнути список доступних мовних версій
-        $langs = Lang::getInstance()->getLangs(); $c= false;
-//        foreach ($langs as $l) {
-//            if($lang == $l['code']){
-//                Config::getInstance()->set('core.lang', $lang);
-//                setcookie('lang', $lang, 3600+8, "/", "." . $_SERVER['HTTP_HOST']);
-//                $this->template->assign('t', Lang::getInstance($lang, true)->t());
-//                $c=true;
-//            }
-//        }
-
-        if(! $c){
-            $lang = Config::getInstance()->get('core.lang');
-        }
-
-        $this->template->assign('s_lang', $lang);
+        $langs = Lang::getInstance()->getLangs();
         $this->template->assign('langs', $langs);
 
         $this->response->body($this->template->fetch('system/admin/login'));

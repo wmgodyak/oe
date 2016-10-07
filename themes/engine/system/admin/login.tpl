@@ -21,7 +21,7 @@
                     <label for="lang" class="l-lang">{$t.admin.lang}</label>
                     <select name="data[lang]" id="adminLang">
                         {foreach $langs as $code=>$lang}
-                            <option {if $code == $s_lang}selected{/if} value="{$code}">{$lang}</option>
+                            <option value="{$code}">{$lang}</option>
                         {/foreach}
                     </select>
                 </div>

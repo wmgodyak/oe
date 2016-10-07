@@ -39,9 +39,9 @@ INSERT INTO `__settings` (`id`, `name`, `value`, `block`, `type`, `required`, `d
   (31, 'yandex_webmaster', '', 'analitycs', 'text', 0, 1),
   (32, 'yandex_metric', '', 'analitycs', 'text', 0, 1),
   (35, 'delimiter', '/', 'seo', 'text', 1, 1),
-  (36, 'mail_email_from', 'me@otakoyi.com', 'mail', 'text', 1, 1),
-  (37, 'mail_email_to', 'me@otakoyi.com', 'mail', 'text', 1, 1),
-  (38, 'mail_from_name', 'Company Otakoyi.com', 'mail', 'text', 1, 1),
+  (36, 'mail_email_from', '', 'mail', 'text', 1, 1),
+  (37, 'mail_email_to', '', 'mail', 'text', 1, 1),
+  (38, 'mail_from_name', '', 'mail', 'text', 1, 1),
   (39, 'mail_header', '', 'mail', 'text', 0, 1),
   (40, 'mail_footer', '', 'mail', 'text', 0, 1),
   (41, 'mail_smtp_on', '0', 'mail', 'text', 1, 1),
@@ -50,13 +50,13 @@ INSERT INTO `__settings` (`id`, `name`, `value`, `block`, `type`, `required`, `d
   (44, 'mail_smtp_user', '', 'mail', 'text', 0, 1),
   (45, 'mail_smtp_password', '', 'mail', 'text', 0, 1),
   (46, 'mail_smtp_secure', 'tls', 'mail', 'text', 0, 1),
-  (47, 'company_name', 'Premium Shop', 'company', 'text', 1, 1),
-  (48, 'company_phone', '111111', 'company', 'text', 1, 1),
+  (47, 'company_name', '', 'company', 'text', 1, 1),
+  (48, 'company_phone', '', 'company', 'text', 1, 1),
   (49, 'seo', 'a:6:{s:5:"guide";a:1:{i:1;a:4:{s:5:"title";s:0:"";s:8:"keywords";s:0:"";s:11:"description";s:0:"";s:2:"h1";s:0:"";}}s:5:"pages";a:1:{i:1;a:4:{s:5:"title";s:34:"{title} {delimiter} {company_name}";s:8:"keywords";s:37:"{keywords} {delimiter} {company_name}";s:11:"description";s:13:"{description}";s:2:"h1";s:4:"{h1}";}}s:4:"post";a:1:{i:1;a:4:{s:5:"title";s:67:"{title} {delimiter}  {category} {delimiter} блог {company_name}";s:8:"keywords";s:46:"{keywords} {delimiter} блог {company_name}";s:11:"description";s:49:"{description} {delimiter} блог {company_name}";s:2:"h1";s:4:"{h1}";}}s:16:"posts_categories";a:1:{i:1;a:4:{s:5:"title";s:67:"{title} {delimiter}  {category} {delimiter} блог {company_name}";s:8:"keywords";s:46:"{keywords} {delimiter} блог {company_name}";s:11:"description";s:46:"{keywords} {delimiter} блог {company_name}";s:2:"h1";s:4:"{h1}";}}s:7:"product";a:1:{i:1;a:4:{s:5:"title";s:58:"{title} {delimiter}  {category} {delimiter} {company_name}";s:8:"keywords";s:37:"{keywords} {delimiter} {company_name}";s:11:"description";s:37:"{keywords} {delimiter} {company_name}";s:2:"h1";s:4:"{h1}";}}s:19:"products_categories";a:1:{i:1;a:4:{s:5:"title";s:59:"{title} {delimiter}  {category} {delimiter}  {company_name}";s:8:"keywords";s:37:"{keywords} {delimiter} {company_name}";s:11:"description";s:37:"{keywords} {delimiter} {company_name}";s:2:"h1";s:4:"{h1}";}}}', '', '', 0, NULL),
   (50, 'home_id', '1', 'common', 'text', 1, 1),
   (51, 'widgets', '', 'common', 'text', 1, 1),
   (52, 'modules', '', 'common', 'text', 1, NULL),
-  (53, 'watermark_src', '/uploads/watermark.png', 'images', 'text', 1, NULL);
+  (53, 'watermark_src', '', 'images', 'text', 1, NULL);
 CREATE TABLE IF NOT EXISTS `__languages` (
   `id` TINYINT(3) UNSIGNED NOT NULL AUTO_INCREMENT,
   `code` CHAR(2) NOT NULL,
@@ -69,7 +69,7 @@ ENGINE = InnoDB
 AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8;
 INSERT INTO `__languages` (`id`, `code`, `name`, `is_main`) VALUES
-  (1, 'uk', 'УКР', 1);
+  (1, '', '', 1);
 CREATE TABLE IF NOT EXISTS `__users_group` (
   `id` TINYINT(3) UNSIGNED NOT NULL AUTO_INCREMENT,
   `parent_id` TINYINT(3) UNSIGNED NOT NULL,

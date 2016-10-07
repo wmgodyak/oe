@@ -9,6 +9,7 @@
 namespace system\components\install\controllers;
 
 use system\core\Controller;
+use system\core\Lang;
 use system\core\Template;
 
 defined("CPATH") or die();
@@ -58,8 +59,100 @@ class Install extends Controller
         echo $this->template->fetch('system/install/index');
     }
 
+    public function success()
+    {
+        return $this->template->fetch('system/install/success');
+    }
+
     private function createAdmin()
     {
+        $langs = Lang::getInstance('engine')->getAllowedLanguages();
+        $language = $this->request->post('language','s');
+        $data = $this->request->post('data');
+        $conf = $_SESSION['inst']['db'];
+        $prefix = $conf['prefix'];
+        if($this->request->isPost() && $language){
+            try {
+                $db = new \PDO("mysql:host={$conf['host']};dbname={$conf['name']}",$conf['user'],$conf['pass']);
+                $db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_WARNING);
+                $db->exec("SET NAMES utf8");
+                $db->setAttribute(\PDO::ATTR_EMULATE_PREPARES, 0);
+            } catch(\PDOException $e) {
+                $error[] = $e->getMessage();
+            }
+
+            // create admin
+            if(empty($this->error)){
+                try {
+                    $pass = crypt($data['pass']);
+                    $db->exec("
+                    insert into {$prefix}users (group_id, languages_id,name,email,password)
+                    values (1, 1, '{$data['user']}','{$data['email']}', '{$pass}') ");
+                } catch(\PDOException $e) {
+                    $this->error[] = 'E2:' . $e->getMessage();
+                }
+            }
+            // set language
+            try{
+                $db->exec("update {$prefix}languages set `code`='{$language}', `name`='{$langs[$language]}' where id = 1 limit 1");
+            } catch(\PDOException $e) {
+                $this->error[] = 'E1:' . $e->getMessage();
+            }
+            // set settings
+            try{
+                $db->exec("update {$prefix}settings set `value`='{$data['email']}' where name = 'mail_email_from' limit 1");
+            } catch(\PDOException $e) {
+                $this->error[] = 'E1:' . $e->getMessage();
+            }
+            try{
+                $db->exec("update {$prefix}settings set `value`='{$data['email']}' where name = 'mail_email_to' limit 1");
+            } catch(\PDOException $e) {
+                $this->error[] = 'E1:' . $e->getMessage();
+            }
+            try{
+                $db->exec("update {$prefix}settings set `value`='{$data['name']}' where name = 'mail_from_name' limit 1");
+            } catch(\PDOException $e) {
+                $this->error[] = 'E1:' . $e->getMessage();
+            }
+            try{
+                $db->exec("update {$prefix}settings set `value`='{$data['name']}' where name = 'company_name' limit 1");
+            } catch(\PDOException $e) {
+                $this->error[] = 'E1:' . $e->getMessage();
+            }
+
+            if(empty($this->error)){
+                try{
+                    $c_sample = DOCROOT . "config/db.sample.php";
+                    $cpath = DOCROOT . "config/db.php";
+
+                    // запишу конфіг
+                    $config = file_get_contents($c_sample);
+                    $config = str_replace
+                    (
+                        array(
+                            '%host%','%db%','%user%','%pass%', '%prefix%'
+                        ),
+                        array(
+                            $conf['host'], $conf['name'], $conf['user'], $conf['pass'], $conf['prefix']
+                        ),
+                        $config
+                    );
+
+                    $h = fopen($cpath,'w+');
+
+                    if (fwrite($h, $config) === FALSE) {
+                        $this->error[] = 'Неможу записати конфіг';
+                    }
+                } catch(\Exception $e) {
+                    $this->error[] = $e->getMessage();
+                }
+            }
+
+            if(empty($this->error)){
+                return $this->success();
+            }
+        }
+        $this->template->assign('langs', $langs);
         return $this->template->fetch('system/install/create_admin');
     }
 
@@ -88,7 +181,7 @@ class Install extends Controller
                 }
                 catch(\PDOException $e) {
                     $error[] = 'Import error: ' . $e->getMessage() ;
-                    d($error);
+//                    d($error);
                 }
             }
 
@@ -201,8 +294,4 @@ class Install extends Controller
         $this->template->assign('text', $text);
         return $this->template->fetch('system/install/license');
     }
-
-    public function step2(){}
-    public function step3(){}
-    public function step4(){}
 }

@@ -27,11 +27,6 @@ if ( !defined("CPATH") ) die();
 
 /**
  * Class Engine
- * в адмінці присутні наступні компоненти
- * блок навігації
- * функціональний блок
- * блок з сайдбаром
- * плагіни
  * @package controllers
  */
 abstract class Engine extends Controller
@@ -137,18 +132,6 @@ abstract class Engine extends Controller
 
     public function init(){}
 
-    private function getLang()
-    {
-        if(! isset($_COOKIE["$this->theme.lang"])){
-            $lang = Config::getInstance()->get('core.lang');
-            $_COOKIE["$this->theme.lang"] = $lang;
-        } else {
-            $lang = $_COOKIE["$this->theme.lang"];
-        }
-
-        return $lang;
-    }
-
     private function _init()
     {
         self::$initialized = true;
@@ -157,7 +140,7 @@ abstract class Engine extends Controller
         $action     = $this->request->param('action');
         $controller = lcfirst($controller);
 
-        $lang = $this->getLang();
+        $lang = Session::get('backend_lang');
 
         $this->template->assign('version',    $this->version);
         $this->template->assign('base_url',   APPURL . 'engine/');

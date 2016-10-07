@@ -30,18 +30,16 @@
 
     <div class="form-group">
         <label> Мова сайту по замовчуванню <span class="text-danger">*</span></label>
-        <select name="data[language]">
-            <option value="uk">Українська</option>
-            <option value="ru">Русский</option>
-            <option value="en">English</option>
-            <option value="pl">Polska</option>
-            <option value="de">Deutch</option>
+        <select name="language" class="form-control">
+            {foreach $langs as $k=>$lang}
+                <option value="{$k}">{$lang}</option>
+            {/foreach}
         </select>
     </div>
 
     <div class="row">
         <div class="col-md-3 col-md-offset-9 text-right">
-            <input type="hidden" name="action" value="db_config">
+            <input type="hidden" name="action" value="create_admin">
             <button class="btn btn-default">Встановити</button>
         </div>
     </div>
