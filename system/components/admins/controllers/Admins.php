@@ -211,7 +211,7 @@ class Admins extends Backend
 
     private function notify($data)
     {
-        $data['url'] = APPURL . 'engine';
+        $data['url'] = APPURL . $this->settings['backend_url'];
 
         include_once DOCROOT . "/vendor/phpmailer/PHPMailer.php";
 

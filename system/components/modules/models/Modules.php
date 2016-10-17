@@ -28,7 +28,7 @@ class Modules extends Model
         $module = lcfirst($module);
 
         $themes_path = \system\models\Settings::getInstance()->get('themes_path');
-        $theme_b = \system\models\Settings::getInstance()->get('engine_theme_current');
+        $theme_b = \system\models\Settings::getInstance()->get('backend_theme');
         $theme_f = \system\models\Settings::getInstance()->get('app_theme_current');
 
         $templates_files = [];
@@ -44,6 +44,7 @@ class Modules extends Model
                 $item = str_replace($dir, '', $item);
                 $item = str_replace('default/', $themes_path . $theme_f . '/', $item);
                 $item = str_replace('engine/', $themes_path . $theme_b . '/', $item);
+                $item = str_replace('backend/', $themes_path . $theme_b . '/', $item);
 
                 $templates_files[$k]['dest'] = $item;
 

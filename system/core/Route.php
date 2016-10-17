@@ -8,6 +8,7 @@
 namespace system\core;
 
 use system\core\exceptions\Exception;
+use system\models\Settings;
 
 defined('CPATH') or die();
 
@@ -40,7 +41,7 @@ class Route
      * @param $params
      * @param $namespace
      */
-    public static function addRule($regex, $params, $namespace = null)
+    public static function add($regex, $params, $namespace = null)
     {
         self::$rules[] = array(
             'regex'      => $regex,
@@ -68,8 +69,10 @@ class Route
 
         $found_route = false;
 
+        $backend_url = Settings::getInstance()->get('backend_url');
+
         foreach (self::$rules as $route) {
-//            print_r($route);
+            $route['regex'] = str_replace('backend', $backend_url, $route['regex']);
             if(preg_match("@^" . $route['regex'] . "$@siu", $uri, $matches)){
                 $found_route = true;
 
@@ -116,10 +119,8 @@ class Route
 
         if(!$found_route){
             die('Route not found :(');
-//            $namespace  = self::$ns;
-//            $controller = 'App';
-//            $action     = 'e404';
         }
+
 
         $controller = ucfirst($controller);
 

@@ -25,7 +25,7 @@ class Backend extends Model
     {
         parent::__construct();
 
-        $this->admin = Session::get('engine.admin');
+        $this->admin = Session::get('backend.admin');
 
         $l = new Languages();
 

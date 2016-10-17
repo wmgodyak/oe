@@ -7,7 +7,7 @@ var engine = {
     require: function(src, path)
     {
         alert('Method engine.required is deprecated');
-        path = typeof path == 'undefined' ? '/themes/engine/assets/js/bootstrap/' : path;
+        path = typeof path == 'undefined' ? '/themes/backend/assets/js/bootstrap/' : path;
         var sc = document.createElement('script');
         sc.type = 'text/javascript';
         sc.async = true;
@@ -532,7 +532,7 @@ engine.admin = {
         if(logForm.length){
 
             engine.validateAjaxForm('#adminLogin', function () {
-                self.location.href = "/engine/dashboard";
+                self.location.href = logForm.data('redirect');
             });
 
             engine.validateAjaxForm('#adminFp', function () {

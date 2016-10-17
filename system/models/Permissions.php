@@ -67,6 +67,7 @@ class Permissions
         if(Request::getInstance()->isXhr()){
             die;
         }
+        $backend_url = Settings::getInstance()->get('backend_url');
         echo '<!DOCTYPE html>
         <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
         <head>
@@ -98,7 +99,7 @@ class Permissions
         <body id="error-page">
             <h2>Отакої! У вас недостатньо прав :(</h2>
             <div class="code-wrapper">
-                <code><p>Зверніться до адміністратора, щоб отримати доступ.</p> <p><a href="/engine/dashboard">Повернутись на головну</a></p></code>
+                <code><p>Зверніться до адміністратора, щоб отримати доступ.</p> <p><a href="/{$backend_url}/dashboard">Повернутись на головну</a></p></code>
             </div>
         </body>
         </html>';

@@ -2,7 +2,7 @@
 session_name('oyiengine');
 session_start();
 
-if(!isset($_SESSION['engine']['admin'])) die;
+if(!isset($_SESSION['backend']['admin'])) die;
 mb_internal_encoding('UTF-8');
 date_default_timezone_set('Europe/Rome');
 

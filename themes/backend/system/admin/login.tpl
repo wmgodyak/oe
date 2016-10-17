@@ -1,7 +1,7 @@
 <section class="log-in">
     <div class="table">
         <div class="table-cell">
-            <form class="login" action="admin/login" method="post" id="adminLogin">
+            <form class="login" action="admin/login" data-redirect="/{$settings.backend_url}/dashboard" method="post" id="adminLogin">
                 <div class="logo">
                     <img src="{$theme_url}assets/img/logo/logo.png">
                 </div>
@@ -32,7 +32,7 @@
                 <input type="hidden" name="token" value="{$token}">
             </form>
 
-            <form class="login" action="admin/fp" method="post" id="adminFp" style="display: none">
+            <form class="login" action="admin/fp"  data-redirect="/{$settings.backend_url}/dashboard" method="post" id="adminFp" style="display: none">
                 <div class="logo">
                     <img src="{$theme_url}assets/img/logo/logo.png">
                 </div>

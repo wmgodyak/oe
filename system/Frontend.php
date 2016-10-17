@@ -122,7 +122,7 @@ class Frontend extends core\Controller
         if(! $this->request->isXhr()){
 
             if($this->settings['active'] == 0){
-                $a = Session::get('engine.admin');
+                $a = Session::get('backend.admin');
                 if( ! $a) {
                     $this->technicalWorks();
                 }
@@ -142,7 +142,7 @@ class Frontend extends core\Controller
             Request::getInstance()->param('page', $page);
 
             if ($page['status'] != 'published') {
-                $a = Session::get('engine.admin');
+                $a = Session::get('backend.admin');
                 if (!$a) {
                     $this->e404();
                 }

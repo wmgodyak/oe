@@ -24,6 +24,11 @@
 
     spl_autoload_register('autoLoad');
 
+    \system\core\Route::add('/backend/([a-zA-Z_0-9]+)/([a-zA-Z_0-9]+)/?(.*)', null, 'system\components\:controller:action');
+    \system\core\Route::add('/backend/([a-zA-Z_0-9]+)/([a-zA-Z_0-9]+)/?', null, 'system\components\:controller:action');
+    \system\core\Route::add('/backend/([a-zA-Z_0-9]+)/?', null, 'system\components\:controller');
+    \system\core\Route::add('/backend/?', null, 'system\components\Dashboard');
+
     // init session
     system\core\Session::init();
 

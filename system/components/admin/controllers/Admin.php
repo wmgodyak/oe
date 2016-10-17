@@ -40,20 +40,20 @@ class Admin extends Backend {
     public static function data($key = null, $val = null)
     {
         if(! $key && ! $val){
-            if(! isset($_SESSION['engine']['admin'])) return null;
-            return $_SESSION['engine']['admin'];
+            if(! isset($_SESSION['backend']['admin'])) return null;
+            return $_SESSION['backend']['admin'];
         } elseif(!$val){
-            if(isset($_SESSION['engine']['admin'][$key])){
-                return $_SESSION['engine']['admin'][$key];
+            if(isset($_SESSION['backend']['admin'][$key])){
+                return $_SESSION['backend']['admin'][$key];
             }
 
             return null;
         }
 
-        if(!isset($_SESSION['engine'])) $_SESSION['engine'] = array();
-        if(!isset($_SESSION['engine']['admin'])) $_SESSION['engine']['admin'] = array();
+        if(!isset($_SESSION['backend'])) $_SESSION['backend'] = array();
+        if(!isset($_SESSION['backend']['admin'])) $_SESSION['backend']['admin'] = array();
 
-        $_SESSION['engine']['admin'][$key] = $val;
+        $_SESSION['backend']['admin'][$key] = $val;
 
         return $val;
     }

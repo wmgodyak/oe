@@ -8,14 +8,6 @@
 
 $routes = array();
 
-    $routes[]  = array('/engine/([a-zA-Z_0-9]+)/([a-zA-Z_0-9]+)/?(.*)', 'system\components\:controller:action');
-    //http://engine_6x.loc/engine/structure/edit
-    $routes[]  = array('/engine/([a-zA-Z_0-9]+)/([a-zA-Z_0-9]+)/?', 'system\components\:controller:action');
-    //http://engine_6x.loc/engine/structure
-    $routes[]  = array('/engine/([a-zA-Z_0-9]+)/?', 'system\components\:controller');
-    //http://engine_6x.loc/engine/
-    $routes[]  = array('/engine/?', 'system\components\Dashboard');
-
 /**
  * FRONTEND
  */

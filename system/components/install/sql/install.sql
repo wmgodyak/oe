@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS `__settings` (
 INSERT INTO `__settings` (`id`, `name`, `value`, `block`, `type`, `required`, `display`) VALUES
   (1, 'autofil_title', '1', 'common', 'text', 1, 1),
   (2, 'autofill_url', '1', 'common', 'text', 1, 1),
+  (3, 'backend_url', 'backend', '', 'text', 1, 0),
   (4, 'editor_bodyId', 'cms_content', 'editor', 'text', 1, 1),
   (5, 'editor_body_class', 'cms_content', 'editor', 'text', 1, 1),
   (6, 'editor_contents_css', '/themes/default/assets/css/style.css', 'editor', 'textarea', 1, 1),
@@ -25,7 +26,7 @@ INSERT INTO `__settings` (`id`, `name`, `value`, `block`, `type`, `required`, `d
   (13, 'content_images_dir', 'uploads/content/', 'images', 'text', 1, 1),
   (14, 'content_images_thumb_dir', 'thumbs/', 'images', 'text', 1, 1),
   (15, 'content_images_source_dir', 'source/', 'images', 'text', 1, 1),
-  (17, 'engine_theme_current', 'engine', 'themes', 'text', 1, 1),
+  (17, 'backend_theme', 'backend', 'themes', 'text', 1, 1),
   (19, 'page_404', '11', 'common', 'text', 1, 1),
   (20, 'content_images_source_size', '1600x1200', 'images', 'text', 1, 1),
   (21, 'content_images_thumbs_size', '125x125', 'images', 'text', 1, 1),

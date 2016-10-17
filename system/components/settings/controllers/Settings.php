@@ -55,7 +55,7 @@ class Settings extends Backend
         $this->template->assign('dir_perm', $dir_perm);
         $this->template->assign('sys_info', $sys_info);
         $this->template->assign('items', $this->mSettings->get());
-        $this->template->assign('com_url', APPURL . 'engine/settings');
+        $this->template->assign('com_url', APPURL . "{$this->settings['backend_url']}/settings");
 
         $this->output($this->template->fetch('system/settings/index'));
     }

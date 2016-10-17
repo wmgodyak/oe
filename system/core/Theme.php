@@ -20,11 +20,13 @@ class Theme {
         if(self::$instance == null){
             self::$instance = new Theme();
         }
+
         self::switchTo();
+
         return self::$instance;
     }
 
-    public static function switchTo($app='engine')
+    public static function switchTo($app = 'backend')
     {
         self::$theme = Config::getInstance()->get("themes.$app");
     }

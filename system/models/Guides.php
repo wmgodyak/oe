@@ -86,7 +86,7 @@ class Guides extends Model
     {
         $this->beginTransaction();
 
-        $data['owner_id']    = Session::get('engine.admin.id');
+        $data['owner_id']    = Session::get('backend.admin.id');
         $data['types_id']    = $this->types_id;
         $data['subtypes_id'] = $this->types_id;
         $data['status']      = 'published';

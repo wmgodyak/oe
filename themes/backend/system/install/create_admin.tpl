@@ -29,7 +29,12 @@
     </div>
 
     <div class="form-group">
-        <label> Мова сайту по замовчуванню <span class="text-danger">*</span></label>
+        <label> Шлях до адмін панелі: <span class="text-danger">*</span></label>
+        <input type="text" required="" name="data[backend_url]" placeholder="engine" class="form-control ">
+    </div>
+
+    <div class="form-group">
+        <label> Мова адмінки замовчуванню <span class="text-danger">*</span></label>
         <select name="language" class="form-control">
             {foreach $langs as $k=>$lang}
                 <option value="{$k}">{$lang}</option>

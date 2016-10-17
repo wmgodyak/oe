@@ -41,7 +41,7 @@ class Seo extends Backend
         $types = $this->mSettings->getContentTypes();
         $this->template->assign('data', $data);
         $this->template->assign('types', $types);
-        $this->template->assign('com_url', APPURL . 'engine/seo');
+        $this->template->assign('com_url', APPURL . "{$this->settings['backend_url']}/seo");
         $this->output($this->template->fetch('system/seo/index'));
     }
 

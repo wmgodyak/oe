@@ -5,7 +5,7 @@ engine.products = {
     init: function()
     {
         //engine.require('content');
-        engine.require('bootstrap-tagsinput.min', '/themes/engine/assets/js/vendor/');
+        engine.require('bootstrap-tagsinput.min', '/themes/backend/assets/js/vendor/');
 
         this.variants.init();
 

@@ -12,8 +12,6 @@ use system\core\Config;
 use system\core\Controller;
 use system\core\EventsHandler;
 use system\core\Lang;
-use system\core\Request;
-use system\core\Response;
 use system\core\Session;
 use system\core\Template;
 use system\models\App;
@@ -88,13 +86,17 @@ abstract class Backend extends Controller
         $this->settings = Settings::getInstance()->get();
 
         // template settings
-        $theme = $this->settings['engine_theme_current'];
+        $theme = $this->settings['backend_theme'];
         $this->theme = $theme;
 
         $this->template = Template::getInstance($theme);
 
+        $version = Config::getInstance()->get('core.version');
+        $this->template->assign('version',    $version);
+        $this->template->assign('base_url',   APPURL . "{$this->settings['backend_url']}/");
+        $this->template->assign('settings',   $this->settings);
 
-        if($this->request->isPost() && !isset($_SERVER['PHP_AUTH_USER'])) {
+        if($this->request->isPost()) {
             $token = $this->request->post('token');
             if($token != TOKEN){
                 die('#1201. Invalid token.');
@@ -107,7 +109,7 @@ abstract class Backend extends Controller
             )
         ){
             if( $controller != 'Admin' && $action != 'login' ){
-                $this->redirect('/engine/admin/login');
+                $this->redirect("/{$this->settings['backend_url']}/admin/login");
             }
         }
 
@@ -144,13 +146,9 @@ abstract class Backend extends Controller
 
         $lang = Session::get('backend_lang');
 
-        $version = Config::getInstance()->get('core.version');
-        $this->template->assign('version',    $version);
-        $this->template->assign('base_url',   APPURL . 'engine/');
         $this->template->assign('controller', $controller);
-        $this->template->assign('action',     $action);
-        $this->template->assign('settings',   $this->settings);
 
+        $this->template->assign('action',     $action);
         $this->initSystemComponents();
 
         $app = new App();

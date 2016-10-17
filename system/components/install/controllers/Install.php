@@ -20,15 +20,13 @@ defined("CPATH") or die();
  */
 class Install extends Controller
 {
-    private $install;
     private $template;
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->template = Template::getInstance('engine');
-//        $this->install = new \system\components\install\models\Install();
+        $this->template = Template::getInstance('backend');
     }
 
     public function init(){}
@@ -61,12 +59,13 @@ class Install extends Controller
 
     public function success()
     {
+        $this->template->assign('data', $this->request->post('data'));
         return $this->template->fetch('system/install/success');
     }
 
     private function createAdmin()
     {
-        $langs = Lang::getInstance('engine')->getAllowedLanguages();
+        $langs = Lang::getInstance('backend')->getAllowedLanguages();
         $language = $this->request->post('language','s');
         $data = $this->request->post('data');
         $conf = $_SESSION['inst']['db'];
@@ -116,6 +115,12 @@ class Install extends Controller
             }
             try{
                 $db->exec("update {$prefix}settings set `value`='{$data['name']}' where name = 'company_name' limit 1");
+            } catch(\PDOException $e) {
+                $this->error[] = 'E1:' . $e->getMessage();
+            }
+            try{
+                if(empty($data['backend_url'])) $data['backend_url'] = 'backend';
+                $db->exec("update {$prefix}settings set `value`='{$data['backend_url']}' where name = 'backend_url' limit 1");
             } catch(\PDOException $e) {
                 $this->error[] = 'E1:' . $e->getMessage();
             }
