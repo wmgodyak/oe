@@ -251,6 +251,16 @@ var engine = {
     init: function(){
 
         var $form = $('#form') ;
+
+        $('#form .editor').each(function(){
+            var name = $(this).attr('name');
+            // console.log(name);
+            //CKEDITOR.replace(name);
+            CKEDITOR.replace(name,{
+                customConfig: 'editor/config'
+            });
+        });
+
         if($form.length){
             $('.datepicker').datepicker({
                 dateFormat: 'dd.mm.yy'
@@ -1102,37 +1112,6 @@ engine.admins = {
                 }
             );
         }
-    }
-};
-
-engine.chunks = {
-    init: function()
-    {
-        // console.log('engine.chunks.init() -> OK');
-        $(document).on('click', '.b-chunks-delete', function(){
-            var id = $(this).data('id');
-            engine.chunks.delete(id);
-        });
-    },
-    onCreateSuccess: function(d)
-    {
-        location.href = "./chunks";
-    },
-    delete: function(id)
-    {
-        engine.confirm
-        (
-            t.chunks.delete_confirm,
-            function()
-            {
-                engine.request.get('./chunks/delete/' + id, function(d){
-                    if(d > 0){
-                        engine.refreshDataTable('chunks');
-                    }
-                });
-                $(this).dialog('close').dialog('destroy').remove();
-            }
-        );
     }
 };
 
@@ -2407,99 +2386,6 @@ engine.themes = {
         );
     }
 };
-engine.translations = {
-    init: function()
-    {
-        // console.log('Init translations');
-        $(document).on('click', '.b-translations-create', function(){
-            engine.translations.create();
-        });
-        $(document).on('click', '.b-translations-edit', function(){
-            engine.translations.edit($(this).data('id'));
-        });
-        $(document).on('click', '.b-translations-delete', function(){
-            engine.translations.delete($(this).data('id'));
-        });
-    },
-    create: function()
-    {
-        engine.request.get('./translations/create', function(d)
-        {
-            var bi = t.common.button_save;
-            var buttons = {};
-
-            buttons[bi] =  function(){
-                $('#form').submit();
-            };
-
-            var dialog = engine.dialog({
-                content: d,
-                title: t.translations.create_title,
-                autoOpen: true,
-                width: 750,
-                modal: true,
-                buttons: buttons
-            });
-
-            engine.validateAjaxForm('#form', function(d){
-                if(d.s){
-                    engine.refreshDataTable('translations');
-                    dialog.dialog('close');
-                    dialog.dialog('destroy').remove()
-                } else {
-                    engine.showFormErrors('#form', d.i);
-                }
-            });
-        });
-    },
-    edit: function(id)
-    {
-        engine.request.post({
-            url: './translations/edit/' + id,
-            data: {id: id},
-            success: function(d)
-            {
-                var bi = t.common.button_save;
-                var buttons = {};
-                buttons[bi] =  function(){
-                    $('#form').submit();
-                };
-                var dialog = engine.dialog({
-                    content: d,
-                    title: t.translations.action_edit,
-                    autoOpen: true,
-                    width: 750,
-                    modal: true,
-                    buttons: buttons
-                });
-
-                engine.validateAjaxForm('#form', function(d){
-                    if(d.s){
-                        engine.refreshDataTable('translations');
-                        dialog.dialog('close');
-                        dialog.dialog('destroy').remove()
-                    }
-                });
-            }
-        })
-    },
-    delete: function(id)
-    {
-        engine.confirm
-        (
-            t.translations.delete_question,
-            function()
-            {
-                engine.request.get('./translations/delete/' + id, function(d){
-                    if(d > 0){
-                        engine.refreshDataTable('translations');
-                    }
-                });
-                $(this).dialog('close').dialog('destroy').remove();
-            }
-        );
-    }
-};
 /**
  * Created by wg on 29.02.16.
  */
@@ -2544,124 +2430,6 @@ engine.seo = {
     }
 };
 
-engine.mailTemplates = {
-    init: function()
-    {
-        $(document).on('click', '.b-mailTemplates-create', function(){
-            engine.mailTemplates.create();
-        });
-        $(document).on('click', '.b-mailTemplates-edit', function(){
-            engine.mailTemplates.edit($(this).data('id'));
-        });
-        $(document).on('click', '.b-mailTemplates-delete', function(){
-            engine.mailTemplates.delete($(this).data('id'));
-        });
-    },
-    before: function()
-    {
-        engine.validateAjaxForm('#form', function(d){
-            if(d.s){
-                engine.refreshDataTable('mailTemplates');
-                engine.closeDialog();
-            } else {
-                engine.showFormErrors('#form', d.i);
-            }
-        });
-
-        $('#switchLanguages').find('button').click(function(){
-            var code = $(this).data('code');
-            if(typeof code == 'undefined')return;
-
-            $(this).addClass('btn-primary').siblings().removeClass('btn-primary');
-            $('.switch-lang:not(.lang-'+code+')').hide();
-            $('.switch-lang.lang-' + code).show();
-        });
-
-        $('#form .ckeditor').each(function(){
-            var name = $(this).attr('name');
-            //// console.log(name);
-            CKEDITOR.replace(name);
-        });
-
-
-    },
-    create: function()
-    {
-        var $this = this;
-        engine.request.get('./mailTemplates/create', function(d)
-        {
-            var bi = t.common.button_save;
-            var buttons = {};
-
-            buttons[bi] =  function(){
-                engine.ckUpdate();
-                setTimeout(function(){
-                    $('#form').submit();
-                },300);
-            };
-
-            var dialog = engine.dialog({
-                content: d,
-                title: t.mailTemplates.create_title,
-                autoOpen: true,
-                width: 900,
-                modal: true,
-                closeOnEscape: false,
-                buttons: buttons
-            });
-
-            $this.before();
-        });
-    },
-    edit: function(id)
-    {
-        var $this = this;
-        engine.request.post({
-            url: './mailTemplates/edit/' + id,
-            data: {id: id},
-            success: function(d)
-            {
-                var bi = t.common.button_save;
-                var buttons = {};
-
-                buttons[bi] =  function(){
-                    engine.ckUpdate();
-                    setTimeout(function(){
-                        $('#form').submit();
-                    },300);
-                };
-
-                var dialog = engine.dialog({
-                    content: d,
-                    title: t.mailTemplates.action_edit,
-                    autoOpen: true,
-                    width: 900,
-                    closeOnEscape: false,
-                    modal: true,
-                    buttons: buttons
-                });
-
-                $this.before();
-            }
-        })
-    },
-    delete: function(id)
-    {
-        engine.confirm
-        (
-            t.mailTemplates.delete_question,
-            function()
-            {
-                engine.request.get('./mailTemplates/delete/' + id, function(d){
-                    if(d > 0){
-                        engine.refreshDataTable('mailTemplates');
-                    }
-                });
-                engine.closeDialog();
-            }
-        );
-    }
-};
 engine.styleInputs = function()
 {
     $("select:not(.no-s2)").select2();
@@ -2703,7 +2471,6 @@ engine.breadcrumb = function()
 $(document).ready(function(){
     engine.admins.init();
     engine.components.init();
-    engine.chunks.init();
     engine.content.init();
     engine.contentImages.init();
     engine.contentImagesSizes.init();
@@ -2712,8 +2479,6 @@ $(document).ready(function(){
     engine.languages.init();
     engine.nav.init();
     engine.themes.init();
-    engine.translations.init();
-    engine.mailTemplates.init();
     engine.trash.init();
     engine.settings.init();
     engine.seo.init();

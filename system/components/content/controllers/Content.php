@@ -186,4 +186,5 @@ class Content extends Backend
     {
         return $this->mContent->hide($id);
     }
+
 }
