@@ -1,7 +1,7 @@
 <?php
 namespace system\components\themes\controllers;
 
-use system\Engine;
+use system\Backend;
 use helpers\bootstrap\Button;
 use helpers\bootstrap\Link;
 use system\models\Settings;
@@ -12,7 +12,7 @@ defined("CPATH") or die();
  * Class Themes
  * @package system\components\themes\controllers
  */
-class Themes extends Engine
+class Themes extends Backend
 {
     private $path = '';
 

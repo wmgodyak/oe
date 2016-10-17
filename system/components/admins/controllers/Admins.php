@@ -7,11 +7,11 @@ use helpers\bootstrap\Icon;
 use helpers\DateTime;
 use helpers\FormValidation;
 use system\core\DataTables2;
-use system\Engine;
+use system\Backend;
 
 defined("CPATH") or die();
 
-class Admins extends Engine
+class Admins extends Backend
 {
     private $admins;
 

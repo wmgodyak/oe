@@ -11,6 +11,5 @@
 
     return array(
         'debug' => true,
-        'lang'  => 'uk',
-        'user'  => 'wg'
+        'version' => '7.0.1'
     );

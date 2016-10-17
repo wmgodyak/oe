@@ -14,7 +14,7 @@ defined("CPATH") or die();
  * Class ContentTypes
  * @package system\models
  */
-class ContentTypes extends Engine
+class ContentTypes extends Backend
 {
     /**
      * @param $id

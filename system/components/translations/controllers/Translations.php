@@ -6,12 +6,12 @@ use helpers\bootstrap\Button;
 use helpers\PHPDocReader;
 use system\core\Lang;
 use system\core\Request;
-use system\Engine;
+use system\Backend;
 use system\models\Settings;
 
 defined("CPATH") or die();
 
-class Translations extends Engine
+class Translations extends Backend
 {
     public function init()
     {

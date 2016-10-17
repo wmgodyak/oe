@@ -6,7 +6,7 @@ use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
 use helpers\FormValidation;
 use system\core\DataTables2;
-use system\Engine;
+use system\Backend;
 
 defined("CPATH") or die();
 
@@ -14,7 +14,7 @@ defined("CPATH") or die();
  * Class ContentImagesSizes
  * @package system\components\blank\controllers
  */
-class ContentImagesSizes extends Engine
+class ContentImagesSizes extends Backend
 {
     private $contentImagesSizes;
 

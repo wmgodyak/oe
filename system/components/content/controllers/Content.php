@@ -13,11 +13,11 @@ use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
 use helpers\bootstrap\Link;
 use system\core\EventsHandler;
-use system\Engine;
+use system\Backend;
 
 defined("CPATH") or die();
 
-class Content extends Engine
+class Content extends Backend
 {
     protected $mContent;
     /**

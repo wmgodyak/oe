@@ -8,13 +8,13 @@
 
 namespace system\components\contentFeatures\models;
 
-use system\models\Engine;
+use system\models\Backend;
 
 /**
  * Class ContentFeatures
  * @package system\components\contentFeatures\models
  */
-class ContentFeatures extends Engine
+class ContentFeatures extends Backend
 {
 
     public function getByCategoryId($category_id, $content_id)

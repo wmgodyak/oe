@@ -18,26 +18,18 @@ abstract class Controller {
     protected $storage;
 
     protected $request;
+    protected $response;
     /**
      * error handler
      * @var object
      */
     protected $error;
 
-    protected $sys_name = '';
-    protected $version = 7.01;
-
     public function __construct()
     {
-        $this->sys_name = base64_decode('T1lpLkVuZ2luZSA2');
         $this->request = Request::getInstance();
-
-//        if($this->request->isPost() && !isset($_SERVER['PHP_AUTH_USER'])) {
-//            $token = $this->request->post('token');
-//            if($token != TOKEN){
-//                die('#1201. Invalid token.');
-//            }
-//        }
+        // response
+        $this->response = Response::getInstance();
     }
 
     /**

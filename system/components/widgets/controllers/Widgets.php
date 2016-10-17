@@ -8,12 +8,12 @@ use system\core\DataTables2;
 use system\core\exceptions\Exception;
 use system\core\WidgetsAreas;
 use system\core\WidgetsFactory;
-use system\Engine;
+use system\Backend;
 use system\models\Settings;
 
 defined("CPATH") or die();
 
-class Widgets extends Engine
+class Widgets extends Backend
 {
     private $modules_dir = 'modules';
 

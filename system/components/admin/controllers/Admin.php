@@ -9,15 +9,14 @@
 namespace system\components\admin\controllers;
 
 use helpers\FormValidation;
-use system\core\Config;
 use system\core\Lang;
 use system\core\Session;
-use system\Engine;
+use system\Backend;
 use system\models\Permissions;
 
 defined("CPATH") or die();
 
-class Admin extends Engine {
+class Admin extends Backend {
 
     private $mAdmin;
 
@@ -69,10 +68,9 @@ class Admin extends Engine {
     }
 
     /**
-     * Login user
-     * @return string
+     *
      */
-    public function login($lang=null)
+    public function login()
     {
         if($this->request->isPost()){
             $status = 0; $inp = []; $data = $this->request->post('data');
@@ -127,7 +125,7 @@ class Admin extends Engine {
                             Session::set('backend_lang', $data['lang']);
                             setcookie('fail', '', time() - 60);
                         } else{
-                            $inp[] = ['data[password]' => $this->mAdmin->getDBError()];
+                            $inp[] = ['data[password]' => $this->mAdmin->getErrorMessage()];
                         }
                     }
                 } else {

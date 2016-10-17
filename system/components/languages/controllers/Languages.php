@@ -8,12 +8,12 @@ use helpers\FormValidation;
 use system\core\DataTables2;
 use system\core\EventsHandler;
 use system\core\Lang;
-use system\Engine;
+use system\Backend;
 use system\models\Settings;
 
 defined("CPATH") or die();
 
-class Languages extends Engine
+class Languages extends Backend
 {
     public function init()
     {

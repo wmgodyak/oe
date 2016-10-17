@@ -9,9 +9,9 @@
 namespace system\components\admins\controllers;
 
 use system\components\admins\models\AdminsGroup;
-use system\Engine;
+use system\Backend;
 
-class AdminsGroups extends Engine
+class AdminsGroups extends Backend
 {
     private $adminsGroup;
 

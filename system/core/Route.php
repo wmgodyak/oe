@@ -35,6 +35,20 @@ class Route
         }
     }
 
+    /**
+     * @param $regex
+     * @param $params
+     * @param $namespace
+     */
+    public static function addRule($regex, $params, $namespace = null)
+    {
+        self::$rules[] = array(
+            'regex'      => $regex,
+            'params'     => $params,
+            'namespace'  => $namespace
+        );
+    }
+
     public static function run()
     {
 //        echo '<pre>';

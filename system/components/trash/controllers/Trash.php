@@ -6,7 +6,7 @@ use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
 use system\core\DataTables2;
 use system\core\EventsHandler;
-use system\Engine;
+use system\Backend;
 
 defined("CPATH") or die();
 
@@ -14,7 +14,7 @@ defined("CPATH") or die();
  * Class Trash
  * @package system\components\blank\controllers
  */
-class Trash extends Engine
+class Trash extends Backend
 {
     private $trash;
 

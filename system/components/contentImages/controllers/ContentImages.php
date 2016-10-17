@@ -5,12 +5,12 @@ namespace system\components\contentImages\controllers;
 use helpers\Image;
 use helpers\Translit;
 use system\core\EventsHandler;
-use system\Engine;
+use system\Backend;
 use system\models\Settings;
 
 defined("CPATH") or die();
 
-class ContentImages extends Engine
+class ContentImages extends Backend
 {
     private $ci;
     /**

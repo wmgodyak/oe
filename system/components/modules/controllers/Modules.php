@@ -6,7 +6,7 @@ use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
 use helpers\PHPDocReader;
 use system\core\DataTables2;
-use system\Engine;
+use system\Backend;
 use system\models\Settings;
 
 defined("CPATH") or die();
@@ -15,7 +15,7 @@ defined("CPATH") or die();
  * Class Modules
  * @package system\components\modules\controllers
  */
-class Modules extends Engine
+class Modules extends Backend
 {
     public $model;
     public function __construct()

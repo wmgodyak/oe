@@ -1,6 +1,6 @@
 <?php
 /**
- * OYiEngine 6.x
+ * OYiEngine
  * Company Otakoyi.com
  * Author wmgodyak mailto:wmgodyak@gmail.com
  * Date: 06.05.14 22:34
@@ -29,7 +29,7 @@ if ( !defined("CPATH") ) die();
  * Class Engine
  * @package controllers
  */
-abstract class Engine extends Controller
+abstract class Backend extends Controller
 {
     /**
      * content of body
@@ -46,9 +46,6 @@ abstract class Engine extends Controller
 
     protected $images;
 
-    protected $request;
-
-    protected $response;
 
     protected $template;
 
@@ -73,7 +70,7 @@ abstract class Engine extends Controller
     {
         parent::__construct();
 
-        $this->engine = new \system\models\Engine();
+        $this->engine = new \system\models\Backend();
 
         $this->languages = new Languages();
         $this->languages_id = $this->languages->getDefault('id');
@@ -84,10 +81,8 @@ abstract class Engine extends Controller
         $controller  = $this->request->param('controller');
         $action      = $this->request->param('action');
 
-        $this->request = Request::getInstance();
+//        $this->request = Request::getInstance();
 
-        // response
-        $this->response = Response::getInstance();
 
         // settings
         $this->settings = Settings::getInstance()->get();
@@ -97,6 +92,14 @@ abstract class Engine extends Controller
         $this->theme = $theme;
 
         $this->template = Template::getInstance($theme);
+
+
+        if($this->request->isPost() && !isset($_SERVER['PHP_AUTH_USER'])) {
+            $token = $this->request->post('token');
+            if($token != TOKEN){
+                die('#1201. Invalid token.');
+            }
+        }
 
         if(
             (
@@ -123,7 +126,6 @@ abstract class Engine extends Controller
 
             $this->_init();
 
-
             $this->makeCrumbs($this->t($controller . '.action_index'), $controller);
         }
 
@@ -142,7 +144,8 @@ abstract class Engine extends Controller
 
         $lang = Session::get('backend_lang');
 
-        $this->template->assign('version',    $this->version);
+        $version = Config::getInstance()->get('core.version');
+        $this->template->assign('version',    $version);
         $this->template->assign('base_url',   APPURL . 'engine/');
         $this->template->assign('controller', $controller);
         $this->template->assign('action',     $action);
@@ -321,8 +324,6 @@ abstract class Engine extends Controller
         }
 
         ksort($nav);
-//        d($nav);die;
-//        d(self::$menu_nav);die;
         $this->template->assign('nav_items', $nav);
         $s = $this->template->fetch('nav');
         $this->template->assign('nav', $s);
@@ -348,10 +349,10 @@ abstract class Engine extends Controller
 
                     $controller = new $c;
                     $components->{$module} = $controller;
-
-                    call_user_func(array($controller, 'init'));
+                    if(is_callable(array($controller, 'init'))){
+                        call_user_func(array($controller, 'init'));
+                    }
                 }
-
             }
             closedir($handle);
         }
@@ -365,8 +366,7 @@ abstract class Engine extends Controller
     protected final function output($body)
     {
         $this->renderHeadingPanel();
-//        return  $body;
-        $this->response->body($body)->asHtml(); // todo ???
+        $this->response->body($body)->asHtml();
     }
 
     /**

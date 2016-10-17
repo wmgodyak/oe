@@ -8,11 +8,11 @@ use helpers\bootstrap\Link;
 use helpers\FormValidation;
 use system\components\features\models\FeaturesContent;
 use system\core\DataTables2;
-use system\Engine;
+use system\Backend;
 
 defined("CPATH") or die();
 
-class Features extends Engine
+class Features extends Backend
 {
     private $features;
     private $featuresContent;

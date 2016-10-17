@@ -2,7 +2,7 @@
 
 namespace system\models;
 
-class UsersGroup extends Engine
+class UsersGroup extends Backend
 {
     /**
      * @param $data

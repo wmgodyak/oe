@@ -4,11 +4,11 @@ namespace system\components\settings\controllers;
 
 use helpers\bootstrap\Button;
 use system\core\EventsHandler;
-use system\Engine;
+use system\Backend;
 
 defined("CPATH") or die();
 
-class Settings extends Engine
+class Settings extends Backend
 {
     private $mSettings;
 

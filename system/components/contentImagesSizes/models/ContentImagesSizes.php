@@ -9,14 +9,14 @@
 namespace system\components\contentImagesSizes\models;
 
 use helpers\Image;
-use system\models\Engine;
+use system\models\Backend;
 use system\models\Settings;
 
 /**
  * Class ContentImagesSizes
  * @package system\components\contentImagesSizes\models
  */
-class ContentImagesSizes extends Engine
+class ContentImagesSizes extends Backend
 {
     /**
      * @param $id

@@ -8,11 +8,11 @@
 
 namespace system\components\features\controllers;
 
-use system\Engine;
+use system\Backend;
 
 defined("CPATH") or die();
 
-class Content extends Engine
+class Content extends Backend
 {
     private $features;
 

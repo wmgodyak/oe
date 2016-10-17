@@ -8,7 +8,7 @@
 
 namespace system\components\dashboard\controllers;
 
-use system\Engine;
+use system\Backend;
 
 defined("CPATH") or die();
 /**
@@ -20,7 +20,7 @@ defined("CPATH") or die();
 
  * @package controllers\engine
  */
-class Dashboard extends Engine
+class Dashboard extends Backend
 {
     public function index()
     {

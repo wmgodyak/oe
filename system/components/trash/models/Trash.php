@@ -8,7 +8,7 @@
 
 namespace system\components\trash\models;
 
-use system\models\Engine;
+use system\models\Backend;
 
 defined("CPATH") or die();
 
@@ -16,7 +16,7 @@ defined("CPATH") or die();
  * Class Trash
  * @package system\components\trash\models
  */
-class Trash extends Engine
+class Trash extends Backend
 {
     /**
      * @param $id

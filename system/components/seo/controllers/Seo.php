@@ -8,11 +8,11 @@
 
 namespace system\components\seo\controllers;
 use helpers\bootstrap\Button;
-use system\Engine;
+use system\Backend;
 
 if ( !defined("CPATH") ) die();
 
-class Seo extends Engine
+class Seo extends Backend
 {
     private $mSettings;
 

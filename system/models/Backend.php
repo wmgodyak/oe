@@ -16,7 +16,7 @@ defined("CPATH") or die();
  * Class Engine
  * @package models
  */
-class Engine extends Model
+class Backend extends Model
 {
     protected $admin;
     protected $languages;

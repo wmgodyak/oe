@@ -2,12 +2,12 @@
 
 namespace system\components\module\controllers;
 
-use system\Engine;
+use system\Backend;
 use system\models\Permissions;
 
 defined("CPATH") or die();
 
-class Module extends Engine
+class Module extends Backend
 {
     public function run()
     {

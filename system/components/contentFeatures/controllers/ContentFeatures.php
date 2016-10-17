@@ -2,11 +2,11 @@
 
 namespace system\components\contentFeatures\controllers;
 
-use system\Engine;
+use system\Backend;
 
 defined("CPATH") or die();
 
-class ContentFeatures extends Engine
+class ContentFeatures extends Backend
 {
     private $cf;
 
