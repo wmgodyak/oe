@@ -1,6 +1,6 @@
 <?php
 /**
- * OYiEngine 6.x
+ * OYiEngine
  * Company Otakoyi.com
  * Author wmgodyak mailto:wmgodyak@gmail.com
  * Date: 06.05.14 22:34
@@ -17,7 +17,6 @@ use system\core\Response;
 use system\core\Session;
 use system\core\Template;
 use system\models\App;
-use system\models\Content;
 use system\models\Images;
 use system\models\Languages;
 use system\models\Modules;
@@ -29,7 +28,7 @@ if ( !defined("CPATH") ) die();
  * Class App
  * @package controllers
  */
-class Front extends core\Controller
+class Frontend extends core\Controller
 {
     /**
      * Request instance
