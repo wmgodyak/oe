@@ -1,11 +1,11 @@
 CREATE TABLE IF NOT EXISTS `__settings` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NOT NULL,
-  `value` TEXT NOT NULL,
-  `block` ENUM('company','common','images','themes','editor','content','seo','analitycs','robots','mail') NOT NULL,
-  `type` ENUM('text','textarea') NOT NULL,
+  `value` LONGTEXT NULL DEFAULT NULL,
+  `block` ENUM('company','common','images','themes','editor','content','seo','analitycs','robots','mail','') NULL DEFAULT NULL,
+  `type` ENUM('text','textarea','') NULL DEFAULT NULL,
   `required` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1',
-  `display` TINYINT(1)  UNSIGNED NULL DEFAULT NULL,
+  `display` TINYINT(1)  UNSIGNED NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `sname` (`name` ASC))
   ENGINE = InnoDB
@@ -419,6 +419,8 @@ CREATE TABLE IF NOT EXISTS `__content_images_sizes` (
   `width` INT(5) UNSIGNED NOT NULL,
   `height` INT(5) UNSIGNED NOT NULL,
   `quality` TINYINT(3) UNSIGNED NOT NULL,
+  `watermark` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
+  `watermark_position` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `size` (`size` ASC))
   ENGINE = InnoDB
