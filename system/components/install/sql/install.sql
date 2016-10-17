@@ -127,7 +127,6 @@ CREATE TABLE IF NOT EXISTS `__users` (
   `lastlogin` TIMESTAMP NULL DEFAULT NULL,
   `status` ENUM('active','ban','deleted') NOT NULL DEFAULT 'active',
   PRIMARY KEY (`id`, `languages_id`, `group_id`),
-  UNIQUE INDEX `phone` (`phone` ASC, `email` ASC),
   INDEX `status` (`status` ASC),
   INDEX `skey` (`skey` ASC),
   INDEX `fk_users_languages1_idx` (`languages_id` ASC),
@@ -170,8 +169,6 @@ CREATE TABLE IF NOT EXISTS `__content_types` (
   `is_main` TINYINT(1) UNSIGNED NULL DEFAULT NULL,
   `settings` TEXT NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `parent_id` (`parent_id` ASC, `type` ASC),
-  UNIQUE INDEX `parent_id_2` (`parent_id` ASC, `is_main` ASC),
   INDEX `is_main` (`is_main` ASC))
   ENGINE = InnoDB
   AUTO_INCREMENT = 1
@@ -334,6 +331,7 @@ CREATE TABLE IF NOT EXISTS `__features` (
   `multiple` TINYINT(1) NULL DEFAULT NULL,
   `on_filter` TINYINT(1) NULL DEFAULT NULL,
   `required` TINYINT(1) NOT NULL DEFAULT '0',
+  `hide` TINYINT(1) NOT NULL DEFAULT '0',
   `created` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   `status` ENUM('blank','published','hidden') NULL DEFAULT 'blank',
   `position` TINYINT(3) UNSIGNED NOT NULL,
@@ -373,7 +371,6 @@ CREATE TABLE IF NOT EXISTS `__features_content` (
   `content_id` INT(10) UNSIGNED NOT NULL DEFAULT '0',
   `position` TINYINT(3) UNSIGNED NULL DEFAULT NULL,
   PRIMARY KEY (`id`, `features_id`, `content_types_id`, `content_subtypes_id`, `content_id`),
-  UNIQUE INDEX `features_id` (`content_subtypes_id` ASC, `content_id` ASC),
   INDEX `fk_features_content_features1_idx` (`features_id` ASC),
   INDEX `fk_features_content_content_types1_idx` (`content_types_id` ASC),
   CONSTRAINT `fk_features_content_features1`
@@ -397,7 +394,6 @@ CREATE TABLE IF NOT EXISTS `__content_features` (
   `languages_id` TINYINT(3) UNSIGNED NOT NULL DEFAULT '0',
   `value` TEXT NULL DEFAULT NULL,
   PRIMARY KEY (`id`, `features_id`, `content_id`),
-  UNIQUE INDEX `content_id` (`values_id` ASC, `languages_id` ASC),
   INDEX `fk_content_features_content1_idx` (`content_id` ASC),
   INDEX `fk_content_features_features1_idx` (`features_id` ASC),
   CONSTRAINT `fk_content_features_content1`
