@@ -1,13 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: user
- * Date: 20.07.16
- * Time: 17:13
- */
 
 namespace system\models;
-
+/**
+ * Class Page
+ * @package system\models
+ */
 class Page extends Model
 {
     /**
@@ -66,6 +63,42 @@ class Page extends Model
     public function title($id)
     {
         return $this->info($id, 'title');
+    }
+
+    public function data($id, $key = '*')
+    {
+        return self::$db
+            ->select("
+                select {$key}
+                from __content
+                where id = '{$id}'
+                limit 1
+              ")
+            -> row($key);
+    }
+
+    /**
+     * @param $id
+     * @param null $languages_id
+     * @return string
+     */
+    public function url($id, $languages_id = null)
+    {
+        if(! $languages_id) $languages_id = $this->languages_id;
+
+        $languages = new Languages();
+
+        $url = self::$db
+            ->select("select url from __content_info where content_id = '{$id}' and languages_id={$languages_id} limit 1")
+            ->row('url');
+
+        if($languages_id == $languages->getDefault('id')){
+            return APPURL . $url;
+        }
+
+        $code = $languages->getData($languages_id, 'code');
+
+        return APPURL. $code .'/'. $url;
     }
 
 }

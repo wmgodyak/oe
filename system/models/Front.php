@@ -148,6 +148,7 @@ class Front extends Model
     }
 
     /**
+     * @deprecated
      * @param $id
      * @return string
      * @throws \system\core\exceptions\Exception

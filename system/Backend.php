@@ -96,12 +96,7 @@ abstract class Backend extends Controller
         $this->template->assign('base_url',   APPURL . "{$this->settings['backend_url']}/");
         $this->template->assign('settings',   $this->settings);
 
-        if($this->request->isPost()) {
-            $token = $this->request->post('token');
-            if($token != TOKEN){
-                die('#1201. Invalid token.');
-            }
-        }
+        $this->validateToken();
 
         if(
             (

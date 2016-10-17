@@ -65,4 +65,14 @@ abstract class Controller {
 
         header('Location: ' . $uri);die;
     }
+
+    protected function validateToken()
+    {
+        if($this->request->isPost()) {
+            $token = $this->request->post('token');
+            if($token != TOKEN){
+                die('#1201. Invalid token.');
+            }
+        }
+    }
 } 

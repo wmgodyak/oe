@@ -31,16 +31,6 @@ if ( !defined("CPATH") ) die();
 class Frontend extends core\Controller
 {
     /**
-     * Request instance
-     * @var
-     */
-    protected $request;
-    /**
-     * Response instance
-     * @var
-     */
-    protected $response;
-    /**
      * Template instance
      * @var
      */
@@ -65,16 +55,13 @@ class Frontend extends core\Controller
 
     protected $page;
     private $theme;
+    protected $app;
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->request = Request::getInstance();
         $this->request->setMode('frontend');
-
-        // response
-        $this->response = Response::getInstance();
 
         $config = Config::getInstance();
         if($config->get('db') == null){
@@ -109,6 +96,8 @@ class Frontend extends core\Controller
 
         $this->template->assign('events', $events);
         $this->template->assign('settings', $this->settings);
+
+        $this->app = new App();
 
         if($this->request->param('controller') != '' &&  ! $this->request->param('doInit')){
             $this->doInit();
@@ -182,7 +171,6 @@ class Frontend extends core\Controller
 
     private function doInit()
     {
-//        echo '<<<< doInit >>>>';
         $this->request->param('doInit', 1);
         // assign translations to template
 
@@ -194,9 +182,7 @@ class Frontend extends core\Controller
 
         $this->template->assign('t', $this->t());
 
-        // assign app
-        $app = new App();
-        $this->template->assign('app', $app);
+        $this->template->assign('app', $this->app);
 
         $this->template->assign('languages_id', $this->languages_id);
         $this->template->assign('settings', $this->settings);

@@ -10,6 +10,10 @@ namespace system\models;
 
 defined("CPATH") or die();
 
+/**
+ * Class Languages
+ * @package system\models
+ */
 class Languages extends Model
 {
     /**
