@@ -118,9 +118,9 @@ class Frontend extends core\Controller
             }
 
             // завантаження сторінки
-            $app  = new \system\models\Front(true);
+            $front  = new \system\models\Front(true);
 
-            $page = $app->getPage();
+            $page = $front->getPage();
 
             if (!$page) {
                 $this->e404();
@@ -209,12 +209,6 @@ class Frontend extends core\Controller
         Session::set($a);
     }
 
-    protected function getUrl($id)
-    {
-        $f = new \system\models\Front();
-        return $f->getUrlById($id);
-    }
-
     public function e404()
     {
         $id = $this->settings['page_404'];
@@ -223,9 +217,7 @@ class Frontend extends core\Controller
             throw new Exception("Неможливо здійснити перенаправлення на 404 сторінку. Введіть ід сторінки в налаштуваннях");
         }
 
-        $f = new \system\models\Front();
-
-        $url = $f->getUrlById($id);
+        $url= $this->app->page->url($id);
 
         $this->redirect( $url, 404);
     }

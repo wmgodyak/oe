@@ -146,28 +146,6 @@ class Front extends Model
 
         $this->page = $page;
     }
-
-    /**
-     * @deprecated
-     * @param $id
-     * @return string
-     * @throws \system\core\exceptions\Exception
-     */
-    public function getUrlById($id)
-    {
-        $url = self::$db
-            ->select("select url from __content_info where content_id = '{$id}' and languages_id={$this->languages_id} limit 1")
-            ->row('url');
-
-        if($this->languages_id == $this->languages->getDefault('id')){
-            return APPURL . $url;
-        }
-
-        $code = $this->languages->getData($this->languages_id, 'code');
-
-        return APPURL. $code .'/'. $url;
-    }
-
     /**
      *
     {title} - заголовок сторінки,
