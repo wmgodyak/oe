@@ -33,3 +33,10 @@
     system\core\Session::init();
 
     if(!defined('TOKEN')) define('TOKEN', md5(\system\core\Session::id()));
+
+    $config = \system\core\Config::getInstance();
+    if($config->get('db') == null){
+        $installer = new \system\components\install\controllers\Install();
+        $installer->index();
+        die;
+    }

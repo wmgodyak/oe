@@ -27,6 +27,7 @@ class Install extends Controller
         parent::__construct();
 
         $this->template = Template::getInstance('backend');
+        $this->request->setMode('backend');
     }
 
     public function init(){}

@@ -7,13 +7,10 @@
  */
 namespace system;
 
-use system\components\install\controllers\Install;
-use system\core\Config;
 use system\core\EventsHandler;
 use system\core\exceptions\Exception;
 use system\core\Lang;
 use system\core\Request;
-use system\core\Response;
 use system\core\Session;
 use system\core\Template;
 use system\models\App;
@@ -62,13 +59,6 @@ class Frontend extends core\Controller
         parent::__construct();
 
         $this->request->setMode('frontend');
-
-        $config = Config::getInstance();
-        if($config->get('db') == null){
-            $installer = new Install();
-            $installer->index();
-            die;
-        }
 
         // settings
         $this->settings = Settings::getInstance()->get();

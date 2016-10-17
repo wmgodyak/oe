@@ -30,9 +30,9 @@ class Request {
 
     private function __construct($mode)
     {
-        if(!$mode) {
-            throw new \system\core\exceptions\Exception('Wrong request mode');
-        }
+//        if(!$mode) {
+//            throw new \system\core\exceptions\Exception('Wrong request mode');
+//        }
 
         $this->mode = $mode;
     }
