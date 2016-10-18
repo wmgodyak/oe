@@ -1,33 +1,30 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: wg
- * Date: 16.06.16
- * Time: 19:22
- */
 
 namespace system\components\nav\models;
-use system\models\Model;
+use system\core\DataFilter;
+use system\models\Backend;
 
 defined("CPATH") or die();
 
-class Nav extends Model
+/**
+ * Class Nav
+ * @package system\components\nav\models
+ */
+class Nav extends Backend
 {
-    public function create()
+    /**
+     * @var array
+     */
+    private $c_types = [1];
+
+    public function create($data)
     {
-        $data = $this->request->post('data');
         return $this->createRow('__nav', $data);
     }
 
     public function getData($id, $key = '*')
     {
-        $data = self::$db->select("select {$key} from __nav where id={$id} limit 1")->row($key);
-
-        if ($key != '*') return $data;
-
-        $data['items'] = $this->getSelectedItems($id);
-
-        return $data;
+        return self::$db->select("select {$key} from __nav where id={$id} limit 1")->row($key);
     }
 
     public function update($id)
@@ -66,23 +63,42 @@ class Nav extends Model
         return $this->deleteRow('__nav_items', $id);
     }
 
-    public function getItems($parent_id = 0, $level = 3)
+    public function buildTree()
     {
-        $parent_id = (int) $parent_id;
+        $c_types = DataFilter::apply('nav.items.content_types', $this->c_types);
+
+        $types_in = implode(',', $c_types);
+
         $res = [];
-        $r = self::$db->select("
+        $r = self::$db->select("select id, name from __content_types where id in ({$types_in})",1)->all();
+
+        foreach ($r as $type) {
+            $res[] = $type;
+        }
+
+        return $res;
+    }
+
+    /**
+     * @param $types_id
+     * @param int $parent_id
+     * @return mixed
+     */
+    public function tree($types_id, $parent_id = 0)
+    {
+        $res = self::$db->select("
           select c.id, c.isfolder, c.status, ci.name
           from __content c
           join __content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
-          where c.parent_id={$parent_id} and c.types_id=1 and c.status = 'published'
+          where c.parent_id={$parent_id} and c.types_id = {$types_id} and c.status = 'published'
           ")->all();
-
-        foreach ($r as $item) {
-            if($item['isfolder'] && $level > 0){
-                $item['items'] = $this->getItems($item['id'], --$level);
-            }
-            $res[] = $item;
-        }
+//
+//        foreach ($r as $item) {
+//            if($item['isfolder'] && $level > 0){
+//                $item['items'] = $this->tree($types_id, $item['id'], --$level);
+//            }
+//            $res[] = $item;
+//        }
 
         return $res;
     }
@@ -97,16 +113,25 @@ class Nav extends Model
         return $this->createRow('__nav_items', ['nav_id'=> $nav_id, 'content_id' => $item_id]);
     }
 
-    public function getSelectedItems($nav_id)
+    public function getSelectedItems($nav_id, $parent_id = 0)
     {
-        return self::$db->select("
-          select ni.id,c.id as content_id, ci.name
-          from __nav_items ni
-          join __content c on c.id=ni.content_id and c.status = 'published'
-          join __content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
-          where ni.nav_id={$nav_id}
-          order by abs(ni.position) asc
+        $res = self::$db->select("
+          select n.id, n.isfolder, n.parent_id,
+           IF(ci.name = '', ni.name, ci.name) as name
+          from __nav_items n
+          left join __content_info ci on ci.content_id=n.content_id and ci.languages_id={$this->languages_id}
+          left join __nav_items_info ni on ni.nav_items_id=n.id and ni.languages_id={$this->languages_id}
+          where n.nav_id={$nav_id} and n.parent_id={$parent_id}
+          order by abs(n.position) asc
           " )->all();
+
+        foreach ($res as $k=>$row) {
+            if($row['isfolder']){
+                $res[$k]['items'] = $this->getSelectedItems($nav_id,$row['id']);
+            }
+        }
+
+        return $res;
     }
 
     private function sortItems($nav_id)

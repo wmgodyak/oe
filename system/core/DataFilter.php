@@ -13,21 +13,35 @@ class DataFilter
     private static $filters = [];
 
     /**
-     * @param $param
+     * @param $key
      * @param $value
      * @return mixed|null
      */
-    public static function apply($param, $value)
+    public static function apply($key, $value)
     {
-        if(!isset(self::$filters[$param])) return $value;
+        if(!isset(self::$filters[$key])) return $value;
 
-        foreach (self::$filters[$param] as $callback) {
-            if(is_array($callback) && isset($callback[1])){
-                if(is_callable($callback, true, $callable_name)){
-                    $value = call_user_func_array($callback, is_array($value) ? $value : [$value]);
+        foreach (self::$filters[$key] as $callback) {
+
+            if(is_array($callback) && isset($callback[1])){ // class :: method
+                if(is_callable($callback, true)){
+                    if(is_array($value)){
+                        $value = call_user_func_array($callback, [$value]);
+                    } else{
+                        $value = call_user_func($callback, $value);
+                    }
                 }
-            } elseif(is_callable($callback, true, $callable_name)){
-                $value = call_user_func_array($callback, is_array($value) ? $value : [$value]);
+                continue;
+            }
+
+            if(is_callable($callback, true, $callable_name)){ // some function
+
+                if(is_array($value)){
+                    $value = call_user_func_array($callback, [$value]);
+                } else{
+                    $value = call_user_func($callback, $value);
+                }
+                continue;
             }
         }
 
@@ -35,16 +49,16 @@ class DataFilter
     }
 
     /**
-     * @param $param
+     * @param $key
      * @param $callback
      * @param int $priority
      */
-    public static function add($param, $callback, $priority = 10)
+    public static function add($key, $callback, $priority = 10)
     {
-        while(isset(self::$filters[$param][$priority])){
+        while(isset(self::$filters[$key][$priority])){
             $priority += 5;
         }
 
-        self::$filters[$param][$priority] = $callback;
+        self::$filters[$key][$priority] = $callback;
     }
 }

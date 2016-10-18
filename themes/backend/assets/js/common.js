@@ -2218,62 +2218,127 @@ engine.languages = {
 engine.nav = {
     init: function()
     {
-        //engine.require('content');
-        // console.log('engine.nav.init() OK');
-
         $(document).on('click', '.b-nav-delete', function(){
             engine.nav.delete($(this).data('id'));
         });
-        $(document).on('click', '.b-nav-item-delete', function(){
-            engine.nav.deleteItem($(this).data('id'));
-        });
 
-        $('#data_code').change(function(){
-            this.value = engine.content.translit( this.value, 'uk');
-        });
+        var form = $('#form');
+        if(form.length){
+            var nav_id = form.data('id');
 
-        $('#selItems').change(function(){
-
-            if(this.value == '') return ;
-
-            var item_id = this.value,
-                nav_id = $(this).data('nav'),
-                is_selected = false;
-
-            $(selected_items).each(function(i,e){
-                if(e.content_id == item_id){
-                    is_selected = true;
-                    return;
-                }
-            });
-
-            if(is_selected){
-                engine.alert('Цей пункт вже вибраний!');
-
-                return ;
-            }
-
-            engine.request.post({
-                url: 'nav/addItem',
-                data: {
-                    item_id : item_id,
-                    nav_id  : nav_id
-                },
-                success: function(res)
-                {
-                    if(res.s){
-                        engine.nav.renderItems(res.items);
+            var renderItems = function()
+            {
+                engine.request.post({
+                    url: 'nav/getNavItems',
+                    data: {
+                        nav_id  : nav_id
+                    },
+                    success: function(res)
+                    {
+                        var cnt = $("#navItems");
+                        var tmpl = _.template($('#nav_items').html());
+                        cnt.html(tmpl({items: res.items, templateFn : tmpl}));
+                        cnt.nestable({ /* config options */ });
                     }
-                }
+                });
+                //
+                //$("#tblItems tbody").sortable({
+                //    handle: ".sort",
+                //    update: function()
+                //    {
+                //        engine.nav.setPositions();
+                //    }
+                //});
+                //
+                //
+                //engine.nav.setPositions();
+
+            };
+
+            var deleteItem = function(id)
+            {
+                var d = engine.confirm
+                (
+                    t.nav.delete_item_question,
+                    function()
+                    {
+                        engine.request.get('./nav/deleteItem/' + id, function(res){
+                            if(res > 0){
+                                renderItems();
+                            }
+                            d.dialog('close');
+                        });
+                    }
+                );
+            };
+
+            var editItem = function(id)
+            {
+                engine.request.get('nav/editItem/'+id , function(data){
+                   var d = engine.dialog({
+                     title: "Редагування пункту меню",
+                     content: data,
+                       width: 750,
+                     buttons: {
+                         'Save' : function(){
+                             $('#itemForm').submit();
+                         }
+                     }
+                   });
+                    engine.validateAjaxForm('#itemForm', function(){
+                        d.dialog('close');
+                    });
+                });
+            };
+
+            renderItems();
+
+            $(document).on('click', '.b-nav-item-delete', function(){
+                deleteItem($(this).data('id'));
             });
-        });
+            $(document).on('click', '.b-nav-item-edit', function(){
+                editItem($(this).data('id'));
+            });
 
-        if(typeof selected_items != 'undefined'){
+            $('#data_code').change(function(){
+                this.value = engine.content.translit( this.value, 'uk');
+            });
 
-            setTimeout(function(){
-                engine.nav.renderItems(selected_items);
-            }, 100);
+            $('#selItems').change(function(){
 
+                if(this.value == '') return ;
+
+                var item_id = this.value,
+                    nav_id = $(this).data('nav'),
+                    is_selected = false;
+
+                //$(selected_items).each(function(i,e){
+                //    if(e.content_id == item_id){
+                //        is_selected = true;
+                //        return;
+                //    }
+                //});
+
+                //if(is_selected){
+                //    engine.alert('Цей пункт вже вибраний!');
+                //
+                //    return ;
+                //}
+
+                engine.request.post({
+                    url: 'nav/addItem',
+                    data: {
+                        item_id : item_id,
+                        nav_id  : nav_id
+                    },
+                    success: function(res)
+                    {
+                        if(res.s){
+                            renderItems();
+                        }
+                    }
+                });
+            });
         }
 
     },
@@ -2292,40 +2357,8 @@ engine.nav = {
                 $(this).dialog('close').dialog('destroy').remove();
             }
         );
-    },
-    deleteItem: function(id)
-    {
-        engine.confirm
-        (
-            t.nav.delete_item_question,
-            function()
-            {
-                engine.request.get('./nav/deleteItem/' + id, function(d){
-                    if(d > 0){
-                        $("#nav-item-"+id).remove();
-                    }
-                });
-                $(this).dialog('close').dialog('destroy').remove();
-            }
-        );
-    },
-    renderItems: function(items)
-    {
-        if(items.length == 0) return ;
-        var tmpl = _.template($('#nItems').html());
-        $("#navItems").html(tmpl({items: items}));
-
-        $("#tblItems tbody").sortable({
-            handle: ".sort",
-            update: function()
-            {
-                engine.nav.setPositions();
-            }
-        });
-
-
-        engine.nav.setPositions();
-    },
+    }
+    /*,
     setPositions: function()
     {
         var inp = $('#pos'), pos = [];
@@ -2335,7 +2368,7 @@ engine.nav = {
         });
 
         inp.val(pos.join('x'));
-    }
+    }*/
 };
 
 /**

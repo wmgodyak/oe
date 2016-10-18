@@ -2,12 +2,12 @@
 
 namespace system\components\nav\controllers;
 
-use system\core\DataTables2;
 use system\Backend;
 use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
 use helpers\bootstrap\Link;
 use helpers\FormValidation;
+use system\core\DataTables2;
 
 defined("CPATH") or die();
 
@@ -87,27 +87,9 @@ class Nav extends Backend
 
     public function create()
     {
-        $this->appendToPanel
-        (
-            (string)Link::create
-            (
-                $this->t('common.back'),
-                ['class' => 'btn-md', 'href'=> 'nav']
-            )
-        );
+        $id = $this->nav->create(['name' => 'blank', 'code' => time()]);
 
-        $this->appendToPanel
-        (
-            (string)Button::create
-            (
-                $this->t('common.button_save'),
-                ['class' => 'btn-md b-form-save']
-            )
-        );
-
-        $this->template->assign('action', 'create');
-        $this->template->assign('items', $this->nav->getItems(0));
-        $this->output($this->template->fetch('system/nav/form'));
+        return $this->edit($id);
     }
 
 
@@ -136,14 +118,10 @@ class Nav extends Backend
 
         $this->template->assign('data', $data);
         $this->template->assign('action', 'edit');
-        $this->template->assign('items', $this->nav->getItems(0));
+        $this->template->assign('mNav', $this->nav);
         $this->output($this->template->fetch('system/nav/form'));
     }
 
-    /**
-     * @param null $id
-     * @throws \Exception
-     */
     public function process($id= null)
     {
         if(! $this->request->isPost()) die;
@@ -161,7 +139,7 @@ class Nav extends Backend
         } else {
             switch($this->request->post('action')){
                 case 'create':
-                    $s = $this->nav->create();
+                    $s = $this->nav->create($data);
                     break;
                 case 'edit':
                     $s = $this->nav->update($id);
@@ -199,15 +177,25 @@ class Nav extends Backend
     {
         $nav_id  = $this->request->post('nav_id', 'i');
         $item_id = $this->request->post('item_id', 'i');
-        if(empty($nav_id) || empty($item_id)) return 0;
+        if(empty($nav_id) || empty($item_id)) die;
 
-        $items = null;
         $s = $this->nav->addItem($nav_id, $item_id);
-        if($s){
-            $items = $this->nav->getSelectedItems($nav_id);
-        }
 //        echo $this->nav->getErrorMessage();
 
-        $this->response->body(['s'=>$s, 'items' => $items])->asJSON();
+       $this->response->body(['s'=>$s])->asJSON();
+    }
+
+    public function getNavItems()
+    {
+        $nav_id  = $this->request->post('nav_id', 'i');
+        if(empty($nav_id)) die;
+
+        $this->response->body(['items' => $this->nav->getSelectedItems($nav_id)])->asJSON();
+    }
+
+    public function editItem($id)
+    {
+        $this->template->assign('id', $id);
+        echo $this->template->fetch('system/nav/itemForm');
     }
 }

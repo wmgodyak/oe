@@ -1,12 +1,13 @@
 {function name=renderSelect}
     {foreach $items as $item}
-        <option value="{$item.id}">{if $parent}{$parent} / {/if}{$item.name}</option>
+        {assign var='name' value="`$parent` / `$item.name`" }
+        <option value="{$item.id}">{$name}</option>
         {if $item.isfolder}
-            {call renderSelect items=$item.items parent=$item.name}
+            {call renderSelect items=$mNav->tree($type.id, $item.id) parent=$name}
         {/if}
     {/foreach}
 {/function}
-<form class="form-horizontal" action="nav/process/{$data.id}"  method="post" id="form" data-success="engine.nav.on{ucfirst($action)}Success">
+<form class="form-horizontal" action="nav/process/{$data.id}"  method="post" id="form" data-id="{$data.id}" data-success="engine.nav.on{ucfirst($action)}Success">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <fieldset>
@@ -26,18 +27,18 @@
             </fieldset>
             <fieldset>
                 <legend>{$t.nav.items}</legend>
-                {if $action == 'create'}
-                    <p>Створення, редагування , сортування пунктів меню досутпні при редагуванні</p>
-                {else}
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <select id="selItems" class="form-control" data-nav="{$data.id}">
-                                <option value="">{$t.common.select}</option>
-                                {call renderSelect items=$items parent=$item.name}
-                            </select>
-                        </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <select id="selItems" class="form-control" data-nav="{$data.id}">
+                            <option value="">{$t.common.select}</option>
+                            {foreach $mNav->buildTree() as $type}
+                                <optgroup label="{$type.name}">
+                                    {call renderSelect items=$mNav->tree($type.id, 0)}
+                                </optgroup>
+                            {/foreach}
+                        </select>
                     </div>
-                {/if}
+                </div>
 
                 <div class="row">
                     <div class="col-md-12" id="navItems"></div>
@@ -52,9 +53,52 @@
     <input type="hidden" name="pos" id="pos" value="">
 </form>
 
-<script>var selected_items = {json_encode($data.items)}</script>
+{*<script>var selected_items = {json_encode($data.items)}</script>*}
 
 {literal}
+    <script type="text/template" id="nav_items">
+        <ol class="dd-list">
+            <% _.each(items, function (item) { %>
+            <li class="dd-item dd3-item" data-id="<%- item.id %>">
+                <div class="dd-handle dd3-handle">Drag</div>
+                <div class="dd3-content">
+                    <%- item.name %>
+                    <a class="b-nav-item-edit dd-remove" style="right: 25px" data-id="<%- item.id %>" href="javascript:void(0)" title="Редагувати"><i class="fa fa-pencil"></i></a>
+                    <a class="b-nav-item-delete dd-remove"  data-id="<%- item.id %>" href="javascript:void(0)" title="Видалити"><i class="fa fa-trash"></i></a>
+                </div>
+                <% if (item.isfolder) { %>
+                    <%= templateFn({ items: item.items, templateFn: templateFn }) %>
+                <% } %>
+            </li>
+            <% }); %>
+        </ol>
+    </script>
+    <script type="text/template" id="nav_items__1">
+        <div class="dd" id="nestable3">
+            <ol class="dd-list">
+                <li class="dd-item dd3-item" data-id="13">
+                    <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">Item 13</div>
+                </li>
+                <li class="dd-item dd3-item" data-id="14">
+                    <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">Item 14</div>
+                </li>
+                <li class="dd-item dd3-item" data-id="15">
+                    <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">Item 15</div>
+                    <ol class="dd-list">
+                        <li class="dd-item dd3-item" data-id="16">
+                            <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">Item 16</div>
+                        </li>
+                        <li class="dd-item dd3-item" data-id="17">
+                            <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">Item 17</div>
+                        </li>
+                        <li class="dd-item dd3-item" data-id="18">
+                            <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">Item 18</div>
+                        </li>
+                    </ol>
+                </li>
+            </ol>
+        </div>
+    </script>
     <script type="text/template" id="nItems" >
         <table class="table table-bordered" id="tblItems">
             <thead>
