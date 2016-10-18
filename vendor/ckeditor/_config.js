@@ -1,66 +1,4 @@
-<?php
-/**
- * OYiEngine 7
- * @author Volodymyr Hodiak mailto:support@otakoi.com
- * @copyright Copyright (c) 2015 Otakoyi.com
- * Date: 17.10.16 : 17:37
- */
-
-namespace system\components\editor\controllers;
-
-use system\Backend;
-
-defined("CPATH") or die();
-
-class Editor extends Backend
-{
-    public function index()
-    {
-        // TODO: Implement index() method.
-    }
-    public function create()
-    {
-        // TODO: Implement create() method.
-    }
-    public function edit($id)
-    {
-        // TODO: Implement edit() method.
-    }
-    public function process($id)
-    {
-        // TODO: Implement process() method.
-    }
-
-    public function delete($id)
-    {
-        // TODO: Implement delete() method.
-    }
-
-    /**
-     *
-     */
-    public function config()
-    {
-/*
- *
-    [editor_bodyId] => cms_content
-    [editor_body_class] => cms_content
-    [editor_contents_css] => /themes/default/assets/css/style.css
- * */
-        $css = $this->settings['editor_contents_css'];
-        $_css = [];
-        if(!empty($css)){
-            $a = explode(',', $css);
-            foreach ($a as $k=>$v) {
-                $_css[] = "'$v'";
-            }
-            $css = implode(',', $_css);
-        }
-        header('Content-Type: application/javascript');
-        echo "CKEDITOR.editorConfig = function( config ) {
-    config.bodyId = '{$this->settings['editor_bodyId']}';
-    config.bodyClass = '{$this->settings['editor_body_class']}';
-    config.contentsCss = [{$css}];
+CKEDITOR.editorConfig = function( config ) {
 	config.toolbarGroups = [
 		{ name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
 		{ name: 'insert', groups: ['links' , 'insert' ] },
@@ -109,8 +47,3 @@ class Editor extends Backend
 	];
 	config.extraPlugins = 'codemirror';
 };
-";
-
-        die;
-    }
-}

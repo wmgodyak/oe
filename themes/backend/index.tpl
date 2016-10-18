@@ -88,6 +88,7 @@
 <script src="{$theme_url}assets/js/vendor/jquery.nestable.js"></script>
 <script src="{$theme_url}assets/js/vendor/jquery.mCustomScrollbar.js"></script>
 <script src="/vendor/ckeditor/ckeditor.js"></script>
+<script src="editor/config"></script>
 <script>
     var TOKEN = '{$token}', ONLINE = 0, t = {json_encode($t)}, CONTROLLER = '{$controller}', ACTION = '{$action}';
 

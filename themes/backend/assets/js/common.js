@@ -254,11 +254,7 @@ var engine = {
 
         $('#form .editor').each(function(){
             var name = $(this).attr('name');
-            // console.log(name);
-            //CKEDITOR.replace(name);
-            CKEDITOR.replace(name,{
-                customConfig: 'editor/config'
-            });
+            CKEDITOR.replace(name);
         });
 
         if($form.length){
