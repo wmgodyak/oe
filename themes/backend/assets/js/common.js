@@ -72,9 +72,10 @@ var engine = {
                             showError(form, d.i)
                         } else {
 
-                            if(typeof d.m != 'undefined'){
+                            if(typeof d.m != 'undefined' && d.m != null){
                                 d.e = typeof d.e == 'undefined' ? null : d.e;
                                 engine.notify(d.m, 'success');
+                                //alert(d.m);
                             }
 
                             if(typeof onSuccess == 'string'){

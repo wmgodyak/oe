@@ -67,7 +67,7 @@
             <li class="dd-item dd3-item" data-id="<%- item.id %>">
                 <div class="dd-handle dd3-handle">Drag</div>
                 <div class="dd3-content">
-                    <%- item.id %> <%- item.name %>
+                    <% if(item.published == 0){ %><span style="text-decoration: line-through"><% } %><%- item.id %> <%- item.name %><% if(item.published == 0){ %></span><% } %>
                     <a class="b-nav-item-edit dd-remove" style="right: 25px" data-id="<%- item.id %>" href="javascript:void(0)" title="Редагувати"><i class="fa fa-pencil"></i></a>
                     <a class="b-nav-item-delete dd-remove" data-id="<%- item.id %>" href="javascript:void(0)" title="Видалити"><i class="fa fa-trash"></i></a>
                 </div>

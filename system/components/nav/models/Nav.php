@@ -124,10 +124,15 @@ class Nav extends Backend
         return $this->createRow('__nav_items', ['nav_id'=> $nav_id, 'content_id' => $item_id]);
     }
 
+    /**
+     * @param $nav_id
+     * @param int $parent_id
+     * @return mixed
+     */
     public function getSelectedItems($nav_id, $parent_id = 0)
     {
         $res = self::$db->select("
-          select n.id, n.isfolder, n.parent_id,
+          select n.id, n.isfolder, n.parent_id, n.published,
            IF(ci.name = '', ni.name, ci.name) as name
           from __nav_items n
           left join __content_info ci on ci.content_id=n.content_id and ci.languages_id={$this->languages_id}
@@ -138,7 +143,7 @@ class Nav extends Backend
 
         foreach ($res as $k=>$row) {
             if($row['isfolder']){
-                $res[$k]['items'] = $this->getSelectedItems($nav_id,$row['id']);
+                $res[$k]['items'] = $this->getSelectedItems($nav_id, $row['id']);
             }
         }
 

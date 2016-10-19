@@ -6,5 +6,5 @@
  * @name home
  *}
 {include file="chunks/head.tpl"}
-<pre>{print_r($page)}</pre>
+    <pre>{print_r($app->nav->get('main'))}</pre>
 {include file="chunks/footer.tpl"}

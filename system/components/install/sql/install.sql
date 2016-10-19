@@ -306,9 +306,13 @@ CREATE TABLE IF NOT EXISTS `__nav_items` (
   `position` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0,
   `url` VARCHAR(160) NULL DEFAULT NULL,
   `display_children` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT  '0',
+  `published` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT  '1',
+  `css_class` VARCHAR( 30 ) NULL DEFAULT NULL,
+  `target` ENUM(  '_blank',  '_self' ) NOT NULL DEFAULT  '_self',
   PRIMARY KEY (`id`, `nav_id`, `content_id`),
   INDEX `fk_nav_items_nav1_idx` (`nav_id` ASC),
   INDEX `position` (`position` ASC),
+  INDEX `published` (`published` ASC),
   CONSTRAINT `fk_nav_items_nav1`
     FOREIGN KEY (`nav_id`)
     REFERENCES `__nav` (`id`)

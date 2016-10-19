@@ -204,7 +204,7 @@ class Nav extends Backend
 
     public function updateItem($item_id)
     {
-       $m = null;
+       $m = $this->t('common.save_success');
        $s = $this->nav->updateItem($item_id);
        if(! $s) $m = $this->nav->getErrorMessage();
 
