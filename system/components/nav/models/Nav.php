@@ -16,6 +16,17 @@ class Nav extends Backend
      * @var array
      */
     private $c_types = [1];
+    public $items;
+    public $items_info;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->items = new NavItems();
+        $this->items_info = new NavItemsInfo();
+    }
+
 
     public function create($data)
     {
@@ -134,6 +145,10 @@ class Nav extends Backend
         return $res;
     }
 
+    /**
+     * @param $nav_id
+     * @throws \system\core\exceptions\Exception
+     */
     private function sortItems($nav_id)
     {
         $pos = $this->request->post('pos');
@@ -146,4 +161,21 @@ class Nav extends Backend
         }
     }
 
+    /**
+     * @param $item_id
+     * @return bool
+     */
+    public function updateItem($item_id)
+    {
+        $data = $this->request->post('data');
+        $info = $this->request->post('info');
+
+        $this->updateRow('__nav_items', $item_id, $data);
+
+        foreach ($info as $languages_id => $cols) {
+            $this->items_info->update($item_id, $languages_id, $cols);
+        }
+
+        return ! $this->hasError();
+    }
 }

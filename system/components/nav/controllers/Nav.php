@@ -196,6 +196,30 @@ class Nav extends Backend
     public function editItem($id)
     {
         $this->template->assign('id', $id);
+        $this->template->assign('data', $this->nav->items->getData($id));
+        $this->template->assign('info', $this->nav->items_info->getData($id));
+        $this->template->assign('languages', $this->languages->get());
         echo $this->template->fetch('system/nav/itemForm');
+    }
+
+    public function updateItem($item_id)
+    {
+       $m = null;
+       $s = $this->nav->updateItem($item_id);
+       if(! $s) $m = $this->nav->getErrorMessage();
+
+       $this->response->body(['s'=>$s, 'm' => $m])->asJSON();
+    }
+
+    public function reorderItems()
+    {
+        $nav_id = $this->request->post('id');
+        $items = $this->request->post('items');
+
+        if(empty($items)) return;
+
+        $s = $this->nav->items->reorder($nav_id, $items);
+
+        echo $s ? 1 : 0;
     }
 }

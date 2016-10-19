@@ -162,24 +162,30 @@ var engine = {
     },
     notify: function(msg, status, cnt)
     {
-        var c = typeof cnt == 'undefined' ? $('.inline-notifications') : $(cnt), icon;
-        switch (status){
-            case 'success':
-                icon = 'check-circle';
-                break;
-            case 'error':
-                icon = 'exclamation-triangle';
-                break;
-            default:
-                icon = 'check-circle';
-                break;
+        if(typeof cnt == 'undefined') {
+            $.notify(msg, status);
         }
-        status = typeof status =='undefined' ? 'info' : status;
-        c.html("<div class='alert alert-"+status+" alert-dismissible' role='alert'>\
-            <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\
-            <i class='fa fa-"+ icon +"'></i>"+msg+"\
-        </div>");
-        setTimeout(function(){c.html('');}, 7000)
+         else {
+            $(cnt).notify(msg, status);
+        }
+        //var c = typeof cnt == 'undefined' ? $('.inline-notifications') : $(cnt), icon;
+        //switch (status){
+        //    case 'success':
+        //        icon = 'check-circle';
+        //        break;
+        //    case 'error':
+        //        icon = 'exclamation-triangle';
+        //        break;
+        //    default:
+        //        icon = 'check-circle';
+        //        break;
+        //}
+        //status = typeof status =='undefined' ? 'info' : status;
+        //c.html("<div class='alert alert-"+status+" alert-dismissible' role='alert'>\
+        //    <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\
+        //    <i class='fa fa-"+ icon +"'></i>"+msg+"\
+        //</div>");
+        //setTimeout(function(){c.html('');}, 7000)
      },
     request:  {
         /**
@@ -2235,24 +2241,27 @@ engine.nav = {
                     },
                     success: function(res)
                     {
-                        var cnt = $("#navItems");
+                        var cnt = $("#navItems"), nsItems = $('.dd');
                         var tmpl = _.template($('#nav_items').html());
                         cnt.html(tmpl({items: res.items, templateFn : tmpl}));
-                        cnt.nestable({ /* config options */ });
+                        nsItems.nestable();
+                        nsItems.on('change', function(e) {
+                            var list   = e.length ? e : $(e.target);
+                            engine.request.post({
+                                url: 'nav/reorderItems',
+                                data: {
+                                    nav_id : nav_id,
+                                    items  : list.nestable('serialize')
+                                },
+                                success: function(res){
+                                    if(res){
+                                        engine.notify("Позіції збережено", 'success');
+                                    }
+                                }
+                            });
+                        });
                     }
                 });
-                //
-                //$("#tblItems tbody").sortable({
-                //    handle: ".sort",
-                //    update: function()
-                //    {
-                //        engine.nav.setPositions();
-                //    }
-                //});
-                //
-                //
-                //engine.nav.setPositions();
-
             };
 
             var deleteItem = function(id)
@@ -2287,6 +2296,8 @@ engine.nav = {
                    });
                     engine.validateAjaxForm('#itemForm', function(){
                         d.dialog('close');
+
+                        renderItems();
                     });
                 });
             };
@@ -2309,21 +2320,7 @@ engine.nav = {
                 if(this.value == '') return ;
 
                 var item_id = this.value,
-                    nav_id = $(this).data('nav'),
-                    is_selected = false;
-
-                //$(selected_items).each(function(i,e){
-                //    if(e.content_id == item_id){
-                //        is_selected = true;
-                //        return;
-                //    }
-                //});
-
-                //if(is_selected){
-                //    engine.alert('Цей пункт вже вибраний!');
-                //
-                //    return ;
-                //}
+                    nav_id = $(this).data('nav');
 
                 engine.request.post({
                     url: 'nav/addItem',
@@ -2358,17 +2355,6 @@ engine.nav = {
             }
         );
     }
-    /*,
-    setPositions: function()
-    {
-        var inp = $('#pos'), pos = [];
-        $("#tblItems tbody tr").each(function(){
-            var id = $(this).attr('id'); id = id.replace('nav-item-', ''); id= parseInt(id);
-            pos.push(id);
-        });
-
-        inp.val(pos.join('x'));
-    }*/
 };
 
 /**

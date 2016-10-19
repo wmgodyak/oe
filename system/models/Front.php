@@ -164,7 +164,7 @@ class Front extends Model
     {
 //        $s = self::$db->select("select value from __settings where name='seo' limit 1")->row('value');
         $settings = Settings::getInstance()->get();
-        $delimiter = $settings['delimiter'];
+        $delimiter = '/';
         $company_name  = $settings['company_name'];
         $company_phone = $settings['company_phone'];
 

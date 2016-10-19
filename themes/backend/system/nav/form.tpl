@@ -41,7 +41,11 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-12" id="navItems"></div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <div class="dd" id="navItems"></div>
+                        </div>
+                    </div>
                 </div>
             </fieldset>
         </div>
@@ -56,15 +60,16 @@
 {*<script>var selected_items = {json_encode($data.items)}</script>*}
 
 {literal}
+    <style>.dd{ max-width:100%; }</style>
     <script type="text/template" id="nav_items">
         <ol class="dd-list">
             <% _.each(items, function (item) { %>
             <li class="dd-item dd3-item" data-id="<%- item.id %>">
                 <div class="dd-handle dd3-handle">Drag</div>
                 <div class="dd3-content">
-                    <%- item.name %>
+                    <%- item.id %> <%- item.name %>
                     <a class="b-nav-item-edit dd-remove" style="right: 25px" data-id="<%- item.id %>" href="javascript:void(0)" title="Редагувати"><i class="fa fa-pencil"></i></a>
-                    <a class="b-nav-item-delete dd-remove"  data-id="<%- item.id %>" href="javascript:void(0)" title="Видалити"><i class="fa fa-trash"></i></a>
+                    <a class="b-nav-item-delete dd-remove" data-id="<%- item.id %>" href="javascript:void(0)" title="Видалити"><i class="fa fa-trash"></i></a>
                 </div>
                 <% if (item.isfolder) { %>
                     <%= templateFn({ items: item.items, templateFn: templateFn }) %>
@@ -72,53 +77,5 @@
             </li>
             <% }); %>
         </ol>
-    </script>
-    <script type="text/template" id="nav_items__1">
-        <div class="dd" id="nestable3">
-            <ol class="dd-list">
-                <li class="dd-item dd3-item" data-id="13">
-                    <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">Item 13</div>
-                </li>
-                <li class="dd-item dd3-item" data-id="14">
-                    <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">Item 14</div>
-                </li>
-                <li class="dd-item dd3-item" data-id="15">
-                    <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">Item 15</div>
-                    <ol class="dd-list">
-                        <li class="dd-item dd3-item" data-id="16">
-                            <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">Item 16</div>
-                        </li>
-                        <li class="dd-item dd3-item" data-id="17">
-                            <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">Item 17</div>
-                        </li>
-                        <li class="dd-item dd3-item" data-id="18">
-                            <div class="dd-handle dd3-handle">Drag</div><div class="dd3-content">Item 18</div>
-                        </li>
-                    </ol>
-                </li>
-            </ol>
-        </div>
-    </script>
-    <script type="text/template" id="nItems" >
-        <table class="table table-bordered" id="tblItems">
-            <thead>
-                <tr>
-                    <th style="width: 20px;"><i class="fa fa-list"></i></th>
-                    <th style="width: 20px;">#</th>
-                    <th>Назва</th>
-                    <th style="width: 20px;">Вид.</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% for(var i=0;i < items.length; i++) { %>
-                <tr id="nav-item-<%- items[i].id %>">
-                    <td class="sort" style="cursor: move;"><i class="fa fa-list"></i></td>
-                    <td><%- items[i].content_id %></td>
-                    <td><%- items[i].name %></td>
-                    <td style="text-align: center"><a class="b-nav-item-delete" data-id="<%- items[i].id %>" title="Видалити" href="javascript:;"><i class="fa fa-remove"></i></a></td>
-                </tr>
-                <% } %>
-            </tbody>
-        </table>
     </script>
 {/literal}
