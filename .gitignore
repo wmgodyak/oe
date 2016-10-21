@@ -10,6 +10,10 @@ vendor/*
 !vendor/phpmailer
 !vendor/smarty
 !vendor/index.html
+modules/*
+!modules/.htaccess
+themes/backend/modules/*
+!themes/backend/modules/.htaccess
 config/db.php
 robots.txt
 sitemap*.xml
