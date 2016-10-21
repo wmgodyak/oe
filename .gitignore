@@ -1,9 +1,13 @@
 .idea/
+!tmp/
 tmp/*
+!logs/
 logs/*
+!uploads/
 uploads/*
 robots.txt
-vendor/filemanager/
+!vendor/
+vendor/*
 vendor/sxd/
 sitemap*.xml
 config/db.php
