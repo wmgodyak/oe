@@ -16,7 +16,7 @@
     <div class="form-group lang-{$lang.code} switch-lang" {if $i>0}style="display:none"{/if}>
         <label for="info_{$lang.id}_name" class="col-md-2 control-label">{$t.content.name}</label>
         <div class="col-md-10">
-            <input type="text" class="form-control info-name lang-{$lang.code}" name="content_info[{$lang.id}][name]" id="content_info_{$lang.id}_name" required="" placeholder="[a-zA-Zа-яА-Я0-9]+" value="{if isset($content.info[$lang.id].name)}{$content.info[$lang.id].name}{/if}" data-lang="{$lang.code}">
+            <input type="text" class="form-control info-name lang-{$lang.code}" name="content_info[{$lang.id}][name]" id="content_info_{$lang.id}_name" required="" placeholder="[a-zA-Zа-яА-Я0-9]+" value="{if isset($content.info[$lang.id].name)}{htmlspecialchars($content.info[$lang.id].name)}{/if}" data-lang="{$lang.code}">
         </div>
     </div>
 
