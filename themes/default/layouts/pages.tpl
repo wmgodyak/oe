@@ -6,5 +6,7 @@
  * @name home
  *}
 {include file="chunks/head.tpl"}
-    <pre>{print_r($app->nav->get('main'))}</pre>
+    {*<pre>{print_r($app->module->banners->get('aaaa'))}</pre>*}
+{*<pre>{print_r($app->module->banners)}</pre>*}
+<pre>{var_dump($app->issetModule('banners'))}</pre>
 {include file="chunks/footer.tpl"}

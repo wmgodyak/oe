@@ -10,6 +10,8 @@ vendor/*
 !vendor/phpmailer
 !vendor/smarty
 !vendor/index.html
+uploads/*
+!uploads/index.html
 modules/*
 !modules/.htaccess
 themes/backend/modules/*

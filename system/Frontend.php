@@ -164,12 +164,15 @@ class Frontend extends core\Controller
         $this->request->param('doInit', 1);
         // assign translations to template
 
-
         // init modules
         $m = new Modules($this->theme, $this->languages_code);
         $modules = $m->init();
-        $this->template->assign('mod', $modules);
+        $this->app->module = $modules;
+//        foreach($modules as $k=>$module){
+//            $this->app->module->{$module};
+//        }
 
+        $this->template->assign('mod', $modules);
         $this->template->assign('t', $this->t());
 
         $this->template->assign('app', $this->app);

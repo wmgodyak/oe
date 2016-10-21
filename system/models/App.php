@@ -10,6 +10,8 @@ class App
     const EXT = '.php';
     private static $storage = [];
 
+    public $module;
+
     private $allowed = ['nav', 'languages', 'images', 'guides', 'contentMeta', 'cache', 'page'];
     /**
      * @param $model
@@ -40,5 +42,15 @@ class App
         self::$storage[$model] = new $c();
 
         return self::$storage[$model];
+    }
+
+    /**
+     * @param $module
+     * @return bool
+     */
+    public function issetModule($module)
+    {
+        $module = lcfirst($module);
+        return isset($this->module->{$module});
     }
 }
