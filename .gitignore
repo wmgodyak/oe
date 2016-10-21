@@ -1,7 +1,15 @@
 .idea/
 tmp/*
+!tmp/.htaccess
 logs/*
+!logs/.htaccess
 vendor/*
+!vendor/acimage
+!vendor/ckeditor
+!vendor/filemanager
+!vendor/phpmailer
+!vendor/smarty
+!vendor/index.html
 config/db.php
 robots.txt
 sitemap*.xml
