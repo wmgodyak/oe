@@ -209,7 +209,7 @@ class Themes extends Backend
             $i=0;
             foreach ($files as $item) {
                 $abs_src = $dir . $item;
-
+                $is_img = false;
                 $stat = stat($abs_src);
 
                 if(is_dir($abs_src)){
@@ -222,6 +222,7 @@ class Themes extends Backend
 
                     $info = pathinfo($item);
                     if(in_array($info['extension'], ['png', 'jpg', 'jpeg'])){
+                        $is_img = true;
                         $src = "/themes/{$theme}{$q_dir}{$item}";
                         $span = "<img src='{$src}' style='max-width: 40px; max-height:40px; margin-right: 1em;float: left;'>";
                     }
@@ -241,11 +242,13 @@ class Themes extends Backend
                         Icon::create('fa fa-download'),
                         ['class' => '', 'href' => "./themes/downloadFile/?path=" . '/themes/'.$theme. $q_dir . $item, 'title' => "Download"]
                     );
-                    $b[] = (string)Link::create
-                    (
-                        Icon::create(Icon::TYPE_EDIT),
-                        ['class' => '', 'href' => $href, 'title' => "Edit"]
-                    );
+                    if(! $is_img){
+                        $b[] = (string)Link::create
+                        (
+                            Icon::create(Icon::TYPE_EDIT),
+                            ['class' => '', 'href' => $href, 'title' => "Edit"]
+                        );
+                    }
 
                     $b[] = (string)Button::create
                     (
