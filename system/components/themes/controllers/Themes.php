@@ -1,9 +1,11 @@
 <?php
 namespace system\components\themes\controllers;
 
+use helpers\bootstrap\Icon;
 use system\Backend;
 use helpers\bootstrap\Button;
 use helpers\bootstrap\Link;
+use system\core\DataTables2;
 use system\models\Settings;
 
 defined("CPATH") or die();
@@ -86,7 +88,7 @@ class Themes extends Backend
     {
         if(empty($theme)) return 0;
 
-        return Settings::getInstance()->set('app_theme_current', $theme);
+        Settings::getInstance()->set('app_theme_current', $theme);
     }
 
     /**
@@ -95,8 +97,7 @@ class Themes extends Backend
     public function create(){}
 
     /**
-     * @param $id
-     * @return mixed
+     * @param $theme
      */
     public function edit($theme)
     {
@@ -144,10 +145,330 @@ class Themes extends Backend
             } else {
                 $this->template->assign('error', "wrong path");
             }
+        } else {
+            $dir = $this->request->get('dir');
+            $path = $theme . (empty($dir) ? '' : '/'.$dir);
+            $this->appendToPanel
+            (
+                (string)Button::create
+                (
+                    "Create folder",
+                    ['class' => 'btn-md b-themes-create-dir', 'data-path' => $path]
+                )
+            );
+
+
+            $this->appendToPanel
+            (
+                (string)Button::create
+                (
+                    "Create file",
+                    ['class' => 'btn-md b-themes-create-file',  'data-path' => $path]
+                )
+            );
+
+            $this->appendToPanel
+            (
+                (string)Button::create
+                (
+                    "Upload File",
+                    ['class' => 'btn-md b-themes-upload-file',  'data-path' => $path]
+                )
+            );
+
+            $t = new DataTables2('themes');
+
+            $t->ajax('themes/view/' . $theme, ['g' => $_GET])
+                ->th('Name', null, 0, 0)
+                ->th('Size', null, 0, 0)
+                ->th('Modified', null, 0, 0)
+                ->th('Permissions', null, 0, 0)
+                ->th($this->t('common.tbl_func'), null, 0, 0, 'width: 200px');
+
+            $this->template->assign('table', $t->init());
         }
+
         $this->template->assign('theme', $theme);
         $this->template->assign('sidebar', $this->template->fetch('system/themes/tree'));
         $this->output($this->template->fetch('system/themes/edit'));
+    }
+
+    public function view($theme)
+    {
+        $dir = Settings::getInstance()->get('themes_path');
+        $dir = DOCROOT . $dir . '/' . $theme . '/';
+
+        $t = new DataTables2('themes');
+
+        $res = [];
+        $g = $this->request->post('g');
+        $q_dir = isset($g['dir'] ) ? $g['dir'] . '/' : null;
+        $dir .= $q_dir;
+        if(is_dir($dir)){
+            $files = array_diff(scandir($dir), array('.','..'));
+            $i=0;
+            foreach ($files as $item) {
+                $abs_src = $dir . $item;
+
+                $stat = stat($abs_src);
+
+                if(is_dir($abs_src)){
+                    $href =  './themes/edit/'. $theme.'?dir=' . $q_dir . $item;
+                    $res[$i][] = "<span style='line-height: 25px; display: inline-block'><i class='fa fa-folder-o'></i></span> <a href='$href'>{$item}</a>";
+
+                    $res[$i][] = "--";
+                } else {
+                    $span = "<span style='line-height: 25px; display: inline-block'><i class='fa fa-file-o'></i></span> ";
+
+                    $info = pathinfo($item);
+                    if(in_array($info['extension'], ['png', 'jpg', 'jpeg'])){
+                        $src = "/themes/{$theme}{$q_dir}{$item}";
+                        $span = "<img src='{$src}' style='max-width: 40px; max-height:40px; margin-right: 1em;float: left;'>";
+                    }
+
+                    $res[$i][] = $span . $item ;
+                    $res[$i][] = $this->formatBytes($stat['size']);
+                }
+
+                $res[$i][] = date('d.m.Y H:i:s', $stat['mtime']);
+                $res[$i][] = $this->getPermissions($abs_src);
+
+                $b = [];
+                if(!is_dir($abs_src)){
+                    $href =  './themes/edit/'. $theme.'?path=' . $q_dir . $item;
+                    $b[] = (string)Link::create
+                    (
+                        Icon::create('fa fa-download'),
+                        ['class' => '', 'href' => "./themes/downloadFile/?path=" . '/themes/'.$theme. $q_dir . $item, 'title' => "Download"]
+                    );
+                    $b[] = (string)Link::create
+                    (
+                        Icon::create(Icon::TYPE_EDIT),
+                        ['class' => '', 'href' => $href, 'title' => "Edit"]
+                    );
+
+                    $b[] = (string)Button::create
+                    (
+                        Icon::create(Icon::TYPE_DELETE),
+                        ['class' => 'b-themes-delete-file btn-danger', 'data-path' => '/themes/'.$theme. $q_dir . $item, 'title' => "Delete"]
+                    );
+                }
+
+                $res[$i][] = implode('', $b);
+
+                $i++;
+            }
+        }
+        echo $t->render($res, $t->getTotal());
+    }
+
+    public function downloadFile()
+    {
+        $path = $this->request->get('path');
+        if(empty($path)) die;
+
+        $file = DOCROOT.$path;
+        $filename = basename($file);
+        header('Content-Type: ' . mime_content_type($file));
+        header('Content-Length: '. filesize($file));
+        header(sprintf('Content-Disposition: attachment; filename=%s',
+            strpos('MSIE',$_SERVER['HTTP_REFERER']) ? rawurlencode($filename) : "\"$filename\"" ));
+        ob_flush();
+        readfile($file);
+        exit;
+    }
+
+    public function deleteFile()
+    {
+        $path = $this->request->post('path');
+        if(empty($path)) die('empty path');
+
+        $file = DOCROOT.$path;
+
+        if(!file_exists($file)) die('File not exists');
+
+        $s = unlink($file);
+
+        echo $s ? 1 : 0;
+    }
+
+    /**
+     *
+     */
+    public function createDir()
+    {
+        $path = $this->request->post('path');
+
+        if($this->request->post('action') == 'create'){
+            $s=0; $i=[];
+            $themes_path = Settings::getInstance()->get('themes_path');
+            $root = DOCROOT . $themes_path;
+            $data = $this->request->post('data');
+            $dir = $root . $path . '/' . $data['name'];
+            if(is_dir($dir)){
+                $i[] = ['data[name]' => 'Directory exists'];
+            } else{
+                $s = mkdir($dir, 0777, true);
+            }
+
+            $this->response->body(['s' =>$s, 'i' => $i])->asJSON();
+            return ;
+        }
+
+        $this->template->assign('path', $path);
+        echo $this->template->fetch('system/themes/createDir');
+    }
+
+
+    /**
+     *
+     */
+    public function createFile()
+    {
+        $path = $this->request->post('path');
+
+        if($this->request->post('action') == 'create'){
+            $s=0; $i=[];
+            $themes_path = Settings::getInstance()->get('themes_path');
+            $root = DOCROOT . $themes_path;
+            $data = $this->request->post('data');
+            $dir = $root . $path . '/' . $data['name'];
+            $info = pathinfo($data['name']);
+            if(file_exists($dir)){
+                $i[] = ['data[name]' => 'File exists'];
+            } elseif(!in_array($info['extension'], ['ini', 'txt', 'tpl'])){
+                $i[] = ['data[name]' => 'File extension not allowed'];
+            } else {
+                file_put_contents($dir, null);
+                $s=1;
+            }
+
+            $this->response->body(['s' =>$s, 'i' => $i])->asJSON();
+            return ;
+        }
+
+        $this->template->assign('path', $path);
+        echo $this->template->fetch('system/themes/createFile');
+    }
+
+    /**
+     *
+     */
+    public function uploadFile()
+    {
+        $s=0; $i=[];
+
+        $allowed = [
+            'image/png',
+            'image/jpg',
+            'image/jpeg',
+            'text/plain',
+            'application/x-wine-extension-ini',
+            'application/octet-stream',
+            'application/javascript',
+            'text/css',
+        ];
+
+        $path = $this->request->post('path');
+
+        if($this->request->post('action') == 'create'){
+
+           foreach ($_FILES['file']['name'] as $k=> $v) {
+               $type = $_FILES['file']['type'][$k];
+               if(!in_array($type, $allowed)){
+                   $i[] = ['file'=> 'Not Allowed'];
+               }
+           }
+
+           $themes_path = Settings::getInstance()->get('themes_path');
+           $dir         = DOCROOT . $themes_path . $path .'/';
+
+            if(!is_dir($dir)){
+                $i[] = ['file'=> 'Wrong directory'];
+            }
+
+            if(empty($i)) {
+
+                foreach ($_FILES['file']['name'] as $k => $v) {
+                    $name = $_FILES['file']['name'][$k];
+                    $tmp_name = $_FILES['file']['tmp_name'][$k];
+//                    echo $dir . $name, "\r\n";
+                    $s = move_uploaded_file($tmp_name, $dir . $name);
+                }
+            }
+            $this->response->body(['s' =>$s, 'i' => $i])->asJSON();
+            return ;
+        }
+
+        $this->template->assign('path', $path);
+        echo $this->template->fetch('system/themes/upload');
+    }
+
+    private function getPermissions($item)
+    {
+        $perms = fileperms($item);
+
+        switch ($perms & 0xF000) {
+            case 0xC000: // сокет
+                $info = 's';
+                break;
+            case 0xA000: // символическая ссылка
+                $info = 'l';
+                break;
+            case 0x8000: // обычный
+                $info = 'r';
+                break;
+            case 0x6000: // файл блочного устройства
+                $info = 'b';
+                break;
+            case 0x4000: // каталог
+                $info = 'd';
+                break;
+            case 0x2000: // файл символьного устройства
+                $info = 'c';
+                break;
+            case 0x1000: // FIFO канал
+                $info = 'p';
+                break;
+            default: // неизвестный
+                $info = 'u';
+        }
+
+// Владелец
+        $info .= (($perms & 0x0100) ? 'r' : '-');
+        $info .= (($perms & 0x0080) ? 'w' : '-');
+        $info .= (($perms & 0x0040) ?
+            (($perms & 0x0800) ? 's' : 'x' ) :
+            (($perms & 0x0800) ? 'S' : '-'));
+
+// Группа
+        $info .= (($perms & 0x0020) ? 'r' : '-');
+        $info .= (($perms & 0x0010) ? 'w' : '-');
+        $info .= (($perms & 0x0008) ?
+            (($perms & 0x0400) ? 's' : 'x' ) :
+            (($perms & 0x0400) ? 'S' : '-'));
+
+// Мир
+        $info .= (($perms & 0x0004) ? 'r' : '-');
+        $info .= (($perms & 0x0002) ? 'w' : '-');
+        $info .= (($perms & 0x0001) ?
+            (($perms & 0x0200) ? 't' : 'x' ) :
+            (($perms & 0x0200) ? 'T' : '-'));
+
+        return $info;
+    }
+    private function formatBytes($bytes, $precision = 2) {
+        $units = array('B', 'KB', 'MB', 'GB', 'TB');
+
+        $bytes = max($bytes, 0);
+        $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
+        $pow = min($pow, count($units) - 1);
+
+        // Uncomment one of the following alternatives
+        // $bytes /= pow(1024, $pow);
+        // $bytes /= (1 << (10 * $pow));
+
+        return round($bytes, $precision) . ' ' . $units[$pow];
     }
 
     public function updateSource()
@@ -182,7 +503,9 @@ class Themes extends Backend
             while (false !== ($fn = readdir($handle))) {
                 if ($fn == "." || $fn == "..")  continue;
 
-                $href = !is_dir($dir . $path . '/' . $fn) ? './themes/edit/'. $theme.'?path=' . $path . '/' . $fn : '#';
+                $href = !is_dir($dir . $path . '/' . $fn) ?
+                    './themes/edit/'. $theme.'?path=' . $path . '/' . $fn :
+                    "./themes/edit/{$theme}?dir={$path}";
 
                 $items[] = [
                     'text' => $fn,
@@ -197,6 +520,7 @@ class Themes extends Backend
         }
         $this->response->body($items)->asJSON();
     }
+
     public function download($theme)
     {
         $dir = Settings::getInstance()->get('themes_path');

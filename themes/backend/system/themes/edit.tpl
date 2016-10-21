@@ -50,6 +50,7 @@
         });
     </script>
 {/if}
+{if isset($table)}{$table}{/if}
 <script>
     $(document).ready(function(){
         var  $tree = new engine.tree('themesTree');

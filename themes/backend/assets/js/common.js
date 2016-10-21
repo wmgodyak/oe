@@ -2384,6 +2384,123 @@ engine.themes = {
                 engine.alert(d.m, 'error');
             }
         });
+
+        $(document).on('click', '.b-themes-create-dir', function(){
+            var path = $(this).data('path');
+            engine.request.post({
+                url: 'themes/createDir',
+                data: {
+                    path: path
+                },
+                success: function(res)
+                {
+                    var dialog = engine.dialog({
+                        title: "Create directory",
+                        content: res,
+                        width: 600,
+                        buttons: {
+                            'Save' : function()
+                            {
+                                $('#form').submit();
+                            }
+                        }
+                    });
+
+                    engine.validateAjaxForm('#form', function(d){
+                        if(d.s){
+                            dialog.dialog('close');
+                            location.reload(true);
+                        } else {
+                            engine.alert(d.m, 'error');
+                        }
+                    });
+                }
+            })
+        });
+
+        $(document).on('click', '.b-themes-upload-file', function(){
+            var path = $(this).data('path');
+            engine.request.post({
+                url: 'themes/uploadFile',
+                data: {
+                    path: path
+                },
+                success: function(res)
+                {
+                    var dialog = engine.dialog({
+                        title: "Upload file",
+                        content: res,
+                        width: 600,
+                        buttons: {
+                            'Save' : function()
+                            {
+                                $('#form').submit();
+                            }
+                        }
+                    });
+
+                    engine.validateAjaxForm('#form', function(d){
+                        if(d.s){
+                            dialog.dialog('close');
+                            location.reload(true);
+                        } else {
+                            engine.alert(d.m, 'error');
+                        }
+                    });
+                }
+            })
+        });
+        $(document).on('click', '.b-themes-create-file', function(){
+            var path = $(this).data('path');
+            engine.request.post({
+                url: 'themes/createFile',
+                data: {
+                    path: path
+                },
+                success: function(res)
+                {
+                    var dialog = engine.dialog({
+                        title: "Create file",
+                        content: res,
+                        width: 600,
+                        buttons: {
+                            'Save' : function()
+                            {
+                                $('#form').submit();
+                            }
+                        }
+                    });
+
+                    engine.validateAjaxForm('#form', function(d){
+                        if(d.s){
+                            dialog.dialog('close');
+                            location.reload(true);
+                        } else {
+                            engine.alert(d.m, 'error');
+                        }
+                    });
+                }
+            })
+        });
+
+        $(document).on('click', '.b-themes-delete-file', function(){
+            var path = $(this).data('path');
+            engine.confirm('Confirm delete file ' + path, function()
+            {
+               engine.request.post({
+                 url: 'themes/deleteFile',
+                   data: {path: path},
+                   success: function(res)
+                   {
+                       if(res > 0) {
+                           location.reload(true);
+                       } else {
+                           engine.alert(res);
+                       }
+                   }
+               });
+            });
+        });
     },
     activate: function(theme)
     {
