@@ -498,23 +498,30 @@ class Themes extends Backend
 
         $dir = Settings::getInstance()->get('themes_path');
 
-        $dir = DOCROOT .'/'. $dir . '/' . $theme . '/';
+        $dir = DOCROOT . $dir . '/' . $theme . '/';
+
         $path = $this->request->get('id');
         $path = str_replace('#', '', $path);
+
         $items = array();
+
         if ($handle = opendir($dir . $path)) {
             while (false !== ($fn = readdir($handle))) {
                 if ($fn == "." || $fn == "..")  continue;
 
-                $href = !is_dir($dir . $path . '/' . $fn) ?
-                    './themes/edit/'. $theme.'?path=' . $path . '/' . $fn :
-                    "./themes/edit/{$theme}?dir={$path}";
+                $href = "./themes/edit/{$theme}?dir=$path/$fn";
+
+                if(file_exists($dir . $path .'/'. $fn) && !is_dir($dir . $path .'/'. $fn)){
+                    $href = './themes/edit/'. $theme.'?path=' . $path . '/' . $fn;
+                }
+
+
 
                 $items[] = [
                     'text' => $fn,
                     'type' => is_dir($dir . $path . '/' . $fn) ? 'folder' : 'file',
                     'children' => is_dir($dir . $path . '/' . $fn) ,
-                    'a_attr' => ['id'=> $path . '/' . $fn, 'href' => $href],
+                    'a_attr' => ['id'=> $path . '/' . $fn, 'href' => $href, 'title' => $dir . $path .'/'. $fn],
                     'li_attr' => ['id'=> $path . '/' . $fn]
                 ];
             }
