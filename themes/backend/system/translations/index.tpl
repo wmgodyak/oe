@@ -12,9 +12,9 @@
                     {/foreach}
                 </ul>
                 <div id="common">
-                    <table class="table">
+                    <table class="table" id="tbl_common">
                         <tr>
-                            <th>Ключ</th>
+                            <th>Key</th>
                             {foreach $langs as $lang}
                                 <th>{$lang.name}</th>
                             {/foreach}
@@ -36,6 +36,9 @@
                             {/foreach}
                         {/foreach}
                     </table>
+                    {*<div class="clearfix" style="text-align: right; padding-top: 10px;">*}
+                        {*<button class="btn btn-primary b-translations-add" type="button">Додати</button>*}
+                    {*</div>*}
                     {*{d($common)}*}
                 </div>
                 {foreach $modules as $module=> $meta}

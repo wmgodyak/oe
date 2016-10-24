@@ -2601,6 +2601,13 @@ engine.breadcrumb = function()
     });
 };
 
+engine.translations = function()
+{
+    $(document).on('click', '.b-translations-add', function(){
+
+    });
+};
+
 $(document).ready(function(){
     engine.admins.init();
     engine.components.init();
@@ -2616,10 +2623,7 @@ $(document).ready(function(){
     engine.settings.init();
     engine.seo.init();
     engine.breadcrumb();
-
-    //setTimeout(function(){
-    //    engine.styleInputs();
-    //},300)
+    engine.translations();
 });
 
 function responsive_filemanager_callback(field_id){
