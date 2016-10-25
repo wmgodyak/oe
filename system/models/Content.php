@@ -20,8 +20,8 @@ class Content extends Model
      * @var int
      */
     protected $type;
-    protected $types_id;
-    protected $subtypes_id;
+    public    $types_id;
+    public    $subtypes_id;
     protected $languages;
     public $meta;
 
