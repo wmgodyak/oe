@@ -163,30 +163,30 @@ var engine = {
     },
     notify: function(msg, status, cnt)
     {
-        if(typeof cnt == 'undefined') {
-            $.notify(msg, status);
-        }
-         else {
-            $(cnt).notify(msg, status);
-        }
-        //var c = typeof cnt == 'undefined' ? $('.inline-notifications') : $(cnt), icon;
-        //switch (status){
-        //    case 'success':
-        //        icon = 'check-circle';
-        //        break;
-        //    case 'error':
-        //        icon = 'exclamation-triangle';
-        //        break;
-        //    default:
-        //        icon = 'check-circle';
-        //        break;
+        //if(typeof cnt == 'undefined') {
+        //    $.notify(msg, status);
         //}
-        //status = typeof status =='undefined' ? 'info' : status;
-        //c.html("<div class='alert alert-"+status+" alert-dismissible' role='alert'>\
-        //    <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\
-        //    <i class='fa fa-"+ icon +"'></i>"+msg+"\
-        //</div>");
-        //setTimeout(function(){c.html('');}, 7000)
+        // else {
+        //    $(cnt).notify(msg, status);
+        //}
+        var c = typeof cnt == 'undefined' ? $('.inline-notifications') : $(cnt), icon;
+        switch (status){
+            case 'success':
+                icon = 'check-circle';
+                break;
+            case 'error':
+                icon = 'exclamation-triangle';
+                break;
+            default:
+                icon = 'check-circle';
+                break;
+        }
+        status = typeof status =='undefined' ? 'info' : status;
+        c.html("<div class='alert alert-"+status+" alert-dismissible' role='alert'>\
+            <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\
+            <i class='fa fa-"+ icon +"'></i>"+msg+"\
+        </div>");
+        setTimeout(function(){c.html('');}, 7000)
      },
     request:  {
         /**

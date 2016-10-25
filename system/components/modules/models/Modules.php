@@ -43,7 +43,7 @@ class Modules extends Model
 
                 $item = str_replace($dir, '', $item);
                 $item = str_replace('default/', $themes_path . $theme_f . '/', $item);
-                $item = str_replace('engine/', $themes_path . $theme_b . '/', $item);
+//                $item = str_replace('engine/', $themes_path . $theme_b . '/', $item);
                 $item = str_replace('backend/', $themes_path . $theme_b . '/', $item);
 
                 $templates_files[$k]['dest'] = $item;
@@ -60,7 +60,7 @@ class Modules extends Model
             }
 
         }
-
+//        d($templates_files);die;
         $file = DOCROOT . "modules/{$module}/sql/install.sql";
         if(file_exists($file)){
             $q = file_get_contents($file);
