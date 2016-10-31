@@ -9,7 +9,7 @@
                 <div class="social__sighin">
                     <span>{$t.comments.hauth}</span>
                     <div class="comments_social">
-                        {$events.call('comments.social.auth')}
+                        {$events->call('comments.social.auth')}
                     </div>
                 </div>
             {else}

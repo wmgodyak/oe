@@ -37,60 +37,9 @@
 </header>
 <!--navigation end-->
 
-<!--post-slider-->
-<section id="myCarousel" class="carousel slide post-slider">
-    <div class="container">
-        <div class="carousel-inner">
-            <div class="item active">
-                <div class="post-slider-image"><img alt="car1" src="{$theme_url}assets/images/slider-img-1.jpg"></div>
-                <div class="post-slider-text">
-                    <div class="post-slider-title">
-                        <h2><a href="index.html#">Anything embarrassing <em>hidden middle</em></a></h2>
-                    </div>
-                    <div class="post-meta-elements">
-                        <div class="meta-post-author">
-                            <i class="fa fa-user"></i><a href="index.html#">By:Admin</a>
-                        </div>
-                        <div class="meta-post-cat">
-                            <i class="fa fa-tags"></i><a href="index.html#">Lifestyle</a>
-                        </div>
-                        <div class="meta-post-date">
-                            <i class="fa fa-clock-o"></i>Jan 25, 2016
-                        </div>
-                    </div>
-                    <div class="post-slider-content">
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="item">
-                <div class="post-slider-image"><img alt="car1" src="{$theme_url}assets/images/slider-post-image-2.jpg"></div>
-                <div class="post-slider-text">
-                    <div class="post-slider-title">
-                        <h2><a href="index.html#">The standard <em>Lorem Ipsum used</em></a></h2>
-                    </div>
-                    <div class="post-meta-elements">
-                        <div class="meta-post-author">
-                            <i class="fa fa-user"></i><a href="index.html#">By:Admin</a>
-                        </div>
-                        <div class="meta-post-cat">
-                            <i class="fa fa-tags"></i><a href="index.html#">Lifestyle</a>
-                        </div>
-                        <div class="meta-post-date">
-                            <i class="fa fa-clock-o"></i>Jan 25, 2016
-                        </div>
-                    </div>
-                    <div class="post-slider-content">
-                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <a class="left carousel-control" href="index.html#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a>
-        <a class="right carousel-control" href="index.html#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
-    </div>
-</section>
-<!--post-slider-end-->
+{if $app->issetModule('mainPosts')}
+    {include file="modules/main_posts/index.tpl"}
+{/if}
 
 <!--blog-psots-->
 <section id="posts">
