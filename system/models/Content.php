@@ -283,8 +283,8 @@ class Content extends Model
 
         // todo modify contentFeatures
 
-//        $cf = new ContentFeatures();
-//        $cf->save($id);
+        $cf = new ContentFeatures();
+        $cf->save($id);
 
         if($this->hasError()){
             $this->rollback();

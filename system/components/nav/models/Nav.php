@@ -71,7 +71,17 @@ class Nav extends Backend
 
     public function deleteItem($id)
     {
-        return $this->deleteRow('__nav_items', $id);
+        $parent_id = self::$db->select("select parent_id from __nav_items where id = {$id} limit 1")
+            ->row('parent_id');
+
+        $s = $this->deleteRow('__nav_items', $id);
+        $c = self::$db->select("select count(*) as t from __nav_items where parent_id = {$parent_id}")->row('t');
+
+        if($c == 0){
+            $this->updateRow('__nav_items', $parent_id, ['isfolder' => 0]);
+        }
+
+        return $s;
     }
 
     public function buildTree()
@@ -81,7 +91,7 @@ class Nav extends Backend
         $types_in = implode(',', $c_types);
 
         $res = [];
-        $r = self::$db->select("select id, name from __content_types where id in ({$types_in})",1)->all();
+        $r = self::$db->select("select id, name from __content_types where id in ({$types_in})")->all();
 
         foreach ($r as $type) {
             $res[] = $type;
@@ -97,21 +107,14 @@ class Nav extends Backend
      */
     public function tree($types_id, $parent_id = 0)
     {
-        $res = self::$db->select("
-          select c.id, c.isfolder, c.status, ci.name
-          from __content c
-          join __content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
-          where c.parent_id={$parent_id} and c.types_id = {$types_id} and c.status = 'published'
-          ")->all();
-//
-//        foreach ($r as $item) {
-//            if($item['isfolder'] && $level > 0){
-//                $item['items'] = $this->tree($types_id, $item['id'], --$level);
-//            }
-//            $res[] = $item;
-//        }
-
-        return $res;
+        return self::$db
+            ->select("
+              select c.id, c.isfolder, c.status, ci.name
+              from __content c
+              join __content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
+              where c.parent_id={$parent_id} and c.types_id = {$types_id} and c.status = 'published'
+              ")
+            ->all();
     }
 
     /**
@@ -133,7 +136,7 @@ class Nav extends Backend
     {
         $res = self::$db->select("
           select n.id, n.isfolder, n.parent_id, n.published,
-           IF(ci.name = '', ni.name, ci.name) as name
+           IF(ni.name is null, ci.name, ni.name) as name
           from __nav_items n
           left join __content_info ci on ci.content_id=n.content_id and ci.languages_id={$this->languages_id}
           left join __nav_items_info ni on ni.nav_items_id=n.id and ni.languages_id={$this->languages_id}
@@ -176,6 +179,29 @@ class Nav extends Backend
         $info = $this->request->post('info');
 
         $this->updateRow('__nav_items', $item_id, $data);
+
+        foreach ($info as $languages_id => $cols) {
+            $this->items_info->update($item_id, $languages_id, $cols);
+        }
+
+        return ! $this->hasError();
+    }
+
+    public function createItem($parent_id)
+    {
+        $data = $this->request->post('data');
+        $info = $this->request->post('info');
+        $data['parent_id'] = $parent_id;
+        $data['nav_id']    = self::$db->select("select nav_id from __nav_items where id = {$parent_id} limit 1")
+            ->row('nav_id');
+
+        $item_id = $this->createRow('__nav_items', $data);
+
+        if(empty($item_id)) {
+            return false;
+        }
+
+        $this->updateRow('__nav_items', $parent_id, ['isfolder' => 1]);
 
         foreach ($info as $languages_id => $cols) {
             $this->items_info->update($item_id, $languages_id, $cols);

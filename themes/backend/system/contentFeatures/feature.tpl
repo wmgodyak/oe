@@ -5,6 +5,7 @@
             <label for="content_features_{$lang.id}" class="col-md-3 control-label">{$feature.name}</label>
             <div class="col-md-9">
                 <input name="content_features[{$feature.id}][{$lang.id}]"  placeholder="{$lang.name}" {if $feature.required}required{/if} id="content_features_{$feature.id}x{$lang.id}" class="form-control" value="{$feature.values[$lang.id]}">
+                <p class="help-block">Code: {$feature.code}</p>
             </div>
         </div>
     {/foreach}
@@ -14,6 +15,7 @@
             <label for="content_features_{$feature.id}x{$lang.id}" class="col-md-3 control-label">{$feature.name}</label>
             <div class="col-md-9">
                 <textarea name="content_features[{$feature.id}][{$lang.id}]"  placeholder="{$lang.name}" {if $feature.required}required{/if} id="content_features_{$feature.id}x{$lang.id}"  class="form-control">{$feature.values[$lang.id]}</textarea>
+                <p class="help-block">Code: {$feature.code}</p>
             </div>
         </div>
     {/foreach}
@@ -27,14 +29,25 @@
                     <option {if $item.selected}selected{/if} value="{$item.id}">{$item.name}</option>
                 {/foreach}
             </select>
+            <p class="help-block">Code: {$feature.code}</p>
         </div>
         {*{/if}*}
+    </div>
+{elseif $feature.type == 'image'}
+    <div class="form-group">
+        <label for="content_features" class="col-md-3 control-label">{$feature.name}</label>
+        <div class="col-md-9">
+            <input type="hidden" name="content_features[{$feature.id}]" id="content_features_{$feature.id}" value="{$feature.values[0]}" class="c-f-type-image-hi" data-id="{$feature.id}">
+            <img title="Click to change" style="max-width: 120px;max-height: 120px;" src="{if isset($feature.values[0])}{$feature.values[0]}{else}/themes/backend/assets/img/no-image.png{/if}" alt="" class="cf-file-browse" data-target="content_features_{$feature.id}" id="content_features_im_{$feature.id}">
+            <p class="help-block">Code: {$feature.code}</p>
+        </div>
     </div>
 {elseif $feature.type == 'file'}
     <div class="form-group">
         <label for="content_features" class="col-md-3 control-label">{$feature.name}</label>
         <div class="col-md-7">
             <input type="text" readonly name="content_features[{$feature.id}]" id="content_features_{$feature.id}"  class="form-control"  value="{$feature.values[0]}">
+            <p class="help-block">Code: {$feature.code}</p>
         </div>
         <div class="col-md-2">
             <button class="btn cf-file-browse" type="button" data-target="content_features_{$feature.id}"><i class="fa fa-file"></i></button>
@@ -47,6 +60,7 @@
         <label for="content_features" class="col-md-3 control-label">{$feature.name}</label>
         <div class="col-md-9">
             <input type="text" name="content_features[{$feature.id}]" id="content_features_{$feature.id}"  class="form-control" value="{$feature.values[0]}">
+            <p class="help-block">Code: {$feature.code}</p>
         </div>
     </div>
 {elseif $feature.type == 'checkbox'}
@@ -57,6 +71,7 @@
                 <input {if $feature.checked}checked{/if} type="checkbox" name="content_features[{$feature.id}]" id="content_features_{$feature.id}" value="1">
                  {$feature.name}
             </label>
+            <p class="help-block">Code: {$feature.code}</p>
         </div>
     </div>
 {elseif $feature.type == 'folder'}

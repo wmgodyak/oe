@@ -1843,6 +1843,12 @@ engine.features = {
             var id = $(this).data('id');
             engine.features.content.del(id);
         });
+
+        $(document).on('change', '.c-f-type-image-hi', function(){
+            var id = $(this).data('id');
+            if(this.value == '') return;
+            $('#content_features_im_'+id).attr('src', this.value);
+        });
     },
 
     create: function(parent){
@@ -2282,6 +2288,26 @@ engine.nav = {
                 );
             };
 
+            var createItem = function(parent_id)
+            {
+                engine.request.get('nav/createItem/'+parent_id , function(data){
+                   var d = engine.dialog({
+                     title: "Додавання пункту меню",
+                     content: data,
+                       width: 750,
+                     buttons: {
+                         'Save' : function(){
+                             $('#itemForm').submit();
+                         }
+                     }
+                   });
+                    engine.validateAjaxForm('#itemForm', function(){
+                        d.dialog('close');
+
+                        renderItems();
+                    });
+                });
+            };
             var editItem = function(id)
             {
                 engine.request.get('nav/editItem/'+id , function(data){
@@ -2310,6 +2336,9 @@ engine.nav = {
             });
             $(document).on('click', '.b-nav-item-edit', function(){
                 editItem($(this).data('id'));
+            });
+            $(document).on('click', '.b-nav-item-add', function(){
+                createItem($(this).data('id'));
             });
 
             $('#data_code').change(function(){
@@ -2633,5 +2662,6 @@ function responsive_filemanager_callback(field_id){
     v = v.replace('http://', '');
     v = v.replace(location.hostname, '');
     inp.val(v);
+    inp.trigger('change');
     engine.closeDialog();
 }

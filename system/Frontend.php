@@ -127,6 +127,8 @@ class Frontend extends core\Controller
                 }
             }
 
+            $page['url'] = $this->app->page->url($page['id']);
+
             $this->languages_id   = $page['languages_id'];
             $this->languages_code = $page['languages_code'];
             $a = [];

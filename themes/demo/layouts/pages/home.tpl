@@ -97,243 +97,111 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8">
+                {foreach $app->module->blog->posts(0,3) as $post}
                 <article class="standard-post-format grid-box">
                     <div class="post-featured-image">
-                        <a href="index.html#"><img src="{$theme_url}assets/images/post-featured-image-01.jpg" alt="image"></a>
+                        <a href="{$post.id}" title ="{$post.title}"><img src="{$app->images->cover($post.id, 'post')}" alt="{$post.title}"></a>
                     </div>
 
                     <div class="the-post">
                         <div class="post-title">
-                            <h2><a href="index.html#">Inside The Garden & <em>Blooming Flowers</em></a></h2>
+                            <h2><a href="{$post.id}" title ="{$post.title}">{$post.name}</a></h2>
                         </div>
                         <div class="post-meta-elements">
                             <div class="meta-post-author">
-                                <i class="fa fa-user"></i><a href="index.html#">Admin</a>
+                                <i class="fa fa-user"></i><a href="11?author={$post.author.id}">{$post.author.name}</a>
                             </div>
                             <div class="meta-post-cat">
-                                <i class="fa fa-tags"></i><a href="index.html#">Lifestyle</a>, <a href="index.html#">Standard</a>
+                                <i class="fa fa-tags"></i>
+                                {foreach $post.categories as $i=>$category}
+                                    <a href="{$category.id}">{$category.name}</a>{if isset($post.categories[$i+1])}, {/if}
+                                {/foreach}
                             </div>
                             <div class="meta-post-date">
-                                <i class="fa fa-clock-o"></i>Jan 25, 2016
+                                <i class="fa fa-clock-o"></i>{date('M d, Y', $post.created)}
                             </div>
                             <div class="meta-post-commetns">
                                 <i class="fa fa-comment-o"></i><a href="index.html#">Comments</a>
                             </div>
                         </div>
                         <div class="post_content">
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley. Dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text..</p>
+                            {$post.intro}
                             <div class="readmore">
-                                <a href="index.html#" class="btn">Continue Reading..</a>
+                                <a href="{$post.id}" class="btn">Continue Reading..</a>
                             </div>
                         </div>
                     </div>
                 </article>
-
-                <article class="standard-post-format grid-box">
-                    <div class="post-featured-image">
-                        <a href="index.html#"><img src="{$theme_url}assets/images/post-featured-image-02.jpg" alt="image"></a>
-                    </div>
-
-                    <div class="the-post">
-                        <div class="post-title">
-                            <h2><a href="index.html#">It is a long established <em>will be distracted</em> </a></h2>
-                        </div>
-                        <div class="post-meta-elements">
-                            <div class="meta-post-author">
-                                <i class="fa fa-user"></i><a href="index.html#">Admin</a>
-                            </div>
-                            <div class="meta-post-cat">
-                                <i class="fa fa-tags"></i><a href="index.html#">Standard</a>
-                            </div>
-                            <div class="meta-post-date">
-                                <i class="fa fa-clock-o"></i>Jan 25, 2016
-                            </div>
-                            <div class="meta-post-commetns">
-                                <i class="fa fa-comment-o"></i><a href="index.html#">Comments</a>
-                            </div>
-                        </div>
-                        <div class="post_content">
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley. Dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text..</p>
-                            <div class="readmore">
-                                <a href="index.html#" class="btn">Continue Reading..</a>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="standard-post-format grid-box">
-                    <div class="quote-post-entry">
-                        <div class="entry-overlay">
-                            <div style="background-image:url(images/slider-img-1.jpg);background-repeat:no-repeat;background-size: cover;width:100%;height:100%;"></div>
-                        </div>
-                        <div class="quote-link">
-                            <p><i class="fa fa-quote-left"></i> Pork loin leberkas ribeye capicola. Ribeye meatloaf sirloin shank, turkey pork loin salami. Flank strip steak shankle drumstick kevin  rump tail chickeRibeye meatloaf sirloin shank.   <i class="fa fa-quote-right"></i></p>
-                            <span> - leberkas </span>
-                        </div>
-                    </div>
-
-                    <div class="the-post">
-                        <div class="post-title">
-                            <h2><a href="index.html#">Quote post format <em>packages and web page</em></a></h2>
-                        </div>
-                        <div class="post-meta-elements">
-                            <div class="meta-post-author">
-                                <i class="fa fa-user"></i><a href="index.html#">Admin</a>
-                            </div>
-                            <div class="meta-post-cat">
-                                <i class="fa fa-tags"></i><a href="index.html#">Lifestyle</a>, <a href="index.html#">Standard</a>
-                            </div>
-                            <div class="meta-post-date">
-                                <i class="fa fa-clock-o"></i>Jan 25, 2016
-                            </div>
-                            <div class="meta-post-commetns">
-                                <i class="fa fa-comment-o"></i><a href="index.html#">Comments</a>
-                            </div>
-                        </div>
-                        <div class="post_content">
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley. Dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text..</p>
-                            <div class="readmore">
-                                <a href="index.html#" class="btn">Continue Reading..</a>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-
-                <div class="pagination">
-                    <ul>
-                        <li><span class="nav-prev">Prev.</span></li>
-                        <li><span class="current">1</span></li>
-                        <li><a href="index.html#">2</a></li>
-                        <li><a href="index.html#">3</a></li>
-                        <li><a href="index.html#">4</a></li>
-                        <li><a href="index.html#" class="nav-prev">Next</a></li>
-                    </ul>
-                </div>
-
+                {/foreach}
+                {$app->module->blog->pagination()}
             </div>
 
             <!-----sidebar----->
-
             <aside class="col-md-4">
                 <div class="sidebar">
                     <div class="sidebar_widget grid-box widgetbox">
                         <div class="about_me">
                             <h6 class="sidebar-title"><span>About <em>Me</em></span></h6>
-                            <div class="about_img"> <img src="{$theme_url}assets/images/morena-girl.jpg" alt="image"> </div>
-                            <div class="about_text">
-                                <h5>Shane <em>Doe</em></h5>
-                                <div class="subtitle">Fashionista &amp; Photographer</div>
-                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text.</p>
-                                <a href="http://engine.log/demo/newsroom/demo1/about-me.html" class="btn">Read More.</a>
-                            </div>
+                            <div class="about_img"><img src="{$app->page->features->getImageValue(2, 'about_img')}" alt="image"> </div>
+                            <div class="about_text">{$app->page->features->getValue(2, 'about_text')}</div>
                         </div>
                     </div>
 
-                    <div class="sidebar_widget grid-box widgetbox">
-                        <h6 class="sidebar-title"><span>Recent <em>Posts</em></span></h6>
-                        <!---latest-post-1--->
-                        <div class="latest-post">
-                            <div class="latest-post-img">
-                                <a href="index.html#"><img alt="image" src="{$theme_url}assets/images/latest-post-img-1.jpg"> </a>
-                            </div>
-                            <div class="latest-post-content">
-                                <div class="latest-post-title">
-                                    <h6><a href="index.html#">Lorem Ipsum has <em>industry's dummy</em></a></h6>
-                                </div>
-                                <div class="post-meta-elements">
-                                    <div class="meta-post-cat">
-                                        <i class="fa fa-tags"></i><a href="index.html#">Travel</a>
-                                    </div>
-                                    <div class="meta-post-date">
-                                        <i class="fa fa-clock-o"></i> Jan 25, 2016
-                                    </div>
-                                </div>
-                            </div>
+                    {*<div class="sidebar_widget grid-box widgetbox">*}
+                        {*<h6 class="sidebar-title"><span>Recent <em>Posts</em></span></h6>*}
+                        {*<!---latest-post-1--->*}
+                        {*<div class="latest-post">*}
+                            {*<div class="latest-post-img">*}
+                                {*<a href="index.html#"><img alt="image" src="{$theme_url}assets/images/latest-post-img-1.jpg"> </a>*}
+                            {*</div>*}
+                            {*<div class="latest-post-content">*}
+                                {*<div class="latest-post-title">*}
+                                    {*<h6><a href="index.html#">Lorem Ipsum has <em>industry's dummy</em></a></h6>*}
+                                {*</div>*}
+                                {*<div class="post-meta-elements">*}
+                                    {*<div class="meta-post-cat">*}
+                                        {*<i class="fa fa-tags"></i><a href="index.html#">Travel</a>*}
+                                    {*</div>*}
+                                    {*<div class="meta-post-date">*}
+                                        {*<i class="fa fa-clock-o"></i> Jan 25, 2016*}
+                                    {*</div>*}
+                                {*</div>*}
+                            {*</div>*}
+                        {*</div>*}
+                        {*<!---/latest-post-1--->*}
+                        {*<!---latest-post-2--->*}
+                        {*<div class="latest-post">*}
+                            {*<div class="latest-post-img">*}
+                                {*<a href="index.html#"><img alt="image" src="{$theme_url}assets/images/latest-post-img-2.jpg"> </a>*}
+                            {*</div>*}
+                            {*<div class="latest-post-content">*}
+                                {*<div class="latest-post-title">*}
+                                    {*<h6><a href="index.html#">There are many <em>variations passages</em></a></h6>*}
+                                {*</div>*}
+                                {*<div class="post-meta-elements">*}
+                                    {*<div class="meta-post-cat">*}
+                                        {*<i class="fa fa-tags"></i><a href="index.html#">Lifestyle</a>*}
+                                    {*</div>*}
+                                    {*<div class="meta-post-date">*}
+                                        {*<i class="fa fa-clock-o"></i> Jan 25, 2016*}
+                                    {*</div>*}
+                                {*</div>*}
+                            {*</div>*}
 
 
 
-                        </div>
-                        <!---/latest-post-1--->
-                        <!---latest-post-2--->
-                        <div class="latest-post">
-                            <div class="latest-post-img">
-                                <a href="index.html#"><img alt="image" src="{$theme_url}assets/images/latest-post-img-2.jpg"> </a>
-                            </div>
-                            <div class="latest-post-content">
-                                <div class="latest-post-title">
-                                    <h6><a href="index.html#">There are many <em>variations passages</em></a></h6>
-                                </div>
-                                <div class="post-meta-elements">
-                                    <div class="meta-post-cat">
-                                        <i class="fa fa-tags"></i><a href="index.html#">Lifestyle</a>
-                                    </div>
-                                    <div class="meta-post-date">
-                                        <i class="fa fa-clock-o"></i> Jan 25, 2016
-                                    </div>
-                                </div>
-                            </div>
+                        {*</div>*}
+                        {*<!---/latest-post-2--->*}
+                    {*</div>*}
 
-
-
-                        </div>
-                        <!---/latest-post-2--->
-                        <!---latest-post-3--->
-                        <div class="latest-post">
-                            <div class="latest-post-img">
-                                <a href="index.html#"><img alt="image" src="{$theme_url}assets/images/latest-post-img-3.jpg"> </a>
-                            </div>
-                            <div class="latest-post-content">
-                                <div class="latest-post-title">
-                                    <h6><a href="index.html#">Lorem Ipsum has <em>industry's dummy</em></a></h6>
-                                </div>
-                                <div class="post-meta-elements">
-                                    <div class="meta-post-cat">
-                                        <i class="fa fa-tags"></i><a href="index.html#">Fashion</a>
-                                    </div>
-                                    <div class="meta-post-date">
-                                        <i class="fa fa-clock-o"></i> Jan 25, 2016
-                                    </div>
-                                </div>
-                            </div>
-
-
-
-                        </div>
-                        <!---/latest-post-3--->
-                    </div>
-
-                    <div class="sidebar_widget grid-box widgetbox">
-                        <h6 class="sidebar-title"><span>Categories</span></h6>
-                        <div class="psot_categories">
-                            <ul>
-                                <li><a href="index.html#">Collection</a></li>
-                                <li><a href="index.html#">Fashion</a></li>
-                                <li><a href="index.html#">Lifestyle</a></li>
-                                <li><a href="index.html#">Motivation</a></li>
-                                <li><a href="index.html#">Photography</a></li>
-                                <li><a href="index.html#">Travel</a></li>
-                            </ul>
-                        </div>
-                    </div>
+                    {include file="modules/blog/categories.tpl"}
 
                     <div class="sidebar_widget grid-box widgetbox">
                         <h6 class="sidebar-title"><span>Tags</span></h6>
                         <div class="post_tags">
-                            <a href="index.html#">Collection</a>
-                            <a href="index.html#">Fashion</a>
-                            <a href="index.html#">Lifestyle</a>
-                            <a href="index.html#">Motivation</a>
-                            <a href="index.html#">Photography</a>
-                            <a href="index.html#">Spring</a>
-                            <a href="index.html#">Photography</a>
-                            <a href="index.html#">You</a>
-                            <a href="index.html#">Link</a>
-                            <a href="index.html#">Flatness</a>
-                            <a href="index.html#">Walk</a>
-                            <a href="index.html#">News</a>
-                            <a href="index.html#">Lifestyle</a>
-                            <a href="index.html#">Video</a>
-                            <a href="index.html#">Audio</a>
+                            {foreach $app->module->blog->tags() as $tag}
+                                <a href="{$app->page->url(11)}/tag/{$tag.tag}">{$tag.tag}</a>
+                            {/foreach}
                         </div>
                     </div>
 
@@ -344,143 +212,6 @@
     </div>
 </section>
 <!--/blog-posts-->
-
-
-
-<!--popular-psots-->
-<section id="popular-posts" class="padding_none">
-    <div class="text-center">
-        <div class="sect-heading"><p><i class="fa fa-rocket"></i>Popular Posts</p></div>
-    </div>
-
-    <div class="col-sm-4 col-md-2">
-        <div class="popular_posts">
-            <div class="populat_post_image">
-                <a href="index.html#"> <img src="{$theme_url}assets/images/populat-post-img-1.jpg" alt="image"> </a>
-            </div>
-            <div class="popular_posts_text">
-                <div class="populat_post_title">
-                    <h5><a href="index.html#">Industry's <em>standard dummy text</em></a></h5>
-                </div>
-                <div class="post-meta-elements">
-                    <div class="meta-post-author">
-                        <i class="fa fa-user"></i><a href="index.html#">Admin</a>
-                    </div>
-                    <div class="meta-post-cat">
-                        <i class="fa fa-tags"></i><a href="index.html#">Motivation</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-sm-4 col-md-2">
-        <div class="popular_posts">
-            <div class="populat_post_image">
-                <a href="index.html#"> <img src="{$theme_url}assets/images/populat-post-img-2.jpg" alt="image"> </a>
-            </div>
-            <div class="popular_posts_text">
-                <div class="populat_post_title">
-                    <h5><a href="index.html#">Industry's <em>standard dummy text</em></a></h5>
-                </div>
-                <div class="post-meta-elements">
-                    <div class="meta-post-author">
-                        <i class="fa fa-user"></i><a href="index.html#">Admin</a>
-                    </div>
-                    <div class="meta-post-cat">
-                        <i class="fa fa-tags"></i><a href="index.html#">Lifestyle</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-sm-4 col-md-2">
-        <div class="popular_posts">
-            <div class="populat_post_image">
-                <a href="index.html#"> <img src="{$theme_url}assets/images/populat-post-img-3.jpg" alt="image"> </a>
-            </div>
-            <div class="popular_posts_text">
-                <div class="populat_post_title">
-                    <h5><a href="index.html#">This is the <em>exact time you left</em></a></h5>
-                </div>
-                <div class="post-meta-elements">
-                    <div class="meta-post-author">
-                        <i class="fa fa-user"></i><a href="index.html#">Admin</a>
-                    </div>
-                    <div class="meta-post-cat">
-                        <i class="fa fa-tags"></i><a href="index.html#">Photography</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-sm-4 col-md-2">
-        <div class="popular_posts">
-            <div class="populat_post_image">
-                <a href="index.html#"> <img src="{$theme_url}assets/images/populat-post-img-4.jpg" alt="image"> </a>
-            </div>
-            <div class="popular_posts_text">
-                <div class="populat_post_title">
-                    <h5><a href="index.html#">This is the <em>exact time you left</em></a></h5>
-                </div>
-                <div class="post-meta-elements">
-                    <div class="meta-post-author">
-                        <i class="fa fa-user"></i>B<a href="index.html#">Admin</a>
-                    </div>
-                    <div class="meta-post-cat">
-                        <i class="fa fa-tags"></i><a href="index.html#">Fashion</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-sm-4 col-md-2">
-        <div class="popular_posts">
-            <div class="populat_post_image">
-                <a href="index.html#"> <img src="{$theme_url}assets/images/populat-post-img-5.jpg" alt="image"> </a>
-            </div>
-            <div class="popular_posts_text">
-                <div class="populat_post_title">
-                    <h5><a href="index.html#">Maiores explicabo <em>beatae omnis</em> </a></h5>
-                </div>
-                <div class="post-meta-elements">
-                    <div class="meta-post-author">
-                        <i class="fa fa-user"></i><a href="index.html#">Admin</a>
-                    </div>
-                    <div class="meta-post-cat">
-                        <i class="fa fa-tags"></i><a href="index.html#">Collection</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-sm-4 col-md-2">
-        <div class="popular_posts">
-            <div class="populat_post_image">
-                <a href="index.html#"> <img src="{$theme_url}assets/images/populat-post-img-6.jpg" alt="image"> </a>
-            </div>
-            <div class="popular_posts_text">
-                <div class="populat_post_title">
-                    <h5><a href="index.html#">Beatae omnis <em>modi laboriosam</em></a></h5>
-                </div>
-                <div class="post-meta-elements">
-                    <div class="meta-post-author">
-                        <i class="fa fa-user"></i><a href="index.html#">Admin</a>
-                    </div>
-                    <div class="meta-post-cat">
-                        <i class="fa fa-tags"></i><a href="index.html#">Lifestyle</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</section>
-<!--/popular-psots-->
 
 {include file="chunks/footer.tpl"}
 {include file="chunks/scripts.tpl"}

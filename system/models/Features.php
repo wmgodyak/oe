@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: wg
- * Date: 29.06.16
- * Time: 23:35
- */
-
 namespace system\models;
 /**
  * Class Features

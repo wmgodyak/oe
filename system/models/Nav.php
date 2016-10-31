@@ -9,7 +9,7 @@ class Nav extends Model
 {
     /**
      * @param $code
-     * @param int $level
+     * @param int $parent_id
      * @return mixed
      */
     public function get($code, $parent_id = 0)
@@ -23,11 +23,12 @@ class Nav extends Model
               ni.isfolder,
               ni.css_class,
               ni.target,
-              ni.display_children
+              ni.display_children,
+              c.isfolder as c_isfolder
               from __nav n
               join __nav_items ni on ni.nav_id = n.id
               left join __nav_items_info nii on nii.nav_items_id = ni.id and nii.languages_id='{$this->languages_id}'
-              -- left join __content c on c.id=ni.content_id and c.status='published'
+              left join __content c on c.id=ni.content_id and c.status='published'
               left join __content_info ci on ci.content_id=ni.content_id and ci.languages_id='{$this->languages_id}'
               where n.code = '{$code}' and ni.parent_id = {$parent_id}
               order by abs(ni.position) asc
@@ -36,15 +37,14 @@ class Nav extends Model
 
         foreach ($items as $k=>$item) {
 
-            if($item['isfolder'] && $item['display_children'] == 1){
-                $a = $this->items($item['nav_item_id']);
+            if($item['c_isfolder'] && $item['display_children'] == 1){
+                $items[$k]['items'] = $this->items($item['content_id']);
+                $items[$k]['isfolder'] = count($items[$k]['items']) > 0 ? 1 : 0;
             } elseif($item['isfolder'] && $item['display_children'] == 0){
-                $a = $this->get($code, $item['nav_item_id']);
+                $items[$k]['items'] = $this->get($code, $item['nav_item_id']);
             }
 
-            if(!empty($a)){
-                $items[$k]['items'] = $a;
-            }
+            unset($items[$k]['c_isfolder'], $items[$k]['display_children']);
         }
 
         return $items;

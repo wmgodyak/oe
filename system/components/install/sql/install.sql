@@ -346,7 +346,7 @@ CREATE TABLE IF NOT EXISTS `__features` (
   `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `parent_id` INT(10) UNSIGNED NULL DEFAULT NULL,
   `owner_id` INT(11) UNSIGNED NOT NULL,
-  `type` ENUM('text','textarea','select','file','folder','value','checkbox','number') NULL DEFAULT NULL,
+  `type` ENUM('text','textarea','select','file','folder','value','checkbox','number', 'image') NULL DEFAULT NULL,
   `code` VARCHAR(45) NOT NULL,
   `multiple` TINYINT(1) NULL DEFAULT NULL,
   `on_filter` TINYINT(1) NULL DEFAULT NULL,

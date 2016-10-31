@@ -193,19 +193,34 @@ class Nav extends Backend
         $this->response->body(['items' => $this->nav->getSelectedItems($nav_id)])->asJSON();
     }
 
+    public function createItem($parent_id)
+    {
+        $this->template->assign('id', $parent_id);
+        $this->template->assign('languages', $this->languages->get());
+        $this->template->assign('action', 'create');
+        echo $this->template->fetch('system/nav/itemForm');
+    }
+
     public function editItem($id)
     {
         $this->template->assign('id', $id);
         $this->template->assign('data', $this->nav->items->getData($id));
         $this->template->assign('info', $this->nav->items_info->getData($id));
         $this->template->assign('languages', $this->languages->get());
+        $this->template->assign('action', 'edit');
         echo $this->template->fetch('system/nav/itemForm');
     }
 
-    public function updateItem($item_id)
+    public function updateItem($id)
     {
        $m = $this->t('common.save_success');
-       $s = $this->nav->updateItem($item_id);
+
+        if($this->request->post('action') == 'create'){
+            $s = $this->nav->createItem($id);
+        } else {
+            $s = $this->nav->updateItem($id);
+        }
+
        if(! $s) $m = $this->nav->getErrorMessage();
 
        $this->response->body(['s'=>$s, 'm' => $m])->asJSON();

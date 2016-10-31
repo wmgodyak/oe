@@ -14,7 +14,9 @@ $routes = array();
 $routes[]  = array('/route/([a-zA-Z0-9-_]+)/([a-zA-Z0-9-_]+)/?(.*)', 'modules\:controller:action');
 $routes[]  = array('/system/cron/run/?(.*)', 'system\Cron', 'action');
 
-//http://engine.loc/uk/oplata-ta-dostavka/filter/vendor=acer,lenovo;display=14,15-16;ram=ddr3
+// blog
+$routes[]  = array('/([a-z0-9-_/]+)/tag/(.*)', 'system\Frontend', 'url/tag/tag');
+
 $routes[]  = array('/([a-z]{2})/?', 'system\Frontend', 'lang');
 $routes[]  = array('/([a-z0-9-_/]+)/filter/(.*)', 'system\Frontend', 'url/filter/filter');
 

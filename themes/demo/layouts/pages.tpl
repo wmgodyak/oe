@@ -6,36 +6,7 @@
  * @name default
  *}
 {include file="chunks/head.tpl"}
-
-<!--navigation-->
-<header class="navbar navbar-inverse">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-2">
-                <div class="logo">
-                    <a href="1" title="{$app->page->title(1)}"><img src="{$theme_url}assets/images/logo.png" alt="logo-image"></a>
-                </div>
-            </div>
-
-            <div class="col-md-7">
-                {include file="chunks/nav.tpl"}
-            </div>
-
-            <div class="col-md-3">
-                <div class="search">
-                    <div class="search_button"><i class="fa fa-search"></i> <i class="fa fa-close"></i></div>
-                    <form role="form" id="search_form">
-                        <div class="form-group has-feedback">
-                            <input type="text" placeholder="Search.." class="form-control input-sm">
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--/.nav-collapse -->
-</header>
-<!--navigation end-->
+{include file="chunks/header.tpl"}
 
 <section class="page_heading">
     <div class="container">

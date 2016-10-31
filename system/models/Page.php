@@ -1,12 +1,23 @@
 <?php
 
 namespace system\models;
+use system\models\page\Features;
+
 /**
  * Class Page
  * @package system\models
  */
 class Page extends Model
 {
+    public $features;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->features = new Features();
+    }
+
     /**
      * get children list
      * @param $parent_id

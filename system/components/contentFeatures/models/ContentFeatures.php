@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: wg
- * Date: 18.06.16
- * Time: 1:16
- */
 
 namespace system\components\contentFeatures\models;
 
@@ -79,9 +73,9 @@ class ContentFeatures extends Backend
         $res = self::$db
             ->select
             ("
-                select f.id, f.type, f.required, f.multiple, fi.name
+                select f.id, f.type, f.required, f.multiple, fi.name, f.code
                 from __features_content fc
-                join __features f on f.id=fc.features_id and f.status='published'
+                join __features f on f.id=fc.features_id and f.status='published' and f.parent_id=0
                 join __features_info fi on fi.features_id=f.id and fi.languages_id={$languages_id}
                 where
                   fc.content_types_id={$page['types_id']} and
@@ -346,6 +340,7 @@ class ContentFeatures extends Backend
                     break;
 
                 case 'file':
+                case 'image':
                     $aid = self::$db
                         ->select("select id from __content_features where content_id={$content_id} and features_id={$features_id} and languages_id = 0 limit 1")
                         ->row('id');

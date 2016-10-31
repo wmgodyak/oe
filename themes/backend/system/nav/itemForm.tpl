@@ -32,6 +32,16 @@
             </div>
         </div>
     </div>
+    <div class="form-group">
+        <div class="col-md-9 col-md-offset-3">
+            <div class="checkbox">
+                <label>
+                    <input type="hidden" name="data[isfolder]" value="0">
+                    <input {if $data.isfolder == 1}checked{/if} type="checkbox" name="data[isfolder]" id="data_isfolder" value="1"> Is folder
+                </label>
+            </div>
+        </div>
+    </div>
     {foreach $languages as $lang}
         <div class="form-group">
             <label for="info_name" class="col-md-3 control-label required">Name ({$lang.code})</label>
@@ -47,4 +57,5 @@
         </div>
     {/foreach}
     <input type="hidden" name="token" value="{$token}">
+    <input type="hidden" name="action" value="{$action}">
 </form>
