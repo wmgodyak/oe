@@ -120,26 +120,10 @@ class Front extends Model
             $page['type'] =$type;
         }
 
-        // cover image
-        $page['image'] = $this->images->cover($page['id']);
-
-        if(!empty($page['image'])){
-            $page['images'] = $this->images->get($page['id']);
-        }
-
         // author
         $page['author'] = self::$db
-            ->select("select id, name, surname, email, phone, avatar from __users where id='{$page['owner_id']}'")
+            ->select("select id, name, surname, email, phone, avatar from __users where id ='{$page['owner_id']}'")
             ->row();
-
-        // modules
-        if(!empty($page['settings'])){
-            $page['settings'] = unserialize($page['settings']);
-        }
-
-        if(!isset($page['settings']['modules'])){
-            $page['settings']['modules'] = [];
-        }
 
         // reformat meta
         $page = $this->makeMeta($page);

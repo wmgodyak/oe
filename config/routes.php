@@ -15,8 +15,10 @@ $routes[]  = array('/route/([a-zA-Z0-9-_]+)/([a-zA-Z0-9-_]+)/?(.*)', 'modules\:c
 $routes[]  = array('/system/cron/run/?(.*)', 'system\Cron', 'action');
 
 // blog
+$routes[]  = array('/([a-z0-9-_/]+)/author/(.*)', 'system\Frontend', 'url/author/author');
 $routes[]  = array('/([a-z0-9-_/]+)/tag/(.*)', 'system\Frontend', 'url/tag/tag');
 
+// default
 $routes[]  = array('/([a-z]{2})/?', 'system\Frontend', 'lang');
 $routes[]  = array('/([a-z0-9-_/]+)/filter/(.*)', 'system\Frontend', 'url/filter/filter');
 
