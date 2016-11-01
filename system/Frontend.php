@@ -7,6 +7,7 @@
  */
 namespace system;
 
+use system\core\DataFilter;
 use system\core\EventsHandler;
 use system\core\exceptions\Exception;
 use system\core\Lang;
@@ -89,8 +90,8 @@ class Frontend extends core\Controller
 
         $this->app = new App();
 
-        if($this->request->param('controller') != '' &&  ! $this->request->param('doInit')){
-            $this->doInit();
+        if($this->request->param('controller') != '' &&  ! $this->request->param('assignVarsAndModules')){
+            $this->assignVarsAndModules();
         }
     }
 
@@ -160,8 +161,8 @@ class Frontend extends core\Controller
             $this->template->assign('page', $page);
             $this->page = $page;
 
-            if(! $this->request->param('doInit')){
-                $this->doInit();
+            if(! $this->request->param('assignVarsAndModules')){
+                $this->assignVarsAndModules();
             }
 
             $template_path = $this->settings['themes_path']
@@ -169,6 +170,8 @@ class Frontend extends core\Controller
                 . 'layouts/';
 
             $ds = $this->template->fetch($template_path . $page['template']);
+
+            $ds = DataFilter::apply('documentSource', $ds);
 
             $this->response->body($ds);
 
@@ -178,9 +181,9 @@ class Frontend extends core\Controller
         }
     }
 
-    private function doInit()
+    private function assignVarsAndModules()
     {
-        $this->request->param('doInit', 1);
+        $this->request->param('assignVarsAndModules', 1);
         // assign translations to template
 
         // init modules
