@@ -100,6 +100,23 @@ class Frontend extends core\Controller
 
         if(! $this->request->isXhr()){
 
+            if ( preg_match('!/{2,}!', $_SERVER['REQUEST_URI']) ){
+                $url = preg_replace('!/{2,}!', '/', $_SERVER['REQUEST_URI']);
+                header('Location: ' . $url , false, 301);
+                exit;
+            }
+
+            $lowerURI = strtolower($_SERVER['REQUEST_URI']);
+            if($_SERVER['REQUEST_URI'] != $lowerURI){
+                if(mb_substr($lowerURI, 0, 1) == '/') {
+                    $lowerURI = mb_substr($lowerURI, 1);
+                }
+                $uri = APPURL . $lowerURI;
+                header("HTTP/1.1 301 Moved Permanently");
+                header("Location: $uri");
+                exit();
+            }
+
             if($this->settings['active'] == 0){
                 $a = Session::get('backend.admin');
                 if( ! $a) {
@@ -113,7 +130,7 @@ class Frontend extends core\Controller
             $page = $front->getPage();
 
             if (!$page) {
-                $this->e404();
+                $page = $this->e404();
             }
 
             $page['content'] = $this->template->fetchString($page['content']);
@@ -121,9 +138,9 @@ class Frontend extends core\Controller
             Request::getInstance()->param('page', $page);
 
             if ($page['status'] != 'published') {
-                $a = Session::get('backend.admin');
+                $a = Session::get('engine.admin');
                 if (!$a) {
-                    $this->e404();
+                    $page = $this->e404();
                 }
             }
 
@@ -212,9 +229,10 @@ class Frontend extends core\Controller
             throw new Exception("Неможливо здійснити перенаправлення на 404 сторінку. Введіть ід сторінки в налаштуваннях");
         }
 
-        $url= $this->app->page->url($id);
+        $f = new \system\models\Front();
 
-        $this->redirect( $url, 404);
+        header("HTTP/1.0 404 Not Found");
+        return $f->getPageById($id);
     }
 
     private function technicalWorks()

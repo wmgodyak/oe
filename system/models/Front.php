@@ -27,6 +27,8 @@ class Front extends Model
      */
     protected $images;
 
+    private $app;
+
     public function __construct($init = false)
     {
         parent::__construct();
@@ -34,11 +36,12 @@ class Front extends Model
         $this->languages = new Languages();
         $this->images    = new Images();
 
+        $this->app = new App();
+
         if($init){
             $this->init();
         }
     }
-
 
     private function init()
     {
@@ -52,6 +55,7 @@ class Front extends Model
             $this->languages_id = $this->languages->getDataByCode($args['lang'], 'id');
         }
 
+
         if(empty($this->languages_id) && !isset($args['url']) && isset($args['lang'])){
             // короткий url
             $args['url'] = $args['lang'];
@@ -60,19 +64,43 @@ class Front extends Model
             $this->languages_id = $this->languages->getDefault('id');
         }
 
-        $url = isset($args['url']) ? $args['url'] : '';
-
-        // обріжу останній слеш, якщо є
-        if(isset($url) && substr($url,-1,1) == '/') {
-            $url = substr($url, 0,-1);
+        if(empty($args['url']) && !empty($args['lang'])){
+            $def_lang_id = $this->languages->getDefault('id');
+            $lang_id = $this->languages->getDataByCode($args['lang'], 'id');
+            if($def_lang_id == $lang_id){
+                $uri = APPURL;
+                header("HTTP/1.1 301 Moved Permanently");
+                header("Location: $uri");
+                die;
+            }
         }
+
+        $url = isset($args['url']) ? $args['url'] : '';
 
         if(empty($url)){
             $id = Settings::getInstance()->get('home_id');
-            $page = self::$db
-                ->select("
+        } else {
+            // інформація про сторінку
+            $id = self::$db
+                ->select("select i.content_id
+                from __content_info i
+                where i.url = '{$url}' and i.languages_id='{$this->languages_id}'
+                limit 1
+                ")
+                ->row('content_id');
+        }
+
+        if(empty($id)) return null;
+
+        return $this->getPageById($id);
+    }
+
+    public function getPageById($id)
+    {
+        $page = self::$db
+            ->select("
                 select c.*,
-                i.languages_id, i.name,i.title,i.h1,i.url,i.keywords, i.description,i.content, i.intro,
+                i.languages_id, i.name,i.title,i.h1,i.keywords, i.description,i.content, i.intro,
                  l.code as languages_code,
                  UNIX_TIMESTAMP(c.created) as created
                 from __content_info i
@@ -81,24 +109,7 @@ class Front extends Model
                 where c.id={$id} and i.languages_id='{$this->languages_id}'
                 limit 1
                 ")
-                ->row();
-        } else {
-
-            // інформація про сторінку
-            $page = self::$db
-                ->select("
-                select c.*,i.languages_id, i.name,i.h1,i.title,i.url,i.keywords, i.description,i.content, i.intro,
-                 l.code as languages_code,
-                 UNIX_TIMESTAMP(c.created) as created
-                from __content_info i
-                join __content c on c.id=i.content_id
-                join __languages l on l.id=i.languages_id
-                where i.url = '{$url}' and i.languages_id='{$this->languages_id}'
-                limit 1
-                ")
-                ->row();
-
-        }
+            ->row();
 
         if(empty($page)) return null;
 
@@ -120,16 +131,29 @@ class Front extends Model
             $page['type'] =$type;
         }
 
+        $page['url'] = $this->app->page->url($page['id']);
+
+        // cover image
+        $page['image'] = $this->images->cover($page['id']);
+
+        if(!empty($page['image'])){
+            $page['images'] = $this->images->get($page['id']);
+        }
+
         // author
         $page['author'] = self::$db
-            ->select("select id, name, surname, email, phone, avatar from __users where id ='{$page['owner_id']}'")
+            ->select("select id, name, surname, email, phone, avatar from __users where id='{$page['owner_id']}'")
             ->row();
+
 
         // reformat meta
         $page = $this->makeMeta($page);
 
         $this->page = $page;
+
+        return $page;
     }
+
     /**
      *
     {title} - заголовок сторінки,
