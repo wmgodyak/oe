@@ -50,6 +50,7 @@ class Response
      */
     public function render()
     {
+        $debug = Config::getInstance()->get('core.debug');
         header('Content-Type: ' . $this->ct);
 
         if($this->ct == 'application/json'){
@@ -76,6 +77,9 @@ class Response
             case 'frontend':
                 $parser = new Parser($this->body);
                 $body = $parser->getDocumentSource();
+                if(! $debug){
+                    $body = $this->compress($body);
+                }
                 break;
             default:
                 throw new Exception("Wrong request mode");
@@ -215,4 +219,20 @@ class Response
 
         header($protocol . ' ' . $code . ' ' . $text);
     }
+
+
+    private function compress($buffer) {
+        $search = array(
+            '/\>[^\S ]+/s',  // strip whitespaces after tags, except space
+            '/[^\S ]+\</s',  // strip whitespaces before tags, except space
+            '/(\s)+/s'       // shorten multiple whitespace sequences
+        );
+        $replace = array(
+            '>',
+            '<',
+            '\\1'
+        );
+        return preg_replace($search, $replace, $buffer);
+    }
+
 } 
