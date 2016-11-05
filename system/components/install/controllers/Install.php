@@ -84,7 +84,7 @@ class Install extends Controller
             // create admin
             if(empty($this->error)){
                 try {
-                    $pass = crypt($data['pass']);
+                    $pass = crypt($data['pass'], md5(time()));
                     $db->exec("
                     insert into {$prefix}users (group_id, languages_id,name,email,password)
                     values (1, 1, '{$data['user']}','{$data['email']}', '{$pass}') ");
