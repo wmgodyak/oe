@@ -185,6 +185,7 @@ CREATE TABLE IF NOT EXISTS `__content` (
   `published` DATE NULL DEFAULT NULL,
   `settings` TEXT NULL DEFAULT NULL,
   `status` ENUM('blank','hidden','published','deleted') NULL DEFAULT 'blank',
+  `external_id` VARCHAR(60) NOT NULL,
   PRIMARY KEY (`id`, `types_id`, `subtypes_id`, `owner_id`),
   INDEX `fk_content_owner_idx` (`owner_id` ASC),
   INDEX `status` (`status` ASC),
