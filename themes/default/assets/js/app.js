@@ -1,6 +1,3 @@
-if(typeof ajaxForm == 'undefined'){
-    console.info('Plugins file was not included');
-}
 var App = {
 
     /**
@@ -130,10 +127,10 @@ var App = {
     },
     dialog: function(args)
     {
-        if(typeof dialog == 'undefined'){
-            alert('Include jQueryUI dialog');
-            return;
-        }
+        //if(typeof $.dialog == 'undefined'){
+        //    alert('Include jQueryUI dialog');
+        //    return;
+        //}
         if(typeof args.close == 'undefined'){
             args.close = function( event, ui ) { $(this).dialog('destroy').remove(); };
         }
