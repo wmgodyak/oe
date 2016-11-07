@@ -127,11 +127,6 @@ CREATE TABLE IF NOT EXISTS `__users` (
   INDEX `skey` (`skey` ASC),
   INDEX `fk_users_languages1_idx` (`languages_id` ASC),
   INDEX `fk_users_users_group1_idx` (`group_id` ASC),
-  CONSTRAINT `fk_users_languages1`
-    FOREIGN KEY (`languages_id`)
-    REFERENCES `__languages` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE,
   CONSTRAINT `fk_users_users_group1`
     FOREIGN KEY (`group_id`)
     REFERENCES `__users_group` (`id`)

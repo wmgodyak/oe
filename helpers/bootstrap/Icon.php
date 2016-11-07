@@ -17,7 +17,6 @@ defined("CPATH") or die();
  */
 abstract class IconBuilder
 {
-
     const TYPE_INSTALL      = 'fa-toggle-on';
     const TYPE_UNINSTALL    = 'fa-toggle-off';
     const TYPE_PUBLISHED    = 'fa-eye';
@@ -31,6 +30,7 @@ abstract class IconBuilder
     const TYPE_REPLY        = 'fa-reply';
     const TYPE_RESTORE      = 'fa-repeat';
     const TYPE_SETTINGS     = 'fa-cog';
+    const TYPE_INFO         = 'fa-info';
 
     protected $type;
     protected $white;
