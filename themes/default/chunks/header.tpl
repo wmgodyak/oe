@@ -11,21 +11,17 @@
     <!-- (c) Developed by Otakoyi.com | http://www.otakoyi.com/ -->
     <!-- (c) Powered by OYi.Engine | http://www.engine.otakoyi.com/ -->
 
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <base href="{$base_url}">
+
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>{$page.title}</title>
     <meta name="description" content="{$page.description|escape}"/>
     <meta name="keywords" content="{{$page.keywords|escape}}" />
-    <meta name="generator" content="OYi.Engine7">
+    <meta name="generator" content="OYi.Engine 7">
 
-    <link href="{$theme_url}assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href={$theme_url}assets/favicon.ico" />
     <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -33,4 +29,14 @@
     <script>
         var TOKEN = '{$token}', LANG_ID={$page.languages_id * 1}, CONTENT_ID = {$page.id};
     </script>
+    <!-- Bootstrap -->
+    <link href="{$theme_url}assets/css/bootstrap.min.css" rel="stylesheet">
+    <!-- custome-css -->
+    <link href="{$theme_url}assets/css/style.css" rel="stylesheet" type="text/css" media="screen">
+    <!-- font awesome for icons -->
+    <link href="{$theme_url}assets/css/font-awesome.min.css" rel="stylesheet">
+    <!-- google font -->
+    <link href='https://fonts.googleapis.com/css?family=Merriweather:300,400,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css'>
 </head>
+<body>

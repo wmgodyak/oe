@@ -6,15 +6,24 @@
  * @name home
  *}
 {include file="chunks/header.tpl"}
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="content">
-                <h1>{$page.h1}</h1>
-            </div>
+
+<section class="page_heading">
+    <div class="container">
+        <div class="text-center">
+            <h1>{$page.h1}</h1>
+            {$page.intro}
         </div>
     </div>
-</div>
+</section>
+
+<!--about-me-->
+<section id="about_me" class="padding_none">
+    <div class="container">
+        {$page.content}
+        <div class="space-60"></div>
+    </div>
+</section>
+
 {include file="chunks/footer.tpl"}
 {include file="chunks/scripts.tpl"}
 </body>

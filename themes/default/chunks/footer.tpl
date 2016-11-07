@@ -5,7 +5,10 @@
  * Date: 2016-03-21T14:13:55+02:00
  * @name footer
  *}
-
-<footer class="footer">
-    <p>&copy; 2016 Company, Inc.</p>
+<footer>
+    <div class="container">
+         <div class="footer-1-copyright text-center">
+            <p>Copyright &copy; 2014-{date('Y')} OYi.Engine All Rights Reserved. </p>
+        </div>
+    </div>
 </footer>
