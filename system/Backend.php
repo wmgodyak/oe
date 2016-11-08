@@ -60,6 +60,7 @@ abstract class Backend extends Controller
     protected $admin = [];
 
     private $theme = null;
+    private $lang = null;
 
     protected $modules = [];
 
@@ -75,7 +76,7 @@ abstract class Backend extends Controller
 
         $this->images = new Images();
 
-        $namespace   = $this->request->param('namespace');
+//        $namespace   = $this->request->param('namespace');
         $controller  = $this->request->param('controller');
         $action      = $this->request->param('action');
 
@@ -88,6 +89,7 @@ abstract class Backend extends Controller
         // template settings
         $theme = $this->settings['backend_theme'];
         $this->theme = $theme;
+        $this->lang = Session::get('backend_lang');
 
         $this->template = Template::getInstance($theme);
 
@@ -116,7 +118,6 @@ abstract class Backend extends Controller
             Permissions::set(Admin::data('permissions'));
             if( ($controller != 'admin' && $action != 'login') && $controller != 'module' ) {
                 if (!Permissions::canComponent($controller, $action)) {
-
                     Permissions::denied();
                 }
             }
@@ -139,8 +140,6 @@ abstract class Backend extends Controller
         $action     = $this->request->param('action');
         $controller = lcfirst($controller);
 
-        $lang = Session::get('backend_lang');
-
         $this->template->assign('controller', $controller);
 
         $this->template->assign('action',     $action);
@@ -153,11 +152,10 @@ abstract class Backend extends Controller
         $events = EventsHandler::getInstance();
         Template::getInstance()->assign('events', $events);
 
-        $m = new Modules($this->theme, $lang, 'backend');
+        $m = new Modules($this->theme, $this->lang, 'backend');
         $this->modules = $m->init();
 
-//        $this->dump(Lang::getInstance($this->theme, $lang)->t());die;
-        $this->template->assign('t', Lang::getInstance($this->theme, $lang)->t());
+        $this->template->assign('t', Lang::getInstance($this->theme, $this->lang)->t());
 
         // admin structure
         if($this->request->isGet() && ! $this->request->isXhr()){
@@ -250,7 +248,7 @@ abstract class Backend extends Controller
      */
     protected function t($key)
     {
-        return Lang::getInstance()->t($key);
+        return Lang::getInstance($this->theme, $this->lang)->t($key);
     }
 
     protected function setNav($b)

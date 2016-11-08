@@ -1,7 +1,7 @@
 <section class="log-in">
     <div class="table">
         <div class="table-cell">
-            <form class="login" action="admin/login" data-redirect="/{$settings.backend_url}/dashboard" method="post" id="adminLogin">
+            <form class="login" action="admin/login" data-redirect="/{$settings.backend_url}/dashboard" data-backend-url="{$settings.backend_url}" method="post" id="adminLogin">
                 <div class="logo">
                     <img src="{$theme_url}assets/img/logo/logo.png">
                 </div>

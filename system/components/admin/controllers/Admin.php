@@ -74,7 +74,7 @@ class Admin extends Backend {
     {
         if($this->request->isPost()){
             $status = 0; $inp = []; $data = $this->request->post('data');
-            $ban_time = time()+3600;
+//            $ban_time = time()+3600;
             $secpic = $this->request->post('secpic');
 
             $fail = isset($_COOKIE['fail']) ? $_COOKIE['fail'] : 0;
@@ -85,12 +85,12 @@ class Admin extends Backend {
             } elseif(empty($data['email']) || empty($data['password'])){
                 $inp[] = ['data[password]' => $this->t('admin.e_login_pass')];
 
-                setcookie('fail', ++$fail, $ban_time);
+//                setcookie('fail', ++$fail, $ban_time);
 
             } elseif ( $fail > 0 && ( isset($_SESSION['secpic']) && $_SESSION['secpic'] != $secpic)) {
                 $inp[] = ['data[password]' => $this->t('admin.e_captcha')];
 
-                setcookie('fail', ++$fail, $ban_time);
+//                setcookie('fail', ++$fail, $ban_time);
 
             } else {
 
@@ -99,19 +99,19 @@ class Admin extends Backend {
 
                 if(empty($user)){
                     $inp[] = ['data[password]' => $this->t('admin.e_login_pass')];
-                    setcookie('fail', ++$fail, $ban_time);
+//                    setcookie('fail', ++$fail, $ban_time);
 
                 } elseif($user['status'] == 'ban'){
                     $inp[] = ['data[password]' => $this->t('admin.e_login_ban')];
-                    setcookie('fail', ++$fail, $ban_time);
+//                    setcookie('fail', ++$fail, $ban_time);
 
                 } elseif($user['status'] == 'deleted'){
                     $inp[] = ['data[password]' => $this->t('admin.e_login_deleted')];
-                    setcookie('fail', ++$fail, $ban_time);
+//                    setcookie('fail', ++$fail, $ban_time);
                 } else if ($this->mAdmin->checkPassword($data['password'], $user['password'])){
                     if($user['backend'] == 0) {
                         $inp[] = ['data[password]' => $this->t('admin.e_rang')];
-                        setcookie('fail', ++$fail, $ban_time);
+//                        setcookie('fail', ++$fail, $ban_time);
                     } else {
                         $status = $this->mAdmin->login($user);
                         if($status){
@@ -123,14 +123,14 @@ class Admin extends Backend {
                                 self::data('avatar', '/uploads/avatars/0.png');
                             }
                             Session::set('backend_lang', $data['lang']);
-                            setcookie('fail', '', time() - 60);
+//                            setcookie('fail', '', time() - 60);
                         } else{
                             $inp[] = ['data[password]' => $this->mAdmin->getErrorMessage()];
                         }
                     }
                 } else {
                     $inp[] = ['data[password]' => $this->t('admin.e_login_pass')];
-                    setcookie('fail', ++$fail, $ban_time);
+//                    setcookie('fail', ++$fail, $ban_time);
                 }
             }
 

@@ -552,11 +552,11 @@ engine.admin = {
                 setTimeout(function(){$('.b-admin-login').click();}, 1500);
             });
 
-            $(document).on('change', '#adminLang', function(e){
-                e.preventDefault();
-                var l = this.value;
-                self.location.href= '/engine/admin/login/'+l;
-            });
+            //$(document).on('change', '#adminLang', function(e){
+            //    e.preventDefault();
+            //    var l = this.value;
+            //    self.location.href= '/engine/admin/login/'+l;
+            //});
             $(document).on('click', '.b-admin-fp', function(e){
                 e.preventDefault();
                 logForm.slideUp(300, function(){
