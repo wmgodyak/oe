@@ -13,11 +13,23 @@ defined('CPATH') or die();
 /**
  * Base controller
  */
-abstract class Controller {
-
+abstract class Controller
+{
+    /**
+     * system version
+     */
+    const VERSION = "7.1.1";
+    /**
+     * @var
+     */
     protected $storage;
-
+    /**
+     * @var Request
+     */
     protected $request;
+    /**
+     * @var Response
+     */
     protected $response;
     /**
      * error handler

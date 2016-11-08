@@ -188,6 +188,34 @@ var engine = {
         </div>");
         setTimeout(function(){c.html('');}, 7000)
      },
+    inlineNotify: function( msg, status, cnt, autoclose)
+    {
+        var c = typeof cnt == 'undefined' ? $('.inline-notifications') : $(cnt), icon;
+        autoclose = typeof autoclose == 'undefined' ? true : autoclose;
+
+        switch (status){
+            case 'success':
+                icon = 'check-circle';
+                break;
+            case 'error':
+                icon = 'exclamation-triangle';
+                break;
+            default:
+                icon = 'check-circle';
+                break;
+        }
+
+        status = typeof status =='undefined' ? 'info' : status;
+
+        c.html("<div class='alert alert-"+status+" alert-dismissible' role='alert'>\
+            <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>\
+            "+msg+"\
+        </div>");
+
+        if(autoclose){
+            setTimeout(function(){c.html('');}, 10000)
+        }
+    },
     request:  {
         /**
          * send get request
@@ -2636,6 +2664,31 @@ engine.translations = function()
 
     });
 };
+engine.updates = function()
+{
+     var check = function()
+     {
+         engine.request.get('updates/check', function(res){
+             if(res == '') return;
+
+             engine.inlineNotify(res, 'info', '.inline-notifications', false);
+         });
+     };
+
+    if($('body').hasClass('ct-dashboard')){
+        setTimeout(function(){
+            check();
+        }, 1000);
+    }
+
+
+    $(document).on('click', '#b_update_core', function(){
+        engine.request.get('updates/run', function(res){
+            if(res == '') return;
+            engine.inlineNotify(res, 'info', '.inline-notifications', false);
+        });
+    })
+};
 
 $(document).ready(function(){
     engine.admins.init();
@@ -2653,6 +2706,7 @@ $(document).ready(function(){
     engine.seo.init();
     engine.breadcrumb();
     engine.translations();
+    engine.updates();
 });
 
 function responsive_filemanager_callback(field_id){

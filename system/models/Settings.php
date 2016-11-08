@@ -89,7 +89,7 @@ class Settings
      */
     public function set($name, $value, $block=null, $type=null)
     {
-        if(is_array($value)) $value = serialize($value);
+        if(is_array($value) || is_object($value)) $value = serialize($value);
 
         $a = DB::getInstance()->select("select id from __settings where name = '{$name}' limit 1")->row('id');
 
