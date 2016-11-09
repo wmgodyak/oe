@@ -59,7 +59,8 @@ class Updates extends Backend
             if($s){
                 $this->createBackup();
                 // extract
-//                $this->extractArchive()
+                $name = pathinfo($u->source, PATHINFO_BASENAME);
+                $this->extractArchive(DOCROOT . $dir . $name);
             }
         }
 
@@ -144,26 +145,14 @@ class Updates extends Backend
      * @param $dest
      * @return bool
      */
-    private function extractArchive($path, $dest)
+    private function extractArchive($path)
     {
-//        $zip = new \ZipArchive;
-//        if ($zip->open($path) === true) {
-//            for($i = 0; $i < $zip->numFiles; $i++) {
-//                $filename = $zip->getNameIndex($i);
-//                $fileinfo = pathinfo($filename);
-////                copy("zip://".$path."#".$filename, "/your/new/destination/".$fileinfo['basename']);
-//            }
-//            $zip->close();
-//            return true;
-//        }
-//
-//        return false;
         $zip = new \ZipArchive;
         $res = $zip->open($path);
-        if ($res === TRUE) {
-            $zip->extractTo($dest);
-            $zip->close();
 
+        if ($res === TRUE) {
+            $zip->extractTo(DOCROOT);
+            $zip->close();
             return true;
         }
 
