@@ -105,7 +105,7 @@ class Lang
             return;
         }
 
-        if(empty($this->lang)) $this->lang = 'default';
+        if(empty($this->lang)) $this->lang = 'en';
 
         $fn = DOCROOT . $dir . '/' . $this->lang .'.ini';
         if(! file_exists($fn)) return ;

@@ -2664,31 +2664,6 @@ engine.translations = function()
 
     });
 };
-engine.updates = function()
-{
-     var check = function()
-     {
-         engine.request.get('updates/check', function(res){
-             if(res == '') return;
-
-             engine.inlineNotify(res, 'info', '.inline-notifications', false);
-         });
-     };
-
-    if($('body').hasClass('ct-dashboard')){
-        setTimeout(function(){
-            check();
-        }, 1000);
-    }
-
-
-    $(document).on('click', '#b_update_core', function(){
-        engine.request.get('updates/run', function(res){
-            if(res == '') return;
-            engine.inlineNotify(res, 'info', '.inline-notifications', false);
-        });
-    })
-};
 
 $(document).ready(function(){
     engine.admins.init();
@@ -2706,7 +2681,6 @@ $(document).ready(function(){
     engine.seo.init();
     engine.breadcrumb();
     engine.translations();
-    engine.updates();
 });
 
 function responsive_filemanager_callback(field_id){

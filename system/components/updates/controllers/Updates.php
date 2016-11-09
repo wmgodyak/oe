@@ -1,6 +1,6 @@
 <?php
 /**
- * OYiEngine 7
+ * OYiEngine
  * @author Volodymyr Hodiak mailto:support@otakoi.com
  * @copyright Copyright (c) 2015 Otakoyi.com
  * Date: 08.11.16 : 12:15
@@ -9,6 +9,7 @@
 namespace system\components\updates\controllers;
 
 use system\Backend;
+use system\core\Config;
 use system\models\Settings;
 
 defined("CPATH") or die();
@@ -20,6 +21,17 @@ defined("CPATH") or die();
 class Updates extends Backend
 {
     const CORE_URL = "http://downloads.engine.loc";
+
+    public function init()
+    {
+        parent::init();
+
+        if(!Config::getInstance()->get('core.update_core')){
+            return ;
+        }
+
+        $this->template->assignScript('system/components/updates/js/updates.js');
+    }
 
     public function check()
     {
@@ -40,7 +52,7 @@ class Updates extends Backend
             Settings::getInstance()->set('core_updates', $res);
 
             if (version_compare(self::VERSION, $res->current, '<')) {
-                echo "<p>Доступна нова версія Engine {$res->current}. <button id='b_update_core' class='btn'>Оновіться</button> будь-ласка.</p>";
+                echo sprintf($this->t('updates.new_version'), $res->current, 'b_update_core');
             }
         }
     }
@@ -53,14 +65,15 @@ class Updates extends Backend
 
         if (version_compare(self::VERSION, $res->current, '<')) {
             $u = end($res->updates);
-            d($u);
             $dir  = "tmp/updates/";
             $s = $this->downloadSource($u->source, $dir);
             if($s){
-                $this->createBackup();
-                // extract
+                $s = $this->createBackup();
+            }
+            if($s){
                 $name = pathinfo($u->source, PATHINFO_BASENAME);
-                $this->extractArchive(DOCROOT . $dir . $name);
+                $s = $this->extractArchive(DOCROOT . $dir . $name);
+                $m = $this->t('updates.successful');
             }
         }
 
@@ -85,7 +98,7 @@ class Updates extends Backend
         curl_setopt($ch, CURLOPT_FILE, $fp);
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
 
-        $res = curl_exec($ch);//get curl response
+        $res = curl_exec($ch);
 
         curl_close($ch);
 

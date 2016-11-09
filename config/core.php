@@ -5,11 +5,10 @@
  * @copyright Copyright (c) 2015 Otakoyi.com
  * Date: 18.12.15 : 11:54
  */
-
-    error_reporting(E_ALL);
-    ini_set('display_errors', 1);
-
     return array(
         'debug' => true,
-        'version' => '7.0.1'
+        /**
+         * enable or disable core update
+         */
+        'update_core' => true,
     );
