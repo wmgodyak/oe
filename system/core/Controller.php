@@ -18,7 +18,7 @@ abstract class Controller
     /**
      * system version
      */
-    const VERSION = "7.2.2";
+    const VERSION = "7.2.3";
     /**
      * @var
      */

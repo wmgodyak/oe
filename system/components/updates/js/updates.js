@@ -16,6 +16,8 @@ $(document).ready(function(){
 
 
     $(document).on('click', '#b_update_core', function(){
+        var b = $(this);
+        b.attr('disabled', true);
         engine.request.get('updates/run', function(res){
             if(res == '') return;
             engine.inlineNotify(res.m, 'success', '.inline-notifications', false);
