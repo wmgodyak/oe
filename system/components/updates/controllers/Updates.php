@@ -24,7 +24,7 @@ class Updates extends Backend
     public function check()
     {
         $period = 24*60*60;
-        $period = 60;
+        $period = 6;
         $res = Settings::getInstance()->get('core_updates');
         if(isset($res->last_check) && ( time() - $res->last_check < $period)) {
             return;
@@ -39,16 +39,135 @@ class Updates extends Backend
 
             Settings::getInstance()->set('core_updates', $res);
 
-
-            if (version_compare(self::VERSION, $res->currenct, '<')) {
-                echo "<p>Доступна нова версія Engine {$res->current}. <button id='b_update_core'>Оновіться</button> будь-ласка.</p>";
+            if (version_compare(self::VERSION, $res->current, '<')) {
+                echo "<p>Доступна нова версія Engine {$res->current}. <button id='b_update_core' class='btn'>Оновіться</button> будь-ласка.</p>";
             }
         }
     }
 
     public function run()
     {
+        $s = 0; $m = [];
+
         $res = Settings::getInstance()->get('core_updates');
+
+        if (version_compare(self::VERSION, $res->current, '<')) {
+            $u = end($res->updates);
+            d($u);
+            $dir  = "tmp/updates/";
+            $s = $this->downloadSource($u->source, $dir);
+            if($s){
+                $this->createBackup();
+                // extract
+//                $this->extractArchive()
+            }
+        }
+
+        $this->response->body(['s'=>$s,'m'=>$m])->asJSON();
+    }
+
+    private function downloadSource($url, $dest)
+    {
+        set_time_limit(0);
+        if(! is_dir(DOCROOT . $dest)){ mkdir(DOCROOT . $dest , 0777, true); }
+
+        $i = pathinfo($url);
+        $fn = $i['basename'];
+
+        if(file_exists(DOCROOT . $dest . $fn)) @unlink(DOCROOT . $dest . $fn);
+
+        $fp = fopen (DOCROOT . $dest . $fn, 'w+');
+
+        $ch = curl_init(str_replace(" ","%20",$url));
+
+        curl_setopt($ch, CURLOPT_TIMEOUT, 50);
+        curl_setopt($ch, CURLOPT_FILE, $fp);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+
+        $res = curl_exec($ch);//get curl response
+
+        curl_close($ch);
+
+        return $res;
+    }
+
+    /**
+     * @return bool
+     */
+    private function createBackup()
+    {
+        $excluded = ['.git', '.idea','uploads', 'tmp', 'logs'];
+        $name = self::VERSION;
+
+        $backup_path = DOCROOT ."tmp/updates/backup/";
+        if(! is_dir($backup_path)){ mkdir($backup_path , 0777, true); }
+
+        $rootPath = DOCROOT;
+
+        $zip = new \ZipArchive();
+        $zip->open("{$backup_path}{$name}.zip", \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+
+        $files = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($rootPath),
+            \RecursiveIteratorIterator::LEAVES_ONLY
+        );
+
+        foreach ($files as $name => $file)
+        {
+            //exclude some direrctories
+            $ex = false;
+            foreach ($excluded as $k=>$v) {
+                if(strpos($name, $v) != false){
+                    $ex = true; break;
+                }
+            }
+            if($ex) continue;
+
+//            echo "$name\r\n";    continue;
+
+            if (!$file->isDir())
+            {
+                $filePath = $file->getRealPath();
+
+                $localname = str_replace(DOCROOT, '', $filePath);
+                $zip->addFile($filePath, $localname);
+            }
+        }
+
+        $zip->close();
+
+        return true;
+    }
+
+    /**
+     * @param $path
+     * @param $dest
+     * @return bool
+     */
+    private function extractArchive($path, $dest)
+    {
+//        $zip = new \ZipArchive;
+//        if ($zip->open($path) === true) {
+//            for($i = 0; $i < $zip->numFiles; $i++) {
+//                $filename = $zip->getNameIndex($i);
+//                $fileinfo = pathinfo($filename);
+////                copy("zip://".$path."#".$filename, "/your/new/destination/".$fileinfo['basename']);
+//            }
+//            $zip->close();
+//            return true;
+//        }
+//
+//        return false;
+        $zip = new \ZipArchive;
+        $res = $zip->open($path);
+        if ($res === TRUE) {
+            $zip->extractTo($dest);
+            $zip->close();
+
+            return true;
+        }
+
+        return false;
     }
 
     public function index(){}
