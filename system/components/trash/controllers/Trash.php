@@ -27,7 +27,7 @@ class Trash extends Backend
 
     public function init()
     {
-        $this->assignToNav('Кошик', 'trash', 'fa-file-text', 'tools', 100);
+        $this->assignToNav($this->t('trash.action_index'), 'trash', 'fa-file-text', 'tools', 100);
     }
 
     public function index()

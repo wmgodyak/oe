@@ -27,7 +27,7 @@ class Modules extends Backend
 
     public function init()
     {
-        $this->assignToNav('Модулі', 'modules', 'fa-cubes', 'settings');
+        $this->assignToNav($this->t('modules.action_index'), 'modules', 'fa-cubes', 'settings');
         $this->template->assignScript("system/components/modules/js/modules.js");
     }
 

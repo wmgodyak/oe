@@ -25,7 +25,7 @@ class Guides extends Content
 
     public function init()
     {
-        $this->assignToNav('Довідкники', 'guides', 'fa-book', 'tools', 100);
+        $this->assignToNav($this->t('guides.action_index'), 'guides', 'fa-book', 'tools', 100);
         $this->template->assignScript(dirname(__FILE__) . "/js/guides.js");
     }
 

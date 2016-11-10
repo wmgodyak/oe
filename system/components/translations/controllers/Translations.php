@@ -15,7 +15,7 @@ class Translations extends Backend
 {
     public function init()
     {
-        $this->assignToNav('Переклади', 'translations', 'fa-flag' , 'tools');
+        $this->assignToNav($this->t('translations.action_index'), 'translations', 'fa-flag' , 'tools');
         $this->template->assignScript('system/components/translations/js/translations.js');
     }
 

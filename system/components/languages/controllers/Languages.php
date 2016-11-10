@@ -17,7 +17,7 @@ class Languages extends Backend
 {
     public function init()
     {
-        $this->assignToNav('Мови', 'languages', 'fa-lang', 'settings', 100);
+        $this->assignToNav($this->t('languages.action_index'), 'languages', 'fa-lang', 'settings', 100);
     }
 
     public function index()

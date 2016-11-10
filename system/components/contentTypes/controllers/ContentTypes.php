@@ -44,7 +44,7 @@ class ContentTypes extends Backend
 
     public function init()
     {
-        $this->assignToNav('Типи контенту', 'contentTypes', 'fa-file-text-o', 'tools' ,100);
+        $this->assignToNav($this->t('contentTypes.action_index'), 'contentTypes', 'fa-file-text-o', 'tools' ,100);
     }
 
 

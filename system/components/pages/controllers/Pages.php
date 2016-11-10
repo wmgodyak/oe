@@ -25,7 +25,7 @@ class Pages extends Content
 
     public function init()
     {
-        $this->assignToNav('Сторінки', 'pages', 'fa-file-text', null, 10);
+        $this->assignToNav($this->t('pages.action_index'), 'pages', 'fa-file-text', null, 10);
     }
 
     public function index($parent_id=0)

@@ -26,7 +26,7 @@ class ContentImagesSizes extends Backend
 
     public function init()
     {
-        $this->assignToNav('Розміри зображень', 'contentImagesSizes', 'fa-users', 'tools', 10);
+        $this->assignToNav($this->t('contentImagesSizes.action_index'), 'contentImagesSizes', 'fa-users', 'tools', 10);
     }
 
     public function index()

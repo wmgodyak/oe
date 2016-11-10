@@ -24,7 +24,7 @@ class Nav extends Backend
 
     public function init()
     {
-        $this->assignToNav('Менеджер меню', 'nav', 'fa-nav', 'tools', 100);
+        $this->assignToNav($this->t('nav.action_index'), 'nav', 'fa-nav', 'tools', 100);
     }
 
     public function index()

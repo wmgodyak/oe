@@ -27,7 +27,7 @@ class Features extends Backend
 
     public function init()
     {
-        $this->assignToNav('Динамічні характерист.', 'features', 'fa-users', 'tools', 100);
+        $this->assignToNav($this->t('features.action_index'), 'features', 'fa-users', 'tools', 100);
     }
 
     public function index($parent_id=0)

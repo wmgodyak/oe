@@ -24,7 +24,7 @@ class Admins extends Backend
 
     public function init()
     {
-        $this->assignToNav('Адміністратори', 'admins', 'fa-users', null, 200);
+        $this->assignToNav($this->t('admins.action_index'), 'admins', 'fa-users', null, 200);
     }
 
     /**

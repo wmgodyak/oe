@@ -27,7 +27,7 @@ class Themes extends Backend
 
     public function init()
     {
-        $this->assignToNav('Теми', 'themes', 'puzzle-piece', 'settings', 100);
+        $this->assignToNav($this->t('themes.action_index'), 'themes', 'puzzle-piece', 'settings', 100);
     }
 
     /**
