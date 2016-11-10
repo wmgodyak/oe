@@ -33,6 +33,9 @@ class Updates extends Backend
         $this->template->assignScript('system/components/updates/js/updates.js');
     }
 
+    /**
+     *
+     */
     public function check()
     {
         $period = 24*60*60;
@@ -57,6 +60,9 @@ class Updates extends Backend
         }
     }
 
+    /**
+     *
+     */
     public function run()
     {
         $s = 0; $m = [];
@@ -80,6 +86,11 @@ class Updates extends Backend
         $this->response->body(['s'=>$s,'m'=>$m])->asJSON();
     }
 
+    /**
+     * @param $url
+     * @param $dest
+     * @return mixed
+     */
     private function downloadSource($url, $dest)
     {
         set_time_limit(0);
@@ -110,7 +121,7 @@ class Updates extends Backend
      */
     private function createBackup()
     {
-        $excluded = ['.git', '.idea','uploads', 'tmp', 'logs'];
+        $excluded = ['.git', '.idea','uploads', 'tmp', 'logs', 'modules'];
         $name = self::VERSION;
 
         $backup_path = DOCROOT ."tmp/updates/backup/";
@@ -170,6 +181,11 @@ class Updates extends Backend
         }
 
         return false;
+    }
+
+    public function runMigrations()
+    {
+        $list = Settings::getInstance()->get('migrations');
     }
 
     public function index(){}
