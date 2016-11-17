@@ -311,8 +311,8 @@ class ContentTypes extends Backend
         $y = date('Y');
         $text = "{*
  * OYiEngine 7
- * @author {$this->admin['name']} {$this->admin['surname']} mailto:{$this->admin['email']}
- * @copyright Copyright (c) {$y} Otakoyi.com
+ * @author {$this->admin['name']} mailto:{$this->admin['email']}
+ * @copyright Copyright (c) {$y}
  * Date: {$now}
  * @name {$data['name']}
  *}\r\n"

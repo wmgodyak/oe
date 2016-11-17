@@ -44,7 +44,7 @@ class Frontend extends core\Controller
      * all system settings
      * @var array
      */
-    private $settings;
+    protected $settings;
 
     protected $images;
 

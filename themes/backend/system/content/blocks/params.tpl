@@ -17,7 +17,7 @@
             <label for="content_status" class="">
                 <input type="hidden" name="content[status]" value="hidden">
                 <input class="switch" type="checkbox" name="content[status]" id="content_status" value="published" {if $content.status=='published'}checked{/if}>
-                <span class="l-check">Опубліковано</span>
+                <span class="l-check">{$t.common.published}</span>
             </label>
         </div>
     </div>

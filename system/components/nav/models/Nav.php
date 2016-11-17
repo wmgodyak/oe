@@ -87,11 +87,13 @@ class Nav extends Backend
     public function buildTree()
     {
         $c_types = DataFilter::apply('nav.items.content_types', $this->c_types);
-
+        foreach ($c_types as $k=>$type) {
+            $c_types[$k] = "'$type'";
+        }
         $types_in = implode(',', $c_types);
 
         $res = [];
-        $r = self::$db->select("select id, name from __content_types where id in ({$types_in})")->all();
+        $r = self::$db->select("select id, name from __content_types where type in ({$types_in})")->all();
 
         foreach ($r as $type) {
             $res[] = $type;

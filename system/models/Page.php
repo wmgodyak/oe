@@ -28,7 +28,7 @@ class Page extends Model
     {
         $items = self::$db
             ->select("
-              select c.id, c.isfolder, ci.name,ci.title
+              select c.id, c.isfolder, ci.name, ci.title
               from __content c
               join __content_info ci on ci.content_id = c.id and ci.languages_id={$this->languages_id}
               where c.parent_id='{$parent_id}' and c.status='published'

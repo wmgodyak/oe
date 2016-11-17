@@ -70,7 +70,7 @@ class Modules
             }
         }
 
-        Settings::getInstance()->set('modules', $active);
+//        Settings::getInstance()->set('modules', $active);
 
         return $modules;
     }

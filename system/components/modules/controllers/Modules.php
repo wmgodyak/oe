@@ -243,9 +243,7 @@ class Modules extends Backend
                 $config = parse_ini_file($path);
                 $s_config = isset($modules[$module]['config']) ? $modules[$module]['config'] : [];
                 $config = array_merge($config, $s_config);
-
             }
-
         }
         $this->template->assign('config', $config);
         $this->template->assign('module', $module);
@@ -260,17 +258,21 @@ class Modules extends Backend
         $s=0; $t=null; $m=null;
         $module = $this->request->post('module');
         $config = $this->request->post('config');
+        if(empty($config)){
+            $m = "Цей модуль немає налаштувань";
+        } else {
+            $module = ucfirst($module);
 
-        $module = ucfirst($module);
+            $modules = Settings::getInstance()->get('modules');
 
-        $modules = Settings::getInstance()->get('modules');
-
-        if(isset($modules[$module])){
-            $_module = lcfirst($module);
-            $path = DOCROOT . "modules/{$_module}/config.ini";
-            if( !file_exists($path)){
-                $m = "Цей модуль немає налаштувань";
-            } else {
+            if(isset($modules[$module])){
+//                $_module = lcfirst($module);
+//                $path = DOCROOT . "modules/{$_module}/config.ini";
+//                if( !file_exists($path)){
+//                    $m = "Цей модуль немає налаштувань";
+//                } else {
+//
+//                }
                 $s=1;
                 $m = 'Налаштування модуля оновлено';
 
@@ -282,9 +284,6 @@ class Modules extends Backend
 
                 Settings::getInstance()->set('modules', $modules);
             }
-
-        } else {
-            $m = 'error';
         }
 
         $this->response->body(['s' => $s, 't' => $t, 'm' => $m])->asJSON();

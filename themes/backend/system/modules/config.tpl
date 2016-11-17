@@ -1,4 +1,4 @@
-<form action="modules/process" method="post" id="modulesForm" class="form-horizontal">
+<form action="modules/process" method="post" id="modulesForm" class="row form-horizontal">
     {foreach $config as $k=>$v}
         {if ! is_array($v)}
             <div class="form-group">
