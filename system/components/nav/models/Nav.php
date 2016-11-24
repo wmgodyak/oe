@@ -15,7 +15,7 @@ class Nav extends Backend
     /**
      * @var array
      */
-    private $c_types = [1];
+    private $c_types = ['pages'];
     public $items;
     public $items_info;
 

@@ -51,14 +51,14 @@ class Guides extends Model
                     case 'position':
                         $ob = "order by abs(c.position) asc";
                         break;
-                    case 'name':
+                    default:
                         $ob = "order by i.name asc";
                         break;
                 }
             }
             $res['items'] = self::$db
                 ->select("
-                select c.id, i.name, c.external_id
+                select c.id, i.name, c.external_id as code
                 from __content c
                 join __content_info i on i.content_id=c.id and i.languages_id={$this->languages_id}
                 where c.parent_id = '{$res['id']}' and c.status = 'published'

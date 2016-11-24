@@ -27,7 +27,7 @@ class Front extends Model
      */
     protected $images;
 
-    private $app;
+    protected $app;
 
     public function __construct($init = false)
     {
@@ -76,6 +76,7 @@ class Front extends Model
         }
 
         $url = isset($args['url']) ? $args['url'] : '';
+        $url = rtrim($url, '/');
 
         if(empty($url)){
             $id = Settings::getInstance()->get('home_id');

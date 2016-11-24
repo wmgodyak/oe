@@ -145,6 +145,7 @@ class Parser extends Model
         $pattern .= '?(filter/[a-z0-9_;,\-]+\-[0-9;,]+)?';
         $pattern .= '?(\?([&a-z]+=[a-zA-Z0-9\.\-]+)*)?';
         $pattern .= '?(\?([&a-z]+=[a-zA-Z0-9\.\-\%]+)*)?'; //http://engine.loc/8;?p=2&q=%D0%B2%D0%B8%D0%BC
+        $pattern .= '?(#[a-zA-Z0-9]+)?';
         $pattern .= '?"@isu';
 //        return $this->ds;
         $this->ds = preg_replace_callback
