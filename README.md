@@ -93,8 +93,39 @@ Some modules extend backend theme or have frontend theme templates. All files pl
 
 /modules/example/themes/
 
-/modules/example/themes/backend/example/myfile.tpl
+/modules/example/themes/backend/modules/example/myfile.tpl
 
+or in frontend 
+
+/modules/example/themes/default/modules/example/myfile.tpl
+
+On instalation theme files was copied to current frontend and backend theme. Original files left on module/themes. Modify only copied files.
+
+If module have javascript files, it is plased on 
+
+/modules/example/js/
+
+/modules/example/js/example.js - default frontend file.
+
+/modules/example/js/admin/example.js - default backend file.
+
+You can use more javascript files and include it on init() of module
+
+public function init()
+{
+    ... 
+    $this->template->assignScript("modules/banners/js/admin/banners.js");
+    ...
+}
+
+
+You can create vendor directory to place custom libraries.
+
+If your module have localization, create directory lang and create languages files.
+
+/modules/example/lang/
+
+/modules/example/lang/en.ini
 
 Its All.
 
