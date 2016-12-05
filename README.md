@@ -73,7 +73,7 @@ Simple module example.
 
 /modules/example/controllers/ - controllers dir
 
-/modules/example/controllers/Excapmple.php - base class of module example. 
+/modules/example/controllers/Exapmple.php - base class of module example. 
 
 if module have models, you need to create directory models in module dir and place models there.
 
