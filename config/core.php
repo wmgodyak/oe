@@ -10,5 +10,5 @@
         /**
          * enable or disable core update
          */
-        'update_core' => true,
+        'update_core' => false,
     );

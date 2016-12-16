@@ -15,6 +15,21 @@
         </h1>
     </div>
     {if !empty($panel_nav)}
+        <div class="user-panel">
+            <div class="user-panel_avatar">
+                <!--<img src="" alt="">-->
+            </div>
+            <div class="user-panel_arrow">
+                <i class="fa fa-angle-down" aria-hidden="true"></i>
+            </div>
+            <div class="user-panel_dropdown">
+                <ul>
+                    <li><a href="#">Повідомлення</a></li>
+                    <li><a href="#">Налаштування</a></li>
+                    <li><a href="#">Вихід</a></li>
+                </ul>
+            </div>
+        </div>
         <div class="btn-group">
             {foreach $panel_nav as $k=>$item}
                 {$item}

@@ -20,3 +20,6 @@ themes/backend/modules/*
 config/db.php
 robots.txt
 sitemap*.xml
+gulpfile.js
+package.json
+node_modules/

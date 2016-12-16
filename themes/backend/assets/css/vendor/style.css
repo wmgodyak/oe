@@ -416,12 +416,12 @@
 .jstree-default .jstree-themeicon {
   background-position: -112px -48px;
 }
-.jstree-default > .jstree-no-dots .jstree-node,
+/*.jstree-default > .jstree-no-dots .jstree-node,
 .jstree-default > .jstree-no-dots .jstree-leaf > .jstree-ocl {
   background: transparent;
-}
+}*/
 .jstree-default > .jstree-no-dots .jstree-open > .jstree-ocl {
-  background-position: -36px -4px;
+  background-position: -40px -4px;
 }
 .jstree-default > .jstree-no-dots .jstree-closed > .jstree-ocl {
   background-position: -4px -4px;
