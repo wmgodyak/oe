@@ -46,6 +46,9 @@
           background: #2FC7F7;
           color: #fff;
         }
+        .jstree-themeicon{
+          display: none;
+        }
       }
       &.jstree-closed{
         & > .jstree-ocl{

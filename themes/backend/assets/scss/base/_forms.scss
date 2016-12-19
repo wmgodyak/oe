@@ -2,17 +2,19 @@ input{
   background: #fff;
   outline: 0;
   border: 1px solid #a6b2c0;
-  height: 28px;
+  height: 30px;
   transition: all .4s ease;
-  padding: 0 12px;
-  border-radius: 3px;
+  padding: 0 15px;
+  border-radius: 2px;
   font-family: $light;
   color: #1e3c50;
-  font-size: 14px;
+  font-size: 13px;
+  line-height: 28px;
   width: 100%;
   &:hover,
   &:focus{
     border: 1px solid #03a9f4;
+    color: #03a9f4;
   }
   &.error{
     border: 1px solid #ff7163 !important;
@@ -33,6 +35,7 @@ textarea{
   line-height:20px;
   width: 100%;
   min-height: 52px;
+  resize: vertical;
   &:hover,
   &:focus{
     border: 1px solid #00c8f9;
@@ -60,23 +63,36 @@ select{
 
 fieldset{
   @include clear();
-  margin: 20px 0;
-  padding:0 10px 10px 10px;
+  position: relative;
+  margin: 0 0 15px;
+  padding:0 10px 0 10px;
   background: #fff;
-  box-shadow: 0 1px 4px 0 rgba(0, 55, 75, 0.2);
+  box-shadow: 0 3px 3px rgba(33, 33, 33, 0.1);
   legend{
     position: relative;
-    font-size: 18px;
-    line-height: 36px;
+    width: calc(100% + 20px);
+    margin: 0;
+    margin-left: -10px;
+    font-size: 16px;
+    line-height: 44px;
     color: #1e3c50;
-    font-family: $light;
+    font-family: $bold;
     font-weight:bold;
-    border-bottom: 1px solid #ececec;
+    background-color: #f3f3f3;
     display: block;
     float: left;
+    padding: 0 10px;
+
+    a{
+      position: relative;
+      top: -2px;
+      margin-left: 5px;
+    }
+  }
+  .fieldset-wrapper{
+    float: left;
     width: 100%;
-    padding: 0 20px;
-    margin: 0 0 10px 0;
+    padding: 15px 0 5px;
   }
   .toggle-arrow{
     position: absolute;
@@ -84,13 +100,38 @@ fieldset{
     right: 30px;
 
   }
+  
+  .hide-fieldset-content{
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    top: 6px;
+    right: 10px;
+    border: 1px solid #c2cad8;
+    border-radius: 2px;
+    text-align: center;
+    font-size: 18px;
+    line-height: 30px;
+    color: #6d7985;
+    transition: all .3s linear;
+
+    &:hover{
+      background-color: #e1e2e2;
+      border-color: #e1e2e2;
+      box-shadow: 0 2px 5px rgba(19, 46, 69, 0.2);
+      transition: all .3s linear;
+    }
+  }
 }
 
 .gallery-uploader{
-  padding: 0 15px;
+
   .list-group{
     float: left;
     width: 100%;
+    .form-group{
+      margin: 0;
+    }
     .dz-clickable{
       border: 2px dashed #bcc5cd;
       .dz-message{
@@ -99,6 +140,10 @@ fieldset{
         font-size: 14px;
         color: #737373;
         padding: 20px;
+
+        .hover{
+          margin: 10px 0 0;
+        }
       }
     }
   }
@@ -120,8 +165,9 @@ fieldset{
           white-space:nowrap;
           overflow: hidden;
           padding: 4px 34px 4px 12px;
-          font-size: 14px;
+          font-size: 13px;
           font-family: $light;
+          color: #1e3c50;
         }
         .select2-selection__arrow{
           position: absolute;
@@ -131,19 +177,22 @@ fieldset{
           right: -1px;
           text-align: center;
           @extend .fa;
-          @extend .fa-chevron-down;
+          @extend .fa-angle-down;
           &:before{
             line-height: 30px;
-            font-size: 12px;
-            color: #798c9c;
+            font-size: 19px;
+            color: #6d7985;
             position: relative;
-            top: -2px;
+            top: -1px;
           }
         }
         &.select2-selection--multiple{
           @include clear();
           .select2-selection__rendered{
-            padding: 2px;
+            padding: 2px 2px 0;
+            input{
+              height: 28px;
+            }
             li{
               float: left;
               display: inline-block;
@@ -151,21 +200,30 @@ fieldset{
             }
             .select2-selection__choice{
               position: relative;
-              background: #798c9c;
-              color: #fff;
+              background-color: #03a9f4;
+              color: #fafbfc;
+              height: 24px;
               font-size: 12px;
               font-family: $bold;
-              border-radius: 3px;
-              line-height: 16px;
-              padding: 5px 26px 5px 10px;
-              margin: 1px;
+              border-radius: 12px;
+              line-height: 24px;
+              padding: 0 24px 0 12px;
+              margin: 0 3px 0 0;
+              cursor: pointer;
               .select2-selection__choice__remove{
                 position: absolute;
-                top: 0;
-                right: 0;
-                width: 26px;
-                height: 26px;
-                line-height: 26px;
+                width: 16px;
+                height: 16px;
+                top: 4px;
+                right: 3px;
+                border-radius: 50%;
+                background-color: #0897d8;
+                text-align: center;
+                color: #ffffff;
+                font-size: 9px;
+                line-height: 16px;
+                font-family: $bold;
+                cursor: pointer;
                 text-align: center;
               }
             }
@@ -186,7 +244,7 @@ fieldset{
       .select2-selection{
         border-radius: 3px 3px 0 0;
         .select2-selection__arrow{
-          @extend .fa-chevron-up;
+          @extend .fa-angle-up;
         }
       }
     }
@@ -194,12 +252,14 @@ fieldset{
 }
 
 .help-block{
-  color: #737373;
-  font-size: 12px;
-  font-family: $light;
+  color: #1e3c50;
+  font-size: 11px;
+  line-height: 12px;
+  font-family: "RobotoLight";
   display: block;
   text-align: left;
   margin: 5px 0 0 0;
+  padding: 0 15px;
 }
 
 .select2-hidden-accessible{
@@ -212,16 +272,15 @@ fieldset{
   background: #fff;
   display: block;
   .select2-dropdown{
-    border: 1px solid #a6b2c0;
+    box-shadow: 0 10px 20px rgba(0, 38, 64, 0.3);
     display: block;
     border-top: none;
     border-radius: 0 0 3px 3px;
     .select2-search{
       box-sizing: border-box;
-      padding: 4px;
+      padding: 4px 8px;
       display: block;
-      background: #fafbfc;
-      border-bottom: 1px solid #a6b2c0;
+      background: #fff;
       .select2-search__field{
         box-sizing: border-box;
       }
@@ -230,14 +289,13 @@ fieldset{
       .select2-results__options{
         li{
           font-family: $light;
-          padding: 3px 12px;
+          padding: 4px 15px;
           color: #1e3c50;
-          font-size: 14px;
+          font-size: 15px;
           line-height: 18px;
           cursor: pointer;
           &.select2-results__option--highlighted{
-            color: #fff;
-            background: #03a9f4;
+            background: #ededed;
           }
         }
       }
@@ -248,24 +306,59 @@ fieldset{
 
 .form-group{
   @include clear();
-  margin: 15px 0;
-  padding: 0 15px;
+  float: left;
+  width: 100%;
+  margin: 0 0 15px;
   .control-label{
     text-align: right;
+    font-size: 13px;
     line-height: 18px;
-    padding: 7px 0;
+    padding: 6px 0;
+    color: #1e3c50;
+
+    a{
+      position: relative;
+      top: -2px;
+    }
   }
   .character-counter{
-    color: #737373;
-    font-size: 12px;
+    color: #1e3c50;
+    font-size: 11px;
+    line-height: 12px;
     font-family: $light;
     display: block;
     text-align: left;
     margin: 5px 0 0 0;
+    padding: 0 15px;
+    opacity: .5;
   }
   .error{
     @extend .character-counter;
     color: #ff7163;
+  }
+  h3{
+    font-size: 16px;
+    line-height: 22px;
+    color: #1e3c50;
+    margin: 0 0 5px;
+
+    a{
+      display: inline-block;
+      position: relative;
+      top: -1px;
+      margin: 0 0 0 5px;
+
+      i{
+        position: relative;
+        top: -1px;
+      }
+    }
+  }
+  .btn{
+    margin: 0;
+  }
+  .cf-file-browse{
+    padding: 0 15px;
   }
   .checkbox{
     text-align: left;
@@ -274,10 +367,17 @@ fieldset{
       margin: 1px 5px 0 0;
     }
   }
+
+  &.row{
+    margin-bottom: 0;
+  }
+}
+.checkbox-group{
+  margin: 0;
 }
 fieldset{
   .form-group{
-    margin:10px 0;
+    margin: 0 0 15px;
   }
 }
 
@@ -517,28 +617,34 @@ fieldset{
   }
 }
 
+.checkbox label{
+  font-size: 13px;
+}
 .check-btn{
   input{
     display: none;
   }
   .check-box{
-    width: 20px;
-    height: 20px;
-    border-radius: 2px;
+    width: 15px;
+    height: 15px;
+    border-radius: 3px;
     border: 1px solid #a6b2c0;
     cursor: pointer;
     display: inline-block;
     text-align: center;
-    line-height: 20px;
+    line-height: 13px;
     color: transparent;
     transition: all .2s ease;
-    font-size: 16px;
+    font-size: 10px;
+    position: relative;
+    top: -3px;
+    margin: 0 5px 0 0;
   }
   input:checked{
     & + .check-box{
       color: #fff;
-      background: #79d4a7;
-      border: 1px solid #79d4a7;
+      background: #03a9f4;
+      border: 1px solid #03a9f4;
     }
   }
 }
@@ -551,7 +657,7 @@ fieldset{
   input:checked{
     & + .check-box{
       background: #fff;
-      border: 6px solid #79d4a7;
+      border: 6px solid #03a9f4;
     }
   }
 }
@@ -563,8 +669,8 @@ fieldset{
     top: 0;
     right: 0;
     width: 36px;
-    height: 32px;
-    line-height: 32px;
+    height: 30px;
+    line-height: 30px;
     display: block;
     text-align: center;
     border-left: 1px solid #a6b2c0;
@@ -590,25 +696,29 @@ fieldset{
   margin-top: 20px;
 }
 .bootstrap-tagsinput {
-  width:100%;
-  background-color: #fff;
-  border:1px solid #a6b2c0;
-  display: inline-block;
-  color: #555;
-  vertical-align: middle;
+  background: #fff;
+  outline: 0;
+  border: 1px solid #a6b2c0;
+  height: 30px;
+  -webkit-transition: all .4s ease;
+  transition: all .4s ease;
+  padding: 0 2px;
+  -webkit-border-radius: 2px;
   border-radius: 2px;
-  max-width: 100%;
-  line-height: 22px;
-  cursor: text;
+  font-family: "RobotoLight";
+  color: #1e3c50;
+  font-size: 13px;
+  line-height: 28px;
+  width: 100%;
   input {
     border: none;
     box-shadow: none;
     outline: none;
     background-color: transparent;
-    padding: 0 6px;
+    padding: 0 13px;
     margin: 0;
     width: auto;
-    height:30px;
+    height:auto;
     max-width: inherit;
   }
   &.form-control input {
@@ -626,27 +736,34 @@ fieldset{
   }
   .tag {
     position: relative;
-    background: #798c9c;
-    color: #fff;
+    background-color: #03a9f4;
+    color: #fafbfc;
+    height: 24px;
     font-size: 12px;
     font-family: $bold;
-    border-radius: 3px;
-    line-height: 16px;
-    padding: 7px 6px 5px 10px;
-    //margin-right:2px;
+    border-radius: 12px;
+    line-height: 24px;
+    padding: 0 24px 0 12px;
+    margin: 0;
     cursor: pointer;
     [data-role="remove"] {
-      margin-left: 8px;
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      top: 4px;
+      right: 3px;
+      border-radius: 50%;
+      background-color: #0897d8;
+      text-align: center;
+      color: #ffffff;
+      font-size: 9px;
+      line-height: 16px;
+      font-family: $bold;
       cursor: pointer;
       &:after {
         content: "x";
-        padding: 0px 2px;
-      }
-      &:hover {
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
-        &:active {
-          box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-        }
+        position: relative;
+        left: 1px;
       }
     }
   }

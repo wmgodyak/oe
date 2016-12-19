@@ -1179,7 +1179,7 @@ engine.content = {
             var code = $(this).data('code');
             if(typeof code == 'undefined')return;
             $('.switch-lang:not(.lang-'+code+')').hide();
-            $(this).addClass('btn-primary').siblings().removeClass('btn-primary');
+            $(this).addClass('active').siblings().removeClass('active');
             $('.switch-lang.lang-' + code).show();
         });
 
@@ -1190,6 +1190,14 @@ engine.content = {
 
         $(document).on('click','.b-change-date', function(){
             $("#content_published").trigger('focus');
+        });
+
+        $('input.info-keywords').tagsinput('items');
+
+        $('.hide-fieldset-content').click(function(e){
+            e.preventDefault();
+
+            $(this).parent().next().slideToggle(400);
         });
 
         this.features.init();

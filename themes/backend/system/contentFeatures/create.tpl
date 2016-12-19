@@ -24,7 +24,7 @@
             </select>
         </div>
     </div>
-    <div class="form-group fg-multiple" style="display: none">
+    <div class="form-group checkbox-group fg-multiple" style="display: none">
         <div class="col-md-10 col-md-offset-2">
             <div class="checkbox">
                 <label>
@@ -34,7 +34,7 @@
             </div>
         </div>
     </div>
-    <div class="form-group fg-show-filter" style="display: none">
+    <div class="form-group checkbox-group fg-show-filter" style="display: none">
         <div class="col-md-10 col-md-offset-2">
             <div class="checkbox">
                 <label>
@@ -46,7 +46,7 @@
     </div>
 
 
-    <div class="form-group">
+    <div class="form-group checkbox-group">
         <div class="col-md-10 col-md-offset-2">
             <div class="checkbox">
                 <label>
@@ -57,7 +57,7 @@
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-group checkbox-group">
         <div class="col-md-10 col-md-offset-2">
             <div class="checkbox">
                 <label>

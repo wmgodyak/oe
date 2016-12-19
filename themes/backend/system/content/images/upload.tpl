@@ -1,30 +1,35 @@
 <fieldset class="gallery-uploader">
     <legend>{$t.contentImages.image}
-    <a href="javascript:;" class="add insert" title="{$t.common.create}">
+    {*<a href="javascript:;" class="add insert" title="{$t.common.create}">
         <i class="fa fa-plus-circle"></i>
     </a>
     <a href="javascript:;" class="add finished" title="{$t.contentImages.remove}">
         <i class="fa fa-minus-circle"></i>
+    </a>*}
+    <a href="javascript:;" class="hide-fieldset-content">
+        <i class="fa fa-angle-down" aria-hidden="true"></i>
     </a>
     </legend>
-    <div class="list-group">
-        <div class="list-group-item dropzone-container">
-            <div class="form-group">
-                <div id="contentImagesDz" data-target="contentImages/upload/{$id}">
-                    <div class="dz-message clearfix">
-                        <i class="fa fa-picture-o"></i>
-                        <span>{$t.contentImages.upload_i}</span>
-                        <div class="hover">
-                            <i class="fa fa-download"></i>
-                            <span>{$t.contentImages.dragHere}</span>
+    <div class="fieldset-wrapper">
+        <div class="list-group">
+            <div class="list-group-item dropzone-container">
+                <div class="form-group">
+                    <div id="contentImagesDz" data-target="contentImages/upload/{$id}">
+                        <div class="dz-message clearfix">
+                            <i class="fa fa-picture-o"></i>
+                            <span>{$t.contentImages.upload_i}</span>
+                            <div class="hover">
+                                <i class="fa fa-download"></i>
+                                <span>{$t.contentImages.dragHere}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="list-group-item preview-container">
-            <div class="form-group">
-                <div class="gallery-container"></div>
+            <div class="list-group-item preview-container">
+                <div class="form-group">
+                    <div class="gallery-container"></div>
+                </div>
             </div>
         </div>
     </div>

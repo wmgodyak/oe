@@ -5,8 +5,11 @@
         <a href="javascript:;" type="button" class="b-ct-features-add" data-id="{$content.id}" data-parent="0" title="Додати">
             <i class="fa fa-plus-circle"></i>
         </a>
+        <a href="javascript:;" class="hide-fieldset-content">
+            <i class="fa fa-angle-down" aria-hidden="true"></i>
+        </a>
     </legend>
-    <div id="content_features_0">
+    <div class="fieldset-wrapper" id="content_features_0">
         {if isset($content_features)}{$content_features}{/if}
     </div>
     {$events->call('content.features', $content)}

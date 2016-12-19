@@ -227,12 +227,25 @@
   & > li{
     border-bottom: 1px solid #ff7163;
     & > a{
-      @include text(14px, 18px);
+      @include text(14px, 24px);
       color: $color-3;
       transition: all 0.25s ease;
+
+      & > i{
+        width: 12px;
+        height: 14px;
+
+        &:before{
+          position: relative;
+          top: -4px;
+        }
+      }
       & > span{
         border: none !important;
-        line-height: 2.4em !important;
+        line-height: 24px;
+      }
+      .vakata-contextmenu-sep{
+        height: 24px !important;
       }
     }
     &:first-child{
@@ -301,7 +314,7 @@ ul.first-level {
       top: -1px;
     }
     h1{
-      font-size:12px;
+      font-size:14px;
       line-height: 18px;
     }
   }
@@ -413,6 +426,18 @@ ul.first-level {
   font-size: 0;
   .btn{
     margin-left: 10px;
+  }
+  &.switch-languages{
+    .btn{
+      margin: 0 10px 0 0;
+      padding: 0;
+      width: 34px;
+
+      &.active{
+        background-color: #dbdcdc;
+        border-color: #dbdcdc;
+      }
+    }
   }
 }
 
@@ -654,12 +679,13 @@ ul.first-level {
     cursor: move;
     //text-align: left;
     position: relative;
-    font-family: $bold;
+    font-size: 16px;
+    line-height: 44px;
     color: #1e3c50;
-    font-size: 20px;
-    line-height: 26px;
-    padding: 10px 17px;
-    border-bottom: 1px solid #dfdfdf;
+    font-family: $bold;
+    font-weight:bold;
+    background-color: #f3f3f3;
+    padding: 0 10px;
     .btn{
       position: absolute;
       margin: 0;
@@ -667,8 +693,8 @@ ul.first-level {
       outline: 0;
       border: none;
       background: transparent;
-      top: 10px;
-      right: 17px;
+      top: 6px;
+      right: 10px;
       color: #798c9c;
       @extend .fa;
       @extend .fa-times;
@@ -740,6 +766,8 @@ ul.first-level {
   line-height: 20px;
   padding: 12px 15px 12px 30px;
   font-family: $light;
+  float: left;
+  width: 100%;
   &.alert-success{
     background: #8fe6bb;
   }
@@ -785,9 +813,9 @@ ul.first-level {
   }
   .list-group {
     .dropzone-container {
-      background: #f7f7f7;
-      padding: 0 20px;
-      max-height: 0;
+      /*background: #f7f7f7;*/
+      padding: 15px 20px;
+      max-height: 145px;
       overflow: hidden;
       -webkit-transition: max-height .1s ease-in-out, padding .1s ease-in-out;
       transition: max-height 0.1s ease-in-out, padding 0.1s ease-in-out;

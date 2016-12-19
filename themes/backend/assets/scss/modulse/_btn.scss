@@ -86,12 +86,17 @@ button {
 
   color: #495766;
   background: $btn-default;
-  border: 1px solid #e1e2e2;
+  border: 1px solid #c2cad8;
 
   height: 30px;
   line-height: 26px;
   padding: 0 20px;
   font-size: 14px;
+
+  &:hover{
+    background: #dbdcdc;
+    border-color: #dbdcdc;
+  }
 
   &.btn-lg{
     height: 60px;
@@ -128,9 +133,10 @@ button {
   &.btn-default{
     color: #1e3c50;
     background: $btn-default;
-    border: 1px solid #a6b2c0;
+    border: 1px solid #c2cad8;
     &:hover{
-      background: #ebeef0;
+      background: #dbdcdc;
+      border-color: #dbdcdc;
     }
     &:disabled{
       cursor: not-allowed;
