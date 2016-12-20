@@ -29,9 +29,13 @@
             </div>
         {/foreach}
         <div class="form-group">
-            <div class="col-md-10">
-                <input type="hidden"  name="permissions[full_access]"  class="form-control" value="0" >
-                <input type="checkbox" {if isset($data.permissions.full_access) && $data.permissions.full_access}checked{/if} name="permissions[full_access]" id="permissions_full_access" value="1" > Повний доступ
+            <div class="col-md-9 col-md-offset-3">
+                <div class="checkbox">
+                    <label>
+                        <input type="hidden"  name="permissions[full_access]"  class="form-control" value="0" >
+                        <input type="checkbox" {if isset($data.permissions.full_access) && $data.permissions.full_access}checked{/if} name="permissions[full_access]" id="permissions_full_access" value="1" > Повний доступ
+                    </label>
+                </div>
             </div>
         </div>
     </fieldset>

@@ -1,5 +1,4 @@
 <form id="form" action="settings/process" method="post"  class="form-horizontal row">
-    <div><br></div>
     <div class="col-md-8 col-md-offset-2">
         <div id="tabs_settings">
             <ul>

@@ -1,8 +1,18 @@
 <form class="form-horizontal" action="admins/process/{if isset($data.id)}{$data.id}{/if}" enctype="multipart/form-data" method="post" id="form">
     <div class="row">
-        <div class="col-md-9">
-            <fieldset>
-                <legend>{$t.common.legend_main}</legend>
+        <div class="col-md-4">
+            <fieldset class="without-bd">
+                <div style="text-align: center; margin: 15px auto 1em; width: 162px; height: 162px; border-radius: 50%; overflow: hidden;"><img src="{$data.avatar}" alt="" class="edit-admin-avatar admin-avatar" style="width: 100%; height: 100%; object-fit: cover;"></div>
+                <div style="display: none">
+                    <input type="file" name="avatar" id="adminAvatar">
+                </div>
+                {if $action == 'edit' }
+                    <div style="text-align: center"><button type="button" id="changeAdminAvatar" class="btn btn-primary-transp">{$t.common.btn_change}</button></div>
+                {/if}
+            </fieldset>
+        </div>
+        <div class="col-md-8">
+            <fieldset class="without-bd">
                 <div class="form-group">
                     <label for="data_name" class="col-sm-3 control-label">{$t.admin_profile.name}</label>
                     <div class="col-sm-9">
@@ -58,25 +68,6 @@
                         </div>
                     </div>
                 </div>
-            </fieldset>
-        </div>
-        <div class="col-md-3">
-            <fieldset style="height: 330px;">
-                <legend>{$t.admin.avatar}</legend>
-                <div style="text-align: center; margin-bottom: 1em;"><img src="{$data.avatar}" alt="" class="edit-admin-avatar admin-avatar" style="max-width: 130px;"></div>
-                <div style="display: none">
-                    <input type="file" name="avatar" id="adminAvatar">
-                </div>
-                {if $action == 'edit' }
-                <div style="text-align: center"><button type="button" id="changeAdminAvatar" class="btn btn-default">{$t.common.btn_change}</button></div>
-                {/if}
-            </fieldset>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <fieldset>
-                <legend>{$t.admin.legend_passowrd}</legend>
                 <div class="form-group">
                     <label for="data_password" class="col-sm-3 control-label">{$t.admin_profile.password}</label>
                     <div class="col-sm-9">
@@ -91,6 +82,7 @@
                 </div>
             </fieldset>
         </div>
+
     </div>
 
     <input type="hidden" name="action" value="{$action}">
