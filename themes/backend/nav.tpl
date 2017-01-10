@@ -19,17 +19,11 @@
                 {/if}
             </li>
             {/foreach}
-            {*<li class="exit">*}
-                {*<a href="admin/logout">*}
-                    {*<i class="fa fa-power-off"></i>*}
-                    {*<span>{$t.admin.logout}</span>*}
-                {*</a>*}
-            {*</li>*}
         </ul>
-        <a href="admin/logout" class="exit">
-            <i class="fa fa-power-off"></i>
-            <span>{$t.admin.logout}</span>
-        </a>
+        {*<a href="admin/logout" class="exit">*}
+            {*<i class="fa fa-power-off"></i>*}
+            {*<span>{$t.admin.logout}</span>*}
+        {*</a>*}
     </nav>
 </div>
 <!--end-->
