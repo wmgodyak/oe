@@ -118,10 +118,6 @@ class Admin extends Backend {
                             foreach ($user as $k=>$v) {
                                 self::data($k, $v);
                             }
-                            $a = self::data('avatar');
-                            if(empty($a)){
-                                self::data('avatar', '/uploads/avatars/0.png');
-                            }
                             Session::set('backend_lang', $data['lang']);
 //                            setcookie('fail', '', time() - 60);
                         } else{
@@ -221,8 +217,7 @@ class Admin extends Backend {
         if($this->request->isPost()){
             $data = $this->request->post('data'); $s=0; $i=[]; $user_id = self::data('id');
 
-            // правила
-            FormValidation::setRule(['name', 'surname', 'email', 'phone'], FormValidation::REQUIRED);
+            FormValidation::setRule(['name', 'email'], FormValidation::REQUIRED);
             FormValidation::setRule('email', FormValidation::EMAIL);
 
             // валідація
@@ -259,7 +254,8 @@ class Admin extends Backend {
 
             }
 
-            $this->response->body(['s'=>$s, 'i' => $i, 'a' => isset($a) ? $a['f'] : null])->asJSON();
+            $this->response->body(['s'=>$s, 'i' => $i, 'a' => isset($a) ? $a['f'] . '?_=' . time() : null])->asJSON();
+            return;
         }
 
         $this->template->assign('ui', self::data());

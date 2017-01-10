@@ -162,12 +162,6 @@ abstract class Backend extends Controller
 
             $this->makeNav();
 
-            $a = Admin::data('avatar');
-
-            if(empty($a)){
-                Admin::data('avatar', '/uploads/avatars/0.png');
-            }
-
             $this->template->assign('title', $this->t($controller . '.action_' . $action));
             $this->template->assign('name',  $this->t($controller . '.action_' . $action));
         }

@@ -27,6 +27,7 @@ class Users extends Model
 
     /**
      * @param $id
+     * @param string $key
      * @return array|mixed
      */
     public function getData($id, $key = '*')
@@ -183,6 +184,8 @@ class Users extends Model
     public function changeAvatar($id)
     {
         $path = "uploads/avatars/";
+        if(! is_dir(DOCROOT . $path)) mkdir(DOCROOT . $path, 0775, true);
+
         $fname =  '/'.$path . md5($id) . '.png';
 
         $allowed = ['image/png', 'image/jpeg']; $size = 500000; $s=0; $m=[];

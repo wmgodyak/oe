@@ -16,17 +16,16 @@
     </div>
     {if !empty($panel_nav)}
         <div class="user-panel">
-            <div class="user-panel_avatar">
-                <!--<img src="" alt="">-->
+            <div class="user-panel_avatar admin-avatar">
+                {if $admin.avatar != ''}<img src="{$admin.avatar}" alt="">{/if}
             </div>
             <div class="user-panel_arrow">
                 <i class="fa fa-angle-down" aria-hidden="true"></i>
             </div>
             <div class="user-panel_dropdown">
                 <ul>
-                    <li><a href="#">Повідомлення</a></li>
-                    <li><a href="#">Налаштування</a></li>
-                    <li><a href="#">Вихід</a></li>
+                    <li><a href="javascript:;" onclick="return false;" class="b-admin-profile">{$t.admin.profile}</a></li>
+                    <li><a href="admin/logout">{$t.admin.logout}</a></li>
                 </ul>
             </div>
         </div>
