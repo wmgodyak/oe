@@ -1,0 +1,59 @@
+@mixin clear(){
+  &:after{
+    display: table;
+    content: '';
+    clear: both;
+  }
+}
+@mixin clearfix(){
+  &:after,
+  &:before{
+    content:'';
+    display: table;
+    clear: both;
+  }
+}
+@mixin text($font-size, $line-height){
+  font-family: $light;
+  font-size: $font-size;
+  line-height: $line-height;
+}
+
+//add - 31.08
+@mixin vendor($property, $value...){
+  -webkit-#{$property}:$value;
+
+  -moz-#{$property}:$value;
+
+  -ms-#{$property}:$value;
+
+  -o-#{$property}:$value;
+
+  #{$property}:$value;
+
+}
+@mixin response($prefix, $media) {
+  @media only screen and ($prefix+-width: $media+px) {
+    @content;
+  }
+}
+@mixin response-to($media1, $media2) {
+  @media only screen and (min-width: $media1+px) and (max-width: $media2+px) {
+    @content;
+  }
+}
+
+@mixin keyframes($name) {
+  @-webkit-keyframes #{$name} {
+    @content;
+  }
+  @-moz-keyframes #{$name} {
+    @content;
+  }
+  @-ms-keyframes #{$name} {
+    @content;
+  }
+  @keyframes #{$name} {
+    @content;
+  }
+}

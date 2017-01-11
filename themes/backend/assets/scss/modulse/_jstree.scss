@@ -1,0 +1,88 @@
+.jstree-wholerow-ul{
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  .mCSB_scrollTools{
+    width:4px;
+  }
+  .mCSB_inside>.mCSB_container {
+    margin-right: 4px;
+  }
+}
+.jstree-default{
+  .jstree-wholerow-hovered, .jstree-wholerow-clicked{
+    background: #2d3e50;
+  }
+}
+.pages-tree{
+  margin: 0 0 0 -7px;
+  position: absolute;
+  top: 140px;
+  bottom: 10px;
+  width: 260px;
+  ul{
+    li{
+      i{
+        background: #fff;
+      }
+      a{
+        @include text(13px, 18px);
+        color: $color-3;
+        transition: all 0.25s ease;
+        padding: 0 4px;
+        max-width: 85%;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        &.jstree-clicked{
+          border: none;
+          background: #2FC7F7;
+          color: #fff;
+        }
+        &:hover{
+          border: none;
+          background: #2FC7F7;
+          color: #fff;
+        }
+        .jstree-themeicon{
+          display: none;
+        }
+      }
+      &.jstree-closed{
+        & > .jstree-ocl{
+          background: url(../img/icons/32.png)  -4px -2px transparent;
+        }
+      }
+      &.jstree-open{
+        & > .jstree-ocl{
+          background: url(../img/icons/32.png)  -40px -2px transparent;
+        }
+        & > a{
+          & > .jstree-themeicon{
+            background-position: -112px -83px;
+          }
+        }
+      }
+      &.jstree-leaf{
+        background-position: -186px 0;
+        & > a{
+          & > .jstree-themeicon{
+            display: none;
+          }
+        }
+        .jstree-ocl{
+          background-position: -79px 0;
+        }
+      }
+    }
+  }
+  .jstree-default .jstree-open > .jstree-ocl{
+    background: #fff;
+  }
+}
+.jstree-default > .jstree-wholerow-ul .jstree-hovered,
+.jstree-default > .jstree-wholerow-ul .jstree-clicked{
+  color:#fff;
+}
