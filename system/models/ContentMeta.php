@@ -5,7 +5,7 @@ namespace system\models;
  * Class ContentMeta
  * @package system\models
  */
-class ContentMeta extends Model
+class ContentMeta extends Frontend
 {
     /**
      * @param $content_id

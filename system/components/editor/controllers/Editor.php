@@ -41,12 +41,6 @@ class Editor extends Backend
      */
     public function config()
     {
-/*
- *
-    [editor_bodyId] => cms_content
-    [editor_body_class] => cms_content
-    [editor_contents_css] => /themes/default/assets/css/style.css
- * */
         $css = $this->settings['editor_contents_css'];
         $_css = [];
         if(!empty($css)){
@@ -61,14 +55,6 @@ class Editor extends Backend
     config.bodyId = '{$this->settings['editor_bodyId']}';
     config.bodyClass = '{$this->settings['editor_body_class']}';
     config.contentsCss = [{$css}];
-	config.toolbarGroups = [
-		{ name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
-		{ name: 'insert', groups: ['links' , 'insert' ] },
-		{ name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ]},
-		{ name: 'document', groups: [ 'tools', 'mode' ] }
-	];
-
-	config.removeButtons = 'Underline,Scayt,Outdent,Indent,Anchor';
 
 	config.filebrowserBrowseUrl = '/vendor/filemanager/dialog.php?type=2&editor=ckeditor&fldr=';
 	config.filebrowserUploadUrl = '/vendor/filemanager/dialog.php?type=2&editor=ckeditor&fldr=';
@@ -101,13 +87,24 @@ class Editor extends Backend
 
 		{ name: 'tools', items : [  'Templates','-','ShowBlocks' ] },
 		{ name: 'file', items : [ 'Maximize','-', 'Source'] },
-		'/',
-		{ name: 'basicstyles', items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ] },
-		{ name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Blockquote','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'] },
+
+		{ name: 'basicstyles', items : [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock' ] },
+		{ name: 'paragraph', items : [ 'NumberedList','BulletedList','-','Blockquote'] },
 		{ name: 'styles', items : [ 'Format' ]},
 		{ name: 'colors', items : [ 'TextColor','BGColor' ] }
 	];
-	config.extraPlugins = 'codemirror';
+
+
+//	config.toolbarGroups = [
+//		{ name: 'clipboard', groups: [ 'clipboard', 'undo' ] },
+//		{ name: 'insert', groups: ['links' , 'insert' ] },
+//		{ name: 'paragraph', groups: [ 'list', 'indent', 'blocks', 'align', 'bidi', 'paragraph' ]},
+//		{ name: 'document', groups: [ 'tools', 'mode' ] }
+//	];
+//
+	config.removeButtons = 'Underline,Scayt,Outdent,Indent,Anchor';
+
+	config.extraPlugins = 'codemirror,justify';
 };
 ";
 

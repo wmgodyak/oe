@@ -12,11 +12,7 @@
             <div class="form-group">
                 <label for="data_surname" class="col-sm-3 control-label">{$t.admin_profile.surname}</label>
                 <div class="col-sm-9">
-<<<<<<< HEAD
-                    <input type="text" class="form-control" name="data[surname]" id="data_surname" value="{$ui.surname}" required>
-=======
                     <input type="text" class="form-control" name="data[surname]" id="data_surname" value="{$ui.surname}">
->>>>>>> 7fa771e0b506f991de2db29d75d140e55dfc7847
                 </div>
             </div>
             <div class="form-group">
@@ -28,11 +24,7 @@
             <div class="form-group">
                 <label for="data_phone" class="col-sm-3 control-label">{$t.admin_profile.phone}</label>
                 <div class="col-sm-9">
-<<<<<<< HEAD
-                    <input type="tel" class="form-control" name="data[phone]" id="data_phone" value="{$ui.phone}" required>
-=======
                     <input type="tel" class="form-control" name="data[phone]" id="data_phone" value="{$ui.phone}">
->>>>>>> 7fa771e0b506f991de2db29d75d140e55dfc7847
                 </div>
             </div>
         </fieldset>
@@ -40,21 +32,13 @@
     <div class="col-md-3">
         <fieldset style="height: 245px;">
             <legend>{$t.common.legend_photo}</legend>
-<<<<<<< HEAD
-            <div style="text-align: center; margin-bottom: 1em;"><img src="{$ui.avatar}" alt="" class="admin-avatar"></div>
-            <div style="display: none">
-                <input type="file" name="avatar" id="adminAvatar">
-            </div>
-            <div style="text-align: center"><button type="button" id="changeAvatar" class="btn btn-default">{$t.common.change}</button></div>
-=======
             <div style="clear: both;"></div>
             <div style="text-align: center; margin-bottom: 1em; margin-top: 1em;" id="changeAvatar" class="admin-avatar">
-                <img style="max-width:100%;" src="{$ui.avatar}">
+                <img style="max-width:100%;" src="{if $ui.avatar == ''}/themes/backend/assets/img/user-bg.png{else}{$ui.avatar}{/if}">
             </div>
             <div style="display: none">
                 <input type="file" name="avatar" id="adminAvatar">
             </div>
->>>>>>> 7fa771e0b506f991de2db29d75d140e55dfc7847
         </fieldset>
     </div>
 </div>

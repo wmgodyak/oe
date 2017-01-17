@@ -14,7 +14,7 @@ defined("CPATH") or die();
  * Class FeaturesContent
  * @package system\models
  */
-class FeaturesContent extends Model
+class FeaturesContent extends Backend
 {
     public function create($data)
     {

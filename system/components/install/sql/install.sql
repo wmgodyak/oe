@@ -201,7 +201,7 @@ CREATE TABLE IF NOT EXISTS `__content_info` (
   `intro` TEXT NULL DEFAULT NULL,
   `content` TEXT NULL DEFAULT NULL,
   PRIMARY KEY (`id`, `content_id`, `languages_id`),
-  UNIQUE INDEX `languages_id` (`url` ASC),
+  UNIQUE INDEX `languages_id` (`languages_id`, `url`),
   INDEX `fk_content_info_content1_idx` (`content_id` ASC),
   INDEX `fk_content_info_languages1_idx` (`languages_id` ASC),
   CONSTRAINT `fk_content_info_content1`

@@ -29,7 +29,7 @@ class Model
      * default languages id not static only
      * @var int
      */
-    protected $languages_id = 1;
+    protected $languages_id = 0;
 
     protected static $db;
 
@@ -38,6 +38,7 @@ class Model
     protected $request;
 
     protected $settings;
+    protected $languages;
 
     public function __construct()
     {
@@ -46,12 +47,6 @@ class Model
         $this->request = Request::getInstance();
 
         $this->settings = Settings::getInstance()->get();
-
-        $this->languages_id   = Session::get('app.languages_id');
-        $this->languages_code = Session::get('app.languages_code');
-
-        if(! $this->languages_id)
-            $this->languages_id = 1;
     }
 
 
@@ -62,7 +57,7 @@ class Model
      */
     protected function t($key=null)
     {
-        return Lang::getInstance($this->settings['app_theme_current'], $this->languages_code)->t($key);
+        return Lang::getInstance()->t($key);
     }
 
     public function setError($msg)

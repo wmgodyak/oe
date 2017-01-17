@@ -12,7 +12,7 @@ use system\core\Session;
 
 defined("CPATH") or die();
 
-class Guides extends Model
+class Guides extends Frontend
 {
     private $content_type = 'guide';
     private $types_id = 0;

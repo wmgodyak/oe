@@ -10,7 +10,7 @@ namespace system\models;
 
 defined("CPATH") or die();
 
-class Parser extends Model
+class Parser extends Frontend
 {
     private $ds;
 

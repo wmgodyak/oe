@@ -5,7 +5,7 @@ namespace system\models;
  * Class UsersMeta
  * @package system\models
  */
-class UsersMeta extends Model
+class UsersMeta extends Frontend
 {
     /**
      * @param $users_id

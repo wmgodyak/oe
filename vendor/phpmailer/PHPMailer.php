@@ -1192,6 +1192,7 @@ class PHPMailer
     public function getSMTPInstance()
     {
         if (!is_object($this->smtp)) {
+            include_once DOCROOT . "vendor/phpmailer/SMTP.php";
             $this->smtp = new SMTP;
         }
         return $this->smtp;

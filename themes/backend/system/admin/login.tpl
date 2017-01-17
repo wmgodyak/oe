@@ -28,7 +28,7 @@
                 <div class="f-link">
                     <a href="#" class="b-admin-fp" onclick="return false;">{$t.admin.fp_link}</a>
                 </div>
-                <button type="submit" class="btn btn-info btn-lg rippler rippler-default">{$t.admin.b_login}</button>
+                <button type="submit" class="btn btn-info btn-lg rippler rippler-default" style="height: 60px!important; line-height:60px; padding: 0 40px; font-size: 20px;width: auto;">{$t.admin.b_login}</button>
                 <input type="hidden" name="token" value="{$token}">
             </form>
 

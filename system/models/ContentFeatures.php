@@ -5,7 +5,7 @@ namespace system\models;
  * Class ContentFeatures
  * @package system\models
  */
-class ContentFeatures extends Model
+class ContentFeatures extends Frontend
 {
     /**
      * @param int $parent_id

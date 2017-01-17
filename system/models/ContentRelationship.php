@@ -6,7 +6,7 @@ use system\core\exceptions\Exception;
  * Class ContentRelationship
  * @package system\models
  */
-class ContentRelationship extends Model
+class ContentRelationship extends Frontend
 {
     /**
      * @param $content_id

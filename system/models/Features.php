@@ -4,10 +4,8 @@ namespace system\models;
  * Class Features
  * @package system\models
  */
-class Features extends Model
+class Features extends Backend
 {
-    private $languages;
-
     public function __construct()
     {
         parent::__construct();

@@ -19,7 +19,7 @@ defined("CPATH") or die();
 class Backend extends Model
 {
     protected $admin;
-    protected $languages;
+    protected $languages; // todo change it to object
 
     public function __construct()
     {

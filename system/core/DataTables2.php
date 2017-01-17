@@ -500,16 +500,16 @@ class DataTables2
         $this->config('order', [$this->order_defs['index'], $this->order_defs['order']]);
 
         $in_init_functions = '';
-        if(!empty($this->group_actions)){
-            $opt = '<label>Action: <select id="tbl_group_actions" class="form-control" style="width: 200px;">';
-            $opt .= "<option value=\"\"> - </option>";
-            foreach ($this->group_actions as $group_action) {
-                $opt .= "<option value=\"{$group_action['action']}\">{$group_action['label']}</option>";
-            }
-            $opt .= "</select> <button class=\"btn\" id=\"tbl_group_actions_submit\">Go</button></label>";
-
-            $in_init_functions .= "$('<div id=\"group_actions\" style=\"width: 360px; padding-top: 10px; float:right;\">$opt</div>').css('opacity',0).insertAfter('.dataTables_filter');";
-        }
+//        if(!empty($this->group_actions)){
+//            $opt = '<label>Action: <select id="tbl_group_actions" class="form-control" style="width: 200px;">';
+//            $opt .= "<option value=\"\"> - </option>";
+//            foreach ($this->group_actions as $group_action) {
+//                $opt .= "<option value=\"{$group_action['action']}\">{$group_action['label']}</option>";
+//            }
+//            $opt .= "</select> <button class=\"btn\" id=\"tbl_group_actions_submit\">Go</button></label>";
+//
+//            $in_init_functions .= "$('<div id=\"group_actions\" style=\"width: 360px; padding-top: 10px; float:right;\">$opt</div>').css('opacity',0).insertAfter('.dataTables_filter');";
+//        }
 
         if($this->sortable){
 //            $this->config('rowReorder', true);
@@ -573,13 +573,13 @@ class DataTables2
                     var chb = $('.dataTable').find('.dt-chb');
                     if($(this).is(':checked')){
                         chb.attr('checked', true);
-                        showGroupActions();
+//                        showGroupActions();
                     } else {
                         chb.removeAttr('checked');
-                        hideGroupActions();
+//                        hideGroupActions();
                     }
                 });
-
+                /*
                 $(document).on('change', '.dt-chb', function(){
                     var checked = false;
                     var chb = $('.dataTable').find('.dt-chb');
@@ -618,7 +618,7 @@ class DataTables2
                     });
 
                     return selected;
-                }
+                }*/
             });
         </script>";
     }

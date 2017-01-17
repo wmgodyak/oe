@@ -8,7 +8,7 @@
                 <ul>
                     <li><a href="{$com_url}#common">Загальні</a></li>
                     {foreach $modules as $module=> $meta}
-                        <li><a href="{$com_url}#{$module}">{$meta.name}</a></li>
+                        <li><a href="{$com_url}#{$module}">{$module}</a></li>
                     {/foreach}
                 </ul>
                 <div id="common">
@@ -25,11 +25,10 @@
                                     <td>{$code}{if is_array($common[$lang.code][$code])}.{$k}{/if}</td>
                                     {foreach $langs as $lang}
                                         <td>
-                                            <input
+                                            <textarea
                                                     class="form-control"
                                                     name="common[{$lang.code}][{$code}]{if is_array($common[$lang.code][$code])}[{$k}]{/if}"
-                                                    value="{if is_array($common[$lang.code][$code])}{$common[$lang.code][$code][$k]}{else}{$common[$lang.code][$code]}{/if}"
-                                                    required>
+                                                    required>{if is_array($common[$lang.code][$code])}{$common[$lang.code][$code][$k]}{else}{$common[$lang.code][$code]}{/if}</textarea>
                                         </td>
                                     {/foreach}
                                 </tr>
@@ -56,11 +55,10 @@
                                         <td>{$code}{if is_array($meta.translations[$lang.code][$code])}.{$k}{/if}</td>
                                         {foreach $langs as $lang}
                                             <td>
-                                                <input
+                                                <textarea
                                                         class="form-control"
                                                         name="modules[{$module}][{$lang.code}][{$code}]{if is_array($meta.translations[$lang.code][$code])}[{$k}]{/if}"
-                                                        value="{if is_array($meta.translations[$lang.code][$code])}{$meta.translations[$lang.code][$code][$k]}{else}{$meta.translations[$lang.code][$code]}{/if}"
-                                                        required>
+                                                        required>{if is_array($meta.translations[$lang.code][$code])}{$meta.translations[$lang.code][$code][$k]}{else}{$meta.translations[$lang.code][$code]}{/if}</textarea>
                                             </td>
                                         {/foreach}
                                     </tr>

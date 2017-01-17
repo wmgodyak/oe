@@ -1,7 +1,10 @@
 <?php
 
 namespace system\models;
-
+/**
+ * Class UsersGroup
+ * @package system\models
+ */
 class UsersGroup extends Backend
 {
     /**

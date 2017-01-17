@@ -35,25 +35,25 @@ class Frontend extends core\Controller
     protected $template;
 
     /**
+     * all system settings
+     * @var array
+     */
+    protected $settings;
+    protected $images;
+    protected $languages_id;
+    protected $languages_code;
+
+    protected $page;
+    private   $theme;
+    protected $app;
+
+    /**
      * init status
      * @var bool
      */
     private static $initLangs = false;
 
-    /**
-     * all system settings
-     * @var array
-     */
-    protected $settings;
-
-    protected $images;
-
-    protected $languages_id;
-    protected $languages_code;
-
-    protected $page;
-    private $theme;
-    protected $app;
+    private $front;
 
     public function __construct()
     {
@@ -61,26 +61,28 @@ class Frontend extends core\Controller
 
         $this->request->setMode('frontend');
 
+        // todo тут треба визначити мову
+
+        $this->front = new \system\models\Frontend();
+
+        $this->languages_id = $this->front->defileLanguageId();
+        $this->languages_code = $this->front->languages->getData($this->languages_id, 'code');
+
         // settings
         $this->settings = Settings::getInstance()->get();
 
         // template settings
         $theme = $this->settings['app_theme_current'];
-        $this->theme= $theme;
+        $this->theme = $theme;
         $this->template = Template::getInstance($theme);
 
         if(!self::$initLangs){
             $this->initLangs();
         }
 
-        $this->images   = new Images();
-
-        $this->languages_id   = Session::get('app.languages_id');
-
-        $this->languages_code = Session::get('app.languages_code');
+        $this->images = new Images();
 
         // to access custom modules
-
         $this->page = $this->template->getVars('page');
 
         $events = EventsHandler::getInstance();
@@ -118,7 +120,7 @@ class Frontend extends core\Controller
                 exit();
             }
 
-            if($this->settings['active'] == 0){
+            if($this->settings['active'] == 0) {
                 $a = Session::get('backend.admin');
                 if( ! $a) {
                     $this->technicalWorks();
@@ -126,9 +128,7 @@ class Frontend extends core\Controller
             }
 
             // завантаження сторінки
-            $front  = new \system\models\Front(true);
-
-            $page = $front->getPage();
+            $page = $this->front->getPage();
 
             if (!$page) {
                 $page = $this->e404();
@@ -149,6 +149,7 @@ class Frontend extends core\Controller
 
             $this->languages_id   = $page['languages_id'];
             $this->languages_code = $page['languages_code'];
+
             $a = [];
             $a['app']['languages_id']   = $this->languages_id;
             $a['app']['languages_code'] = $this->languages_code;
@@ -232,10 +233,8 @@ class Frontend extends core\Controller
             throw new Exception("Неможливо здійснити перенаправлення на 404 сторінку. Введіть ід сторінки в налаштуваннях");
         }
 
-        $f = new \system\models\Front();
-
         header("HTTP/1.0 404 Not Found");
-        return $f->getPageById($id);
+        return $this->front->getPageById($id);
     }
 
     private function technicalWorks()

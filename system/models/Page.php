@@ -7,7 +7,7 @@ use system\models\page\Features;
  * Class Page
  * @package system\models
  */
-class Page extends Model
+class Page extends Frontend
 {
     public $features;
 

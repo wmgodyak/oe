@@ -64,12 +64,14 @@ class Modules extends Model
         $file = DOCROOT . "modules/{$module}/sql/install.sql";
         if(file_exists($file)){
             $q = file_get_contents($file);
-            $q = str_replace('__', self::$db->getDbPrefix(), $q);
-            self::$db->exec($q);
+            if(!empty($q)){
+                $q = str_replace('__', self::$db->getDbPrefix(), $q);
+                self::$db->exec($q);
 
-            if($this->hasError()){
-                $this->setError($this->getErrorMessage());
-                return false;
+                if($this->hasError()){
+                    $this->setError($this->getErrorMessage());
+                    return false;
+                }
             }
         }
 

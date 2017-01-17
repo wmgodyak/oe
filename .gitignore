@@ -22,8 +22,4 @@ robots.txt
 sitemap*.xml
 gulpfile.js
 package.json
-<<<<<<< HEAD
 node_modules/
-=======
-node_modules/
->>>>>>> bda36599d346f763db1a6ace8a39c28b7b3a5f42

@@ -56,7 +56,7 @@ class Translations extends Backend
 
             $cls = 'modules\\'.$module.'\controllers\\'.ucfirst($module);
             $doc = PHPDocReader::getMeta(new $cls);
-//            d($doc);
+            $doc['name'] = isset($doc['name']) ? $doc['name'] : $modules;
             $modules[$module] = ['name' => $doc['name'], 'translations' => $translations];
 
         }

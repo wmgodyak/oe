@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: wg
- * Date: 18.06.16
- * Time: 16:40
- */
 
 namespace system\models;
 /**
@@ -13,7 +7,6 @@ namespace system\models;
  */
 class Images extends Model
 {
-
     /**
      * @param $content_id
      * @param null $size

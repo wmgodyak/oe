@@ -5,7 +5,7 @@ namespace system\models;
  * Class Nav
  * @package system\models
  */
-class Nav extends Model
+class Nav extends Frontend
 {
     /**
      * @param $code
@@ -52,13 +52,11 @@ class Nav extends Model
 
     /**
      * @param $parent_id
-     * @param $level
      * @return mixed
      */
-    private function items($parent_id, $level = 5)
+    public function items($parent_id)
     {
-        $level--;
-        $items = self::$db
+        return self::$db
             ->select("
               select c.id, c.id as url, c.isfolder, ci.name, ci.title
               from __content c
@@ -66,17 +64,6 @@ class Nav extends Model
               where c.parent_id='{$parent_id}' and c.status='published'
               ")
             ->all();
-
-        foreach ($items as $k=>$item) {
-            if($item['isfolder'] && $level > 0){
-                $a = $this->items($item['id'], $level);
-                if(!empty($a)){
-                    $items[$k]['items'] = $a;
-                }
-            }
-        }
-
-        return $items;
     }
 
 }

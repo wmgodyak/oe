@@ -2460,15 +2460,12 @@ input[type="submit"].btn-block, input[type="reset"].btn-block, input[type="butto
     transition: height .35s ease
 }
 
-<<<<<<< HEAD
-=======
 @font-face {
     font-family: 'Glyphicons Halflings';
     src: url('http://oyi.orangehilldev.com/fonts/glyphicons-halflings-regular.eot');
     src: url('http://oyi.orangehilldev.com/fonts/glyphicons-halflings-regular.eot?') format('embedded-opentype'), url('http://oyi.orangehilldev.com/fonts/glyphicons-halflings-regular.woff') format('woff'), url('http://oyi.orangehilldev.com/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('http://oyi.orangehilldev.com/fonts/glyphicons-halflings-regular.svg') format('svg')
 }
 
->>>>>>> 7fa771e0b506f991de2db29d75d140e55dfc7847
 .glyphicon {
     position: relative;
     top: 1px;

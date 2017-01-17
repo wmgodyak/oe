@@ -603,40 +603,6 @@ engine.admin = {
 
         $(document).on('click','.b-admin-profile', function(e){
             e.preventDefault();
-<<<<<<< HEAD
-            engine.admin.editProfile();
-        });
-    },
-    editProfile: function()
-    {
-        engine.request.get('admin/profile', function(d){
-           var pw = engine.dialog({
-                content: d,
-                title: 'Мій профіль',
-                autoOpen: true,
-                width: 750,
-                modal: true,
-                buttons: {
-                    "Зберегти": function(){
-                        $('#editProfileForm').submit();
-                    }
-                }
-            });
-            engine.validateAjaxForm('#editProfileForm', function(d){
-                if(d.a == null){
-                    pw.dialog('close');
-                } else{
-                    $('.admin-avatar').attr('src' , d.a);
-                }
-
-            });
-            $('#changeAvatar').click(function(){
-                $('#adminAvatar')
-                       .trigger('click')
-                       .change(function(){
-                           $('#editProfileForm').submit();
-                       });
-=======
             engine.request.get('admin/profile', function(d){
                 var pw = engine.dialog({
                     content: d,
@@ -668,7 +634,6 @@ engine.admin = {
                             $('#editProfileForm').submit();
                         });
                 });
->>>>>>> 7fa771e0b506f991de2db29d75d140e55dfc7847
             });
         });
     }
