@@ -12,7 +12,7 @@ class App
 
     public $module;
 
-    private $allowed = ['nav', 'languages', 'images', 'guides', 'contentMeta', 'cache', 'page'];
+    private $allowed = ['nav', 'languages', 'images', 'guides', 'contentMeta', 'cache', 'page', 'pagination'];
     /**
      * @param $model
      * @return mixed

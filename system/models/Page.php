@@ -44,6 +44,21 @@ class Page extends Frontend
         return $items;
     }
 
+    /**
+     * @param $parent_id
+     * @return mixed
+     */
+    public function totalItems($parent_id)
+    {
+        return self::$db
+            ->select("
+              select count(c.id) as t
+              from __content c
+              where c.parent_id='{$parent_id}' and c.status='published'
+              ")
+            ->row('t');
+    }
+
     public function info($id, $key = '*')
     {
         return self::$db

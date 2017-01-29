@@ -8,7 +8,7 @@
 
 namespace system\models\page;
 
-use system\models\Model;
+use system\models\Frontend;
 
 defined("CPATH") or die();
 
@@ -16,7 +16,7 @@ defined("CPATH") or die();
  * Class Features
  * @package system\models\page
  */
-class Features extends Model
+class Features extends Frontend
 {
     /**
      * @param $content_id
@@ -202,5 +202,23 @@ class Features extends Model
         if(empty($features_id)) return null;
 
         return $this->value($content_id, $features_id);
+    }
+
+    /**
+     * @param $code
+     * @return mixed
+     */
+    public function getName($code)
+    {
+        return self::$db
+            ->select
+            ("
+              select fi.name
+              from __features f
+              join __features_info fi on fi.features_id=f.id and fi.languages_id='{$this->languages_id}'
+              where f.code = '{$code}'
+              limit 1
+           ")
+            ->all('name');
     }
 }
