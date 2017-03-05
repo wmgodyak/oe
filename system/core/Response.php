@@ -10,6 +10,8 @@ namespace system\core;
 use system\core\exceptions\Exception;
 use system\models\Parser;
 
+use MatthiasMullie\Minify;
+
 defined("CPATH") or die();
 
 /**
@@ -221,7 +223,47 @@ class Response
     }
 
 
-    private function compress($buffer) {
+    private function compress($buffer)
+    {
+        $template = Template::getInstance();
+
+        $js_path = "tmp/{$template->theme}.min.js";
+        $css_path = "tmp/{$template->theme}.min.css";
+
+        $css = $template->getStyles();
+        if(!file_exists(DOCROOT . $css_path) && !empty($css)){
+
+            $minifier = new Minify\CSS();
+
+            foreach ($css as $k=>$v) {
+                $minifier->add(DOCROOT . $v);
+            }
+
+            $minifier->minify(DOCROOT . $css_path);
+        }
+
+        if(!empty($css)){
+            $css_compiled = "<link href='{$css_path}' rel='stylesheet'>";
+            $buffer = str_replace('</head>', "$css_compiled\n</head>", $buffer);
+        }
+
+        $js = $template->getScripts();
+        if(!file_exists(DOCROOT . $js_path) && !empty($js)){
+
+            $minifier = new Minify\JS();
+
+            foreach ($js as $k=>$v) {
+                $minifier->add(DOCROOT . $v);
+            }
+
+            $minifier->minify(DOCROOT . $js_path);
+        }
+
+        if(!empty($js)){
+            $js_compiled  = "<script src='{$js_path}'></script>";
+            $buffer = str_replace('</body>', "$js_compiled\n</body>", $buffer);
+        }
+
         $search = array(
             '/\>[^\S ]+/s',  // strip whitespaces after tags, except space
             '/[^\S ]+\</s',  // strip whitespaces before tags, except space

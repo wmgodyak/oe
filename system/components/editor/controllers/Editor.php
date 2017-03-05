@@ -105,6 +105,7 @@ class Editor extends Backend
 	config.removeButtons = 'Underline,Scayt,Outdent,Indent,Anchor';
 
 	config.extraPlugins = 'codemirror,justify';
+	config.height = 500;
 };
 ";
 

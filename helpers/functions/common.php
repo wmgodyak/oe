@@ -111,3 +111,32 @@ if (!function_exists('http_response_code')) {
 
     }
 }
+
+if (!function_exists('assets')){
+
+    function assets($path, $theme_path = true, $priority = 0)
+    {
+        $debug = \system\core\Config::getInstance()->get('core.debug');
+        $template = \system\core\Template::getInstance();
+
+        $ext = pathinfo($path, PATHINFO_EXTENSION);
+
+        $file_path = ( $theme_path ? $template->theme_path : '' ) . $path;
+
+        switch($ext){
+            case 'js':
+                $template->assignScript($file_path, $priority);
+                $link = "<script src='{$file_path}'></script>";
+                break;
+            case 'css':
+                $template->assignStyle($file_path, $priority);
+                $link = "<link href='{$file_path}' rel='stylesheet'>";
+                break;
+            default:
+                throw new Exception('Wrong file extension. Allowed only css and js');
+                break;
+        }
+
+        if($debug) return $link;
+    }
+}

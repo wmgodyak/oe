@@ -21,9 +21,9 @@ require_once DOCROOT. "vendor/smarty/Smarty.class.php";
 class Template
 {
     private static $instance;
-    private $theme = null;
-    private $theme_url;
-    private $theme_path;
+    public $theme = null;
+    public $theme_url;
+    public $theme_path;
     private $smarty;
 
     /**
@@ -68,7 +68,7 @@ class Template
         $this->smarty->setCacheDir(DOCROOT . '/tmp/cache/');
 
         // custom vars
-        $theme_path = DOCROOT. $theme;
+        $theme_path = $theme;
         
         if(is_dir($theme_path)) {
 

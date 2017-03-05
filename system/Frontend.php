@@ -171,6 +171,8 @@ class Frontend extends core\Controller
                 . 'layouts/';
 
             $ds = $this->template->fetch($template_path . $page['template']);
+            $this->template->assign('content', $ds);
+            $ds = $this->template->fetch($template_path . 'index');
 
             $ds = DataFilter::apply('documentSource', $ds);
 
