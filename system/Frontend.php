@@ -61,8 +61,6 @@ class Frontend extends core\Controller
 
         $this->request->setMode('frontend');
 
-        // todo тут треба визначити мову
-
         $this->front = new \system\models\Frontend();
 
         $this->languages_id = $this->front->defileLanguageId();
@@ -171,7 +169,7 @@ class Frontend extends core\Controller
                 . 'layouts/';
 
             $ds = $this->template->fetch($template_path . $page['template']);
-            $this->template->assign('content', $ds);
+            $this->template->assign('body', $ds);
             $ds = $this->template->fetch($template_path . 'index');
 
             $ds = DataFilter::apply('documentSource', $ds);

@@ -17,11 +17,11 @@ $db = [
 if(isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] == '127.0.0.1'){
     $db = [
         'type'     => 'mysql',
-        'host'     => '%host%',
-        'db'       => '%db%',
-        'prefix'   => '%prefix%',
-        'user'     => '%user%',
-        'pass'     => '%pass%',
+        'host'     => 'localhost',
+        'db'       => 'e7',
+        'prefix'   => 'x_',
+        'user'     => 'root',
+        'pass'     => 'dell',
         'port'     => 3306,
         'charset'  => 'utf8',
         'debug'    => true
