@@ -90,7 +90,7 @@ $config = array(
 	| DO NOT put inside upload folder
 	|
 	*/
-	'thumbs_base_path' => 'thumbs/',
+	'thumbs_base_path' => $_SERVER['DOCUMENT_ROOT'] . 'uploads/thumbs/',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -149,9 +149,9 @@ $config = array(
 	//Show or not show sorting feature in filemanager
 	'show_sorting_bar'                        => true,
 	//active or deactive the transliteration (mean convert all strange characters in A..Za..z0..9 characters)
-	'transliteration'                         => false,
+	'transliteration'                         => true,
 	//convert all spaces on files name and folders name with $replace_with variable
-	'convert_spaces'                          => false,
+	'convert_spaces'                          => true,
 	//convert all spaces on files name and folders name this value
 	'replace_with'                            => "_",
 	//convert to lowercase the files and folders name
