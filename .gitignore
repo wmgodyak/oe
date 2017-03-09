@@ -5,8 +5,8 @@ logs/*
 !logs/.htaccess
 uploads/*
 !uploads/index.html
-modules/*
-!modules/.htaccess
-!modules/index.html
+#modules/*
+#!modules/.htaccess
+#!modules/index.html
 robots.txt
 sitemap*.xml
