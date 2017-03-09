@@ -11,4 +11,8 @@
          * enable or disable core update
          */
         'update_core' => false,
+        /**
+         * Enable or disable force compile for assets
+         */
+        'assets_compile_force' => false
     );

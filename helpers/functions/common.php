@@ -121,7 +121,7 @@ if (!function_exists('assets')){
 
         $ext = pathinfo($path, PATHINFO_EXTENSION);
 
-        $file_path = ( $theme_path ? $template->theme_path : '' ) . $path;
+        $file_path = ( $theme_path ? $template->theme_path . 'assets/' : '' ) . $path;
 
         switch($ext){
             case 'js':

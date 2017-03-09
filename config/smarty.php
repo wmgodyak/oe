@@ -10,6 +10,5 @@ return array(
     'compile_check'  => true,
     'caching'        => false,
     'cache_lifetime' => 0,
-    'debugging'      => false,
-    'html_minify'    => false
+    'debugging'      => false
 );

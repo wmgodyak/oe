@@ -222,48 +222,66 @@ class Response
         header($protocol . ' ' . $code . ' ' . $text);
     }
 
-
+    /**
+     * @param $buffer
+     * @return mixed
+     */
     private function compress($buffer)
     {
+        $compile_force = Config::getInstance()->get('core.assets_compile_force');
+
         $template = Template::getInstance();
 
         $js_path = "tmp/{$template->theme}.min.js";
         $css_path = "tmp/{$template->theme}.min.css";
 
-        $css = $template->getStyles();
-        if(!file_exists(DOCROOT . $css_path) && !empty($css)){
+        $css_exists = file_exists(DOCROOT . $css_path);
+        $js_exists = file_exists(DOCROOT . $js_path);
 
-            $minifier = new Minify\CSS();
+        if($compile_force || !$css_exists){
 
-            foreach ($css as $k=>$v) {
-                $minifier->add(DOCROOT . $v);
+            $css = $template->getStyles();
+            if(! empty($css)){
+
+                $minifier = new Minify\CSS();
+
+                foreach ($css as $k=>$v) {
+                    $minifier->add(DOCROOT . $v);
+                }
+
+                $minifier->minify(DOCROOT . $css_path);
             }
-
-            $minifier->minify(DOCROOT . $css_path);
         }
 
-        if(!empty($css)){
-            $css_compiled = "<link href='{$css_path}' rel='stylesheet'>";
+        if( $css_exists ){
+            $v = filemtime(DOCROOT . $css_path);
+            $css_compiled = "<link href='$css_path?_=$v' rel='stylesheet'>";
             $buffer = str_replace('</head>', "$css_compiled\n</head>", $buffer);
         }
 
-        $js = $template->getScripts();
-        if(!file_exists(DOCROOT . $js_path) && !empty($js)){
 
-            $minifier = new Minify\JS();
+        if($compile_force || !$js_exists){
+            $js = $template->getScripts();
+            if(!empty($js)){
 
-            foreach ($js as $k=>$v) {
-                $minifier->add(DOCROOT . $v);
+                $minifier = new Minify\JS();
+
+                foreach ($js as $k=>$v) {
+                    $minifier->add(DOCROOT . $v);
+                }
+
+                $minifier->minify(DOCROOT . $js_path);
+
             }
-
-            $minifier->minify(DOCROOT . $js_path);
         }
 
-        if(!empty($js)){
-            $js_compiled  = "<script src='{$js_path}'></script>";
+        if($js_exists){
+            $v = filemtime(DOCROOT . $js_path);
+            $js_compiled  = "<script src='$js_path?_=$v'></script>";
             $buffer = str_replace('</body>', "$js_compiled\n</body>", $buffer);
         }
 
+        // minify html
         $search = array(
             '/\>[^\S ]+/s',  // strip whitespaces after tags, except space
             '/[^\S ]+\</s',  // strip whitespaces before tags, except space

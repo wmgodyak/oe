@@ -84,7 +84,6 @@ class Frontend extends core\Controller
         $this->page = $this->template->getVars('page');
 
         $events = EventsHandler::getInstance();
-
         $this->template->assign('events', $events);
         $this->template->assign('settings', $this->settings);
 
