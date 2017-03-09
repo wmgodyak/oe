@@ -26,7 +26,7 @@ class Updates extends Backend
     {
         parent::init();
 
-        if(!Config::getInstance()->get('core.update_core')){
+        if(!Config::getInstance()->get('core.update_system')){
             return ;
         }
 

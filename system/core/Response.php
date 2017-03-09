@@ -52,13 +52,13 @@ class Response
      */
     public function render()
     {
-        $debug = Config::getInstance()->get('core.debug');
         header('Content-Type: ' . $this->ct);
 
         if($this->ct == 'application/json'){
-            echo json_encode($this->body);
-            return;
+            echo json_encode($this->body); die;
         }
+
+        $env = Config::getInstance()->get('core.environment');
 
         $body = $this->body;
 
@@ -79,7 +79,7 @@ class Response
             case 'frontend':
                 $parser = new Parser($this->body);
                 $body = $parser->getDocumentSource();
-                if(! $debug){
+                if($env == 'production'){
                     $body = $this->compress($body);
                 }
                 break;
@@ -88,11 +88,9 @@ class Response
                 break;
         }
 
-        $debug = Config::getInstance()->get('core.debug');
-
         $db = DB::getInstance();
 
-        if($debug &&  $this->ct == 'text/html' && ! Request::getInstance()->isXhr()){
+        if($env == 'debugging' &&  $this->ct == 'text/html' && ! Request::getInstance()->isXhr()){
             $time = $_SERVER['REQUEST_TIME_FLOAT'];
             $q = $db->getQueryCount();
 
@@ -143,29 +141,21 @@ class Response
     public function asHtml()
     {
         $this->ct = 'text/html';
-
-//        $this->render();
     }
     public function asPlainText()
     {
         $this->ct = 'text/plain';
-
-//        $this->render();
     }
 
     public function asJSON()
     {
         header('Content-Type: application/json');
         $this->ct = 'application/json';
-
-//        $this->render();
     }
 
     public function asXML()
     {
         $this->ct = 'application/xml';
-
-//        $this->render();
     }
 
     /**
@@ -220,6 +210,7 @@ class Response
         $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
 
         header($protocol . ' ' . $code . ' ' . $text);
+        if($die) die;
     }
 
     /**

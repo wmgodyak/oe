@@ -116,7 +116,7 @@ if (!function_exists('assets')){
 
     function assets($path, $theme_path = true, $priority = 0)
     {
-        $debug = \system\core\Config::getInstance()->get('core.debug');
+        $env = \system\core\Config::getInstance()->get('core.environment');
         $template = \system\core\Template::getInstance();
 
         $ext = pathinfo($path, PATHINFO_EXTENSION);
@@ -137,6 +137,6 @@ if (!function_exists('assets')){
                 break;
         }
 
-        if($debug) return $link;
+        if($env != 'production') return $link;
     }
 }
