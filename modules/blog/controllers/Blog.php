@@ -32,8 +32,9 @@ class Blog extends Frontend
         $this->posts = new Posts();
         $this->categories = new Categories('posts_categories');
 
-        if(isset($this->settings['modules']['Blog']['config']) && !empty($this->settings['modules']['Blog']['config'])){
-            $this->config = array_merge($this->config, $this->settings['modules']['Blog']['config']);
+        $user_conf = $this->settings->get('modules.Blog.config');
+        if(!empty($user_conf)){
+            $this->config = array_merge($this->config, $user_conf);
         }
     }
 

@@ -12,7 +12,6 @@
     </div>
 
     <div class="row">
-
         <div class="col-sm-8 blog-main">
             {assign var='posts' value=$app->module->blog->posts(0, 4)}
             {foreach $posts as $post}

@@ -487,6 +487,7 @@ INSERT INTO `__content_types` (`id`,`parent_id`, `isfolder`, `type`, `name`, `is
 -- SAMPLE DATA
 
 INSERT INTO `__content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id`, `isfolder`, `position`, `created`, `updated`, `published`, `settings`, `status`, `external_id`) VALUES
+  (1, 1, 1, 1, 0, 1, 0, '2017-03-09 10:13:35', '2017-03-09 13:01:11', '2017-03-09', NULL, 'published', ''),
   (2, 1, 1, 1, 1, 0, 0, '2017-03-09 10:13:35', '2017-03-09 13:01:11', '2017-03-09', NULL, 'published', ''),
   (3, 1, 1, 1, 1, 0, 0, '2017-03-09 10:13:44', '2017-03-09 10:13:49', '2017-03-09', NULL, 'published', ''),
   (4, 4, 4, 1, 0, 1, 0, '2017-03-09 10:18:39', '2017-03-09 12:53:09', '2017-03-09', NULL, 'published', ''),
@@ -497,6 +498,7 @@ INSERT INTO `__content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id
   (9, 3, 3, 1, 0, 0, 0, '2017-03-09 12:54:36', '2017-03-09 12:55:23', '2017-03-09', NULL, 'published', '');
 
 INSERT INTO `__content_info` (`id`, `content_id`, `languages_id`, `name`, `url`, `h1`, `title`, `keywords`, `description`, `intro`, `content`) VALUES
+  (1, 1, 1, 'Home', '', '', 'Home', '', '', '', ''),
   (2, 2, 1, 'About', 'about', '', 'About', '', '', '', ''),
   (3, 3, 1, '404', '404', '', '404', '', '', '', ''),
   (4, 4, 1, 'Blog', 'blog', '', 'Blog', '', 'The official example template of creating a blog with Bootstrap.', NULL, NULL),

@@ -153,12 +153,22 @@ class Lang
                     if(isset($this->translations[$parts[0]][$parts[1]][$parts[2]])){
                         $data = $this->translations[$parts[0]][$parts[1]][$parts[2]];
                     }
+                } else if($c == 4){
+                    if(isset($this->translations[$parts[0]][$parts[1]][$parts[2]][$parts[3]])){
+                        $data = $this->translations[$parts[0]][$parts[1]][$parts[2]][$parts[3]];
+                    }
+                } else if($c == 5){
+                    if(isset($this->translations[$parts[0]][$parts[1]][$parts[2]][$parts[3]][$parts[4]])){
+                        $data = $this->translations[$parts[0]][$parts[1]][$parts[2]][$parts[3]][$parts[4]];
+                    }
                 }
-
                 return $data;
             }
+
+            return isset($this->translations[$key])? $this->translations[$key] : $key;
         }
 
-        return $key && isset($this->translations[$key])? $this->translations[$key] : $this->translations;
+
+        return $this->translations;
     }
 }

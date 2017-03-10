@@ -113,7 +113,15 @@ if (!function_exists('http_response_code')) {
 }
 
 if (!function_exists('assets')){
-
+    /**
+     * Assign assets to template
+     * @param $path
+     * @param bool $theme_path
+     * @param int $priority
+     * @return string
+     * @throws Exception
+     * @throws \system\core\exceptions\Exception
+     */
     function assets($path, $theme_path = true, $priority = 0)
     {
         $env = \system\core\Config::getInstance()->get('core.environment');
@@ -138,5 +146,13 @@ if (!function_exists('assets')){
         }
 
         if($env != 'production') return $link;
+    }
+}
+
+if(!function_exists('t')){
+
+    function t($key=null)
+    {
+        return \system\core\Lang::getInstance()->t($key);
     }
 }

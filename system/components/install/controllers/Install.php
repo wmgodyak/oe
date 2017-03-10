@@ -92,19 +92,18 @@ class Install extends Controller
                     $this->error[] = 'E2:' . $e->getMessage();
                 }
             }
-            // create admin
-            if(empty($this->error)){
-                try {
-                    $db->exec("
-                    insert ignore into {$prefix}content (id, types_id, subtypes_id, owner_id, status)
-                    values (1, 1, 1, 1, 'published') ");
-                    $db->exec("
-                    insert ignore into {$prefix}content_info (id, content_id, languages_id, name)
-                    values (1, 1, 1, 'Home') ");
-                } catch(\PDOException $e) {
-                    $this->error[] = 'E2:' . $e->getMessage();
-                }
-            }
+//            if(empty($this->error)){
+//                try {
+//                    $db->exec("
+//                    insert ignore into {$prefix}content (id, types_id, subtypes_id, owner_id, status)
+//                    values (1, 1, 1, 1, 'published') ");
+//                    $db->exec("
+//                    insert ignore into {$prefix}content_info (id, content_id, languages_id, name)
+//                    values (1, 1, 1, 'Home') ");
+//                } catch(\PDOException $e) {
+//                    $this->error[] = 'E2:' . $e->getMessage();
+//                }
+//            }
             // set language
             try{
                 $db->exec("update {$prefix}languages set `code`='{$language}', `name`='{$langs[$language]}' where id = 1 limit 1");

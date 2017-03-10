@@ -29,7 +29,7 @@ class Model
      * default languages id not static only
      * @var int
      */
-    protected $languages_id = 0;
+    public $languages_id;
 
     protected static $db;
 
@@ -46,7 +46,7 @@ class Model
 
         $this->request = Request::getInstance();
 
-        $this->settings = Settings::getInstance()->get();
+        $this->settings = Settings::getInstance();
     }
 
 

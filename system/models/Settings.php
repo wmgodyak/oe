@@ -37,20 +37,11 @@ class Settings
      */
     public function get($key=null)
     {
-//        if(!$key)
-//            return $this->data;
-//
-//        if($key && !isset($this->data[$key])) {
-//            return null;
-//        }
-//
-//        return $this->data[$key];
-
         if($key){
 
-            $data = '';
+            if(strpos($key, '.') !== false){
 
-            if(strpos($key,'.')){
+                $data = null;
 
                 $parts = explode('.', $key);
                 $c = count($parts);
@@ -71,13 +62,19 @@ class Settings
                     if(isset($this->data[$parts[0]][$parts[1]][$parts[2]][$parts[3]])){
                         $data = $this->data[$parts[0]][$parts[1]][$parts[2]][$parts[3]];
                     }
+                } else if($c == 5){
+                    if(isset($this->data[$parts[0]][$parts[1]][$parts[2]][$parts[3]][$parts[4]])){
+                        $data = $this->data[$parts[0]][$parts[1]][$parts[2]][$parts[3]][$parts[4]];
+                    }
                 }
 
                 return $data;
             }
+
+            return isset($this->data[$key]) ? $this->data[$key] : null;
         }
 
-        return $key ? isset($this->data[$key]) ? $this->data[$key] : null : $this->data;
+        return $this->data;
     }
 
     /**

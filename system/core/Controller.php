@@ -18,7 +18,7 @@ abstract class Controller
     /**
      * system version
      */
-    const VERSION = "7.2.4";
+    const VERSION = "7.2.7";
     /**
      * @var
      */
@@ -62,11 +62,6 @@ abstract class Controller
 
     public function redirect($uri, $header = null)
     {
-        switch($uri){
-            case 404:
-                $uri = 'NotFound';
-                break;
-        }
         switch($header){
             case 404:
                 header("HTTP/1.0 404 Not Found");

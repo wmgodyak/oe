@@ -127,4 +127,84 @@ class Page extends Frontend
         return APPURL. $code .'/'. $url;
     }
 
+    /**
+     * @param $url
+     * @param null $languages_id
+     * @return array|mixed
+     */
+    public function getIdByUrl($url, $languages_id = null)
+    {
+       if(! $languages_id) $languages_id = $this->languages_id;
+
+       return self::$db
+            ->select
+            ("
+                    select i.content_id
+                    from __content_info i
+                    where i.url = '{$url}' and i.languages_id='{$languages_id}'
+                    limit 1
+                ")
+            ->row('content_id');
+    }
+
+    /**
+     * @param $id
+     * @return array|mixed|null
+     */
+    public function fullInfo($id)
+    {
+        $page = self::$db
+            ->select("
+                select c.*,
+                i.languages_id, i.name,i.title,i.h1,i.keywords, i.description,i.content, i.intro,
+                 l.code as languages_code,
+                 UNIX_TIMESTAMP(c.created) as created,
+                 UNIX_TIMESTAMP(c.published) as published
+                from __content_info i
+                join __content c on c.id=i.content_id
+                join __languages l on l.id=i.languages_id
+                where c.id={$id} and i.languages_id='{$this->languages_id}'
+                limit 1
+                ")
+            ->row();
+
+        if(empty($page)) return null;
+
+        // page template
+        if($page['types_id'] == $page['subtypes_id']){
+            $page['template'] = self::$db
+                ->select("select type from __content_types where id={$page['subtypes_id']} limit 1")
+                ->row('type');
+            $page['type'] = $page['template'];
+        } else {
+            $type = self::$db
+                ->select("select type from __content_types where id={$page['types_id']} limit 1")
+                ->row('type');
+            $subtype = self::$db
+                ->select("select type from __content_types where id={$page['subtypes_id']} limit 1")
+                ->row('type');
+            $page['template'] = $type .'/'. $subtype;
+
+            $page['type'] =$type;
+        }
+
+        $page['url'] = $this->url($page['id']);
+
+        // cover image
+        $page['image'] = $this->images->cover($page['id']);
+
+        // author
+        $page['author'] = self::$db
+            ->select("select id, name, surname, email, phone, avatar from __users where id='{$page['owner_id']}'")
+            ->row();
+
+        return $page;
+    }
+
+    public function getRelationMainCategoryID($content_id)
+    {
+        return self::$db
+            ->select("select categories_id from __content_relationship where content_id={$content_id} order by is_main desc limit 1")
+            ->row('categories_id');
+    }
 }

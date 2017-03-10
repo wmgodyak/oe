@@ -70,8 +70,6 @@ class Modules
             }
         }
 
-//        Settings::getInstance()->set('modules', $active);
-
         return $modules;
     }
 
@@ -84,6 +82,8 @@ class Modules
         }
 
         $a = parse_ini_file($file, true);
+
+        if(empty($a)) $a = [];
 
         return array_merge($a, $settings);
     }

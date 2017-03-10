@@ -6,6 +6,8 @@ use system\core\exceptions\Exception;
 
 class App
 {
+    private static $instance;
+
     const NS = 'system\models\\';
     const EXT = '.php';
     private static $storage = [];
@@ -13,6 +15,21 @@ class App
     public $module;
 
     private $allowed = ['nav', 'languages', 'images', 'guides', 'contentMeta', 'cache', 'page', 'pagination'];
+
+
+    private function __construct(){}
+    private function __clone(){}
+
+
+    public static function getInstance()
+    {
+        if(self::$instance == null){
+            self::$instance = new self;
+        }
+
+        return self::$instance;
+    }
+
     /**
      * @param $model
      * @return mixed
