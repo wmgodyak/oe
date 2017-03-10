@@ -145,7 +145,7 @@ abstract class Backend extends Controller
         $this->template->assign('action',     $action);
         $this->initSystemComponents();
 
-        $app = new App();
+        $app = App::getInstance();
         Template::getInstance()->assign('app', $app);
 
         // assign events
