@@ -220,7 +220,7 @@ class Content extends Frontend
                 $this->error[] = ["content_info[$languages_id][name]" => 'field_required'];
             }
 
-            if( $this->settings['home_id'] != $id && empty($item['url'])){
+            if( $this->settings->get('home_id') != $id && empty($item['url'])){
                 $this->error[] = ["content_info[$languages_id][url]" => 'field_required'];
             }
 
@@ -249,7 +249,7 @@ class Content extends Frontend
 
         foreach($info as $languages_id => $data){
 
-            if($this->settings['home_id'] == $id){
+            if($this->settings->get('home_id') == $id){
                 $data['url'] = '';
             }
 

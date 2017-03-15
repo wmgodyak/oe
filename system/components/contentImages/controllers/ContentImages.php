@@ -207,8 +207,8 @@ class ContentImages extends Backend
                         $img->resize($size['width'], $size['height']);
                     }
 
-                    if($size['watermark'] == 1 && $this->settings['watermark_src'] != ''){
-                        $w_img = DOCROOT . $this->settings['watermark_src'];
+                    if($size['watermark'] == 1 && $this->settings->get('watermark_src') != ''){
+                        $w_img = DOCROOT . $this->settings->get('watermark_src');
                         if(file_exists($w_img)){
                             $img->drawLogo($w_img, (int)$size['watermark_position']);
                         }

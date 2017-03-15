@@ -84,10 +84,10 @@ abstract class Backend extends Controller
 
 
         // settings
-        $this->settings = Settings::getInstance()->get();
+        $this->settings = Settings::getInstance();
 
         // template settings
-        $theme = $this->settings['backend_theme'];
+        $theme = $this->settings->get('backend_theme');
         $this->theme = $theme;
         $this->lang = Session::get('backend_lang');
 
@@ -95,7 +95,7 @@ abstract class Backend extends Controller
 
         $version = Config::getInstance()->get('core.version');
         $this->template->assign('version',    $version);
-        $this->template->assign('base_url',   APPURL . "{$this->settings['backend_url']}/");
+        $this->template->assign('base_url',   APPURL . $this->settings->get('backend_url') ."/");
         $this->template->assign('settings',   $this->settings);
 
         $this->validateToken();
@@ -106,7 +106,7 @@ abstract class Backend extends Controller
             )
         ){
             if( $controller != 'Admin' && $action != 'login' ){
-                $this->redirect("/{$this->settings['backend_url']}/admin/login");
+                $this->redirect("/{$this->settings->get('backend_url')}/admin/login");
             }
         }
 

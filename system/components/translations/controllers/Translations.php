@@ -67,7 +67,7 @@ class Translations extends Backend
         $this->template->assign('common', $common);
         $this->template->assign('modules', $modules);
         $this->template->assign('front', $this->languages->getDefault('code'));
-        $this->template->assign('com_url', APPURL . "{$this->settings['backend_url']}/translations");
+        $this->template->assign('com_url', APPURL . "{$this->settings->get('backend_url')}/translations");
 
         $this->output($this->template->fetch('system/translations/index'));
     }

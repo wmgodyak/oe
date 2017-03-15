@@ -159,9 +159,8 @@ class Content extends Backend
         $i=[]; $m = $this->t('common.update_success');
 
         $s = $this->mContent->update($id);
-        if($s){
-            EventsHandler::getInstance()->call('content.process', $id);
-        }
+
+        EventsHandler::getInstance()->call('content.process', $id);
 
         if(! $s){
             $i = $this->mContent->getError();

@@ -41,7 +41,7 @@ class Editor extends Backend
      */
     public function config()
     {
-        $css = $this->settings['editor_contents_css'];
+        $css = $this->settings->get('editor_contents_css');
         $_css = [];
         if(!empty($css)){
             $a = explode(',', $css);
@@ -52,8 +52,8 @@ class Editor extends Backend
         }
         header('Content-Type: application/javascript');
         echo "CKEDITOR.editorConfig = function( config ) {
-    config.bodyId = '{$this->settings['editor_bodyId']}';
-    config.bodyClass = '{$this->settings['editor_body_class']}';
+    config.bodyId = '{$this->settings->get('editor_bodyId')}';
+    config.bodyClass = '{$this->settings->get('editor_body_class')}';
     config.contentsCss = [{$css}];
 
 	config.filebrowserBrowseUrl = '/vendor/filemanager/dialog.php?type=2&editor=ckeditor&fldr=';

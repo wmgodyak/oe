@@ -73,6 +73,8 @@ class EventsHandler
         if(!isset(self::$events[$action])) return null;
         $out = '';
 
+        ksort(self::$events[$action]);
+
         foreach (self::$events[$action] as $callback) {
             if(is_array($callback) && isset($callback[1])){
                 if(is_callable($callback, true, $callable_name)){

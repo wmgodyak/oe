@@ -24,7 +24,7 @@
         <div class="form-group lang-{$lang.code} switch-lang" {if $i>0}style="display:none"{/if}>
             <label for="info_{$lang.id}_url" class="col-md-2 control-label">{$t.content.url}</label>
             <div class="col-md-10">
-                <input type="text" data-parent-url="{if isset($content.parent_url[$lang.id])}{$content.parent_url[$lang.id]}{/if}" class="form-control info-url lang-{$lang.code}" name="content_info[{$lang.id}][url]" id="content_info_{$lang.id}_url" placeholder="[a-z0-9]+ max:160" value="{if isset($content.info[$lang.id].url)}{$content.info[$lang.id].url}{/if}"  {if $settings.home_id != $content.id}required{/if}>
+                <input type="text" data-parent-url="{if isset($content.parent_url[$lang.id])}{$content.parent_url[$lang.id]}{/if}" class="form-control info-url lang-{$lang.code}" name="content_info[{$lang.id}][url]" id="content_info_{$lang.id}_url" placeholder="[a-z0-9]+ max:160" value="{if isset($content.info[$lang.id].url)}{$content.info[$lang.id].url}{/if}"  {if $settings->get('home_id') != $content.id}required{/if}>
             </div>
         </div>
         {/foreach}
