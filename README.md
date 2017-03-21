@@ -22,7 +22,7 @@ MySQL 5.6 (or latest mainline version)
 
 MariaDB and Percona are compatible with OYi Engine because we support MySQL 5.6 APIs.
 
-##PHP
+## PHP
 
 5.6.x
 
@@ -32,7 +32,7 @@ MariaDB and Percona are compatible with OYi Engine because we support MySQL 5.6 
 
 There is a known PHP 7.0.5 issue that affects our code compiler; to avoid the issue, do not use PHP 7.0.5.
 
-##Instalation
+## Instalation
 
 Download and unpack it to your web root directory.
 
