@@ -102,7 +102,7 @@ class Mailer
      * @param string $name
      * @return bool
      */
-    private function addReplyTo($address, $name = '')
+    public function addReplyTo($address, $name = '')
     {
         $this->phpmailer->addReplyTo($address, $name);
 
