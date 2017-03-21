@@ -50,6 +50,7 @@ class Page extends \system\Frontend
         }
 
         $this->template->assign('base_url',    APPURL );
+        $this->template->assign('app', $this->app);
 
         $events = EventsHandler::getInstance();
         $this->template->assign('events', $events);
