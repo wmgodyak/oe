@@ -12,7 +12,7 @@ use system\models\Settings;
 
 defined("CPATH") or die();
 
-require_once DOCROOT. "vendor/smarty/Smarty.class.php";
+require_once DOCROOT. "vendor/smarty/smarty/libs/Autoloader.php";
 
 /**
  * Class Template
