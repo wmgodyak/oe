@@ -72,6 +72,9 @@ class Response
                     $scripts = Template::getInstance()->getScripts();
                     Template::getInstance()->assign('components_scripts', $scripts);
 
+                    $styles = Template::getInstance()->getStyles();
+                    Template::getInstance()->assign('components_styles', $styles);
+
                     $body = Template::getInstance()->fetch('index');
                 }
 
