@@ -96,6 +96,10 @@ class Modules
         $file = DOCROOT . $dir . '/' . $backend . $this->lang . '.ini';
 
         if(!file_exists( $file )) {
+            $file = DOCROOT . $dir . '/' . $backend . 'en.ini';
+        }
+
+        if(!file_exists( $file )) {
             return ;
         }
         $a = parse_ini_file($file, true);

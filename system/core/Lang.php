@@ -45,7 +45,7 @@ class Lang
     public static function getInstance($theme = null, $lang = null)
     {
         if(self::$instance == null){
-            self::$instance = new Lang($theme, $lang);
+            self::$instance = new self($theme, $lang);
         }
 
         return self::$instance;
@@ -101,11 +101,13 @@ class Lang
         $dir = !$dir ? $this->dir : $dir;
 
         if(!is_dir(DOCROOT . $dir )) {
-//            throw new Exception("Wrong lang dir: $dir");
             return;
         }
 
         if(empty($this->lang)) $this->lang = 'en';
+
+        $fn = DOCROOT . $dir . '/' . $this->lang .'.ini';
+        if(! file_exists($fn)) $this->lang = 'en';
 
         $fn = DOCROOT . $dir . '/' . $this->lang .'.ini';
         if(! file_exists($fn)) return ;
