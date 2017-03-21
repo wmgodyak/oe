@@ -2274,6 +2274,23 @@ engine.nav = {
         if(form.length){
             var nav_id = form.data('id');
 
+            $(document).on('change', '.dd', function(e){
+                var list   = e.length ? e : $(e.target);
+                engine.request.post({
+                    url: 'nav/reorderItems',
+                    data: {
+                        nav_id : nav_id,
+                        items  : list.nestable('serialize')
+                    },
+                    success: function(res){
+                        if(res){
+                            engine.notify("Позиції збережено", 'success');
+                        }
+                    }
+                });
+            });
+
+
             var renderItems = function()
             {
                 engine.request.post({
@@ -2283,25 +2300,25 @@ engine.nav = {
                     },
                     success: function(res)
                     {
-                        var cnt = $("#navItems"), nsItems = $('.dd');
+                        var cnt = $("#navItems");//, nsItems = $('.dd');
                         var tmpl = _.template($('#nav_items').html());
                         cnt.html(tmpl({items: res.items, templateFn : tmpl}));
-                        nsItems.nestable();
-                        nsItems.on('change', function(e) {
-                            var list   = e.length ? e : $(e.target);
-                            engine.request.post({
-                                url: 'nav/reorderItems',
-                                data: {
-                                    nav_id : nav_id,
-                                    items  : list.nestable('serialize')
-                                },
-                                success: function(res){
-                                    if(res){
-                                        engine.notify("Позіції збережено", 'success');
-                                    }
-                                }
-                            });
-                        });
+                        $('.dd').nestable();
+                        // nsItems.on('change', function(e) {
+                        //     var list   = e.length ? e : $(e.target);
+                        //     engine.request.post({
+                        //         url: 'nav/reorderItems',
+                        //         data: {
+                        //             nav_id : nav_id,
+                        //             items  : list.nestable('serialize')
+                        //         },
+                        //         success: function(res){
+                        //             if(res){
+                        //                 engine.notify("Позиції збережено", 'success');
+                        //             }
+                        //         }
+                        //     });
+                        // });
                     }
                 });
             };
@@ -2326,16 +2343,16 @@ engine.nav = {
             var createItem = function(parent_id)
             {
                 engine.request.get('nav/createItem/'+parent_id , function(data){
-                   var d = engine.dialog({
-                     title: "Додавання пункту меню",
-                     content: data,
-                       width: 750,
-                     buttons: {
-                         'Save' : function(){
-                             $('#itemForm').submit();
-                         }
-                     }
-                   });
+                    var d = engine.dialog({
+                        title: "Додавання пункту меню",
+                        content: data,
+                        width: 750,
+                        buttons: {
+                            'Save' : function(){
+                                $('#itemForm').submit();
+                            }
+                        }
+                    });
                     engine.validateAjaxForm('#itemForm', function(){
                         d.dialog('close');
 
@@ -2346,16 +2363,16 @@ engine.nav = {
             var editItem = function(id)
             {
                 engine.request.get('nav/editItem/'+id , function(data){
-                   var d = engine.dialog({
-                     title: "Редагування пункту меню",
-                     content: data,
-                       width: 750,
-                     buttons: {
-                         'Save' : function(){
-                             $('#itemForm').submit();
-                         }
-                     }
-                   });
+                    var d = engine.dialog({
+                        title: "Редагування пункту меню",
+                        content: data,
+                        width: 750,
+                        buttons: {
+                            'Save' : function(){
+                                $('#itemForm').submit();
+                            }
+                        }
+                    });
                     engine.validateAjaxForm('#itemForm', function(){
                         d.dialog('close');
 
