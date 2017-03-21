@@ -67,61 +67,15 @@ class Features extends Frontend
 
     /**
      * @param $content_id
-     * @param $features_id
-     * @return mixed
-     */
-    private function values($content_id, $features_id)
-    {
-        return self::$db->select("
-              select f.id, fi.name
-              from __content_features cf
-              join __features f on f.id = cf.values_id and f.type = 'value' and f.status='published'
-              join __features_info fi on fi.features_id=f.id and fi.languages_id={$this->languages_id}
-              where cf.content_id = {$content_id} and cf.features_id={$features_id}
-              order by fi.name asc
-           ")->all();
-    }
-
-    /**
-     * @param $content_id
-     * @param $features_id
-     * @param int $languages_id
-     * @return array|mixed
-     */
-    private function value($content_id, $features_id, $languages_id = 0)
-    {
-        return self::$db
-            ->select("
-                 select value
-                 from __content_features
-                 where content_id={$content_id}
-                 and features_id = {$features_id}
-                 and languages_id = {$languages_id}
-                 limit 1
-                 ")
-            ->row('value');
-    }
-
-    /**
-     * @param $code
-     * @return array|mixed
-     */
-    private function getFeatureIdByCode($code)
-    {
-        return self::$db->select("select id from __features where code like '$code' limit 1")->row('id');
-    }
-
-    /**
-     * @param $content_id
      * @param $code
      * @return mixed|null
      */
-    public function getValues($content_id, $code)
+    public function getValues($content_id, $code, $single = false)
     {
         $features_id = $this->getFeatureIdByCode($code);
         if(empty($features_id)) return null;
 
-        return $this->values($content_id, $features_id);
+        return $this->values($content_id, $features_id, $single);
     }
 
     /**
@@ -220,5 +174,59 @@ class Features extends Frontend
               limit 1
            ")
             ->all('name');
+    }
+
+
+
+    /**
+     * @param $content_id
+     * @param $features_id
+     * @param bool $single
+     * @return mixed
+     */
+    private function values($content_id, $features_id, $single = false)
+    {
+        $res = self::$db->select("
+              select f.id, fi.name
+              from __content_features cf
+              join __features f on f.id = cf.values_id and f.type = 'value' and f.status='published'
+              join __features_info fi on fi.features_id=f.id and fi.languages_id={$this->languages_id}
+              where cf.content_id = {$content_id} and cf.features_id={$features_id}
+              order by fi.name asc
+           ");
+
+        if($single)
+            return $res->row();
+
+        return $res->all();
+    }
+
+    /**
+     * @param $content_id
+     * @param $features_id
+     * @param int $languages_id
+     * @return array|mixed
+     */
+    private function value($content_id, $features_id, $languages_id = 0)
+    {
+        return self::$db
+            ->select("
+                 select value
+                 from __content_features
+                 where content_id={$content_id}
+                 and features_id = {$features_id}
+                 and languages_id = {$languages_id}
+                 limit 1
+                 ")
+            ->row('value');
+    }
+
+    /**
+     * @param $code
+     * @return array|mixed
+     */
+    private function getFeatureIdByCode($code)
+    {
+        return self::$db->select("select id from __features where code like '$code' limit 1")->row('id');
     }
 }
