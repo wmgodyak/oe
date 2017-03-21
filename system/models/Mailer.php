@@ -137,7 +137,7 @@ class Mailer
         $header = Settings::getInstance()->get('mail_header');
         $footer = Settings::getInstance()->get('mail_footer');
 
-        $app_cl = new App();
+        $app_cl = App::getInstance();
 
         Template::getInstance()->assign('appurl', APPURL);
         Template::getInstance()->assign('app', $app_cl);
