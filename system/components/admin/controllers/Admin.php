@@ -16,9 +16,14 @@ use system\models\Permissions;
 
 defined("CPATH") or die();
 
+/**
+ * Class Admin
+ * @package system\components\admin\controllers
+ */
 class Admin extends Backend {
 
     private $mAdmin;
+
 
     /**
      * error handle
@@ -142,7 +147,7 @@ class Admin extends Backend {
         $langs = Lang::getInstance()->getLangs();
         $this->template->assign('langs', $langs);
 
-        $this->response->body($this->template->fetch('system/admin/login'));
+        $this->template->display('system/admin/login');
     }
 
     /**
@@ -259,7 +264,7 @@ class Admin extends Backend {
         }
 
         $this->template->assign('ui', self::data());
-        $this->response->body($this->template->fetch('system/admin/edit_profile'))->render();
+        $this->template->display('system/admin/edit_profile');
     }
     public function index()
     {

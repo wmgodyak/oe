@@ -29,7 +29,7 @@ class ContentFeatures extends Backend
             $out .= $this->makeFeature($feature);
         }
 
-        $this->response->body($out)->asHtml();
+        echo $out;
     }
 
     public function create()

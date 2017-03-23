@@ -236,6 +236,7 @@ abstract class Backend extends Controller
 
 
     /**
+     * @deprecated
      * translations
      * @param $key
      * @return string
@@ -260,7 +261,6 @@ abstract class Backend extends Controller
         $this->template->assign('panel_nav', $this->panel_nav);
         $this->template->assign('heading_panel', $this->template->fetch('heading_panel'));
     }
-
 
     private static $menu_nav = [];
 
@@ -351,7 +351,17 @@ abstract class Backend extends Controller
     protected final function output($body)
     {
         $this->renderHeadingPanel();
-        $this->response->body($body)->asHtml();
+//        $this->response->body($body)->asHtml();
+
+        $this->template->assign('body', $body);
+
+        $scripts = $this->template->getScripts();
+        $this->template->assign('components_scripts', $scripts);
+
+        $styles = $this->template->getStyles();
+        $this->template->assign('components_styles', $styles);
+
+        $this->template->display('index');
     }
 
     /**

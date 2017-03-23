@@ -5,7 +5,8 @@
  * Date: 2016-07-04T22:37:00+03:00
  * @name home
  *}
-
+{extends 'layouts/index.tpl'}
+{block name="body"}
     <div class="blog-header">
         <h1 class="blog-title">{$page.h1}</h1>
         <p class="lead blog-description">{$page.content}</p>
@@ -27,3 +28,4 @@
             {include file="modules/blog/sidebar.tpl"}
         </div><!-- /.blog-sidebar -->
     </div><!-- /.row -->
+{/block}

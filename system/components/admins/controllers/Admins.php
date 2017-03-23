@@ -129,7 +129,7 @@ class Admins extends Backend
         $this->template->assign('action', 'create');
         $this->template->assign('data', ['avatar' => '']);
         $this->template->assign('groups', $this->admins->getGroups());
-        $this->response->body($this->template->fetch('system/admins/form'))->asHtml();
+        $this->template->display('system/admins/form');
     }
 
     public function edit($id)
@@ -137,7 +137,7 @@ class Admins extends Backend
         $this->template->assign('groups', $this->admins->getGroups());
         $this->template->assign('data', $this->admins->getData($id));
         $this->template->assign('action', 'edit');
-        $this->response->body($this->template->fetch('system/admins/form'))->asHtml();
+        $this->template->display('system/admins/form');
     }
 
     public function process($id= null)

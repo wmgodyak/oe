@@ -11,13 +11,12 @@
     <body>
         <div class="container" style="margin-top: 50px;">
             {include file="chunks/nav.tpl"}
+
             {$events->call('body.before')}
-            {$body}
+            {block name=body}{$body}{/block}
             {$events->call('body.after')}
-            <!-- Site footer -->
-            <footer class="footer">
-                <p>&copy; {date('Y')} Otakoyi.com.</p>
-            </footer>
+
+            {include file="chunks/footer.tpl"}
         </div><!-- /.container -->
         {include file="chunks/scripts.tpl"}
         {$events->call('body.bottom')}
