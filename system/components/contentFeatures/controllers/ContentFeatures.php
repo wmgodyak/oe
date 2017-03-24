@@ -46,7 +46,7 @@ class ContentFeatures extends Backend
         $this->template->assign('content_id', $content_id);
         $this->template->assign('disable_values', $disable_values);
 
-        $this->response->body($this->template->fetch('system/contentFeatures/create'));
+        $this->template->display('system/contentFeatures/create');
     }
 
     public function createValue()
@@ -95,7 +95,7 @@ class ContentFeatures extends Backend
         $data = ['parent_id' => $parent_id];
         $this->template->assign('data', $data);
 
-        $this->response->body($this->template->fetch('system/contentFeatures/create_value'));
+        $this->template->display('system/contentFeatures/create_value');
     }
 
     public function edit($id)
@@ -152,7 +152,7 @@ class ContentFeatures extends Backend
             $f = $this->makeFeature($feature);
         }
 
-        $this->response->body(['s'=>$s, 'i' => $i, 'm' => $m, 'f' => $f])->asJSON();
+        return ['s'=>$s, 'i' => $i, 'm' => $m, 'f' => $f];
     }
 
     private function makeFeature($feature)
