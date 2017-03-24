@@ -132,7 +132,7 @@ class Modules extends Backend
             echo $t->render($res, $t->getTotal()); return;
         }
 
-        $this->output($t->init());
+        return $t->init();
     }
 
     private function availableModules()
@@ -176,7 +176,7 @@ class Modules extends Backend
             $m = "<p style='text-align: left;'>Під час встановлення модуля виникла помилка.</p><p style='text-align: left; font-size: 12px;'>{$m}</p>";
         }
 
-        $this->response->body(['s' => $s, 'm' => $m])->asJSON();
+        return ['s' => $s, 'm' => $m];
     }
 
     public function uninstall()
@@ -196,7 +196,7 @@ class Modules extends Backend
             }
         }
 
-        $this->response->body(['s' => $s, 'm' => $m])->asJSON();
+        return ['s' => $s, 'm' => $m];
     }
 
     public function enable()
@@ -208,7 +208,7 @@ class Modules extends Backend
             Settings::getInstance()->set('modules', $modules);
         }
 
-        $this->response->body(['s' => 1])->asJSON();
+        return ['s' => 1];
     }
 
     public function disable()
@@ -220,7 +220,7 @@ class Modules extends Backend
             Settings::getInstance()->set('modules', $modules);
         }
 
-        $this->response->body(['s' => 1])->asJSON();
+        return ['s' => 1];
     }
 
     public function create()
@@ -249,7 +249,7 @@ class Modules extends Backend
         $this->template->assign('module', $module);
         $m = $this->template->fetch('system/modules/config');
 
-        $this->response->body(['s' => $s, 't' => $t, 'm' => $m])->asJSON();
+        return ['s' => $s, 't' => $t, 'm' => $m];
     }
 
 
@@ -286,7 +286,7 @@ class Modules extends Backend
             }
         }
 
-        $this->response->body(['s' => $s, 't' => $t, 'm' => $m])->asJSON();
+        return ['s' => $s, 't' => $t, 'm' => $m];
     }
 
     public function delete($id){}
