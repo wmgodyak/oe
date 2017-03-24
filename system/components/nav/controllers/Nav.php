@@ -152,7 +152,7 @@ class Nav extends Backend
             $m = $this->nav->getErrorMessage();
         }
 
-        $this->response->body(['s'=>$s, 'i' => $i, 'm' => $m])->asJSON();
+        return ['s'=>$s, 'i' => $i, 'm' => $m];
     }
 
     /**
@@ -182,7 +182,7 @@ class Nav extends Backend
         $s = $this->nav->addItem($nav_id, $item_id);
 //        echo $this->nav->getErrorMessage();
 
-       $this->response->body(['s'=>$s])->asJSON();
+       return ['s'=>$s];
     }
 
     public function getNavItems()
@@ -190,7 +190,7 @@ class Nav extends Backend
         $nav_id  = $this->request->post('nav_id', 'i');
         if(empty($nav_id)) die;
 
-        $this->response->body(['items' => $this->nav->getSelectedItems($nav_id)])->asJSON();
+        return ['items' => $this->nav->getSelectedItems($nav_id)];
     }
 
     public function createItem($parent_id)
@@ -198,7 +198,7 @@ class Nav extends Backend
         $this->template->assign('id', $parent_id);
         $this->template->assign('languages', $this->languages->get());
         $this->template->assign('action', 'create');
-        echo $this->template->fetch('system/nav/itemForm');
+        $this->template->display('system/nav/itemForm');
     }
 
     public function editItem($id)
@@ -208,7 +208,7 @@ class Nav extends Backend
         $this->template->assign('info', $this->nav->items_info->getData($id));
         $this->template->assign('languages', $this->languages->get());
         $this->template->assign('action', 'edit');
-        echo $this->template->fetch('system/nav/itemForm');
+        $this->template->display('system/nav/itemForm');
     }
 
     public function updateItem($id)
@@ -223,7 +223,7 @@ class Nav extends Backend
 
        if(! $s) $m = $this->nav->getErrorMessage();
 
-       $this->response->body(['s'=>$s, 'm' => $m])->asJSON();
+       return ['s'=>$s, 'm' => $m];
     }
 
     public function reorderItems()
