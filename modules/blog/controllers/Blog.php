@@ -54,7 +54,10 @@ class Blog extends Frontend
         } elseif($this->page['type'] == 'posts_categories'){
 
             $category = $this->page;
-            $this->posts->categories_id = $this->page['id'];
+
+            if($this->page['id'] != $this->config['blog_id']){
+                $this->posts->categories_id = $this->page['id'];
+            }
 
             $tag = $this->request->param('tag');
             if($tag){
