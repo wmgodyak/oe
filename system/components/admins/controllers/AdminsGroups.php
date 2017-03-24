@@ -33,7 +33,7 @@ class AdminsGroups extends Backend
 //        $items = $this->getComponents();
 //        $items += $this->getPlugins();
 //        $this->template->assign('components', $items);
-        $this->response->body($this->template->fetch('system/admins/groups/form'));
+        $this->template->display('system/admins/groups/form');
     }
 
     public function edit($id)
@@ -47,7 +47,7 @@ class AdminsGroups extends Backend
         $this->template->assign('modules', $this->getModules());
         $this->template->assign('components', $this->getSystemComponents());
 
-        $this->response->body($this->template->fetch('system/admins/groups/form'));
+        $this->template->display('system/admins/groups/form');
     }
 
     private function getSystemComponents()
@@ -154,7 +154,7 @@ class AdminsGroups extends Backend
             echo $this->adminsGroup->getErrorMessage();
         }
 
-        $this->response->body(['s'=>$s, 'i' => $i, 'a' => isset($a['f']) ? $a['f'] : null])->asJSON();
+        return ['s'=>$s, 'i' => $i, 'a' => isset($a['f']) ? $a['f'] : null];
     }
 
 
@@ -177,7 +177,7 @@ class AdminsGroups extends Backend
             $items[] = $item;
         }
 
-        $this->response->body($items)->asJSON();
+        return $items;
     }
 
     public function move()

@@ -200,6 +200,7 @@ class Template
         }
 
         $this->smarty->display($template, $cache_id, $compile_id, $parent);
+        die;
     }
 
     /**
