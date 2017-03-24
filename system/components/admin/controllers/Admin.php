@@ -24,7 +24,6 @@ class Admin extends Backend {
 
     private $mAdmin;
 
-
     /**
      * error handle
      * @var array
@@ -197,12 +196,7 @@ class Admin extends Backend {
                     }
                 }
             }
-
-            $this->response->body(array(
-                's' => $status > 0,
-                'i' => $inp,
-                'f' => $fail > 0
-            ))->asJSON();
+            return [ 's' => $status > 0, 'i' => $inp, 'f' => $fail > 0 ];
         }
     }
 
@@ -259,13 +253,13 @@ class Admin extends Backend {
 
             }
 
-            $this->response->body(['s'=>$s, 'i' => $i, 'a' => isset($a) ? $a['f'] . '?_=' . time() : null])->asJSON();
-            return;
+            return ['s'=>$s, 'i' => $i, 'a' => isset($a) ? $a['f'] . '?_=' . time() : null];
         }
 
         $this->template->assign('ui', self::data());
         $this->template->display('system/admin/edit_profile');
     }
+
     public function index()
     {
     }
