@@ -41,7 +41,7 @@ class Module extends Backend
         $this->template->assign('title', $this->t($module . '.action_' . $action));
         $this->template->assign('name',  $this->t($module . '.action_' . $action));
 
-        call_user_func_array(array($controller, $action), $params);
+        return call_user_func_array(array($controller, $action), $params);
     }
 
     public function index()
