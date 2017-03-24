@@ -190,7 +190,7 @@ class Nav extends Backend
         $nav_id  = $this->request->post('nav_id', 'i');
         if(empty($nav_id)) die;
 
-        return ['items' => $this->nav->getSelectedItems($nav_id)];
+        $this->response->body(['items' => $this->nav->getSelectedItems($nav_id)])->asJSON();
     }
 
     public function createItem($parent_id)
