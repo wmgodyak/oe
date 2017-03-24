@@ -35,26 +35,25 @@ class Content extends Backend
                 $sc = $this->featuresContent->getSelectedContent($features_id);
             }
 
-            $this->response->body(['s' => $s, 'sc' => $sc])->asJSON();
-            return;
+            return ['s' => $s, 'sc' => $sc];
         }
 
         $this->template->assign('types', $this->featuresContent->getContentTypes(0));
         $this->template->assign('action', 'process');
         $this->template->assign('features_id', $features_id);
-        $this->response->body($this->template->fetch('system/features/sel_content_types'))->asHtml();
+        $this->template->display('system/features/sel_content_types');
     }
 
     public function getTypes($parent_id)
     {
-        $this->response->body(['o' => $this->featuresContent->getContentTypes($parent_id)])->asJSON();
+        return ['o' => $this->featuresContent->getContentTypes($parent_id)];
     }
 
     public function getContent($types_id, $subtypes_id = 0)
     {
         if($subtypes_id == 0) $subtypes_id = $types_id;
 
-        $this->response->body(['o' => $this->featuresContent->getContent($types_id, $subtypes_id)])->asJSON();
+        return ['o' => $this->featuresContent->getContent($types_id, $subtypes_id)];
     }
 
     public function delete($id)
@@ -64,7 +63,7 @@ class Content extends Backend
             echo $this->features->getErrorMessage();
         }
 
-        $this->response->body(['s' => $s])->asJSON();
+        return ['s' => $s];
     }
 
     public function edit($id)

@@ -152,7 +152,7 @@ class Features extends Backend
 
         $this->template->assign('selected_content', $this->featuresContent->getSelectedContent($id));
         $this->template->assign('action', 'edit');
-        $this->output($this->template->fetch('system/features/form'));
+        $this->template->display('system/features/form');
     }
 
     /**
@@ -189,7 +189,7 @@ class Features extends Backend
             $m = $this->features->getErrorMessage();
         }
 
-        $this->response->body(['s'=>$s, 'i' => $i, 'm' => $m])->asJSON();
+        return ['s'=>$s, 'i' => $i, 'm' => $m];
     }
 
     /**
@@ -214,25 +214,21 @@ class Features extends Backend
 
     public function values()
     {
-        include "Values.php";
-
         $params = func_get_args();
         $action = array_shift($params);
 
         $controller  = new Values();
 
-        call_user_func_array(array($controller, $action), $params);
+        return call_user_func_array(array($controller, $action), $params);
     }
 
     public function content()
     {
-        include "Content.php";
-
         $params = func_get_args();
         $action = array_shift($params);
 
         $controller  = new Content();
 
-        call_user_func_array(array($controller, $action), $params);
+        return call_user_func_array(array($controller, $action), $params);
     }
 }
