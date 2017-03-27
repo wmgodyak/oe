@@ -80,6 +80,6 @@ class Settings extends Backend
         $this->mSettings->update();
         $s = ! $this->mSettings->hasError();
         $m = $s ? $this->t('common.update_success') : $this->mSettings->getErrorMessage();
-        $this->response->body(['s' => $s, 'm' => $m])->asJSON();
+        return ['s' => $s, 'm' => $m];
     }
 }
