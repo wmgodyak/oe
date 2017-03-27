@@ -23,15 +23,6 @@ class ContentTypes extends \system\models\ContentTypes
         if($s>0 && $data['parent_id'] > 0){
             self::$db->update('__content_types', ['isfolder'=>1], "id={$data['parent_id']} limit 1");
         }
-        if($s>0){
-            // content_types_images_sizes
-            $ct = $this->request->post('ct_images_sizes');
-            if($ct){
-                foreach ($ct as $k=>$sizes_id) {
-                    $this->createRow('__content_types_images_sizes', ['types_id' => $s, 'images_sizes_id' => $sizes_id]);
-                }
-            }
-        }
         return $s;
     }
 
@@ -42,19 +33,7 @@ class ContentTypes extends \system\models\ContentTypes
      */
     public function update($id, $data)
     {
-        $s = parent::updateRow('__content_types', $id, $data);
-        if($s>0){
-            self::$db->delete("__content_types_images_sizes", "types_id = {$id}");
-            // content_types_images_sizes
-            $ct = $this->request->post('ct_images_sizes');
-            if($ct){
-
-                foreach ($ct as $k=>$sizes_id) {
-                    $this->createRow('__content_types_images_sizes', ['types_id' => $id, 'images_sizes_id' => $sizes_id]);
-                }
-            }
-        }
-        return $s;
+        return parent::updateRow('__content_types', $id, $data);
     }
 
     public function delete($id)
@@ -131,10 +110,5 @@ class ContentTypes extends \system\models\ContentTypes
     public function deleteFeatures($id)
     {
         return $this->deleteRow('__features_content', $id);
-    }
-
-    public function getContentImagesSizes()
-    {
-        return self::$db->select("select * from __content_images_sizes order by id asc")->all();
     }
 }

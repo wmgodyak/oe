@@ -38,20 +38,6 @@
                         <p class="help-block">{$t.features.parent_id_help}</p>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="settings_parent_id" class="col-md-4 control-label">
-                        {$t.features.images_sizes}
-                        <a href="javascript:;" class="ct-create-images-size" title="{$t.common.create}"><i class="fa fa-plus-circle"></i></a>
-                    </label>
-                    <div class="col-md-8">
-                        <select name="ct_images_sizes[]" id="contentImagesSizes" class="form-control" multiple>
-                            {foreach $imagesSizes as $item}
-                                <option {if in_array($item.id, $data.images_sizes)}selected{/if} value="{$item.id}">{$item.size} ({$item.width}x{$item.height})</option>
-                            {/foreach}
-                        </select>
-                        <p class="help-block">{$t.features.images_sizes_help}</p>
-                    </div>
-                </div>
                 {if isset($data.parent_id) && $data.parent_id}
                 <div class="form-group">
                     <div class="col-md-8 col-md-offset-4">
