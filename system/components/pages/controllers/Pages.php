@@ -20,7 +20,7 @@ class Pages extends Content
     {
         parent::__construct('pages');
 
-        $this->template->assignScript(dirname(__FILE__) . "/js/pages.js");
+        $this->template->assignScript("system/components/pages/js/pages.js");
     }
 
     public function init()
@@ -155,16 +155,15 @@ class Pages extends Content
 
     public function process($id)
     {
-        $a = parent::process($id, false);
+        $a = parent::process($id);
 
         if($a['s']){
             $content = $this->request->post('content');
             $a['m'] = sprintf($this->t('pages.update_success'), "pages/index/{$content['parent_id']}", "pages/create/{$content['parent_id']}");
         }
 
-        $this->response->body($a)->asJSON();
+        return $a;
     }
-
 
     public function tree()
     {
@@ -199,8 +198,6 @@ class Pages extends Content
                 $items[] = $item;
             }
 
-            $this->response->asJSON();
-
             return $items;
         }
 
@@ -223,7 +220,7 @@ class Pages extends Content
         $this->mContent->move($id, $old_parent, $parent, $position);
 
         if($this->mContent->hasError()){
-            echo $this->mContent->getDBError();
+            echo $this->mContent->getError();
             return 0;
         }
 

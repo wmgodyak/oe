@@ -2302,6 +2302,7 @@ engine.nav = {
                     {
                         var cnt = $("#navItems");//, nsItems = $('.dd');
                         var tmpl = _.template($('#nav_items').html());
+                        console.log(res);
                         cnt.html(tmpl({items: res.items, templateFn : tmpl}));
                         $('.dd').nestable();
                         // nsItems.on('change', function(e) {

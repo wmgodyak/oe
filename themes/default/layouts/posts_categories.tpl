@@ -1,3 +1,5 @@
+{extends 'layouts/index.tpl'}
+{block name="body"}
 <div class="blog-header">
     <h1 class="blog-title">{$category.h1}</h1>
     <p class="lead blog-description">{$category.description}</p>
@@ -14,3 +16,4 @@
 
     {include file="chunks/sidebar.right.tpl"}
 </div><!-- /.row -->
+{/block}

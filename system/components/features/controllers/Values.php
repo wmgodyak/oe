@@ -117,14 +117,14 @@ class Values extends Backend
     public function reorder()
     {
         $this->features->reorder();
-        $this->response->body(['m' => "Сортування збережено"])->asJSON();
+        return ['m' => "Сортування збережено"];
     }
 
     public function create($parent_id = 0){
         $data = ['parent_id' => $parent_id];
         $this->template->assign('data', $data);
         $this->template->assign('action', 'create');
-        $this->output($this->template->fetch('system/features/value'));
+        $this->template->display('system/features/value');
     }
 
     public function edit($id){
@@ -132,7 +132,7 @@ class Values extends Backend
         unset($data['parent_id']);
         $this->template->assign('data', $data);
         $this->template->assign('action', 'edit');
-        $this->output($this->template->fetch('system/features/value'));
+        $this->template->display('system/features/value');
     }
 
     public function process($id=null)
@@ -171,7 +171,7 @@ class Values extends Backend
             $m = $this->features->getErrorMessage();
         }
 
-        $this->response->body(['s'=>$s, 'i' => $i, 'm' => $m])->asJSON();
+        return ['s'=>$s, 'i' => $i, 'm' => $m];
     }
 
 

@@ -99,7 +99,7 @@ class ContentImagesSizes extends Backend
         $this->template->assign('types',$this->contentImagesSizes->getContentTypes(0));
         $this->template->assign('data', ['types' => []]);
         $this->template->assign('action', 'create');
-        $this->response->body($this->template->fetch('system/content/images/sizes/edit'))->asHtml();
+        $this->template->display('system/content/images/sizes/edit');
     }
 
     public function edit($id)
@@ -107,7 +107,7 @@ class ContentImagesSizes extends Backend
         $this->template->assign('types',$this->contentImagesSizes->getContentTypes(0));
         $this->template->assign('data', $this->contentImagesSizes->getData($id));
         $this->template->assign('action', 'edit');
-        $this->response->body($this->template->fetch('system/content/images/sizes/edit'))->asHtml();
+        $this->template->display('system/content/images/sizes/edit');
     }
 
     public function process($id= null)
@@ -139,7 +139,7 @@ class ContentImagesSizes extends Backend
             }
         }
 
-        $this->response->body(['s'=>$s, 'i' => $i])->asJSON();
+        return ['s'=>$s, 'i' => $i];
     }
 
     public function delete($id)
@@ -154,7 +154,7 @@ class ContentImagesSizes extends Backend
 
         $t = $this->contentImagesSizes->resizeGetTotal($size_id);
         echo $this->contentImagesSizes->getErrorMessage();
-        $this->response->body($t)->asHtml();
+        return $t;
     }
 
     public function resizeItems()
@@ -168,6 +168,6 @@ class ContentImagesSizes extends Backend
 
         $s = $this->contentImagesSizes->resizeItems($size_id, $start, $num);
 
-        $this->response->body($s)->asHtml();
+        return $s;
     }
 }

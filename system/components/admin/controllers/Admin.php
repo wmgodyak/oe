@@ -16,6 +16,10 @@ use system\models\Permissions;
 
 defined("CPATH") or die();
 
+/**
+ * Class Admin
+ * @package system\components\admin\controllers
+ */
 class Admin extends Backend {
 
     private $mAdmin;
@@ -142,7 +146,7 @@ class Admin extends Backend {
         $langs = Lang::getInstance()->getLangs();
         $this->template->assign('langs', $langs);
 
-        $this->response->body($this->template->fetch('system/admin/login'));
+        $this->template->display('system/admin/login');
     }
 
     /**
@@ -192,12 +196,7 @@ class Admin extends Backend {
                     }
                 }
             }
-
-            $this->response->body(array(
-                's' => $status > 0,
-                'i' => $inp,
-                'f' => $fail > 0
-            ))->asJSON();
+            return [ 's' => $status > 0, 'i' => $inp, 'f' => $fail > 0 ];
         }
     }
 
@@ -254,13 +253,13 @@ class Admin extends Backend {
 
             }
 
-            $this->response->body(['s'=>$s, 'i' => $i, 'a' => isset($a) ? $a['f'] . '?_=' . time() : null])->asJSON();
-            return;
+            return ['s'=>$s, 'i' => $i, 'a' => isset($a) ? $a['f'] . '?_=' . time() : null];
         }
 
         $this->template->assign('ui', self::data());
-        $this->response->body($this->template->fetch('system/admin/edit_profile'))->render();
+        $this->template->display('system/admin/edit_profile');
     }
+
     public function index()
     {
     }

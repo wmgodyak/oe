@@ -47,6 +47,12 @@ if ( !defined('CPATH') ) die();
         echo '<pre>'; print_r($var); echo '</pre>';
     }
 
+    function dd($var)
+    {
+        d($var);
+        die;
+    }
+
 if (!function_exists('http_response_code')) {
     function http_response_code($code = NULL) {
 

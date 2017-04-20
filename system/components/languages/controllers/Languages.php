@@ -22,7 +22,6 @@ class Languages extends Backend
 
     public function index()
     {
-
         $this->appendToPanel((string)Button::create($this->t('common.button_create'), ['class' => 'btn-md btn-primary b-languages-create']));
 
         $t = new DataTables2('languages');
@@ -67,10 +66,7 @@ class Languages extends Backend
                         Icon::create(Icon::TYPE_DELETE),
                         ['class' => 'b-languages-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
                     ) : "")
-
-
-
-                ;
+                  ;
             }
 
             return $t->render($res, $t->getTotal());
@@ -83,14 +79,14 @@ class Languages extends Backend
     {
         $this->template->assign('action', 'create');
         $this->template->assign('allowed', Lang::getInstance()->getAllowedLanguages());
-        $this->response->body($this->template->fetch('system/languages/edit'))->asHtml();
+        $this->template->display('system/languages/edit');
     }
     public function edit($id)
     {
         $this->template->assign('data', $this->languages->getData($id));
         $this->template->assign('allowed', Lang::getInstance()->getAllowedLanguages());
         $this->template->assign('action', 'edit');
-        $this->response->body($this->template->fetch('system/languages/edit'))->asHtml();
+        $this->template->display('system/languages/edit');
     }
 
     public function process($id= null)
@@ -121,8 +117,7 @@ class Languages extends Backend
             }
         }
 
-        $this->response->body(['s'=>$s, 'i' => $i])->asJSON();
-
+        return ['s'=>$s, 'i' => $i];
     }
 
     private function copyTranslations($code)

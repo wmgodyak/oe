@@ -1,5 +1,5 @@
 <div class="blog-post">
-    <h2 class="blog-post-title"><a href="{$post.id}" rel="bookmark" title="{$post.title}">{$post.name}</a></h2>
+    <h2 class="blog-post-title"><a href="{$post.url}" rel="bookmark" title="{$post.title}">{$post.name}</a></h2>
     <p class="blog-post-meta">{date('d M, Y', $post.published)} by <a href="{$app->page->url($blog_id)}/author/{$post.author.id}">{$post.author.name}</a></p>
     {if $post.categories|count}
         <div class="blog-post-category">
@@ -24,7 +24,7 @@
     {if !empty($img)}
         <div class="blogimage">
             <div class="loading"></div>
-            <a href="{$post.id}" rel="bookmark" title="{$post.title}">
+            <a href="{$post.url}" rel="bookmark" title="{$post.title}">
                 <img width="1080" height="580" src="{$img}" class="attachment-blog wp-post-image"  alt="{$post.name}"/>
             </a>
         </div>

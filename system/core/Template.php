@@ -153,24 +153,22 @@ class Template
         $this->assign($varname, $var);
         return $this;
     }
+
     /**
      * @param null $template
      * @param null $cache_id
      * @param null $compile_id
      * @param null $parent
-     * @param bool $display
-     * @param bool $merge_tpl_vars
-     * @param bool $no_output_filter
      * @return string
      */
-    public function fetch($template = null, $cache_id = null, $compile_id = null, $parent = null, $display = false, $merge_tpl_vars = true, $no_output_filter = false)
+    public function fetch($template = null, $cache_id = null, $compile_id = null, $parent = null)
     {
 
         if(!empty($template) && strpos($template, '.tpl') === false){
             $template .= '.tpl';
         }
 
-        return $this->smarty->fetch($template, $cache_id, $compile_id, $parent, $display, $merge_tpl_vars, $no_output_filter);
+        return $this->smarty->fetch($template, $cache_id, $compile_id, $parent);
     }
 
     /**
@@ -178,15 +176,52 @@ class Template
      * @param null $cache_id
      * @param null $compile_id
      * @param null $parent
-     * @param bool $display
-     * @param bool $merge_tpl_vars
-     * @param bool $no_output_filter
      * @return string
      */
-    public function fetchString($string = null, $cache_id = null, $compile_id = null, $parent = null, $display = false, $merge_tpl_vars = true, $no_output_filter = false)
+    public function fetchString($string = null, $cache_id = null, $compile_id = null, $parent = null)
     {
-        return $this->smarty->fetch('string:' . $string, $cache_id, $compile_id, $parent, $display, $merge_tpl_vars, $no_output_filter);
+        return $this->smarty->fetch('string:' . $string, $cache_id, $compile_id, $parent);
     }
+
+
+    /**
+     * displays a Smarty template
+     *
+     * @param string $template   the resource handle of the template file or template object
+     * @param mixed  $cache_id   cache id to be used with this template
+     * @param mixed  $compile_id compile id to be used with this template
+     * @param object $parent     next higher level of Smarty variables
+     */
+    public function display($template = null, $cache_id = null, $compile_id = null, $parent = null)
+    {
+
+        if(!empty($template) && strpos($template, '.tpl') === false){
+            $template .= '.tpl';
+        }
+
+        $this->smarty->display($template, $cache_id, $compile_id, $parent);
+        die;
+    }
+
+    /**
+     * test if cache is valid
+     *
+     * @api  Smarty::isCached()
+     * @link http://www.smarty.net/docs/en/api.is.cached.tpl
+     *
+     * @param  null|string|\Smarty_Internal_Template $template   the resource handle of the template file or template object
+     * @param  mixed                                 $cache_id   cache id to be used with this template
+     * @param  mixed                                 $compile_id compile id to be used with this template
+     * @param  object                                $parent     next higher level of Smarty variables
+     *
+     * @return boolean       cache status
+     */
+    public function isCached($template = null, $cache_id = null, $compile_id = null, $parent = null)
+    {
+        return $this->smarty->isCached($template, $cache_id, $compile_id, $parent);
+    }
+
+
 
     /**
      * @param $src
@@ -202,7 +237,7 @@ class Template
         }
 
         if( $priority && isset($this->styles[$priority]) ){
-          throw new Exception("In this position assigned {$this->styles[$priority]}. Change priority.");
+            throw new Exception("In this position assigned {$this->styles[$priority]}. Change priority.");
         }
 
         $this->styles[$priority] = $src;
@@ -225,7 +260,7 @@ class Template
         }
 
         if( $priority && isset($this->scripts[$priority]) ){
-          throw new Exception("In this position assigned {$this->scripts[$priority]}. Change priority.");
+            throw new Exception("In this position assigned {$this->scripts[$priority]}. Change priority.");
         }
 
         $this->scripts[$priority] = $src;
@@ -249,7 +284,6 @@ class Template
         return $this->scripts;
     }
 
-    // todo а воно треба?
     public static function fatalErrorTemplateContent($array)
     {
         return '<!DOCTYPE html>

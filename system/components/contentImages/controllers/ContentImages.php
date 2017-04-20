@@ -228,23 +228,18 @@ class ContentImages extends Backend
             $s = $image_id > 0;
         }
 
-        $this->response
-            ->body
-            (
-                [
-                    's' => $s,
-                    'm' => $m,
-                    'p' =>$this->uploaddir,
-                    'im' => $fname,
-                    'id' => $image_id
-                ]
-            )
-            ->asJSON();
+        return [
+            's' => $s,
+            'm' => $m,
+            'p' =>$this->uploaddir,
+            'im' => $fname,
+            'id' => $image_id
+        ];
     }
 
     public function sort()
     {
         $s = $this->ci->sort();
-        $this->response->body(['s' =>$s])->asJSON();
+        return ['s' =>$s];
     }
 }

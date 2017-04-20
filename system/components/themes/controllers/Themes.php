@@ -89,6 +89,7 @@ class Themes extends Backend
         if(empty($theme)) return 0;
 
         Settings::getInstance()->set('app_theme_current', $theme);
+        echo 1;
     }
 
     /**
@@ -351,7 +352,7 @@ class Themes extends Backend
         }
 
         $this->template->assign('path', $path);
-        echo $this->template->fetch('system/themes/createFile');
+        $this->template->display('system/themes/createFile');
     }
 
     /**
@@ -404,7 +405,7 @@ class Themes extends Backend
         }
 
         $this->template->assign('path', $path);
-        echo $this->template->fetch('system/themes/upload');
+        $this->template->display('system/themes/upload');
     }
 
     private function getPermissions($item)
@@ -489,7 +490,7 @@ class Themes extends Backend
             $s = file_put_contents($dir.$path, $source);
             $m = 'Source Updated';
         }
-        $this->response->body(['s' => $s, 'm' => $m])->asJSON();
+        return ['s' => $s, 'm' => $m];
     }
 
     public function tree($theme)
@@ -515,8 +516,6 @@ class Themes extends Backend
                     $href = './themes/edit/'. $theme.'?path=' . $path . '/' . $fn;
                 }
 
-
-
                 $items[] = [
                     'text' => $fn,
                     'type' => is_dir($dir . $path . '/' . $fn) ? 'folder' : 'file',
@@ -528,7 +527,7 @@ class Themes extends Backend
             closedir($handle);
 
         }
-        $this->response->body($items)->asJSON();
+        return $items;
     }
 
     public function download($theme)
@@ -594,7 +593,7 @@ class Themes extends Backend
             }
         }
 
-        $this->response->body(['s' => $s, 'm' => $m])->asJSON();
+        return ['s' => $s, 'm' => $m];
     }
 
     /**

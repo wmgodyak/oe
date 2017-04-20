@@ -26,7 +26,7 @@ class Guides extends Content
     public function init()
     {
         $this->assignToNav($this->t('guides.action_index'), 'guides', 'fa-book', 'tools', 100);
-        $this->template->assignScript(dirname(__FILE__) . "/js/guides.js");
+        $this->template->assignScript("system/components/guides/js/guides.js");
     }
 
     public function main($guide)
@@ -34,7 +34,6 @@ class Guides extends Content
         if(empty($guide['types_id'])) return null;
         $ct = new ContentTypes();
         $a = $ct->getData($guide['types_id'], 'type');
-//        echo $a, '   ', $this->type;
         if($this->type != $a) return '';
 
         return $this->template->fetch('system/guides/main');
@@ -139,7 +138,7 @@ class Guides extends Content
         $this->template->assign('content', ['parent_id' => $parent_id]);
         $this->template->assign('action', 'create');
 
-        $this->response->body($this->template->fetch('system/guides/form'));
+        $this->template->display('system/guides/form');
     }
 
     public function edit($id)
@@ -147,7 +146,7 @@ class Guides extends Content
         EventsHandler::getInstance()->add('content.main', [$this, 'main']);
         $this->template->assign('content', $this->mContent->getData($id));
         $this->template->assign('action', 'edit');
-        $this->response->body($this->template->fetch('system/guides/form'));
+        $this->template->display('system/guides/form');
     }
 
     public function process($id = null)
@@ -170,7 +169,7 @@ class Guides extends Content
             $m = $this->mContent->getErrorMessage();
         }
 
-        $this->response->body(['s'=>$s, 'i' => $i, 'm' => $m])->asJSON();
+        return ['s'=>$s, 'i' => $i, 'm' => $m];
     }
 
     public function tree()
@@ -205,8 +204,6 @@ class Guides extends Content
 
                 $items[] = $item;
             }
-
-            $this->response->asJSON();
 
             return $items;
         }

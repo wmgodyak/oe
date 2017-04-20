@@ -44,7 +44,7 @@ class Settings extends Model
             $text = $settings['robots_no_index_sample'];
         }
 
-        file_put_contents(DOCROOT . 'robots.txt', $text);
+       @ file_put_contents(DOCROOT . 'robots.txt', $text);
     }
 
     public function getVersion()

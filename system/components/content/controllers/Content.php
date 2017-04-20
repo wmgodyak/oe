@@ -151,10 +151,10 @@ class Content extends Backend
         if($s){
             EventsHandler::getInstance()->call('content.delete', ['id' => $id]);
         }
-        $this->response->body(['s'=>$s,'m' => $m])->asJSON();
+        return ['s'=>$s,'m' => $m];
     }
 
-    public function process($id, $response = true)
+    public function process($id)
     {
         $i=[]; $m = $this->t('common.update_success');
 
@@ -167,13 +167,7 @@ class Content extends Backend
             $m = $this->mContent->getErrorMessage();
         }
 
-        $a = ['s'=>$s, 'i' => $i, 'm' => $m];
-
-        if($response){
-            $this->response->body($a)->asJSON();
-        }
-
-        return $a;
+        return ['s'=>$s, 'i' => $i, 'm' => $m];
     }
 
     public function pub($id)

@@ -73,11 +73,14 @@ abstract class Frontend extends core\Controller
 
         $frontend = new \system\models\Frontend();
 
+        $this->app = App::getInstance();
+
         // template settings
         $theme = $this->settings->get('app_theme_current');
         $this->template = Template::getInstance($theme);
+        $this->template->assign('app', $this->app);
 
-        $this->app = App::getInstance();
+
 
         $this->languages = $frontend->languages;
         $this->languages_id = $frontend->languages_id;

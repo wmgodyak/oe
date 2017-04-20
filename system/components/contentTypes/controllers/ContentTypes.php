@@ -18,12 +18,10 @@ defined("CPATH") or die();
  */
 class ContentTypes extends Backend
 {
-
     private $contentTypes;
     private $path;
 
     const DIR = 'layouts/';
-//    const PATH = 'engine/layouts/';
     const EXT = '.tpl';
 
     public function __construct()
@@ -34,12 +32,11 @@ class ContentTypes extends Backend
 
         // шлях до тем
         $themes_path = Settings::getInstance()->get('themes_path');
+
         // активна тема
         $theme = Settings::getInstance()->get('app_theme_current');
-        // шлях до вьюшок
-        $vpath = '';//Settings::getInstance()->get('app_views_path');
 
-        $this->path = DOCROOT .  $themes_path  . $theme .'/' . $vpath . self::DIR;
+        $this->path = DOCROOT .  $themes_path  . $theme .'/' . self::DIR;
     }
 
     public function init()
@@ -148,7 +145,6 @@ class ContentTypes extends Backend
         );
         $data = ['parent_id' => $parent_id,'images_sizes' => []];
         $this->template->assign('data', $data);
-        $this->template->assign('imagesSizes', $this->contentTypes->getContentImagesSizes());
         $this->template->assign('content_types', $this->contentTypes->get(0));
         $this->template->assign('action', 'create');
         $this->output($this->template->fetch('system/contentTypes/form'));
@@ -182,7 +178,6 @@ class ContentTypes extends Backend
 
         $data['template'] = $this->readTemplate($id);
 
-        $this->template->assign('imagesSizes', $this->contentTypes->getContentImagesSizes());
         $this->template->assign('data', $data);
         $this->template->assign('content_types', $this->contentTypes->get(0));
 
@@ -239,7 +234,7 @@ class ContentTypes extends Backend
             echo $this->contentTypes->getErrorMessage();
         }
 
-        $this->response->body(['s'=>$s, 'i' => $i, 'm' => $m])->asJSON();
+        return ['s'=>$s, 'i' => $i, 'm' => $m];
     }
 
     /**
@@ -301,7 +296,6 @@ class ContentTypes extends Backend
 
         if(!is_dir($path)) {
             mkdir($path, 0777, true);
-//            chown($path, Config::getInstance()->get('core.user'));
         }
 
 
@@ -309,15 +303,19 @@ class ContentTypes extends Backend
 
         $now = date('c');
         $y = date('Y');
+        $body = $this->request->post('template');
         $text = "{*
  * OYiEngine 7
  * @author {$this->admin['name']} mailto:{$this->admin['email']}
  * @copyright Copyright (c) {$y}
  * Date: {$now}
  * @name {$data['name']}
- *}\r\n"
-            . $this->request->post('template');
-
+ *}\r\n
+{extends 'layouts/index.tpl'}
+{block name=body}\r\n
+{$body}\r\n
+{/block}
+";
         return $this->writeTemplate($id, $text);
     }
 
@@ -361,10 +359,5 @@ class ContentTypes extends Backend
         }
 
         return !$abs ? str_replace(DOCROOT , '', $template) : $template;
-    }
-
-    public function getImagesSizes()
-    {
-        $this->response->body(['items' => $this->contentTypes->getContentImagesSizes()])->asJSON();
     }
 }
