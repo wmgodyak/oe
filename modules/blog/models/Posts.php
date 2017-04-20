@@ -62,6 +62,7 @@ class Posts extends Content
         $res = [];
 
         foreach ($r as $item) {
+            $item['url'] = $this->app->page->url($item['id']);
             $item['author']     = ['id' => $item['author_id'], 'name' => $item['author_name']];
             $item['tags']       = $this->tags->get($item['id']);
             $item['categories'] = $this->categories($item['id']);
@@ -70,7 +71,6 @@ class Posts extends Content
 
             $res[] = $item;
         }
-
         return $res;
     }
 

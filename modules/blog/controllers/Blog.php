@@ -42,6 +42,7 @@ class Blog extends Frontend
 
     public function init()
     {
+        $this->template->assignScript('modules/blog/js/blog.js');
         $this->template->assign('blog_id', $this->config['blog_id']);
 
         if($this->page['type'] == 'post'){
@@ -172,5 +173,39 @@ class Blog extends Frontend
         header('Content-Type: application/javascript');
         if($post_id > 0) $this->posts->collect($post_id);
         die;
+    }
+
+    /**
+     * @param $start - start from
+     * @param $num - items quantity
+     * @param $render - render posts
+     * @return array
+     */
+    public function more()
+    {
+        $start = $this->request->post('start', 'i');
+        $num   = $this->request->post('num', 'i');
+        $render = $this->request->post('html', '1');
+        $html = null;
+
+        $this->posts->start = $start;
+        $this->posts->num   = $num;
+
+        $total = $this->posts->total();
+        $posts = $this->posts->get();
+
+        if($render == 1){
+            $res = $posts;
+            foreach ($res as $post) {
+                $this->template->assign('post', $post);
+                $html .= $this->template->fetch('modules/blog/post_item');
+            }
+        }
+
+        return [
+            'total' => $total,
+            'posts' => $posts,
+            'html'  => $html
+        ];
     }
 }

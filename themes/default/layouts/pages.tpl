@@ -18,6 +18,11 @@
             {foreach $posts as $post}
                 {include file="modules/blog/post_item.tpl"}
             {/foreach}
+            <div class="row blog-main-more">
+                <div class="col md-12 text-center">
+                    <button class="btn btn-primary blog-more">More</button>
+                </div>
+            </div>
         </div><!-- /.blog-main -->
 
         <div class="col-sm-3 col-sm-offset-1 blog-sidebar">

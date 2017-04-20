@@ -48,6 +48,10 @@ class Response
     public function render()
     {
         if(! headers_sent()){
+            if(is_array($this->body) || is_object($this->body)){
+                $this->asJSON();
+            }
+
             header('Content-Type: ' . $this->ct);
         }
 
