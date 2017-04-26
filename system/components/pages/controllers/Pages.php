@@ -19,12 +19,11 @@ class Pages extends Content
     public function __construct()
     {
         parent::__construct('pages');
-
-        $this->template->assignScript("system/components/pages/js/pages.js");
     }
 
     public function init()
     {
+        $this->template->assignScript("system/components/pages/js/pages.js");
         $this->assignToNav($this->t('pages.action_index'), 'pages', 'fa-file-text', null, 10);
     }
 
