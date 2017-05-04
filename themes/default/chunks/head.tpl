@@ -18,6 +18,14 @@
         <meta name="keywords" content="{{$page.keywords|escape}}" />
     {/block}
 
+
+    <link rel="apple-touch-icon" sizes="180x180" href="{$theme_url}/assets/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="{$theme_url}/assets/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="{$theme_url}/assets/favicons/favicon-16x16.png">
+    <link rel="mask-icon" href="{$theme_url}/assets/favicons/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="theme-color" content="#ffffff">
+
+
     <meta name="generator" content="OYi.Engine">
     <meta name="csrf-token" content="{$token}">
 

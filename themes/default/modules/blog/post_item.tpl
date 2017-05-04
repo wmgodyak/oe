@@ -25,7 +25,7 @@
         <div class="blogimage">
             <div class="loading"></div>
             <a href="{$post.url}" rel="bookmark" title="{$post.title}">
-                <img width="1080" height="580" src="{$img}" class="attachment-blog wp-post-image"  alt="{$post.name}"/>
+                <img src="{$img}" class="attachment-blog wp-post-image"  alt="{$post.name}"/>
             </a>
         </div>
     {/if}
