@@ -44,7 +44,8 @@ if ( !defined('CPATH') ) die();
  */
     function d($var)
     {
-        echo '<pre>'; print_r($var); echo '</pre>';
+        echo '<pre class="sys-dump">'; print_r($var); echo '</pre>';
+        echo "<style type='text/css'>.sys-dump{z-index:99999; position: relative; display: block; font-size: 15px; font-family: monospace;    line-height: 1.4em;    color: white;    background-color: #2d0922;    padding: 1em;    margin-bottom: 1em;}</style>";
     }
 
     function dd($var)
