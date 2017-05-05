@@ -54,10 +54,11 @@ class Themes extends Backend
         if ($handle = opendir($path)) {
             while (false !== ($theme = readdir($handle))) {
                 if ($theme != "." && $theme != "..") {
-                    if(!file_exists($path . '/' . $theme . '/config.ini'))
+                    if(!file_exists($path . '/' . $theme . '/config.json'))
                         continue;
 
-                    $config = parse_ini_file($path . '/' . $theme . '/config.ini');
+                    $config = file_get_contents($path . '/' . $theme . '/config.json');
+                    $config = json_decode($config, true);
 
                     if($config['type'] == 'backend') continue;
 

@@ -1,0 +1,8 @@
+{
+  "name" : "Backend default",
+  "author" : "VH",
+  "version" : "1.0.0",
+  "screenshot" : "screenshot.png",
+  "type" : "backend",
+  "description" : "Backend default"
+}
