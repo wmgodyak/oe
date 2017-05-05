@@ -84,8 +84,8 @@ class Modules extends Backend
                 $res[$i][] =
                     (isset($module['description']) ? $module['description'] .'<br>' : '')
                     . '<small>'
-                    . "   Автор: " . (isset($module['author']) ? $module['author'] : 'немає.')
-                    . " | Версія: " . (isset($module['version']) ? $module['version'] : 'немає.')
+                    . "   Author: " . (isset($module['author']) ? $module['author'] : 'немає.')
+                    . " | Version: " . (isset($module['version']) ? $module['version'] : 'немає.')
                     . '</small>'
                 ;
                 $b = [];

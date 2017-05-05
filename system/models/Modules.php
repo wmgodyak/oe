@@ -75,17 +75,32 @@ class Modules
 
     private function readConfig($module, $settings)
     {
-        $file =  DOCROOT . "modules/{$module}/config.ini";
 
-        if(!file_exists( $file )) {
-            return null;
+        $file =  DOCROOT . "modules/{$module}/config.json";
+
+        if(file_exists( $file )) {
+
+            $a = file_get_contents($file);
+            $a = json_decode($a, true);
+            if(empty($a)) $a = [];
+
+            return array_merge($a, $settings);
         }
 
-        $a = parse_ini_file($file, true);
+        // older versions
 
-        if(empty($a)) $a = [];
+        $file =  DOCROOT . "modules/{$module}/config.ini";
 
-        return array_merge($a, $settings);
+        if(file_exists( $file )) {
+
+            $a = parse_ini_file($file, true);
+
+            if(empty($a)) $a = [];
+
+            return array_merge($a, $settings);
+        }
+
+        return null;
     }
 
     private function assignLang($module)
@@ -93,16 +108,18 @@ class Modules
         $modules_dir = 'modules';
         $backend = $this->mode == 'backend' ? 'backend/' : '';
         $dir  =  $modules_dir .'/'. $module . '/lang';
-        $file = DOCROOT . $dir . '/' . $backend . $this->lang . '.ini';
+        $file = DOCROOT . $dir . '/' . $backend . $this->lang . '.json';
 
         if(!file_exists( $file )) {
-            $file = DOCROOT . $dir . '/' . $backend . 'en.ini';
+            $file = DOCROOT . $dir . '/' . $backend . 'en.json';
         }
 
         if(!file_exists( $file )) {
             return ;
         }
-        $a = parse_ini_file($file, true);
+
+        $a = file_get_contents($file);
+        $a = json_decode($a, true);
 
         Lang::getInstance($this->theme, $this->lang)->addTranslations($module, $a);
     }

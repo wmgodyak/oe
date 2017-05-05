@@ -161,7 +161,6 @@ abstract class Backend extends Controller
         if($this->request->isGet() && ! $this->request->isXhr()){
 
             $this->makeNav();
-
             $this->template->assign('title', $this->t($controller . '.action_' . $action));
             $this->template->assign('name',  $this->t($controller . '.action_' . $action));
         }

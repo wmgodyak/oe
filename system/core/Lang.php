@@ -19,7 +19,7 @@ class Lang
 
     private $langs = array();
 
-    private $translations;
+    private $translations = [];
     private $dir;
     private $lang = null;
 
@@ -106,17 +106,16 @@ class Lang
 
         if(empty($this->lang)) $this->lang = 'en';
 
-        $fn = DOCROOT . $dir . '/' . $this->lang .'.ini';
+        $fn = DOCROOT . $dir . '/' . $this->lang .'.json';
         if(! file_exists($fn)) $this->lang = 'en';
 
-        $fn = DOCROOT . $dir . '/' . $this->lang .'.ini';
+        $fn = DOCROOT . $dir . '/' . $this->lang .'.json';
         if(! file_exists($fn)) return ;
 
-        $a = parse_ini_file($fn, true);
+        $a = file_get_contents($fn, true);
+        $a = json_decode($a, true);
 
-        foreach ($a as $k=>$v) {
-            $this->translations[$k] = $v;
-        }
+        $this->translations = array_merge($this->translations, $a);
     }
 
     /**
