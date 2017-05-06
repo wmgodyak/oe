@@ -12,7 +12,7 @@
      * @since		Version 7.0
      */
 
-    if (version_compare(phpversion(), '5.3.0', '<') == true) { die ('PHP 5.3+ Only'); }
+    if (version_compare(phpversion(), '5.4.0', '<') == true) { die ('PHP 5.4+ Only'); }
 
     if(!defined('DOCROOT')) define('DOCROOT', str_replace("\\", "/", $_SERVER['DOCUMENT_ROOT'] . '/'));
     if(!defined('CPATH')) define('CPATH', DOCROOT . 'system/controllers/');
@@ -21,6 +21,6 @@
     include_once "config/bootstrap.php";
 
     // Routing
-    \system\core\Route::run();
+    \system\core\Route::getInstance()->run();
 
     \system\core\Response::getInstance()->render();

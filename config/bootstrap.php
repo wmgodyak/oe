@@ -18,6 +18,8 @@
         closedir($handle);
     }
 
+
+    // todo move it to request
     $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? "https://" : "http://";
 
     if(!defined('APP')) define('APP', "{$_SERVER['HTTP_HOST']}");
@@ -28,11 +30,7 @@
     spl_autoload_register('autoLoad');
 
     require DOCROOT . "vendor/autoload.php";
-
-    \system\core\Route::add('/backend/([a-zA-Z_0-9]+)/([a-zA-Z_0-9]+)/?(.*)', null, 'system\components\:controller:action');
-    \system\core\Route::add('/backend/([a-zA-Z_0-9]+)/([a-zA-Z_0-9]+)/?', null, 'system\components\:controller:action');
-    \system\core\Route::add('/backend/([a-zA-Z_0-9]+)/?', null, 'system\components\:controller');
-    \system\core\Route::add('/backend/?', null, 'system\components\Dashboard');
+    include_once DOCROOT . "config/routes.php";
 
     // init session
     system\core\Session::init();

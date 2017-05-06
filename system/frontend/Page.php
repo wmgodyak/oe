@@ -33,9 +33,8 @@ class Page extends \system\Frontend
     private   $theme;
     protected $app;
 
-    public function index()
+    public function __construct()
     {
-        if($this->request->isXhr()) return;
 
         if ( preg_match('!/{2,}!', $_SERVER['REQUEST_URI']) ){
             $url = preg_replace('!/{2,}!', '/', $_SERVER['REQUEST_URI']);
@@ -52,6 +51,70 @@ class Page extends \system\Frontend
             header("HTTP/1.1 301 Moved Permanently");
             header("Location: $uri");
             exit();
+        }
+
+        parent::__construct();
+    }
+
+    public function displayHome()
+    {
+        if($this->request->isXhr()) return null;
+
+        $id = $this->settings->get('home_id');
+        $page = $this->app->page->fullInfo($id);
+
+        $this->display($page);
+    }
+
+    public function displayLang($code)
+    {
+        if(empty($this->languages_id) && !isset($args['url']) && isset($code)){
+            // short url
+            $args['url'] = $code;
+        }
+
+        $def_lang_id = $this->languages->getDefault('id');
+        $lang_id = $this->languages->getDataByCode($code, 'id');
+
+        if($def_lang_id == $lang_id){
+
+            $uri = APPURL;
+            header("HTTP/1.1 301 Moved Permanently");
+            header("Location: $uri");
+            die;
+
+        }
+
+
+        $id = $this->settings->get('home_id');
+        $page = $this->app->page->fullInfo($id, $lang_id);
+
+        $this->display($page);
+    }
+
+    public function displayLangAndUrl($code, $url)
+    {
+        $lang_id = $this->languages->getDataByCode($code, 'id');
+        $id = $this->app->page->getIdByUrl($url, $lang_id);
+
+            $page = $this->app->page->fullInfo($id, $lang_id);
+
+        $this->display($page);
+    }
+
+    public function displayUrl($url)
+    {
+        $id = $this->app->page->getIdByUrl($url, $this->languages_id);
+
+        $page = $this->app->page->fullInfo($id);
+
+        $this->display($page);
+    }
+
+    private function display($page)
+    {
+        if (!$page) {
+            $page = $this->e404();
         }
 
         $env = Config::getInstance()->get('core.environment');
@@ -71,13 +134,6 @@ class Page extends \system\Frontend
             }
         }
 
-        // завантаження сторінки
-        $page = $this->getPageInfoFromRequest();
-
-        if (!$page) {
-            $page = $this->e404();
-        }
-
         $page['content'] = $this->template->fetchString($page['content']);
 
         Request::getInstance()->param('page', $page);
@@ -93,8 +149,8 @@ class Page extends \system\Frontend
         $this->languages_code = $page['languages_code'];
 
         $_SESSION['app'] = [
-          'languages_id' => $page['languages_id'],
-          'languages_code' => $page['languages_code']
+            'languages_id' => $page['languages_id'],
+            'languages_code' => $page['languages_code']
         ];
 
         $this->request->param('languages_id', $page['languages_id']);
@@ -168,9 +224,10 @@ class Page extends \system\Frontend
         }
 
         $db->close();
-        echo $ds;
-        die;
+        echo $ds; die;
     }
+
+    public function index(){}
 
     private function getPageInfoFromRequest()
     {

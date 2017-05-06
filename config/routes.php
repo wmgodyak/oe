@@ -1,29 +1,54 @@
 <?php
 /**
  * OYiEngine 7
- * @author Volodymyr Hodiak mailto:support@otakoi.com
+ * @author Volodymyr Hodiak mailto:vh@otakoi.com
  * @copyright Copyright (c) 2015 Otakoyi.com
- * Date: 18.12.15 : 14:32
  */
-
-$routes = array();
+$route = \system\core\Route::getInstance();
 
 /**
  * FRONTEND
  */
-$routes[]  = array('/route/([a-zA-Z0-9-_]+)/([a-zA-Z0-9-_]+)/?(.*)', 'modules\:controller:action');
-$routes[]  = array('/system/cron/run/?(.*)', 'system\Cron', 'action');
+// cron
+$route->get('/system/cron', '\system\Cron');
+// some module
+$route->any('/route/{alpha}/{alpha}', 'module');
+$route->any('/route/{alpha}/{alpha}/{any}', 'module');
 
-// blog
-$routes[]  = array('/([a-z0-9-_/]+)/author/(.*)', 'system\frontend\Page', 'url/author/author');
-$routes[]  = array('/([a-z0-9-_/]+)/tag/(.*)', 'system\frontend\Page', 'url/tag/tag');
+// only lang
+$route->get('/{lang}', '\system\frontend\Page::displayLang');
 
-// default
-$routes[]  = array('/([a-z]{2})/?', 'system\frontend\Page', 'lang');
-$routes[]  = array('/([a-z0-9-_/]+)/filter/(.*)', 'system\frontend\Page', 'url/filter/filter');
+// lang/url
+$route->get('/{lang}/{url}', '\system\frontend\Page::displayLangAndUrl');
 
-$routes[]  = array('/([a-z]{2})/([a-zA-Z0-9-_/]+)/?', 'system\frontend\Page', 'lang/url');
-$routes[]  = array('/([a-zA-Z0-9-_/]+)/page/([0-9]+)/?', 'system\frontend\Page', 'url/p');
-$routes[]  = array('/(.*)', 'system\frontend\Page', 'url');
+// only url
+$route->get('/{url}', '\system\frontend\Page::displayUrl');
+$route->get('/', '\system\frontend\Page::displayHome');
 
-return $routes;
+/**
+ * BACKEND
+ */
+// some component
+$route->any('/backend/{alpha}/{alpha}/{any}', 'component');
+$route->any('/backend/{alpha}/{alpha}', 'component');
+$route->any('/backend/{alpha}', 'component');
+// dashboard
+$route->get('/backend', '\system\components\Dashboard');
+
+//        $this->get('/', function(){return '/home closure';});
+//        $this->get('/post/{id}', function($id){return "/home closure $id";});
+//        $this->get('/post/{post}/comments/{comment}', function($post, $comment){return "/home closure $post $comment";});
+//        $this->get('/post/{url}', function($url){return "/home closure $url";});
+//        $this->get('/{any}', function($url){return "/home closure $url";});
+//        $this->get('/rest', 'Rest::index');
+//        $this->get('/system/cron', '\system\Cron');
+//        $this->get('/route/{alpha}/{alpha}', 'module');
+
+//        $this->get('/{url}/tag/{url}', 'Rest::index');
+//        $this->get('/{lang}', 'Rest::index');
+//        $this->get('/rest/{url}', 'Rest');
+//        $this->get('/rest/{url}', 'Rest::show');
+//        $this->get('/rest/{id}/edit', 'Rest::edit');
+//        $this->post('/rest', 'Rest::store');
+//        $this->put('/rest/{id}', 'Rest::update');
+//        $this->delete('/rest/{id}', 'Rest::delete');

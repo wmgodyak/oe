@@ -15,12 +15,16 @@ if ( !defined('CPATH') ) die();
             $fileName = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
         }
         $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
-        if (!file_exists($fileName)) {
+        if (file_exists($fileName)) {
+            require $fileName;
             return;
-            //      throw new Exception("Try to load className: <b>{$className}</b> on line 32. Error, file: {$fileName} not found");
         }
 
-        require $fileName;
+        // try load module
+//        echo "Try to load class $className";
+
+
+
     }
 
     /**
@@ -45,7 +49,7 @@ if ( !defined('CPATH') ) die();
     function d($var)
     {
         echo '<pre class="sys-dump">'; print_r($var); echo '</pre>';
-        echo "<style type='text/css'>.sys-dump{z-index:99999; position: relative; display: block; font-size: 15px; font-family: monospace;    line-height: 1.4em;    color: white;    background-color: #2d0922;    padding: 1em;    margin-bottom: 1em;}</style>";
+        echo "<style type='text/css'>.sys-dump{z-index:99999; position: relative; display: block; font-size: 1em; font-family: monospace; line-height: 1.2em; color: white; background-color: #2d0922; padding: 1em; margin-bottom: 1em;}</style>";
     }
 
     function dd($var)

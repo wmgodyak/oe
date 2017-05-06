@@ -149,10 +149,12 @@ class Page extends Frontend
 
     /**
      * @param $id
+     * @param null $languages_id
      * @return array|mixed|null
      */
-    public function fullInfo($id)
+    public function fullInfo($id, $languages_id = null)
     {
+        if($languages_id) $this->languages_id = $languages_id;
         $page = self::$db
             ->select("
                 select c.*,
