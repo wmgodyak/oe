@@ -170,7 +170,7 @@ class Route
 
             if(preg_match("@^$regex$@siu", $this->uri, $matches)){
 
-//                d($this->uri);d($regex);d($matches);
+//                d($this->uri);d($regex);d($matches); d($route[1]);
 
                 $params = [];
                 $callback = $route[1];

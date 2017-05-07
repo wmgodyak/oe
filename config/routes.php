@@ -6,6 +6,19 @@
  */
 $route = \system\core\Route::getInstance();
 
+
+/**
+ * BACKEND
+ */
+// some component
+$route->any('/backend/{alpha}/{alpha}/{any}', 'component');
+$route->any('/backend/{alpha}/{alpha}', 'component');
+$route->any('/backend/{alpha}', 'component');
+//$route->any('/backend', 'component');
+// dashboard
+$route->get('/backend', '\system\components\dashboard\controllers\Dashboard');
+
+
 /**
  * FRONTEND
  */
@@ -24,16 +37,6 @@ $route->get('/{lang}/{url}', '\system\frontend\Page::displayLangAndUrl');
 // only url
 $route->get('/{url}', '\system\frontend\Page::displayUrl');
 $route->get('/', '\system\frontend\Page::displayHome');
-
-/**
- * BACKEND
- */
-// some component
-$route->any('/backend/{alpha}/{alpha}/{any}', 'component');
-$route->any('/backend/{alpha}/{alpha}', 'component');
-$route->any('/backend/{alpha}', 'component');
-// dashboard
-$route->get('/backend', '\system\components\Dashboard');
 
 //        $this->get('/', function(){return '/home closure';});
 //        $this->get('/post/{id}', function($id){return "/home closure $id";});
