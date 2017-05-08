@@ -134,12 +134,11 @@ class Admin extends Backend {
                 }
             }
 
-            $this->response->body(array(
+            return [
                 's' => $status > 0,
                 'i' => $inp,
                 'f' => $fail > 0
-            ))->asJSON();
-            return;
+            ];
         }
 
         // витягнути список доступних мовних версій

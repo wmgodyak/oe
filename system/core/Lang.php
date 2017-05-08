@@ -74,7 +74,7 @@ class Lang
                 if ($entry != "." && $entry != ".."){
 
                     $entry = mb_strtolower($entry);
-                    $entry = str_replace('.ini','', $entry);
+                    $entry = str_replace('.json','', $entry);
 
                     if( !isset($allowed[$entry])) continue;
 
