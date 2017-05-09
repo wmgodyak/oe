@@ -35,14 +35,23 @@ class Route
         'lang'     => '[a-z]{2}',
         'url'     => '[a-zA-Z0-9-_/]+',
         'any'     => '.+',
-//        'alnum'   => '[a-zA-Z0-9-_/]+',
         'alpha'   => '[[:alpha:]]+',
         'segment' => '[^/]*'
     ];
 
-    //$this->pattern('url', '[a-z0-9\-]+');
+    /**
+     * @param $name
+     * @param $regex
+     * @return $this
+     */
+    public function pattern($name, $regex)
+    {
+        $this->patterns[$name] = $regex;
 
-    public function __construct()
+        return $this;
+    }
+
+    private function __construct()
     {
         $this->uri = rtrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
         $this->uri = $this->protect($this->uri);
@@ -129,6 +138,11 @@ class Route
     public function options($uri, $callback)
     {
         return $this->add('OPTIONS', $uri, $callback);
+    }
+
+    public function actions()
+    {
+        return $this->actions;
     }
 
     /**
