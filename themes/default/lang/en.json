@@ -1,1 +1,20 @@
-{"hello":"Hello","b":"A.B"}
+{
+  "taction_index": "Blog",
+  "action_create": "Create article",
+  "ttaction_edit": "Edit article",
+  "tdelete_question": "Are you sure?",
+  "tstatus_published": "Published",
+  "tstatus_hidden": "Hidden",
+  "ttree_title": "Categories",
+  "ttree_create": "Add",
+  "ttree_edit": "Edit",
+  "ttree_delete": "Delete",
+  "tcategories": {
+    "ttree_create": "Add",
+    "ttree_edit": "Edit",
+    "ttree_delete": "Delete",
+    "ttree_title": "Categories",
+    "tcreate_title": "Crate category",
+    "taction_edit": "Edit category"
+  }
+}

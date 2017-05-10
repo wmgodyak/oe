@@ -6,7 +6,6 @@
  */
 $route = \system\core\Route::getInstance();
 
-
 /**
  * BACKEND
  */
@@ -14,7 +13,7 @@ $route = \system\core\Route::getInstance();
 $route->any('/backend/{alpha}/{alpha}/{any}', 'component');
 $route->any('/backend/{alpha}/{alpha}', 'component');
 $route->any('/backend/{alpha}', 'component');
-//$route->any('/backend', 'component');
+
 // dashboard
 $route->get('/backend', '\system\components\dashboard\controllers\Dashboard');
 
@@ -38,20 +37,20 @@ $route->get('/{lang}/{url}', '\system\frontend\Page::displayLangAndUrl');
 $route->get('/{url}', '\system\frontend\Page::displayUrl');
 $route->get('/', '\system\frontend\Page::displayHome');
 
-//        $this->get('/', function(){return '/home closure';});
-//        $this->get('/post/{id}', function($id){return "/home closure $id";});
-//        $this->get('/post/{post}/comments/{comment}', function($post, $comment){return "/home closure $post $comment";});
-//        $this->get('/post/{url}', function($url){return "/home closure $url";});
-//        $this->get('/{any}', function($url){return "/home closure $url";});
-//        $this->get('/rest', 'Rest::index');
-//        $this->get('/system/cron', '\system\Cron');
-//        $this->get('/route/{alpha}/{alpha}', 'module');
+//        $route->get('/', function(){return '/home closure';});
+//        $route->get('/post/{id}', function($id){return "/home closure $id";});
+//        $route->get('/post/{post}/comments/{comment}', function($post, $comment){return "/home closure $post $comment";});
+//        $route->get('/post/{url}', function($url){return "/home closure $url";});
+//        $route->get('/{any}', function($url){return "/home closure $url";});
+//        $route->get('/rest', 'Rest::index');
+//        $route->get('/system/cron', '\system\Cron');
+//        $route->get('/route/{alpha}/{alpha}', 'module');
 
-//        $this->get('/{url}/tag/{url}', 'Rest::index');
-//        $this->get('/{lang}', 'Rest::index');
-//        $this->get('/rest/{url}', 'Rest');
-//        $this->get('/rest/{url}', 'Rest::show');
-//        $this->get('/rest/{id}/edit', 'Rest::edit');
-//        $this->post('/rest', 'Rest::store');
-//        $this->put('/rest/{id}', 'Rest::update');
-//        $this->delete('/rest/{id}', 'Rest::delete');
+//        $route->get('/{url}/tag/{url}', 'Rest::index');
+//        $route->get('/{lang}', 'Rest::index');
+//        $route->get('/rest/{url}', 'Rest');
+//        $route->get('/rest/{url}', 'Rest::show');
+//        $route->get('/rest/{id}/edit', 'Rest::edit');
+//        $route->post('/rest', 'Rest::store');
+//        $route->put('/rest/{id}', 'Rest::update');
+//        $route->delete('/rest/{id}', 'Rest::delete');

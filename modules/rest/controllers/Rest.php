@@ -1,5 +1,7 @@
 <?php
 namespace modules\rest\controllers;
+use system\core\Route;
+
 /**
  * Created by PhpStorm.
  * User: wg
@@ -13,4 +15,11 @@ class Rest
     public function edit($id){}
     public function update($id){}
     public function delete($id){}
+
+
+    public function boot()
+    {
+        Route::getInstance()->get('my-custom-route', function(){return 'callback';});
+        Route::getInstance()->get('my-custom-route-2', 'MyModuleName::action');
+    }
 }
