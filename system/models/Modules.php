@@ -21,18 +21,40 @@ class Modules
     private $theme;
     private $lang;
     private $mode;
+    private static $instance;
+    private $modules;
 
-    public function __construct($theme = null, $lang = null, $mode = 'frontend')
+    private function __construct($theme, $lang, $mode)
     {
         $this->theme = $theme;
         $this->lang  = $lang;
         $this->mode  = $mode;
+
+        $this->boot();
     }
 
-    public function init()
+    private function __clone()
+    {
+    }
+
+    public static function getInstance($theme = null, $lang = null, $mode = 'frontend')
+    {
+        if(self::$instance == null){
+            self::$instance = new self($theme, $lang, $mode);
+        }
+
+        return self::$instance;
+    }
+
+    public function get()
+    {
+        return $this->modules;
+    }
+
+    private function boot()
     {
         $modules_dir = 'modules';
-        $modules = new \stdClass();
+        $this->modules = new \stdClass();
         $active = Settings::getInstance()->get('modules');
 
         $admin = $this->mode == 'backend' ? '\admin' : '';
@@ -63,14 +85,19 @@ class Modules
                     // assign config to module
                     $controller->config = $config;
 
-                    $modules->{$_module} = $controller;
+                    $this->modules->{$_module} = $controller;
 
-                    call_user_func(array($controller, 'init'));
+                    call_user_func(array($controller, 'boot'));
                 }
             }
         }
+    }
 
-        return $modules;
+    public function init()
+    {
+        foreach ($this->modules as $module) {
+            call_user_func(array($module, 'init'));
+        }
     }
 
     private function readConfig($module, $settings)

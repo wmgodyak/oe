@@ -47,8 +47,9 @@ abstract class Controller
     /**
      * @return mixed
      */
-    abstract public function index();
-    abstract public function init();
+    public function index(){}
+    public function init(){}
+    public function boot(){}
 
     /**
      *	Setter method

@@ -38,7 +38,7 @@ abstract class Backend extends Controller
      * buttons
      * @var array
      */
-    private $buttons = array();
+    private $buttons = [];
 
     protected $settings;
 
@@ -152,8 +152,9 @@ abstract class Backend extends Controller
         $events = EventsHandler::getInstance();
         Template::getInstance()->assign('events', $events);
 
-        $m = new Modules($this->theme, $this->lang, 'backend');
-        $this->modules = $m->init();
+        $m = Modules::getInstance($this->theme, $this->lang, 'backend');
+        $m->init();
+        $this->modules = $m->get();
 
         $this->template->assign('t', Lang::getInstance($this->theme, $this->lang)->t());
 
