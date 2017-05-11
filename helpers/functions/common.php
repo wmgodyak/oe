@@ -49,7 +49,7 @@ if ( !defined('CPATH') ) die();
     function d($var)
     {
         echo '<pre class="sys-dump">'; print_r($var); echo '</pre>';
-        echo "<style type='text/css'>.sys-dump{z-index:99999; position: relative; display: block; font-size: 1em; font-family: monospace; line-height: 1.2em; color: white; background-color: #2d0922; padding: 1em; margin-bottom: 1em;}</style>";
+        echo "<style type='text/css'>.sys-dump{text-align: left; z-index:99999; position: relative; display: block; font-size: 1em; font-family: monospace; line-height: 1.2em; color: white; background-color: #2d0922; padding: 1em; margin-bottom: 1em;}</style>";
     }
 
     function dd($var)
@@ -165,5 +165,42 @@ if(!function_exists('t')){
     function t($key=null)
     {
         return \system\core\Lang::getInstance()->t($key);
+    }
+}
+
+if(!function_exists('dots_get')){
+    function dots_get(array $array, $key)
+    {
+        $keys = explode('.', $key);
+        if (empty($keys)) {
+            return null;
+        }
+
+        $current = $array;
+
+        foreach ($keys as $k) {
+            if (!isset($current[$k])) {
+                return null;
+            }
+            $current = $current[$k];
+        }
+
+        return $current;
+    }
+}
+if(!function_exists('dots_set')){
+    function dots_set(array $array, $key, $value)
+    {
+        $keys = explode('.', $key);
+        if (empty($keys)) {
+            return $array;
+        }
+        $keys = array_reverse($keys);
+
+        foreach ($keys as $k) {
+            $value = array($k => $value);
+        }
+
+        return array_replace_recursive($array, $value);
     }
 }

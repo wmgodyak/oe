@@ -27,8 +27,8 @@ class Translations extends Backend
 
         $t
             -> ajax('translations/get')
-            -> th(t('translations.code'), 'code', 0, 0, 'width: 300px')
-            -> th(t('translations.text'), 'name', 0, 0 )
+            -> th(t('translations.code'), 'code', 1, 1, 'width: 300px')
+            -> th(t('translations.text'), 'name', 1, 1)
             -> th(t('common.tbl_func'), null, 0, 0, 'width: 60px')
         ;
 
@@ -37,6 +37,11 @@ class Translations extends Backend
 
     public function get()
     {
+        $start = !empty($_POST['start']) ? intval($_POST['start']) : 0;
+        $length = !empty($_POST['length']) ? intval($_POST['length']) : 0;
+        $search = !empty($_POST['search']['value']) ? trim(strip_tags($_POST['search']['value'])) : '';
+        $order = !empty($_POST['order'][0]['column']) ? intval($_POST['order'][0]['column']) : 0;
+        $direction = !empty($_POST['order'][0]['dir']) ? trim(strip_tags($_POST['order'][0]['dir'])) : 'asc';
         $t = new DataTables2('translations');
         $code = $this->languages->getDefault('code');
         $theme = $this->settings->get('app_theme_current');
@@ -48,6 +53,40 @@ class Translations extends Backend
         $res = [];
 
         $translations = array_merge($this->getModules($code), $this->getFileContent($fn));
+
+        if (mb_strlen($search) > 2) {
+            $translations = array_filter($translations, function($v) use ($search){
+                return (!empty($v['text']) && mb_strpos($v['text'], $search) !== false) || (!empty($v['id']) && mb_strpos($v['id'], $search) !== false);
+            });
+        }
+
+        $total = count($translations);
+        $translations = array_slice($translations, $start, $length);
+
+        switch ($order) {
+            case 0:
+                if ($direction == 'desc') {
+                    usort($translations, function($a, $b){
+                        return strcmp($b['id'], $a['id']);
+                    });
+                } else {
+                    usort($translations, function($a, $b){
+                        return strcmp($a['id'], $b['id']);
+                    });
+                }
+                break;
+            case 1:
+                if ($direction == 'desc') {
+                    usort($translations, function($a, $b){
+                        return strcmp($b['text'], $a['text']);
+                    });
+                } else {
+                    usort($translations, function($a, $b){
+                        return strcmp($a['text'], $b['text']);
+                    });
+                }
+                break;
+        }
 
         // assign buttons
         foreach ($translations as $row) {
@@ -67,7 +106,7 @@ class Translations extends Backend
             ];
         }
 
-        return $t->render($res, $t->getTotal());
+        return $t->render($res, $total);
     }
 
     /**
@@ -138,10 +177,26 @@ class Translations extends Backend
 
         if(empty($id) || empty($path)) return 'Wrong id';
 
-        $r = file_get_contents(DOCROOT . $path);
-        $a = json_decode($r, true);
+        $dir_path = preg_replace('/[a-z]{2}\.json/', '', $path);
 
-        d($a);
+        $languages = $this->languages->get();
+
+        $data = array();
+
+        foreach ($languages as $lang) {
+            $file = DOCROOT . $dir_path . $lang['code'] . '.json';
+            if (!file_exists($file)) {
+                $file_content = file_get_contents(DOCROOT . $path);
+                file_put_contents($file, $file_content);
+            }
+            $t = json_decode(file_get_contents($file), true);
+            $data[$lang['code']] = dots_get($t, $id);
+        }
+
+        $this->template->assign('languages', $languages);
+        $this->template->assign('data', $data);
+        $this->template->assign('id', $id);
+        $this->template->assign('path', $path);
 
         return $this->template->fetch('system/translations/edit');
     }
@@ -153,32 +208,27 @@ class Translations extends Backend
 
     public function process($id = null)
     {
-        $theme_path = Settings::getInstance()->get('themes_path');
-        $current = Settings::getInstance()->get('app_theme_current');
+        $id   = $this->request->post('id');
+        $path = $this->request->post('path');
+        $data = $this->request->post('data');
 
-        $common = $this->request->post('common');
+        if(empty($id) || empty($path)) return 'Wrong id';
 
-        if($common){
-            foreach ($common as $code => $a) {
-                $fn = DOCROOT . $theme_path . $current . "/lang/{$code}.ini";
-                $data = $this->buildOutputString($a);
-                file_put_contents($fn, $data);
+        $dir_path = preg_replace('/[a-z]{2}\.json/', '', $path);
+
+        $languages = $this->languages->get();
+
+        foreach ($languages as $lang) {
+            $file = DOCROOT . $dir_path . $lang['code'] . '.json';
+            if (!file_exists($file)) {
+                $file_content = file_get_contents(DOCROOT . $path);
+                file_put_contents($file, $file_content);
             }
+            $t = json_decode(file_get_contents($file), true);
+            $t = dots_set($t, $id, $data[$lang['code']]);
+            file_put_contents($file, json_encode($t));
         }
-
-        $modules = $this->request->post('modules');
-
-        if($modules){
-            foreach ($modules as $module => $a) {
-                foreach ($a as $lang => $data) {
-                    $fn = DOCROOT . "modules/{$module}/lang/{$lang}.ini";
-                    $data = $this->buildOutputString($data);
-                    file_put_contents($fn, $data);
-                }
-            }
-        }
-
-        $this->response->body(['s' => 1, 'm' => 'Переклади оновлено'])->asJSON();
+        return json_encode(array('s' => 1));
     }
 
 

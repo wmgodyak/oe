@@ -17,21 +17,21 @@ class Languages extends Backend
 {
     public function init()
     {
-        $this->assignToNav($this->t('languages.action_index'), 'languages', 'fa-lang', 'settings', 100);
+        $this->assignToNav(t('languages.action_index'), 'languages', 'fa-lang', 'settings', 100);
     }
 
     public function index()
     {
-        $this->appendToPanel((string)Button::create($this->t('common.button_create'), ['class' => 'btn-md btn-primary b-languages-create']));
+        $this->appendToPanel((string)Button::create(t('common.button_create'), ['class' => 'btn-md btn-primary b-languages-create']));
 
         $t = new DataTables2('languages');
 
         $t
-            -> th($this->t('common.id'), 'id')
-            -> th($this->t('languages.name'), 'name', true, true)
-            -> th($this->t('languages.code'), 'code', true, true)
-            -> th($this->t('languages.is_main'), 'is_main')
-            -> th($this->t('common.tbl_func'), null, false, false, 'width:200px');
+            -> th(t('common.id'), 'id')
+            -> th(t('languages.name'), 'name', true, true)
+            -> th(t('languages.code'), 'code', true, true)
+            -> th(t('languages.is_main'), 'is_main')
+            -> th(t('common.tbl_func'), null, false, false, 'width:200px');
 //        ;
 
         $t-> ajax('languages/index');
@@ -59,12 +59,12 @@ class Languages extends Backend
                     (string)Button::create
                     (
                         Icon::create(Icon::TYPE_EDIT),
-                        ['class' => 'b-languages-edit  btn-primary', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
+                        ['class' => 'b-languages-edit  btn-primary', 'data-id' => $row['id'], 'title' => t('common.title_edit')]
                     ) .
                     ($row['is_main'] == 0 ? (string)Button::create
                     (
                         Icon::create(Icon::TYPE_DELETE),
-                        ['class' => 'b-languages-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+                        ['class' => 'b-languages-delete btn-danger', 'data-id' => $row['id'], 'title' => t('common.title_delete')]
                     ) : "")
                   ;
             }
@@ -127,8 +127,8 @@ class Languages extends Backend
         $theme_path = Settings::getInstance()->get('themes_path');
         $current = Settings::getInstance()->get('app_theme_current');
 
-        $file = DOCROOT . $theme_path . $current . "/lang/{$def}.ini";
-        $dest = DOCROOT . $theme_path . $current . "/lang/{$code}.ini";
+        $file = DOCROOT . $theme_path . $current . "/lang/{$def}.json";
+        $dest = DOCROOT . $theme_path . $current . "/lang/{$code}.json";
 
         if( !file_exists($file) || file_exists($dest)) return false;
         $s = @copy($file, $dest);
@@ -136,11 +136,15 @@ class Languages extends Backend
         if( !$s) return false;
 
         foreach ($this->modules as $module => $instance) {
-            $file = DOCROOT . "modules/{$module}/lang/{$def}.ini";
-            $dest = DOCROOT . "modules/{$module}/lang/{$code}.ini";
+            $file = DOCROOT . "modules/{$module}/lang/{$def}.json";
+            $dest = DOCROOT . "modules/{$module}/lang/{$code}.json";
             if( !file_exists($file) || file_exists($dest)) continue;
-            @copy($file, $dest);
+            $s = @copy($file, $dest);
         }
+
+        if( !$s) return false;
+
+        return true;
     }
 
     private function rmTranslations($code)
@@ -149,17 +153,19 @@ class Languages extends Backend
         $theme_path = Settings::getInstance()->get('themes_path');
         $current = Settings::getInstance()->get('app_theme_current');
 
-        $dest = DOCROOT . $theme_path . $current . "/lang/{$code}.ini";
+        $dest = DOCROOT . $theme_path . $current . "/lang/{$code}.json";
 
         $s = @unlink($dest);
 
         if( !$s) return false;
 
         foreach ($this->modules as $module => $instance) {
-            $dest = DOCROOT . "modules/{$module}/lang/{$code}.ini";
+            $dest = DOCROOT . "modules/{$module}/lang/{$code}.json";
             if( !file_exists($dest)) continue;
             $s = @unlink($dest);
         }
+
+        if( !$s) return false;
 
         return true;
     }

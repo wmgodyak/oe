@@ -16,11 +16,18 @@ $(document).ready(function(){
                 };
                 var dialog = engine.dialog({
                     content: res,
-                    title: 'Edit translation',
+                    title: 'Edit translation - ' + id,
                     autoOpen: true,
                     width: 600,
                     modal: true,
                     buttons: buttons
+                });
+
+                engine.validateAjaxForm('#form', function(d){
+                    if(d.s){
+                        dialog.dialog('close');
+                        engine.refreshDataTable('translations');
+                    }
                 });
             }
         })
