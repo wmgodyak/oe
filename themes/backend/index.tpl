@@ -18,9 +18,11 @@
                                 <i class="fa fa-chevron-left"></i>
                             </div>
                             <div class="sidebar-heading">
-                                <img src="{$theme_url}assets/img/logo/logo-black.png">
+                                <img src="{filter_apply('backend.sidebar.logo', "`$theme_url`assets/img/logo/logo-black.png")}">
                             </div>
-                            {if isset($sidebar)}{$sidebar}{/if}
+                            {block name="sidebar"}
+                                {if isset($sidebar)}{$sidebar}{/if}
+                            {/block}
                         </div>
                         {/if}
                     {/block}

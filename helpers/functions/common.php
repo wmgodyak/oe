@@ -212,6 +212,15 @@ if(!function_exists('dots_set')){
 }
 
 if (!function_exists('filter_apply')){
+    /**
+     * example
+     *
+     *  filter_add('backend.login.logo', 'path/to/custom/logo.png');
+     *  filter_add('backend.sidebar.logo', 'path/to/custom/logo.png');
+     * @param $key
+     * @param $value
+     * @return mixed|null
+     */
     function filter_apply($key, $value)
     {
         return \system\core\DataFilter::apply($key, $value);
@@ -221,6 +230,6 @@ if (!function_exists('filter_apply')){
 if (!function_exists('filter_add')){
     function filter_add($key, $value)
     {
-        return \system\core\DataFilter::add($key, $value);
+        \system\core\DataFilter::add($key, $value);
     }
 }
