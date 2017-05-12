@@ -260,7 +260,7 @@ abstract class Backend extends Controller
     private final function renderHeadingPanel()
     {
         $this->template->assign('panel_nav', $this->panel_nav);
-        $this->template->assign('heading_panel', $this->template->fetch('heading_panel'));
+        $this->template->assign('heading_panel', $this->template->fetch('chunks/heading_panel'));
     }
 
     private static $menu_nav = [];
@@ -311,7 +311,7 @@ abstract class Backend extends Controller
 
         ksort($nav);
         $this->template->assign('nav_items', $nav);
-        $s = $this->template->fetch('nav');
+        $s = $this->template->fetch('chunks/nav');
         $this->template->assign('nav', $s);
     }
 
