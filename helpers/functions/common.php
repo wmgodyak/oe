@@ -210,3 +210,17 @@ if(!function_exists('dots_set')){
         return array_replace_recursive($array, $value);
     }
 }
+
+if (!function_exists('filter_apply')){
+    function filter_apply($key, $value)
+    {
+        return \system\core\DataFilter::apply($key, $value);
+    }
+}
+
+if (!function_exists('filter_add')){
+    function filter_add($key, $value)
+    {
+        return \system\core\DataFilter::add($key, $value);
+    }
+}
