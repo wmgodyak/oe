@@ -51,7 +51,6 @@ class Translations extends Backend
         }
 
         $res = [];
-
         $translations = array_merge($this->getModules($code), $this->getFileContent($fn));
 
         if (mb_strlen($search) > 2) {

@@ -78,13 +78,13 @@ class Languages extends Backend
     public function create()
     {
         $this->template->assign('action', 'create');
-        $this->template->assign('allowed', Lang::getInstance()->getAllowedLanguages());
+        $this->template->assign('allowed', t()->getAllowedLanguages());
         $this->template->display('system/languages/edit');
     }
     public function edit($id)
     {
         $this->template->assign('data', $this->languages->getData($id));
-        $this->template->assign('allowed', Lang::getInstance()->getAllowedLanguages());
+        $this->template->assign('allowed', t()->getAllowedLanguages());
         $this->template->assign('action', 'edit');
         $this->template->display('system/languages/edit');
     }

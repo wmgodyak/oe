@@ -32,6 +32,7 @@ class Lang
     {
         $this->dir  = "themes/$theme/lang/";
         $this->lang = $lang;
+//        echo "Lang::construct $theme $lang";
         $this->setTranslations();
     }
 
@@ -127,11 +128,22 @@ class Lang
         $this->translations[$key] = $translations;
     }
 
+    public function parseFile($path, $parent = null)
+    {
+        $a = file_get_contents($path);
+        $a = json_decode($a, true);
+        if($parent){
+            $this->translations[$parent] = $a;
+        } else {
+            $this->translations = array_merge($this->translations, $a);
+        }
+    }
+
     /**
      * @param null $key
      * @return null
      */
-    public function t($key = null)
+    public function get($key = null)
     {
         if($key){
 

@@ -43,3 +43,5 @@
         $installer->index();
         die;
     }
+
+    \system\models\Modules::getInstance();

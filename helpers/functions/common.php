@@ -164,7 +164,13 @@ if(!function_exists('t')){
 
     function t($key=null)
     {
-        return \system\core\Lang::getInstance()->t($key);
+        $lang = \system\core\Lang::getInstance();
+
+        if(empty($key)){
+            return $lang;
+        }
+
+        return $lang->get($key);
     }
 }
 

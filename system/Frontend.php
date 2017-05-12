@@ -93,6 +93,8 @@ abstract class Frontend extends core\Controller
 
     }
 
+    public function boot(){}
+
     /**
      * @return mixed
      * @throws Exception
@@ -117,10 +119,6 @@ abstract class Frontend extends core\Controller
      */
     protected function t($key=null)
     {
-        return Lang::getInstance
-        (
-            $this->settings->get('app_theme_current'),
-            $this->languages_code)
-            ->t($key);
+        return "This method is deprecated. Use t($key).";
     }
 }

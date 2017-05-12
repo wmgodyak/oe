@@ -21,7 +21,7 @@ if(isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] == '127.0.0.1'){
         'db'       => 'engine',
         'prefix'   => 'x_',
         'user'     => 'root',
-        'pass'     => 'hp',
+        'pass'     => 'dell',
         'port'     => 3306,
         'charset'  => 'utf8',
         'debug'    => true

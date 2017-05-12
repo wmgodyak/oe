@@ -1,20 +1,12 @@
 {
-  "taction_index": "Blog",
-  "action_create": "Create article",
-  "ttaction_edit": "Edit article",
-  "tdelete_question": "Are you sure?",
-  "tstatus_published": "Published",
-  "tstatus_hidden": "Hidden",
-  "ttree_title": "Categories",
-  "ttree_create": "Add",
-  "ttree_edit": "Edit",
-  "ttree_delete": "Delete",
+  "taction_index": "111Blog",
+  "action_create": "111Create article",
   "tcategories": {
-    "ttree_create": "Add",
-    "ttree_edit": "Edit",
-    "ttree_delete": "Delete",
-    "ttree_title": "Categories",
-    "tcreate_title": "Crate category",
-    "taction_edit": "Edit category"
+    "ttree_create": "1Add",
+    "ttree_edit": "1Edit",
+    "ttree_delete": "1Delete",
+    "ttree_title": "1Categories",
+    "tcreate_title": "1Crate category",
+    "taction_edit": "1Edit category"
   }
 }

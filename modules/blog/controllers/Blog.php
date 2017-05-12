@@ -40,6 +40,13 @@ class Blog extends Frontend
 
     public function index(){}
 
+    public function boot()
+    {
+        parent::boot();
+
+        // here you can add routes, etc.
+    }
+
     public function init()
     {
         $this->template->assignScript('modules/blog/js/blog.js');

@@ -166,8 +166,10 @@ class Page extends \system\Frontend
         $this->page = $page;
 
         // init modules
-        $m = new Modules($this->template->theme, $page['languages_code']);
-        $this->app->module = $m->init();;
+        $m = Modules::getInstance();
+//        $m = new Modules($this->template->theme, $page['languages_code']);
+        $m->init('frontend', $page['languages_code']);
+        $this->app->module = $m->get();
 
         $this->template->assign('app', $this->app);
         $this->template->assign('modules_scripts', $this->template->getScripts());
