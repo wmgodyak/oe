@@ -1,24 +1,28 @@
 {*
  * OYiEngine 7
  * @author Володимир Годяк mailto:support@otakoi.com
- * @copyright Copyright (c) 2016 Otakoyi.com
- * Date: 2016-03-21T14:13:48+02:00
+ * @copyright Copyright (c) 2017 Otakoyi.com
+ * Date: 2017-03-21
  * @name index
  *}
 <!DOCTYPE html>
-<html data-id="{$page.id}" lang="{$page.languages_code}" data-type="{$page.types_id}" data-template="{$page.template}">
-    {include file="chunks/head.tpl"}
-    <body>
-        <div class="container" style="margin-top: 50px;">
-            {include file="chunks/nav.tpl"}
+<!--[if lt IE 9 ]> <html lang="en" dir="ltr" class="no-js ie-old"> <![endif]-->
+<!--[if IE 9 ]> <html lang="en" dir="ltr" class="no-js ie9"> <![endif]-->
+<!--[if IE 10 ]> <html lang="en" dir="ltr" class="no-js ie10"> <![endif]-->
+<!--[if (gt IE 10)|!(IE)]><!-->
+<html dir="ltr" class="no-js"  data-id="{$page.id}" lang="{$page.languages_code}" data-type="{$page.types_id}" data-template="{$page.template}">
+<!--<![endif]-->
+{include file="chunks/head.tpl"}
 
-            {$events->call('body.before')}
-            {block name=body}{$body}{/block}
-            {$events->call('body.after')}
+<body id="body" class="wide-layout preloader-active">
+    {$events->call('body.top')}
 
-            {include file="chunks/footer.tpl"}
-        </div><!-- /.container -->
-        {include file="chunks/scripts.tpl"}
-        {$events->call('body.bottom')}
-    </body>
+    {$events->call('body.before')}
+        {block name=body}{$body}{/block}
+    {$events->call('body.after')}
+
+    {include file="chunks/scripts.tpl"}
+    {$events->call('body.bottom')}
+</body>
+
 </html>

@@ -139,6 +139,7 @@ if (!function_exists('assets')){
         $template = \system\core\Template::getInstance();
 
         $ext = pathinfo($path, PATHINFO_EXTENSION);
+        $ext = mb_strtolower($ext);
 
         $file_path = ( $theme_path ? $template->theme_path . 'assets/' : '' ) . $path;
 
@@ -150,6 +151,15 @@ if (!function_exists('assets')){
             case 'css':
                 $template->assignStyle($file_path, $priority);
                 $link = "<link href='{$file_path}' rel='stylesheet'>";
+                break;
+            case 'ico':
+                return  "<link rel=\"icon\" href=\"$file_path\">";
+                break;
+            case 'png':
+            case 'jpg':
+            case 'jpeg':
+            case 'gif':
+                return  "<img src=\"$file_path\">";
                 break;
             default:
                 throw new Exception('Wrong file extension. Allowed only css and js');
