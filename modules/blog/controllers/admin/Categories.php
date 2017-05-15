@@ -13,13 +13,16 @@ class Categories extends Backend
 {
     private $content_relationship;
     private $categories;
+    private $config;
 
     public function __construct()
     {
         parent::__construct();
 
+        $this->config = module_config('blog');
+
         $this->content_relationship = new ContentRelationship();
-        $this->categories = new \modules\blog\models\Categories('posts_categories');
+        $this->categories = new \modules\blog\models\Categories($this->config->category_type);
     }
 
     public function index()
@@ -35,21 +38,21 @@ class Categories extends Backend
         $this->template->assign('content', ['parent_id' => $parent_id]);
         $this->template->assign('action', 'create');
 
-        $this->response->body($this->template->fetch('modules/blog/categories/form'));
+        $this->template->display('modules/blog/categories/form');
     }
 
     public function edit($id)
     {
         $this->template->assign('content', $this->categories->getData($id));
         $this->template->assign('action', 'edit');
-        $this->response->body($this->template->fetch('modules/blog/categories/form'));
+        $this->template->display('modules/blog/categories/form');
     }
 
     public function delete($id)
     {
         $s = $this->categories->delete($id);
 
-        $this->response->body(['s' => $s, 'm' => $this->categories->getErrorMessage()])->asJSON();
+        return ['s' => $s, 'm' => $this->categories->getErrorMessage()];
     }
 
 
@@ -73,7 +76,7 @@ class Categories extends Backend
             $m = $this->categories->getErrorMessage();
         }
 
-        $this->response->body(['s'=>$s, 'i' => $i, 'm' => $m])->asJSON();
+        return ['s'=>$s, 'i' => $i, 'm' => $m];
     }
 
 
@@ -101,7 +104,7 @@ class Categories extends Backend
             $items[] = $item;
         }
 
-        $this->response->body($items)->asJSON();
+        return $items;
     }
 
     public function move()

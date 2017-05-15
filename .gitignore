@@ -10,3 +10,4 @@ uploads/*
 #!modules/index.html
 robots.txt
 sitemap*.xml
+/config/db.php

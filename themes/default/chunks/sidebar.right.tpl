@@ -1,4 +1,5 @@
-<div class="col-sm-3 col-sm-offset-1 blog-sidebar">
-    {include file="modules/blog/sidebar.tpl"}
-    {$events->call('sidebar.right', $page)}
-</div><!-- /.blog-sidebar -->
+{$events->call('sidebar.right.top', $page)}
+    {block name="chunks.sidebar.right"}
+
+    {/block}
+{$events->call('sidebar.right.bottom', $page)}

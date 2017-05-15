@@ -1,3 +1,5 @@
-<div class="col-sm-3 col-sm-offset-1">
-    {$events->call('sidebar.right', $page)}
-</div>
+{$events->call('sidebar.left.top', $page)}
+    {block name="chunks.sidebar.left"}
+
+    {/block}
+{$events->call('sidebar.left.bottom', $page)}

@@ -1,0 +1,20 @@
+{
+  "action_index": "Blog",
+  "action_create": "Create article",
+  "action_edit": "Edit article",
+  "delete_question": "Are you sure?",
+  "status_published": "Published",
+  "status_hidden": "Hidden",
+  "tree_title": "Categories",
+  "tree_create": "Add",
+  "tree_edit": "Edit",
+  "tree_delete": "Delete",
+  "categories": {
+    "tree_create": "Add",
+    "tree_edit": "Edit",
+    "tree_delete": "Delete",
+    "tree_title": "Categories",
+    "create_title": "Crate category",
+    "action_edit": "Edit category"
+  }
+}

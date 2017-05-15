@@ -4,9 +4,6 @@
 engine.blog = {
     init: function()
     {
-        //engine.require('content');
-        //engine.require('bootstrap-tagsinput.min', '/themes/engine/assets/js/vendor/');
-
         $(document).on('click', '.b-post-delete', function(){
             var id = $(this).data('id');
             engine.confirm('ДІйсно видалити сторінку?', function(){engine.content.delete(id, 'module/run/blog');});

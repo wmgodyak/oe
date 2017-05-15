@@ -15,12 +15,16 @@ if ( !defined('CPATH') ) die();
             $fileName = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
         }
         $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
-        if (!file_exists($fileName)) {
+        if (file_exists($fileName)) {
+            require $fileName;
             return;
-            //      throw new Exception("Try to load className: <b>{$className}</b> on line 32. Error, file: {$fileName} not found");
         }
 
-        require $fileName;
+        // try load module
+//        echo "Try to load class $className";
+
+
+
     }
 
     /**
@@ -44,7 +48,8 @@ if ( !defined('CPATH') ) die();
  */
     function d($var)
     {
-        echo '<pre>'; print_r($var); echo '</pre>';
+        echo '<pre class="sys-dump">'; print_r($var); echo '</pre>';
+        echo "<style type='text/css'>.sys-dump{text-align: left; z-index:99999; position: relative; display: block; font-size: 1em; font-family: monospace; line-height: 1.2em; color: white; background-color: #2d0922; padding: 1em; margin-bottom: 1em;}</style>";
     }
 
     function dd($var)
@@ -134,6 +139,7 @@ if (!function_exists('assets')){
         $template = \system\core\Template::getInstance();
 
         $ext = pathinfo($path, PATHINFO_EXTENSION);
+        $ext = mb_strtolower($ext);
 
         $file_path = ( $theme_path ? $template->theme_path . 'assets/' : '' ) . $path;
 
@@ -146,8 +152,17 @@ if (!function_exists('assets')){
                 $template->assignStyle($file_path, $priority);
                 $link = "<link href='{$file_path}' rel='stylesheet'>";
                 break;
+            case 'ico':
+                return  "<link rel=\"icon\" href=\"$file_path\">";
+                break;
+            case 'png':
+            case 'jpg':
+            case 'jpeg':
+            case 'gif':
+                return  "<img src=\"$file_path\">";
+                break;
             default:
-                throw new Exception('Wrong file extension. Allowed only css and js');
+                throw new Exception('Wrong file extension. Allowed only png,jpg,jpeg,gif,css and js');
                 break;
         }
 
@@ -159,6 +174,92 @@ if(!function_exists('t')){
 
     function t($key=null)
     {
-        return \system\core\Lang::getInstance()->t($key);
+        $lang = \system\core\Lang::getInstance();
+
+        if(empty($key)){
+            return $lang;
+        }
+
+        return $lang->get($key);
+    }
+}
+
+if(!function_exists('dots_get')){
+    function dots_get(array $array, $key)
+    {
+        $keys = explode('.', $key);
+        if (empty($keys)) {
+            return null;
+        }
+
+        $current = $array;
+
+        foreach ($keys as $k) {
+            if (!isset($current[$k])) {
+                return null;
+            }
+            $current = $current[$k];
+        }
+
+        return $current;
+    }
+}
+if(!function_exists('dots_set')){
+    function dots_set(array $array, $key, $value)
+    {
+        $keys = explode('.', $key);
+        if (empty($keys)) {
+            return $array;
+        }
+        $keys = array_reverse($keys);
+
+        foreach ($keys as $k) {
+            $value = array($k => $value);
+        }
+
+        return array_replace_recursive($array, $value);
+    }
+}
+
+if (!function_exists('filter_apply')){
+    /**
+     * example
+     *
+     *  filter_add('backend.login.logo', 'path/to/custom/logo.png');
+     *  filter_add('backend.sidebar.logo', 'path/to/custom/logo.png');
+     * @param $key
+     * @param $value
+     * @return mixed|null
+     */
+    function filter_apply($key, $value)
+    {
+        return \system\core\DataFilter::apply($key, $value);
+    }
+}
+
+if (!function_exists('filter_add')){
+    function filter_add($key, $value)
+    {
+        \system\core\DataFilter::add($key, $value);
+    }
+}
+
+if (!function_exists('module_config')){
+    function module_config($module)
+    {
+        static $config;
+
+        if(isset($config[$module])){
+            return $config[$module];
+        }
+
+        $path = "modules/$module/config.json";
+        if(!file_exists(DOCROOT . $path)) return null;
+
+        $a = file_get_contents(DOCROOT . $path);
+
+        $config[$module] = json_decode($a);
+
+        return $config[$module];
     }
 }

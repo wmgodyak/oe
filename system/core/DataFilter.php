@@ -23,6 +23,11 @@ class DataFilter
 
         foreach (self::$filters[$key] as $callback) {
 
+            if(is_string($callback) || is_numeric($callback)){
+                $value = $callback;
+                continue;
+            }
+
             if(is_array($callback) && isset($callback[1])){ // class :: method
                 if(is_callable($callback, true)){
                     if(is_array($value)){
@@ -60,5 +65,10 @@ class DataFilter
         }
 
         self::$filters[$key][$priority] = $callback;
+    }
+
+    public static function get()
+    {
+        return self::$filters;
     }
 }

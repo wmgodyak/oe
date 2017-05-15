@@ -1,24 +1,26 @@
 {*
  * OYiEngine 7
  * @author Володимир Годяк mailto:support@otakoi.com
- * @copyright Copyright (c) 2016 Otakoyi.com
- * Date: 2016-03-21T14:13:48+02:00
+ * @copyright Copyright (c) 2017 Otakoyi.com
+ * Date: 2017-03-21
  * @name index
  *}
 <!DOCTYPE html>
-<html data-id="{$page.id}" lang="{$page.languages_code}" data-type="{$page.types_id}" data-template="{$page.template}">
-    {include file="chunks/head.tpl"}
-    <body>
-        <div class="container" style="margin-top: 50px;">
-            {include file="chunks/nav.tpl"}
+<html lang="{block name="html.lang"}en{/block}">
 
-            {$events->call('body.before')}
-            {block name=body}{$body}{/block}
-            {$events->call('body.after')}
+    <head>{include file="chunks/head.tpl"}</head>
 
-            {include file="chunks/footer.tpl"}
-        </div><!-- /.container -->
+    <body class="{block name="body.class"}cnt-home{/block}">
+
+        {$events->call('layout.index.body.before')}
+
+        {block name=body}{$body}{/block}
+
+        {$events->call('layout.index.body.after')}
+
         {include file="chunks/scripts.tpl"}
-        {$events->call('body.bottom')}
+
+        {$events->call('layout.index.body.bottom')}
+
     </body>
 </html>

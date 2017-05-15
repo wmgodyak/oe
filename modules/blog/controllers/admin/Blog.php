@@ -20,16 +20,21 @@ class Blog extends Content
     private $categories;
     private $relations;
     private $posts;
+    private $config;
 
-    private $allowed_types = ['post'];
+    private $allowed_types = [];
 
     public function __construct()
     {
-        parent::__construct('post');
+        $this->config = module_config('blog');
+
+        parent::__construct($this->config->post_type);
+
+        $this->allowed_types[] = $this->config->post_type;
 
         $this->form_action = "module/run/blog/process/";
-        $this->posts       = new Posts('post');
-        $this->categories  = new \modules\blog\models\Categories('posts_categories');
+        $this->posts       = new Posts($this->config->post_type);
+        $this->categories  = new \modules\blog\models\Categories($this->config->category_type);
         $this->relations   = new ContentRelationship();
 
         // hide custom block
@@ -41,16 +46,16 @@ class Blog extends Content
 
     public function init()
     {
-        $this->assignToNav('Блог', 'module/run/blog', 'fa-book', null, 30);
+        $this->assignToNav('Blog', 'module/run/blog', 'fa-book', null, 30);
         $this->template->assignScript("modules/blog/js/admin/blog.js");
-        $this->template->assignScript("modules/blog/js/admin/bootstrap-tagsinput.min.js");
+//        $this->template->assignScript("modules/blog/js/admin/bootstrap-tagsinput.min.js");
 
         DataFilter::add
         (
             'nav.items.content_types',
             function($types)
             {
-                $types[] = 'posts_categories';
+                $types[] = $this->config->category_type;
                 return $types;
             }
         );
@@ -63,7 +68,8 @@ class Blog extends Content
 
     public function dashboard()
     {
-        $this->template->assign('items', $this->posts->get(0, 0, 3));
+        $this->posts->num = 3;
+        $this->template->assign('items', $this->posts->get());
         return $this->template->fetch('modules/blog/dashboard');
     }
 
@@ -78,7 +84,7 @@ class Blog extends Content
 
         $this->template->assign('selected_categories', $this->relations->getCategories($content['id']));
 
-        $this->template->assign('categories', $this->categories->get(0, 1));
+        $this->template->assign('categories', $this->categories);
 
         return $this->template->fetch('modules/blog/select_categories');
     }
@@ -89,10 +95,10 @@ class Blog extends Content
     public function contentProcess($id)
     {
         $type = $this->mContent->getContentType($id);
-        if($type != 'post') return;
+        if($type != $this->config->post_type) return;
 
         $categories = $this->request->post('categories');
-        $this->relations->saveContentCategories($id, $categories, 'post_category');
+        $this->relations->saveContentCategories($id, $categories, $this->config->post_type);
 
 
     }
@@ -235,70 +241,5 @@ class Blog extends Content
 
         $this->template->assign('sidebar', $this->template->fetch('modules/blog/categories/tree'));
         parent::edit($id);
-    }
-
-    public function categories()
-    {
-        include "Categories.php";
-
-        $params = func_get_args();
-
-        $action = 'index';
-        if(!empty($params)){
-            $action = array_shift($params);
-        }
-
-        $controller  = new Categories();
-
-        call_user_func_array(array($controller, $action), $params);
-    }
-
-    public function tags()
-    {
-        include "Tags.php";
-
-        $params = func_get_args();
-
-        $action = 'index';
-        if(!empty($params)){
-            $action = array_shift($params);
-        }
-
-        $controller  = new Categories();
-
-        call_user_func_array(array($controller, $action), $params);
-    }
-
-    /**
-     * todo блокується виклик категорій в Module як магічний метод
-     * @param $class
-     * @throws Exception
-     */
-    public function __get($class)
-    {
-        $params     = func_get_args();
-        if(empty($params)){
-            throw new Exception("Wrong params");
-        }
-
-        $controller = array_shift($params);
-        $controller = ucfirst($controller);
-        $ns = '\modules\blog\controllers\admin\\';
-
-        $action = 'index';
-        if(!empty($params)){
-            $action = array_shift($params);
-        }
-
-        $c  = $ns . $controller;
-        $file = str_replace("\\", "/", $ns) . $controller . '.php';
-
-        if(! file_exists($file) ) {
-            throw new Exception("Module controller $controller not found");
-        }
-
-        $controller  = new $c;
-
-        call_user_func_array(array($controller, $action), $params);
     }
 }

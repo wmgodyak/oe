@@ -19,7 +19,7 @@ class Lang
 
     private $langs = array();
 
-    private $translations;
+    private $translations = [];
     private $dir;
     private $lang = null;
 
@@ -32,6 +32,7 @@ class Lang
     {
         $this->dir  = "themes/$theme/lang/";
         $this->lang = $lang;
+//        echo "Lang::construct $theme $lang";
         $this->setTranslations();
     }
 
@@ -74,7 +75,7 @@ class Lang
                 if ($entry != "." && $entry != ".."){
 
                     $entry = mb_strtolower($entry);
-                    $entry = str_replace('.ini','', $entry);
+                    $entry = str_replace('.json','', $entry);
 
                     if( !isset($allowed[$entry])) continue;
 
@@ -106,17 +107,16 @@ class Lang
 
         if(empty($this->lang)) $this->lang = 'en';
 
-        $fn = DOCROOT . $dir . '/' . $this->lang .'.ini';
+        $fn = DOCROOT . $dir . '/' . $this->lang .'.json';
         if(! file_exists($fn)) $this->lang = 'en';
 
-        $fn = DOCROOT . $dir . '/' . $this->lang .'.ini';
+        $fn = DOCROOT . $dir . '/' . $this->lang .'.json';
         if(! file_exists($fn)) return ;
 
-        $a = parse_ini_file($fn, true);
+        $a = file_get_contents($fn, true);
+        $a = json_decode($a, true);
 
-        foreach ($a as $k=>$v) {
-            $this->translations[$k] = $v;
-        }
+        $this->translations = array_merge($this->translations, $a);
     }
 
     /**
@@ -128,11 +128,22 @@ class Lang
         $this->translations[$key] = $translations;
     }
 
+    public function parseFile($path, $parent = null)
+    {
+        $a = file_get_contents($path);
+        $a = json_decode($a, true);
+        if($parent){
+            $this->translations[$parent] = $a;
+        } else {
+            $this->translations = array_merge($this->translations, $a);
+        }
+    }
+
     /**
      * @param null $key
      * @return null
      */
-    public function t($key = null)
+    public function get($key = null)
     {
         if($key){
 

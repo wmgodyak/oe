@@ -51,13 +51,14 @@ class Model
 
 
     /**
+     * @deprecated
      * get translation by key
      * @param $key
      * @return string
      */
     protected function t($key=null)
     {
-        return Lang::getInstance()->t($key);
+        return t($key);
     }
 
     public function setError($msg)

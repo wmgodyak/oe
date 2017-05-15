@@ -3,7 +3,9 @@
 namespace system\components\translations\controllers;
 
 use helpers\bootstrap\Button;
+use helpers\bootstrap\Icon;
 use helpers\PHPDocReader;
+use system\core\DataTables2;
 use system\core\Lang;
 use system\core\Request;
 use system\Backend;
@@ -21,55 +23,145 @@ class Translations extends Backend
 
     public function index()
     {
-        $this->appendToPanel
-        (
-            (string)Button::create
-            (
-                $this->t('common.button_save'),
-                ['class' => 'btn-md b-form-save']
-            )
-        );
-        $error = null;
+        $t = new DataTables2('translations');
 
-        $theme_path = Settings::getInstance()->get('themes_path');
+        $t
+            -> ajax('translations/get')
+            -> th(t('translations.code'), 'code', 1, 1, 'width: 300px')
+            -> th(t('translations.text'), 'name', 1, 1)
+            -> th(t('common.tbl_func'), null, 0, 0, 'width: 60px')
+        ;
 
-        $current = Settings::getInstance()->get('app_theme_current');
-        $langs   = Lang::getInstance()->getLangs($current);
-//        d($langs);
-        $common = [];
-        foreach ($langs as $code=>$name) {
-            $fn = DOCROOT . $theme_path . $current . "/lang/{$code}.ini";
-            if( !file_exists($fn)) continue;
-            $common[$code] = parse_ini_file($fn, true);
+        $this->output($t->init());
+    }
+
+    public function get()
+    {
+        $start = !empty($_POST['start']) ? intval($_POST['start']) : 0;
+        $length = !empty($_POST['length']) ? intval($_POST['length']) : 0;
+        $search = !empty($_POST['search']['value']) ? trim(strip_tags($_POST['search']['value'])) : '';
+        $order = !empty($_POST['order'][0]['column']) ? intval($_POST['order'][0]['column']) : 0;
+        $direction = !empty($_POST['order'][0]['dir']) ? trim(strip_tags($_POST['order'][0]['dir'])) : 'asc';
+        $t = new DataTables2('translations');
+        $code = $this->languages->getDefault('code');
+        $theme = $this->settings->get('app_theme_current');
+        $fn = "themes/$theme/lang/$code.json";
+        if(!file_exists(DOCROOT . $fn)){
+            $fn = "themes/$theme/lang/en.json";
         }
 
+        $res = [];
+        $translations = array_merge($this->getModules($code), $this->getFileContent($fn));
+
+        if (mb_strlen($search) > 2) {
+            $translations = array_filter($translations, function($v) use ($search){
+                return (!empty($v['text']) && mb_strpos($v['text'], $search) !== false) || (!empty($v['id']) && mb_strpos($v['id'], $search) !== false);
+            });
+        }
+
+        $total = count($translations);
+        $translations = array_slice($translations, $start, $length);
+
+        switch ($order) {
+            case 0:
+                if ($direction == 'desc') {
+                    usort($translations, function($a, $b){
+                        return strcmp($b['id'], $a['id']);
+                    });
+                } else {
+                    usort($translations, function($a, $b){
+                        return strcmp($a['id'], $b['id']);
+                    });
+                }
+                break;
+            case 1:
+                if ($direction == 'desc') {
+                    usort($translations, function($a, $b){
+                        return strcmp($b['text'], $a['text']);
+                    });
+                } else {
+                    usort($translations, function($a, $b){
+                        return strcmp($a['text'], $b['text']);
+                    });
+                }
+                break;
+        }
+
+        // assign buttons
+        foreach ($translations as $row) {
+            $res[] = [
+                "<input value='{$row['id']}' onfocus='select()'>",
+                $row['text'],
+                (string)Button::create
+                (
+                    Icon::create(Icon::TYPE_EDIT),
+                    [
+                        'class' => 'btn-primary b-translations-edit',
+                        'title' => t('common.title_edit'),
+                        'data-id' => $row['id'],
+                        'data-path' => $row['path']
+                    ]
+                )
+            ];
+        }
+
+        return $t->render($res, $total);
+    }
+
+    /**
+     * @param $lang_code
+     * @return array
+     */
+    private function getModules($lang_code)
+    {
+        $modules_dir = 'modules';
         $modules = [];
-        foreach ($this->modules as $module => $instance) {
-            $translations = [];
-            foreach ($langs as $code=>$name) {
-                $fn = DOCROOT . "modules/{$module}/lang/{$code}.ini";
 
-                if( !file_exists($fn)) continue;
+        if ($handle = opendir(DOCROOT . $modules_dir)) {
+            while (false !== ($module = readdir($handle))) {
 
-                $translations[$code] = parse_ini_file($fn, true);
+                $fn = "$modules_dir/$module/lang/$lang_code.json";
+                if(!file_exists(DOCROOT . $fn)){
+                    $fn = "$modules_dir/$module/lang/en.json";
+                }
+
+                if(!file_exists(DOCROOT . $fn)) continue;
+
+                $modules = array_merge($modules, $this->getFileContent($fn));
             }
-
-            $cls = 'modules\\'.$module.'\controllers\\'.ucfirst($module);
-            $doc = PHPDocReader::getMeta(new $cls);
-            $doc['name'] = isset($doc['name']) ? $doc['name'] : $modules;
-            $modules[$module] = ['name' => $doc['name'], 'translations' => $translations];
-
+            closedir($handle);
         }
-        Request::getInstance()->setMode('backend');
 
-        $this->template->assign('error', $error);
-        $this->template->assign('langs', $this->languages->get());
-        $this->template->assign('common', $common);
-        $this->template->assign('modules', $modules);
-        $this->template->assign('front', $this->languages->getDefault('code'));
-        $this->template->assign('com_url', APPURL . "{$this->settings->get('backend_url')}/translations");
+        return $modules;
+    }
 
-        $this->output($this->template->fetch('system/translations/index'));
+    /**
+     * @param $file
+     * @return array
+     */
+    private function getFileContent($file)
+    {
+        $r = file_get_contents(DOCROOT . $file);
+        $a = json_decode($r, true);
+
+        $res = [];
+        foreach ($a as $k=>$v) {
+            if(is_array($v)){
+                foreach ($v as $k1=>$v1) {
+                    if(is_array($k1)){
+                        foreach ($k1 as $k2=>$v2) {
+                            $res[] = ['id'=> $k.'.'.$k1. $k2, 'text' => $v2, 'path' => $file];
+                        }
+                    } else {
+                        $res[] = ['id'=> $k.'.'.$k1, 'text' => $v1, 'path' => $file];
+                    }
+                }
+            } else {
+                $res[] = ['id'=> $k, 'text' => $v, 'path' => $file];
+            }
+        }
+
+        return $res;
     }
 
     public function create()
@@ -77,9 +169,35 @@ class Translations extends Backend
         // TODO: Implement create() method.
     }
 
-    public function edit($id)
+    public function edit($id = null)
     {
-        // TODO: Implement edit() method.
+        $id   = $this->request->post('id');
+        $path = $this->request->post('path');
+
+        if(empty($id) || empty($path)) return 'Wrong id';
+
+        $dir_path = preg_replace('/[a-z]{2}\.json/', '', $path);
+
+        $languages = $this->languages->get();
+
+        $data = array();
+
+        foreach ($languages as $lang) {
+            $file = DOCROOT . $dir_path . $lang['code'] . '.json';
+            if (!file_exists($file)) {
+                $file_content = file_get_contents(DOCROOT . $path);
+                file_put_contents($file, $file_content);
+            }
+            $t = json_decode(file_get_contents($file), true);
+            $data[$lang['code']] = dots_get($t, $id);
+        }
+
+        $this->template->assign('languages', $languages);
+        $this->template->assign('data', $data);
+        $this->template->assign('id', $id);
+        $this->template->assign('path', $path);
+
+        return $this->template->fetch('system/translations/edit');
     }
 
     public function delete($id)
@@ -89,32 +207,27 @@ class Translations extends Backend
 
     public function process($id = null)
     {
-        $theme_path = Settings::getInstance()->get('themes_path');
-        $current = Settings::getInstance()->get('app_theme_current');
+        $id   = $this->request->post('id');
+        $path = $this->request->post('path');
+        $data = $this->request->post('data');
 
-        $common = $this->request->post('common');
+        if(empty($id) || empty($path)) return 'Wrong id';
 
-        if($common){
-            foreach ($common as $code => $a) {
-                $fn = DOCROOT . $theme_path . $current . "/lang/{$code}.ini";
-                $data = $this->buildOutputString($a);
-                file_put_contents($fn, $data);
+        $dir_path = preg_replace('/[a-z]{2}\.json/', '', $path);
+
+        $languages = $this->languages->get();
+
+        foreach ($languages as $lang) {
+            $file = DOCROOT . $dir_path . $lang['code'] . '.json';
+            if (!file_exists($file)) {
+                $file_content = file_get_contents(DOCROOT . $path);
+                file_put_contents($file, $file_content);
             }
+            $t = json_decode(file_get_contents($file), true);
+            $t = dots_set($t, $id, $data[$lang['code']]);
+            file_put_contents($file, json_encode($t));
         }
-
-        $modules = $this->request->post('modules');
-
-        if($modules){
-            foreach ($modules as $module => $a) {
-                foreach ($a as $lang => $data) {
-                    $fn = DOCROOT . "modules/{$module}/lang/{$lang}.ini";
-                    $data = $this->buildOutputString($data);
-                    file_put_contents($fn, $data);
-                }
-            }
-        }
-
-        $this->response->body(['s' => 1, 'm' => 'Переклади оновлено'])->asJSON();
+        return json_encode(array('s' => 1));
     }
 
 

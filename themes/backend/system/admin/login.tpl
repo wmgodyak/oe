@@ -4,9 +4,11 @@
         <div class="table">
             <div class="table-cell">
                 <form class="login" action="admin/login" data-redirect="/{$settings->get('backend_url')}/dashboard" data-backend-url="{$settings->get('backend_url')}" method="post" id="adminLogin">
+                    {block name="backend.login.logo"}
                     <div class="logo">
-                        <img src="{$theme_url}assets/img/logo/logo.png">
+                        <img src="{filter_apply('backend.login.logo', "`$theme_url`assets/img/logo/logo.png")}">
                     </div>
+                    {/block}
                     <div class="input-group transformed">
                         <label for="email">{$t.admin.email}</label>
                         <input type="email" name="data[email]" id="email" required>
@@ -27,6 +29,7 @@
                             {/foreach}
                         </select>
                     </div>
+                    {$events->call('backend.login.form')}
                     <div class="f-link">
                         <a href="#" class="b-admin-fp" onclick="return false;">{$t.admin.fp_link}</a>
                     </div>

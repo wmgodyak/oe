@@ -1,0 +1,33 @@
+Нова тема Friday
+https://friday-theme.firebaseapp.com/
+https://friday-theme.firebaseapp.com/ar/index.html
+
+
+http://demo.smartaddons.com/templates/html/market/intro/
+https://demo2.transvelo.in/html/unicase/
+http://kute-themes.com/html/koolshop/
+http://themesground.com/flipmart-demo/demo-page/1.htm
+http://event-theme.com/themes/Smile/
+++ http://devitems.com/tf/dilima-preview/
+http://eazzy.me/html/bella-shop/
+http://kute-themes.com/html/aloshop/
++ http://kute-themes.com/html/aloshop/html/index.html
++ http://kute-themes.com/html/luckyshop/html/index10.html
+Recent Activity
+
+Themes structure
+ Base
+  - Blog
+    - Catalog
+      - Shop
+        - Shop Ex
+          - Shop ET
+
+
+ - Створити дефолтні шаблони.
+ - Зібрати всі ваіанти головної.
+ - зібрати всі варіанти блогу
+ - блог список статтей
+ - блог перегляд статті
+ - блог мітки
+ - блок категорії

@@ -7,60 +7,87 @@ use system\models\Permissions;
 
 defined("CPATH") or die();
 
+/**
+ * Class Module
+ * @package system\components\module\controllers
+ */
 class Module extends Backend
 {
+    /**
+     * @return mixed
+     */
     public function run()
     {
         $params = func_get_args();
 
         if(empty($params)) {
-            $this->redirect('dashboard', 404);
+            if($this->request->isGet()) {
+                $this->redirect('dashboard', 404);
+            } else{
+                die;
+            }
         }
 
-        $module = array_shift($params);
-        $ns     = "modules\\$module\\controllers\\admin\\";
         $action = 'index';
+        $path = array_shift($params);
+        $params = explode('/', $path);
 
+        $module = array_shift($params);
+
+        if ($this->request->isGet()){
+
+            $this->makeCrumbs(t($module . '.action_index'), "module/run/{$module}");
+
+            $this->template->assign('title', t($module . '.action_' . $action));
+            $this->template->assign('name',  t($module . '.action_' . $action));
+
+        }
+
+        if(isset($params[0])){
+            $_params = $params;
+            $sub_module = array_shift($_params);
+            $ns = "\modules\\$module\\controllers\\admin\\" . ucfirst($sub_module);
+            $path = str_replace('\\', DIRECTORY_SEPARATOR, $ns . ".php");
+            if(file_exists( DOCROOT . $path)){
+                if(!empty($_params)){
+                    $action = array_shift($_params);
+                }
+
+                return $this->call($ns, $action, $_params);
+            }
+        }
+
+        $ns = "modules\\$module\\controllers\\admin\\" . ucfirst($module);
         if(!empty($params)){
             $action = array_shift($params);
         }
 
-        if (! Permissions::canModule($module, $action)) {
-            Permissions::denied();
+        return $this->call($ns, $action, $params);
+    }
+
+    /**
+     * @param $ns
+     * @param $action
+     * @param array $params
+     * @return mixed
+     */
+    private function call($ns, $action, $params = [])
+    {
+        $module = new $ns;
+        if(!is_callable(array($module, $action))){
+            if($this->request->isGet()) {
+                $this->redirect('dashboard', 404);
+            } else{
+                die;
+            }
         }
 
-        $c = $ns . ucfirst($module);
-        $controller = new $c;
-
-        if(!is_callable(array($controller, $action))){
-            $this->redirect('/404', 404);
-        }
-
-        $this->makeCrumbs($this->t($module . '.action_index'), "module/run/{$module}");
-
-        $this->template->assign('title', $this->t($module . '.action_' . $action));
-        $this->template->assign('name',  $this->t($module . '.action_' . $action));
-
-        return call_user_func_array(array($controller, $action), $params);
+        return call_user_func_array(array($module, $action), $params);
     }
 
-    public function index()
-    {
-
-    }
-    public function create()
-    {
-
-    }
-    public function edit($id)
-    {
-
-    }
-    public function delete($id)
-    {
-
-    }
-    public function process($id)
-    {
-    }
+    public function index(){}
+    public function create(){}
+    public function edit($id){}
+    public function delete($id){}
+    public function process($id){}
 }

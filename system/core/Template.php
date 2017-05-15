@@ -26,6 +26,8 @@ class Template
     public $theme_path;
     private $smarty;
 
+    private $storage = [];
+
     /**
      * list of attached scripts
      * @var array
@@ -97,11 +99,14 @@ class Template
      */
     public static function getInstance($theme = null)
     {
-        if(self::$instance == null){
-            self::$instance = new self($theme);
+        static $last_theme;
+        if($theme) $last_theme = $theme;
+
+        if(!isset(self::$instance[$last_theme]) || self::$instance[$last_theme] == null){
+            self::$instance[$last_theme] = new self($theme);
         }
 
-        return self::$instance;
+        return self::$instance[$last_theme];
     }
 
     public function getThemeUrl()

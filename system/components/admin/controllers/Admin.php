@@ -134,16 +134,15 @@ class Admin extends Backend {
                 }
             }
 
-            $this->response->body(array(
+            return [
                 's' => $status > 0,
                 'i' => $inp,
                 'f' => $fail > 0
-            ))->asJSON();
-            return;
+            ];
         }
 
         // витягнути список доступних мовних версій
-        $langs = Lang::getInstance()->getLangs();
+        $langs = t()->getLangs();
         $this->template->assign('langs', $langs);
 
         $this->template->display('system/admin/login');
