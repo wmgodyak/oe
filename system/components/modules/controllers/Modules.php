@@ -237,10 +237,10 @@ class Modules extends Backend
 
             $_module = lcfirst($module);
             $t = 'Налаштування модуля';
-            $path = DOCROOT . "modules/{$_module}/config.ini";
+            $path = DOCROOT . "modules/{$_module}/config.json";
             if (file_exists($path)) {
                 $s=1;
-                $config = parse_ini_file($path);
+                $config = json_decode(file_get_contents($path), true);
                 $s_config = isset($modules[$module]['config']) ? $modules[$module]['config'] : [];
                 $config = array_merge($config, $s_config);
             }
