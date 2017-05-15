@@ -22,11 +22,11 @@ class Posts extends Content
 
     public $debug = 0;
 
-    public function __construct()
+    public function __construct($type)
     {
-        parent::__construct('post');
+        parent::__construct($type);
 
-        $this->tags = new Tags();
+        $this->tags      = new Tags();
         $this->relations = new ContentRelationship();
     }
 
@@ -62,7 +62,7 @@ class Posts extends Content
         $res = [];
 
         foreach ($r as $item) {
-            $item['url'] = $this->app->page->url($item['id']);
+            $item['url']        = $this->app->page->url($item['id']);
             $item['author']     = ['id' => $item['author_id'], 'name' => $item['author_name']];
             $item['tags']       = $this->tags->get($item['id']);
             $item['categories'] = $this->categories($item['id']);
@@ -112,12 +112,27 @@ class Posts extends Content
      * @param int $num
      * @return array
      */
-    public function related($post_id, $start = 0, $num = 5)
+    public function related($post_id, $num = 5, $start = 0)
     {
         $this->categories_id = 0;
         $this->start         = $start;
         $this->num           = $num;
         $this->where         = "c.id <> {$post_id}";
+
+        return $this->get();
+    }
+
+    /**
+     * @param $num
+     * @param int $start
+     * @return array
+     */
+    public function popular($num, $start = 0)
+    {
+        $this->categories_id = 0;
+        $this->start         = $start;
+        $this->num           = $num;
+        $this->join[] = " join __content_meta cm on cm.content_id=c.id and cm.meta_k = 'views' ";
 
         return $this->get();
     }

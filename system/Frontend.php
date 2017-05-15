@@ -61,7 +61,7 @@ abstract class Frontend extends core\Controller
      * Current page info
      * @var string
      */
-    protected $page;
+    public $page;
 
     public function __construct()
     {

@@ -162,7 +162,7 @@ if (!function_exists('assets')){
                 return  "<img src=\"$file_path\">";
                 break;
             default:
-                throw new Exception('Wrong file extension. Allowed only css and js');
+                throw new Exception('Wrong file extension. Allowed only png,jpg,jpeg,gif,css and js');
                 break;
         }
 
@@ -241,5 +241,25 @@ if (!function_exists('filter_add')){
     function filter_add($key, $value)
     {
         \system\core\DataFilter::add($key, $value);
+    }
+}
+
+if (!function_exists('module_config')){
+    function module_config($module)
+    {
+        static $config;
+
+        if(isset($config[$module])){
+            return $config[$module];
+        }
+
+        $path = "modules/$module/config.json";
+        if(!file_exists(DOCROOT . $path)) return null;
+
+        $a = file_get_contents(DOCROOT . $path);
+
+        $config[$module] = json_decode($a);
+
+        return $config[$module];
     }
 }

@@ -73,9 +73,14 @@ class Modules
         }
     }
 
-    public function init($mode, $lang)
+    public function init($mode, $lang,array $params = [])
     {
         foreach ($this->modules as $module) {
+
+            foreach ($params as $param_name=> $param_value) {
+                $module->{$param_name} = $param_value;
+            }
+
             $a = explode('\\', (string)$module);
             $module_name = end($a);
             $module_name = lcfirst($module_name);

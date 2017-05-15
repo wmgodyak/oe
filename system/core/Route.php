@@ -301,7 +301,7 @@ class Route
      */
     private function add($method, $uri, $callback)
     {
-        $this->actions[$method][] = [$uri, $callback];
+        array_unshift($this->actions[$method], [$uri, $callback]);
 
         return $this;
     }

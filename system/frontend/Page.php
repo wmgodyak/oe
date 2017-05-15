@@ -26,12 +26,9 @@ use MatthiasMullie\Minify;
  */
 class Page extends \system\Frontend
 {
-    protected $languages_id;
     protected $languages_code;
 
-    protected $page;
-    private   $theme;
-    protected $app;
+    private $theme;
 
     public function __construct()
     {
@@ -76,6 +73,11 @@ class Page extends \system\Frontend
         $def_lang_id = $this->languages->getDefault('id');
         $lang_id = $this->languages->getDataByCode($code, 'id');
 
+        if(empty($lang_id)){
+            $page = $this->e404();
+            $this->display($page);
+        }
+
         if($def_lang_id == $lang_id){
 
             $uri = APPURL;
@@ -84,7 +86,6 @@ class Page extends \system\Frontend
             die;
 
         }
-
 
         $id = $this->settings->get('home_id');
         $page = $this->app->page->fullInfo($id, $lang_id);
@@ -96,8 +97,11 @@ class Page extends \system\Frontend
     {
         $lang_id = $this->languages->getDataByCode($code, 'id');
         $id = $this->app->page->getIdByUrl($url, $lang_id);
-
+        if(empty($id)){
+            $page = $this->e404();
+        } else {
             $page = $this->app->page->fullInfo($id, $lang_id);
+        }
 
         $this->display($page);
     }
@@ -106,7 +110,11 @@ class Page extends \system\Frontend
     {
         $id = $this->app->page->getIdByUrl($url, $this->languages_id);
 
-        $page = $this->app->page->fullInfo($id);
+        if(empty($id)){
+            $page = $this->e404();
+        } else {
+            $page = $this->app->page->fullInfo($id);
+        }
 
         $this->display($page);
     }
@@ -164,7 +172,7 @@ class Page extends \system\Frontend
 
         // init modules
         $m = Modules::getInstance();
-        $m->init('frontend', $page['languages_code']);
+        $m->init('frontend', $page['languages_code'], ['page'=>$page]);
         $this->app->module = $m->get();
 
         $this->template->assign('app', $this->app);

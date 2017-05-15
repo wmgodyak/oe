@@ -1,4 +1,6 @@
 {
-  "ipp" : 5,
-  "blog_id" : 4
+  "id" : 4,
+  "ipp" : 2,
+  "category_type": "blog_category",
+  "post_type" : "blog_post"
 }

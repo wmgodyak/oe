@@ -4,7 +4,9 @@ namespace modules\blog\controllers;
 
 use modules\blog\models\Categories;
 use modules\blog\models\Posts;
+use system\core\DataFilter;
 use system\core\EventsHandler;
+use system\core\Route;
 use system\Frontend;
 
 /**
@@ -17,25 +19,17 @@ use system\Frontend;
  */
 class Blog extends Frontend
 {
-    private $posts;
+    public  $posts;
     private $categories;
-    private $config =
-        [
-            'ipp'     => 5,
-            'blog_id' => 4
-        ];
+    private $config;
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->posts = new Posts();
-        $this->categories = new Categories('posts_categories');
-
-        $user_conf = $this->settings->get('modules.Blog.config');
-        if(!empty($user_conf)){
-            $this->config = array_merge($this->config, $user_conf);
-        }
+        $this->config = module_config('blog');
+        $this->posts = new Posts($this->config->post_type);
+        $this->categories = new Categories($this->config->category_type);
     }
 
     public function index(){}
@@ -45,25 +39,38 @@ class Blog extends Frontend
         parent::boot();
 
         // here you can add routes, etc.
+
+        Route::getInstance()->get('/blog/author/{id}', function($id){
+            $this->request->param('author', $id);
+            $page = $this->app->page->fullInfo($id);
+            dd($page);
+        });
+//        dd(Route::getInstance()->actions());
     }
 
     public function init()
     {
+        $errors = [];
         $this->template->assignScript('modules/blog/js/blog.js');
-        $this->template->assign('blog_id', $this->config['blog_id']);
 
-        if($this->page['type'] == 'post'){
+        $blog = [];
+        $blog['id'] = $this->config->id;
+        
+        if($this->page['type'] == $this->config->post_type){
 
             $post = (array)$this->page;
             $post['categories'] = $this->posts->categories($post['id']);
             $post['tags'] = $this->posts->tags->get($post['id']);
-            $this->template->assign('post', $post);
 
-        } elseif($this->page['type'] == 'posts_categories'){
+            $post = filter_apply('blog.post', $post);
+
+            $blog['post'] = $post;
+
+        } elseif($this->page['type'] == $this->config->category_type){
 
             $category = (array)$this->page;
 
-            if($this->page['id'] != $this->config['blog_id']){
+            if($this->page['id'] != $this->config->id){
                 $this->posts->categories_id = $this->page['id'];
             }
 
@@ -82,14 +89,17 @@ class Blog extends Frontend
             }
 
             if(isset($_GET['q'])){
+                
+                $blog['search'] = [];
 
                 $this->posts->categories_id = 0;
 
                 $q = $this->request->get('q', 's');
                 $q = strip_tags(trim($q));
-
+                $blog['search']['query'] = $q;
+                
                 if(strlen($q) < 3){
-                    $category['error'] = $this->t('blog.search.qs_min_len');
+                    $errors[] = t('blog.search.qs_min_len');
                 } else {
                     $a = explode(' ', $q);
                     $sq = [];
@@ -102,32 +112,51 @@ class Blog extends Frontend
                     }
 
                     if(empty($sq)){
-                        $category['error'] = $this->t('blog.search.qs_min_len');
+                        $errors[] = t('blog.search.qs_min_len');
                     } else {
                         $this->posts->where[] = ' and ' . implode(' and ', $sq);
                     }
                 }
             }
 
-            $total = $this->posts->total();
+            if(empty($errors)){
+                $total = $this->posts->total();
+            }
 
             if(!empty($total)){
-                $pagination = $this->app->pagination->init($total, $this->config['ipp'], $this->page['id'] . ';');
+                $pagination = $this->app->pagination->init($total, $this->config->ipp, $this->page['id'] . ';');
                 $limit = $pagination->getLimit();
 
                 $this->posts->start = $limit[0];
                 $this->posts->num = $limit[1];
 
-                $category['posts_total'] = $total;
+                $category['total'] = $total;
                 $category['posts'] = $this->posts->get();
-
-                $this->template->assign('pagination', $pagination->render());
+                $blog['pagination'] = $pagination;
             }
 
-            $this->template->assign('category', $category);
+            $category = filter_apply('blog.category', $category);
 
+            $blog['category'] = $category;
         }
+
+        $this->template->assign('errors', $errors);
+        $this->template->assign('blog', $blog);
     }
+
+    public function byCategory()
+    {
+
+    }
+
+    private function displayPosts()
+    {
+
+    }
+
+    public function searchByAuthor(){}
+    public function searchByTag(){}
+    public function search(){}
 
     /**
      * @param $start
@@ -143,31 +172,19 @@ class Blog extends Frontend
     }
 
     /**
-     * @param $parent_id
-     * @param bool $recursive
+     * @param int $parent_id
      * @return mixed
      */
-    public function categories($parent_id = 0, $recursive = false)
+    public function categories($parent_id = 0)
     {
-        return $this->categories->get($parent_id, $recursive);
-    }
-
-    /**
-     * @param $post_id
-     * @param int $start
-     * @param int $num
-     * @return array
-     */
-    public function relatedPosts($post_id, $start = 0, $num = 10)
-    {
-        return $this->posts->related($post_id, $start, $num );
+        return $this->categories->get($parent_id);
     }
 
     /**
      * @param int $num
      * @return mixed
      */
-    public function popularTags($num = 1000)
+    public function tags($num = 30)
     {
         return $this->posts->tags->popular($num);
     }
@@ -205,7 +222,7 @@ class Blog extends Frontend
             $res = $posts;
             foreach ($res as $post) {
                 $this->template->assign('post', $post);
-                $html .= $this->template->fetch('modules/blog/post_item');
+                $html .= $this->template->fetch('modules/blog/post');
             }
         }
 

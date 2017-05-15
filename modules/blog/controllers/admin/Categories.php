@@ -13,13 +13,16 @@ class Categories extends Backend
 {
     private $content_relationship;
     private $categories;
+    private $config;
 
     public function __construct()
     {
         parent::__construct();
 
+        $this->config = module_config('blog');
+
         $this->content_relationship = new ContentRelationship();
-        $this->categories = new \modules\blog\models\Categories('posts_categories');
+        $this->categories = new \modules\blog\models\Categories($this->config->category_type);
     }
 
     public function index()

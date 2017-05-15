@@ -167,7 +167,7 @@ class Pagination
      * @param string $tpl
      * @return string
      */
-    public function render($tpl = 'chunks/pagination')
+    public function display($tpl = 'chunks/pagination')
     {
         $template = Template::getInstance();
 

@@ -20,16 +20,19 @@ class Blog extends Content
     private $categories;
     private $relations;
     private $posts;
+    private $config;
 
     private $allowed_types = ['post'];
 
     public function __construct()
     {
-        parent::__construct('post');
+        $this->config = module_config('blog');
+
+        parent::__construct($this->config->post_type);
 
         $this->form_action = "module/run/blog/process/";
-        $this->posts       = new Posts('post');
-        $this->categories  = new \modules\blog\models\Categories('posts_categories');
+        $this->posts       = new Posts($this->config->post_type);
+        $this->categories  = new \modules\blog\models\Categories($this->config->category_type);
         $this->relations   = new ContentRelationship();
 
         // hide custom block
@@ -41,9 +44,9 @@ class Blog extends Content
 
     public function init()
     {
-        $this->assignToNav('Блог', 'module/run/blog', 'fa-book', null, 30);
+        $this->assignToNav('Blog', 'module/run/blog', 'fa-book', null, 30);
         $this->template->assignScript("modules/blog/js/admin/blog.js");
-        $this->template->assignScript("modules/blog/js/admin/bootstrap-tagsinput.min.js");
+//        $this->template->assignScript("modules/blog/js/admin/bootstrap-tagsinput.min.js");
 
         DataFilter::add
         (
