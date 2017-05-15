@@ -38,7 +38,7 @@ abstract class Backend extends Controller
      * buttons
      * @var array
      */
-    private $buttons = [];
+    private $buttons = array();
 
     protected $settings;
 
@@ -90,7 +90,6 @@ abstract class Backend extends Controller
         $theme = $this->settings->get('backend_theme');
         $this->theme = $theme;
         $this->lang = Session::get('backend_lang');
-
         $this->template = Template::getInstance($theme);
 
         $version = Config::getInstance()->get('core.version');
@@ -124,7 +123,7 @@ abstract class Backend extends Controller
 
             $this->_init();
 
-            $this->makeCrumbs($this->t($controller . '.action_index'), $controller);
+            $this->makeCrumbs(t($controller . '.action_index'), $controller);
         }
 
         $this->admin = Admin::data();
@@ -136,6 +135,8 @@ abstract class Backend extends Controller
     {
         self::$initialized = true;
 
+        Lang::getInstance($this->theme, $this->lang);
+
         $controller = $this->request->param('controller');
         $action     = $this->request->param('action');
         $controller = lcfirst($controller);
@@ -143,31 +144,29 @@ abstract class Backend extends Controller
         $this->template->assign('controller', $controller);
 
         $this->template->assign('action',     $action);
+
         $this->initSystemComponents();
 
         $app = App::getInstance();
-        Template::getInstance()->assign('app', $app);
+        $this->template->assign('app', $app);
 
         // assign events
         $events = EventsHandler::getInstance();
-        Template::getInstance()->assign('events', $events);
+        $this->template->assign('events', $events);
 
-        $m = Modules::getInstance($this->theme, $this->lang, 'backend');
-        $m->init();
-        $this->modules = $m->get();
+        Modules::getInstance()->init('backend', $this->lang);
 
-        $this->template->assign('t', Lang::getInstance($this->theme, $this->lang)->t());
 
         // admin structure
         if($this->request->isGet() && ! $this->request->isXhr()){
 
             $this->makeNav();
-
-            $this->template->assign('title', $this->t($controller . '.action_' . $action));
-            $this->template->assign('name',  $this->t($controller . '.action_' . $action));
+            $this->template->assign('title', t($controller . '.action_' . $action));
+            $this->template->assign('name',  t($controller . '.action_' . $action));
         }
 
         $this->template->assign('languages',  $this->languages->get());
+        $this->template->assign('t', t()->get());
 
         $this->template->assign('admin', Admin::data());
 
@@ -244,7 +243,8 @@ abstract class Backend extends Controller
      */
     protected function t($key)
     {
-        return Lang::getInstance($this->theme, $this->lang)->t($key);
+        return t($key);
+//        return Lang::getInstance($this->theme, $this->lang)->get($key);
     }
 
     protected function setNav($b)
@@ -260,7 +260,7 @@ abstract class Backend extends Controller
     private final function renderHeadingPanel()
     {
         $this->template->assign('panel_nav', $this->panel_nav);
-        $this->template->assign('heading_panel', $this->template->fetch('heading_panel'));
+        $this->template->assign('heading_panel', $this->template->fetch('chunks/heading_panel'));
     }
 
     private static $menu_nav = [];
@@ -311,7 +311,7 @@ abstract class Backend extends Controller
 
         ksort($nav);
         $this->template->assign('nav_items', $nav);
-        $s = $this->template->fetch('nav');
+        $s = $this->template->fetch('chunks/nav');
         $this->template->assign('nav', $s);
     }
 

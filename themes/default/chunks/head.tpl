@@ -1,43 +1,48 @@
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- (c) Developed by Otakoyi.com | http://otakoyi.com/ -->
-    <!-- (c) Powered by OYi.Engine | http://engine.otakoyi.com/ -->
+<!-- (c) Developed by Otakoyi.com | http://otakoyi.com/ -->
+<!-- (c) Powered by OYi.Engine | http://engine.otakoyi.com/ -->
 
-    <base href="{$base_url}">
+<base href="{$base_url}">
 
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    {block name=head_meta}
-        <title>{$page.title}</title>
-        <meta name="description" content="{$page.description|escape}"/>
-        <meta name="keywords" content="{{$page.keywords|escape}}" />
-    {/block}
+<title>{block name='meta.title'}{$page.title}{/block}</title>
+<meta name="description" content="{block name='meta.description'}{$page.description|escape}{/block}"/>
+<meta name="keywords" content="{block name='meta.keywords'}{{$page.keywords|escape}}{/block}"/>
 
+<meta name="generator" content="OYi.Engine">
+<meta name="csrf-token" content="{$token}">
 
-    <link rel="apple-touch-icon" sizes="180x180" href="{$theme_url}/assets/favicons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="{$theme_url}/assets/favicons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="{$theme_url}/assets/favicons/favicon-16x16.png">
-    <link rel="mask-icon" href="{$theme_url}/assets/favicons/safari-pinned-tab.svg" color="#5bbad5">
-    <meta name="theme-color" content="#ffffff">
+{block name="chunks.head"}
+    <!-- Bootstrap Core CSS -->
+    {assets('css/bootstrap.min.css')}
 
+    <!-- Customizable CSS -->
+    {assets('css/main.css')}
+    {assets('css/orange.css')}
+    {assets('css/owl.carousel.css')}
+    {assets('css/owl.transitions.css')}
+    {assets('assets/css/lightbox.css')}
+    {assets('css/animate.min.css')}
+    {assets('css/rateit.css')}
+    {assets('css/bootstrap-select.min.css')}
+    <!-- Icons/Glyphs -->
+    {assets('css/font-awesome.min.css')}
 
-    <meta name="generator" content="OYi.Engine">
-    <meta name="csrf-token" content="{$token}">
+    <!-- Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,700' rel='stylesheet' type='text/css'>
+    <!-- Favicon -->
+    {assets('images/favicon.ico')}
 
+    <!-- HTML5 elements and media queries Support for IE8 : HTML5 shim and Respond.js -->
     <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <script src="assets/js/html5shiv.js"></script>
+    <script src="assets/js/respond.min.js"></script>
     <![endif]-->
-
-    {assets('bootstrap/css/bootstrap.min.css')}
-    {assets('bootstrap/css/bootstrap-theme.min.css')}
-
-    {block name=head}
-        {$events->call('head', $page)}
-    {/block}
-</head>
+    {$events->call('chunks.head', $page)}
+{/block}

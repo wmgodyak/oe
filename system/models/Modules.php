@@ -18,29 +18,21 @@ defined("CPATH") or die();
  */
 class Modules
 {
-    private $theme;
-    private $lang;
-    private $mode;
+    const DIR = "modules";
     private static $instance;
     private $modules;
 
-    private function __construct($theme, $lang, $mode)
+    private function __construct()
     {
-        $this->theme = $theme;
-        $this->lang  = $lang;
-        $this->mode  = $mode;
-
         $this->boot();
     }
 
-    private function __clone()
-    {
-    }
+    private function __clone(){}
 
-    public static function getInstance($theme = null, $lang = null, $mode = 'frontend')
+    public static function getInstance()
     {
         if(self::$instance == null){
-            self::$instance = new self($theme, $lang, $mode);
+            self::$instance = new self();
         }
 
         return self::$instance;
@@ -53,84 +45,101 @@ class Modules
 
     private function boot()
     {
-        $modules_dir = 'modules';
         $this->modules = new \stdClass();
         $active = Settings::getInstance()->get('modules');
 
-        $admin = $this->mode == 'backend' ? '\admin' : '';
-        if(!empty($active)){
+        if(empty($active)){
+            return;
+        }
 
-            foreach ($active as $module=>$params) {
-                if($params['status'] != 'enabled') continue;
-                $c  = $modules_dir .'\\'. lcfirst($module) . '\controllers'.$admin.'\\' . ucfirst($module);
+        foreach ($active as $module=>$params) {
 
-                $path = str_replace("\\", "/", $c);
+            if($params['status'] != 'enabled') continue;
 
-                if(file_exists(DOCROOT . $path . '.php')) {
+            $c  = self::DIR .'\\'. lcfirst($module) . '\controllers\\' . ucfirst($module);
 
-                    $_module = lcfirst($module);
+            $controller = new $c;
 
-                    if($this->mode == 'backend' &&  ! Permissions::canModule($_module, 'index')) continue;
+            $_module = lcfirst($module);
 
+            $config = $this->readConfig($_module, (isset($params['config']) ? $params['config'] : []));
 
-                    if($this->theme && $this->lang){
-                        $this->assignLang($_module);
-                    }
+            // assign config to module
+            $controller->config = $config;
 
-                    $config = $this->readConfig($_module, (isset($params['config']) ? $params['config'] : []));
+            $this->modules->{$_module} = $controller;
 
-                    $active[$module]['config'] = $config;
-
-                    $controller = new $c;
-                    // assign config to module
-                    $controller->config = $config;
-
-                    $this->modules->{$_module} = $controller;
-
-                    call_user_func(array($controller, 'boot'));
-                }
-            }
+            call_user_func(array($controller, 'boot'));
         }
     }
 
-    public function init()
+    public function init($mode, $lang,array $params = [])
     {
         foreach ($this->modules as $module) {
+
+            foreach ($params as $param_name=> $param_value) {
+                $module->{$param_name} = $param_value;
+            }
+
+            $a = explode('\\', (string)$module);
+            $module_name = end($a);
+            $module_name = lcfirst($module_name);
+
+            if($mode == 'backend'){
+                if(! Permissions::canModule($module_name, 'index')) continue;
+
+                // replace module path
+                $c  = self::DIR .'\\'. $module_name . '\controllers\admin\\' . ucfirst($module_name);
+                $path = str_replace('\\', DIRECTORY_SEPARATOR, $c . ".php");
+                if(! file_exists($path)){
+                    continue;
+                }
+                $module = new $c;
+                $t_path = DOCROOT . "modules/{$module_name}/lang/backend/$lang.json";
+                if(!file_exists($t_path)){
+                    $t_path = DOCROOT . "modules/{$module_name}/lang/backend/en.json";
+                }
+            } else {
+                $t_path = DOCROOT . "modules/{$module_name}/lang/$lang.json";
+                if(!file_exists($t_path)){
+                    $t_path = DOCROOT . "modules/{$module_name}/lang/en.json";
+                }
+            }
+
+            // load translations
+            t()->parseFile($t_path, $module_name);
+
             call_user_func(array($module, 'init'));
         }
     }
 
     private function readConfig($module, $settings)
     {
+
+        $file =  DOCROOT . "modules/{$module}/config.json";
+
+        if(file_exists( $file )) {
+
+            $a = file_get_contents($file);
+            $a = json_decode($a, true);
+            if(empty($a)) $a = [];
+
+            return array_merge($a, $settings);
+        }
+
+        // older versions
+
         $file =  DOCROOT . "modules/{$module}/config.ini";
 
-        if(!file_exists( $file )) {
-            return null;
+        if(file_exists( $file )) {
+
+            $a = parse_ini_file($file, true);
+
+            if(empty($a)) $a = [];
+
+            return array_merge($a, $settings);
         }
 
-        $a = parse_ini_file($file, true);
-
-        if(empty($a)) $a = [];
-
-        return array_merge($a, $settings);
-    }
-
-    private function assignLang($module)
-    {
-        $modules_dir = 'modules';
-        $backend = $this->mode == 'backend' ? 'backend/' : '';
-        $dir  =  $modules_dir .'/'. $module . '/lang';
-        $file = DOCROOT . $dir . '/' . $backend . $this->lang . '.ini';
-
-        if(!file_exists( $file )) {
-            $file = DOCROOT . $dir . '/' . $backend . 'en.ini';
-        }
-
-        if(!file_exists( $file )) {
-            return ;
-        }
-        $a = parse_ini_file($file, true);
-
-        Lang::getInstance($this->theme, $this->lang)->addTranslations($module, $a);
+        return null;
     }
 }

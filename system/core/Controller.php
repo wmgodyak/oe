@@ -47,9 +47,9 @@ abstract class Controller
     /**
      * @return mixed
      */
-    public function index(){}
+    abstract public function index();
+
     public function init(){}
-    public function boot(){}
 
     /**
      *	Setter method
@@ -82,5 +82,10 @@ abstract class Controller
                 die('#1201. Invalid token.');
             }
         }
+    }
+
+    public function __toString()
+    {
+        return static::class;
     }
 } 
