@@ -98,7 +98,7 @@ class Blog extends Content
         if($type != $this->config->post_type) return;
 
         $categories = $this->request->post('categories');
-        $this->relations->saveContentCategories($id, $categories, 'post_category');
+        $this->relations->saveContentCategories($id, $categories, $this->config->post_type);
 
 
     }
