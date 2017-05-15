@@ -31,7 +31,7 @@ class Tags extends Frontend
      * @param int $num
      * @return mixed
      */
-    public function get($post_id, $start = 0, $num = 1000)
+    public function get($post_id, $start = 0, $num = 100)
     {
         return self::$db
             ->select("

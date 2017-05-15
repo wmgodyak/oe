@@ -41,122 +41,199 @@ class Blog extends Frontend
         // here you can add routes, etc.
 
         Route::getInstance()->get('/blog/author/{id}', function($id){
-            $this->request->param('author', $id);
-            $page = $this->app->page->fullInfo($id);
-            dd($page);
+            return $this->searchByAuthor($id);
         });
-//        dd(Route::getInstance()->actions());
+
+        Route::getInstance()->get('/blog/tag/{alpha}', function($tag){
+            return $this->searchByTag($tag);
+        });
     }
 
     public function init()
     {
-        $errors = [];
         $this->template->assignScript('modules/blog/js/blog.js');
 
-        $blog = [];
-        $blog['id'] = $this->config->id;
-        
         if($this->page['type'] == $this->config->post_type){
-
-            $post = (array)$this->page;
-            $post['categories'] = $this->posts->categories($post['id']);
-            $post['tags'] = $this->posts->tags->get($post['id']);
-
-            $post = filter_apply('blog.post', $post);
-
-            $blog['post'] = $post;
+            $this->displayPost();
 
         } elseif($this->page['type'] == $this->config->category_type){
+            $this->displayCategory();
+        }
+    }
 
-            $category = (array)$this->page;
+    private function displayCategory()
+    {
+        $blog = [];
+        $blog['id'] = $this->config->id;
+        $errors = [];
+        $category = (array)$this->page;
 
-            if($this->page['id'] != $this->config->id){
-                $this->posts->categories_id = $this->page['id'];
-            }
+        if($this->page['id'] != $this->config->id){
+            $this->posts->categories_id = $this->page['id'];
+        }
 
-            $tag = $this->request->param('tag');
-            if($tag){
-                $this->posts->categories_id = 0;
-                $category['tag'] = $tag;
-                $this->posts->join[] = " join __tags t on t.tag like '$tag'";
-                $this->posts->join[] = " join __posts_tags pt on pt.posts_id=c.id and pt.tags_id=t.id";
-            }
+        if(isset($_GET['q'])){
 
-            $owner_id = (int)$this->request->param('author');
-            if($owner_id > 0){
-                $this->posts->categories_id = 0;
-                $this->posts->where[] = " and c.owner_id = {$owner_id}";
-            }
+            $blog['search'] = [];
 
-            if(isset($_GET['q'])){
-                
-                $blog['search'] = [];
+            $this->posts->categories_id = 0;
 
-                $this->posts->categories_id = 0;
+            $q = $this->request->get('q', 's');
+            $q = strip_tags(trim($q));
+            $blog['search']['query'] = $q;
 
-                $q = $this->request->get('q', 's');
-                $q = strip_tags(trim($q));
-                $blog['search']['query'] = $q;
-                
-                if(strlen($q) < 3){
+            if(strlen($q) < 3){
+                $errors[] = t('blog.search.qs_min_len');
+            } else {
+                $a = explode(' ', $q);
+                $sq = [];
+
+                foreach ($a as $k=>$v) {
+                    $v = trim($v);
+                    if(empty($v) || strlen($v) < 3) continue;
+
+                    $sq[] = " ( ci.name like '%$v%' or ci.keywords like '%$v%' ) ";
+                }
+
+                if(empty($sq)){
                     $errors[] = t('blog.search.qs_min_len');
                 } else {
-                    $a = explode(' ', $q);
-                    $sq = [];
-
-                    foreach ($a as $k=>$v) {
-                        $v = trim($v);
-                        if(empty($v) || strlen($v) < 3) continue;
-
-                        $sq[] = " ( ci.name like '%$v%' or ci.keywords like '%$v%' ) ";
-                    }
-
-                    if(empty($sq)){
-                        $errors[] = t('blog.search.qs_min_len');
-                    } else {
-                        $this->posts->where[] = ' and ' . implode(' and ', $sq);
-                    }
+                    $this->posts->where[] = ' and ' . implode(' and ', $sq);
                 }
             }
-
-            if(empty($errors)){
-                $total = $this->posts->total();
-            }
-
-            if(!empty($total)){
-                $pagination = $this->app->pagination->init($total, $this->config->ipp, $this->page['id'] . ';');
-                $limit = $pagination->getLimit();
-
-                $this->posts->start = $limit[0];
-                $this->posts->num = $limit[1];
-
-                $category['total'] = $total;
-                $category['posts'] = $this->posts->get();
-                $blog['pagination'] = $pagination;
-            }
-
-            $category = filter_apply('blog.category', $category);
-
-            $blog['category'] = $category;
         }
+
+        if(empty($errors)){
+            $total = $this->posts->total();
+        }
+
+        if(!empty($total)){
+            $pagination = $this->app->pagination->init($total, $this->config->ipp, $this->page['id'] . ';');
+            $limit = $pagination->getLimit();
+
+            $this->posts->start = $limit[0];
+            $this->posts->num = $limit[1];
+
+            $category['total'] = $total;
+            $category['posts'] = $this->posts->get();
+            $blog['pagination'] = $pagination;
+        }
+
+        $category = filter_apply('blog.category', $category);
+
+        $blog['category'] = $category;
 
         $this->template->assign('errors', $errors);
         $this->template->assign('blog', $blog);
     }
 
-    public function byCategory()
+    private function displayPost()
     {
+        $blog = [];
+        $blog['id'] = $this->config->id;
 
+        $post = (array)$this->page;
+        $post['categories'] = $this->posts->categories($post['id']);
+        $post['tags'] = $this->posts->tags->get($post['id']);
+
+        $post = filter_apply('blog.post', $post);
+
+        $blog['post'] = $post;
+
+//        dd($blog);
+
+        $this->template->assign('blog', $blog);
     }
 
-    private function displayPosts()
-    {
 
+    public function searchByAuthor($author_id)
+    {
+        if(empty($author_id)){
+            return $this->e404();
+        }
+
+        $blog = [];
+        $blog['id'] = $this->config->id;
+        $errors = [];
+
+        // set page
+        $page = $this->app->page->fullInfo($blog['id']);
+        $category = $page;
+
+        // search on all posts
+        $this->posts->categories_id = 0;
+        $this->posts->where[] = " and c.owner_id = {$author_id}";
+
+        if(empty($errors)){
+            $total = $this->posts->total();
+        }
+
+        if(!empty($total)){
+            $pagination = $this->app->pagination->init($total, $this->config->ipp, $page['id'] . ';');
+            $limit = $pagination->getLimit();
+
+            $this->posts->start = $limit[0];
+            $this->posts->num = $limit[1];
+
+            $category['total']  = $total;
+            $category['posts']  = $this->posts->get();
+            $blog['pagination'] = $pagination;
+        }
+
+        $category = filter_apply('blog.category', $category);
+
+        $blog['category'] = $category;
+
+        $this->template->assign('errors', $errors);
+        $this->template->assign('blog', $blog);
+        $this->display($page);
     }
 
-    public function searchByAuthor(){}
-    public function searchByTag(){}
-    public function search(){}
+    public function searchByTag($tag)
+    {
+        if(empty($tag)){
+            return $this->e404();
+        }
+
+        $blog = []; $errors = [];
+
+        $blog['id'] = $this->config->id;
+
+        // set page
+        $page = $this->app->page->fullInfo($blog['id']);
+        $category = $page;
+
+//        $this->posts->debug  =1;
+
+        $this->posts->categories_id = 0;
+        $category['tag'] = $tag;
+        $this->posts->join[] = " join __tags t on t.tag like '$tag'";
+        $this->posts->join[] = " join __posts_tags pt on pt.posts_id=c.id and pt.tags_id=t.id";
+
+        if(empty($errors)){
+            $total = $this->posts->total();
+        }
+
+        if(!empty($total)){
+            $pagination = $this->app->pagination->init($total, $this->config->ipp, $page['id'] . ';');
+            $limit = $pagination->getLimit();
+
+            $this->posts->start = $limit[0];
+            $this->posts->num = $limit[1];
+
+            $category['total']  = $total;
+            $category['posts']  = $this->posts->get();
+            $blog['pagination'] = $pagination;
+        }
+
+        $category = filter_apply('blog.category', $category);
+
+        $blog['category'] = $category;
+
+        $this->template->assign('errors', $errors);
+        $this->template->assign('blog', $blog);
+        $this->display($page);
+    }
 
     /**
      * @param $start

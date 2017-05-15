@@ -22,13 +22,15 @@ class Blog extends Content
     private $posts;
     private $config;
 
-    private $allowed_types = ['post'];
+    private $allowed_types = [];
 
     public function __construct()
     {
         $this->config = module_config('blog');
 
         parent::__construct($this->config->post_type);
+
+        $this->allowed_types[] = $this->config->post_type;
 
         $this->form_action = "module/run/blog/process/";
         $this->posts       = new Posts($this->config->post_type);
@@ -53,7 +55,7 @@ class Blog extends Content
             'nav.items.content_types',
             function($types)
             {
-                $types[] = 'posts_categories';
+                $types[] = $this->config->category_type;
                 return $types;
             }
         );
@@ -66,7 +68,8 @@ class Blog extends Content
 
     public function dashboard()
     {
-        $this->template->assign('items', $this->posts->get(0, 0, 3));
+        $this->posts->num = 3;
+        $this->template->assign('items', $this->posts->get());
         return $this->template->fetch('modules/blog/dashboard');
     }
 
@@ -81,7 +84,7 @@ class Blog extends Content
 
         $this->template->assign('selected_categories', $this->relations->getCategories($content['id']));
 
-        $this->template->assign('categories', $this->categories->get(0, 1));
+        $this->template->assign('categories', $this->categories);
 
         return $this->template->fetch('modules/blog/select_categories');
     }
@@ -92,7 +95,7 @@ class Blog extends Content
     public function contentProcess($id)
     {
         $type = $this->mContent->getContentType($id);
-        if($type != 'post') return;
+        if($type != $this->config->post_type) return;
 
         $categories = $this->request->post('categories');
         $this->relations->saveContentCategories($id, $categories, 'post_category');

@@ -8,10 +8,13 @@ class Tags extends Backend
 {
     private $tags;
     private $posts_tags;
+    private $config;
 
     public function __construct()
     {
         parent::__construct();
+
+        $this->config = module_config('blog');
 
         $this->tags       = new \modules\blog\models\Tags();
         $this->posts_tags = new \modules\blog\models\PostsTags();
@@ -33,7 +36,7 @@ class Tags extends Backend
     {
         $ct = $this->tags->getContentType($posts_id);
 
-        if($ct != 'post') return;
+        if($ct != $this->config->post_type) return;
 
         $tags  = $this->request->post('tags');
         if($tags){
