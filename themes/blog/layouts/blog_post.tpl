@@ -16,12 +16,18 @@
     <div class="blog-post wow fadeInUp">
         {assign var='img' value=$app->images->cover($blog.post.id, 'post')}
         {if !empty($img)}
-            <img class="img-responsive" src="{$img}" alt="{$post.title}">
+            <img class="img-responsive" src="{$img}" alt="{$blog.post.title}">
         {/if}
         <h1>{$blog.post.name}</h1>
-        <span class="author">{$blog.post.author.name} {$blog.post.author.surname}</span>
-        <span class="review">6 Comments</span>
+        <span class="author"><a href="{$app->page->url($blog.id)}/author/{$blog.post.author.id}">{$blog.post.author.name}</a></span>
+        <span class="review">0 Comments</span>
         <span class="date-time">{date('d M, Y', $blog.post.published)}</span>
+        <span class="review">
+            Tags:
+            {foreach $blog.post.tags as $k=>$tag}
+                 <a href="{$app->page->url($blog.id)}/tag/{$tag.tag}">{$tag.tag}</a>
+            {/foreach}
+        </span>
         {$blog.post.content}
 
         <div class="social-media">
@@ -36,11 +42,13 @@
     <div class="blog-post-author-details wow fadeInUp">
         <div class="row">
             <div class="col-md-2">
-                <img src="assets/images/blog-post/author.png" alt="Responsive image"
-                     class="img-circle img-responsive">
+                {if $blog.post.author.avatar != ''}
+                    <img src="{$blog.post.author.avatar}" alt="{$blog.post.author.name}"
+                         class="img-circle img-responsive">
+                {/if}
             </div>
             <div class="col-md-10">
-                <h4>Michael Lee</h4>
+                <h4>{$blog.post.author.name} {$blog.post.author.surname}</h4>
                 <div class="btn-group author-social-network pull-right">
                     <span>Follow me on</span>
                     <button type="button" class="dropdown-toggle" data-toggle="dropdown">
@@ -61,154 +69,7 @@
             </div>
         </div>
     </div>
-    <div class="blog-review wow fadeInUp">
-        <div class="row">
-            <div class="col-md-12">
-                <h3 class="title-review-comments">16 comments</h3>
-            </div>
-            <div class="col-md-2 col-sm-2">
-                <img src="assets/images/blog-post/c1.jpg" alt="Responsive image"
-                     class="img-rounded img-responsive">
-            </div>
-            <div class="col-md-10 col-sm-10 blog-comments outer-bottom-xs">
-                <div class="blog-comments inner-bottom-xs">
-                    <h4>Jone doe</h4>
-				<span class="review-action pull-right">
-					03 Day ago &sol;
-                    <a href=""> Repost</a> &sol;
-                    <a href=""> Reply</a>
-				</span>
-                    <p>Integer sit amet commodo eros, sed dictum ipsum. Integer sit amet commodo eros.
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibul um quis
-                        convallis lorem, ac volutpat magna. Suspendisse potenti.</p>
-                </div>
-                <div class="blog-comments-responce outer-top-xs ">
-                    <div class="row">
-                        <div class="col-md-2 col-sm-2">
-                            <img src="assets/images/blog-post/c2.jpg" alt="Responsive image"
-                                 class="img-rounded img-responsive">
-                        </div>
-                        <div class="col-md-10 col-sm-10 outer-bottom-xs">
-                            <div class="blog-sub-comments inner-bottom-xs">
-                                <h4>mike</h4>
-							<span class="review-action pull-right">
-								03 Day ago &sol;
-                                <a href=""> Repost</a> &sol;
-                                <a href=""> Reply</a>
-							</span>
-                                <p>Integer sit amet commodo eros, sed dictum ipsum. Integer sit amet
-                                    commodo eros. Lorem ipsum dolor sit amet, consectetur adipiscing
-                                    elit.</p>
-                            </div>
-                        </div>
-                        <div class="col-md-2 col-sm-2">
-                            <img src="assets/images/blog-post/c3.jpg" alt="Responsive image"
-                                 class="img-rounded img-responsive">
-                        </div>
-                        <div class="col-md-10 col-sm-10">
-                            <div class=" inner-bottom-xs">
-                                <h4>mike</h4>
-							<span class="review-action pull-right">
-								03 Day ago &sol;
-                                <a href=""> Repost</a> &sol;
-                                <a href=""> Reply</a>
-							</span>
-                                <p>Integer sit amet commodo eros, sed dictum ipsum. Integer sit amet
-                                    commodo eros. Lorem ipsum dolor sit amet, consectetur adipiscing
-                                    elit.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-2 col-sm-2">
-                <img src="assets/images/blog-post/c4.jpg" alt="Responsive image"
-                     class="img-rounded img-responsive">
-            </div>
-            <div class="col-md-10 col-sm-10">
-                <div class="blog-comments inner-bottom-xs outer-bottom-xs">
-                    <h4>onrents</h4>
-				<span class="review-action pull-right">
-					03 Day ago &sol;
-                    <a href=""> Repost</a> &sol;
-                    <a href=""> Reply</a>
-				</span>
-                    <p>Integer sit amet commodo eros, sed dictum ipsum. Integer sit amet commodo eros.
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibul um quis
-                        convallis lorem, ac volutpat magna. Suspendisse potenti.</p>
-                </div>
-            </div>
-            <div class="col-md-2 col-sm-2">
-                <img src="assets/images/blog-post/c5.jpg" alt="Responsive image"
-                     class="img-rounded img-responsive">
-            </div>
-            <div class="col-md-10 col-sm-10">
-                <div class="blog-comment inner-bottom-xs">
-                    <h4>michael lee</h4>
-				<span class="review-action pull-right">
-					03 Day ago &sol;
-                    <a href=""> Repost</a> &sol;
-                    <a href=""> Reply</a>
-				</span>
-                    <p>Integer sit amet commodo eros, sed dictum ipsum. Integer sit amet commodo eros.
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibul um quis
-                        convallis lorem, ac volutpat magna. Suspendisse potenti.</p>
-                </div>
-            </div>
-            <div class="post-load-more col-md-12"><a class="btn btn-upper btn-primary" href="#">Load
-                    more</a></div>
-        </div>
-    </div>
-    <div class="blog-write-comment m-t-20">
-        <div class="row">
-            <div class="col-md-12">
-                <h4>leave a comment</h4>
-            </div>
-            <div class="col-md-4">
-                <form class="register-form" role="form">
-                    <div class="form-group">
-                        <label class="info-title" for="exampleInputName">Your Name
-                            <span>*</span></label>
-                        <input type="email" class="form-control unicase-form-control text-input"
-                               id="exampleInputName" placeholder="Name">
-                    </div>
-                </form>
-            </div>
-            <div class="col-md-4">
-                <form class="register-form" role="form">
-                    <div class="form-group">
-                        <label class="info-title" for="exampleInputEmail1">Email Address <span>*</span></label>
-                        <input type="email" class="form-control unicase-form-control text-input"
-                               id="exampleInputEmail1" placeholder="admin@unicase.com">
-                    </div>
-                </form>
-            </div>
-            <div class="col-md-4">
-                <form class="register-form" role="form">
-                    <div class="form-group">
-                        <label class="info-title" for="exampleInputTitle">Title <span>*</span></label>
-                        <input type="email" class="form-control unicase-form-control text-input"
-                               id="exampleInputTitle" placeholder="Mr / Mrs">
-                    </div>
-                </form>
-            </div>
-            <div class="col-md-12">
-                <form class="register-form" role="form">
-                    <div class="form-group">
-                        <label class="info-title" for="exampleInputComments">Your Comments
-                            <span>*</span></label>
-                                        <textarea class="form-control unicase-form-control"
-                                                  id="exampleInputComments"></textarea>
-                    </div>
-                </form>
-            </div>
-            <div class="col-md-12 outer-bottom-small m-t-20">
-                <button type="submit" class="btn-upper btn btn-primary checkout-page-button">Submit
-                    Comment
-                </button>
-            </div>
-        </div>
-    </div>
+    {$events->call('comments')}
 {/block}
 {block name="sidebar.content"}
     {include file="modules/blog/sidebar.tpl"}
