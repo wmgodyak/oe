@@ -53,6 +53,10 @@ class Blog extends Frontend
     {
         $this->template->assignScript('modules/blog/js/blog.js');
 
+        $blog = [];
+        $blog['id'] = $this->config->id;
+        $this->template->assign('blog', $blog);
+
         if($this->page['type'] == $this->config->post_type){
             $this->displayPost();
 
