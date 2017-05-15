@@ -8,5 +8,22 @@
 
 {extends 'layouts/pages/fw.tpl'}
 {block name=container}
-
+    <div class="body-content outer-top-bd">
+        <div class="container">
+            <div class="row  outer-bottom-vs">
+                <div class="blog-page">
+                    <div class="col-md-3 sidebar">
+                        {block name="sidebar.content"}
+                            <p>Block: sidebar.content</p>
+                        {/block}
+                    </div>
+                    <div class="col-md-9">
+                        {block name="content"}
+                            <p>Block: content</p>
+                        {/block}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {/block}

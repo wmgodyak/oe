@@ -16,7 +16,7 @@
                     <div class="navbar-collapse collapse" id="mc-horizontal-menu-collapse">
                         <div class="nav-outer">
                             <ul class="nav navbar-nav">
-                                {foreach $app->nav->get('blog-main') as $item}
+                                {foreach $app->nav->get('blog_main') as $item}
                                     <li class="{if $page.id == $item.content_id}active {/if}dropdown">
                                         <a href="{$item.url}" title="{$item.title}">{$item.name}</a>
                                     </li>
