@@ -445,3 +445,16 @@ CREATE TABLE IF NOT EXISTS `__content_types_images_sizes` (
   DEFAULT CHARACTER SET = utf8;
 
 
+-- Sample data
+
+
+
+INSERT INTO `__content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id`, `isfolder`, `position`, `created`, `updated`, `published`, `settings`, `status`, `external_id`) VALUES
+  (1, 1, 1, 1, 0, 1, 0, '2017-03-09 10:13:35', '2017-03-09 13:01:11', '2017-03-09', NULL, 'published', ''),
+  (2, 1, 1, 1, 1, 0, 0, '2017-03-09 10:13:35', '2017-03-09 13:01:11', '2017-03-09', NULL, 'published', ''),
+  (3, 1, 1, 1, 1, 0, 0, '2017-03-09 10:13:44', '2017-03-09 10:13:49', '2017-03-09', NULL, 'published', '');
+
+INSERT INTO `__content_info` (`id`, `content_id`, `languages_id`, `name`, `url`, `h1`, `title`, `keywords`, `description`, `intro`, `content`) VALUES
+  (1, 1, 1, 'Home', '', '', 'Home', '', '', '', ''),
+  (2, 2, 1, 'About', 'about', '', 'About', '', '', '', ''),
+  (3, 3, 1, '404', '404', '', '404', '', '', '', '');
