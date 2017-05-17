@@ -47,6 +47,12 @@ class Blog extends Frontend
         Route::getInstance()->get('/blog/tag/{alpha}', function($tag){
             return $this->searchByTag($tag);
         });
+
+        Route::getInstance()->get('/blog/post/collect/{id}', function($id = null){
+            header('Content-Type: application/javascript');
+            if(empty($id)) return null;
+            $this->collect($id);
+        });
     }
 
     public function init()
@@ -275,9 +281,7 @@ class Blog extends Frontend
      */
     public function collect($post_id = null)
     {
-        header('Content-Type: application/javascript');
-        if($post_id > 0) $this->posts->collect($post_id);
-        die;
+        $this->posts->collect($post_id);
     }
 
     /**

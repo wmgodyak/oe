@@ -9,14 +9,14 @@
 {extends 'layouts/index.tpl'}
 {block name=body}
     {include file="chunks/header.tpl"}
-
-    <div class="{block name="body.class"}body-content outer-top-xs{/block}" id="{block name="body.id"}{/block}">
-        <div class="container">
-            {block name="container"}
-                {$page.content}
-            {/block}
-        </div><!-- /.container -->
-    </div><!-- /#top-banner-and-menu -->
-
+    {block name="main"}
+        <main class="{block name="main.class"}site-main{/block}">
+            <div class="container">
+                {block name="container"}
+                    {$page.content}
+                {/block}
+            </div><!-- /.container -->
+        </main>
+    {/block}
     {include file="chunks/footer.tpl"}
 {/block}
