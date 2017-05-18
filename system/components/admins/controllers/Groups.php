@@ -11,7 +11,7 @@ namespace system\components\admins\controllers;
 use system\components\admins\models\AdminsGroup;
 use system\Backend;
 
-class AdminsGroups extends Backend
+class Groups extends Backend
 {
     private $adminsGroup;
 
@@ -30,9 +30,9 @@ class AdminsGroups extends Backend
         $this->template->assign('data', ['parent_id' => $parent_id]);
         $this->template->assign('groups', $this->adminsGroup->getItems(0, 1));
         $this->template->assign('languages', $this->languages->get());
-//        $items = $this->getComponents();
-//        $items += $this->getPlugins();
-//        $this->template->assign('components', $items);
+
+        $this->template->assign('modules', $this->getModules());
+        $this->template->assign('components', $this->getSystemComponents());
         $this->template->display('system/admins/groups/form');
     }
 
@@ -85,7 +85,7 @@ class AdminsGroups extends Backend
         $res = [];
         $dir = 'modules/';
         $blc = ['module', 'admin', 'install'];
-        $bla = ['init', '__construct', '__set', 'before', 'redirect'];
+        $bla = ['init', 'boot', '__construct', '__set', 'before', 'redirect'];
 
         if ($handle = opendir($dir)) {
             while (false !== ($c = readdir($handle))) {

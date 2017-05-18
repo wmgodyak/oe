@@ -205,15 +205,19 @@ class Admin extends Backend {
      */
     public function logout()
     {
+        $this->mAdmin->logout(self::id());
+
         Session::destroy();
         setcookie('fail', '', time() - 3600);
+
         $this->redirect('/');
     }
 
     public function profile()
     {
         if($this->request->isPost()){
-            $data = $this->request->post('data'); $s=0; $i=[]; $user_id = self::data('id');
+            $data = $this->request->post('data'); $s=0; $i=[];
+            $user_id = self::data('id');
 
             FormValidation::setRule(['name', 'email'], FormValidation::REQUIRED);
             FormValidation::setRule('email', FormValidation::EMAIL);
@@ -233,7 +237,7 @@ class Admin extends Backend {
                 unset($data['password_c']);
 
                 // оновлення даних
-                $s = $this->mAdmin->updateProfile($user_id, $data);
+                $s = $this->mAdmin->update($user_id, $data);
 
                 if($s == 0){
                     echo $this->mAdmin->getErrorMessage();
@@ -255,26 +259,13 @@ class Admin extends Backend {
             return ['s'=>$s, 'i' => $i, 'a' => isset($a) ? $a['f'] . '?_=' . time() : null];
         }
 
-        $this->template->assign('ui', self::data());
+        $this->template->assign('data', self::data());
         $this->template->display('system/admin/edit_profile');
     }
 
-    public function index()
-    {
-    }
-
-    public function create()
-    {
-    }
-
-    public function edit($id)
-    {
-    }
-
-    public function process($id)
-    {
-    }
-    public function delete($id)
-    {
-    }
+    public function index(){}
+    public function create(){}
+    public function edit($id){}
+    public function process($id){}
+    public function delete($id){}
 }

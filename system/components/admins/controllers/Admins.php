@@ -147,7 +147,7 @@ class Admins extends Backend
 
         $data = $this->request->post('data'); $s=0; $i=[];
 
-        FormValidation::setRule(['name', 'surname', 'email'], FormValidation::REQUIRED);
+        FormValidation::setRule(['name', 'email'], FormValidation::REQUIRED);
         FormValidation::setRule('email', FormValidation::EMAIL);
         FormValidation::run($data);
 
@@ -169,6 +169,12 @@ class Admins extends Backend
 
                     if($s > 0 && $this->request->post('notify', 'i') == 1){
                         $this->notify($data);
+                    }
+
+                    if( $s > 0 ){
+                        if(isset($_FILES['avatar'])){
+                            $a = $this->admins->changeAvatar($id);
+                        }
                     }
                 }
 
@@ -220,7 +226,7 @@ class Admins extends Backend
         $mail->addAddress($data['email']);
         $mail->setFrom('no-reply@' . $_SERVER['HTTP_HOST'], t('core.sys_name'));
         $mail->isHTML(false);
-        $tpl = implode("\r\n", t('admins.notify_tpl'));
+        $tpl = t('admins.notify_tpl');
         $this->template->assign('data', $data);
         $mail->Body = $this->template->fetchString($tpl);
         return $mail->send();
@@ -244,17 +250,4 @@ class Admins extends Backend
     {
         return $this->admins->restore($id);
     }
-
-    public function groups()
-    {
-        include "AdminsGroups.php";
-
-        $params = func_get_args();
-        $action = array_shift($params);
-
-        $controller  = new AdminsGroups();
-
-        return call_user_func_array(array($controller, $action), $params);
-    }
-
 }
