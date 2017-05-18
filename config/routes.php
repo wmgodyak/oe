@@ -31,9 +31,10 @@ $route->get('/', '\system\frontend\Page::displayHome');
  * BACKEND
  */
 // some component
-$route->any('/backend/{alpha}/{alpha}/{any}', 'component');
-$route->any('/backend/{alpha}/{alpha}', 'component');
 $route->any('/backend/{alpha}', 'component');
+$route->any('/backend/{alpha}/{alpha}', 'component');
+$route->any('/backend/{alpha}/{alpha}/{any}', 'component');
+$route->any('/backend/{alpha}/{alpha}/{any}/{any}', 'component');
 
 // dashboard
 $route->get('/backend', '\system\components\dashboard\controllers\Dashboard');
