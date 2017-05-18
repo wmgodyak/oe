@@ -108,6 +108,7 @@ abstract class Frontend extends core\Controller
     }
 
     public function boot(){}
+    public function index(){}
 
     protected function display($page)
     {
