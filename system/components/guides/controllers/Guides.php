@@ -25,7 +25,7 @@ class Guides extends Content
 
     public function init()
     {
-        $this->assignToNav($this->t('guides.action_index'), 'guides', 'fa-book', 'tools', 100);
+        $this->assignToNav(t('guides.action_index'), 'guides', 'fa-book', 'tools', 100);
         $this->template->assignScript("system/components/guides/js/guides.js");
     }
 
@@ -54,7 +54,7 @@ class Guides extends Content
         (
             (string)Link::create
             (
-                $this->t('common.button_create'),
+                t('common.button_create'),
                 ['class' => 'btn-md btn-primary b-guides-create', 'data-id'=> $parent_id]
             )
         );
@@ -63,11 +63,11 @@ class Guides extends Content
 
         $t
             -> ajax('guides/items/' . $parent_id)
-            -> th($this->t('common.id'), 'c.id', 1, 1, 'width: 60px')
-            -> th($this->t('common.name'), 'ci.name', 1, 1)
-            -> th($this->t('common.created'), 'c.created', 1,1, 'width: 200px')
-            -> th($this->t('common.updated'), 'c.updated', 1, 1, 'width: 200px')
-            -> th($this->t('common.tbl_func'), null, 0, 0, 'width: 180px')
+            -> th(t('common.id'), 'c.id', 1, 1, 'width: 60px')
+            -> th(t('common.name'), 'ci.name', 1, 1)
+            -> th(t('common.created'), 'c.created', 1,1, 'width: 200px')
+            -> th(t('common.updated'), 'c.updated', 1, 1, 'width: 200px')
+            -> th(t('common.tbl_func'), null, 0, 0, 'width: 180px')
         ;
         $t->get('c.external_id',0,0,0);
         $t->get('c.status',0,0,0);
@@ -100,7 +100,7 @@ class Guides extends Content
                         Icon::create(Icon::TYPE_PUBLISHED),
                         [
                             'class' => 'b-guides-hide',
-                            'title' => $this->t('common.title_pub'),
+                            'title' => t('common.title_pub'),
                             'data-id' => $row['id']
                         ]
                     )
@@ -110,7 +110,7 @@ class Guides extends Content
                         Icon::create(Icon::TYPE_HIDDEN),
                         [
                             'class' => ' b-guides-pub',
-                            'title' => $this->t('common.title_hide'),
+                            'title' => t('common.title_hide'),
                             'data-id' => $row['id']
                         ]
                     )
@@ -118,12 +118,12 @@ class Guides extends Content
                 (string)Link::create
                 (
                     Icon::create(Icon::TYPE_EDIT),
-                    ['class' => 'btn-primary b-guides-edit', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
+                    ['class' => 'btn-primary b-guides-edit', 'data-id' => $row['id'], 'title' => t('common.title_edit')]
                 ) .
                 ($row['isfolder'] == 0 ? (string)Button::create
                 (
                     Icon::create(Icon::TYPE_DELETE),
-                    ['class' => 'btn-danger b-guides-delete', 'data-id' => $row['id'], 'title' => $this->t('guides.delete_question')]
+                    ['class' => 'btn-danger b-guides-delete', 'data-id' => $row['id'], 'title' => t('guides.delete_question')]
                 ) : "")
 
             ;
@@ -151,7 +151,7 @@ class Guides extends Content
 
     public function process($id = null)
     {
-        $i=[]; $m = $this->t('common.update_success'); $s = 0;
+        $i=[]; $m = t('common.update_success'); $s = 0;
         switch($this->request->post('action')){
             case 'create':
                 $id = $this->mContent->create(0, $this->admin['id']);

@@ -27,7 +27,7 @@ class Trash extends Backend
 
     public function init()
     {
-        $this->assignToNav($this->t('trash.action_index'), 'trash', 'fa-file-text', 'tools', 100);
+        $this->assignToNav(t('trash.action_index'), 'trash', 'fa-file-text', 'tools', 100);
     }
 
     public function index()
@@ -35,11 +35,11 @@ class Trash extends Backend
         $t = new DataTables2('content');
 
         $t  -> orderDef(0, 'desc')
-            -> th($this->t('common.id'), 'c.id', 1,1, 'width:60px')
-            -> th($this->t('common.name'), 'ci.name', 1,1)
-            -> th($this->t('common.created'), 'c.created', 1,1)
-            -> th($this->t('common.updated'), 'c.updated', 1,1)
-            -> th($this->t('common.tbl_func'), null, null, null, 'width: 160px')
+            -> th(t('common.id'), 'c.id', 1,1, 'width:60px')
+            -> th(t('common.name'), 'ci.name', 1,1)
+            -> th(t('common.created'), 'c.created', 1,1)
+            -> th(t('common.updated'), 'c.updated', 1,1)
+            -> th(t('common.tbl_func'), null, null, null, 'width: 160px')
 
             -> get('ci.url')
             -> get('c.status')
@@ -65,7 +65,7 @@ class Trash extends Backend
         $res = array();
         foreach ($t->getResults(false) as $i=>$row) {
             $icon = Icon::create(($row['isfolder'] ? 'fa-folder' : 'fa-file'));
-            $status = $this->t('trash.status_' . $row['status']);
+            $status = t('trash.status_' . $row['status']);
             $res[$i][] = $row['id'];
             $res[$i][] =
                 " <a class='status-{$row['status']}' title='{$status}' href='trash/index/{$row['id']}'>{$icon}  {$row['name']}</a>"
@@ -77,13 +77,13 @@ class Trash extends Backend
                 (string)Button::create
                 (
                     Icon::create(Icon::TYPE_RESTORE),
-                    ['class' => 'b-trash-restore btn-primary', 'data-id' => $row['id'], 'title' => $this->t('trash.restore_question')]
+                    ['class' => 'b-trash-restore btn-primary', 'data-id' => $row['id'], 'title' => t('trash.restore_question')]
                 )
                 .
                 (string)Button::create
                 (
                     Icon::create(Icon::TYPE_DELETE),
-                    ['class' => 'b-trash-remove btn-danger', 'data-id' => $row['id'], 'title' => $this->t('trash.remove_question')]
+                    ['class' => 'b-trash-remove btn-danger', 'data-id' => $row['id'], 'title' => t('trash.remove_question')]
                 )
             ;
         }

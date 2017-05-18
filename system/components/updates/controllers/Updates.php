@@ -55,7 +55,7 @@ class Updates extends Backend
             Settings::getInstance()->set('core_updates', $res);
 
             if (version_compare(self::VERSION, $res->current, '<')) {
-                echo sprintf($this->t('updates.new_version'), $res->current, 'b_update_core');
+                echo sprintf(t('updates.new_version'), $res->current, 'b_update_core');
             }
         }
     }
@@ -79,7 +79,7 @@ class Updates extends Backend
             if($s){
                 $name = pathinfo($u->source, PATHINFO_BASENAME);
                 $s = $this->extractArchive(DOCROOT . $dir . $name);
-                $m = $this->t('updates.successful');
+                $m = t('updates.successful');
             }
         }
 

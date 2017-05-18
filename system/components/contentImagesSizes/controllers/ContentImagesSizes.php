@@ -26,7 +26,7 @@ class ContentImagesSizes extends Backend
 
     public function init()
     {
-        $this->assignToNav($this->t('contentImagesSizes.action_index'), 'contentImagesSizes', 'fa-users', 'tools', 10);
+        $this->assignToNav(t('contentImagesSizes.action_index'), 'contentImagesSizes', 'fa-users', 'tools', 10);
     }
 
     public function index()
@@ -35,7 +35,7 @@ class ContentImagesSizes extends Backend
         (
             (string)Button::create
             (
-                $this->t('common.button_create'),
+                t('common.button_create'),
                 [
                     'class' => 'btn-md b-contentImagesSizes-create'
                 ]
@@ -45,11 +45,11 @@ class ContentImagesSizes extends Backend
         $t = new DataTables2('contentImagesSizesList');
 
         $t
-            -> th($this->t('common.id'), 'id', null, null, 'width: 20px')
-            -> th($this->t('contentImagesSizes.size'), 'size', 1, 1)
-            -> th($this->t('contentImagesSizes.width'), 'width', 1, 1)
-            -> th($this->t('contentImagesSizes.height'), 'height', 1, 1)
-            -> th($this->t('common.tbl_func'), null, null, null, 'width: 180px')
+            -> th(t('common.id'), 'id', null, null, 'width: 20px')
+            -> th(t('contentImagesSizes.size'), 'size', 1, 1)
+            -> th(t('contentImagesSizes.width'), 'width', 1, 1)
+            -> th(t('contentImagesSizes.height'), 'height', 1, 1)
+            -> th(t('common.tbl_func'), null, null, null, 'width: 180px')
             -> ajax('contentImagesSizes/items')
         ;
 
@@ -76,17 +76,17 @@ class ContentImagesSizes extends Backend
                 (string)Button::create
                 (
                     Icon::create(Icon::TYPE_CROP),
-                    ['class' => 'b-contentImagesSizes-crop', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
+                    ['class' => 'b-contentImagesSizes-crop', 'data-id' => $row['id'], 'title' => t('common.title_edit')]
                 ) .
                 (string)Button::create
                 (
                     Icon::create(Icon::TYPE_EDIT),
-                    ['class' => 'b-contentImagesSizes-edit btn-primary', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
+                    ['class' => 'b-contentImagesSizes-edit btn-primary', 'data-id' => $row['id'], 'title' => t('common.title_edit')]
                 ) .
                 (string)Button::create
                 (
                     Icon::create(Icon::TYPE_DELETE),
-                    ['class' => 'b-contentImagesSizes-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+                    ['class' => 'b-contentImagesSizes-delete btn-danger', 'data-id' => $row['id'], 'title' => t('common.title_delete')]
                 )
             ;
         }

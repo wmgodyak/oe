@@ -84,15 +84,15 @@ class Admin extends Backend {
             $fail = isset($_COOKIE['fail']) ? $_COOKIE['fail'] : 0;
 
             if($fail > 5){
-                $inp[] = ['data[password]' => $this->t('admin.ban')];
+                $inp[] = ['data[password]' => t('admin.ban')];
 
             } elseif(empty($data['email']) || empty($data['password'])){
-                $inp[] = ['data[password]' => $this->t('admin.e_login_pass')];
+                $inp[] = ['data[password]' => t('admin.e_login_pass')];
 
 //                setcookie('fail', ++$fail, $ban_time);
 
             } elseif ( $fail > 0 && ( isset($_SESSION['secpic']) && $_SESSION['secpic'] != $secpic)) {
-                $inp[] = ['data[password]' => $this->t('admin.e_captcha')];
+                $inp[] = ['data[password]' => t('admin.e_captcha')];
 
 //                setcookie('fail', ++$fail, $ban_time);
 
@@ -102,19 +102,19 @@ class Admin extends Backend {
                 Permissions::set($user['permissions']);
 
                 if(empty($user)){
-                    $inp[] = ['data[password]' => $this->t('admin.e_login_pass')];
+                    $inp[] = ['data[password]' => t('admin.e_login_pass')];
 //                    setcookie('fail', ++$fail, $ban_time);
 
                 } elseif($user['status'] == 'ban'){
-                    $inp[] = ['data[password]' => $this->t('admin.e_login_ban')];
+                    $inp[] = ['data[password]' => t('admin.e_login_ban')];
 //                    setcookie('fail', ++$fail, $ban_time);
 
                 } elseif($user['status'] == 'deleted'){
-                    $inp[] = ['data[password]' => $this->t('admin.e_login_deleted')];
+                    $inp[] = ['data[password]' => t('admin.e_login_deleted')];
 //                    setcookie('fail', ++$fail, $ban_time);
                 } else if ($this->mAdmin->checkPassword($data['password'], $user['password'])){
                     if($user['backend'] == 0) {
-                        $inp[] = ['data[password]' => $this->t('admin.e_rang')];
+                        $inp[] = ['data[password]' => t('admin.e_rang')];
 //                        setcookie('fail', ++$fail, $ban_time);
                     } else {
                         $status = $this->mAdmin->login($user);
@@ -129,7 +129,7 @@ class Admin extends Backend {
                         }
                     }
                 } else {
-                    $inp[] = ['data[password]' => $this->t('admin.e_login_pass')];
+                    $inp[] = ['data[password]' => t('admin.e_login_pass')];
 //                    setcookie('fail', ++$fail, $ban_time);
                 }
             }
@@ -159,9 +159,9 @@ class Admin extends Backend {
             $fail = isset($_COOKIE['fail']) ? $_COOKIE['fail'] : 0;
 
             if($fail > 5){
-                $e[] = $this->t('admin.ban');
+                $e[] = t('admin.ban');
             } elseif(empty($data['email'])){
-                $inp[] = ['data[email]' => $this->t('admin.e_email')];
+                $inp[] = ['data[email]' => t('admin.e_email')];
 
                 setcookie('fail', ++$fail, time()+60*15);
 
@@ -169,10 +169,10 @@ class Admin extends Backend {
                 $user = $this->mAdmin->getUserByEmail($data['email']);
                 Permissions::set($user['permissions']);
                 if(empty($user)){
-                    $inp[] = ['data[email]' => $this->t('admin.e_email')];
+                    $inp[] = ['data[email]' => t('admin.e_email')];
                     setcookie('fail', ++$fail, time()+60*15);
                 }elseif($user['backend'] == 0) {
-                    $inp[] = ['data[email]' => $this->t('admin.e_rang')];
+                    $inp[] = ['data[email]' => t('admin.e_rang')];
                     setcookie('fail', ++$fail, time()+60*15);
                 } else {
                     // new password
@@ -182,13 +182,13 @@ class Admin extends Backend {
                         include_once DOCROOT . "/vendor/phpmailer/PHPMailer.php";
                         $mail = new \PHPMailer();
                         $mail->addAddress($data['email']);
-                        $mail->setFrom('no-reply@' . $_SERVER['HTTP_HOST'], $this->t('core.sys_name'));
+                        $mail->setFrom('no-reply@' . $_SERVER['HTTP_HOST'], t('core.sys_name'));
 
-                        $tpl = implode("\r\n", $this->t('admin.fp_tpl'));
+                        $tpl = implode("\r\n", t('admin.fp_tpl'));
                         $mail->Body = str_replace(['{psw}'],[$psw], $tpl);
                         $status = $mail->send();
                         if($status){
-                            $inp[] = ['data[email]' => $this->t('admin.fp_success')];
+                            $inp[] = ['data[email]' => t('admin.fp_success')];
                         } else{
                             $inp[] = ['data[email]' => 'Error. Message not send.'];
                         }
@@ -224,7 +224,7 @@ class Admin extends Backend {
             if(FormValidation::hasErrors()){
                 $i = FormValidation::getErrors();
             } elseif(!empty($data['password']) && ($data['password_c'] != $data['password'])){
-                $i[] = ["data[password_c]" => $this->t('admin_profile.e_pasw_equal')];
+                $i[] = ["data[password_c]" => t('admin_profile.e_pasw_equal')];
             } else {
 
                 if(empty($data['password'])){

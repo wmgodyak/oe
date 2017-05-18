@@ -24,7 +24,7 @@ class Nav extends Backend
 
     public function init()
     {
-        $this->assignToNav($this->t('nav.action_index'), 'nav', 'fa-nav', 'tools', 100);
+        $this->assignToNav(t('nav.action_index'), 'nav', 'fa-nav', 'tools', 100);
     }
 
     public function index()
@@ -33,7 +33,7 @@ class Nav extends Backend
         (
             (string)Link::create
             (
-                $this->t('common.button_create'),
+                t('common.button_create'),
                 ['class' => 'btn-md btn-primary', 'href'=> 'nav/create']
             )
         );
@@ -43,10 +43,10 @@ class Nav extends Backend
 
         $t
             -> ajax('nav/items')
-            -> th($this->t('common.id'), 'id', false, false, 'width: 40px')
-            -> th($this->t('nav.name'), 'name')
-            -> th($this->t('nav.code'), 'code', 0, 0, 'width: 300px')
-            -> th($this->t('common.tbl_func'), null, 0, 0, 'width: 200px')
+            -> th(t('common.id'), 'id', false, false, 'width: 40px')
+            -> th(t('nav.name'), 'name')
+            -> th(t('nav.code'), 'code', 0, 0, 'width: 300px')
+            -> th(t('common.tbl_func'), null, 0, 0, 'width: 200px')
         ;
 
         $this->output($t->init());
@@ -71,13 +71,13 @@ class Nav extends Backend
                     [
                         'class' => 'btn-primary',
                         'href' => 'nav/edit/' . $row['id'],
-                        'title' => $this->t('common.title_edit')
+                        'title' => t('common.title_edit')
                     ]
                 ) .
                 (string)Button::create
                 (
                     Icon::create(Icon::TYPE_DELETE),
-                    ['class' => 'b-nav-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+                    ['class' => 'b-nav-delete btn-danger', 'data-id' => $row['id'], 'title' => t('common.title_delete')]
                 )
             ;
         }
@@ -102,7 +102,7 @@ class Nav extends Backend
         (
             (string)Link::create
             (
-                $this->t('common.back'),
+                t('common.back'),
                 ['class' => 'btn-md', 'href'=> 'nav']
             )
         );
@@ -111,7 +111,7 @@ class Nav extends Backend
         (
             (string)Button::create
             (
-                $this->t('common.button_save'),
+                t('common.button_save'),
                 ['class' => 'btn-md b-form-save']
             )
         );
@@ -213,7 +213,7 @@ class Nav extends Backend
 
     public function updateItem($id)
     {
-       $m = $this->t('common.save_success');
+       $m = t('common.save_success');
 
         if($this->request->post('action') == 'create'){
             $s = $this->nav->createItem($id);
