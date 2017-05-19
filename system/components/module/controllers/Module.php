@@ -28,9 +28,14 @@ class Module extends Backend
             }
         }
 
+        $params = isset($params[0]) ? $params[0]  : $params;
+
+
         $action = 'index';
-        $path = array_shift($params);
-        $params = explode('/', $path);
+        if(is_string($params)){
+            $params = explode('/', $params);
+        }
+
 
         $module = array_shift($params);
 
@@ -61,7 +66,6 @@ class Module extends Backend
         if(!empty($params)){
             $action = array_shift($params);
         }
-
         return $this->call($ns, $action, $params);
     }
 

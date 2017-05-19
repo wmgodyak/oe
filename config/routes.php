@@ -36,6 +36,8 @@ $route->any('/backend/{alpha}/{alpha}', 'component');
 $route->any('/backend/{alpha}/{alpha}/{any}', 'component');
 $route->any('/backend/{alpha}/{alpha}/{any}/{any}', 'component');
 
+$route->any('/backend/module/run/(.*)', '\system\components\module\controllers\Module::run');
+
 // dashboard
 $route->get('/backend', '\system\components\dashboard\controllers\Dashboard');
 
