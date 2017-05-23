@@ -22,7 +22,7 @@ class FileManager extends Backend
     public function init()
     {
         parent::init();
-        $this->assignToNav($this->t('fileManager.action_index'), './fileManager', 'fa fa-file', 'tools', 8);
+        $this->assignToNav(t('fileManager.action_index'), './fileManager', 'fa fa-file', 'tools', 8);
     }
 
     public function index()

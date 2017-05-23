@@ -29,7 +29,7 @@ class Dashboard extends Backend
 
     public function init()
     {
-        $this->assignToNav($this->t('dashboard.action_index'), 'dashboard', 'fa-home', null, 1);
+        $this->assignToNav(t('dashboard.action_index'), 'dashboard', 'fa-home', null, 1);
     }
 
     public function create()

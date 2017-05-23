@@ -119,7 +119,7 @@ class Blog extends Content
         (
             (string)Link::create
             (
-                $this->t('common.button_create'),
+                t('common.button_create'),
                 ['class' => 'btn-md btn-primary', 'href'=> 'module/run/blog/create' . ($parent_id? "/$parent_id" : '')]
             )
         );
@@ -128,11 +128,11 @@ class Blog extends Content
 
         $t  -> ajax('module/run/blog/index/' . $parent_id)
 //            ->orderDef(0, 'desc')
-            -> th($this->t('common.id'), 'c.id', 1, 1, 'width: 60px')
-            -> th($this->t('common.name'), 'ci.name', 1, 1)
-            -> th($this->t('common.created'), 'c.created', 0,1, 'width: 200px')
-            -> th($this->t('common.updated'), 'c.updated', 0, 1, 'width: 200px')
-            -> th($this->t('common.tbl_func'), null, 0, 0, 'width: 180px')
+            -> th(t('common.id'), 'c.id', 1, 1, 'width: 60px')
+            -> th(t('common.name'), 'ci.name', 1, 1)
+            -> th(t('common.created'), 'c.created', 0,1, 'width: 200px')
+            -> th(t('common.updated'), 'c.updated', 0, 1, 'width: 200px')
+            -> th(t('common.tbl_func'), null, 0, 0, 'width: 180px')
         ;
         $t->get('ci.url',null,null,null);
         $t->get('c.status',null,null,null);
@@ -161,7 +161,7 @@ class Blog extends Content
 
                 $icon = Icon::create(($row['isfolder'] ? 'fa-folder' : 'fa-file'));
                 $icon_link = Icon::create('fa-external-link');
-                $status = $this->t($this->type .'.status_' . $row['status']);
+                $status = t($this->type .'.status_' . $row['status']);
                 $res[$i][] = $row['id'];
                 $res[$i][] =
                     " <a class='status-{$row['status']}' title='{$status}' href='module/run/blog/edit/{$row['id']}'>{$icon}  {$row['name']}</a>"
@@ -179,7 +179,7 @@ class Blog extends Content
                             Icon::create(Icon::TYPE_PUBLISHED),
                             [
                                 'class' => 'btn-primary b-'.$this->type.'-hide',
-                                'title' => $this->t('common.title_pub'),
+                                'title' => t('common.title_pub'),
                                 'data-id' => $row['id']
                             ]
                         )
@@ -189,7 +189,7 @@ class Blog extends Content
                             Icon::create(Icon::TYPE_HIDDEN),
                             [
                                 'class' => 'btn-primary b-'.$this->type.'-pub',
-                                'title' => $this->t('common.title_hide'),
+                                'title' => t('common.title_hide'),
                                 'data-id' => $row['id']
                             ]
                         )
@@ -197,12 +197,12 @@ class Blog extends Content
                     (string)Link::create
                     (
                         Icon::create(Icon::TYPE_EDIT),
-                        ['class' => 'btn-primary', 'href' => "module/run/blog/edit/" . $row['id'], 'title' => $this->t('common.title_edit')]
+                        ['class' => 'btn-primary', 'href' => "module/run/blog/edit/" . $row['id'], 'title' => t('common.title_edit')]
                     ) .
                     ($row['isfolder'] == 0 ? (string)Button::create
                     (
                         Icon::create(Icon::TYPE_DELETE),
-                        ['class' => 'b-'.$this->type.'-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t($this->type.'.delete_question')]
+                        ['class' => 'b-'.$this->type.'-delete btn-danger', 'data-id' => $row['id'], 'title' => t($this->type.'.delete_question')]
                     ) : "")
 
                 ;
@@ -231,7 +231,7 @@ class Blog extends Content
         (
             (string)Link::create
             (
-                $this->t('common.back'),
+                t('common.back'),
                 ['class' => 'btn-md', 'href'=> 'module/run/blog' . ($parent_id > 0 ? '/index/' . $parent_id : '')]
             )
         );

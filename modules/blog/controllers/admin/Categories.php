@@ -58,7 +58,7 @@ class Categories extends Backend
 
     public function process($id=0)
     {
-        $i=[]; $m = $this->t('common.update_success'); $s = 0;
+        $i=[]; $m = t('common.update_success'); $s = 0;
         switch($this->request->post('action')){
             case 'create':
                 $id = $this->categories->create($id, $this->admin['id']);

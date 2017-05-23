@@ -27,7 +27,7 @@ class Modules extends Backend
 
     public function init()
     {
-        $this->assignToNav($this->t('modules.action_index'), 'modules', 'fa-cubes', 'settings');
+        $this->assignToNav(t('modules.action_index'), 'modules', 'fa-cubes', 'settings');
         $this->template->assignScript("system/components/modules/js/modules.js");
     }
 
@@ -41,9 +41,9 @@ class Modules extends Backend
         $t = new DataTables2('modules_' . $status);
 
         $t->ajax('modules/tab/' . $status)
-            ->th($this->t('modules.name'), null, 0, 0)
-            ->th($this->t('modules.description'), null, 0, 0)
-            ->th($this->t('common.tbl_func'), null, 0, 0, 'width: 200px');
+            ->th(t('modules.name'), null, 0, 0)
+            ->th(t('modules.description'), null, 0, 0)
+            ->th(t('common.tbl_func'), null, 0, 0, 'width: 200px');
 
         if($this->request->post('draw')){
             $res = []; $modules = []; $installed_modules = Settings::getInstance()->get('modules');
@@ -98,13 +98,13 @@ class Modules extends Backend
                         $b[] = (string)Button::create
                         (
                             Icon::create(Icon::TYPE_PUBLISHED),
-                            ['class' => 'b-modules-disable', 'data-id' => $module['module'], 'title' => $this->t('modules.title_disable')]
+                            ['class' => 'b-modules-disable', 'data-id' => $module['module'], 'title' => t('modules.title_disable')]
                         );
                     } else {
                         $b[] = (string)Button::create
                         (
                             Icon::create(Icon::TYPE_HIDDEN),
-                            ['class' => 'b-modules-enable', 'data-id' => $module['module'], 'title' => $this->t('modules.title_activate')]
+                            ['class' => 'b-modules-enable', 'data-id' => $module['module'], 'title' => t('modules.title_activate')]
                         );
 
                     }
@@ -112,18 +112,18 @@ class Modules extends Backend
                     $b[] = (string)Button::create
                     (
                         Icon::create(Icon::TYPE_SETTINGS),
-                        ['class' => 'b-modules-edit', 'data-id' => $module['module'], 'title' => $this->t('modules.title_edit')]
+                        ['class' => 'b-modules-edit', 'data-id' => $module['module'], 'title' => t('modules.title_edit')]
                     );
                     $b[] = (string)Button::create
                     (
                         Icon::create(Icon::TYPE_DELETE),
-                        ['class' => 'b-modules-uninstall btn-danger', 'data-id' => $module['module'], 'title' => $this->t('modules.title_uninstall')]
+                        ['class' => 'b-modules-uninstall btn-danger', 'data-id' => $module['module'], 'title' => t('modules.title_uninstall')]
                     );
                 } else {
                     $b[] = (string)Button::create
                     (
                         Icon::create(Icon::TYPE_INSTALL),
-                        ['class' => 'b-modules-install', 'data-id' => $module['module'], 'title' => $this->t('modules.title_install')]
+                        ['class' => 'b-modules-install', 'data-id' => $module['module'], 'title' => t('modules.title_install')]
                     );
 
                 }

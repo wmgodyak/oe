@@ -27,7 +27,7 @@ class Themes extends Backend
 
     public function init()
     {
-        $this->assignToNav($this->t('themes.action_index'), 'themes', 'puzzle-piece', 'settings', 100);
+        $this->assignToNav(t('themes.action_index'), 'themes', 'puzzle-piece', 'settings', 100);
     }
 
     /**
@@ -114,7 +114,7 @@ class Themes extends Backend
             (
                 (string)Link::create
                 (
-                    $this->t('common.back'),
+                    t('common.back'),
                     ['class' => 'btn-md', 'href'=> 'themes']
                 )
             );
@@ -123,7 +123,7 @@ class Themes extends Backend
             (
                 (string)Button::create
                 (
-                    $this->t('common.button_save'),
+                    t('common.button_save'),
                     ['class' => 'btn-md b-form-save']
                 )
             );
@@ -185,7 +185,7 @@ class Themes extends Backend
                 ->th('Size', null, 0, 0)
                 ->th('Modified', null, 0, 0)
                 ->th('Permissions', null, 0, 0)
-                ->th($this->t('common.tbl_func'), null, 0, 0, 'width: 200px');
+                ->th(t('common.tbl_func'), null, 0, 0, 'width: 200px');
 
             $this->template->assign('table', $t->init());
         }

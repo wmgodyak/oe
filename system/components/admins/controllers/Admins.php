@@ -24,7 +24,7 @@ class Admins extends Backend
 
     public function init()
     {
-        $this->assignToNav($this->t('admins.action_index'), 'admins', 'fa-users', null, 200);
+        $this->assignToNav(t('admins.action_index'), 'admins', 'fa-users', null, 200);
     }
 
     /**
@@ -33,19 +33,19 @@ class Admins extends Backend
      */
     public function index($group_id = null)
     {
-        $this->appendToPanel((string)Button::create($this->t('common.button_create'), ['class' => 'btn-md btn-primary b-admins-create']));
+        $this->appendToPanel((string)Button::create(t('common.button_create'), ['class' => 'btn-md btn-primary b-admins-create']));
 
         $t = new DataTables2('admins');
 
         $t
-            -> th($this->t('common.id'),        'u.id', true, true)
-            -> th($this->t('admins.pib'),       'CONCAT(u.surname , \' \', u.name) as username', true, true )
-            -> th($this->t('admins.group'),     'ugi.name as group_name', false, true)
-            -> th($this->t('admins.email'),     'u.email', true, true)
-            -> th($this->t('admins.phone'),     'u.phone', true, true)
-            -> th($this->t('admins.created') ,  'u.created', true, false)
-            -> th($this->t('admins.lastlogin'), 'u.lastlogin', true, false)
-            -> th($this->t('common.func'), null, false, false)
+            -> th(t('common.id'),        'u.id', true, true)
+            -> th(t('admins.pib'),       'CONCAT(u.surname , \' \', u.name) as username', true, true )
+            -> th(t('admins.group'),     'ugi.name as group_name', false, true)
+            -> th(t('admins.email'),     'u.email', true, true)
+            -> th(t('admins.phone'),     'u.phone', true, true)
+            -> th(t('admins.created') ,  'u.created', true, false)
+            -> th(t('admins.lastlogin'), 'u.lastlogin', true, false)
+            -> th(t('common.func'), null, false, false)
             -> get('u.status', 0, 0, 0 )
         ;
 
@@ -70,7 +70,7 @@ class Admins extends Backend
                 return null;
             }
 
-            $s = ['ban' => $this->t('admins.status_ban'), 'deleted' => $this->t('admins.status_deleted')];
+            $s = ['ban' => t('admins.status_ban'), 'deleted' => t('admins.status_deleted')];
 
             $res = array();
             foreach ($t->getResults(false) as $i=>$row) {
@@ -87,31 +87,31 @@ class Admins extends Backend
                 $b[] = (string)Button::create
                 (
                     Icon::create(Icon::TYPE_EDIT),
-                    ['class' => 'b-admins-edit btn-primary', 'data-id' => $row['id'], 'title' => $this->t('common.title_edit')]
+                    ['class' => 'b-admins-edit btn-primary', 'data-id' => $row['id'], 'title' => t('common.title_edit')]
                 );
                 if($row['status'] == 'active'){
                     $b[] =  (string)Button::create
                     (
                         Icon::create(Icon::TYPE_BAN),
-                        ['class' => 'b-admins-ban', 'data-id' => $row['id'], 'title' => $this->t('admins.title_ban')]
+                        ['class' => 'b-admins-ban', 'data-id' => $row['id'], 'title' => t('admins.title_ban')]
                     );
                     $b[] = (string)Button::create
                     (
                         Icon::create(Icon::TYPE_DELETE),
-                        ['class' => 'b-admins-delete', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+                        ['class' => 'b-admins-delete', 'data-id' => $row['id'], 'title' => t('common.title_delete')]
                     );
                 } elseif($row['status'] == 'deleted' || $row['status'] == 'ban'){
                     $b[] =  (string)Button::create
                     (
                         Icon::create(Icon::TYPE_RESTORE),
-                        ['class' => 'b-admins-restore', 'data-id' => $row['id'], 'title' => $this->t('admins.title_restore')]
+                        ['class' => 'b-admins-restore', 'data-id' => $row['id'], 'title' => t('admins.title_restore')]
                     );
                 }
 
                 $b[] = (string)Button::create
                 (
                     Icon::create(Icon::TYPE_TRASH),
-                    ['class' => 'b-admins-remove btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_remove')]
+                    ['class' => 'b-admins-remove btn-danger', 'data-id' => $row['id'], 'title' => t('common.title_remove')]
                 );
 
                 $res[$i][] = implode('', $b);
@@ -147,7 +147,7 @@ class Admins extends Backend
 
         $data = $this->request->post('data'); $s=0; $i=[];
 
-        FormValidation::setRule(['name', 'surname', 'email'], FormValidation::REQUIRED);
+        FormValidation::setRule(['name', 'email'], FormValidation::REQUIRED);
         FormValidation::setRule('email', FormValidation::EMAIL);
         FormValidation::run($data);
 
@@ -157,9 +157,9 @@ class Admins extends Backend
                 if(FormValidation::hasErrors()){
                     $i = FormValidation::getErrors();
                 } elseif(!empty($data['password']) && ($data['password_c'] != $data['password'])){
-                    $i[] = ["data[password_c]" => $this->t('admin_profile.e_pasw_equal')];
+                    $i[] = ["data[password_c]" => t('admin_profile.e_pasw_equal')];
                 } elseif($this->admins->issetEmail($data['email'])){
-                    $i[] = ["data[email]" => $this->t('admins.error_email_not_unique')];
+                    $i[] = ["data[email]" => t('admins.error_email_not_unique')];
                 } else {
                     unset($data['password_c']);
 
@@ -170,6 +170,12 @@ class Admins extends Backend
                     if($s > 0 && $this->request->post('notify', 'i') == 1){
                         $this->notify($data);
                     }
+
+                    if( $s > 0 ){
+                        if(isset($_FILES['avatar'])){
+                            $a = $this->admins->changeAvatar($id);
+                        }
+                    }
                 }
 
                 break;
@@ -179,9 +185,9 @@ class Admins extends Backend
                     if(FormValidation::hasErrors()){
                         $i = FormValidation::getErrors();
                     } elseif(!empty($data['password']) && ($data['password_c'] != $data['password'])){
-                        $i[] = ["data[password_c]" => $this->t('admin_profile.e_pasw_equal')];
+                        $i[] = ["data[password_c]" => t('admin_profile.e_pasw_equal')];
                     } elseif($this->admins->issetEmail($data['email'], $id)){
-                        $i[] = ["data[email]" => $this->t('admins.error_email_not_unique')];
+                        $i[] = ["data[email]" => t('admins.error_email_not_unique')];
                     } else {
                         unset($data['password_c']);
 
@@ -218,9 +224,9 @@ class Admins extends Backend
 
         $mail = new \PHPMailer();
         $mail->addAddress($data['email']);
-        $mail->setFrom('no-reply@' . $_SERVER['HTTP_HOST'], $this->t('core.sys_name'));
+        $mail->setFrom('no-reply@' . $_SERVER['HTTP_HOST'], t('core.sys_name'));
         $mail->isHTML(false);
-        $tpl = implode("\r\n", $this->t('admins.notify_tpl'));
+        $tpl = t('admins.notify_tpl');
         $this->template->assign('data', $data);
         $mail->Body = $this->template->fetchString($tpl);
         return $mail->send();
@@ -244,17 +250,4 @@ class Admins extends Backend
     {
         return $this->admins->restore($id);
     }
-
-    public function groups()
-    {
-        include "AdminsGroups.php";
-
-        $params = func_get_args();
-        $action = array_shift($params);
-
-        $controller  = new AdminsGroups();
-
-        return call_user_func_array(array($controller, $action), $params);
-    }
-
 }

@@ -606,17 +606,17 @@ engine.admin = {
             engine.request.get('admin/profile', function(d){
                 var pw = engine.dialog({
                     content: d,
-                    title: 'Мій профіль',
+                    title: 'My profile',
                     autoOpen: true,
                     width: 750,
                     modal: true,
                     buttons: {
-                        "Зберегти": function(){
-                            $('#editProfileForm').submit();
+                        "Update": function(){
+                            $('#profileForm').submit();
                         }
                     }
                 });
-                engine.validateAjaxForm('#editProfileForm', function(d){
+                engine.validateAjaxForm('#profileForm', function(d){
                     if(d.a == null){
                         pw.dialog('close');
                     } else{
@@ -837,17 +837,17 @@ engine.admins = {
             engine.admins.group.tree = new engine.tree('usersGroup');
             engine.admins.group.tree
                 .setUrl('admins/groups/tree')
-                .setContextMenu('create', t.admins_group.tree_create, 'fa-file', function(o){
+                .setContextMenu('create', t.admins.groups.tree_create, 'fa-file', function(o){
                         var node_id= o.reference[0].id;
                         engine.admins.group.create(node_id);
                     }
                 )
-                .setContextMenu('edit', t.admins_group.tree_edit, 'fa-pencil', function(o){
+                .setContextMenu('edit', t.admins.groups.tree_edit, 'fa-pencil', function(o){
                         var node_id= o.reference[0].id;
                         engine.admins.group.edit(node_id);
                     }
                 )
-                .setContextMenu('del', t.admins_group.tree_delete, 'fa-remove', function(o){
+                .setContextMenu('del', t.admins.groups.tree_delete, 'fa-remove', function(o){
                         var node_id= o.reference[0].id;
                         engine.admins.group.delete(node_id);
                     }
@@ -904,7 +904,6 @@ engine.admins = {
                     if(d.s){
                         engine.refreshDataTable('admins');
                         dialog.dialog('close');
-                        dialog.dialog('destroy').remove()
                     }
                 },
                 {
@@ -945,7 +944,6 @@ engine.admins = {
                             engine.refreshDataTable('admins');
                             if(d.a == null){
                                 dialog.dialog('close');
-                                dialog.dialog('destroy').remove()
                             } else{
                                 $('.edit-admin-avatar').attr('src', d.a);
                             }
@@ -961,7 +959,7 @@ engine.admins = {
     },
     delete: function(id)
     {
-        engine.confirm
+        var dialog =engine.confirm
         (
             t.admins.delete_question,
             function()
@@ -971,13 +969,13 @@ engine.admins = {
                         engine.refreshDataTable('admins');
                     }
                 });
-                $(this).dialog('close').dialog('destroy').remove();
+                dialog.dialog('close');
             }
         );
     },
     ban: function(id)
     {
-        engine.confirm
+       var dialog = engine.confirm
         (
             t.admins.ban_question,
             function()
@@ -987,13 +985,13 @@ engine.admins = {
                         engine.refreshDataTable('admins');
                     }
                 });
-                $(this).dialog('close').dialog('destroy').remove();
+                dialog.dialog('close');
             }
         );
     },
     remove: function(id)
     {
-        engine.confirm
+        var dialog = engine.confirm
         (
             t.admins.remove_question,
             function()
@@ -1003,13 +1001,13 @@ engine.admins = {
                         engine.refreshDataTable('admins');
                     }
                 });
-                $(this).dialog('close').dialog('destroy').remove();
+                dialog.dialog('close');
             }
         );
     },
     restore: function(id)
     {
-        engine.confirm
+        var dialog = engine.confirm
         (
             t.admins.restore_question,
             function()
@@ -1019,7 +1017,7 @@ engine.admins = {
                         engine.refreshDataTable('admins');
                     }
                 });
-                $(this).dialog('close').dialog('destroy').remove();
+                dialog.dialog('close');
             }
         );
     },
@@ -1061,7 +1059,7 @@ engine.admins = {
                         };
                         var dialog = engine.dialog({
                             content: d,
-                            title: t.admins_group.create_title,
+                            title: t.admins.groups.create_title,
                             autoOpen: true,
                             width: 900,
                             modal: true,
@@ -1078,7 +1076,6 @@ engine.admins = {
                                     //engine.refreshDataTable('admins');
                                     engine.admins.group.tree.refresh();
                                     dialog.dialog('close');
-                                    dialog.dialog('destroy').remove()
                                 }
                             }
                         );
@@ -1099,7 +1096,7 @@ engine.admins = {
                     };
                     var dialog = engine.dialog({
                         content: d,
-                        title: t.admins_group.action_edit,
+                        title: t.admins.groups.action_edit,
                         autoOpen: true,
                         width: 900,
                         modal: true,
@@ -1112,7 +1109,6 @@ engine.admins = {
                         if(d.s){
                             engine.admins.group.tree.refresh();
                             dialog.dialog('close');
-                            dialog.dialog('destroy').remove()
                         }
                     });
                 }
@@ -1122,7 +1118,7 @@ engine.admins = {
         {
             var dialog = engine.confirm
             (
-                t.admins_group.delete_question,
+                t.admins.groups.delete_question,
                 function()
                 {
                     engine.request.post(
@@ -1134,7 +1130,6 @@ engine.admins = {
 
                                     engine.admins.group.tree.refresh();
                                     dialog.dialog('close');
-                                    dialog.dialog('destroy').remove()
                                 }
                             }
                         }
