@@ -77,7 +77,7 @@ class Content extends Backend
         $controller  = $this->request->param('controller');
         $controller  = lcfirst($controller);
 
-        $this->addBreadCrumb($this->t($controller . '.action_create'));
+        $this->addBreadCrumb(t($controller . '.action_create'));
 
         return $this->mContent->create($parent_id, $this->admin['id']);
     }
@@ -88,7 +88,7 @@ class Content extends Backend
         (
             (string)Button::create
             (
-                $this->t('common.button_save'),
+                t('common.button_save'),
                 ['class' => 'btn-md b-form-save']
             )
         );
@@ -156,7 +156,7 @@ class Content extends Backend
 
     public function process($id)
     {
-        $i=[]; $m = $this->t('common.update_success');
+        $i=[]; $m = t('common.update_success');
 
         $s = $this->mContent->update($id);
 

@@ -263,3 +263,20 @@ if (!function_exists('module_config')){
         return $config[$module];
     }
 }
+
+if ( ! function_exists('settings')){
+
+    function settings($name = null, $value=null, $block=null, $type=null)
+    {
+        if (is_null($name)) {
+            return \system\models\Settings::getInstance();
+        }
+
+        if($value){
+            return \system\models\Settings::getInstance()->set($name, $value, $block, $type);
+        }
+
+        return \system\models\Settings::getInstance()->get($name);
+    }
+
+}

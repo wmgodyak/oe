@@ -17,7 +17,7 @@ class Translations extends Backend
 {
     public function init()
     {
-        $this->assignToNav($this->t('translations.action_index'), 'translations', 'fa-flag' , 'tools');
+        $this->assignToNav(t('translations.action_index'), 'translations', 'fa-flag' , 'tools');
         $this->template->assignScript('system/components/translations/js/translations.js');
     }
 
@@ -142,6 +142,7 @@ class Translations extends Backend
     private function getFileContent($file)
     {
         $r = file_get_contents(DOCROOT . $file);
+        if (empty($r)) return array();
         $a = json_decode($r, true);
 
         $res = [];

@@ -66,7 +66,7 @@ class ContentFeatures extends Backend
             } else {*/
             foreach ($info as $languages_id=> $item) {
                 if(empty($item['name'])){
-                    $i[] = ["info[$languages_id][name]" => $this->t('features.empty_name')];
+                    $i[] = ["info[$languages_id][name]" => t('features.empty_name')];
                 }
             }
             if(empty($i)) {
@@ -127,7 +127,7 @@ class ContentFeatures extends Backend
          } else {*/
         foreach ($info as $languages_id=> $item) {
             if(empty($item['name'])){
-                $i[] = ["info[$languages_id][name]" => $this->t('features.empty_name')];
+                $i[] = ["info[$languages_id][name]" => t('features.empty_name')];
             }
         }
         if(empty($i)) {

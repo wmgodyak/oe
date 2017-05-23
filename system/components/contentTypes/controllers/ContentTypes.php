@@ -41,7 +41,7 @@ class ContentTypes extends Backend
 
     public function init()
     {
-        $this->assignToNav($this->t('contentTypes.action_index'), 'contentTypes', 'fa-file-text-o', 'tools' ,100);
+        $this->assignToNav(t('contentTypes.action_index'), 'contentTypes', 'fa-file-text-o', 'tools' ,100);
     }
 
 
@@ -53,7 +53,7 @@ class ContentTypes extends Backend
             (
                 (string)Link::create
                 (
-                    $this->t('common.back'),
+                    t('common.back'),
                     ['class' => 'btn-md b-contentTypes-create', 'href'=> 'contentTypes/index' . ($data['parent_id']>0 ? '/' . $data['parent_id'] : '')]
                 )
             );
@@ -63,7 +63,7 @@ class ContentTypes extends Backend
         (
             (string)Link::create
             (
-                $this->t('common.button_create'),
+                t('common.button_create'),
                 ['class' => 'btn-md b-contentTypes-create btn-primary', 'href'=> 'contentTypes/create' . ($parent_id? "/$parent_id" : '')]
             )
         );
@@ -71,11 +71,11 @@ class ContentTypes extends Backend
         $t = new DataTables2('contentTypes');
 
         $t
-            -> th($this->t('common.id'), 'id', 1, 1, 'width:60px')
-            -> th($this->t('contentTypes.name'), 'name', 1, 1)
-            -> th($this->t('contentTypes.type'), 'type', 1, 1)
-            -> th($this->t('contentTypes.template'), null, 0 , 0)
-            -> th($this->t('common.tbl_func'), null, false, false, 'width: 130px')
+            -> th(t('common.id'), 'id', 1, 1, 'width:60px')
+            -> th(t('contentTypes.name'), 'name', 1, 1)
+            -> th(t('contentTypes.type'), 'type', 1, 1)
+            -> th(t('contentTypes.template'), null, 0 , 0)
+            -> th(t('common.tbl_func'), null, false, false, 'width: 130px')
 
             -> get('isfolder', 0, 0, 0)
             -> get('is_main', 0, 0, 0)
@@ -111,12 +111,12 @@ class ContentTypes extends Backend
                 (string)Link::create
                 (
                     Icon::create(Icon::TYPE_EDIT),
-                    ['class' => 'btn-primary', 'href' => "contentTypes/edit/" . $row['id'], 'title' => $this->t('common.title_edit')]
+                    ['class' => 'btn-primary', 'href' => "contentTypes/edit/" . $row['id'], 'title' => t('common.title_edit')]
                 ) .
                 ($row['is_main'] == 0 && $row['isfolder'] == 0 ? (string)Button::create
                 (
                     Icon::create(Icon::TYPE_DELETE),
-                    ['class' => 'b-contentTypes-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+                    ['class' => 'b-contentTypes-delete btn-danger', 'data-id' => $row['id'], 'title' => t('common.title_delete')]
                 ) : "")
 
             ;
@@ -129,7 +129,7 @@ class ContentTypes extends Backend
     {
         $this->appendToPanel((string)Link::create
         (
-            $this->t('common.back'),
+            t('common.back'),
             ['class' => 'btn-md b-contentTypes-create', 'href'=> 'contentTypes/index' . ($parent_id? "/$parent_id" : '')]
         )
         );
@@ -139,7 +139,7 @@ class ContentTypes extends Backend
         (
             (string)Button::create
             (
-                $this->t('common.button_save'),
+                t('common.button_save'),
                 ['class' => 'btn-md b-form-save']
             )
         );
@@ -162,7 +162,7 @@ class ContentTypes extends Backend
         (
             (string)Link::create
             (
-                $this->t('common.back'),
+                t('common.back'),
                 ['class' => 'btn-md b-contentTypes-create', 'href'=> 'contentTypes/index' . ($data['parent_id']? "/{$data['parent_id']}" : '')]
             )
         );
@@ -171,7 +171,7 @@ class ContentTypes extends Backend
         (
             (string)Button::create
             (
-                $this->t('common.button_save'),
+                t('common.button_save'),
                 ['class' => 'btn-md b-form-save']
             )
         );
@@ -204,7 +204,7 @@ class ContentTypes extends Backend
         if(FormValidation::hasErrors()){
             $i = FormValidation::getErrors();
         } elseif($this->contentTypes->issetTemplate($data['parent_id'], $data['type'], $data['id'])){
-            $i[] = ["data[type]" => $this->t('contentTypes.error_isset_type')];
+            $i[] = ["data[type]" => t('contentTypes.error_isset_type')];
         } else {
             $data['settings'] = serialize($data['settings']);
             switch($this->request->post('action')){
@@ -224,7 +224,7 @@ class ContentTypes extends Backend
                         }
 
                         $this->writeTemplate($id, $this->request->post('template'));
-                        $m = $this->t('common.update_success');
+                        $m = t('common.update_success');
                     }
                     break;
             }

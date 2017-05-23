@@ -27,7 +27,7 @@ class Features extends Backend
 
     public function init()
     {
-        $this->assignToNav($this->t('features.action_index'), 'features', 'fa-users', 'tools', 100);
+        $this->assignToNav(t('features.action_index'), 'features', 'fa-users', 'tools', 100);
     }
 
     public function index($parent_id=0)
@@ -40,7 +40,7 @@ class Features extends Backend
         (
             (string)Button::create
             (
-                $this->t('common.button_create'),
+                t('common.button_create'),
                 ['class' => 'btn-md btn-primary b-features-create', 'data-parent'=> $parent_id]
             )
         );
@@ -48,11 +48,11 @@ class Features extends Backend
         $t = new DataTables2('features');
 
         $t  -> ajax('features/index/'.$parent_id)
-            -> th($this->t('common.id'), 'f.id', 1, 1, 'width: 60px')
-            -> th($this->t('features.name'), 'i.name', 1, 1)
-            -> th($this->t('features.code'), 'f.code', 1, 1, 'width: 300px')
-            -> th($this->t('features.type'), 'f.type', 1, 1, 'width: 200px')
-            -> th($this->t('common.tbl_func'), null, 0, 0, 'width: 200px')
+            -> th(t('common.id'), 'f.id', 1, 1, 'width: 60px')
+            -> th(t('features.name'), 'i.name', 1, 1)
+            -> th(t('features.code'), 'f.code', 1, 1, 'width: 300px')
+            -> th(t('features.type'), 'f.type', 1, 1, 'width: 200px')
+            -> th(t('common.tbl_func'), null, 0, 0, 'width: 200px')
             -> get('f.status', 0, 0, 0)
         ;
 
@@ -69,7 +69,7 @@ class Features extends Backend
                 $res[$i][] = $row['id'];
                 $res[$i][] = "<a href='{$url}{$row['id']}'>{$row['name']}</a>";
                 $res[$i][] = "<input class='form-control' onfocus='select()' value='{$row['code']}'>";
-                $res[$i][] = $this->t('features.type_' . $row['type']);
+                $res[$i][] = t('features.type_' . $row['type']);
                 $res[$i][] =
                     (string)(
                     $row['status'] == 'published' ?
@@ -78,7 +78,7 @@ class Features extends Backend
                             Icon::create(Icon::TYPE_PUBLISHED),
                             [
                                 'class' => ' b-features-hide',
-                                'title' => $this->t('common.title_pub'),
+                                'title' => t('common.title_pub'),
                                 'data-id' => $row['id']
                             ]
                         )
@@ -88,7 +88,7 @@ class Features extends Backend
                             Icon::create(Icon::TYPE_HIDDEN),
                             [
                                 'class' => ' b-features-pub',
-                                'title' => $this->t('common.title_hide'),
+                                'title' => t('common.title_hide'),
                                 'data-id' => $row['id']
                             ]
                         )
@@ -99,13 +99,13 @@ class Features extends Backend
                         [
                             'class' => 'btn-primary' . ($row['type'] == 'value' ? ' b-features-edit-value' : ' b-features-edit'),
                             'data-id' => $row['id'],
-                            'title' => $this->t('common.title_edit')
+                            'title' => t('common.title_edit')
                         ]
                     ) .
                     (string)Button::create
                     (
                         Icon::create(Icon::TYPE_DELETE),
-                        ['class' => 'b-features-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+                        ['class' => 'b-features-delete btn-danger', 'data-id' => $row['id'], 'title' => t('common.title_delete')]
                     )
                 ;
             }
@@ -134,7 +134,7 @@ class Features extends Backend
         (
             (string)Link::create
             (
-                $this->t('common.back'),
+                t('common.back'),
                 ['class' => 'btn-md', 'href'=> 'features' . ($data['parent_id'] > 0 ? '/index/' . $data['parent_id'] : '')]
             )
         );
@@ -143,7 +143,7 @@ class Features extends Backend
         (
             (string)Button::create
             (
-                $this->t('common.button_save'),
+                t('common.button_save'),
                 ['class' => 'btn-md b-form-save']
             )
         );
@@ -177,7 +177,7 @@ class Features extends Backend
         } else {
             foreach ($info as $languages_id=> $item) {
                 if(empty($item['name'])){
-                    $i[] = ["info[$languages_id][name]" => $this->t('features.empty_name')];
+                    $i[] = ["info[$languages_id][name]" => t('features.empty_name')];
                 }
             }
             if(empty($i)) {

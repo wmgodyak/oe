@@ -20,9 +20,9 @@ class Settings extends Backend
 
     public function init()
     {
-        $this->assignToNav($this->t('tools.action_index'), 'tools', 'fa-cog', null, 400);
-        $this->assignToNav($this->t('settings.action_index'), 'settings', 'fa-file-text', null, 500);
-        $this->assignToNav($this->t('settings.general'), 'settings', 'fa-file-text', 'settings', 10);
+        $this->assignToNav(t('tools.action_index'), 'tools', 'fa-cog', null, 400);
+        $this->assignToNav(t('settings.action_index'), 'settings', 'fa-file-text', null, 500);
+        $this->assignToNav(t('settings.general'), 'settings', 'fa-file-text', 'settings', 10);
     }
 
     public function index()
@@ -31,7 +31,7 @@ class Settings extends Backend
         (
             (string)Button::create
             (
-                $this->t('common.button_save'),
+                t('common.button_save'),
                 ['class' => 'btn-md b-form-save']
             )
         );
@@ -79,7 +79,7 @@ class Settings extends Backend
     {
         $this->mSettings->update();
         $s = ! $this->mSettings->hasError();
-        $m = $s ? $this->t('common.update_success') : $this->mSettings->getErrorMessage();
+        $m = $s ? t('common.update_success') : $this->mSettings->getErrorMessage();
         return ['s' => $s, 'm' => $m];
     }
 }

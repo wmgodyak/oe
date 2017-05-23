@@ -40,7 +40,7 @@ class Values extends Backend
         (
             (string)Button::create
             (
-                $this->t('common.button_create'),
+                t('common.button_create'),
                 ['class' => 'btn-md btn-primary b-features-values-create', 'data-features_id'=> $features_id]
             )
         );
@@ -48,10 +48,10 @@ class Values extends Backend
         $t = new DataTables2('features_values');
 
         $t  -> ajax('features/values/index/' . $features_id)
-            -> th($this->t('common.id'), 'f.id', 1, 1, 'width: 60px')
-            -> th($this->t('features.name'), 'i.name', 1, 1)
-            -> th($this->t('features.code'), 'f.code', 1, 1, 'width: 300px')
-            -> th($this->t('common.tbl_func'), null, 0, 0, 'width: 200px')
+            -> th(t('common.id'), 'f.id', 1, 1, 'width: 60px')
+            -> th(t('features.name'), 'i.name', 1, 1)
+            -> th(t('features.code'), 'f.code', 1, 1, 'width: 300px')
+            -> th(t('common.tbl_func'), null, 0, 0, 'width: 200px')
             -> get('f.status', 0, 0, 0)
             -> get('f.type', 0, 0, 0)
         ;
@@ -76,7 +76,7 @@ class Values extends Backend
                             Icon::create(Icon::TYPE_PUBLISHED),
                             [
                                 'class' => ' b-features-values-hide',
-                                'title' => $this->t('common.title_pub'),
+                                'title' => t('common.title_pub'),
                                 'data-id' => $row['id']
                             ]
                         )
@@ -86,7 +86,7 @@ class Values extends Backend
                             Icon::create(Icon::TYPE_HIDDEN),
                             [
                                 'class' => ' b-features-values-pub',
-                                'title' => $this->t('common.title_hide'),
+                                'title' => t('common.title_hide'),
                                 'data-id' => $row['id']
                             ]
                         )
@@ -97,13 +97,13 @@ class Values extends Backend
                         [
                             'class' => 'btn-primary  b-features-values-edit',
                             'data-id' => $row['id'],
-                            'title' => $this->t('common.title_edit')
+                            'title' => t('common.title_edit')
                         ]
                     ) .
                     (string)Button::create
                     (
                         Icon::create(Icon::TYPE_DELETE),
-                        ['class' => 'b-features-values-delete btn-danger', 'data-id' => $row['id'], 'title' => $this->t('common.title_delete')]
+                        ['class' => 'b-features-values-delete btn-danger', 'data-id' => $row['id'], 'title' => t('common.title_delete')]
                     )
                 ;
             }
@@ -145,7 +145,7 @@ class Values extends Backend
 
         foreach ($info as $languages_id=> $item) {
             if(empty($item['name'])){
-                $i[] = ["info[$languages_id][name]" => $this->t('features.empty_value')];
+                $i[] = ["info[$languages_id][name]" => t('features.empty_value')];
             }
         }
 
@@ -165,7 +165,7 @@ class Values extends Backend
             }
         }
 
-        $m = $this->t('common.update_success');
+        $m = t('common.update_success');
 
         if($this->features->hasError()){
             $m = $this->features->getErrorMessage();

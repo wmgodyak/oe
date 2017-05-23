@@ -58,11 +58,7 @@ class Users extends Frontend
     public function update($id, $data)
     {
         if(isset($data['password'])){
-            if(empty($data['password'])){
-                unset($data['password']);
-            } else {
-                $data['password'] = $this->cryptPassword($data['password']);
-            }
+            $data['password'] = $this->cryptPassword($data['password']);
         }
 
         $data['updated'] = $this->now();
@@ -161,19 +157,6 @@ class Users extends Frontend
         return crypt($password, $hash) == $hash;
     }
 
-    /**
-     * @param $id
-     * @param $data
-     * @return bool
-     */
-    public function updateProfile($id, $data)
-    {
-        $data['updated'] = $this->now();
-        if(isset($data['password'])){
-            $data['password'] = $this->cryptPassword($data['password']);
-        }
-        return self::$db->update('__users', $data, " id={$id} limit 1");
-    }
 
     public function changeAvatar($id)
     {
@@ -312,9 +295,10 @@ class Users extends Frontend
         return self::$db->select('SELECT FOUND_ROWS() as t')->row('t');
     }
 
-
     public function logout($id)
     {
+        if(empty($id)) return null;
+
         return self::$db->update('__users', array('sessid'=>''), " id = '{$id}' limit 1");
     }
 }

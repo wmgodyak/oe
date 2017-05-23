@@ -1,1 +1,8 @@
-{"search":{"qs_min_len":"Надто коротка фраза. Введіть фразу більше 3-х символів"}}
+{
+  "search": {
+    "qs_min_len": "Надто коротка фраза. Введіть фразу більше 3-х символів"
+  },
+  "categories": "Categories",
+  "popular_posts": "Recent Posts",
+  "popular_tags" : "Popular Tags"
+}

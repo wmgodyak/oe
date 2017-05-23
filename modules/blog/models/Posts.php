@@ -18,6 +18,8 @@ class Posts extends Content
     public  $where = [];
     public  $join = [];
 
+    private $order_by = " abs(c.id) desc ";
+
     public $categories_id = 0;
 
     public $debug = 0;
@@ -54,7 +56,7 @@ class Posts extends Content
                   join __content_info ci on ci.content_id=c.id and ci.languages_id='{$this->languages_id}'
                   join __users u on u.id = c.owner_id
                   where c.status ='published' {$w}
-                  order by abs(c.id) desc
+                  order by {$this->order_by}
                   limit {$this->start}, {$this->num}
             ", $this->debug)
             ->all();
@@ -133,6 +135,8 @@ class Posts extends Content
         $this->start         = $start;
         $this->num           = $num;
         $this->join[] = " join __content_meta cm on cm.content_id=c.id and cm.meta_k = 'views' ";
+
+        $this->where[] = " and c.published >= DATE_ADD(LAST_DAY(DATE_SUB(NOW(), INTERVAL 2 MONTH)), INTERVAL 1 DAY) and c.published <= DATE_SUB(NOW(), INTERVAL 1 MONTH)";
 
         return $this->get();
     }

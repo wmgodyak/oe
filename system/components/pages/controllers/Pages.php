@@ -25,7 +25,7 @@ class Pages extends Content
 
     public function init()
     {
-        $this->assignToNav($this->t('pages.action_index'), 'pages', 'fa-file-text', null, 10);
+        $this->assignToNav(t('pages.action_index'), 'pages', 'fa-file-text', null, 10);
     }
 
     public function index($parent_id=0)
@@ -44,7 +44,7 @@ class Pages extends Content
         (
             (string)Link::create
             (
-                $this->t('common.button_create'),
+                t('common.button_create'),
                 ['class' => 'btn-md btn-primary', 'href'=> './pages/create' . ($parent_id? "/$parent_id" : '')]
             )
         );
@@ -53,11 +53,11 @@ class Pages extends Content
 
         $t
             -> ajax('pages/items/' . $parent_id)
-            -> th($this->t('common.id'), 'c.id', 1, 1, 'width: 60px')
-            -> th($this->t('common.name'), 'ci.name', 1, 1)
-            -> th($this->t('common.created'), 'c.created', 1,1, 'width: 200px')
-            -> th($this->t('common.updated'), 'c.updated', 1, 1, 'width: 200px')
-            -> th($this->t('common.tbl_func'), null, 0, 0, 'width: 180px')
+            -> th(t('common.id'), 'c.id', 1, 1, 'width: 60px')
+            -> th(t('common.name'), 'ci.name', 1, 1)
+            -> th(t('common.created'), 'c.created', 1,1, 'width: 200px')
+            -> th(t('common.updated'), 'c.updated', 1, 1, 'width: 200px')
+            -> th(t('common.tbl_func'), null, 0, 0, 'width: 180px')
         ;
         $t->get('ci.url',0,0,0);
         $t->get('c.status',0,0,0);
@@ -80,7 +80,7 @@ class Pages extends Content
         foreach ($t->getResults(false) as $i=>$row) {
             $icon = Icon::create(($row['isfolder'] ? 'fa-folder' : 'fa-file'));
             $icon_link = Icon::create('fa-external-link');
-            $status = $this->t('pages.status_' . $row['status']);
+            $status = t('pages.status_' . $row['status']);
             $res[$i][] = $row['id'];
             $res[$i][] =
                 " <a class='status-{$row['status']}' title='{$status}' href='{$this->type}/index/{$row['id']}'>{$icon}  {$row['name']}</a>"
@@ -96,7 +96,7 @@ class Pages extends Content
                         Icon::create(Icon::TYPE_PUBLISHED),
                         [
                             'class' => 'b-pages-hide',
-                            'title' => $this->t('common.title_pub'),
+                            'title' => t('common.title_pub'),
                             'data-id' => $row['id']
                         ]
                     )
@@ -106,7 +106,7 @@ class Pages extends Content
                         Icon::create(Icon::TYPE_HIDDEN),
                         [
                             'class' => ' b-pages-pub',
-                            'title' => $this->t('common.title_hide'),
+                            'title' => t('common.title_hide'),
                             'data-id' => $row['id']
                         ]
                     )
@@ -114,12 +114,12 @@ class Pages extends Content
                 (string)Link::create
                 (
                     Icon::create(Icon::TYPE_EDIT),
-                    ['class' => 'btn-primary', 'href' => "pages/edit/" . $row['id'], 'title' => $this->t('common.title_edit')]
+                    ['class' => 'btn-primary', 'href' => "pages/edit/" . $row['id'], 'title' => t('common.title_edit')]
                 ) .
                 ($row['isfolder'] == 0 ? (string)Button::create
                 (
                     Icon::create(Icon::TYPE_DELETE),
-                    ['class' => 'btn-danger b-pages-delete', 'data-id' => $row['id'], 'title' => $this->t('pages.delete_question')]
+                    ['class' => 'btn-danger b-pages-delete', 'data-id' => $row['id'], 'title' => t('pages.delete_question')]
                 ) : "")
 
             ;
@@ -142,7 +142,7 @@ class Pages extends Content
         (
             (string)Link::create
             (
-                $this->t('common.back'),
+                t('common.back'),
                 ['class' => 'btn-md', 'href'=> './'. $this->type . ($parent_id > 0 ? '/index/' . $parent_id : '')],
                 (string)Icon::create('fa-reply')
             )
@@ -159,7 +159,7 @@ class Pages extends Content
 
         if($a['s']){
             $content = $this->request->post('content');
-            $a['m'] = sprintf($this->t('pages.update_success'), "pages/index/{$content['parent_id']}", "pages/create/{$content['parent_id']}");
+            $a['m'] = sprintf(t('pages.update_success'), "pages/index/{$content['parent_id']}", "pages/create/{$content['parent_id']}");
         }
 
         return $a;

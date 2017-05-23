@@ -184,7 +184,7 @@ class Route
 
             if(preg_match("@^$regex$@siu", $this->uri, $matches)){
 
-//                d($this->uri);d($regex);d($matches); d($route[1]);
+//                d($this->uri);d($regex);d($matches);
 
                 $params = [];
                 $callback = $route[1];
@@ -251,14 +251,25 @@ class Route
                     $_component  = "system\\components\\" . lcfirst($controller) . "\\controllers\\$controller";
                     $c_path = str_replace("\\", DIRECTORY_SEPARATOR, $_component);
 
+                    $_component_a  = "system\\components\\" . lcfirst($controller) . "\\controllers\\" . ucfirst($action);
+                    $ca_path = str_replace("\\", DIRECTORY_SEPARATOR, $_component_a);
+
                     // or some controller
                     $path = str_replace("\\", DIRECTORY_SEPARATOR, $controller);
 
-                    if(file_exists(DOCROOT . $m_path . '.php')) {
+                    if($callback == 'module' && file_exists(DOCROOT . $m_path . '.php')) {
 
                         $controller = $_module;
 
-                    } elseif(file_exists(DOCROOT . $c_path . '.php')) {
+                    } elseif($callback == 'component' && file_exists(DOCROOT . $ca_path . '.php')) {
+
+                        $controller = $_component_a;
+                        $action = "index";
+                        if(!empty($params)){
+                            $action = array_shift($params);
+                        }
+
+                    } elseif($callback == 'component' && file_exists(DOCROOT . $c_path . '.php')) {
 
                         $controller = $_component;
 
