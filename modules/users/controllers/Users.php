@@ -57,7 +57,7 @@ class Users extends Frontend
 
                 //todo move it from here
 
-                Lang::getInstance()->set($this->template->theme, $lang);
+//                Lang::getInstance()->set($this->template->theme, $lang);
 
                 return $this->register();
             });
