@@ -49,7 +49,18 @@ abstract class Controller
      */
     abstract public function index();
 
-    public function init(){}
+    /**
+     * Initialize
+     */
+    public function init()
+    {
+        // here you can add callbacks for events
+        // on system boot
+//        events()->add('boot', function(){});
+
+        // on page init
+//        events()->add('init', function(){});
+    }
 
     /**
      *	Setter method
@@ -60,7 +71,7 @@ abstract class Controller
     {
         $this->storage[$index] = $value;
     }
-
+// todo move it from here
     public function redirect($uri, $header = null)
     {
         switch($header){
@@ -74,6 +85,7 @@ abstract class Controller
         header('Location: ' . $uri);die;
     }
 
+// todo move it to helper
     protected function validateToken()
     {
         if($this->request->isPost()) {

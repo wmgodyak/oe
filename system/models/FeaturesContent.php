@@ -46,7 +46,7 @@ class FeaturesContent extends Backend
     public function getContentName($id)
     {
         return self::$db
-            ->select("select name from __content_info where content_id={$id} and languages_id={$this->languages_id} limit 1")
+            ->select("select name from __content_info where content_id={$id} and languages_id={$this->languages->id} limit 1")
             ->row('name');
     }
 
@@ -76,7 +76,7 @@ class FeaturesContent extends Backend
                 select c.id, c.isfolder, i.name
                 from __content c, __content_info i
                 where c.types_id={$types_id} and c.subtypes_id={$subtypes_id} and c.parent_id={$parent_id}
-                 and i.content_id=c.id and i.languages_id={$this->languages_id}
+                 and i.content_id=c.id and i.languages_id={$this->languages->id}
                 limit 100 -- блок підвисання
                  ")
             ->all();

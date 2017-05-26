@@ -32,7 +32,7 @@ class Features extends Frontend
               select f.id, fi.name, f.code, f.type
               from __features_content fc
               join __features f on  f.id=fc.features_id and f.parent_id = {$parent_id} and f.status='published'
-              join __features_info fi on fi.features_id=f.id and fi.languages_id={$this->languages_id}
+              join __features_info fi on fi.features_id=f.id and fi.languages_id={$this->languages->id}
               where fc.content_types_id={$cdata['types_id']} and fc.content_subtypes_id={$cdata['subtypes_id']}
                     and fc.content_id in (0, {$content_id})
               order by abs(fc.position) asc
@@ -55,7 +55,7 @@ class Features extends Frontend
                     $item['value'] = $this->value($content_id, $item['id']);
                     break;
                 default:
-                    $item['value'] = $this->value($content_id, $item['id'], $this->languages_id);
+                    $item['value'] = $this->value($content_id, $item['id'], $this->languages->id);
                     break;
             }
 
@@ -89,7 +89,7 @@ class Features extends Frontend
         $features_id = $this->getFeatureIdByCode($code);
         if(empty($features_id)) return null;
 
-        $languages_id = $languages_id == null ? $this->languages_id : 0;
+        $languages_id = $languages_id == null ? $this->languages->id : 0;
 
         return $this->value($content_id, $features_id, $languages_id);
     }
@@ -104,7 +104,7 @@ class Features extends Frontend
         $features_id = $this->getFeatureIdByCode($code);
         if(empty($features_id)) return null;
 
-        return $this->value($content_id, $features_id, $this->languages_id);
+        return $this->value($content_id, $features_id, $this->languages->id);
     }
 
     /**
@@ -169,7 +169,7 @@ class Features extends Frontend
             ("
               select fi.name
               from __features f
-              join __features_info fi on fi.features_id=f.id and fi.languages_id='{$this->languages_id}'
+              join __features_info fi on fi.features_id=f.id and fi.languages_id='{$this->languages->id}'
               where f.code = '{$code}'
               limit 1
            ")
@@ -190,7 +190,7 @@ class Features extends Frontend
               select f.id, fi.name
               from __content_features cf
               join __features f on f.id = cf.values_id and f.type = 'value' and f.status='published'
-              join __features_info fi on fi.features_id=f.id and fi.languages_id={$this->languages_id}
+              join __features_info fi on fi.features_id=f.id and fi.languages_id={$this->languages->id}
               where cf.content_id = {$content_id} and cf.features_id={$features_id}
               order by fi.name asc
            ");

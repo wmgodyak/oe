@@ -14,6 +14,7 @@ namespace system\core;
  * To add event just add this code in init() your in module Event::getInstance()->add('content.main.info', [$this, 'mainInfoBottom']);
  * To run event in template just call {$events->call('content.main.info')}
  * To run event in module just call Event::getInstance()->call('content.main.info')
+ * Also you can run events()->call();
  * It`s simply!!!
  * @package system\core
  */
@@ -56,7 +57,7 @@ class EventsHandler
        while(isset(self::$events[$action][$priority])){
            $priority += 5;
        }
-
+       if($this->debug)  echo "<code>Events::add  ". time() . $action . "</code><br>";
        self::$events[$action][$priority] = $callback;
     }
 
@@ -66,38 +67,39 @@ class EventsHandler
      * @param bool $display
      * @return null|string
      */
-    public function call($action, $params = null, $display = true)
+    public function call($action, $params = [], $display = true)
     {
-        if($this->debug) echo "<code>".$action . "</code><br>";
+        if($this->debug) echo "<code>Events::call  ". time() . $action . "</code><br>";
 
-        if(!isset(self::$events[$action])) return null;
-        $out = '';
+        if(!isset(self::$events[$action])) {
+            if($this->debug) echo "No callbacks for event {$action}<br>";
+            return null;
+        }
+
+        $out = [];
 
         ksort(self::$events[$action]);
 
-        foreach (self::$events[$action] as $callback) {
+        foreach (self::$events[$action] as  $callback) {
+
             if(is_array($callback) && isset($callback[1])){
                 if(is_callable($callback, true, $callable_name)){
-                    if($this->debug)  echo $callable_name, '<br>';
+                    if($this->debug)  echo 'Called: ', $callable_name, '<br>';
                     if($params && is_array($params)){
-                        $out .= call_user_func_array($callback, [$params]);
+                        $out[] = call_user_func_array($callback, [$params]);
                     } else {
-                        $out .= call_user_func($callback, $params);
-                    }
-                }elseif(is_callable($callback, true, $callable_name)){
-                    if($params && is_array($params)){
-                        $out .= call_user_func_array($callback, [$params]);
-                    } else {
-                        $out .= call_user_func($callback, $params);
+                        $out[] = call_user_func($callback, $params);
                     }
                 }
+            }  elseif (is_callable($callback, true) && !is_string($callback)){
+                $out[] = call_user_func_array($callback, $params);
             }
         }
 
         if($display) {
-            echo $out;
+            echo implode('', $out);
         } else {
-            return $out;
+            return implode('', $out);
         }
     }
 
@@ -114,7 +116,7 @@ class EventsHandler
      */
     public function display()
     {
-        echo '<pre>'; print_r(self::$events);
+        dd(self::$events);
     }
 
     public function getEvents()

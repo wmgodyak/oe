@@ -18,9 +18,9 @@
     if(!defined('CPATH')) define('CPATH', DOCROOT . 'system/controllers/');
 
     // load startup file
-    include_once "config/bootstrap.php";
+    include_once "system/bootstrap.php";
 
     // Routing
     \system\core\Route::getInstance()->run();
 
-    \system\core\Response::getInstance()->render();
+    \system\core\Response::getInstance()->display();

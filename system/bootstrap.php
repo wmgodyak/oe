@@ -45,3 +45,6 @@
     }
 
     \system\models\Modules::getInstance();
+
+//    events()->debug();
+    events()->call('boot');

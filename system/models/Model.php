@@ -20,17 +20,6 @@ defined("CPATH") or die();
  */
 class Model
 {
-    /**
-     * default languages id
-     * @var int
-     */
-    protected static $language_id = 1;
-    /**
-     * default languages id not static only
-     * @var int
-     */
-    public $languages_id;
-
     protected static $db;
 
     protected $error = [];

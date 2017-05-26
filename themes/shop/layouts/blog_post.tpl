@@ -45,7 +45,6 @@
                         <a href="{$blog.post.url}"><i aria-hidden="true" class="fa fa-instagram"></i></a>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>

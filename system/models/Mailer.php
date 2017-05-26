@@ -36,7 +36,7 @@ class Mailer
         $this->tpl = $tpl;
         $this->settings['subject'] = $subject;
         $this->phpmailer    = new \PHPMailer();
-        $this->languages_id = 1; // todo change it in future
+        $this->languages->id = 1; // todo change it in future
         $this->data         = $data;
 
         $this->settings['name']          = Settings::getInstance()->get('mail_from_name');

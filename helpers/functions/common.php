@@ -280,3 +280,26 @@ if ( ! function_exists('settings')){
     }
 
 }
+
+if (!function_exists('events')){
+
+    function events()
+    {
+
+        return \system\core\EventsHandler::getInstance();
+    }
+
+}
+
+if( ! function_exists('route')){
+
+    function route($url)
+    {
+        $url = trim($url, '/');
+        $lang = \system\core\Languages::getInstance();
+
+        $prefix = $lang->is_main ? "" : "$lang->code/";
+
+        return '/'.$prefix . $url;
+    }
+}

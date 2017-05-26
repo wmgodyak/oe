@@ -53,7 +53,7 @@ class Posts extends Content
                   from __content c
                   {$join}
                   join __content_types ct on ct.type = '{$this->type}' and ct.id=c.types_id
-                  join __content_info ci on ci.content_id=c.id and ci.languages_id='{$this->languages_id}'
+                  join __content_info ci on ci.content_id=c.id and ci.languages_id='{$this->languages->id}'
                   join __users u on u.id = c.owner_id
                   where c.status ='published' {$w}
                   order by {$this->order_by}
@@ -102,7 +102,7 @@ class Posts extends Content
                   from __content c
                   {$join}
                   join __content_types ct on ct.type = '{$this->type}' and ct.id=c.types_id
-                  join __content_info ci on ci.content_id=c.id and ci.languages_id='{$this->languages_id}'
+                  join __content_info ci on ci.content_id=c.id and ci.languages_id='{$this->languages->id}'
                   where c.status = 'published' {$w}
             ", $this->debug)
             ->row('t');

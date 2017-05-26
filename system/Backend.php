@@ -135,7 +135,7 @@ abstract class Backend extends Controller
     {
         self::$initialized = true;
 
-        Lang::getInstance($this->theme, $this->lang);
+        Lang::getInstance()->set($this->theme, $this->lang);
 
         $controller = $this->request->param('controller');
         $action     = $this->request->param('action');
@@ -236,7 +236,7 @@ abstract class Backend extends Controller
 
 
     /**
-     * @deprecated
+     * @deprecated use function t()
      * translations
      * @param $key
      * @return string
@@ -244,7 +244,6 @@ abstract class Backend extends Controller
     protected function t($key)
     {
         return t($key);
-//        return Lang::getInstance($this->theme, $this->lang)->get($key);
     }
 
     protected function setNav($b)

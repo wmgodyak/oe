@@ -62,7 +62,7 @@ class ContentTypes extends Backend
                 select fc.features_id as id, f.type, i.name
                 from __features_content fc
                 join __features f on f.id=fc.features_id
-                join __features_info i on i.features_id=f.id and i.languages_id={$this->languages_id}
+                join __features_info i on i.features_id=f.id and i.languages_id={$this->languages->id}
                 where
                 content_types_id    = {$types_id} and
                 content_subtypes_id = {$subtypes_id}

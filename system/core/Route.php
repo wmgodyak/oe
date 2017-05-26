@@ -184,7 +184,7 @@ class Route
 
             if(preg_match("@^$regex$@siu", $this->uri, $matches)){
 
-//                d($this->uri);d($regex);d($matches);
+//                d($this->uri); d($route); d($regex);d($matches);
 
                 $params = [];
                 $callback = $route[1];
@@ -301,7 +301,7 @@ class Route
             throw new \Exception("Call to undefined action $action", 404);
         }
 
-        return Response::getInstance()->body(call_user_func_array([$controller, $action], $params));
+        Response::getInstance()->body(call_user_func_array([$controller, $action], $params));
     }
 
     /**

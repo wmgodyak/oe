@@ -10,21 +10,24 @@ $route = \system\core\Route::getInstance();
 /**
  * FRONTEND
  */
+$route->get('/', '\system\frontend\Page::displayHome');
+// only url
+$route->get('/{url}', '\system\frontend\Page::displayUrl');
+
 // cron
 $route->get('/system/cron', '\system\Cron');
+
 // some module
 $route->any('/route/{alpha}/{alpha}', 'module');
 $route->any('/route/{alpha}/{alpha}/{any}', 'module');
+
+
 
 // only lang
 $route->get('/{lang}', '\system\frontend\Page::displayLang');
 
 // lang/url
 $route->get('/{lang}/{url}', '\system\frontend\Page::displayLangAndUrl');
-
-// only url
-$route->get('/{url}', '\system\frontend\Page::displayUrl');
-$route->get('/', '\system\frontend\Page::displayHome');
 
 
 /**

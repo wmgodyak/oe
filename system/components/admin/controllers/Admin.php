@@ -142,7 +142,7 @@ class Admin extends Backend {
         }
 
         // витягнути список доступних мовних версій
-        $langs = t()->getLangs();
+        $langs = t()->getLangs($this->template->theme);
         $this->template->assign('langs', $langs);
 
         $this->template->display('system/admin/login');

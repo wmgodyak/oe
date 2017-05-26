@@ -77,5 +77,4 @@ class Languages extends Model
     {
         return self::$db->select("select * from __languages order by is_main desc, name asc")->all();
     }
-
 }

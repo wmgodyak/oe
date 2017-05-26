@@ -2,6 +2,8 @@
 
 namespace system\models;
 
+use system\core\Session;
+
 defined('CPATH') or die();
 
 /**
@@ -30,7 +32,7 @@ class Users extends Frontend
             "select u.{$key}, g.backend, gi.name as group_name
             from __users u
             join __users_group g on g.id=u.group_id
-            join __users_group_info gi on gi.group_id=u.group_id and gi.languages_id={$this->languages_id}
+            join __users_group_info gi on gi.group_id=u.group_id and gi.languages_id={$this->languages->id}
             where u.id = '{$id}'
             limit 1"
         )->row($key);
@@ -58,7 +60,11 @@ class Users extends Frontend
     public function update($id, $data)
     {
         if(isset($data['password'])){
-            $data['password'] = $this->cryptPassword($data['password']);
+            if(empty($data['password'])) {
+                
+            } else {
+                $data['password'] = $this->cryptPassword($data['password']);
+            }
         }
 
         $data['updated'] = $this->now();
@@ -299,6 +305,7 @@ class Users extends Frontend
     {
         if(empty($id)) return null;
 
-        return self::$db->update('__users', array('sessid'=>''), " id = '{$id}' limit 1");
+        self::$db->update('__users', array('sessid'=>''), " id = '{$id}' limit 1");
+        Session::delete('user');
     }
 }

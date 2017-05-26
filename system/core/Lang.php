@@ -8,6 +8,7 @@
 
 namespace system\core;
 use system\core\exceptions\Exception;
+use system\models\Settings;
 
 /**
  * Class Lang
@@ -17,39 +18,39 @@ class Lang
 {
     private static $instance;
 
-    private $langs = array();
+    private $langs = [];
 
     private $translations = [];
-    private $dir;
-    private $lang = null;
+    private $lang;
 
     /**
      * Lang constructor.
-     * @param $theme
-     * @param $lang
      */
-    private function __construct($theme, $lang)
-    {
-        $this->dir  = "themes/$theme/lang/";
-        $this->lang = $lang;
-//        echo "Lang::construct $theme $lang";
-        $this->setTranslations();
-    }
+    private function __construct(){}
 
     private function __clone(){}
 
     /**
-     * @param null $theme
-     * @param null $lang
      * @return Lang
      */
-    public static function getInstance($theme = null, $lang = null)
+    public static function getInstance()
     {
         if(self::$instance == null){
-            self::$instance = new self($theme, $lang);
+            self::$instance = new self;
         }
 
         return self::$instance;
+    }
+
+    /**
+     * @param $theme
+     * @param $lang
+     */
+    public function set($theme, $lang)
+    {
+        $this->lang = $lang;
+
+        $this->setTranslations($theme, $lang);
     }
 
     public function getAllowedLanguages()
@@ -58,17 +59,14 @@ class Lang
     }
 
     /**
-     * @param null $theme
+     * @param $theme
      * @return array
      */
-    public function getLangs($theme = null)
+    public function getLangs($theme)
     {
-        $dir = $this->dir;
         $allowed = $this->getAllowedLanguages();
 
-        if($theme){
-            $dir = "themes/$theme/lang/";
-        }
+        $dir = "themes/$theme/lang/";
 
         if ($handle = opendir($dir)) {
             while (false !== ($entry = readdir($handle))) {
@@ -94,29 +92,75 @@ class Lang
     }
 
     /**
-     * @param null $dir
-     * @throws Exception
+     * @param $theme
+     * @param $lang
      */
-    public function setTranslations($dir = null)
+    public function setTranslations($theme, $lang)
     {
-        $dir = !$dir ? $this->dir : $dir;
+        $dir  = "themes/$theme/lang/";
 
         if(!is_dir(DOCROOT . $dir )) {
             return;
         }
 
-        if(empty($this->lang)) $this->lang = 'en';
+        if(empty($lang)) $lang = 'en';
 
-        $fn = DOCROOT . $dir . '/' . $this->lang .'.json';
-        if(! file_exists($fn)) $this->lang = 'en';
+        $fn = DOCROOT . $dir . '/' . $lang .'.json';
+        if(! file_exists($fn)) $lang = 'en';
 
-        $fn = DOCROOT . $dir . '/' . $this->lang .'.json';
+        $fn = DOCROOT . $dir . '/' . $lang .'.json';
         if(! file_exists($fn)) return ;
 
         $a = file_get_contents($fn, true);
         $a = json_decode($a, true);
 
         $this->translations = array_merge($this->translations, $a);
+
+
+        $this->readModules($lang);
+    }
+
+    /**
+     * @param $lang
+     */
+    private function readModules($lang)
+    {
+        $mode = Request::getInstance()->getMode();
+
+        $active = Settings::getInstance()->get('modules');
+        if(empty($active)){
+            return;
+        }
+
+        foreach ($active as $module=>$params) {
+
+            if($params['status'] != 'enabled') continue;
+
+            $module = lcfirst($module);
+
+            if($mode == 'backend'){
+
+                // replace module path
+                $t_path = DOCROOT . "modules/{$module}/lang/backend/$lang.json";
+                if(!file_exists($t_path)){
+                    $t_path = DOCROOT . "modules/{$module}/lang/backend/en.json";
+                }
+            } else {
+                $t_path = DOCROOT . "modules/{$module}/lang/$lang.json";
+                if(!file_exists($t_path)){
+                    $t_path = DOCROOT . "modules/{$module}/lang/en.json";
+                }
+            }
+
+
+            if(!file_exists($t_path)){
+                continue;
+            }
+
+            // load translations
+            $this->parseFile($t_path, $module);
+        }
+
     }
 
     /**
@@ -132,6 +176,7 @@ class Lang
     {
         $a = file_get_contents($path);
         $a = json_decode($a, true);
+
         if($parent){
             $this->translations[$parent] = $a;
         } else {

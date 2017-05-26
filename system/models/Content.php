@@ -9,6 +9,7 @@
 namespace system\models;
 
 use system\components\contentFeatures\models\ContentFeatures;
+use system\core\DataFilter;
 use system\core\exceptions\Exception;
 
 if ( !defined("CPATH") ) die();
@@ -22,7 +23,6 @@ class Content extends Frontend
     protected $type;
     public    $types_id;
     public    $subtypes_id;
-//    protected $languages;
     public $meta;
 
     /**
@@ -37,8 +37,6 @@ class Content extends Frontend
             $this->setTypeAndSubtype($type);
         }
 
-        $languages = new Languages();
-        $this->languages = $languages->get();
         $this->meta = new ContentMeta();
     }
 
@@ -145,7 +143,7 @@ class Content extends Frontend
     {
         $info = [];
 
-        foreach ($this->languages as $language) {
+        foreach ($this->languages->languages->get() as $language) {
             $info[$language['id']] = self::$db
                 ->select("select * from __content_info where content_id={$content_id} and languages_id={$language['id']} limit 1")
                 ->row();
@@ -153,11 +151,12 @@ class Content extends Frontend
 
         return $info;
     }
+
     private function getParentUrl($content_id)
     {
         $info = [];
 
-        foreach ($this->languages as $language) {
+        foreach ($this->languages->languages->get() as $language) {
             $info[$language['id']] = self::$db
                 ->select("select url from __content_info where content_id={$content_id} and languages_id={$language['id']} limit 1")
                 ->row('url');
@@ -196,6 +195,9 @@ class Content extends Frontend
     public function update($id)
     {
         $content = $this->request->post('content');
+
+        $content = DataFilter::apply('content.update', $content);
+
         if(isset($content['settings'])) {
             $content['settings'] = serialize($content['settings']);
         } else{
@@ -204,16 +206,7 @@ class Content extends Frontend
 
         $info = $this->request->post('content_info');
 
-//        FormValidation::setRule(['name', 'url'], FormValidation::REQUIRED);
-//
-//        foreach($info as $languages_id => $data){
-//            FormValidation::run($data);
-//        }
-//
-//        if(FormValidation::hasErrors()){
-//            $this->error = FormValidation::getErrors();
-//            return false;
-//        }
+        $info = DataFilter::apply('content.info.update', $info);
 
         foreach ($info as $languages_id=> $item) {
             if(empty($item['name'])){
@@ -303,6 +296,8 @@ class Content extends Frontend
     private function updateMeta($content_id)
     {
         $cm = $this->request->post('content_meta');
+
+        $cm = DataFilter::apply('content_meta.update', $cm);
         if($cm){
             foreach ($cm as $meta_k => $a) {
                 if(is_array($a)){
@@ -434,7 +429,7 @@ class Content extends Frontend
           select c.id, c.isfolder, c.status, ci.name as text
           from __content c
           join __content_types ct on ct.type = '{$type}' and ct.id=c.types_id
-          join __content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
+          join __content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages->id}
           where c.parent_id='{$parent_id}' and c.status in ('published', 'hidden')
           order by abs(c.position) asc, abs(c.id) asc
           ")->all();

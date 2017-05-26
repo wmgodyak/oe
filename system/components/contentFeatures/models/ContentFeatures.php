@@ -2,6 +2,7 @@
 
 namespace system\components\contentFeatures\models;
 
+use system\core\Languages;
 use system\models\Backend;
 
 /**
@@ -68,7 +69,7 @@ class ContentFeatures extends Backend
             $page = self::$db->select("select types_id, subtypes_id from __content where id={$content_id} limit 1")->row();
         }
 
-        $languages_id = self::$language_id;
+        $languages_id = Languages::getInstance()->id;
 
         $res = self::$db
             ->select
@@ -105,7 +106,7 @@ class ContentFeatures extends Backend
      */
     private static function getFeatures($parent_id, $content_id)
     {
-        $languages_id = self::$language_id;
+        $languages_id = Languages::getInstance()->id;
 
         $res = self::$db
             ->select

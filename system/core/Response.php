@@ -45,7 +45,7 @@ class Response
     /**
      * display content
      */
-    public function render()
+    public function display()
     {
         if(! headers_sent()){
             if(is_array($this->body) || is_object($this->body)){
@@ -59,7 +59,12 @@ class Response
             echo json_encode($this->body); die;
         }
 
-        echo $this->body; die;
+        $mode = Request::getInstance()->getMode();
+
+        $ns = 'system\core\\' . ucfirst($mode) . "Response";
+
+        $c = new $ns($this->body);
+        $c->display();
     }
 
     public function setHeader($header)
@@ -90,7 +95,6 @@ class Response
 
     public function asJSON()
     {
-        header('Content-Type: application/json');
         $this->ct = 'application/json';
     }
 

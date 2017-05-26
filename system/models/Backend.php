@@ -26,11 +26,6 @@ class Backend extends Model
         parent::__construct();
 
         $this->admin = Session::get('backend.admin');
-
-        $l = new Languages();
-
-        $this->languages    = $l->get();
-        $this->languages_id = $l->getDefault('id');
-        self::$language_id  = $this->languages_id;
+        $this->languages = \system\core\Languages::getInstance();
     }
 }

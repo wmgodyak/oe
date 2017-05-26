@@ -8,8 +8,6 @@
 
 namespace system\models;
 
-use system\core\Lang;
-
 defined("CPATH") or die();
 
 /**
@@ -69,7 +67,7 @@ class Modules
 
             $this->modules->{$_module} = $controller;
 
-            call_user_func(array($controller, 'boot'));
+            call_user_func(array($controller, 'init'));
         }
     }
 

@@ -36,7 +36,7 @@ class Guides extends Frontend
             ->select("
                 select c.id, i.name
                 from __content c
-                join __content_info i on i.content_id=c.id and i.languages_id={$this->languages_id}
+                join __content_info i on i.content_id=c.id and i.languages_id={$this->languages->id}
                 where c.external_id='{$key}' limit 1
               ")
             ->row();
@@ -60,7 +60,7 @@ class Guides extends Frontend
                 ->select("
                 select c.id, i.name, c.external_id as code
                 from __content c
-                join __content_info i on i.content_id=c.id and i.languages_id={$this->languages_id}
+                join __content_info i on i.content_id=c.id and i.languages_id={$this->languages->id}
                 where c.parent_id = '{$res['id']}' and c.status = 'published'
                 {$ob}
               ")
@@ -76,7 +76,7 @@ class Guides extends Frontend
             ->select("
                 select c.id, i.name, c.external_id
                 from __content c
-                join __content_info i on i.content_id=c.id and i.languages_id='{$this->languages_id}'
+                join __content_info i on i.content_id=c.id and i.languages_id='{$this->languages->id}'
                 where c.parent_id = '{$parent_id}' and c.status = 'published'
               ")
             ->all();

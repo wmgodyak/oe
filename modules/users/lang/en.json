@@ -1,0 +1,55 @@
+{
+  "links" : {
+      "login" : "Login",
+      "fp" : "Forgot password",
+      "register" : "Register"
+  },
+  "errors" : {
+    "e_pasw_length": "a weak password, enter at least 6 characters",
+    "e_pasw_equal": "passwords do not match",
+    "e_login_pass": "invalid username or password",
+    "e_not_logged_in": "log in or register to continue"
+  },
+  "profile": {
+    "title": "your contact information:",
+    "edit": "Edit profile",
+    "name": "your name",
+    "surname": "your name *",
+    "phone": "phone number",
+    "email": "e-mail *",
+    "save": "Save"
+  },
+  "fp": {
+    "title": "login to Internet-shop",
+    "email": "e-mail:",
+    "submit": "submit",
+    "login": "Login",
+    "Cancel": "Cancel",
+    "success": "We are send you link to reset password. Check you mail"
+  },
+  "login": {
+    "title": "login to Internet-shop",
+    "email": "e-mail:",
+    "password": "password:",
+    "fp_link": "forgot your password?",
+    "button": "log in",
+    "Cancel": "Cancel"
+  },
+  "new_psw": {
+    "password": "password:",
+    "password_c": "repeat Password:",
+    "Update": "Save"
+  },
+  "register": {
+    "title": "login to Internet-shop",
+    "name": "name:",
+    "email": "e-mail:",
+    "passowrd": "password:",
+    "pasword_c": "Confirm password:",
+    "Cancel": "Cancel",
+    "button": "register"
+  },
+  "nav": {
+    "profile_title": "my profile"
+  }
+}

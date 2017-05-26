@@ -45,21 +45,21 @@ class Page extends \system\Frontend
         $id = $this->settings->get('home_id');
         $page = $this->app->page->fullInfo($id);
 
-        $this->display($page);
+        return $this->display($page);
     }
 
     public function displayLang($code)
     {
-        if(empty($this->languages_id) && !isset($args['url']) && isset($code)){
+        if(empty($this->languages->id) && !isset($args['url']) && isset($code)){
             // short url
             $args['url'] = $code;
         }
 
-        $def_lang_id = $this->languages->getDefault('id');
-        $lang_id = $this->languages->getDataByCode($code, 'id');
+        $def_lang_id = $this->languages->languages->getDefault('id');
+        $lang_id = $this->languages->languages->getDataByCode($code, 'id');
 
         if(empty($lang_id)){
-            $this->e404();
+            return $this->e404();
         }
 
         if($def_lang_id == $lang_id){
@@ -74,32 +74,32 @@ class Page extends \system\Frontend
         $id = $this->settings->get('home_id');
         $page = $this->app->page->fullInfo($id, $lang_id);
 
-        $this->display($page);
+        return $this->display($page);
     }
 
     public function displayLangAndUrl($code, $url)
     {
-        $lang_id = $this->languages->getDataByCode($code, 'id');
+        $lang_id = $this->languages->languages->getDataByCode($code, 'id');
         $id = $this->app->page->getIdByUrl($url, $lang_id);
         if(empty($id)){
-            $this->e404();
+           return $this->e404();
         }
 
         $page = $this->app->page->fullInfo($id, $lang_id);
-        $this->display($page);
+        return $this->display($page);
     }
 
     public function displayUrl($url)
     {
-        $id = $this->app->page->getIdByUrl($url, $this->languages_id);
+        $id = $this->app->page->getIdByUrl($url, $this->languages->id);
 
         if(empty($id)){
-            $this->e404();
+            return $this->e404();
         }
 
         $page = $this->app->page->fullInfo($id);
 
-        $this->display($page);
+        return $this->display($page);
     }
 
     public function index(){}
