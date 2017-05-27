@@ -101,7 +101,7 @@ abstract class Frontend extends core\Controller
     protected function display($page)
     {
         if (!$page) {
-            $page = $this->e404();
+            return  $this->e404();
         }
 
 
