@@ -2288,35 +2288,13 @@ engine.nav = {
 
             var renderItems = function()
             {
-                engine.request.post({
-                    url: 'nav/getNavItems',
-                    data: {
-                        nav_id  : nav_id
-                    },
-                    success: function(res)
-                    {
-                        var cnt = $("#navItems");//, nsItems = $('.dd');
-                        var tmpl = _.template($('#nav_items').html());
-                        console.log(res);
-                        cnt.html(tmpl({items: res.items, templateFn : tmpl}));
-                        $('.dd').nestable();
-                        // nsItems.on('change', function(e) {
-                        //     var list   = e.length ? e : $(e.target);
-                        //     engine.request.post({
-                        //         url: 'nav/reorderItems',
-                        //         data: {
-                        //             nav_id : nav_id,
-                        //             items  : list.nestable('serialize')
-                        //         },
-                        //         success: function(res){
-                        //             if(res){
-                        //                 engine.notify("Позиції збережено", 'success');
-                        //             }
-                        //         }
-                        //     });
-                        // });
-                    }
-                });
+                engine.request.get('nav/getNavItems/'+nav_id, function(res){
+
+                    var cnt = $("#navItems");//, nsItems = $('.dd');
+                    var tmpl = _.template($('#nav_items').html());
+                    cnt.html(tmpl({items: res.items, templateFn : tmpl}));
+                    $('.dd').nestable();
+                })
             };
 
             var deleteItem = function(id)

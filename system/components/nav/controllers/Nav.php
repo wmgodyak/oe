@@ -185,9 +185,8 @@ class Nav extends Backend
        return ['s'=>$s];
     }
 
-    public function getNavItems()
+    public function getNavItems($nav_id = null)
     {
-        $nav_id  = $this->request->post('nav_id', 'i');
         if(empty($nav_id)) die;
 
         return ['items' => $this->nav->getSelectedItems($nav_id)];
