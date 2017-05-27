@@ -30,28 +30,23 @@ class Module extends Backend
 
         $params = isset($params[0]) ? $params[0]  : $params;
 
-
         $action = 'index';
         if(is_string($params)){
             $params = explode('/', $params);
         }
 
-
         $module = array_shift($params);
 
         if ($this->request->isGet()){
 
-            $this->makeCrumbs(t($module . '.action_index'), "module/run/{$module}");
-
-            $this->template->assign('title', t($module . '.action_' . $action));
-            $this->template->assign('name',  t($module . '.action_' . $action));
-
+            $this->request->param('controller', $module);
+            $this->request->param('action', $action);
         }
 
         if(isset($params[0])){
             $_params = $params;
             $sub_module = array_shift($_params);
-            $ns = "\modules\\$module\\controllers\\admin\\" . ucfirst($sub_module);
+            $ns = "\\modules\\$module\\controllers\\admin\\" . ucfirst($sub_module);
             $path = str_replace('\\', DIRECTORY_SEPARATOR, $ns . ".php");
             if(file_exists( DOCROOT . $path)){
                 if(!empty($_params)){
@@ -62,7 +57,7 @@ class Module extends Backend
             }
         }
 
-        $ns = "modules\\$module\\controllers\\admin\\" . ucfirst($module);
+        $ns = "\\modules\\$module\\controllers\\admin\\" . ucfirst($module);
         if(!empty($params)){
             $action = array_shift($params);
         }

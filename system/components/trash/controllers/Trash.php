@@ -56,7 +56,7 @@ class Trash extends Backend
     {
         $t = new DataTables2();
         $t  -> from('__content c')
-            -> join("__content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}")
+            -> join("__content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages->id}")
             -> join('__users u on u.id=c.owner_id')
             -> where(" c.status = 'deleted' ")
             -> execute();

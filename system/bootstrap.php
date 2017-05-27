@@ -30,10 +30,10 @@
     spl_autoload_register('autoLoad');
 
     require DOCROOT . "vendor/autoload.php";
-    include_once DOCROOT . "config/routes.php";
+    require DOCROOT . "config/routes.php";
 
     // init session
-    system\core\Session::init();
+    system\core\Session::start();
 
     if(!defined('TOKEN')) define('TOKEN', md5(\system\core\Session::id()));
 
@@ -46,5 +46,6 @@
 
     \system\models\Modules::getInstance();
 
-//    events()->debug();
+    \system\core\Lang::getInstance();
+
     events()->call('boot');

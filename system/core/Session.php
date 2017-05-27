@@ -21,7 +21,7 @@ class Session {
     /**
      * starts the session
      */
-    public static function init(){
+    public static function start(){
         // if no session exist, start the session
         if (session_id() == '') {
             session_name('oyiengine');
@@ -76,6 +76,7 @@ class Session {
 
         return isset($_SESSION[$key]) ? $_SESSION[$key] : null;
     }
+
     public static function delete($key)
     {
         if(!isset($_SESSION[$key])) return;

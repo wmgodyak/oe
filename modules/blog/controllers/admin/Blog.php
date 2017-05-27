@@ -240,6 +240,7 @@ class Blog extends Content
         EventsHandler::getInstance()->add('content.params.after', [$tags, 'index']);
 
         $this->template->assign('sidebar', $this->template->fetch('modules/blog/categories/tree'));
+
         parent::edit($id);
     }
 }

@@ -1,7 +1,7 @@
 <fieldset>
     <legend>{$t.content.legend_meta}</legend>
     <div class="fieldset-wrapper">
-        {foreach $languages as $i=>$lang}
+        {foreach $languages->get() as $i=>$lang}
             <div class="form-group lang-{$lang.code} switch-lang" {if $i>0}style="display:none"{/if}>
                 <label for="info_{$lang.id}_h1" class="col-md-2 control-label">{$t.content.h1}</label>
                 <div class="col-md-10">

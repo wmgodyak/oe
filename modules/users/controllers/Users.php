@@ -43,10 +43,6 @@ class Users extends Frontend
         events()->add('boot', function(){
 
             Route::getInstance()->get('/register', function(){
-
-                //todo move it from here
-                Lang::getInstance();
-
                 return $this->register();
             });
 
@@ -119,7 +115,7 @@ class Users extends Frontend
     {
         $user = Session::get('user');
         EventsHandler::getInstance()->call('user.logout', $user);
-        $this->redirect( APPURL);
+        $this->redirect( APPURL );
     }
 
     public function fp()

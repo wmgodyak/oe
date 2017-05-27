@@ -34,7 +34,7 @@ class Features extends Backend
 
         if ($key != '*') return $data;
 
-        foreach ($this->languages->get() as $language) {
+        foreach ($this->languages->languages->get() as $language) {
             $data['info'][$language['id']] =
                 self::$db
                     ->select("select * from __features_info where features_id={$id} and languages_id={$language['id']} limit 1")

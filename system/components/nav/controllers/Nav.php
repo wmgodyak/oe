@@ -196,7 +196,7 @@ class Nav extends Backend
     public function createItem($parent_id)
     {
         $this->template->assign('id', $parent_id);
-        $this->template->assign('languages', $this->languages->get());
+        $this->template->assign('languages', $this->languages->languages->get());
         $this->template->assign('action', 'create');
         $this->template->display('system/nav/itemForm');
     }
@@ -206,7 +206,7 @@ class Nav extends Backend
         $this->template->assign('id', $id);
         $this->template->assign('data', $this->nav->items->getData($id));
         $this->template->assign('info', $this->nav->items_info->getData($id));
-        $this->template->assign('languages', $this->languages->get());
+        $this->template->assign('languages', $this->languages->languages->get());
         $this->template->assign('action', 'edit');
         $this->template->display('system/nav/itemForm');
     }

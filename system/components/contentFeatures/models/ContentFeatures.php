@@ -21,7 +21,7 @@ class ContentFeatures extends Backend
                 select f.id, f.type, f.required, f.multiple, fi.name
                 from __features_content fc
                 join __features f on f.id=fc.features_id and f.status='published'
-                join __features_info fi on fi.features_id=f.id and fi.languages_id={$this->languages_id}
+                join __features_info fi on fi.features_id=f.id and fi.languages_id={$this->languages->id}
                 where
                   fc.content_types_id={$page['types_id']} and
                   fc.content_subtypes_id in (0, {$page['subtypes_id']}) and

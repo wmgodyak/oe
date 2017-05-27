@@ -59,7 +59,7 @@ class Features extends Backend
         if($this->request->isXhr()){
 
             $t  -> from('__features f')
-                -> join("__features_info i on i.features_id=f.id and i.languages_id={$this->languages_id}")
+                -> join("__features_info i on i.features_id=f.id and i.languages_id={$this->languages->id}")
                 -> where("f.parent_id = {$parent_id}")
                 -> execute();
 

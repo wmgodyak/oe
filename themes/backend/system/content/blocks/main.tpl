@@ -13,7 +13,7 @@
             </div>
         </div>
         {/if}
-        {foreach $languages as $i=>$lang}
+        {foreach $languages->get() as $i=>$lang}
         <div class="form-group lang-{$lang.code} switch-lang" {if $i>0}style="display:none"{/if}>
             <label for="info_{$lang.id}_name" class="col-md-2 control-label">{$t.content.name}</label>
             <div class="col-md-10">
