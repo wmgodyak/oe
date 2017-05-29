@@ -36,15 +36,15 @@ class Blog extends Frontend
     {
         events()->add('boot', function(){
 
-            Route::getInstance()->get('/blog/author/{id}', function($id){
+            Route::getInstance()->get('blog/author/{id}', function($id){
                 return $this->searchByAuthor($id);
             });
 
-            Route::getInstance()->get('/blog/tag/{alpha}', function($tag){
+            Route::getInstance()->get('blog/tag/{alpha}', function($tag){
                 return $this->searchByTag($tag);
             });
 
-            Route::getInstance()->get('/blog/post/collect/{id}', function($id = null){
+            Route::getInstance()->get('blog/post/collect/{id}', function($id = null){
                 header('Content-Type: application/javascript');
                 if(empty($id)) return null;
                 $this->collect($id);
@@ -155,7 +155,7 @@ class Blog extends Frontend
     public function searchByAuthor($author_id)
     {
         if(empty($author_id)){
-            return $this->e404();
+            $this->e404();
         }
 
         $blog = [];
@@ -198,7 +198,7 @@ class Blog extends Frontend
     public function searchByTag($tag)
     {
         if(empty($tag)){
-            return $this->e404();
+            $this->e404();
         }
 
         $blog = []; $errors = [];

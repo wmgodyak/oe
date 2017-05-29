@@ -114,9 +114,11 @@ abstract class Backend extends Controller
         $theme = $this->settings->get('backend_theme');
         $lang = Session::get('backend_lang');
 
-        Lang::getInstance()->set($theme, $lang);
+        Lang::getInstance()->set($lang, $theme);
 
         Components::init();
+
+        events()->call('init');
 
         $app = App::getInstance();
         $this->template->assign('app', $app);
@@ -128,7 +130,7 @@ abstract class Backend extends Controller
         Modules::getInstance()->init('backend', $lang);
 
         $this->template->assign('languages',  $this->languages->languages);
-        $this->template->assign('t', t()->get());
+        $this->template->assign('t', t()->get()); // todo remove it in future
 
         $this->template->assign('admin', Admin::data());
     }

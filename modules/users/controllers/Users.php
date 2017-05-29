@@ -42,28 +42,21 @@ class Users extends Frontend
 
         events()->add('boot', function(){
 
-            Route::getInstance()->get('/{lang}/login', function(){
-//                dd($this->request->param());
-                return $this->register();
-            });
-            Route::getInstance()->get('/login', function(){
+            Route::getInstance()->get('{lang}/login', function(){
                 return $this->register();
             });
 
-            Route::getInstance()->get('/register', function(){
+            Route::getInstance()->get('login', function(){
                 return $this->register();
             });
 
-            Route::getInstance()->get('/{lang}/register', function($lang){
-
-                $s = $this->languages->setByCode($lang);
-                if(! $s) return $this->e404();
-
-                Lang::getInstance()->set($this->template->theme, $lang);
-
+            Route::getInstance()->get('register', function(){
                 return $this->register();
             });
 
+            Route::getInstance()->get('{lang}/register', function($lang){
+                return $this->register();
+            });
         });
 
         events()->add('init', function($page){
@@ -284,7 +277,6 @@ class Users extends Frontend
             $data = $this->request->post('data'); $i=[]; $s = 0;
 
             FormValidation::setRule(['password', 'password_c'], FormValidation::REQUIRED);
-//            FormValidation::setRule(['password'], FormValidation::PASSWORD);
             FormValidation::run($data);
 
             if(FormValidation::hasErrors()){

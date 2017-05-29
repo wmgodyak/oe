@@ -7,7 +7,6 @@
  */
 namespace system;
 
-use system\core\EventsHandler;
 use system\core\exceptions\Exception;
 use system\core\Request;
 use system\core\Session;
@@ -58,7 +57,7 @@ abstract class Frontend extends core\Controller
 
     /**
      * Current page info
-     * @var string
+     * @var array
      */
     public $page = [];
 
@@ -74,25 +73,37 @@ abstract class Frontend extends core\Controller
 
         $this->app = App::getInstance();
 
-        // template settings
-        $theme = $this->settings->get('app_theme_current');
-        $this->template = Template::getInstance($theme);
+        if( ! $this->template ){
+            $theme = $this->settings->get('app_theme_current');
+            $this->template = Template::getInstance($theme);
+        }
 
         // to access custom modules
         $this->page = $this->template->getVars('page');
 
         if(! $this->request->param('initialized')){
 
+            $this->request->param('initialized', 1);
+
             $this->template->assign('base_url',    APPURL );
             $this->template->assign('app', $this->app);
 
-            // todo events_add && events_call
             $events = events();
+
+            $events->add('route', function($request){
+                $lang = $request->param('lang');
+                if($lang != null){
+                    $s = $this->languages->setByCode($lang);
+                    if(! $s) $this->e404();
+                    \system\core\Lang::getInstance()->set($this->languages->code, $this->template->theme);
+               }
+            });
+
             $this->template->assign('events', $events);
 
             $this->template->assign('settings', $this->settings);
 
-            $this->request->param('initialized', 1);
+            \system\core\Lang::getInstance()->set($this->languages->code, $this->template->theme);
         }
     }
 
@@ -101,9 +112,8 @@ abstract class Frontend extends core\Controller
     protected function display($page)
     {
         if (!$page) {
-            return  $this->e404();
+            $this->e404();
         }
-
 
         if($this->settings->get('active') == 0) {
             $a = Session::get('backend.admin');
@@ -117,7 +127,7 @@ abstract class Frontend extends core\Controller
         if (isset($page['status']) && $page['status'] != 'published') {
             $a = Session::get('engine.admin');
             if (!$a) {
-                return $this->e404();
+                $this->e404();
             }
         }
 
@@ -198,7 +208,7 @@ abstract class Frontend extends core\Controller
     protected function e404()
     {
         header("HTTP/1.0 404 Not Found");
-        return $this->template->fetch('layouts/404');
+        $this->template->display('layouts/404');
     }
 
     /**

@@ -7,7 +7,6 @@
  */
 
 namespace system\core;
-use system\core\exceptions\Exception;
 use system\models\Settings;
 
 /**
@@ -22,6 +21,7 @@ class Lang
 
     private $translations = [];
     private $lang;
+    private $theme;
 
     /**
      * Lang constructor.
@@ -44,13 +44,26 @@ class Lang
 
     /**
      * @param $theme
-     * @param $lang
+     * @return $this
      */
-    public function set($theme, $lang)
+    public function setTheme($theme)
+    {
+        $this->theme = $theme;
+
+        return $this;
+    }
+
+    /**
+     * @param $lang
+     * @param null $theme
+     */
+    public function set($lang, $theme = null)
     {
         $this->lang = $lang;
 
-        $this->setTranslations($theme, $lang);
+        if($theme) $this->theme = $theme;
+
+        $this->setTranslations($lang);
     }
 
     public function getAllowedLanguages()
@@ -92,15 +105,15 @@ class Lang
     }
 
     /**
-     * @param $theme
      * @param $lang
+     * @throws \Exception
      */
-    public function setTranslations($theme, $lang)
+    public function setTranslations($lang)
     {
-        $dir  = "themes/$theme/lang/";
+        $dir  = "themes/$this->theme/lang/";
 
         if(!is_dir(DOCROOT . $dir )) {
-            return;
+            throw new \Exception("No theme defined");
         }
 
         if(empty($lang)) $lang = 'en';
@@ -115,7 +128,6 @@ class Lang
         $a = json_decode($a, true);
 
         $this->translations = array_merge($this->translations, $a);
-
 
         $this->readModules($lang);
     }
@@ -225,7 +237,6 @@ class Lang
 
             return isset($this->translations[$key])? $this->translations[$key] : $key;
         }
-
 
         return $this->translations;
     }

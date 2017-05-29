@@ -21,12 +21,10 @@ require_once DOCROOT. "vendor/smarty/smarty/libs/Autoloader.php";
 class Template
 {
     private static $instance;
-    public $theme = null;
+    public $theme;
     public $theme_url;
     public $theme_path;
     private $smarty;
-
-    private $storage = [];
 
     /**
      * list of attached scripts

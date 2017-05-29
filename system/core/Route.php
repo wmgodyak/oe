@@ -70,7 +70,7 @@ class Route
             exit();
         }
 
-        $this->uri = rtrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+        $this->uri = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
         $this->uri = $this->protect($this->uri);
     }
 
@@ -179,10 +179,12 @@ class Route
         $actions = array_merge($this->actions['ANY'], $this->actions[$method]);
 
         $mode = 'frontend';
+        $request = Request::getInstance($mode);
         $backend_url = Settings::getInstance()->get('backend_url');
         $response  = Response::getInstance();
 
         foreach ($actions as $route) {
+
             // for admin panel
             $regex = str_replace('backend', $backend_url, $route[0]);
 
@@ -200,10 +202,15 @@ class Route
 
             if(preg_match("@^$regex$@siu", $this->uri, $matches)){
 
-//                d($this->uri);
-//                d($route);
-//                d($regex);
-//                d($matches);
+//                d($route[0]);
+                $request_params = [];
+
+                $a = explode('/', $route[0]);
+                foreach ($a as $k=>$pattern) {
+                    if(strpos($pattern,'{') !== false){
+                        $request_params[] = ['name' => str_replace(['{', '}'], [], $pattern)];
+                    }
+                }
 
                 $params = [];
                 $callback = $route[1];
@@ -213,10 +220,21 @@ class Route
                     foreach ($params as $k=>$v) {
                         $v = trim($v);
                         if(empty($v)) unset($params[$k]);
+
+                        if(isset($request_params[$k])){
+                            $request_params[$k]['value'] = $v;
+                        }
+                    }
+                }
+
+                if(!empty($request_params)){
+                    foreach ($request_params as $param) {
+                        $request->param($param['name'], $param['value']);
                     }
                 }
 
                 if(is_callable($callback, true) && !is_string($callback)){
+                    events()->call('route', ['request' => $request]);
                     return $response->body(call_user_func_array($callback, $params));
                 } else {
 
@@ -252,15 +270,9 @@ class Route
 
                     $controller = ucfirst($controller);
 
-                    Request::getInstance($mode)
-                        ->param('controller', $controller)
-                        ->param('action',     $action);
-
-//                    Request::getInstance()->param('args', $params);
-
-                    foreach ($params as $k=>$v) {
-                        Request::getInstance()->param($k, $v);
-                    }
+                    $request->setMode($mode);
+                    $request->param('controller', $controller);
+                    $request->param('action',     $action);
 
                     // maybe it is module
                     $_module  = "modules\\" . lcfirst($controller) . "\\controllers\\$controller";
@@ -314,6 +326,10 @@ class Route
      */
     private function call($controller, $action, $params)
     {
+        events()->call('route');
+        events()->call('route.' . str_replace('\\', '.' , trim($controller, '/')));
+        events()->call('route.' . str_replace('\\', '.' , trim($controller, '/')) . '.' . $action);
+        events()->display();
         $controller = new $controller;
 
         if(!is_callable([$controller, $action])){
