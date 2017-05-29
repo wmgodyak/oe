@@ -194,14 +194,16 @@ class Route
                 }
             }
 
-            // if found like this /post/{post}/comment/{comment}
             if(strpos($regex,'{') !== false){
                 $regex = preg_replace('(\{[[:alpha:]]+\})', $this->patterns['url'], $regex);
             }
 
             if(preg_match("@^$regex$@siu", $this->uri, $matches)){
 
-//                d($this->uri); d($route); d($regex);d($matches);
+//                d($this->uri);
+//                d($route);
+//                d($regex);
+//                d($matches);
 
                 $params = [];
                 $callback = $route[1];

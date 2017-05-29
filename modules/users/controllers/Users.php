@@ -42,6 +42,14 @@ class Users extends Frontend
 
         events()->add('boot', function(){
 
+            Route::getInstance()->get('/{lang}/login', function(){
+//                dd($this->request->param());
+                return $this->register();
+            });
+            Route::getInstance()->get('/login', function(){
+                return $this->register();
+            });
+
             Route::getInstance()->get('/register', function(){
                 return $this->register();
             });
@@ -49,11 +57,9 @@ class Users extends Frontend
             Route::getInstance()->get('/{lang}/register', function($lang){
 
                 $s = $this->languages->setByCode($lang);
-                if(! $s) $this->e404();
+                if(! $s) return $this->e404();
 
-                //todo move it from here
-
-//                Lang::getInstance()->set($this->template->theme, $lang);
+                Lang::getInstance()->set($this->template->theme, $lang);
 
                 return $this->register();
             });
@@ -300,7 +306,6 @@ class Users extends Frontend
 
             return ['s'=>$s, 'i' => $i];
         }
-
 
         return $this->template->fetch('modules/users/password');
     }
