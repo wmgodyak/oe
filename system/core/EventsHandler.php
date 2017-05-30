@@ -133,7 +133,10 @@ class EventsHandler
 
     public function clear($action = null)
     {
-        if($action) self::$events[$action] = [];
+        if($action){
+            self::$events[$action] = [];
+            return;
+        }
         self::$events = [];
     }
 }

@@ -118,8 +118,8 @@ abstract class Backend extends Controller
         $app = App::getInstance();
         $this->template->assign('app', $app);
 
-
         Modules::getInstance()->init('backend', $lang);
+
         // remove frontend events
         $events->clear('init');
         $events->call('init');
