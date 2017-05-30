@@ -210,7 +210,7 @@ class Admin extends Backend {
         Session::destroy();
         setcookie('fail', '', time() - 3600);
 
-        $this->redirect('/');
+        redirect('/');
     }
 
     public function profile()

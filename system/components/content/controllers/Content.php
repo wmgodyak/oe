@@ -96,7 +96,7 @@ class Content extends Backend
         $content = $this->mContent->getData($id);
 
         if(empty($content)){
-            $this->redirect('dashboard', 404);
+            redirect('dashboard', 404);
         }
 
         if($this->mContent->hasError()){

@@ -68,8 +68,6 @@ abstract class Backend extends Controller
         $this->template->assign('base_url',   APPURL . $this->settings->get('backend_url') ."/");
         $this->template->assign('settings',   $this->settings);
 
-        $this->validateToken();
-
         if(!self::$initialized){
              $this->_init();
         }
@@ -83,6 +81,16 @@ abstract class Backend extends Controller
     {
         self::$initialized = true;
 
+        if
+        (
+               $this->request->isPost()
+            || $this->request->isPut()
+            || $this->request->isDelete()
+        )
+        {
+            validateToken();
+        }
+
         $action      = $this->request->param('action');
 
         $controller = $this->request->param('controller');
@@ -94,7 +102,7 @@ abstract class Backend extends Controller
         )
         ){
             if( $controller != 'admin' && $action != 'login' ){
-                $this->redirect("/{$this->settings->get('backend_url')}/admin/login");
+                redirect("/{$this->settings->get('backend_url')}/admin/login");
             }
         }
 

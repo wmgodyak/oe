@@ -19,10 +19,7 @@ abstract class Controller
      * system version
      */
     const VERSION = "7.2.7";
-    /**
-     * @var
-     */
-    protected $storage;
+
     /**
      * @var Request
      */
@@ -31,6 +28,7 @@ abstract class Controller
      * @var Response
      */
     protected $response;
+
     /**
      * error handler
      * @var object
@@ -60,40 +58,6 @@ abstract class Controller
 
         // on page init
 //        events()->add('init', function(){});
-    }
-
-    /**
-     *	Setter method
-     *	@param string $index
-     *	@param mixed $value
-     */
-    final public function __set($index, $value)
-    {
-        $this->storage[$index] = $value;
-    }
-// todo move it from here
-    public function redirect($uri, $header = null)
-    {
-        switch($header){
-            case 404:
-                header("HTTP/1.0 404 Not Found");
-                break;
-            default:
-                break;
-        }
-
-        header('Location: ' . $uri);die;
-    }
-
-// todo move it to helper
-    protected function validateToken()
-    {
-        if($this->request->isPost()) {
-            $token = $this->request->post('token');
-            if($token != TOKEN){
-                die('#1201. Invalid token.');
-            }
-        }
     }
 
     public function __toString()

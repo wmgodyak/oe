@@ -22,7 +22,7 @@ class Module extends Backend
 
         if(empty($params)) {
             if($this->request->isGet()) {
-                $this->redirect('dashboard', 404);
+                redirect('dashboard', 404);
             } else{
                 die;
             }
@@ -75,7 +75,7 @@ class Module extends Backend
         $module = new $ns;
         if(!is_callable(array($module, $action))){
             if($this->request->isGet()) {
-                $this->redirect('dashboard', 404);
+                redirect('dashboard', 404);
             } else{
                 die;
             }

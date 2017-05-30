@@ -96,7 +96,7 @@ class Nav extends Backend
     public function edit($id)
     {
         $data = $this->nav->getData($id);
-        if(empty($data)) $this->redirect(404);
+        if(empty($data)) redirect(404);
 
         $this->appendToPanel
         (

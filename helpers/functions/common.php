@@ -302,4 +302,35 @@ if( ! function_exists('route')){
 
         return '/'.$prefix . $url;
     }
+
+}
+
+function validateToken($token = null)
+{
+    $request = \system\core\Request::getInstance();
+    if(! $token) {
+        $token = $request->post('token');
+    }
+
+    if($token != TOKEN){
+        if($request->isXhr()){
+            // todo send json encoded response
+        }
+        die('#1201. Invalid token.');
+    }
+}
+
+/**
+ * @param $uri
+ * @param int $status_code
+ */
+function redirect($uri, $status_code = 303)
+{
+    if(strpos($uri, 'http') === false){
+        $uri = APPURL . $uri;
+    }
+
+    header('Location: ' . $uri, true, $status_code);
+
+    die;
 }

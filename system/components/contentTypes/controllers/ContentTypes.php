@@ -156,7 +156,7 @@ class ContentTypes extends Backend
     public function edit($id)
     {
         $data = $this->contentTypes->getData($id);
-        if(empty($data)) $this->redirect(404);
+        if(empty($data)) redirect(404);
 
         $this->appendToPanel
         (
