@@ -10,9 +10,9 @@ $route = \system\core\Route::getInstance();
 /**
  * FRONTEND
  */
-$route->get('/', '\system\frontend\Page::displayHome');
-// only url
 $route->get('{url}', '\system\frontend\Page::displayUrl');
+// only url
+$route->get('/', '\system\frontend\Page::displayHome');
 
 // cron
 $route->get('system/cron', '\system\Cron');

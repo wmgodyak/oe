@@ -41,7 +41,7 @@ class EventsHandler
     public static function getInstance()
     {
         if(!self::$instance instanceof self){
-            self::$instance = new EventsHandler();
+            self::$instance = new self;
         }
 
         return self::$instance;

@@ -43,11 +43,11 @@ class Users extends Frontend
         events()->add('boot', function(){
 
             Route::getInstance()->get('{lang}/login', function(){
-                return $this->register();
+                return $this->login();
             });
 
             Route::getInstance()->get('login', function(){
-                return $this->register();
+                return $this->login();
             });
 
             Route::getInstance()->get('register', function(){

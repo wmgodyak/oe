@@ -113,16 +113,17 @@ abstract class Backend extends Controller
 
         Components::init();
 
-        events()->call('init');
+        $events = EventsHandler::getInstance();
 
         $app = App::getInstance();
         $this->template->assign('app', $app);
 
-        // assign events
-        $events = EventsHandler::getInstance();
-        $this->template->assign('events', $events);
 
         Modules::getInstance()->init('backend', $lang);
+        $events->call('backend.init');
+
+        // assign events
+        $this->template->assign('events', $events);
 
         $this->template->assign('languages',  $this->languages->languages);
         $this->template->assign('t', t()->get()); // todo remove it in future
