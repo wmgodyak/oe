@@ -88,7 +88,7 @@ abstract class Backend extends Controller
             || $this->request->isDelete()
         )
         {
-            validateToken();
+            token_validate();
         }
 
         $action      = $this->request->param('action');

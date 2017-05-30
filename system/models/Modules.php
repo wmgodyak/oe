@@ -59,12 +59,7 @@ class Modules
             $controller = new $c;
 
             $_module = lcfirst($module);
-
-            $config = $this->readConfig($_module, (isset($params['config']) ? $params['config'] : []));
-
-            // assign config to module
-            $controller->config = $config;
-
+//            $controller->config = module_config($_module);
             $this->modules->{$_module} = $controller;
 
             call_user_func(array($controller, 'init'));

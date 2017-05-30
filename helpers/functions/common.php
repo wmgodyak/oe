@@ -285,7 +285,6 @@ if (!function_exists('events')){
 
     function events()
     {
-
         return \system\core\EventsHandler::getInstance();
     }
 
@@ -305,22 +304,48 @@ if( ! function_exists('route')){
 
 }
 
-function validateToken($token = null)
+/**
+ * Request token generator
+ * @return mixed|string
+ */
+function token_make()
+{
+    $token = \system\core\Session::get('token');
+
+    if(empty($token)){
+        $token = hash('sha256', uniqid(mt_rand()));
+        \system\core\Session::set('token', $token);
+    }
+
+    return $token;
+}
+
+/**
+ * Request token validator
+ * @param null $token
+ */
+function token_validate($token = null)
 {
     $request = \system\core\Request::getInstance();
+
     if(! $token) {
         $token = $request->post('token');
     }
 
     if($token != TOKEN){
+
         if($request->isXhr()){
-            // todo send json encoded response
+            header('Content-Type: application/json');
+            echo json_encode(['error' => '#1201. Invalid token.']);
+            die;
         }
+
         die('#1201. Invalid token.');
     }
 }
 
 /**
+ * Simple redirect tool
  * @param $uri
  * @param int $status_code
  */

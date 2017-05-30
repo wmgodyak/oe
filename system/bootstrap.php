@@ -32,7 +32,7 @@
     // init session
     system\core\Session::start();
 
-    if(!defined('TOKEN')) define('TOKEN', md5(\system\core\Session::id()));
+    if(!defined('TOKEN')) define('TOKEN', token_make());
 
     $config = \system\core\Config::getInstance();
     if($config->get('db') == null){
