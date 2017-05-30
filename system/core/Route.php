@@ -309,6 +309,7 @@ class Route
                         throw new \Exception('Route not found', 404);
                     }
 
+                    events()->call('route', ['request' => $request]);
                     return $this->call($controller, $action, $params);
                 }
             }
@@ -326,10 +327,9 @@ class Route
      */
     private function call($controller, $action, $params)
     {
-        events()->call('route');
         events()->call('route.' . str_replace('\\', '.' , trim($controller, '/')));
         events()->call('route.' . str_replace('\\', '.' , trim($controller, '/')) . '.' . $action);
-        events()->display();
+
         $controller = new $controller;
 
         if(!is_callable([$controller, $action])){

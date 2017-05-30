@@ -35,11 +35,6 @@ abstract class Backend extends Controller
      * @var string
      */
     private $content;
-    /**
-     * buttons
-     * @var array
-     */
-    private $buttons = array();
 
     protected $settings;
 

@@ -37,11 +37,11 @@ class Blog extends Frontend
         events()->add('boot', function(){
 
             Route::getInstance()->get('blog/author/{id}', function($id){
-                return $this->searchByAuthor($id);
+                $this->searchByAuthor($id);
             });
 
             Route::getInstance()->get('blog/tag/{alpha}', function($tag){
-                return $this->searchByTag($tag);
+                $this->searchByTag($tag);
             });
 
             Route::getInstance()->get('blog/post/collect/{id}', function($id = null){
