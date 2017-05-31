@@ -22,7 +22,6 @@ class Users extends Frontend
 {
     protected $users;
     protected $group_id;
-
     protected $config;
 
     public function __construct()
@@ -59,7 +58,7 @@ class Users extends Frontend
             });
         });
 
-        events()->add('init', function($page){
+        events()->add('init', function(){
 
             $this->template->assignScript("modules/users/js/users.js");
             $this->template->assign('user', Session::get('user'));
@@ -70,37 +69,43 @@ class Users extends Frontend
     public function login()
     {
         if($this->request->isPost()){
-            $status = 0; $i = []; $data = $this->request->post('data');
+
+            token_validate();
+
+            $status = 0; $i = [];
+            $email = $this->request->post('email');
+            $password = $this->request->post('password');
+
 
             FormValidation::setRule(['password', 'email'], FormValidation::REQUIRED);
             FormValidation::setRule('email', FormValidation::EMAIL);
-            FormValidation::run($data);
+            FormValidation::run($_POST);
 
             if(FormValidation::hasErrors()){
                 $i = FormValidation::getErrors();
             } else {
-                $user = $this->users->getUserByEmail($data['email']);
+                $user = $this->users->getUserByEmail($email);
 
                 if(empty($user)){
-                    $i[] = ['data[password]' => t('users.e_login_pass')];
+                    $i[] = ['password' => t('users.e_login_pass')];
                 } elseif($user['status'] == 'ban'){
-                    $i[] = ['data[password]' => t('users.e_login_ban')];
+                    $i[] = ['password' => t('users.e_login_ban')];
                 } elseif($user['status'] == 'deleted'){
-                    $i[] = ['data[password]' => t('users.e_login_deleted')];
-                } else if ($this->users->checkPassword($data['password'], $user['password'])){
+                    $i[] = ['password' => t('users.e_login_deleted')];
+                } else if ($this->users->checkPassword($password, $user['password'])){
                     if($user['backend'] == 1){
-                        $i[] = ['data[password]' => "Адміністратори не можуть логінитись на сайті"];
+                        $i[] = ['password' => "Адміністратори не можуть логінитись на сайті"];
                     } else {
                         $status = $this->users->setOnline($user);
                         if($status){
                             Session::set('user', $user);
                         } else {
-                            $i[] = ['data[password]' => $this->users->getError()];
+                            $i[] = ['password' => $this->users->getError()];
                         }
                     }
 
                 } else {
-                    $i[] = ['data[password]' => t('users.e_login_pass')];
+                    $i[] = ['password' => t('users.e_login_pass')];
                 }
             }
 
@@ -114,7 +119,9 @@ class Users extends Frontend
     {
         $user = Session::get('user');
         EventsHandler::getInstance()->call('user.logout', $user);
-        $this->redirect( APPURL );
+
+        $this->users->logout($user['id']);
+        redirect( APPURL );
     }
 
     public function fp()
@@ -225,7 +232,7 @@ class Users extends Frontend
         if(!$user){
             $url = $this->getUrl(29); //profile
 
-            $this->redirect( APPURL . $url);
+            redirect( APPURL . $url);
         }
 
         if($this->request->isPost()){

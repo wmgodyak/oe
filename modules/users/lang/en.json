@@ -4,6 +4,26 @@
       "fp" : "Forgot password",
       "register" : "Register"
   },
+  "login": {
+    "form": {
+      "title": "Login area",
+      "description": "<p>If you have an account please enter the username & password here</p>",
+      "labels": {
+        "email": "Your email",
+        "password": "Your password",
+        "remember": "Remember me!",
+        "submit" : "Login"
+      }
+    },
+    "email": "e-mail:",
+    "password": "password:",
+    "fp_link": "forgot your password?",
+    "button": "log in",
+    "Cancel": "Cancel"
+  },
+
+
+
   "errors" : {
     "e_pasw_length": "a weak password, enter at least 6 characters",
     "e_pasw_equal": "passwords do not match",
@@ -26,14 +46,6 @@
     "login": "Login",
     "Cancel": "Cancel",
     "success": "We are send you link to reset password. Check you mail"
-  },
-  "login": {
-    "title": "login to Internet-shop",
-    "email": "e-mail:",
-    "password": "password:",
-    "fp_link": "forgot your password?",
-    "button": "log in",
-    "Cancel": "Cancel"
   },
   "new_psw": {
     "password": "password:",

@@ -19,7 +19,8 @@ class Blog extends Frontend
 {
     public  $posts;
     private $categories;
-    private $config;
+
+    protected $config;
 
     public function __construct()
     {
