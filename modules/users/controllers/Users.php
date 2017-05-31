@@ -7,6 +7,7 @@ use system\core\EventsHandler;
 use system\core\Lang;
 use system\core\Route;
 use system\core\Session;
+use system\core\Validator;
 use system\Frontend;
 use system\models\Mailer;
 

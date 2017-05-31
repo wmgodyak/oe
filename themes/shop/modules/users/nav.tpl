@@ -11,7 +11,7 @@
     <ul class="hotline nav-left">
         <li>
             <span class="wellcome">Hi, {$user.name}
-                <a href="{route('profile')}">Profile</a> | <a href="/logout">Logout</a>
+                <a href="{route('profile')}">Profile</a> | <a href="{route('logout')}">Logout</a>
             </span>
         </li>
     </ul>
