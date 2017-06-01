@@ -146,10 +146,6 @@ abstract class Frontend extends core\Controller
         $this->template->assign('app', $this->app);
         $this->template->assign('modules_scripts', $this->template->getScripts());
 
-        if ($page['id'] == $this->settings->get('page_404')) {
-            $this->response->sendError(404);
-        }
-
         // fetch template
         $template_path = $this->settings->get('themes_path')
             . $this->settings->get('app_theme_current') . '/'
