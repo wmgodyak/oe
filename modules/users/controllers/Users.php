@@ -40,6 +40,12 @@ class Users extends Frontend
     {
         parent::init();
 
+        $validator = new Validator();
+        $validator->run(
+            ['name'=> 'a', 'surname' => ''],
+            ['name' => 'required']
+        );
+die;
         events()->add('boot', function(){
 
             Route::getInstance()->get('{lang}/login', function(){

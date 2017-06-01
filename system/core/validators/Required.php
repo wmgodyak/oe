@@ -9,15 +9,9 @@ use system\core\ValidatorInterface;
  */
 class Required implements ValidatorInterface
 {
-    private $error = null;
-
-    public function getError()
-    {
-        return $this->error;
-    }
-
     public function validate($data)
     {
-        // TODO: Implement validate() method.
+        d($data);
+        return false;
     }
 }

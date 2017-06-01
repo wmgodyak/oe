@@ -13,9 +13,27 @@ class Validator
     private $errors = [];
     private $rules  = [];
 
+    private $validators = [];
+
+    private $validation_methods = [];
+
+    private $ns = "system\\core\\validators\\";
+
     public function __construct()
     {
-        // todo read all validators and save it to
+        $path = str_replace("\\", DIRECTORY_SEPARATOR, $this->ns);
+        if ($handle = opendir(DOCROOT . $path)) {
+            while (false !== ($controller = readdir($handle))) {
+                if ($controller != "." && $controller != "..") {
+
+                    $controller = str_replace('.php', '', $controller);
+                    $c = $this->ns . $controller;
+                    $this->validators[$controller] = new $c;
+
+                }
+            }
+            closedir($handle);
+        }
     }
 
     public function rules(array $rules = [])
@@ -23,72 +41,69 @@ class Validator
         // todo sanitize input data
     }
 
-    public function getErrors()
-    {
-
-    }
-
     public function run(array $data, $rules = [])
     {
+        $rules = array_merge($this->rules, $rules);
+
+        $this->rules  = [];
         $this->errors = [];
 
         foreach ($rules as $field => $_rules) {
 
             $_rules = explode('|', $_rules);
 
-            $lookFor = ['required'];
+            if (isset($data[$field]) && !is_array($data[$field])) {
 
-            if (count(array_intersect($lookFor, $_rules)) > 0 || (isset($data[$field]) && !is_array($data[$field]))) {
                 foreach ($_rules as $rule) {
 
-                    $controller = null;
+                    $validator  = $rule;
                     $action     = 'validate';
-                    $param      = [];
+                    $param      = $data[$field];
 
-                    // Check if we have rule parameters
                     if (strstr($rule, ',') !== false) {
-                        $rule   = explode(',', $rule);
-                        $controller = $rule[0];
-                        $param  = $rule[1];
-                        $rule   = $rule[0];
 
-                        // If there is a reference to a field
+                        $rule      = explode(',', $rule);
+                        $validator = $rule[0];
+                        $param     = $rule[1];
+                        $rule      = $rule[0];
+
                         if (preg_match('/(?:(?:^|;)_([a-z_]+))/', $param, $matches)) {
 
-                            // If provided parameter is a field
                             if (isset($data[$matches[1]])) {
                                 $param = str_replace('_'.$matches[1], $data[$matches[1]], $param);
                             }
+
                         }
-                    } else {
-                        $controller = $rule;
+
                     }
 
-                    //self::$validation_methods[$rule] = $callback;
+                    $validator_name = lcfirst($validator);
 
-                    d($controller);d($param);die;
+                    if(isset($this->validators[$validator_name])){
+                        $result = call_user_func([$this->validators[$validator_name], $action], $param);
 
-                    if (is_callable(array($this, $controller))) {
-                        $result = $this->$method(
-                            $field, $data, $param
-                        );
-
-                        if (is_array($result)) {
-                            $this->errors[] = $result;
+                        if( ! $result ){
+                            $this->errors[] =
+                                [
+                                    'field' => $field,
+//                                    'value' => $data,
+                                    'rule'  => $rule,
+                                    'param' => $param,
+                                ];
                         }
-                    } elseif(isset(self::$validation_methods[$rule])) {
-                        $result = call_user_func(self::$validation_methods[$rule], $field, $data, $param);
+                    } elseif(isset($this->validation_methods[$rule])) {
+                        $result = call_user_func($this->validation_methods[$rule], $field, $data, $param);
 
                         if($result === false) {
-                            $this->errors[] = array(
+                            $this->errors[] = [
                                 'field' => $field,
-                                'value' => $data,
-                                'rule' => $rule,
+//                                'value' => $data,
+                                'rule'  => $rule,
                                 'param' => $param,
-                            );
+                            ];
                         }
                     } else {
-                        throw new \Exception("Validator method '$method' does not exist.");
+                        throw new \Exception("Validator '$validator' does not exist.");
                     }
                 }
             }
@@ -106,5 +121,16 @@ class Validator
         $valiator = new static();
 
         return $valiator->run($data, $rules);
+    }
+
+    public function getErrors($to_string = false)
+    {
+
+    }
+
+    public function __toString()
+    {
+        // todo get errors converted to string
+        return '';
     }
 }
