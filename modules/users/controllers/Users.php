@@ -40,11 +40,18 @@ class Users extends Frontend
     {
         parent::init();
 
+        $data = ['name'=> 'a', 'surname' => '', 'age' => 15];
         $validator = new Validator();
-        $validator->run(
-            ['name'=> 'a', 'surname' => ''],
-            ['name' => 'required']
+        $validator->run
+        (
+            $data,
+            [
+//                'name' => 'required',
+                'age'  => 'between,14,18'
+            ]
         );
+
+        dd($validator->getErrors());
 die;
         events()->add('boot', function(){
 

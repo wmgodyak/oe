@@ -58,29 +58,21 @@ class Validator
 
                     $validator  = $rule;
                     $action     = 'validate';
-                    $param      = $data[$field];
+                    $value      = $data[$field];
+                    $params = [];
 
                     if (strstr($rule, ',') !== false) {
 
-                        $rule      = explode(',', $rule);
-                        $validator = $rule[0];
-                        $param     = $rule[1];
-                        $rule      = $rule[0];
-
-                        if (preg_match('/(?:(?:^|;)_([a-z_]+))/', $param, $matches)) {
-
-                            if (isset($data[$matches[1]])) {
-                                $param = str_replace('_'.$matches[1], $data[$matches[1]], $param);
-                            }
-
-                        }
-
+                        $params = explode(',', $rule);
+                        $validator = array_shift($params);
+                        array_unshift($params, $value);
                     }
 
-                    $validator_name = lcfirst($validator);
+                    $validator_name = ucfirst($validator);
 
                     if(isset($this->validators[$validator_name])){
-                        $result = call_user_func([$this->validators[$validator_name], $action], $param);
+
+                        $result = call_user_func_array([$this->validators[$validator_name], $action], $params);
 
                         if( ! $result ){
                             $this->errors[] =
@@ -88,18 +80,18 @@ class Validator
                                     'field' => $field,
 //                                    'value' => $data,
                                     'rule'  => $rule,
-                                    'param' => $param,
+                                    'value' => $value,
                                 ];
                         }
                     } elseif(isset($this->validation_methods[$rule])) {
-                        $result = call_user_func($this->validation_methods[$rule], $field, $data, $param);
+                        $result = call_user_func_array($this->validation_methods[$rule], $params);
 
                         if($result === false) {
                             $this->errors[] = [
                                 'field' => $field,
 //                                'value' => $data,
                                 'rule'  => $rule,
-                                'param' => $param,
+                                'value' => $value,
                             ];
                         }
                     } else {
@@ -125,7 +117,7 @@ class Validator
 
     public function getErrors($to_string = false)
     {
-
+        return $this->errors;
     }
 
     public function __toString()
