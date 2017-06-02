@@ -24,6 +24,8 @@ class Validator
 
     private $validation_methods = [];
 
+    private $rules = [];
+
     private $ns = "system\\core\\validators\\";
 
     public function __construct($error_messages = [])
@@ -49,15 +51,18 @@ class Validator
     public function run(array $data, $rules = [])
     {
         $this->errors = [];
+        $rules = array_merge($this->rules, $rules);
 
         foreach ($rules as $field => $_rules) {
 
-            $_rules = explode('|', $_rules);
-
             if (isset($data[$field]) && !is_array($data[$field])) {
 
-                foreach ($_rules as $rule) {
+                if(is_string($_rules)){
+                    $_rules = explode('|', $_rules);
+                }
 
+                foreach ($_rules as $rule) {
+                    dd($rule);
                     $validator  = $rule;
                     $action     = 'validate';
                     $value      = $data[$field];
@@ -81,8 +86,6 @@ class Validator
 
                     if(isset($this->validators[$validator_name])){
 
-                        d($validator_name); d($params);
-
                         $result = call_user_func_array([$this->validators[$validator_name], $action], $params);
 
                         if( ! $result ){
@@ -93,7 +96,7 @@ class Validator
                                     'value' => $value,
                                 ];
                         }
-                    } elseif(isset($this->validation_methods[$validator_name])) {
+                    } elseif(isset($this->validation_methods[$validator])) {
                         $result = call_user_func_array($this->validation_methods[$validator_name], $params);
 
                         if($result === false) {
@@ -124,6 +127,10 @@ class Validator
         return $valiator->run($data, $rules);
     }
 
+    /**
+     * @param $rule
+     * @param $message
+     */
     public function setErrorMessage($rule, $message)
     {
         $this->error_messages[$rule] = $message;
@@ -188,10 +195,16 @@ class Validator
         return $res;
     }
 
-
+    /**
+     * @param $field
+     * @param $name
+     * @return $this
+     */
     public function setFieldName($field, $name)
     {
         $this->custom_field_names[$field] = $name;
+
+        return $this;
     }
 
 
@@ -199,4 +212,19 @@ class Validator
     {
        return $this->getErrors(true);
     }
+
+    /**
+     * @param $rule
+     * @param $callback
+     * @return $this
+     */
+    public function addValidationMethod($rule, $callback)
+    {
+        $this->validation_methods[$rule] = $callback;
+
+        return $this;
+    }
+
+    // todo add closure function
+    // todo add custom messages
 }
