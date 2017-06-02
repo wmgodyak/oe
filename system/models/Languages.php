@@ -77,4 +77,9 @@ class Languages extends Model
     {
         return self::$db->select("select * from __languages order by is_main desc, name asc")->all();
     }
+
+    public function total()
+    {
+        return self::$db->select("select count(id) as t from __languages")->row('t');
+    }
 }

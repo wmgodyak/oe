@@ -40,19 +40,26 @@ class Users extends Frontend
     {
         parent::init();
 
-        $data = ['name'=> 'a', 'surname' => '', 'age' => 15];
-        $validator = new Validator();
-        $validator->run
-        (
-            $data,
-            [
+//        $data = [
+//            'name'=> 'a',
+//            'surname' => '',
+//            'age' => 10,
+//            'email' => "im.dot.com"
+//        ];
+//
+//        $validator = new Validator(t('validator'));
+//        $validator->run
+//        (
+//            $data,
+//            [
 //                'name' => 'required',
-                'age'  => 'between,14,18'
-            ]
-        );
-
-        dd($validator->getErrors());
-die;
+//                'email' => 'required|valid_email',
+////                'age'  => 'between,14,18'
+//            ]
+//        );
+//
+//        dd($validator->getErrors());
+//die;
         events()->add('boot', function(){
 
             Route::getInstance()->get('{lang}/login', function(){

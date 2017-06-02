@@ -11,6 +11,6 @@ class Required implements ValidatorInterface
 {
     public function validate($data)
     {
-        return false;
+        return !empty($data);
     }
 }

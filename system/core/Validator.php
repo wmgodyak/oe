@@ -4,23 +4,33 @@ namespace system\core;
 
 class Validator
 {
-    /*
-     * functions to must be
-     * set_field_name
+     /**
+     * List of error messages
+     * @var array
      */
-
-    private $translations = [];
+    private $error_messages = [];
+    /**
+     * @var array
+     */
+    private $custom_field_names = [];
+    /**
+     * @var array
+     */
     private $errors = [];
-    private $rules  = [];
-
+    /**
+     * @var array
+     */
     private $validators = [];
 
     private $validation_methods = [];
 
     private $ns = "system\\core\\validators\\";
 
-    public function __construct()
+    public function __construct($error_messages = [])
     {
+        $this->error_messages = $error_messages;
+
+        // get validators
         $path = str_replace("\\", DIRECTORY_SEPARATOR, $this->ns);
         if ($handle = opendir(DOCROOT . $path)) {
             while (false !== ($controller = readdir($handle))) {
@@ -36,16 +46,8 @@ class Validator
         }
     }
 
-    public function rules(array $rules = [])
-    {
-        // todo sanitize input data
-    }
-
     public function run(array $data, $rules = [])
     {
-        $rules = array_merge($this->rules, $rules);
-
-        $this->rules  = [];
         $this->errors = [];
 
         foreach ($rules as $field => $_rules) {
@@ -59,7 +61,7 @@ class Validator
                     $validator  = $rule;
                     $action     = 'validate';
                     $value      = $data[$field];
-                    $params = [];
+                    $params = [$value];
 
                     if (strstr($rule, ',') !== false) {
 
@@ -69,8 +71,17 @@ class Validator
                     }
 
                     $validator_name = ucfirst($validator);
+                    if(strpos($validator_name, '_') !== false){
+                        $a = explode('_', $validator_name);
+                        $validator_name = "";
+                        foreach ($a as $k=>$v) {
+                            $validator_name .= ucfirst($v);
+                        }
+                    }
 
                     if(isset($this->validators[$validator_name])){
+
+                        d($validator_name); d($params);
 
                         $result = call_user_func_array([$this->validators[$validator_name], $action], $params);
 
@@ -78,24 +89,22 @@ class Validator
                             $this->errors[] =
                                 [
                                     'field' => $field,
-//                                    'value' => $data,
-                                    'rule'  => $rule,
+                                    'rule'  => $validator,
                                     'value' => $value,
                                 ];
                         }
-                    } elseif(isset($this->validation_methods[$rule])) {
-                        $result = call_user_func_array($this->validation_methods[$rule], $params);
+                    } elseif(isset($this->validation_methods[$validator_name])) {
+                        $result = call_user_func_array($this->validation_methods[$validator_name], $params);
 
                         if($result === false) {
                             $this->errors[] = [
                                 'field' => $field,
-//                                'value' => $data,
-                                'rule'  => $rule,
+                                'rule'  => $validator,
                                 'value' => $value,
                             ];
                         }
                     } else {
-                        throw new \Exception("Validator '$validator' does not exist.");
+                        throw new \Exception("Validator '$validator_name' does not exist.");
                     }
                 }
             }
@@ -115,14 +124,79 @@ class Validator
         return $valiator->run($data, $rules);
     }
 
-    public function getErrors($to_string = false)
+    public function setErrorMessage($rule, $message)
     {
-        return $this->errors;
+        $this->error_messages[$rule] = $message;
     }
+
+    /**
+     * @param bool $to_string
+     * @param string $symbol_l
+     * @param string $symbol_r
+     * @return array|string
+     */
+    public function getErrors($to_string = false, $symbol_l = "<li>", $symbol_r = "</li>")
+    {
+        $res = array();
+
+        $messages = $this->error_messages;
+
+        foreach ($this->errors as $e)
+        {
+            $field = ucwords(str_replace(array('_', '-'), chr(32), $e['field']));
+            $value = $e['value'];
+
+            if (array_key_exists($e['field'], $this->custom_field_names)) {
+                $field = $this->custom_field_names[$e['field']];
+
+                if (array_key_exists($value, $this->custom_field_names)) {
+                    $value = $this->custom_field_names[$e['param']];
+                }
+            }
+
+            // Messages
+            if (isset($messages[$e['rule']])) {
+                // Show first validation error and don't allow to be overwritten
+                if (!isset($res[$e['field']])) {
+                    if (is_array($value)) {
+                        $value = implode(', ', $value);
+                    }
+
+                    $message = str_replace
+                    (
+                        ['{value}', '{field}'],
+                        [$value, $field],
+                        $messages[$e['rule']]
+                    );
+
+                    $res[$e['field']] = $message;
+                }
+            } else {
+                $res[$e['field']] = 'Rule "'.$e['rule'].'" does not have an error message';
+            }
+        }
+
+        if($to_string){
+            $out = "";
+            foreach ($res as $k=>$v){
+                $out .= "$symbol_l $v $symbol_r";
+            }
+
+            return $out;
+        }
+
+        return $res;
+    }
+
+
+    public function setFieldName($field, $name)
+    {
+        $this->custom_field_names[$field] = $name;
+    }
+
 
     public function __toString()
     {
-        // todo get errors converted to string
-        return '';
+       return $this->getErrors(true);
     }
 }
