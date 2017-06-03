@@ -7,10 +7,18 @@ use system\core\ValidatorInterface;
  * Class Required
  * @package system\core\validators
  */
-class Between // implements ValidatorInterface
+class Between implements ValidatorInterface
 {
-    public function validate($data, $min, $max)
+    private $min, $max;
+
+    public function __construct( $min, $max )
     {
-        return false;
+        $this->min = (int)$min;
+        $this->max = (int)$max;
+    }
+
+    public function validate($data)
+    {
+        return $data > $this->min && $data < $this->max;
     }
 }

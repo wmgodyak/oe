@@ -1,7 +1,47 @@
 <?php
 
 namespace system\core;
+/**
+ * Class Validator
+ *
+ * Examples
+ *        $data = [
+            'name'=> 'a',
+            'surname' => '',
+            'age' => 10,
+            'email' => "im.dot.com"
+            ];
 
+$validator = new Validator(t('validator'));
+
+$validator->addMethod
+(
+'min_age',
+function($value, $min_value)
+{
+return $value > $min_value;
+}
+, "You are too young"
+);
+
+$validator->run
+(
+$data,
+[
+'name' => 'required',
+'email' => 'required|valid_email',
+'age' => 'min_age, 18|between, 4, 6',
+]
+);
+
+dd($validator->getErrors());
+Array
+(
+    [email] => The Email field must be a valid email address
+    [age] => You are too young
+)
+ * @package system\core
+ */
 class Validator
 {
      /**
@@ -17,41 +57,25 @@ class Validator
      * @var array
      */
     private $errors = [];
-    /**
-     * @var array
-     */
-    private $validators = [];
 
     private $validation_methods = [];
-
-    private $rules = [];
 
     private $ns = "system\\core\\validators\\";
 
     public function __construct($error_messages = [])
     {
         $this->error_messages = $error_messages;
-
-        // get validators
-        $path = str_replace("\\", DIRECTORY_SEPARATOR, $this->ns);
-        if ($handle = opendir(DOCROOT . $path)) {
-            while (false !== ($controller = readdir($handle))) {
-                if ($controller != "." && $controller != "..") {
-
-                    $controller = str_replace('.php', '', $controller);
-                    $c = $this->ns . $controller;
-                    $this->validators[$controller] = new $c;
-
-                }
-            }
-            closedir($handle);
-        }
     }
 
+    /**
+     * @param array $data
+     * @param array $rules
+     * @throws \Exception
+     */
     public function run(array $data, $rules = [])
     {
         $this->errors = [];
-        $rules = array_merge($this->rules, $rules);
+        $path = str_replace("\\", DIRECTORY_SEPARATOR, $this->ns);
 
         foreach ($rules as $field => $_rules) {
 
@@ -62,7 +86,7 @@ class Validator
                 }
 
                 foreach ($_rules as $rule) {
-                    dd($rule);
+
                     $validator  = $rule;
                     $action     = 'validate';
                     $value      = $data[$field];
@@ -84,9 +108,25 @@ class Validator
                         }
                     }
 
-                    if(isset($this->validators[$validator_name])){
+                    if(!empty($this->validation_methods[$validator])) {
+                        $result = call_user_func_array($this->validation_methods[$validator], $params);
 
-                        $result = call_user_func_array([$this->validators[$validator_name], $action], $params);
+                        if($result === false) {
+                            $this->errors[] = [
+                                'field' => $field,
+                                'rule'  => $validator,
+                                'value' => $value,
+                            ];
+                        }
+
+                        continue;
+                    }
+
+                    if(file_exists(DOCROOT . $path . $validator_name . '.php')){
+
+                        $c = $this->ns . $validator_name;
+                        $controller = new $c(... $params);
+                        $result = call_user_func_array([$controller, $action], $params);
 
                         if( ! $result ){
                             $this->errors[] =
@@ -96,19 +136,11 @@ class Validator
                                     'value' => $value,
                                 ];
                         }
-                    } elseif(isset($this->validation_methods[$validator])) {
-                        $result = call_user_func_array($this->validation_methods[$validator_name], $params);
 
-                        if($result === false) {
-                            $this->errors[] = [
-                                'field' => $field,
-                                'rule'  => $validator,
-                                'value' => $value,
-                            ];
-                        }
-                    } else {
-                        throw new \Exception("Validator '$validator_name' does not exist.");
+                        continue;
                     }
+
+                    throw new \Exception("Validator '$validator_name' does not exist.");
                 }
             }
         }
@@ -122,9 +154,9 @@ class Validator
      */
     public static function make(array $data, $rules = [])
     {
-        $valiator = new static();
+        $validator = new static();
 
-        return $valiator->run($data, $rules);
+        return $validator->run($data, $rules);
     }
 
     /**
@@ -216,15 +248,22 @@ class Validator
     /**
      * @param $rule
      * @param $callback
+     * @param null $message
      * @return $this
+     * @throws \Exception
      */
-    public function addValidationMethod($rule, $callback)
+    public function addMethod($rule, $callback, $message = null)
     {
+        if(isset($this->validation_methods[$rule])){
+            throw new \Exception("Validator $rule exists.");
+        }
+
         $this->validation_methods[$rule] = $callback;
+
+        if($message){
+            $this->error_messages[$rule] = $message;
+        }
 
         return $this;
     }
-
-    // todo add closure function
-    // todo add custom messages
 }
