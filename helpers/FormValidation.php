@@ -72,6 +72,11 @@ class FormValidation
         return self::$errors;
     }
 
+    /**
+     * @deprecated Use $this->validator->run()
+     * @param $data
+     * @throws \Exception
+     */
     public static function run($data)
     {
         if(empty(self::$rules)){

@@ -5,12 +5,12 @@ namespace system\core;
  * Class Validator
  *
  * Examples
- *        $data = [
-            'name'=> 'a',
-            'surname' => '',
-            'age' => 10,
-            'email' => "im.dot.com"
-            ];
+ * $data = [
+    'name'=> 'a',
+    'surname' => '',
+    'age' => 10,
+    'email' => "me@dot.com"
+    ];
 
 $validator = new Validator(t('validator'));
 
@@ -35,6 +35,7 @@ $data,
 );
 
 dd($validator->getErrors());
+ * Result
 Array
 (
     [email] => The Email field must be a valid email address
@@ -49,15 +50,23 @@ class Validator
      * @var array
      */
     private $error_messages = [];
+
     /**
+     * Custom fields names. You can override default field name to custom.
      * @var array
      */
     private $custom_field_names = [];
+
     /**
+     * Validation errors
      * @var array
      */
     private $errors = [];
 
+    /**
+     * custom validation methods
+     * @var array
+     */
     private $validation_methods = [];
 
     private $ns = "system\\core\\validators\\";
@@ -70,6 +79,7 @@ class Validator
     /**
      * @param array $data
      * @param array $rules
+     * @return bool
      * @throws \Exception
      */
     public function run(array $data, $rules = [])
@@ -144,10 +154,12 @@ class Validator
                 }
             }
         }
+
+        return empty($this->errors);
     }
 
     /**
-     * get instance and run validation
+     * Get instance of validator and run validation
      * @param array $data
      * @param array $rules
      * @return mixed
@@ -160,6 +172,7 @@ class Validator
     }
 
     /**
+     * Override or add custom error message
      * @param $rule
      * @param $message
      */
@@ -169,6 +182,7 @@ class Validator
     }
 
     /**
+     * Get validation errors
      * @param bool $to_string
      * @param string $symbol_l
      * @param string $symbol_r
@@ -193,9 +207,7 @@ class Validator
                 }
             }
 
-            // Messages
             if (isset($messages[$e['rule']])) {
-                // Show first validation error and don't allow to be overwritten
                 if (!isset($res[$e['field']])) {
                     if (is_array($value)) {
                         $value = implode(', ', $value);
@@ -228,6 +240,7 @@ class Validator
     }
 
     /**
+     * Override field name
      * @param $field
      * @param $name
      * @return $this
@@ -246,6 +259,7 @@ class Validator
     }
 
     /**
+     * Add custom validation closure
      * @param $rule
      * @param $callback
      * @param null $message

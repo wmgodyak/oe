@@ -10,6 +10,7 @@ namespace system;
 use system\core\exceptions\Exception;
 use system\core\Request;
 use system\core\Session;
+use system\core\Validator;
 use system\models\Images;
 use system\models\Languages;
 use system\models\Modules;
@@ -61,6 +62,8 @@ abstract class Frontend extends core\Controller
      */
     public $page = [];
 
+    protected $validator;
+
     public function __construct()
     {
         parent::__construct();
@@ -104,6 +107,8 @@ abstract class Frontend extends core\Controller
             $this->template->assign('settings', $this->settings);
 
             \system\core\Lang::getInstance()->set($this->languages->code, $this->template->theme);
+
+            $this->validator = new Validator(t('validator'));
         }
     }
 

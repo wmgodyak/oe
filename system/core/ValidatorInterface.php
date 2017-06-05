@@ -3,5 +3,5 @@ namespace system\core;
 
 interface ValidatorInterface
 {
-    public function validate($data);
+    public function validate($input);
 }
