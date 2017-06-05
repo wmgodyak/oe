@@ -1,3 +1,4 @@
 {
-    "guest_group_id" : 2
+    "guest_group_id" : 2,
+    "auth_after_register": true
 }

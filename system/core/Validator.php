@@ -171,6 +171,16 @@ class Validator
         return $validator->run($data, $rules);
     }
 
+    public function runOrDie(array $data, $rules = [])
+    {
+        $valid = $this->run($data, $rules);
+        if( ! $valid ){
+            if( Request::getInstance()->isXhr()){
+                Response::getInstance()->body(['errors' => $this->getErrors()])->display();
+            }
+        }
+    }
+
     /**
      * Override or add custom error message
      * @param $rule

@@ -4,10 +4,8 @@ namespace modules\users\controllers;
 
 use helpers\FormValidation;
 use system\core\EventsHandler;
-use system\core\Lang;
 use system\core\Route;
 use system\core\Session;
-use system\core\Validator;
 use system\Frontend;
 use system\models\Mailer;
 
@@ -22,7 +20,6 @@ use system\models\Mailer;
 class Users extends Frontend
 {
     protected $users;
-    protected $group_id;
     protected $config;
 
     public function __construct()
@@ -32,8 +29,6 @@ class Users extends Frontend
         $this->users = new \modules\users\models\Users();
 
         $this->config = module_config('users');
-
-        $this->group_id = $this->config->guest_group_id;
     }
 
     public function init()
@@ -74,39 +69,38 @@ class Users extends Frontend
             token_validate();
 
             $status = 0; $i = [];
+
             $email = $this->request->post('email');
             $password = $this->request->post('password');
 
+            $valid = $this->validator->run
+            (
+                ['email' => $email, 'password' => $password],
+                ['email' => 'required|email', 'password' => 'required']
+            );
 
-            FormValidation::setRule(['password', 'email'], FormValidation::REQUIRED);
-            FormValidation::setRule('email', FormValidation::EMAIL);
-            FormValidation::run($_POST);
-
-            if(FormValidation::hasErrors()){
-                $i = FormValidation::getErrors();
+            if(!$valid){
+                $i = $this->validator->getErrors();
             } else {
                 $user = $this->users->getUserByEmail($email);
 
                 if(empty($user)){
-                    $i[] = ['password' => t('users.e_login_pass')];
+                    $i[] = ['password' => t('users.login.error.not_found')];
                 } elseif($user['status'] == 'ban'){
-                    $i[] = ['password' => t('users.e_login_ban')];
+                    $i[] = ['password' => t('users.login.error.status_banned')];
                 } elseif($user['status'] == 'deleted'){
-                    $i[] = ['password' => t('users.e_login_deleted')];
+                    $i[] = ['password' => t('users.login.error.status_deleted')];
                 } else if ($this->users->checkPassword($password, $user['password'])){
                     if($user['backend'] == 1){
-                        $i[] = ['password' => "Адміністратори не можуть логінитись на сайті"];
+                        $i[] = ['password' => t("users.login.error.only_backend")];
                     } else {
-                        $status = $this->users->setOnline($user);
-                        if($status){
-                            Session::set('user', $user);
-                        } else {
+                        $status = $this->users->login($user);
+                        if( !$status){
                             $i[] = ['password' => $this->users->getError()];
                         }
                     }
-
                 } else {
-                    $i[] = ['password' => t('users.e_login_pass')];
+                    $i[] = ['password' => t('users.login.error.invalid_password')];
                 }
             }
 
@@ -115,7 +109,55 @@ class Users extends Frontend
 
         return $this->template->fetch('modules/users/login');
     }
+    
+    public function register()
+    {
+        if($this->request->isPost()){
 
+            $s=0; $i=[];
+
+            $data = $this->request->post('data');
+
+            $this->validator->setErrorMessage('equals_to', t('users.register.error.password_equals_to'))
+
+            $valid = $this->validator->run
+            (
+                $data,
+                [
+                    'email'      => 'required|email',
+                    'password'   => 'required',
+                    'password_c' => "required|equals_to, {$data['password']}"
+                ]
+            );
+
+            if(!$valid){
+                $i = $this->validator->getErrors();
+            } else {
+                unset($data['password_c']);
+
+                $data['group_id'] = $this->config->guest_group_id;
+
+                $id = $this->users->create($data);
+
+                $data['id'] = $id;
+                $s = $id > 0;
+
+                if($s){
+                    if($this->config->auth_after_register){
+                        $this->users->login($data);
+                    }
+                    events()->call('user.registered', ['user' => $data]);
+                } else {
+                    $i = $this->users->getError();
+                }
+
+            }
+
+            return ['s'=>$s, 'i' => $i];
+        }
+
+        return $this->template->fetch('modules/users/register');
+    }
     public function logout()
     {
         $user = Session::get('user');
@@ -205,25 +247,6 @@ class Users extends Frontend
 
         $this->template->assign('user', $user);
         return $this->template->fetch('modules/users/new_psw');
-    }
-
-    public function register()
-    {
-        if($this->request->isPost()){
-
-            $data = $this->request->post('data'); $s=0; $i=[];
-
-            $data['group_id'] = $this->group_id;
-            $s = $this->users->register($data);
-
-            if(!$s && $this->users->hasError()){
-                $i = $this->users->getError();
-            }
-
-            return ['s'=>$s, 'i' => $i];
-        }
-
-        return $this->template->fetch('modules/users/register');
     }
 
     public function profile()

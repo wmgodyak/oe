@@ -15,20 +15,28 @@
         "submit" : "Login"
       }
     },
-    "email": "e-mail:",
-    "password": "password:",
-    "fp_link": "forgot your password?",
-    "button": "log in",
-    "Cancel": "Cancel"
+    "error":{
+      "not_found" : "User with those email not found",
+      "status_banned": "This account was banned",
+      "status_deleted": "This account was deleted by administrator",
+      "invalid_password": "Invalid password",
+      "only_backend" : "It is admin access. Only for backend"
+    }
   },
-
-
-
-  "errors" : {
-    "e_pasw_length": "a weak password, enter at least 6 characters",
-    "e_pasw_equal": "passwords do not match",
-    "e_login_pass": "invalid username or password",
-    "e_not_logged_in": "log in or register to continue"
+  "register": {
+    "form": {
+      "title": "Register area",
+      "description": "",
+      "labels": {
+        "email": "Your email",
+        "password": "Your password",
+        "password_c": "Confirm password",
+        "submit" : "Register"
+      }
+    },
+    "error":{
+      "password_equals_to" : "Password confirmation must be equals to password field"
+    }
   },
   "profile": {
     "title": "your contact information:",
@@ -51,15 +59,6 @@
     "password": "password:",
     "password_c": "repeat Password:",
     "Update": "Save"
-  },
-  "register": {
-    "title": "login to Internet-shop",
-    "name": "name:",
-    "email": "e-mail:",
-    "passowrd": "password:",
-    "pasword_c": "Confirm password:",
-    "Cancel": "Cancel",
-    "button": "register"
   },
   "nav": {
     "profile_title": "my profile"

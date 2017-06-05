@@ -1,5 +1,15 @@
 App.users = {
     init: function(){
+
+        App.validateAjaxForm('#usersRegister', function () {
+            var r = $('#usersRegister').data('href');
+            if(typeof r == 'undefined'){
+                location.reload(true);
+            }
+
+            self.location.href = r;
+        });
+
         App.validateAjaxForm('#usersLogin', function () {
             var r = $('#usersLogin').data('href');
             if(typeof r == 'undefined'){
@@ -16,14 +26,6 @@ App.users = {
             }, 3000);
         });
 
-        App.validateAjaxForm('#usersRegister', function () {
-            var r = $('#usersRegister').data('href');
-            if(typeof r == 'undefined'){
-                location.reload(true);
-            }
-
-            self.location.href = r;
-        });
 
         App.validateAjaxForm('#accountProfile', function () {
             App.alert('Дані оновлено.', 'success', $("#accountProfile .response"));
