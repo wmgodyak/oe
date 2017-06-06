@@ -13,6 +13,7 @@ class EqualsTo implements ValidatorInterface
 
     public function __construct($val)
     {
+        d($val);
         $this->val = $val;
     }
 
@@ -21,7 +22,7 @@ class EqualsTo implements ValidatorInterface
         if (empty($input)) {
             return false;
         }
-
+        dd($input);
         return $input == $this->val;
     }
 }

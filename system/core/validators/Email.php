@@ -7,7 +7,7 @@ use system\core\ValidatorInterface;
  * Class Required
  * @package system\core\validators
  */
-class ValidEmail implements ValidatorInterface
+class Email implements ValidatorInterface
 {
     public function validate($email)
     {

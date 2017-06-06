@@ -5,12 +5,12 @@ use system\core\ValidatorInterface;
 
 /**
  * Class ValidUrl
- * Determine if the provided value is a PHP accepted ValidUrl.
+ * Determine if the provided value is a PHP accepted Valid Url.
  *
- * Usage: '<field>' => 'valid_url'
+ * Usage: '<field>' => 'url'
  * @package system\core\validators
  */
-class ValidUrl implements ValidatorInterface
+class Url implements ValidatorInterface
 {
     public function validate($input)
     {

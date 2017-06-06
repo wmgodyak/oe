@@ -135,8 +135,14 @@ class Validator
                     if(file_exists(DOCROOT . $path . $validator_name . '.php')){
 
                         $c = $this->ns . $validator_name;
+
+                        $input = $params;
+                        if(!empty($params[1])){
+                            $input = array_shift($params);
+                        }
+
                         $controller = new $c(... $params);
-                        $result = call_user_func_array([$controller, $action], $params);
+                        $result = call_user_func_array([$controller, $action], [$input]);
 
                         if( ! $result ){
                             $this->errors[] =

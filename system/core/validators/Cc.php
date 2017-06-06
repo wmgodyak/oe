@@ -8,10 +8,10 @@ use system\core\ValidatorInterface;
  * Determine if the input is a valid credit card number.
  *
  * See: http://stackoverflow.com/questions/174730/what-is-the-best-way-to-validate-a-credit-card-in-php
- * Usage: '<index>' => 'valid_cc'
+ * Usage: '<index>' => 'cc'
  * @package system\core\validators
  */
-class ValidCc implements ValidatorInterface
+class Cc implements ValidatorInterface
 {
     public function validate($input)
     {
