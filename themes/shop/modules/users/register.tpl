@@ -9,7 +9,7 @@
                     </div>
                     <div class="block-content">
                         {t('users.register.form.description')}
-                        <form method="post" action="register" id="usersLoginForm">
+                        <form method="post" action="{route('register')}" id="usersLoginForm">
                             <div class="form-group">
                                 <input type="text" required name="data[email]" class="form-control" placeholder="{t('users.register.form.labels.email')}">
                             </div>

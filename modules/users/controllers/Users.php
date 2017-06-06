@@ -158,6 +158,7 @@ class Users extends Frontend
 
         return $this->template->fetch('modules/users/register');
     }
+
     public function logout()
     {
         $user = Session::get('user');
