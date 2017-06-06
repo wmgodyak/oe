@@ -118,7 +118,7 @@ class Users extends Frontend
 
             $data = $this->request->post('data');
 
-            $this->validator->setErrorMessage('equals_to', t('users.register.error.password_equals_to'))
+            $this->validator->setErrorMessage('equals_to', t('users.register.error.password_equals_to'));
 
             $valid = $this->validator->run
             (
