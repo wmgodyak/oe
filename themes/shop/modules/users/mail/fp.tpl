@@ -1,3 +1,4 @@
-<p>Вітаємо {$data.name}. Ви отримали це повідомлення, так як здійснили запит на відновлення паролю.</p>
-
-<p>Для цього вам необхідно перейти по <a href="{$data.fp_link}">цьому&nbsp;посиланню</a></p>
+{extends 'layouts/mail/index.tpl'}
+{block name="mail.body"}
+    {t('users.fp.mail.body')}
+{/block}

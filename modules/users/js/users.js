@@ -23,7 +23,7 @@ $(document).ready(function(){
 
     App.validateAjaxForm('#usersLoginForm', function (res) {
         if(res.s){
-
+            App.alert(d.m);
             var r = $('#usersLoginForm').data('href');
             if(typeof r == 'undefined'){
                 location.reload(true);
@@ -39,26 +39,66 @@ $(document).ready(function(){
         }
     });
 
-    App.validateAjaxForm('#usersFpForm', function (d) {
-        App.alert(d.m, 'success', $("#usersFp .response"));
-        setTimeout(function(){
-            self.location.href="/";
-        }, 3000);
+    App.validateAjaxForm('#usersPasswordChangeForm', function (res) {
+        if(res.s){
+            App.alert(res.m, function(){
+
+                var r = $('#usersPasswordChangeForm').data('href');
+                if(typeof r != 'undefined'){
+                    self.location.href = r;
+                }
+            });
+        } else {
+            var validator = $( "#usersPasswordChangeForm" ).validate();
+            for (var inp in res.i){
+                validator.showErrors(res.i[inp]);
+            }
+        }
+    });
+    App.validateAjaxForm('#usersPasswordResetForm', function (res) {
+        if(res.s){
+            App.alert(res.m, function(){
+
+                var r = $('#usersPasswordResetForm').data('href');
+                if(typeof r != 'undefined'){
+                    self.location.href = r;
+                }
+            });
+        } else {
+            var validator = $( "#usersPasswordResetForm" ).validate();
+            for (var inp in res.i){
+                validator.showErrors(res.i[inp]);
+            }
+        }
     });
 
 
-    App.validateAjaxForm('#accountProfile', function () {
-        App.alert('Дані оновлено.', 'success', $("#accountProfile .response"));
+    App.validateAjaxForm('#usersProfileForm', function (res) {
+        if(res.s){
+            App.alert(res.m);
+        } else {
+            var validator = $( "#usersProfileForm" ).validate();
+            for (var inp in res.i){
+                validator.showErrors(res.i[inp]);
+            }
+        }
     });
 
-    App.validateAjaxForm('#accountChangePassword', function () {
-        App.alert('Дані оновлено.', 'success', $("#accountChangePassword .response"));
-    });
 
-    App.validateAjaxForm('#usersNewPsw', function (d) {
-        App.alert(d.m, 'success', $("#usersNewPsw .response"));
-        setTimeout(function(){
-            self.location.href = $('#usersNewPsw').data('href');
-        }, 3000);
+    App.validateAjaxForm('#usersFpForm', function (res) {
+        if(res.s){
+            App.alert(res.m, function(){
+
+                var r = $('#usersFpForm').data('href');
+                if(typeof r != 'undefined'){
+                    self.location.href = r;
+                }
+            });
+        } else {
+            var validator = $( "#usersFpForm" ).validate();
+            for (var inp in res.i){
+                validator.showErrors(res.i[inp]);
+            }
+        }
     });
 });

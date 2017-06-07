@@ -19,7 +19,7 @@
     // todo move it to request
     $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? "https://" : "http://";
 
-    if(!defined('APP')) define('APP', "{$_SERVER['HTTP_HOST']}");
+    if(!defined('APP')) define('APP', "{$_SERVER['SERVER_NAME']}");
     if(!defined('APPURL')) define('APPURL', $protocol . APP . '/');
 
     if (!ini_get('zlib.output_compression') && function_exists('ob_gzhandler')) ob_start('ob_gzhandler');

@@ -2,12 +2,10 @@
 
 namespace modules\users\controllers;
 
-use helpers\FormValidation;
 use system\core\EventsHandler;
-use system\core\Route;
 use system\core\Session;
 use system\Frontend;
-use system\models\Mailer;
+use system\models\XMail;
 
 /**
  * Class users
@@ -80,6 +78,16 @@ class Users extends Frontend
             $this->route->post('login', [$this, 'login']);
 
             $this->route->get('profile', [$this, 'profile']);
+            $this->route->post('profile', [$this, 'profile']);
+
+            $this->route->get('change-password', function(){
+
+                if(! Session::get('user.id')) {
+                    redirect(route('login'));
+                }
+
+                return $this->template->fetch('modules/users/password_change');
+            });
 
             $this->route->get('forgot-password', function(){
 
@@ -88,6 +96,36 @@ class Users extends Frontend
                 }
 
                 return $this->template->fetch('modules/users/fp');
+            });
+
+            $this->route->post('change-password',[$this, 'changePassword']);
+            $this->route->post('forgot-password',[$this, 'fp']);
+
+            $this->route->get('restore-password/{any}',function($skey){
+
+                if(empty($skey)){
+                    die('wrong key');
+                }
+
+                $user = $this->users->getUserBySkey($skey);
+
+                if(! $user){
+                    die('wrong key');
+                }
+
+                $this->template->assign('skey', $skey);
+                return $this->template->fetch('modules/users/reset_password');
+            });
+            $this->route->post('restore-password',[$this, 'resetPassword']);
+
+
+            $this->route->get('account', function(){
+
+                if(! Session::get('user.id')) {
+                    redirect(route('login'));
+                }
+
+                return $this->template->fetch('modules/users/account');
             });
 
             $this->route->get('logout', [$this, 'logout']);
@@ -100,11 +138,14 @@ class Users extends Frontend
     {
         if(! $this->request->isPost() ) die;
 
+        token_validate();
+
         $s=0; $i=[];
 
         $data = $this->request->post('data');
 
         $this->validator->setErrorMessage('equals_to', t('users.register.error.password_equals_to'));
+        $this->validator->setErrorMessage('not_allowed', t('users.register.error.password_equals_to'));
 
         $this->validator->addMethod('not_allowed', function($data){
 
@@ -206,11 +247,11 @@ class Users extends Frontend
 
         if($this->request->isPost()){
 
+            token_validate();
+
             $s=0; $i=[];
 
             $data = $this->request->post('data');
-
-            $this->validator->setErrorMessage('equals_to', t('users.register.error.password_equals_to'));
 
             $this->validator->addMethod('not_allowed', function($data){
 
@@ -229,9 +270,7 @@ class Users extends Frontend
                 [
                     'email'      => 'required|email',
                     'name'       => 'required',
-                    'surname'    => 'required',
-                    'password'   => 'required',
-                    'password_c' => "required|equals_to, {$data['password']}"
+                    'surname'    => 'required'
                 ]
             );
 
@@ -249,11 +288,54 @@ class Users extends Frontend
                     events()->call('user.profile.updated', ['user' => $data]);
                 }
             }
-
-            return ['s'=>$s, 'i' => $i];
+            $m = t('users.profile.updated');
+            return ['s'=>$s, 'i' => $i, 'm' => $m];
         }
 
         return $this->template->fetch('modules/users/profile');
+    }
+
+    public function changePassword()
+    {
+        if(! $this->request->isPost()) die();
+
+        token_validate();
+
+        $user = Session::get('user');
+        if(!$user){
+            $this->response->sendError(403);
+        }
+
+
+        $i=[]; $s = 0;
+
+        $data = [
+            'password' => $this->request->post('password'),
+            'password_c' => $this->request->post('password_c')
+        ];
+
+        $this->validator->setErrorMessage('equals_to', t('users.register.error.password_equals_to'));
+
+        $valid = $this->validator->run
+        (
+            $data,
+            [
+                'password'   => 'required',
+                'password_c' => "required|equals_to, {$data['password']}"
+            ]
+        );
+
+        if(!$valid){
+            $i = $this->validator->getErrors();
+        }   else {
+
+            unset($data['password_c']);
+
+            $s = $this->users->update($user['id'], $data);
+        }
+
+        $m = t('users.profile_psw.updated');
+        return ['s'=>$s, 'i' => $i, 'm' => $m];
     }
 
     public function logout()
@@ -267,121 +349,95 @@ class Users extends Frontend
 
     public function fp()
     {
-        if($this->request->isPost()){
-            $s = 0; $i = []; $data = $this->request->post('data'); $m=null;
+        token_validate();
 
-            FormValidation::setRule('email', FormValidation::REQUIRED);
-            FormValidation::setRule('email', FormValidation::EMAIL);
-            FormValidation::run($data);
+        $s = 0; $i = []; $m=null;
+        $email = $this->request->post('email');
+        $valid = $this->validator->run
+        (
+            ['email' => $email],
+            ['email'  => 'required|email']
+        );
 
-            if(FormValidation::hasErrors()){
-                $i = FormValidation::getErrors();
+        if(!$valid){
+            $i = $this->validator->getErrors();
+        }  elseif(! $this->users->issetEmail($email)){
+            $i[] = ["email" => t('users.fp.error.not_found')];
+        } else {
+            $user = $this->users->getUserByEmail($email);
+
+            if(empty($user)){
+                $i[] = ['email' => t('users.fp.error.not_found')];
+            } elseif($user['status'] == 'ban'){
+                $i[] = ['email' => t('users.fp.error.status_banned')];
+            } elseif($user['status'] == 'deleted'){
+                $i[] = ['email' => t('users.fp.error.status_deleted')];
             } else {
-                $user = $this->users->getUserByEmail($data['email']);
 
-                if(empty($user)){
-                    $i[] = ['data[email]' => t('users.e_bad_email')];
-                } elseif($user['status'] == 'ban'){
-                    $i[] = ['data[email]' => t('users.e_login_ban')];
-                } elseif($user['status'] == 'deleted'){
-                    $i[] = ['data[email]' => t('users.e_login_deleted')];
-                } else {
-                    $skey = base64_encode(serialize($user)); $skey = substr($skey, 0, 64);
-                    $s = $this->users->update($user['id'], ['skey' => $skey]);
-                    if($s){
-                        $user['skey'] = $skey;
-                        $user['fp_link'] = APPURL . "route/users/newPsw/{$skey}";
+                $skey = base64_encode(serialize($user));
+                $skey = substr($skey, 0, 64);
 
-                        $mailer = new Mailer('modules/users/mail/fp', 'FP', $user);
-                        $mailer
-                            ->addAddress($user['email'], $user['name'])
-                            ->send();
-                        $m = t('users.fp.success');
-                    }
+                $s = $this->users->update($user['id'], ['skey' => $skey]);
+
+                if($s){
+                    $user['skey'] = $skey;
+                    $user['link'] = APPURL . "restore-password/{$skey}";
+
+                    $mailer = new XMail(t('users.ft.mail.subject'), ['user' => $user]);
+                    $body = sprintf($this->template->fetch('modules/users/mail/fp'), $user['name'], $user['link']);
+                    $mailer->body($body);
+                    $mailer->addAddress($user['email'], $user['name']);
+                    $s = $mailer->send();
+                    $m = t('users.fp.success') . " " . $user['link'];
                 }
             }
-
-            return ['s' => $s, 'i' => $i, 'm' => $m];
         }
+
+        return ['s' => $s, 'i' => $i, 'm' => $m];
+
     }
 
-    public function newPsw($skey=null)
+    public function resetPassword()
     {
-        if(! $skey) return null;
+        $skey = $this->request->post('skey');
 
-        $user = $this->users->getUserBySkey($skey);
+        $i=[]; $s = 0; $m = null;
 
-        if($this->request->isPost()){
-            $data = $this->request->post('data'); $i=[]; $s = 0;
+        $data = [
+            'skey' => $skey,
+            'password' => $this->request->post('password'),
+            'password_c' => $this->request->post('password_c')
+        ];
 
-            FormValidation::setRule(['password', 'password_c'], FormValidation::REQUIRED);
-//            FormValidation::setRule(['password'], FormValidation::PASSWORD);
-            FormValidation::run($data);
+        $this->validator->setErrorMessage('equals_to', t('users.reset_password.error.password_equals_to'));
 
-            if(FormValidation::hasErrors()){
-                $i = FormValidation::getErrors();
-            } elseif(!empty($data['password']) && ($data['password_c'] != $data['password'])){
-                $i[] = ["data[password_c]" => t('admin_profile.e_pasw_equal')];
-            }  else {
+        $valid = $this->validator->run
+        (
+            $data,
+            [
+                'skey'       => 'required',
+                'password'   => 'required',
+                'password_c' => "required|equals_to, {$data['password']}"
+            ]
+        );
 
-                unset($data['password_c']);
-                $data['skey'] = null;
-                $s = $this->users->update($user['id'], $data);
-            }
+        if(!$valid){
+            $i = $this->validator->getErrors();
+        }   else {
 
-            if(!$s && $this->users->hasError()){
-                $i[] = ["data[password_c]" => $this->users->getErrorMessage()];
-            }
-
-            $this->template->assign('status', $s);
-            $this->template->assign('errors', $i);
-        }
-
-        if(! $user){
-            die('wrong key');
-        }
-
-        $this->template->assign('user', $user);
-        return $this->template->fetch('modules/users/new_psw');
-    }
-
-
-    public function changePassword()
-    {
-        if($this->request->isPost()){
-
-            $user = Session::get('user');
-            if(!$user){
-                $this->response->sendError(403);
-            }
-
-            if(! $this->request->isPost()) die();
-
-            $data = $this->request->post('data'); $i=[]; $s = 0;
-
-            FormValidation::setRule(['password', 'password_c'], FormValidation::REQUIRED);
-            FormValidation::run($data);
-
-            if(FormValidation::hasErrors()){
-                $i = FormValidation::getErrors();
-            } elseif(strlen($data['password']) < 6){
-                $i[] = ["data[password_c]" => t('users.e_pasw_length')];
-            } elseif($data['password_c'] != $data['password']){
-                $i[] = ["data[password_c]" => t('users.e_pasw_equal')];
-            }  else {
+            $user = $this->users->getUserBySkey($skey);
+            if(empty($user)){
+                $i[] = ["password" => t('users.reset_password.error.wrong_skey')];
+            } else{
 
                 unset($data['password_c']);
 
                 $s = $this->users->update($user['id'], $data);
-            }
 
-            if(!$s && $this->users->hasError()){
-                echo $this->users->getErrorMessage();
+                $m = t('users.reset_password.updated');
             }
-
-            return ['s'=>$s, 'i' => $i];
         }
 
-        return $this->template->fetch('modules/users/password');
+        return ['s'=>$s, 'i' => $i, 'm' => $m];
     }
 }

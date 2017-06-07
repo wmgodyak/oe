@@ -11,21 +11,25 @@
                     <div class="block-content">
                         {t('users.register.form.description')}
                         <form method="post" action="{route('register')}" id="usersRegisterForm" data-href="{route('profile')}">
-                            <div class="form-group">
-                                <input type="text" required name="data[name]" class="form-control" placeholder="{t('users.register.form.labels.name')}">
-                            </div>
-                            <div class="form-group">
-                                <input type="text" required name="data[surname]" class="form-control" placeholder="{t('users.register.form.labels.surname')}">
-                            </div>
-                            <div class="form-group">
-                                <input type="email" required name="data[email]" class="form-control" placeholder="{t('users.register.form.labels.email')}">
-                            </div>
-                            <div class="form-group">
-                                <input type="password" required name="data[password]" class="form-control" placeholder="{t('users.register.form.labels.password')}">
-                            </div>
-                            <div class="form-group">
-                                <input type="password" required name="data[password_c]" class="form-control" placeholder="{t('users.register.form.labels.password_c')}">
-                            </div>
+                            {block name='users.register.form'}
+                                <div class="form-group">
+                                    <input type="text" required name="data[name]" class="form-control" placeholder="{t('users.register.form.labels.name')}">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" required name="data[surname]" class="form-control" placeholder="{t('users.register.form.labels.surname')}">
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" required name="data[email]" class="form-control" placeholder="{t('users.register.form.labels.email')}">
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" required name="data[password]" class="form-control" placeholder="{t('users.register.form.labels.password')}">
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" required name="data[password_c]" class="form-control" placeholder="{t('users.register.form.labels.password_c')}">
+                                </div>
+                            {/block}
+
+                            {$events->call('users.register.form')}
                             <input type="hidden" name="token" value="{$token}">
                             <button type="submit" class="btn btn-inline">{t('users.register.form.labels.submit')}</button>
                         </form>

@@ -175,17 +175,21 @@ var App = {
             }
         });
     },
-    alert: function(msg)
+    alert: function(msg, success)
     {
         return App.dialog({
             content: msg,
-            title: 'Інфомація',
+            title: 'Information',
             autoOpen: true,
             width: 500,
             modal: true,
-            buttons: {
-                "Ok": function(){$(this).dialog('close');}
-            }
+            buttons:  [
+                {
+                    text    : "Ok",
+                    "class" : 'btn-success',
+                    click   : success
+                }
+            ]
         });
     }
 };

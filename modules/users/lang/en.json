@@ -50,15 +50,49 @@
         "name": "Your name",
         "surname": "Your surname",
         "email": "Your email",
-        "password": "Your password",
-        "password_c": "Confirm password",
-        "submit" : "Save"
+        "submit" : "Update"
       }
     },
     "error":{
       "password_equals_to" : "Password confirmation must be equals to password field",
-      "is_email" : "This email address was registered"
-    }
+      "is_email" : "This email address was already registered"
+    },
+    "updated" : "Your profile updated"
+  },
+  "profile_psw": {
+    "title": "Change password",
+    "form": {
+      "title": "Change password",
+      "description": "",
+      "labels": {
+        "password": "Your password",
+        "password_c": "Confirm password",
+        "submit" : "Update"
+      }
+    },
+    "error":{
+      "password_equals_to" : "Password confirmation must be equals to password field",
+      "is_email" : "This email address was already registered"
+    },
+    "updated" : "Your password updated"
+  },
+  "reset_password": {
+    "title": "Reset password",
+    "form": {
+      "title": "Reset password",
+      "description": "",
+      "labels": {
+        "password": "New password",
+        "password_c": "Confirm password",
+        "submit" : "Update"
+      }
+    },
+    "error":{
+      "password_equals_to" : "Password confirmation must be equals to password field",
+      "wrong_skey" : "Wrong skey",
+      "is_email" : "This email address was already registered"
+    },
+    "updated" : "Your password updated"
   },
 
   "fp": {
@@ -75,10 +109,13 @@
     "error":{
       "not_found" : "User with those email not found",
       "status_banned": "This account was banned",
-      "status_deleted": "This account was deleted by administrator",
-      "invalid_password": "Invalid password",
-      "only_backend" : "It is admin access. Only for backend"
-    }
+      "status_deleted": "This account was deleted by administrator"
+    },
+    "mail": {
+      "subject" : "Reset password link",
+      "body" : "<p>Вітаємо %s. Ви отримали це повідомлення, так як здійснили запит на відновлення паролю.</p><p>Для цього вам необхідно перейти по <a href='%s'>цьому&nbsp;посиланню</a></p>"
+    },
+    "success": "We send you reset link. "
   },
   "new_psw": {
     "password": "password:",
