@@ -171,6 +171,9 @@ class Template
             $template .= '.tpl';
         }
 
+        $this->assign('custom_scripts', $this->getScripts());
+        $this->assign('custom_styles', $this->getStyles());
+
         return $this->smarty->fetch($template, $cache_id, $compile_id, $parent);
     }
 
@@ -201,6 +204,9 @@ class Template
         if(!empty($template) && strpos($template, '.tpl') === false){
             $template .= '.tpl';
         }
+
+        $this->assign('custom_scripts', $this->getScripts());
+        $this->assign('custom_styles', $this->getStyles());
 
         $this->smarty->display($template, $cache_id, $compile_id, $parent);
         die;

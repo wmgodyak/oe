@@ -22,6 +22,8 @@ class Users extends Frontend
     protected $users;
     protected $config;
 
+    private $allowed_fields = ['name', 'surname', 'email', 'password'];
+
     public function __construct()
     {
         parent::__construct();
@@ -37,81 +39,171 @@ class Users extends Frontend
 
         events()->add('boot', function(){
 
-            Route::getInstance()->get('{lang}/login', function(){
-                return $this->login();
-            });
-
-            Route::getInstance()->get('login', function(){
-                return $this->login();
-            });
-
-            Route::getInstance()->get('register', function(){
-                return $this->register();
-            });
-
-            Route::getInstance()->get('{lang}/register', function($lang){
-                return $this->register();
-            });
-        });
-
-        events()->add('init', function(){
-
             $this->template->assignScript("modules/users/js/users.js");
             $this->template->assign('user', Session::get('user'));
 
+            $this->route->get('register', function(){
+                if(Session::get('user.id')) {
+                    redirect(route('profile'));
+                }
+
+                return $this->template->fetch('modules/users/register');
+            });
+
+            $this->route->get('{lang}/register', function(){
+                if(Session::get('user.id')) {
+                    redirect(route('profile'));
+                }
+
+                return $this->template->fetch('modules/users/register');
+            });
+
+            $this->route->post('register', [$this, 'register']);
+
+            $this->route->get('{lang}/login', function(){
+                if(Session::get('user.id')) {
+                    redirect(route('profile'));
+                }
+
+                return $this->template->fetch('modules/users/login');
+            });
+
+            $this->route->get('login', function(){
+
+                if(Session::get('user.id')) {
+                    redirect(route('profile'));
+                }
+
+                return $this->template->fetch('modules/users/login');
+            });
+
+            $this->route->post('login', [$this, 'login']);
+
+            $this->route->get('profile', [$this, 'profile']);
+
+            $this->route->get('forgot-password', function(){
+
+                if(Session::get('user.id')) {
+                    redirect(route('profile'));
+                }
+
+                return $this->template->fetch('modules/users/fp');
+            });
+
+            $this->route->get('logout', [$this, 'logout']);
         });
+
+        events()->add('init', function(){});
+    }
+
+    public function register()
+    {
+        if(! $this->request->isPost() ) die;
+
+        $s=0; $i=[];
+
+        $data = $this->request->post('data');
+
+        $this->validator->setErrorMessage('equals_to', t('users.register.error.password_equals_to'));
+
+        $this->validator->addMethod('not_allowed', function($data){
+
+            foreach ($data as $k=>$v) {
+                if(! in_array($k, $this->allowed_fields)){
+                    return false;
+                }
+            }
+
+            return true;
+        });
+
+        $valid = $this->validator->run
+        (
+            $data,
+            [
+                'email'      => 'required|email',
+                'password'   => 'required',
+                'password_c' => "required|equals_to, {$data['password']}"
+            ]
+        );
+
+        if(!$valid){
+            $i = $this->validator->getErrors();
+        } else {
+            unset($data['password_c']);
+
+            $data['group_id'] = $this->config->guest_group_id;
+
+            $id = $this->users->create($data);
+
+            $data['id'] = $id;
+            $s = $id > 0;
+
+            if($s){
+                if($this->config->auth_after_register){
+                    $this->users->login($data);
+                }
+                events()->call('user.registered', ['user' => $data]);
+            } else {
+                $i = $this->users->getError();
+            }
+        }
+
+        return ['s'=>$s, 'i' => $i];
     }
 
     public function login()
     {
-        if($this->request->isPost()){
+        if( ! $this->request->isPost() ) die;
 
-            token_validate();
+        token_validate();
 
-            $status = 0; $i = [];
+        $status = 0; $i = [];
 
-            $email = $this->request->post('email');
-            $password = $this->request->post('password');
+        $email = $this->request->post('email');
+        $password = $this->request->post('password');
 
-            $valid = $this->validator->run
-            (
-                ['email' => $email, 'password' => $password],
-                ['email' => 'required|email', 'password' => 'required']
-            );
+        $valid = $this->validator->run
+        (
+            ['email' => $email, 'password' => $password],
+            ['email' => 'required|email', 'password' => 'required']
+        );
 
-            if(!$valid){
-                $i = $this->validator->getErrors();
-            } else {
-                $user = $this->users->getUserByEmail($email);
+        if(!$valid){
+            $i = $this->validator->getErrors();
+        } else {
+            $user = $this->users->getUserByEmail($email);
 
-                if(empty($user)){
-                    $i[] = ['password' => t('users.login.error.not_found')];
-                } elseif($user['status'] == 'ban'){
-                    $i[] = ['password' => t('users.login.error.status_banned')];
-                } elseif($user['status'] == 'deleted'){
-                    $i[] = ['password' => t('users.login.error.status_deleted')];
-                } else if ($this->users->checkPassword($password, $user['password'])){
-                    if($user['backend'] == 1){
-                        $i[] = ['password' => t("users.login.error.only_backend")];
-                    } else {
-                        $status = $this->users->login($user);
-                        if( !$status){
-                            $i[] = ['password' => $this->users->getError()];
-                        }
-                    }
+            if(empty($user)){
+                $i[] = ['email' => t('users.login.error.not_found')];
+            } elseif($user['status'] == 'ban'){
+                $i[] = ['email' => t('users.login.error.status_banned')];
+            } elseif($user['status'] == 'deleted'){
+                $i[] = ['email' => t('users.login.error.status_deleted')];
+            } else if ($this->users->checkPassword($password, $user['password'])){
+                if($user['backend'] == 1){
+                    $i[] = ['email' => t("users.login.error.only_backend")];
                 } else {
-                    $i[] = ['password' => t('users.login.error.invalid_password')];
+                    $status = $this->users->login($user);
+                    events()->call('user.login.success', ['user' => $user]);
                 }
+            } else {
+                $i[] = ['password' => t('users.login.error.invalid_password')];
             }
-
-            return ['s' => $status > 0, 'i' => $i];
         }
 
-        return $this->template->fetch('modules/users/login');
+        return ['s' => $status > 0, 'i' => $i];
     }
-    
-    public function register()
+
+
+    public function profile()
     {
+        $user = Session::get('user');
+
+        if(!$user){
+            redirect('login');
+        }
+
         if($this->request->isPost()){
 
             $s=0; $i=[];
@@ -120,11 +212,24 @@ class Users extends Frontend
 
             $this->validator->setErrorMessage('equals_to', t('users.register.error.password_equals_to'));
 
+            $this->validator->addMethod('not_allowed', function($data){
+
+                foreach ($data as $k=>$v) {
+                    if(! in_array($k, $this->allowed_fields)){
+                        return false;
+                    }
+                }
+
+                return true;
+            });
+
             $valid = $this->validator->run
             (
                 $data,
                 [
                     'email'      => 'required|email',
+                    'name'       => 'required',
+                    'surname'    => 'required',
                     'password'   => 'required',
                     'password_c' => "required|equals_to, {$data['password']}"
                 ]
@@ -132,31 +237,23 @@ class Users extends Frontend
 
             if(!$valid){
                 $i = $this->validator->getErrors();
+            }  elseif($this->users->issetEmail($data['email'], $user['id'])){
+                $i[] = ["data[email]" => t('users.profile.error.is_email')];
             } else {
-                unset($data['password_c']);
 
-                $data['group_id'] = $this->config->guest_group_id;
-
-                $id = $this->users->create($data);
-
-                $data['id'] = $id;
-                $s = $id > 0;
-
+                $s = $this->users->update($user['id'], $data);
                 if($s){
-                    if($this->config->auth_after_register){
-                        $this->users->login($data);
-                    }
-                    events()->call('user.registered', ['user' => $data]);
-                } else {
-                    $i = $this->users->getError();
-                }
+                    $data = array_merge($user, $data);
+                    Session::set('user', $data);
 
+                    events()->call('user.profile.updated', ['user' => $data]);
+                }
             }
 
             return ['s'=>$s, 'i' => $i];
         }
 
-        return $this->template->fetch('modules/users/register');
+        return $this->template->fetch('modules/users/profile');
     }
 
     public function logout()
@@ -206,8 +303,6 @@ class Users extends Frontend
 
             return ['s' => $s, 'i' => $i, 'm' => $m];
         }
-
-        return $this->template->fetch('modules/users/fp');
     }
 
     public function newPsw($skey=null)
@@ -250,50 +345,6 @@ class Users extends Frontend
         return $this->template->fetch('modules/users/new_psw');
     }
 
-    public function profile()
-    {
-        $user = Session::get('user');
-        
-        if(!$user){
-            $url = $this->getUrl(29); //profile
-
-            redirect( APPURL . $url);
-        }
-
-        if($this->request->isPost()){
-
-            $data = $this->request->post('data'); $s=0; $i=[];
-
-            FormValidation::setRule(['name', 'surname', 'email', 'phone'], FormValidation::REQUIRED);
-            FormValidation::setRule('email', FormValidation::EMAIL);
-            FormValidation::run($data);
-
-            if(FormValidation::hasErrors()){
-                $i = FormValidation::getErrors();
-            }  elseif($this->users->issetEmail($data['email'], $user['id'])){
-                $i[] = ["data[email]" => t('admins.error_email_not_unique')];
-            } else {
-                unset($data['password_c']);
-
-                if(empty($data['password'])) $data['password'] = $this->users->generatePassword();
-
-//                $data['group_id'] = $this->guest_group_id;
-                $s = $this->users->update($user['id'], $data);
-                if($s){
-                    $data = array_merge($user, $data);
-                    Session::set('user', $data);
-                }
-            }
-
-            if(!$s && $this->users->hasError()){
-                echo $this->users->getErrorMessage();
-            }
-
-            return ['s'=>$s, 'i' => $i];
-        }
-        
-        return $this->template->fetch('modules/users/profile');
-    }
 
     public function changePassword()
     {

@@ -1,4 +1,3 @@
-
 <script src="{$theme_url}assets/js/vendor/pace.js"></script>
 <script src="{$theme_url}assets/js/vendor/jquery.cookie.js"></script>
 <script src="{$theme_url}assets/js/vendor/jstree.min.js"></script>
@@ -29,8 +28,8 @@
     });
 </script>
 <script id="mainScript" src="{$theme_url}assets/js/common.js?v={$version}"></script>
-{if $components_scripts}
-    {foreach $components_scripts as $src}
+{if $custom_scripts}
+    {foreach $custom_scripts as $src}
         <script src="{$src}"></script>
     {/foreach}
 {/if}

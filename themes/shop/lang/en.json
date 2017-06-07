@@ -2,7 +2,7 @@
   "hello": "World",
   "validator": {
     "required": "The {field} field is required",
-    "valid_email": "The {field} field must be a valid email address",
+    "email": "The {field} field must be a valid email address",
     "equals_to": "The {field} field must be equals to password",
     "max_len": "The {field} field needs to be {param} characters or less",
     "min_len": "The {field} field needs to be at least {param} characters",

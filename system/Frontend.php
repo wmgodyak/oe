@@ -107,7 +107,9 @@ abstract class Frontend extends core\Controller
             $this->template->assign('settings', $this->settings);
 
             \system\core\Lang::getInstance()->set($this->languages->code, $this->template->theme);
+        }
 
+        if(! $this->validator){
             $this->validator = new Validator(t('validator'));
         }
     }
@@ -146,10 +148,9 @@ abstract class Frontend extends core\Controller
         $m = Modules::getInstance();
         $this->app->module = $m->get();
 
-        events()->call('init', ['page' => $page]);
+        events()->call('page.display', ['page' => $page]);
 
         $this->template->assign('app', $this->app);
-        $this->template->assign('modules_scripts', $this->template->getScripts());
 
         // fetch template
         $template_path = $this->settings->get('themes_path')

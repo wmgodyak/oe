@@ -1,4 +1,5 @@
 {extends 'layouts/pages/fw.tpl'}
+{block name='meta.title'}{t('users.register.title')}{/block}
 {block name="container"}
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
@@ -9,9 +10,15 @@
                     </div>
                     <div class="block-content">
                         {t('users.register.form.description')}
-                        <form method="post" action="{route('register')}" id="usersLoginForm">
+                        <form method="post" action="{route('register')}" id="usersRegisterForm" data-href="{route('profile')}">
                             <div class="form-group">
-                                <input type="text" required name="data[email]" class="form-control" placeholder="{t('users.register.form.labels.email')}">
+                                <input type="text" required name="data[name]" class="form-control" placeholder="{t('users.register.form.labels.name')}">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" required name="data[surname]" class="form-control" placeholder="{t('users.register.form.labels.surname')}">
+                            </div>
+                            <div class="form-group">
+                                <input type="email" required name="data[email]" class="form-control" placeholder="{t('users.register.form.labels.email')}">
                             </div>
                             <div class="form-group">
                                 <input type="password" required name="data[password]" class="form-control" placeholder="{t('users.register.form.labels.password')}">

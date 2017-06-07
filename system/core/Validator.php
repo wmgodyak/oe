@@ -109,15 +109,6 @@ class Validator
                         array_unshift($params, $value);
                     }
 
-                    $validator_name = ucfirst($validator);
-                    if(strpos($validator_name, '_') !== false){
-                        $a = explode('_', $validator_name);
-                        $validator_name = "";
-                        foreach ($a as $k=>$v) {
-                            $validator_name .= ucfirst($v);
-                        }
-                    }
-
                     if(!empty($this->validation_methods[$validator])) {
                         $result = call_user_func_array($this->validation_methods[$validator], $params);
 
@@ -132,17 +123,23 @@ class Validator
                         continue;
                     }
 
+                    $validator_name = ucfirst($validator);
+                    if(strpos($validator_name, '_') !== false){
+                        $a = explode('_', $validator_name);
+                        $validator_name = "";
+                        foreach ($a as $k=>$v) {
+                            $validator_name .= ucfirst($v);
+                        }
+                    }
+
                     if(file_exists(DOCROOT . $path . $validator_name . '.php')){
 
                         $c = $this->ns . $validator_name;
 
-                        $input = $params;
-                        if(!empty($params[1])){
-                            $input = array_shift($params);
-                        }
+                        $input = array_shift($params);
 
                         $controller = new $c(... $params);
-                        $result = call_user_func_array([$controller, $action], [$input]);
+                        $result = call_user_func([$controller, $action], $input);
 
                         if( ! $result ){
                             $this->errors[] =

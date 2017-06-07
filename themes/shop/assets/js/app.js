@@ -22,7 +22,7 @@ var App = {
         $(myForm).validate({
             errorElement: 'span',
             rules: rules,
-            debug: true,
+            debug: false,
             submitHandler: function(form) {
                 var bSubmit = $('.b-submit, .b-form-save');
                 var settings = {
@@ -49,28 +49,45 @@ var App = {
                     success: function(d)
                     {
                         bSubmit.removeAttr('disabled');
-                        if(! d.s ){
-                            showError(form, d.i)
-                        } else {
-
-                            if(typeof d.m != 'undefined'){
-                                d.e = typeof d.e == 'undefined' ? null : d.e;
-                                //engine.notify(d.m, d.t, 'success');
-                                //alert(d.m);
-                            }
-
-                            if(typeof onSuccess == 'string'){
-                                try {
-                                    onSuccess += '(d)';
-                                    var fn = new Function('d', onSuccess);
-                                    fn(d);
-                                } catch (err) {
-                                    console.info(onSuccess + ' is undefined.');
-                                }
-                            } else if(typeof onSuccess != 'undefined'){
-                                onSuccess(d);
-                            }
+                        if(typeof d.m != 'undefined'){
+                            d.e = typeof d.e == 'undefined' ? null : d.e;
+                            //engine.notify(d.m, d.t, 'success');
+                            //alert(d.m);
                         }
+
+                        if(typeof onSuccess == 'string'){
+                            try {
+                                onSuccess += '(d)';
+                                var fn = new Function('d', onSuccess);
+                                fn(d);
+                            } catch (err) {
+                                console.info(onSuccess + ' is undefined.');
+                            }
+                        } else if(typeof onSuccess != 'undefined'){
+                            onSuccess(d);
+                        }
+                        //if(! d.s ){
+                        //    showError(form, d.i)
+                        //} else {
+                        //
+                        //    if(typeof d.m != 'undefined'){
+                        //        d.e = typeof d.e == 'undefined' ? null : d.e;
+                        //        //engine.notify(d.m, d.t, 'success');
+                        //        //alert(d.m);
+                        //    }
+                        //
+                        //    if(typeof onSuccess == 'string'){
+                        //        try {
+                        //            onSuccess += '(d)';
+                        //            var fn = new Function('d', onSuccess);
+                        //            fn(d);
+                        //        } catch (err) {
+                        //            console.info(onSuccess + ' is undefined.');
+                        //        }
+                        //    } else if(typeof onSuccess != 'undefined'){
+                        //        onSuccess(d);
+                        //    }
+                        //}
                     },
                     error: function(d)
                     {
@@ -86,7 +103,6 @@ var App = {
             }
         });
     },
-
     request:  {
         /**
          * send get request

@@ -32,5 +32,11 @@
             }
         </style>
     {/literal}
-    {block name="head"}{/block}
+    {block name="head"}
+        {if $custom_styles}
+            {foreach $custom_styles as $src}
+                <link href="{$src}" rel="stylesheet">
+            {/foreach}
+        {/if}
+    {/block}
 </head>

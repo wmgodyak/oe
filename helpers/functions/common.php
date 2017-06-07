@@ -299,7 +299,7 @@ if( ! function_exists('route')){
 
         $prefix = $lang->is_main ? "" : "$lang->code/";
 
-        return '/'.$prefix . $url;
+        return APPURL . $prefix . $url;
     }
 
 }

@@ -1,18 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: wg
- * Date: 25.05.17
- * Time: 16:40
- */
 
 namespace system\core;
 
 use MatthiasMullie\Minify;
 use system\models\Parser;
-//use system\core\Config;
-//use system\core\DataFilter;
-//use system\core\DB;
 
 class FrontendResponse implements ResponseInterface
 {

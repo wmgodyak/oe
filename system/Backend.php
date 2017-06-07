@@ -270,13 +270,6 @@ abstract class Backend extends Controller
         $this->renderHeadingPanel();
 
         $this->template->assign('body', $body);
-
-        $scripts = $this->template->getScripts();
-        $this->template->assign('components_scripts', $scripts);
-
-        $styles = $this->template->getStyles();
-        $this->template->assign('components_styles', $styles);
-
         $this->template->display('index');
     }
 

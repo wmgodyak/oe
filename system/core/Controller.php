@@ -30,6 +30,11 @@ abstract class Controller
     protected $response;
 
     /**
+     * @var null|Route
+     */
+    protected $route;
+
+    /**
      * error handler
      * @var object
      */
@@ -40,6 +45,8 @@ abstract class Controller
         $this->request = Request::getInstance();
         // response
         $this->response = Response::getInstance();
+
+        $this->route = Route::getInstance();
     }
 
     /**
