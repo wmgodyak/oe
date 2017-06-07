@@ -165,11 +165,13 @@ class Validator
      * Get instance of validator and run validation
      * @param array $data
      * @param array $rules
+     * @param array $error_messages
      * @return mixed
+     * @throws \Exception
      */
-    public static function make(array $data, $rules = [])
+    public static function make(array $data, array $rules, array $error_messages = [])
     {
-        $validator = new static();
+        $validator = new static($error_messages);
 
         return $validator->run($data, $rules);
     }
