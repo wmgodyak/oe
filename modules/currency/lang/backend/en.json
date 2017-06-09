@@ -1,0 +1,14 @@
+{
+  "action_index": "Currency",
+  "code": "ISO code",
+  "name": "Name",
+  "rate": "Rate",
+  "symbol": "Symbol",
+  "is_main": "Is default",
+  "on_site": "Default on site",
+  "action_edit": "Edit currency",
+  "create_title": "Create currency",
+  "placeholder_code": "[a-z_0-9]+",
+  "delete_question": "Are you really want to delete currency?",
+  "empty_name": "Please, enter name"
+}
