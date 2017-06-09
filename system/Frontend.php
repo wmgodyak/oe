@@ -148,7 +148,7 @@ abstract class Frontend extends core\Controller
         $m = Modules::getInstance();
         $this->app->module = $m->get();
 
-        events()->call('page.display', ['page' => $page]);
+        events()->call('init', ['page' => $page]);
 
         $this->template->assign('app', $this->app);
 
