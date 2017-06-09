@@ -27,9 +27,9 @@ class Nav extends Frontend
               c.isfolder as c_isfolder
               from __nav n
               join __nav_items ni on ni.nav_id = n.id
-              left join __nav_items_info nii on nii.nav_items_id = ni.id and nii.languages_id='{$this->languages_id}'
+              left join __nav_items_info nii on nii.nav_items_id = ni.id and nii.languages_id='{$this->languages->id}'
               left join __content c on c.id=ni.content_id and c.status='published'
-              left join __content_info ci on ci.content_id=ni.content_id and ci.languages_id='{$this->languages_id}'
+              left join __content_info ci on ci.content_id=ni.content_id and ci.languages_id='{$this->languages->id}'
               where n.code = '{$code}' and ni.parent_id = {$parent_id}
               order by abs(ni.position) asc
               ")
@@ -60,7 +60,7 @@ class Nav extends Frontend
             ->select("
               select c.id, c.id as url, c.isfolder, ci.name, ci.title
               from __content c
-              join __content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
+              join __content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages->id}
               where c.parent_id='{$parent_id}' and c.status='published'
               ")
             ->all();

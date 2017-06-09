@@ -6,7 +6,7 @@
         {/foreach}
     {/if}
 {/function}
-<form class="form-horizontal" action="{block name="system.admins.groups.form.action"}admins/groups/process/{if isset($data.id)}{$data.id}{/if}{/block}" method="post" id="{block name="system.admins.groups.form.id"}adminsGroupForm{/block}">
+<form class="form-horizontal" action="{block name="system.admins.groups.form.action"}admins/groups/process{if isset($data.id)}/{$data.id}{/if}{/block}" method="post" id="{block name="system.admins.groups.form.id"}adminsGroupForm{/block}">
     <fieldset>
         <legend>{t('admins.groups.label_main')}</legend>
         <div class="form-group">
@@ -43,7 +43,7 @@
         {/block}
     </fieldset>
 
-    {block name="system.admins.groups.form.full_access_group"}
+    {block name="system.admins.groups.form.access_to_components"}
     <fieldset id="custom_permissions" style="display: {if $data.permissions.full_access}none{else}block{/if}">
         <legend>{t('admins.groups.access_to_components')}</legend>
         {foreach $components as $component=>$a}
@@ -68,7 +68,7 @@
     </fieldset>
     {/block}
 
-    {block name="system.admins.groups.form.full_access_group"}
+    {block name="system.admins.groups.form.access_to_modules"}
     <fieldset id="custom_permissions" style="display: {if $data.permissions.full_access}none{else}block{/if}">
         <legend>{t('admins.groups.access_to_modules')}</legend>
         {foreach $modules as $module=>$a}

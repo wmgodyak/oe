@@ -179,7 +179,7 @@ class Translations extends Backend
 
         $dir_path = preg_replace('/[a-z]{2}\.json/', '', $path);
 
-        $languages = $this->languages->get();
+        $languages = $this->languages->languages->get();
 
         $data = array();
 
@@ -216,7 +216,7 @@ class Translations extends Backend
 
         $dir_path = preg_replace('/[a-z]{2}\.json/', '', $path);
 
-        $languages = $this->languages->get();
+        $languages = $this->languages->languages->get();
 
         foreach ($languages as $lang) {
             $file = DOCROOT . $dir_path . $lang['code'] . '.json';

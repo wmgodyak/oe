@@ -21,12 +21,10 @@ require_once DOCROOT. "vendor/smarty/smarty/libs/Autoloader.php";
 class Template
 {
     private static $instance;
-    public $theme = null;
+    public $theme;
     public $theme_url;
     public $theme_path;
     private $smarty;
-
-    private $storage = [];
 
     /**
      * list of attached scripts
@@ -173,6 +171,9 @@ class Template
             $template .= '.tpl';
         }
 
+        $this->assign('custom_scripts', $this->getScripts());
+        $this->assign('custom_styles', $this->getStyles());
+
         return $this->smarty->fetch($template, $cache_id, $compile_id, $parent);
     }
 
@@ -203,6 +204,9 @@ class Template
         if(!empty($template) && strpos($template, '.tpl') === false){
             $template .= '.tpl';
         }
+
+        $this->assign('custom_scripts', $this->getScripts());
+        $this->assign('custom_styles', $this->getStyles());
 
         $this->smarty->display($template, $cache_id, $compile_id, $parent);
         die;

@@ -280,3 +280,82 @@ if ( ! function_exists('settings')){
     }
 
 }
+
+if (!function_exists('events')){
+
+    function events()
+    {
+        return \system\core\EventsHandler::getInstance();
+    }
+
+}
+
+if( ! function_exists('route')){
+
+    function route($url)
+    {
+        $url = trim($url, '/');
+        $lang = \system\core\Languages::getInstance();
+
+        $prefix = $lang->is_main ? "" : "$lang->code/";
+
+        return APPURL . $prefix . $url;
+    }
+
+}
+
+/**
+ * Request token generator
+ * @return mixed|string
+ */
+function token_make()
+{
+    $token = \system\core\Session::get('token');
+
+    if(empty($token)){
+        $token = hash('sha256', uniqid(mt_rand()));
+        \system\core\Session::set('token', $token);
+    }
+
+    return $token;
+}
+
+/**
+ * Request token validator
+ * @param null $token
+ */
+function token_validate($token = null)
+{
+    $request = \system\core\Request::getInstance();
+
+    if(! $token) {
+        $token = $request->post('token');
+    }
+
+    if($token != TOKEN){
+
+        if($request->isXhr()){
+            header('Content-Type: application/json');
+            echo json_encode(['error' => '#1201. Invalid token.']);
+            die;
+        }
+
+        die('#1201. Invalid token.');
+    }
+}
+
+/**
+ * Simple redirect tool
+ * @param $uri
+ * @param int $status_code
+ */
+function redirect($uri, $status_code = 303)
+{
+    if(strpos($uri, 'http') === false){
+        $uri = APPURL . $uri;
+    }
+
+    header('Location: ' . $uri, true, $status_code);
+
+    die;
+}

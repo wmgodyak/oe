@@ -38,7 +38,7 @@ class Tags extends Frontend
               select ct.id, t.tag
               from __posts_tags ct
               join __tags t on t.id=ct.tags_id
-              where ct.posts_id={$post_id} and ct.languages_id = '{$this->languages_id}'
+              where ct.posts_id={$post_id} and ct.languages_id = '{$this->languages->id}'
               limit {$start}, {$num}
             ")
             ->all();

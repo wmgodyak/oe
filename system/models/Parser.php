@@ -134,8 +134,8 @@ class Parser extends Frontend
     public function makeFriendlyUrl()
     {
         $home_id  = Settings::getInstance()->get('home_id');
-        $def_lang = self::$db->select("select id, code from __languages where is_main=1 limit 1")->row();
-        $languages_id = $this->request->param('languages_id');
+        $def_lang = self::$db->select("select id, code from __languages where is_main = 1 limit 1")->row();
+        $languages_id = \system\core\Languages::getInstance()->id;
         $self = $this;
 
         $pattern = '@';

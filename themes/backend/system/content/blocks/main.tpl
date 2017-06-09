@@ -1,11 +1,11 @@
 <fieldset>
     <legend>{$t.common.legend_main}</legend>
     <div class="fieldset-wrapper">
-        {if count($languages) > 1}
+        {if $languages->total() > 1}
         <div class="form-group">
             <label class="col-md-2 control-label">{$t.common.lang}</label>
             <div class="btn-group switch-languages col-md-6" id="switchLanguages" role="group">
-                {foreach $languages as $i=>$lang}
+                {foreach $languages->get() as $i=>$lang}
                     {if $lang.is_main == 1}{assign var='mainLang' value=$lang }{/if}
                     <button type="button" class="btn {if $i == 0}btn-default active{/if}" data-code="{$lang.code}">{$lang.code}</button>
                 {/foreach}
@@ -13,7 +13,7 @@
             </div>
         </div>
         {/if}
-        {foreach $languages as $i=>$lang}
+        {foreach $languages->get() as $i=>$lang}
         <div class="form-group lang-{$lang.code} switch-lang" {if $i>0}style="display:none"{/if}>
             <label for="info_{$lang.id}_name" class="col-md-2 control-label">{$t.content.name}</label>
             <div class="col-md-10">

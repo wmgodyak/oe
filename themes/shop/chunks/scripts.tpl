@@ -15,9 +15,11 @@
 
 {assets('js/main.js')}
 
+{assets('js/plugins.js')}
 {assets('js/app.js')}
 
-{foreach $modules_scripts as $k=>$src}
-    {assets($src, false)}
-{/foreach}
-
+{if $custom_scripts}
+    {foreach $custom_scripts as $src}
+        <script src="{$src}"></script>
+    {/foreach}
+{/if}

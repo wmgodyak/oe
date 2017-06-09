@@ -66,7 +66,7 @@ class Install extends Controller
 
     private function createAdmin()
     {
-        $langs = Lang::getInstance('backend')->getAllowedLanguages();
+        $langs = Lang::getInstance()->getAllowedLanguages();
         $language = $this->request->post('language','s');
         $data = $this->request->post('data');
         $conf = $_SESSION['inst']['db'];

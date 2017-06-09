@@ -19,18 +19,13 @@ defined("CPATH") or die();
 class Backend extends Model
 {
     protected $admin;
-    protected $languages; // todo change it to object
+    protected $languages;
 
     public function __construct()
     {
         parent::__construct();
 
         $this->admin = Session::get('backend.admin');
-
-        $l = new Languages();
-
-        $this->languages    = $l->get();
-        $this->languages_id = $l->getDefault('id');
-        self::$language_id  = $this->languages_id;
+        $this->languages = \system\core\Languages::getInstance();
     }
 }

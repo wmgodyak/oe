@@ -2,6 +2,7 @@
 
 namespace system\components\contentFeatures\models;
 
+use system\core\Languages;
 use system\models\Backend;
 
 /**
@@ -20,7 +21,7 @@ class ContentFeatures extends Backend
                 select f.id, f.type, f.required, f.multiple, fi.name
                 from __features_content fc
                 join __features f on f.id=fc.features_id and f.status='published'
-                join __features_info fi on fi.features_id=f.id and fi.languages_id={$this->languages_id}
+                join __features_info fi on fi.features_id=f.id and fi.languages_id={$this->languages->id}
                 where
                   fc.content_types_id={$page['types_id']} and
                   fc.content_subtypes_id in (0, {$page['subtypes_id']}) and
@@ -68,7 +69,7 @@ class ContentFeatures extends Backend
             $page = self::$db->select("select types_id, subtypes_id from __content where id={$content_id} limit 1")->row();
         }
 
-        $languages_id = self::$language_id;
+        $languages_id = Languages::getInstance()->id;
 
         $res = self::$db
             ->select
@@ -105,7 +106,7 @@ class ContentFeatures extends Backend
      */
     private static function getFeatures($parent_id, $content_id)
     {
-        $languages_id = self::$language_id;
+        $languages_id = Languages::getInstance()->id;
 
         $res = self::$db
             ->select

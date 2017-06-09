@@ -3,9 +3,7 @@
         <div class="header-top">
             <div class="container">
 
-                <ul class="hotline nav-left">
-                    <li><span class="wellcome">Wellcome to BigShop <a href="">Register</a> <span>or</span> <a href="">Login</a></span></li>
-                </ul>
+                {include file="modules/users/nav.tpl"}
 
                 <ul class="links nav-right">
                     <li class="link-account"><a href=""><img alt="img" src="{$theme_url}assets/images/icon/index9/user.png">My Account </a></li>

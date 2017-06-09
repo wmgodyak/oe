@@ -8,15 +8,16 @@
 namespace system;
 
 use system\components\admin\controllers\Admin;
+use system\core\Components;
 use system\core\Config;
 use system\core\Controller;
 use system\core\EventsHandler;
 use system\core\Lang;
+use system\core\Languages;
 use system\core\Session;
 use system\core\Template;
 use system\models\App;
 use system\models\Images;
-use system\models\Languages;
 use system\models\Modules;
 use system\models\Permissions;
 use system\models\Settings;
@@ -34,96 +35,41 @@ abstract class Backend extends Controller
      * @var string
      */
     private $content;
-    /**
-     * buttons
-     * @var array
-     */
-    private $buttons = array();
 
     protected $settings;
 
     protected $images;
 
-
     protected $template;
 
     private $panel_nav = [];
 
-    private $engine;
-
     private static $initialized = false;
 
     protected $languages;
-    protected $languages_id = 1;
 
-    protected $plugins;
-    protected $admin = [];
-
-    private $theme = null;
-    private $lang = null;
-
-    protected $modules = [];
-
+    protected $admin;
 
     public function __construct()
     {
         parent::__construct();
 
-        $this->engine = new \system\models\Backend();
-
-        $this->languages = new Languages();
-        $this->languages_id = $this->languages->getDefault('id');
+        $this->languages = Languages::getInstance();
 
         $this->images = new Images();
-
-//        $namespace   = $this->request->param('namespace');
-        $controller  = $this->request->param('controller');
-        $action      = $this->request->param('action');
-
-//        $this->request = Request::getInstance();
-
 
         // settings
         $this->settings = Settings::getInstance();
 
         // template settings
         $theme = $this->settings->get('backend_theme');
-        $this->theme = $theme;
-        $this->lang = Session::get('backend_lang');
         $this->template = Template::getInstance($theme);
 
-        $version = Config::getInstance()->get('core.version');
-        $this->template->assign('version',    $version);
         $this->template->assign('base_url',   APPURL . $this->settings->get('backend_url') ."/");
         $this->template->assign('settings',   $this->settings);
 
-        $this->validateToken();
-
-        if(
-            (
-                ! \system\components\admin\models\Admin::isOnline(Admin::id(), Session::id())
-            )
-        ){
-            if( $controller != 'Admin' && $action != 'login' ){
-                $this->redirect("/{$this->settings->get('backend_url')}/admin/login");
-            }
-        }
-
         if(!self::$initialized){
-
-            $controller = $this->request->param('controller');
-            $controller = lcfirst($controller);
-
-            Permissions::set(Admin::data('permissions'));
-            if( ($controller != 'admin' && $action != 'login') && $controller != 'module' ) {
-                if (!Permissions::canComponent($controller, $action)) {
-                    Permissions::denied();
-                }
-            }
-
-            $this->_init();
-
-            $this->makeCrumbs(t($controller . '.action_index'), $controller);
+             $this->_init();
         }
 
         $this->admin = Admin::data();
@@ -135,81 +81,71 @@ abstract class Backend extends Controller
     {
         self::$initialized = true;
 
-        Lang::getInstance($this->theme, $this->lang);
+        if
+        (
+               $this->request->isPost()
+            || $this->request->isPut()
+            || $this->request->isDelete()
+        )
+        {
+            token_validate();
+        }
+
+        $action      = $this->request->param('action');
 
         $controller = $this->request->param('controller');
-        $action     = $this->request->param('action');
         $controller = lcfirst($controller);
 
-        $this->template->assign('controller', $controller);
+        if(
+        (
+        ! \system\components\admin\models\Admin::isOnline(Admin::id(), Session::id())
+        )
+        ){
+            if( $controller != 'admin' && $action != 'login' ){
+                redirect("/{$this->settings->get('backend_url')}/admin/login");
+            }
+        }
 
-        $this->template->assign('action',     $action);
+        Permissions::set(Admin::data('permissions'));
 
-        $this->initSystemComponents();
+        if( ($controller != 'admin' && $action != 'login') && $controller != 'module' ) {
+            if (!Permissions::canComponent($controller, $action)) {
+                Permissions::denied();
+            }
+        }
+
+        $theme = $this->settings->get('backend_theme');
+        $lang = Session::get('backend_lang');
+
+        Lang::getInstance()->set($lang, $theme);
+
+        Components::init();
+
+        $events = EventsHandler::getInstance();
 
         $app = App::getInstance();
         $this->template->assign('app', $app);
 
+        Modules::getInstance()->init('backend', $lang);
+
         // assign events
-        $events = EventsHandler::getInstance();
         $this->template->assign('events', $events);
 
-        Modules::getInstance()->init('backend', $this->lang);
-
-
-        // admin structure
-        if($this->request->isGet() && ! $this->request->isXhr()){
-
-            $this->makeNav();
-            $this->template->assign('title', t($controller . '.action_' . $action));
-            $this->template->assign('name',  t($controller . '.action_' . $action));
-        }
-
-        $this->template->assign('languages',  $this->languages->get());
-        $this->template->assign('t', t()->get());
+        $this->template->assign('languages',  $this->languages->languages);
+        $this->template->assign('t', t()->get()); // todo remove it in future
 
         $this->template->assign('admin', Admin::data());
-
-    }
-    /**
-     * @param $name
-     * @param $url
-     */
-    protected function makeCrumbs($name, $url)
-    {
-        $breadcrumb =
-            [
-                [
-                    'url'  => $url,
-                    'name' => $name
-                ]
-            ];
-
-        $this->template->assign('breadcrumb', $breadcrumb);
     }
 
     /**
      * @param $name
      * @param null $url
      */
-    protected function addBreadCrumb($name, $url=null)
+    protected function addBreadCrumb($name, $url = null)
     {
         $items = $this->template->getVars('breadcrumb');
-
-        $items = array_merge($items, [['name' => $name, 'url' => $url]]);
+        $items = array_merge((array) $items, [['name' => $name, 'url' => $url]]);
         $this->template->assign('breadcrumb', $items);
-    }
-
-    public function before(){}
-
-    protected final function setButtonsPanel($buttons)
-    {
-        if(is_string($buttons)){
-            $this->panel_nav = array($buttons);
-        } else {
-            $this->panel_nav = $buttons;
-        }
-        return $this;
     }
 
     /**
@@ -236,7 +172,7 @@ abstract class Backend extends Controller
 
 
     /**
-     * @deprecated
+     * @deprecated use function t()
      * translations
      * @param $key
      * @return string
@@ -244,12 +180,6 @@ abstract class Backend extends Controller
     protected function t($key)
     {
         return t($key);
-//        return Lang::getInstance($this->theme, $this->lang)->get($key);
-    }
-
-    protected function setNav($b)
-    {
-        $this->buttons[] = $b;
     }
 
     protected function setContent($c)
@@ -315,53 +245,31 @@ abstract class Backend extends Controller
         $this->template->assign('nav', $s);
     }
 
-    private function initSystemComponents()
-    {
-        $ns = 'system\components';
-        $root = str_replace('\\','/', $ns);
-
-        $components = new \stdClass();
-        if ($handle = opendir(DOCROOT . $root)) {
-            while (false !== ($module = readdir($handle))) {
-                if ($module == "." || $module == ".." || $module == 'content')  continue;
-
-                if(! Permissions::canComponent($module, 'index')) continue;
-
-                $c  = $ns .'\\'. $module . '\controllers\\' . ucfirst($module);
-
-                $path = str_replace("\\", "/", $c);
-
-                if(file_exists(DOCROOT . $path . '.php')) {
-
-                    $controller = new $c;
-                    $components->{$module} = $controller;
-                    if(is_callable(array($controller, 'init'))){
-                        call_user_func(array($controller, 'init'));
-                    }
-                }
-            }
-            closedir($handle);
-        }
-
-        return $components;
-    }
-
     /**
      * @param $body
      */
     protected final function output($body)
     {
+        $version = Config::getInstance()->get('core.version');
+        $this->template->assign('version',    $version);
+
+        $controller = $this->request->param('controller');
+        $controller = lcfirst($controller);
+
+        $action = $this->request->param('action');
+
+        $this->addBreadCrumb(t($controller . '.action_index'), $controller);
+        $items = $this->template->getVars('breadcrumb');
+        rsort($items);
+        $this->template->assign('breadcrumb', $items);
+
+        $this->makeNav();
+        $this->template->assign('title', t($controller . '.action_' . $action));
+        $this->template->assign('name',  t($controller . '.action_' . $action));
+
         $this->renderHeadingPanel();
-//        $this->response->body($body)->asHtml();
 
         $this->template->assign('body', $body);
-
-        $scripts = $this->template->getScripts();
-        $this->template->assign('components_scripts', $scripts);
-
-        $styles = $this->template->getStyles();
-        $this->template->assign('components_styles', $styles);
-
         $this->template->display('index');
     }
 

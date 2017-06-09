@@ -96,7 +96,7 @@ class Nav extends Backend
     public function edit($id)
     {
         $data = $this->nav->getData($id);
-        if(empty($data)) $this->redirect(404);
+        if(empty($data)) redirect(404);
 
         $this->appendToPanel
         (
@@ -185,9 +185,8 @@ class Nav extends Backend
        return ['s'=>$s];
     }
 
-    public function getNavItems()
+    public function getNavItems($nav_id = null)
     {
-        $nav_id  = $this->request->post('nav_id', 'i');
         if(empty($nav_id)) die;
 
         return ['items' => $this->nav->getSelectedItems($nav_id)];
@@ -196,7 +195,7 @@ class Nav extends Backend
     public function createItem($parent_id)
     {
         $this->template->assign('id', $parent_id);
-        $this->template->assign('languages', $this->languages->get());
+        $this->template->assign('languages', $this->languages->languages->get());
         $this->template->assign('action', 'create');
         $this->template->display('system/nav/itemForm');
     }
@@ -206,7 +205,7 @@ class Nav extends Backend
         $this->template->assign('id', $id);
         $this->template->assign('data', $this->nav->items->getData($id));
         $this->template->assign('info', $this->nav->items_info->getData($id));
-        $this->template->assign('languages', $this->languages->get());
+        $this->template->assign('languages', $this->languages->languages->get());
         $this->template->assign('action', 'edit');
         $this->template->display('system/nav/itemForm');
     }

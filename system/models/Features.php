@@ -12,7 +12,7 @@ class Features extends Backend
 
         $this->languages = new Languages();
 
-        $this->languages_id = $this->languages->getDefault('id');
+        $this->languages->id = $this->languages->getDefault('id');
     }
 
     public function createBlank($parent_id, $owner_id)
@@ -34,7 +34,7 @@ class Features extends Backend
 
         if ($key != '*') return $data;
 
-        foreach ($this->languages->get() as $language) {
+        foreach ($this->languages->languages->get() as $language) {
             $data['info'][$language['id']] =
                 self::$db
                     ->select("select * from __features_info where features_id={$id} and languages_id={$language['id']} limit 1")
@@ -56,7 +56,7 @@ class Features extends Backend
     public function getName($id)
     {
         return self::$db
-            ->select("select name from __features_info where features_id={$id} and languages_id = {$this->languages_id} limit 1")
+            ->select("select name from __features_info where features_id={$id} and languages_id = {$this->languages->id} limit 1")
             ->row('name');
     }
 

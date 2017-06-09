@@ -30,7 +30,7 @@ class Page extends Frontend
             ->select("
               select c.id, c.isfolder, ci.name, ci.title
               from __content c
-              join __content_info ci on ci.content_id = c.id and ci.languages_id={$this->languages_id}
+              join __content_info ci on ci.content_id = c.id and ci.languages_id={$this->languages->id}
               where c.parent_id='{$parent_id}' and c.status='published'
               ")
             ->all();
@@ -65,7 +65,7 @@ class Page extends Frontend
             ->select("
                 select {$key} 
                 from __content_info 
-                where content_id = '{$id}' and languages_id='{$this->languages_id}'
+                where content_id = '{$id}' and languages_id='{$this->languages->id}'
                 limit 1
               ")
             -> row($key);
@@ -110,7 +110,7 @@ class Page extends Frontend
      */
     public function url($id, $languages_id = null)
     {
-        if(! $languages_id) $languages_id = $this->languages_id;
+        if(! $languages_id) $languages_id = $this->languages->id;
 
         $languages = new Languages();
 
@@ -134,7 +134,7 @@ class Page extends Frontend
      */
     public function getIdByUrl($url, $languages_id = null)
     {
-       if(! $languages_id) $languages_id = $this->languages_id;
+       if(! $languages_id) $languages_id = $this->languages->id;
 
        return self::$db
             ->select
@@ -154,7 +154,7 @@ class Page extends Frontend
      */
     public function fullInfo($id, $languages_id = null)
     {
-        if($languages_id) $this->languages_id = $languages_id;
+        if($languages_id) $this->languages->id = $languages_id;
         $page = self::$db
             ->select("
                 select c.*,
@@ -165,7 +165,7 @@ class Page extends Frontend
                 from __content_info i
                 join __content c on c.id=i.content_id
                 join __languages l on l.id=i.languages_id
-                where c.id={$id} and i.languages_id='{$this->languages_id}'
+                where c.id={$id} and i.languages_id='{$this->languages->id}'
                 limit 1
                 ")
             ->row();

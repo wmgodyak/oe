@@ -113,7 +113,7 @@ class Nav extends Backend
             ->select("
               select c.id, c.isfolder, c.status, ci.name
               from __content c
-              join __content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}
+              join __content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages->id}
               where c.parent_id={$parent_id} and c.types_id = {$types_id} and c.status = 'published'
               ")
             ->all();
@@ -140,8 +140,8 @@ class Nav extends Backend
           select n.id, n.isfolder, n.parent_id, n.published,
            IF(ni.name is null, ci.name, ni.name) as name
           from __nav_items n
-          left join __content_info ci on ci.content_id=n.content_id and ci.languages_id={$this->languages_id}
-          left join __nav_items_info ni on ni.nav_items_id=n.id and ni.languages_id={$this->languages_id}
+          left join __content_info ci on ci.content_id=n.content_id and ci.languages_id={$this->languages->id}
+          left join __nav_items_info ni on ni.nav_items_id=n.id and ni.languages_id={$this->languages->id}
           where n.nav_id={$nav_id} and n.parent_id={$parent_id}
           order by abs(n.position) asc
           " )->all();

@@ -58,7 +58,7 @@ class ContentRelationship extends Frontend
             ->select("
                 select cr.categories_id as id, ci.name
                 from __content_relationship cr
-                join __content_info ci on ci.content_id = cr.categories_id and ci.languages_id='{$this->languages_id}'
+                join __content_info ci on ci.content_id = cr.categories_id and ci.languages_id='{$this->languages->id}'
                 where cr.content_id={$content_id} and cr.is_main={$is_main} {$w}
                 {$limit}
                 ");

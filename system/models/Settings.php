@@ -82,7 +82,7 @@ class Settings
      * @param $value
      * @param null $block
      * @param null $type
-     * @throws \system\core\exceptions\Exception
+     * @return bool|string
      */
     public function set($name, $value, $block=null, $type=null)
     {
@@ -91,14 +91,16 @@ class Settings
         $a = DB::getInstance()->select("select id from __settings where name = '{$name}' limit 1")->row('id');
 
         if($a > 0){
-            $this->update($name, $value);
+           $s = $this->update($name, $value);
         } else {
-            $this->create($name, $value, $block, $type);
+           $s = $this->create($name, $value, $block, $type);
         }
 
         if(! DB::getInstance()->hasError()){
             $this->reload();
         }
+
+        return $s;
     }
 
     /**

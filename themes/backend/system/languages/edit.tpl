@@ -6,13 +6,9 @@
         </div>
     </div>
     <div class="form-group">
-        <label for="data_code" class="col-sm-3 control-label">{$t.languages.code}</label>
+        <label for="name" class="col-sm-3 control-label">{$t.languages.code}</label>
         <div class="col-sm-9">
-            <select name="data[code]" id="data_code"  class="form-control" required>
-                {foreach $allowed as $code=>$name}
-                    <option {if $data.code == $code}selected{/if} value="{$code}">{$name} ({$code})</option>
-                {/foreach}
-            </select>
+            <input name="data[code]" id="name"  class="form-control" value="{$data.code}" required placeholder="en">
         </div>
     </div>
     <div class="form-group">

@@ -7,12 +7,15 @@ use helpers\bootstrap\Icon;
 use helpers\FormValidation;
 use system\core\DataTables2;
 use system\core\EventsHandler;
-use system\core\Lang;
 use system\Backend;
 use system\models\Settings;
 
 defined("CPATH") or die();
 
+/**
+ * Class Languages
+ * @package system\components\languages\controllers
+ */
 class Languages extends Backend
 {
     public function init()
@@ -78,13 +81,11 @@ class Languages extends Backend
     public function create()
     {
         $this->template->assign('action', 'create');
-        $this->template->assign('allowed', t()->getAllowedLanguages());
         $this->template->display('system/languages/edit');
     }
     public function edit($id)
     {
-        $this->template->assign('data', $this->languages->getData($id));
-        $this->template->assign('allowed', t()->getAllowedLanguages());
+        $this->template->assign('data', $this->languages->languages->getData($id));
         $this->template->assign('action', 'edit');
         $this->template->display('system/languages/edit');
     }
@@ -104,14 +105,14 @@ class Languages extends Backend
         } else {
             switch($this->request->post('action')){
                 case 'create':
-                    $s = $this->languages->create($data);
+                    $s = $this->languages->languages->create($data);
                     if($s){
-                        $this->copyTranslations($data['code']);
+//                        $this->copyTranslations($data['code']);
                     }
                     break;
                 case 'edit':
                     if( $id > 0 ){
-                        $s = $this->languages->update($id, $data);
+                        $s = $this->languages->languages->update($id, $data);
                     }
                     break;
             }
@@ -122,7 +123,7 @@ class Languages extends Backend
 
     private function copyTranslations($code)
     {
-        $def = $this->languages->getDefault('code');
+        $def = $this->languages->languages->getDefault('code');
         // copy theme file
         $theme_path = Settings::getInstance()->get('themes_path');
         $current = Settings::getInstance()->get('app_theme_current');
@@ -172,8 +173,8 @@ class Languages extends Backend
 
     public function delete($id)
     {
-        $code = $this->languages->getData($id, 'code');
-        $this->rmTranslations($code);
-        return $this->languages->delete($id);
+        $code = $this->languages->languages->getData($id, 'code');
+//        $this->rmTranslations($code);
+        return $this->languages->languages->delete($id);
     }
 }

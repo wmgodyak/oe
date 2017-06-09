@@ -56,7 +56,7 @@ class Admins extends Backend
 //            $t->get('u.status');
             $t  -> from('__users u')
                 -> join("__users_group ug on ug.backend = 1")
-                -> join("__users_group_info ugi on ugi.group_id=ug.id and ugi.languages_id={$this->languages_id}")
+                -> join("__users_group_info ugi on ugi.group_id=ug.id and ugi.languages_id={$this->languages->id}")
                 -> where(" u.group_id=ug.id");
 
             if($group_id > 0){

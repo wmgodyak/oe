@@ -8,8 +8,6 @@
 
 namespace system\models;
 
-use system\core\Session;
-
 defined("CPATH") or die();
 
 /**
@@ -41,36 +39,8 @@ class Frontend extends Model
 
         $this->languages = new Languages();
 
-        $this->languages_id = $this->defileLanguageId();
-
         $this->images    = new Images();
         $this->app       = App::getInstance();
-    }
-
-    /**
-     * detect languages id by request uri or set if empty
-     * @return array|mixed|null
-     */
-    public function defileLanguageId()
-    {
-        $id = $this->request->param('languages_id');
-        if(!empty($id)) return $id;
-
-        $args = $this->request->param();
-
-        if(isset($args['lang'])) {
-            // selected language
-            $id = $this->languages->getDataByCode($args['lang'], 'id');
-        } elseif(!empty($args['controller'])){
-            $id = Session::get('app.languages_id');
-        }
-
-        if(empty($id)){
-            $id = $this->languages->getDefault('id');
-        }
-
-        $this->request->param('languages_id', $id);
-
-        return $id;
+        $this->languages = \system\core\Languages::getInstance();
     }
 }

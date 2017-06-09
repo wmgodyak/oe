@@ -19,10 +19,7 @@ abstract class Controller
      * system version
      */
     const VERSION = "7.2.7";
-    /**
-     * @var
-     */
-    protected $storage;
+
     /**
      * @var Request
      */
@@ -31,6 +28,12 @@ abstract class Controller
      * @var Response
      */
     protected $response;
+
+    /**
+     * @var null|Route
+     */
+    protected $route;
+
     /**
      * error handler
      * @var object
@@ -42,6 +45,8 @@ abstract class Controller
         $this->request = Request::getInstance();
         // response
         $this->response = Response::getInstance();
+
+        $this->route = Route::getInstance();
     }
 
     /**
@@ -49,39 +54,17 @@ abstract class Controller
      */
     abstract public function index();
 
-    public function init(){}
-
     /**
-     *	Setter method
-     *	@param string $index
-     *	@param mixed $value
+     * Initialize
      */
-    final public function __set($index, $value)
+    public function init()
     {
-        $this->storage[$index] = $value;
-    }
+        // here you can add callbacks for events
+        // on system boot
+//        events()->add('boot', function(){});
 
-    public function redirect($uri, $header = null)
-    {
-        switch($header){
-            case 404:
-                header("HTTP/1.0 404 Not Found");
-                break;
-            default:
-                break;
-        }
-
-        header('Location: ' . $uri);die;
-    }
-
-    protected function validateToken()
-    {
-        if($this->request->isPost()) {
-            $token = $this->request->post('token');
-            if($token != TOKEN){
-                die('#1201. Invalid token.');
-            }
-        }
+        // on page init
+//        events()->add('init', function(){});
     }
 
     public function __toString()

@@ -10,6 +10,7 @@ namespace system\components\admins\controllers;
 
 use system\components\admins\models\AdminsGroup;
 use system\Backend;
+use system\models\Modules;
 
 class Groups extends Backend
 {
@@ -29,9 +30,8 @@ class Groups extends Backend
         $this->template->assign('action', 'create');
         $this->template->assign('data', ['parent_id' => $parent_id]);
         $this->template->assign('groups', $this->adminsGroup->getItems(0, 1));
-        $this->template->assign('languages', $this->languages->get());
-
-        $this->template->assign('modules', $this->getModules());
+        $this->template->assign('languages', $this->languages->languages->get());
+        $this->template->assign('modules', Modules::getInstance()->getActionsList(true));
         $this->template->assign('components', $this->getSystemComponents());
         $this->template->display('system/admins/groups/form');
     }
@@ -40,11 +40,11 @@ class Groups extends Backend
     {
         $this->template->assign('action', 'edit');
         $this->template->assign('groups', $this->adminsGroup->getItems(0, 1));
-        $this->template->assign('languages', $this->languages->get());
+        $this->template->assign('languages', $this->languages->languages->get());
         $this->template->assign('data', $this->adminsGroup->getData($id));
         $this->template->assign('info', $this->adminsGroup->getInfo($id));
 
-        $this->template->assign('modules', $this->getModules());
+        $this->template->assign('modules', Modules::getInstance()->getActionsList(true));
         $this->template->assign('components', $this->getSystemComponents());
 
         $this->template->display('system/admins/groups/form');
@@ -65,37 +65,6 @@ class Groups extends Backend
                     $cc = str_replace('/','\\', "{$dir}{$c}/controllers/{$cl}");
 
 //                    echo "{$dir}{$c}/controllers/{$cl}<br>";
-
-                    $class = new \ReflectionClass($cc);
-                    foreach ($class->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
-
-                        if(in_array($method->name, $bla)) continue;
-
-                        $res[$c][] = $method->name;
-                    }
-                }
-            }
-            closedir($handle);
-        }
-        return $res;
-    }
-
-    private function getModules()
-    {
-        $res = [];
-        $dir = 'modules/';
-        $blc = ['module', 'admin', 'install'];
-        $bla = ['init', 'boot', '__construct', '__set', 'before', 'redirect'];
-
-        if ($handle = opendir($dir)) {
-            while (false !== ($c = readdir($handle))) {
-                if($c != '.' && $c != '..' && ! in_array($c, $blc)){
-
-                    $cl = ucfirst($c);
-
-                    if(!file_exists("{$dir}{$c}/controllers/admin/{$cl}.php")) continue;
-
-                    $cc = str_replace('/','\\', "{$dir}{$c}/controllers/admin/{$cl}");
 
                     $class = new \ReflectionClass($cc);
                     foreach ($class->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {

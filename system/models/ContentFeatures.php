@@ -20,7 +20,7 @@ class ContentFeatures extends Frontend
               select f.id, fi.name, f.code,f.type
               from __features f
               join __features_content fc on fc.content_id={$content_id} and fc.features_id=f.id
-              join __features_info fi on fi.features_id=f.id and fi.languages_id={$this->languages_id}
+              join __features_info fi on fi.features_id=f.id and fi.languages_id={$this->languages->id}
               where f.parent_id = {$parent_id}
                and f.type in ('select', 'folder')
                and f.status='published'
@@ -49,7 +49,7 @@ class ContentFeatures extends Frontend
         return self::$db->select("
               select f.id, fi.name
               from __features f
-              join __features_info fi on fi.features_id=f.id and fi.languages_id={$this->languages_id}
+              join __features_info fi on fi.features_id=f.id and fi.languages_id={$this->languages->id}
               where f.parent_id = {$parent_id} and f.type = 'value' and f.status='published'
               order by fi.name asc
            ")->all();

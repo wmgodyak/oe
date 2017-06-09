@@ -15,29 +15,6 @@ defined("CPATH") or die();
  */
 class Page extends \system\Frontend
 {
-    public function __construct()
-    {
-
-        if ( preg_match('!/{2,}!', $_SERVER['REQUEST_URI']) ){
-            $url = preg_replace('!/{2,}!', '/', $_SERVER['REQUEST_URI']);
-            header('Location: ' . $url , false, 301);
-            exit;
-        }
-
-        $lowerURI = strtolower($_SERVER['REQUEST_URI']);
-        if($_SERVER['REQUEST_URI'] != $lowerURI){
-            if(mb_substr($lowerURI, 0, 1) == '/') {
-                $lowerURI = mb_substr($lowerURI, 1);
-            }
-            $uri = APPURL . $lowerURI;
-            header("HTTP/1.1 301 Moved Permanently");
-            header("Location: $uri");
-            exit();
-        }
-
-        parent::__construct();
-    }
-
     public function displayHome()
     {
         if($this->request->isXhr()) return null;
@@ -45,18 +22,18 @@ class Page extends \system\Frontend
         $id = $this->settings->get('home_id');
         $page = $this->app->page->fullInfo($id);
 
-        $this->display($page);
+        return $this->display($page);
     }
 
     public function displayLang($code)
     {
-        if(empty($this->languages_id) && !isset($args['url']) && isset($code)){
+        if(empty($this->languages->id) && !isset($args['url']) && isset($code)){
             // short url
             $args['url'] = $code;
         }
 
-        $def_lang_id = $this->languages->getDefault('id');
-        $lang_id = $this->languages->getDataByCode($code, 'id');
+        $def_lang_id = $this->languages->languages->getDefault('id');
+        $lang_id = $this->languages->languages->getDataByCode($code, 'id');
 
         if(empty($lang_id)){
             $this->e404();
@@ -74,24 +51,24 @@ class Page extends \system\Frontend
         $id = $this->settings->get('home_id');
         $page = $this->app->page->fullInfo($id, $lang_id);
 
-        $this->display($page);
+        return $this->display($page);
     }
 
     public function displayLangAndUrl($code, $url)
     {
-        $lang_id = $this->languages->getDataByCode($code, 'id');
+        $lang_id = $this->languages->languages->getDataByCode($code, 'id');
         $id = $this->app->page->getIdByUrl($url, $lang_id);
         if(empty($id)){
-            $this->e404();
+           $this->e404();
         }
 
         $page = $this->app->page->fullInfo($id, $lang_id);
-        $this->display($page);
+        return $this->display($page);
     }
 
     public function displayUrl($url)
     {
-        $id = $this->app->page->getIdByUrl($url, $this->languages_id);
+        $id = $this->app->page->getIdByUrl($url, $this->languages->id);
 
         if(empty($id)){
             $this->e404();
@@ -99,7 +76,7 @@ class Page extends \system\Frontend
 
         $page = $this->app->page->fullInfo($id);
 
-        $this->display($page);
+        return $this->display($page);
     }
 
     public function index(){}

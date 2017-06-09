@@ -7,23 +7,17 @@
  */
 namespace system;
 
-use system\core\Config;
-use system\core\DataFilter;
-use system\core\DB;
-use system\core\EventsHandler;
 use system\core\exceptions\Exception;
-use system\core\Lang;
 use system\core\Request;
 use system\core\Session;
+use system\core\Validator;
 use system\models\Images;
 use system\models\Languages;
 use system\models\Modules;
-use system\models\Parser;
 use system\models\Settings;
 use system\core\Template;
 use system\models\App;
 
-use MatthiasMullie\Minify;
 
 if ( !defined("CPATH") ) die();
 
@@ -54,11 +48,6 @@ abstract class Frontend extends core\Controller
     protected $languages;
 
     /**
-     * defined languages id
-     * @var array|mixed|null
-     */
-    protected $languages_id;
-    /**
      * @var Images
      */
     protected $images;
@@ -69,13 +58,11 @@ abstract class Frontend extends core\Controller
 
     /**
      * Current page info
-     * @var string
+     * @var array
      */
     public $page = [];
 
-    protected $languages_code;
-
-    private $theme;
+    protected $validator;
 
     public function __construct()
     {
@@ -85,46 +72,55 @@ abstract class Frontend extends core\Controller
 
         $this->settings = Settings::getInstance();
 
-        $frontend = new \system\models\Frontend();
+        $this->languages = \system\core\Languages::getInstance();
 
         $this->app = App::getInstance();
 
-        // template settings
-        $theme = $this->settings->get('app_theme_current');
-        $this->template = Template::getInstance($theme);
-        $this->template->assign('app', $this->app);
-
-
-
-        $this->languages = $frontend->languages;
-        $this->languages_id = $frontend->languages_id;
-        $this->images =  $frontend->images;
+        if( ! $this->template ){
+            $theme = $this->settings->get('app_theme_current');
+            $this->template = Template::getInstance($theme);
+        }
 
         // to access custom modules
         $this->page = $this->template->getVars('page');
 
-//        $this->languages_code = $this->frontend->languages->getData($this->languages_id, 'code');
+        if(! $this->request->param('initialized')){
 
+            $this->request->param('initialized', 1);
+
+            $this->template->assign('base_url',    APPURL );
+            $this->template->assign('app', $this->app);
+
+            $events = events();
+
+            $events->add('route', function($request){
+                $lang = $request->param('lang');
+                if($lang != null){
+                    $s = $this->languages->setByCode($lang);
+                    if(! $s) $this->e404();
+                    \system\core\Lang::getInstance()->set($this->languages->code, $this->template->theme);
+               }
+            });
+
+            $this->template->assign('events', $events);
+
+            $this->template->assign('settings', $this->settings);
+
+            \system\core\Lang::getInstance()->set($this->languages->code, $this->template->theme);
+        }
+
+        if(! $this->validator){
+            $this->validator = new Validator(t('validator'));
+        }
     }
 
-    public function boot(){}
     public function index(){}
 
     protected function display($page)
     {
         if (!$page) {
-            $page = $this->e404();
+            $this->e404();
         }
-
-        $env = Config::getInstance()->get('core.environment');
-
-        $this->template->assign('base_url',    APPURL );
-        $this->template->assign('app', $this->app);
-
-        $events = EventsHandler::getInstance();
-        $this->template->assign('events', $events);
-
-        $this->template->assign('settings', $this->settings);
 
         if($this->settings->get('active') == 0) {
             $a = Session::get('backend.admin');
@@ -133,29 +129,16 @@ abstract class Frontend extends core\Controller
             }
         }
 
-        $page['content'] = $this->template->fetchString($page['content']);
-
         Request::getInstance()->param('page', $page);
 
-        if ($page['status'] != 'published') {
+        if (isset($page['status']) && $page['status'] != 'published') {
             $a = Session::get('engine.admin');
             if (!$a) {
-                $page = $this->e404();
+                $this->e404();
             }
         }
 
-        $this->languages_id   = $page['languages_id'];
-        $this->languages_code = $page['languages_code'];
-
-        $_SESSION['app'] = [
-            'languages_id'   => $page['languages_id'],
-            'languages_code' => $page['languages_code']
-        ];
-
-        $this->request->param('languages_id', $page['languages_id']);
-
-        Request::getInstance()->param('languages_id', $this->languages_id);
-        Request::getInstance()->param('languages_code', $this->languages_code);
+        $this->languages->set($page['languages_id']);
 
         //assign page to template
         $this->template->assign('page', $page);
@@ -163,137 +146,18 @@ abstract class Frontend extends core\Controller
 
         // init modules
         $m = Modules::getInstance();
-        $m->init('frontend', $page['languages_code'], ['page'=>$page]);
         $this->app->module = $m->get();
 
-        $this->template->assign('app', $this->app);
-        $this->template->assign('modules_scripts', $this->template->getScripts());
+        events()->call('init', ['page' => $page]);
 
-        if ($page['id'] == $this->settings->get('page_404')) {
-            $this->response->sendError(404);
-        }
+        $this->template->assign('app', $this->app);
 
         // fetch template
         $template_path = $this->settings->get('themes_path')
             . $this->settings->get('app_theme_current') . '/'
             . 'layouts/';
 
-        $ds = $this->template->fetch($template_path . $page['template']);
-
-        $parser = new Parser($ds);
-        $ds = $parser->getDocumentSource();
-
-        $ds = DataFilter::apply('documentSource', $ds);
-
-        $db = DB::getInstance();
-
-        if($env == 'production'){
-
-            $ds = $this->compress($ds);
-
-        } elseif($env == 'debugging' ){
-
-            $db = DB::getInstance();
-            $time = $_SERVER['REQUEST_TIME_FLOAT'];
-            $q = $db->getQueryCount();
-
-            $ds.= "\r\n<!--\r\n";
-            $time_end = microtime(true);
-            $exec_time = round($time_end-$time, 4);
-            $mu = memory_get_usage();
-            $mp = 0; $mpf=0;
-            if(function_exists('memory_get_peak_usage')){
-                $mp = memory_get_peak_usage();
-                $mpf = round(($mp / 1024) / 1024, 3);
-            }
-            $muf = round((memory_get_usage() / 1024) / 1024, 3);
-            $ml=ini_get('memory_limit');
-
-            if($mp > 0){
-                $ds.= "    Memory peak in use: $mp ($mpf M)\r\n";
-            }
-
-            $ds.= "    Page generation time: ".$exec_time." seconds\r\n";
-            $ds.= "    Memory in use: $mu ($muf M) \r\n";
-            $ds.= "    Memory limit: $ml \r\n";
-            $ds.= "    Total queries: $q \r\n";
-            $ds.=  "-->";
-        }
-
-        $db->close();
-        echo $ds; die;
-    }
-
-
-    /**
-     * @param $buffer
-     * @return mixed
-     */
-    private function compress($buffer)
-    {
-        $compile_force = Config::getInstance()->get('core.assets_compile_force');
-
-        $js_path = "tmp/{$this->template->theme}.min.js";
-        $css_path = "tmp/{$this->template->theme}.min.css";
-
-        $css_exists = file_exists(DOCROOT . $css_path);
-        $js_exists = file_exists(DOCROOT . $js_path);
-
-        if($compile_force || !$css_exists){
-
-            $css = $this->template->getStyles();
-            if(! empty($css)){
-
-                $minifier = new Minify\CSS();
-
-                foreach ($css as $k=>$v) {
-                    $minifier->add(DOCROOT . $v);
-                }
-
-                $minifier->minify(DOCROOT . $css_path);
-            }
-        }
-
-        if( $css_exists ){
-            $v = filemtime(DOCROOT . $css_path);
-            $css_compiled = "<link href='$css_path?_=$v' rel='stylesheet'>";
-            $buffer = str_replace('</head>', "$css_compiled\n</head>", $buffer);
-        }
-
-
-        if($compile_force || !$js_exists){
-            $js = $this->template->getScripts();
-            if(!empty($js)){
-
-                $minifier = new Minify\JS();
-
-                foreach ($js as $k=>$v) {
-                    $minifier->add(DOCROOT . $v);
-                }
-
-                $minifier->minify(DOCROOT . $js_path);
-
-            }
-        }
-
-        if($js_exists){
-            $v = filemtime(DOCROOT . $js_path);
-            $js_compiled  = "<script src='$js_path?_=$v'></script>";
-            $buffer = str_replace('</body>', "$js_compiled\n</body>", $buffer);
-        }
-
-        // minify html
-        $search = array(
-            '/\>[^\S ]+/s',  // strip whitespaces after tags, except space
-            '/[^\S ]+\</s',  // strip whitespaces before tags, except space
-            '/(\s)+/s'       // shorten multiple whitespace sequences
-        );
-        $replace = array(
-            '>',
-            '<',
-            '\\1'
-        );
-        return preg_replace($search, $replace, $buffer);
+        return $this->template->fetch($template_path . $page['template']);
     }
 
     /**
@@ -339,24 +203,14 @@ abstract class Frontend extends core\Controller
         die();
     }
 
-
-
-
     /**
      * @return mixed
      * @throws Exception
      */
     protected function e404()
     {
-        $id = $this->settings->get('page_404');
-
-        if(empty($id)){
-            throw new Exception("Неможливо здійснити перенаправлення на 404 сторінку. Введіть ід сторінки в налаштуваннях");
-        }
-
         header("HTTP/1.0 404 Not Found");
-        $page = $this->app->page->fullInfo($id);
-        $this->display($page);
+        $this->template->display('layouts/404');
     }
 
     /**

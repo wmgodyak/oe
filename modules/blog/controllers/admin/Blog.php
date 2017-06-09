@@ -143,7 +143,7 @@ class Blog extends Content
         if($this->request->isXhr()){
             $t  -> from('__content c')
                 -> join("__content_types ct on ct.type = '{$this->type}' and ct.id=c.types_id")
-                -> join("__content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages_id}")
+                -> join("__content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages->id}")
                 -> join('__users u on u.id=c.owner_id')
                 -> where("c.status in ('published', 'hidden')");
 
@@ -240,6 +240,7 @@ class Blog extends Content
         EventsHandler::getInstance()->add('content.params.after', [$tags, 'index']);
 
         $this->template->assign('sidebar', $this->template->fetch('modules/blog/categories/tree'));
+
         parent::edit($id);
     }
 }

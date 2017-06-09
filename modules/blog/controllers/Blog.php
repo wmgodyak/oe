@@ -4,8 +4,6 @@ namespace modules\blog\controllers;
 
 use modules\blog\models\Categories;
 use modules\blog\models\Posts;
-use system\core\DataFilter;
-use system\core\EventsHandler;
 use system\core\Route;
 use system\Frontend;
 
@@ -21,65 +19,65 @@ class Blog extends Frontend
 {
     public  $posts;
     private $categories;
-    private $config;
+
+    protected $config;
 
     public function __construct()
     {
         parent::__construct();
 
         $this->config = module_config('blog');
+
         $this->posts = new Posts($this->config->post_type);
         $this->categories = new Categories($this->config->category_type);
     }
 
     public function index(){}
 
-    public function boot()
-    {
-        parent::boot();
-
-        // here you can add routes, etc.
-
-        Route::getInstance()->get('/blog/author/{id}', function($id){
-            return $this->searchByAuthor($id);
-        });
-
-        Route::getInstance()->get('/blog/tag/{alpha}', function($tag){
-            return $this->searchByTag($tag);
-        });
-
-        Route::getInstance()->get('/blog/post/collect/{id}', function($id = null){
-            header('Content-Type: application/javascript');
-            if(empty($id)) return null;
-            $this->collect($id);
-        });
-    }
-
     public function init()
     {
-        $this->template->assignScript('modules/blog/js/blog.js');
+        events()->add('boot', function(){
 
-        $blog = [];
-        $blog['id'] = $this->config->id;
-        $this->template->assign('blog', $blog);
+            Route::getInstance()->get('blog/author/{id}', function($id){
+                $this->searchByAuthor($id);
+            });
 
-        if($this->page['type'] == $this->config->post_type){
-            $this->displayPost();
+            Route::getInstance()->get('blog/tag/{alpha}', function($tag){
+                $this->searchByTag($tag);
+            });
 
-        } elseif($this->page['type'] == $this->config->category_type){
-            $this->displayCategory();
-        }
+            Route::getInstance()->get('blog/post/collect/{id}', function($id = null){
+                header('Content-Type: application/javascript');
+                if(empty($id)) return null;
+                $this->collect($id);
+            });
+
+        });
+
+        events()->add('init', function($page){
+
+            $this->template->assignScript('modules/blog/js/blog.js');
+
+            $blog = [];
+            $blog['id'] = $this->config->id;
+            $this->template->assign('blog', $blog);
+
+            if($page['type'] == $this->config->post_type){
+                $this->displayPost($page);
+
+            } elseif($page['type'] == $this->config->category_type){
+                $this->displayCategory($page);
+            }
+        });
+
     }
 
-    private function displayCategory()
+    private function displayCategory($category)
     {
-        $blog = [];
-        $blog['id'] = $this->config->id;
         $errors = [];
-        $category = (array)$this->page;
 
-        if($this->page['id'] != $this->config->id){
-            $this->posts->categories_id = $this->page['id'];
+        if($category['id'] != $this->config->id){
+            $this->posts->categories_id = $category['id'];
         }
 
         if(isset($_GET['q'])){
@@ -118,7 +116,7 @@ class Blog extends Frontend
         }
 
         if(!empty($total)){
-            $pagination = $this->app->pagination->init($total, $this->config->ipp, $this->page['id'] . ';');
+            $pagination = $this->app->pagination->init($total, $this->config->ipp, $category['id'] . ';');
             $limit = $pagination->getLimit();
 
             $this->posts->start = $limit[0];
@@ -126,40 +124,38 @@ class Blog extends Frontend
 
             $category['total'] = $total;
             $category['posts'] = $this->posts->get();
-            $blog['pagination'] = $pagination;
+            $category['pagination'] = $pagination;
         }
 
         $category = filter_apply('blog.category', $category);
 
-        $blog['category'] = $category;
-
         $this->template->assign('errors', $errors);
-        $this->template->assign('blog', $blog);
+        $this->template->assign('category', $category);
     }
 
-    private function displayPost()
+    private function displayPost($post)
     {
         $blog = [];
         $blog['id'] = $this->config->id;
 
-        $post = (array)$this->page;
         $post['categories'] = $this->posts->categories($post['id']);
         $post['tags'] = $this->posts->tags->get($post['id']);
+        $post['views'] = $this->posts->meta->get($post['id'], 'views', true);
 
         $post = filter_apply('blog.post', $post);
 
         $blog['post'] = $post;
 
-//        dd($blog);
+//        dd($post);
 
-        $this->template->assign('blog', $blog);
+        $this->template->assign('post', $post);
     }
 
 
     public function searchByAuthor($author_id)
     {
         if(empty($author_id)){
-            return $this->e404();
+            $this->e404();
         }
 
         $blog = [];
@@ -202,7 +198,7 @@ class Blog extends Frontend
     public function searchByTag($tag)
     {
         if(empty($tag)){
-            return $this->e404();
+            $this->e404();
         }
 
         $blog = []; $errors = [];

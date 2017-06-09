@@ -18,18 +18,18 @@
     {/if}
     {if $blog.search}
         {if $blog.category.total > 0}
-            <p>We found {$blog.category.total} results for query {$blog.search.query}</p>
+            <p>We found {$category.total} results for query {$search.query}</p>
         {/if}
     {/if}
 
     <div class="post-grid">
         <div class="row post-items">
-            {foreach $blog.category.posts as $i=>$post}
+            {foreach $category.posts as $i=>$post}
                 {include file="modules/blog/post.tpl"}
             {/foreach}
         </div>
     </div>
-    {if $blog.pagination}{$blog.pagination->display()}{/if}
+    {if $category.pagination}{$category.pagination->display()}{/if}
 {/block}
 {block name="sidebar.content"}
     {include file="modules/blog/sidebar.tpl"}

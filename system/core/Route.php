@@ -53,7 +53,24 @@ class Route
 
     private function __construct()
     {
-        $this->uri = rtrim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
+//        if ( preg_match('!/{2,}!', $_SERVER['REQUEST_URI']) ){
+//            $url = preg_replace('!/{2,}!', '/', $_SERVER['REQUEST_URI']);
+//            header('Location: ' . $url , false, 301);
+//            exit;
+//        }
+//
+//        $lowerURI = strtolower($_SERVER['REQUEST_URI']);
+//        if($_SERVER['REQUEST_URI'] != $lowerURI){
+//            if(mb_substr($lowerURI, 0, 1) == '/') {
+//                $lowerURI = mb_substr($lowerURI, 1);
+//            }
+//            $uri = APPURL . $lowerURI;
+//            header("HTTP/1.1 301 Moved Permanently");
+//            header("Location: $uri");
+//            exit();
+//        }
+
+        $this->uri = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
         $this->uri = $this->protect($this->uri);
     }
 
@@ -162,10 +179,12 @@ class Route
         $actions = array_merge($this->actions['ANY'], $this->actions[$method]);
 
         $mode = 'frontend';
+        $request = Request::getInstance($mode);
         $backend_url = Settings::getInstance()->get('backend_url');
         $response  = Response::getInstance();
 
         foreach ($actions as $route) {
+
             // for admin panel
             $regex = str_replace('backend', $backend_url, $route[0]);
 
@@ -177,14 +196,21 @@ class Route
                 }
             }
 
-            // if found like this /post/{post}/comment/{comment}
             if(strpos($regex,'{') !== false){
                 $regex = preg_replace('(\{[[:alpha:]]+\})', $this->patterns['url'], $regex);
             }
 
             if(preg_match("@^$regex$@siu", $this->uri, $matches)){
 
-//                d($this->uri);d($regex);d($matches);
+//                d($route[0]);
+                $request_params = [];
+
+                $a = explode('/', $route[0]);
+                foreach ($a as $k=>$pattern) {
+                    if(strpos($pattern,'{') !== false){
+                        $request_params[] = ['name' => str_replace(['{', '}'], [], $pattern)];
+                    }
+                }
 
                 $params = [];
                 $callback = $route[1];
@@ -194,10 +220,21 @@ class Route
                     foreach ($params as $k=>$v) {
                         $v = trim($v);
                         if(empty($v)) unset($params[$k]);
+
+                        if(isset($request_params[$k])){
+                            $request_params[$k]['value'] = $v;
+                        }
+                    }
+                }
+
+                if(!empty($request_params)){
+                    foreach ($request_params as $param) {
+                        $request->param($param['name'], $param['value']);
                     }
                 }
 
                 if(is_callable($callback, true) && !is_string($callback)){
+                    events()->call('route', ['request' => $request]);
                     return $response->body(call_user_func_array($callback, $params));
                 } else {
 
@@ -233,15 +270,9 @@ class Route
 
                     $controller = ucfirst($controller);
 
-                    Request::getInstance($mode)
-                        ->param('controller', $controller)
-                        ->param('action',     $action);
-
-//                    Request::getInstance()->param('args', $params);
-
-                    foreach ($params as $k=>$v) {
-                        Request::getInstance()->param($k, $v);
-                    }
+                    $request->setMode($mode);
+                    $request->param('controller', $controller);
+                    $request->param('action',     $action);
 
                     // maybe it is module
                     $_module  = "modules\\" . lcfirst($controller) . "\\controllers\\$controller";
@@ -278,6 +309,7 @@ class Route
                         throw new \Exception('Route not found', 404);
                     }
 
+                    events()->call('route', ['request' => $request]);
                     return $this->call($controller, $action, $params);
                 }
             }
@@ -295,13 +327,16 @@ class Route
      */
     private function call($controller, $action, $params)
     {
+        events()->call('route.' . str_replace('\\', '.' , trim($controller, '/')));
+        events()->call('route.' . str_replace('\\', '.' , trim($controller, '/')) . '.' . $action);
+
         $controller = new $controller;
 
         if(!is_callable([$controller, $action])){
             throw new \Exception("Call to undefined action $action", 404);
         }
 
-        return Response::getInstance()->body(call_user_func_array([$controller, $action], $params));
+        Response::getInstance()->body(call_user_func_array([$controller, $action], $params));
     }
 
     /**
