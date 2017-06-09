@@ -1,20 +1,37 @@
-<div class="modal-login modal">
-    <h2>{$t.users.login.title}</h2>
-    <div class="form-block">
-        <form action="route/users/login" class="form-login" data-href="28" method="post" id="usersLogin">
-            <div class="form-group">
-                <label for="email-modal">{$t.users.login.email}</label>
-                <input id="email-modal" required name="data[email]" type="email">
-            </div>
-            <div class="form-group">
-                <label for="pass-modal">{$t.users.login.password}</label>
-                <input id="pass-modal" required name="data[password]" class="alert" type="password">
-            </div>
-            <a href="" class="link-red b-users-fp">{$t.users.login.fp_link}</a>
-            <input type="hidden" name="token" value="{$token}">
-            <button type="submit" class="btn-red">{$t.users.login.button}</button>
-            <button type="button" class="btn-clear close b-users-cancel">{$t.users.login.cancel}</button>
-        </form>
-    </div>
-    {$events->call('users.form.login', $page)}
-</div>
+{extends 'layouts/pages/fw.tpl'}
+{block name="container"}
+   <div class="row">
+       <div class="col-md-6 col-md-offset-3">
+           <div class="block-form-login">
+               <div class="block-form-registered">
+                   <div class="block-title">
+                       {t('users.login.form.title')}
+                   </div>
+                   <div class="block-content">
+                       {t('users.login.form.description')}
+                       <form method="post" action="login" id="usersLoginForm" data-href="{route('profile')}">
+                           {block name='users.login.form'}
+                               <div class="form-group">
+                                   <input type="text" required name="email" class="form-control" placeholder="{t('users.login.form.labels.email')}">
+                               </div>
+                               <div class="form-group">
+                                   <input type="password" required name="password" class="form-control" placeholder="{t('users.login.form.labels.password')}">
+                               </div>
+
+                               <div class="checkbox">
+                                   <label><input type="checkbox" name="remember" value="1"><span>{t('users.login.form.labels.remember')}</span></label>
+                               </div>
+                               <div class="checkbox">
+                                   <label><a href="{route('forgot-password')}">{t('users.links.fp')}</a></label>
+                               </div>
+                           {/block}
+                           {$events->call('users.login.form')}
+                           <input type="hidden" name="token" value="{$token}">
+                           <button type="submit" class="btn btn-inline">{t('users.login.form.labels.submit')}</button>
+                       </form>
+                   </div>
+               </div>
+           </div>
+       </div>
+   </div>
+{/block}

@@ -80,7 +80,6 @@ class Blog extends Content
     public function contentParams($content)
     {
         $type = $this->posts->getContentType($content['id']);
-
         if(!in_array($type, $this->allowed_types)) return '';
 
         $this->template->assign('selected_categories', $this->relations->getCategories($content['id']));

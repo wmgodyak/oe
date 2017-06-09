@@ -1,36 +1,34 @@
-<form action="route/users/profile" method="post" id="accountProfile">
-    <table class="info">
-        <tr>
-            <td><h3 class="head-red">{$t.users.profile.title}</h3></td>
-            <td class="text-right"><a href="javascript:void(0);" class="btn-edit b-users-profile-edit">{$t.users.profile.edit}</a></td>
-        </tr>
-        <tr>
-            <td>{$t.users.profile.name}</td>
-            <td><input type="text" name="data[name]" value="{if isset($user.name)}{$user.name}{/if}" disabled required></td>
-        </tr>
-        <tr>
-            <td>{$t.users.profile.surname}</td>
-            <td><input type="text" name="data[surname]" value="{if isset($user.surname)}{$user.surname}{/if}" disabled required></td>
-        </tr>
-        <tr>
-            <td>{$t.users.profile.phone}</td>
-            <td><input type="text" class="hidden" name="data[phone]" value="{if isset($user.phone)}{$user.phone}{/if}" disabled required></td>
-        </tr>
-        <tr>
-            <td>{$t.users.profile.email}</td>
-            <td><input type="email" class="hidden" name="data[email]" value="{if isset($user.email)}{$user.email}{/if}" disabled required></td>
-        </tr>
-        {*<tr>*}
-            {*<td>Дата народження</td>*}
-            {*<td><input type="date" class="hidden" name="data[name]" value="{$user.name}" disabled="disabled"></td>*}
-        {*</tr>*}
-        <tr class="form-action" style="display: none">
-            <td>&nbsp;</td>
-            <td>
-                <button class="btn b-form-save">{$t.users.profile.save}</button>
-            </td>
-        </tr>
-    </table>
-    <div class="response"></div>
-    <input type="hidden" name="token" value="{$token}">
-</form>
+{extends 'layouts/pages/fw.tpl'}
+{block name='meta.title'}{t('users.profile.title')}{/block}
+{block name="container"}
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="block-form-login">
+                <div class="block-form-registered">
+                    <div class="block-title">
+                        {t('users.profile.form.title')}
+                    </div>
+                    <div class="block-content">
+                        {t('users.profile.form.description')}
+                        <form method="post" action="/profile" id="usersProfileForm">
+                            {block name="users.profile.form"}
+                                <div class="form-group">
+                                    <input type="text" value="{$user.name}" required name="data[name]" class="form-control" placeholder="{t('users.profile.form.labels.name')}">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" value="{$user.surname}" required name="data[surname]" class="form-control" placeholder="{t('users.profile.form.labels.surname')}">
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" value="{$user.email}" required name="data[email]" class="form-control" placeholder="{t('users.profile.form.labels.email')}">
+                                </div>
+                            {/block}
+                            {$events->call('users.profile.form')}
+                            <input type="hidden" name="token" value="{$token}">
+                            <button type="submit" class="btn btn-inline">{t('users.profile.form.labels.submit')}</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{/block}

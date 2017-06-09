@@ -27,6 +27,7 @@ class Blog extends Frontend
         parent::__construct();
 
         $this->config = module_config('blog');
+
         $this->posts = new Posts($this->config->post_type);
         $this->categories = new Categories($this->config->category_type);
     }
@@ -50,6 +51,7 @@ class Blog extends Frontend
                 if(empty($id)) return null;
                 $this->collect($id);
             });
+
         });
 
         events()->add('init', function($page){
@@ -72,8 +74,6 @@ class Blog extends Frontend
 
     private function displayCategory($category)
     {
-        $blog = [];
-        $blog['id'] = $this->config->id;
         $errors = [];
 
         if($category['id'] != $this->config->id){
@@ -124,15 +124,13 @@ class Blog extends Frontend
 
             $category['total'] = $total;
             $category['posts'] = $this->posts->get();
-            $blog['pagination'] = $pagination;
+            $category['pagination'] = $pagination;
         }
 
         $category = filter_apply('blog.category', $category);
 
-        $blog['category'] = $category;
-
         $this->template->assign('errors', $errors);
-        $this->template->assign('blog', $blog);
+        $this->template->assign('category', $category);
     }
 
     private function displayPost($post)
@@ -142,14 +140,15 @@ class Blog extends Frontend
 
         $post['categories'] = $this->posts->categories($post['id']);
         $post['tags'] = $this->posts->tags->get($post['id']);
+        $post['views'] = $this->posts->meta->get($post['id'], 'views', true);
 
         $post = filter_apply('blog.post', $post);
 
         $blog['post'] = $post;
 
-//        dd($blog);
+//        dd($post);
 
-        $this->template->assign('blog', $blog);
+        $this->template->assign('post', $post);
     }
 
 

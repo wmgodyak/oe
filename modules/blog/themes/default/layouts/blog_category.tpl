@@ -1,18 +1,16 @@
 {extends 'layouts/pages/sb-sr.tpl'}
-{block name="container" prepend}
-    <div class="breadcrumb">
-        <div class="container">
-            <div class="breadcrumb-inner">
-                <ul class="list-inline list-unstyled">
-                    <li><a href="#">Home</a></li>
-                    <li class='active'>Blog</li>
-                </ul>
-            </div><!-- /.breadcrumb-inner -->
-        </div><!-- /.container -->
-    </div>
-    <!-- /.breadcrumb -->
+{block name="body.class"}index-opt-1 cms-page cms-blog{/block}
+{block name="main" prepend}
+    <!-- breadcrumb -->
+    <div class="container breadcrumb-page">
+        <ol class="breadcrumb">
+            <li><a href="Blog_Grid.html#">Home </a></li>
+            <li class="active">Authentication</li>
+        </ol>
+    </div> <!-- breadcrumb -->
 {/block}
 {block name="content"}
+
     {if $errors|count}
         <div class="alert alert-error">
             {implode('<br>', $errors)}
@@ -23,9 +21,14 @@
             <p>We found {$blog.category.total} results for query {$blog.search.query}</p>
         {/if}
     {/if}
-    {foreach $blog.category.posts as $i=>$post}
-        {include file="modules/blog/post.tpl"}
-    {/foreach}
+
+    <div class="post-grid">
+        <div class="row post-items">
+            {foreach $blog.category.posts as $i=>$post}
+                {include file="modules/blog/post.tpl"}
+            {/foreach}
+        </div>
+    </div>
     {if $blog.pagination}{$blog.pagination->display()}{/if}
 {/block}
 {block name="sidebar.content"}
