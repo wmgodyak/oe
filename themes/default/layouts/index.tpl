@@ -6,11 +6,11 @@
  * @name index
  *}
 <!DOCTYPE html>
-<html lang="{block name="html.lang"}en{/block}">
+<html lang="{block name="html.lang"}en{/block}" data-page="{$page.id}" data-template="{$page.template}" data-type="{$page.type}">
 
     <head>{include file="chunks/head.tpl"}</head>
 
-    <body class="{block name="body.class"}cnt-home{/block}">
+    <body class="{block name="body.class"}cms-index-index index-opt-8{/block}">
 
         {$events->call('layout.index.body.before')}
 

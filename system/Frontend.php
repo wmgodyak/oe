@@ -88,6 +88,8 @@ abstract class Frontend extends core\Controller
 
             $this->request->param('initialized', 1);
 
+            $this->app->module = Modules::getInstance()->get();
+
             $this->template->assign('base_url',    APPURL );
             $this->template->assign('app', $this->app);
 

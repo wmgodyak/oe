@@ -20,29 +20,6 @@
 
 {block name="chunks.head"}
     <!-- Bootstrap Core CSS -->
-    {assets('css/bootstrap.min.css')}
-
-    <!-- Customizable CSS -->
-    {assets('css/main.css')}
-    {assets('css/orange.css')}
-    {assets('css/owl.carousel.css')}
-    {assets('css/owl.transitions.css')}
-    {assets('assets/css/lightbox.css')}
-    {assets('css/animate.min.css')}
-    {assets('css/rateit.css')}
-    {assets('css/bootstrap-select.min.css')}
-    <!-- Icons/Glyphs -->
-    {assets('css/font-awesome.min.css')}
-
-    <!-- Fonts -->
-    <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,500,700' rel='stylesheet' type='text/css'>
-    <!-- Favicon -->
-    {assets('images/favicon.ico')}
-
-    <!-- HTML5 elements and media queries Support for IE8 : HTML5 shim and Respond.js -->
-    <!--[if lt IE 9]>
-    <script src="assets/js/html5shiv.js"></script>
-    <script src="assets/js/respond.min.js"></script>
-    <![endif]-->
+    {assets('css/style.css')}
     {$events->call('chunks.head', $page)}
 {/block}

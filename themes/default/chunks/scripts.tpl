@@ -1,22 +1,25 @@
-{assets('js/jquery-1.11.1.min.js')}
-
-{assets('js/bootstrap.min.js')}
-
-{assets('js/bootstrap-hover-dropdown.min.js')}
+{assets('js/jquery.min.js')}
+{assets('js/jquery.sticky.js')}
 {assets('js/owl.carousel.min.js')}
+{assets('js/bootstrap.min.js')}
+{assets('js/jquery.countdown.min.js')}
+{assets('js/jquery.bxslider.min.js')}
+{assets('js/jquery.actual.min.js')}
+{assets('js/jquery-ui.min.js')}
+{assets('js/chosen.jquery.min.js')}
+{assets('js/jquery.elevateZoom.min.js')}
+{assets('js/fancybox/source/jquery.fancybox.pack.js')}
+{assets('js/fancybox/source/helpers/jquery.fancybox-media.js')}
+{assets('js/fancybox/source/helpers/jquery.fancybox-thumbs.js')}
+{assets('js/arcticmodal/jquery.arcticmodal.js')}
 
-{assets('js/echo.min.js')}
-{assets('js/jquery.easing-1.3.min.js')}
-{assets('js/bootstrap-slider.min.js')}
-{assets('js/jquery.rateit.min.js')}
-{assets('js/lightbox.min.js')}
-{assets('js/bootstrap-select.min.js')}
-{assets('js/wow.min.js')}
+{assets('js/main.js')}
 
-{*{assets('js/plugins.js')}*}
+{assets('js/plugins.js')}
 {assets('js/app.js')}
-{foreach $modules_scripts as $k=>$src}
-    {assets($src, false)}
-{/foreach}
-{assets('js/scripts.js')}
 
+{if $custom_scripts}
+    {foreach $custom_scripts as $src}
+        <script src="{$src}"></script>
+    {/foreach}
+{/if}
