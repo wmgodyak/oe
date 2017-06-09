@@ -113,11 +113,13 @@ class Validator
                         $result = call_user_func_array($this->validation_methods[$validator], $params);
 
                         if($result === false) {
+
                             $this->errors[] = [
                                 'field' => $field,
                                 'rule'  => $validator,
                                 'value' => $value,
                             ];
+
                         }
 
                         continue;
@@ -142,12 +144,18 @@ class Validator
                         $result = call_user_func([$controller, $action], $input);
 
                         if( ! $result ){
+
+                            if(empty($this->error_messages[$validator])){
+                                $this->error_messages[$validator] = call_user_func([$controller, 'getErrorMessage']);
+                            }
+
                             $this->errors[] =
                                 [
                                     'field' => $field,
                                     'rule'  => $validator,
                                     'value' => $value,
                                 ];
+
                         }
 
                         continue;

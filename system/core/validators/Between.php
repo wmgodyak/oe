@@ -21,4 +21,9 @@ class Between implements ValidatorInterface
     {
         return $data > $this->min && $data < $this->max;
     }
+
+    public function getErrorMessage()
+    {
+        return "The {field} must be between $this->min and $this->max";
+    }
 }

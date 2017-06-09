@@ -23,4 +23,9 @@ class Date implements ValidatorInterface
 
         return $cdate1 != $input && $cdate2 != $input;
     }
+
+    public function getErrorMessage()
+    {
+        return "The {field} must be a valid date";
+    }
 }

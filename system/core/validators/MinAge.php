@@ -31,4 +31,9 @@ class MinAge implements ValidatorInterface
         $age = $interval->y;
         return $age <= $this->min;
     }
+
+    public function getErrorMessage()
+    {
+        return "The {field} field needs to have an age greater than or equal to {param}";
+    }
 }

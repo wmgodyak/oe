@@ -20,4 +20,9 @@ class AlphaNumeric implements ValidatorInterface
 
         return preg_match('/^([a-z0-9ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖßÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ])+$/i', $input) !== false;
     }
+
+    public function getErrorMessage()
+    {
+        return "The {field} field may only contain letters and numbers";
+    }
 }

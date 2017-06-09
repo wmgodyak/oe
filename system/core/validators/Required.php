@@ -13,4 +13,9 @@ class Required implements ValidatorInterface
     {
         return !empty($data);
     }
+
+    public function getErrorMessage()
+    {
+        return "The {field} field is required";
+    }
 }

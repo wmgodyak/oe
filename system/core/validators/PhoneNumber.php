@@ -26,4 +26,9 @@ class PhoneNumber implements ValidatorInterface
         $regex = '/^(\d[\s-]?)?[\(\[\s-]{0,2}?\d{3}[\)\]\s-]{0,2}?\d{3}[\s-]?\d{4}$/i';
         return preg_match($regex, $input);
     }
+
+    public function getErrorMessage()
+    {
+        return "The {field} field needs to be a valid Phone Number";
+    }
 }

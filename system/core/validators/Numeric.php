@@ -20,4 +20,9 @@ class Numeric implements ValidatorInterface
 
         return is_numeric($input);
     }
+
+    public function getErrorMessage()
+    {
+        return "The {field} field must be a number";
+    }
 }

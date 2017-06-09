@@ -37,4 +37,9 @@ class ExactLen implements ValidatorInterface
 
         return false;
     }
+
+    public function getErrorMessage()
+    {
+        return "The {field} field needs to be exactly {param} characters";
+    }
 }

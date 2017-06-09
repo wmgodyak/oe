@@ -34,4 +34,9 @@ class MinLen implements ValidatorInterface
 
         return false;
     }
+
+    public function getErrorMessage()
+    {
+        return "The {field} field needs to be at least {param} characters";
+    }
 }

@@ -21,4 +21,9 @@ class StreetAddress implements ValidatorInterface
 
         return $hasLetter && $hasDigit && $hasSpace;
     }
+
+    public function getErrorMessage()
+    {
+        return "The {field} field needs to be a valid street address";
+    }
 }

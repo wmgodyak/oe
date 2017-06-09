@@ -27,4 +27,9 @@ class MaxNumeric implements ValidatorInterface
 
         return is_numeric($input) && is_numeric($this->max) && ($input <= $this->max);
     }
+
+    public function getErrorMessage()
+    {
+        return "The {field} field needs to be a numeric value, equal to, or lower than {param}";
+    }
 }

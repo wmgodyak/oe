@@ -20,4 +20,9 @@ class Alpha implements ValidatorInterface
 
         return preg_match('/^([a-zÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖßÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ])+$/i', $input) !== false;
     }
+
+    public function getErrorMessage()
+    {
+        return "The {field} field may only contain letters";
+    }
 }

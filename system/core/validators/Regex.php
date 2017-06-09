@@ -24,4 +24,9 @@ class Regex implements ValidatorInterface
     {
         return preg_match($this->regex, $input);
     }
+
+    public function getErrorMessage()
+    {
+        return "The {field} field needs to contain a value with valid format";
+    }
 }

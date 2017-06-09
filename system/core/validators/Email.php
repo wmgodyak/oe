@@ -89,4 +89,9 @@ class Email implements ValidatorInterface
                 return (boolean)filter_var($email, FILTER_VALIDATE_EMAIL);
         }
     }
+
+    public function getErrorMessage()
+    {
+        return "The {field} field must be a valid email address";
+    }
 }

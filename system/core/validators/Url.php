@@ -20,4 +20,9 @@ class Url implements ValidatorInterface
 
         return filter_var($input, FILTER_VALIDATE_FLOAT) === true;
     }
+
+    public function getErrorMessage()
+    {
+        return "The {field} field has to be a URL";
+    }
 }

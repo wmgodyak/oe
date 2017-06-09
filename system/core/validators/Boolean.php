@@ -21,4 +21,9 @@ class Boolean implements ValidatorInterface
         $booleans = array('1', 'true', true, 1, '0', 'false', false, 0, 'yes', 'no', 'on', 'off');
         return in_array($input, $booleans, true );
     }
+
+    public function getErrorMessage()
+    {
+        return "The {field} field has to be either true or false";
+    }
 }

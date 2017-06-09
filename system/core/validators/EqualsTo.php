@@ -24,4 +24,9 @@ class EqualsTo implements ValidatorInterface
 
         return $input == $this->val;
     }
+
+    public function getErrorMessage()
+    {
+        return "The {field} field must be equals to password";
+    }
 }

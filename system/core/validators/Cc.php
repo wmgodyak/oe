@@ -39,4 +39,9 @@ class Cc implements ValidatorInterface
 
         return $total % 10 == 0;
     }
+
+    public function getErrorMessage()
+    {
+        return "The {field} is not a valid credit card number";
+    }
 }

@@ -22,7 +22,7 @@
     "valid_ipv4": "The {field} field needs to contain a valid IPv4 address",
     "valid_ipv6": "The {field} field needs to contain a valid IPv6 address",
     "guidv4": "The {field} field needs to contain a valid GUID",
-    "valid_cc": "The {field} is not a valid credit card number",
+    "cc": "The {field} is not a valid credit card number",
     "valid_name": "The {field} should be a full name",
     "contains": "The {field} can only be one of the following: {param}",
     "contains_list": "The {field} is not a valid option",

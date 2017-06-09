@@ -20,4 +20,9 @@ class IsFloat implements ValidatorInterface
 
         return filter_var($input, FILTER_VALIDATE_FLOAT) === true;
     }
+
+    public function getErrorMessage()
+    {
+        return "The {field} field must be a number with a decimal point (float)";
+    }
 }
