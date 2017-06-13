@@ -26,3 +26,20 @@ CREATE TABLE IF NOT EXISTS `__products` (
     ON DELETE CASCADE
     ON UPDATE CASCADE)
   ENGINE = InnoDB;
+
+
+CREATE TABLE IF NOT EXISTS `__products_prices` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `product_id` int(10) unsigned NOT NULL,
+  `group_id` tinyint(3) unsigned NOT NULL,
+  `price` decimal(10,2) DEFAULT NULL,
+  `price_old` decimal(10,2) DEFAULT NULL,
+  PRIMARY KEY (`id`,`product_id`,`group_id`),
+  UNIQUE KEY `product_id` (`product_id`,`group_id`),
+  KEY `fk_products_prices_content1_idx` (`product_id`),
+  KEY `fk_products_prices_users_group1_idx` (`group_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 ;
+
+ALTER TABLE `__products_prices`
+ADD CONSTRAINT `fk_products_prices_content1` FOREIGN KEY (`product_id`) REFERENCES `__content` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+ADD CONSTRAINT `fk_products_prices_users_group1` FOREIGN KEY (`group_id`) REFERENCES `__users_group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;

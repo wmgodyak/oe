@@ -3,5 +3,6 @@
   "type": {
     "product" : "shop_product",
     "category" : "shop_category"
-  }
+  },
+  "units_guides_key": "units"
 }

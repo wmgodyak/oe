@@ -38,6 +38,9 @@ class Products extends Content
         $this->form_display_params['pub_date'] = false;
 
         events()->add('content.main', [$this, 'displayCategories']);
+
+        $prices = new ProductsPrices();
+        $prices->init();
     }
 
     public function index($category_id=0)
@@ -214,13 +217,10 @@ class Products extends Content
 
     public function displayCategories($content)
     {
-        if($content['type'] != $this->config->type->product) return ;
+        if($content['type'] != $this->config->type->product) return null;
 
-        // display categories;
 
         $pc = new ProductsCategories($content);
         return $pc->index();
     }
-
-
 }
