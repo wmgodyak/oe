@@ -164,11 +164,6 @@ class Lang
                 }
             }
 
-
-            if(!file_exists($t_path)){
-                continue;
-            }
-
             // load translations
             $this->parseFile($t_path, $module);
         }
@@ -186,6 +181,10 @@ class Lang
 
     public function parseFile($path, $parent = null)
     {
+        if(!file_exists($path)){
+            return;
+        }
+
         $a = file_get_contents($path);
         $a = json_decode($a, true);
 

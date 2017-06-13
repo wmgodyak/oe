@@ -106,36 +106,6 @@ class Modules
         }
     }
 
-    private function readConfig($module, $settings)
-    {
-
-        $file =  DOCROOT . "modules/{$module}/config.json";
-
-        if(file_exists( $file )) {
-
-            $a = file_get_contents($file);
-            $a = json_decode($a, true);
-            if(empty($a)) $a = [];
-
-            return array_merge($a, $settings);
-        }
-
-        // older versions
-
-        $file =  DOCROOT . "modules/{$module}/config.ini";
-
-        if(file_exists( $file )) {
-
-            $a = parse_ini_file($file, true);
-
-            if(empty($a)) $a = [];
-
-            return array_merge($a, $settings);
-        }
-
-        return null;
-    }
-
     public function getActionsList($backend = false)
     {
         $bl = ['init', 'boot', '__construct', '__set', 'before', 'redirect'];

@@ -1,0 +1,7 @@
+{
+  "ipp" : 15,
+  "type": {
+    "product" : "shop_product",
+    "category" : "shop_category"
+  }
+}

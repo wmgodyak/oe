@@ -2268,6 +2268,7 @@ engine.nav = {
         var form = $('#form');
         if(form.length){
             var nav_id = form.data('id');
+            if(typeof nav_id == 'undefined') return;
 
             $(document).on('change', '.dd', function(e){
                 var list   = e.length ? e : $(e.target);

@@ -6,6 +6,10 @@
      * Date: 18.12.15 : 11:50
      */
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
     if ($handle = opendir(DOCROOT . 'helpers/functions/')) {
         while (false !== ($entry = readdir($handle))) {
             if ($entry != "." && $entry != "..") {
