@@ -1,20 +1,8 @@
 <?php
-/**
- * OYiEngine 7
- * @author Volodymyr Hodiak mailto:support@otakoi.com
- * @copyright Copyright (c) 2015 Otakoyi.com
- * Date: 01.07.16 : 12:23
- */
 
-namespace modules\shop\models\admin\categories;
+namespace modules\catalog\models\backend;
 
-defined("CPATH") or die();
-
-/**
- * Class CategoriesFeatures
- * @package modules\shop\models\admin
- */
-class Features extends \modules\shop\models\categories\Features
+class CategoriesFeatures extends \modules\catalog\models\CategoriesFeatures
 {
     /**
      * @param int $parent_id
@@ -35,7 +23,7 @@ class Features extends \modules\shop\models\categories\Features
               select f.id, fi.name, f.code,f.type {$w}
               from __features f
               {$j}
-              join __features_info fi on fi.features_id=f.id and fi.languages_id={$this->languages_id}
+              join __features_info fi on fi.features_id=f.id and fi.languages_id={$this->languages->id}
               where f.parent_id = {$parent_id}
                and f.type <> 'value'
                and f.status='published'
@@ -77,5 +65,4 @@ class Features extends \modules\shop\models\categories\Features
     {
         return self::$db->enumValues('__features', 'type');
     }
-
 }

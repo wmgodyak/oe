@@ -1,6 +1,3 @@
-{*<div class="row">*}
-    {*<pre>{print_r($features)}</pre>*}
-{*</div>*}
 {foreach $features as $feature}
     <div class="row" id="scf-{$feature.fc_id}">
         <div class="form-group">

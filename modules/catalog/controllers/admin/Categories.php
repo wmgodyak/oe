@@ -35,24 +35,8 @@ class Categories extends Content
         $this->form_display_blocks['features'] = false;
         $this->form_display_params['position'] = true;
 
-    }
-
-    public function init()
-    {
-        parent::init();
-
-        EventsHandler::getInstance()->add('content.params',[$this, 'params']);
-    }
-
-    /**
-     * @param $content
-     * @return string
-     */
-    public function params($content)
-    {
-        if(isset($content['type']) && $content['type'] == $this->config->type->category) {
-            return $this->template->fetch('modules/catalog/categories/params');
-        }
+        $features = new CategoriesFeatures();
+        $features->init();
     }
 
     public function index($parent_id=0)

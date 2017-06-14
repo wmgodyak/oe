@@ -172,14 +172,13 @@ engine.catalog = {
                                 var n = data.selected;
                                 event.preventDefault();
 
-                                console.log(n);
                                 inp_selected_nodes.val(n.join(','))
                             });
 
                         engine.validateAjaxForm('#sp_cat_form', function(d){
                             if(d.s){
                                 mainCatA.attr('href', d.cat.href).attr('data-id', d.cat.id).html(d.cat.name);
-                                $('#inp_main_categories_id').val(d.cat.id)
+                                $('#catalog_product_main_category_id').val(d.cat.id).trigger('change');
                                 dialog.dialog('destroy').remove();
                                 engine.alert('Категорію збережено');
                             }
@@ -396,13 +395,7 @@ engine.catalog = {
             {
                 var $features = this;
 
-                /*$(document).on('click', '.b-shop_category-features-add', function(){
-                    var parent_id = $(this).data('parent');
-                    var content_id = $('#catalogCategoriesFeatures').data('id');
-                    $features.create(content_id, parent_id);
-                });
-                */
-                $(document).on('click', '.b-shop_category-features-select', function(){
+                $(document).on('click', '.b-catalog-categories-features-select', function(){
                     var parent_id = $(this).data('parent');
                     var content_id = $('#catalogCategoriesFeatures').data('id');
                     $features.select(content_id, parent_id);
@@ -442,7 +435,7 @@ engine.catalog = {
                         });
 
                         engine.request.post({
-                            url: 'module/run/catalog/categories/features/reorder',
+                            url: 'module/run/catalog/categoriesFeatures/reorder',
                             data: {o: sData},
                             success: function(){
                                 engine.notify('Відсортовано!', 'success');
@@ -452,7 +445,7 @@ engine.catalog = {
 
             },
             select: function(content_id, parent_id){
-                engine.request.get('module/run/catalog/categories/features/select/'+ content_id, function(d){
+                engine.request.get('module/run/catalog/categoriesFeatures/select/'+ content_id, function(d){
                     var pw = engine.dialog({
                         content: d,
                         title: 'Вибір властивості',
@@ -481,7 +474,7 @@ engine.catalog = {
             },
             getSelected: function(content_id)
             {
-                engine.request.get('module/run/catalog/categories/features/getSelected/'+ content_id, function(d){
+                engine.request.get('module/run/catalog/categoriesFeatures/getSelected/'+ content_id, function(d){
                     $("#content_features_0").html(d);
                     engine.catalog.categories.features.initSorting();
                 });
@@ -489,7 +482,7 @@ engine.catalog = {
             create: function(content_id, parent_id)
             {
                 engine.request.post({
-                    url: 'module/run/catalog/categories/features/create',
+                    url: 'module/run/catalog/categoriesFeatures/create',
                     data: {
                         content_id     : content_id,
                         parent_id      : parent_id
@@ -549,7 +542,7 @@ engine.catalog = {
             edit: function(id, content_id)
             {
                 engine.request.post({
-                    url: 'module/run/catalog/categories/features/edit',
+                    url: 'module/run/catalog/categoriesFeatures/edit',
                     data: {
                         id: id
                     },
@@ -604,7 +597,7 @@ engine.catalog = {
                     'Видалити звязок властивості з цією категорією?',
                     function()
                     {
-                        engine.request.get('module/run/catalog/categories/features/delete/'+id, function(res){
+                        engine.request.get('module/run/catalog/categoriesFeatures/delete/'+id, function(res){
                             $('#scf-'+id).remove();
                             engine.closeDialog();
                         });
@@ -617,7 +610,7 @@ engine.catalog = {
                     'Видалити властивість назавжди?',
                     function()
                     {
-                        engine.request.get('module/run/catalog/categories/features/drop/'+id, function(res){
+                        engine.request.get('module/run/catalog/categoriesFeatures/drop/'+id, function(res){
                             $('#scf-'+fc_id).remove();
                             engine.closeDialog();
                         });
@@ -675,14 +668,19 @@ engine.catalog = {
                 dataType: 'html'
             });
         },
-        // engine.catalog.products.features
         features : {
             init: function()
             {
-                var $features = this, products_id = $("#productsFeatures").data('id')
-                $(document).on('change', '#main_categories_id', function(){
-                    var id= this.value;
-                    engine.catalog.products.features.get(products_id, id);
+                var $features = this,
+                    products_id = parseInt($("#productsFeatures").data('id')),
+                    category_id = parseInt($("#catalog_product_main_category_id").val())
+                ;
+
+                $(document).on('change', '#catalog_product_main_category_id', function(){
+
+                    category_id = this.value;
+
+                    engine.catalog.products.features.get(products_id, category_id);
                 });
 
                 $(document).on('click', '.spf-values-add', function(){
@@ -691,22 +689,15 @@ engine.catalog = {
                 });
 
                 $(document).on('click', '.b-spf-select', function(){
-                    var parent_id = $(this).data('parent'), categories_id = $('#inp_main_categories_id').val();
-                    //console.log(categories_id, products_id, parent_id);return;
-                    if(categories_id == ''){
-                        engine.alert('Main category is not selected');
+                    var parent_id = $(this).data('parent');
+
+                    if(category_id == 0){
+                        engine.alert("Please set main category");
                         return;
                     }
-                    $features.select(categories_id, products_id, parent_id);
-                });
 
-/** ************************/
-                /*$(document).on('click', '.b-shop_category-features-add', function(){
-                 var parent_id = $(this).data('parent');
-                 var content_id = $('#catalogCategoriesFeatures').data('id');
-                 $features.create(content_id, parent_id);
-                 });
-                 */
+                    $features.select(category_id, products_id, parent_id);
+                });
 
                 $(document).on('click', '.scf-remove', function(){
                     var id = $(this).data('id');
@@ -721,7 +712,7 @@ engine.catalog = {
             },
             get: function(products_id, categories_id){
                 engine.request.post({
-                    url: 'module/run/catalog/products/features/index/',
+                    url: 'module/run/catalog/productsFeatures/index/',
                     data:{categories_id : categories_id, products_id: products_id},
                     success: function(d)
                     {
@@ -732,7 +723,7 @@ engine.catalog = {
             values: {
                 add: function(features_id, products_id)
                 {
-                    engine.request.get('module/run/catalog/products/features/addValue/'+ features_id + '/'+ products_id, function(d){
+                    engine.request.get('module/run/catalog/productsFeatures/addValue/'+ features_id + '/'+ products_id, function(d){
                         var pw = engine.dialog({
                             content: d,
                             title: 'Додати значення',
@@ -763,7 +754,7 @@ engine.catalog = {
             },
             /** ***************************************************/
             select: function(categories_id,products_id, parent_id){
-                engine.request.get('module/run/catalog/products/features/select/'+ categories_id, function(d){
+                engine.request.get('module/run/catalog/productsFeatures/select/'+ categories_id, function(d){
                     var pw = engine.dialog({
                         content: d,
                         title: 'Вибір властивості',
@@ -792,14 +783,14 @@ engine.catalog = {
             },
             getSelected: function(categories_id, products_id)
             {
-                engine.request.get('module/run/catalog/products/features/getSelected/'+ categories_id + '/' + products_id, function(d){
+                engine.request.get('module/run/catalog/productsFeatures/getSelected/'+ categories_id + '/' + products_id, function(d){
                     $("#content_features_0").html(d);
                 });
             },
             create: function(categories_id, products_id, parent_id)
             {
                 engine.request.post({
-                    url: 'module/run/catalog/categories/features/create',
+                    url: 'module/run/catalog/categoriesFeatures/create',
                     data: {
                         content_id     : categories_id,
                         parent_id      : parent_id

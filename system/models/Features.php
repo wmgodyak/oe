@@ -10,8 +10,6 @@ class Features extends Backend
     {
         parent::__construct();
 
-        $this->languages = new Languages();
-
         $this->languages->id = $this->languages->getDefault('id');
     }
 

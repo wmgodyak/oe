@@ -1,4 +1,4 @@
-<form action="module/run/catalog/categories/features/select/{$content_id}" method="post" id="formContentFeatures" class="form-horizontal" >
+<form action="module/run/catalog/categoriesFeatures/select/{$content_id}" method="post" id="formContentFeatures" class="form-horizontal" >
    <div class="form-group">
         <label for="data_type" class="col-md-2 control-label">{$t.features.type}</label>
         <div class="col-md-10">

@@ -1,5 +1,5 @@
-<form action="module/run/catalog/categories/features/{$action}" method="post" id="formContentFeatures" class="form-horizontal" >
-    {foreach $languages as $lang}
+<form action="module/run/catalog/categoriesFeatures/{$action}" method="post" id="formContentFeatures" class="form-horizontal" >
+    {foreach $languages->get() as $lang}
         <div class="form-group">
             <label for="f_info_{$lang.id}" class="col-md-2 control-label">{$t.features.name} ({$lang.code})</label>
             <div class="col-md-10">
@@ -25,17 +25,6 @@
             </select>
         </div>
     </div>
-    {* <div class="form-group">
-        <div class="col-md-10 col-md-offset-2">
-            <div class="checkbox">
-                <label>
-                    <input type="hidden" name="data[type]"  value="select">
-                    <input type="checkbox" name="data[type]" id="data_folder" value="folder" {if isset($data.folder) && $data.folder == 1}checked{/if}> Група
-                </label>
-            </div>
-        </div>
-    </div> *}
-
     <div class="form-group fg-required">
         <div class="col-md-10 col-md-offset-2">
             <div class="checkbox">

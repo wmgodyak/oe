@@ -1,5 +1,5 @@
-<form action="module/run/catalog/products/features/addValue/{$features_id}/{$products_id}"  method="post" id="formProductsFeaturesValues" class="form-horizontal" >
-    {foreach $languages as $lang}
+<form action="module/run/catalog/productsFeatures/addValue/{$features_id}/{$products_id}"  method="post" id="formProductsFeaturesValues" class="form-horizontal" >
+    {foreach $languages->get() as $lang}
         <div class="form-group">
             <label for="f_info_{$lang.id}" class="col-md-2 control-label">{$t.features.name} ({$lang.code})</label>
             <div class="col-md-10">

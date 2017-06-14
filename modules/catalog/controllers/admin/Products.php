@@ -41,6 +41,9 @@ class Products extends Content
 
         $prices = new ProductsPrices();
         $prices->init();
+
+        $features = new ProductsFeatures();
+        $features->init();
     }
 
     public function index($category_id=0)
