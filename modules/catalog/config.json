@@ -1,8 +1,12 @@
 {
-  "ipp" : 15,
+  "group_id" : 2,
+  "ipp" : 3,
   "type": {
     "product" : "shop_product",
-    "category" : "shop_category"
+    "category" : "shop_category",
+    "manufacturer" : "shop_manufacturer"
   },
-  "units_guides_key": "units"
+  "units_guides_key": "units",
+  "sorting": ["popular","cheap", "expensive", "novelty"],
+  "paginate_options": [3, 9, 15, 30, 45]
 }

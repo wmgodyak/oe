@@ -33,6 +33,8 @@ class Frontend extends Model
 
     protected $app;
 
+    protected $debug;
+
     public function __construct()
     {
         parent::__construct();
@@ -43,4 +45,12 @@ class Frontend extends Model
         $this->app       = App::getInstance();
         $this->languages = \system\core\Languages::getInstance();
     }
+
+    public function debug($status = 1)
+    {
+        $this->debug = $status;
+
+        return $this;
+    }
+
 }

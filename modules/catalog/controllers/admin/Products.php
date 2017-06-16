@@ -8,6 +8,7 @@ use helpers\bootstrap\Link;
 use system\core\DataTables2;
 use system\models\ContentRelationship;
 use system\components\content\controllers\Content;
+use system\models\Images;
 
 /**
  * Class products
@@ -37,13 +38,24 @@ class Products extends Content
         $this->form_display_params['parent']   = false;
         $this->form_display_params['pub_date'] = false;
 
-        events()->add('content.main', [$this, 'displayCategories']);
+        events()->add('content.params', [$this, 'params']);
+
+        $cat = new ProductsCategories();
+        $cat->init();
 
         $prices = new ProductsPrices();
         $prices->init();
 
         $features = new ProductsFeatures();
         $features->init();
+
+        $manufacturers = new ProductsManufacturers();
+        $manufacturers->init();
+
+        $filter = new Filter();
+        $filter->init();
+
+        events()->add('content.process', [$this, 'updateParams']);
     }
 
     public function index($category_id=0)
@@ -78,7 +90,9 @@ class Products extends Content
 
         $ths = filter_apply('catalog.admin.products.table.th', $ths);
 
-        $t  -> ajax('module/run/catalog/products/index/' . $category_id);
+        $_GET['category_id'] = $category_id;
+
+        $t  -> ajax('module/run/catalog/products/index/' . $category_id, ['filter' => $_GET]);
 
         foreach ($ths as $th) {
             $t->th(... $th);
@@ -93,7 +107,9 @@ class Products extends Content
             $t  -> from('__content c')
                 -> join("__content_types ct on ct.type = '{$this->config->type->product}' and ct.id=c.types_id")
                 -> join("__content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages->id}")
-                -> where(" c.parent_id='$category_id' and c.status in ('published', 'hidden')");
+                -> where(" c.status in ('published', 'hidden')");
+
+            $t = filter_apply('catalog.products.datatable.xhr', $t);
 
             $t-> execute();
 
@@ -101,7 +117,9 @@ class Products extends Content
 
             foreach ($t->getResults(false) as $i=>$row) {
 
-                $icon = Icon::create(($row['isfolder'] ? 'fa-folder' : 'fa-file'));
+                $img  = $this->images->cover($row['id'], 'thumbs');
+
+                $icon = empty($img) ? "" :  "<img class='thumbnail' src='$img' style='max-width: 40px; max-height: 40px; float:left; margin-right:10px;'>";
                 $icon_link = Icon::create('fa-external-link');
                 $status = t($this->config->type->product .'.status_' . $row['status']);
                 $res[$i][] = $row['id'];
@@ -151,8 +169,11 @@ class Products extends Content
             return $t->render($res, $t->getTotal());
         }
 
+        $this->template->assign('category_id', $category_id);
         $this->template->assign('sidebar', $this->template->fetch('modules/catalog/categories/tree'));
-        $this->output($t->init());
+        $this->template->assign('table', $t->init());
+
+        $this->output($this->template->fetch('modules/catalog/products/index'));
     }
 
 
@@ -179,6 +200,8 @@ class Products extends Content
         );
 
         $this->template->assign('sidebar', $this->template->fetch('modules/catalog/categories/tree'));
+
+        $this->template->assign('product', $this->products->getParams($id));
 
         parent::edit($id);
     }
@@ -218,12 +241,20 @@ class Products extends Content
         return parent::process($id);
     }
 
-    public function displayCategories($content)
+    public function params($content)
     {
         if($content['type'] != $this->config->type->product) return null;
+        return $this->template->fetch('modules/catalog/products/params');
+    }
 
+    public function updateParams($id)
+    {
+        $type = $this->products->getContentType($id);
 
-        $pc = new ProductsCategories($content);
-        return $pc->index();
+        if($type != $this->config->type->product) return null;
+
+        $data = $this->request->post('product');
+
+        $this->products->updateParams($id, $data);
     }
 }

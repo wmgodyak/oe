@@ -39,6 +39,11 @@ class Categories extends Content
         $features->init();
     }
 
+    public function init()
+    {
+
+    }
+
     public function index($parent_id=0)
     {
         if($parent_id > 0){
@@ -166,8 +171,7 @@ class Categories extends Content
         if($this->request->isXhr()){
             $this->template->assign('content', $this->categories->getData($id));
             $this->template->assign('action', 'edit');
-            $this->response->body($this->template->fetch('modules/catalog/categories/form'));
-            return '';
+            return $this->template->fetch('modules/catalog/categories/form');
         }
 
         $parent_id = $this->mContent->getData($id, 'parent_id');

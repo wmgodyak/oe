@@ -155,7 +155,7 @@ class Blog extends Frontend
     public function searchByAuthor($author_id)
     {
         if(empty($author_id)){
-            $this->e404();
+            return $this->e404();
         }
 
         $blog = [];
@@ -198,7 +198,7 @@ class Blog extends Frontend
     public function searchByTag($tag)
     {
         if(empty($tag)){
-            $this->e404();
+            return $this->e404();
         }
 
         $blog = []; $errors = [];

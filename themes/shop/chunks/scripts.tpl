@@ -23,3 +23,4 @@
         <script src="{$src}"></script>
     {/foreach}
 {/if}
+{block name='footer.scripts'}{/block}

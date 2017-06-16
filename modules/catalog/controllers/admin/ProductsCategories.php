@@ -11,13 +11,10 @@ class ProductsCategories extends Backend
     private $config;
     private $relations;
 
-    private $content;
 
-    public function __construct($content = [])
+    public function __construct()
     {
         parent::__construct();
-
-        $this->content = $content;
 
         $this->config = module_config('catalog');
 
@@ -25,10 +22,18 @@ class ProductsCategories extends Backend
         $this->categories = new \modules\catalog\models\backend\Categories($this->config->type->category);
     }
 
-    public function index()
+    public function init()
     {
-        $this->template->assign('selected_categories', $this->relations->getCategoriesFull($this->content['id']));
-        $this->template->assign('main_category', $this->relations->getCategoriesFull($this->content['id'],1));
+        events()->add('content.params', [$this, 'index']);
+    }
+
+    public function index($content = null)
+    {
+        if($content['type'] != $this->config->type->product) return null;
+
+        $this->template->assign('selected_categories', $this->relations->getCategoriesFull($content['id']));
+        $this->template->assign('main_category', $this->relations->getCategoriesFull($content['id'],1));
+
         return $this->template->fetch('modules/catalog/products/categories/index');
     }
 

@@ -2,23 +2,27 @@
 
 namespace modules\catalog\models;
 
-use system\core\Session;
+use system\models\Features;
+use system\models\Model;
+
 
 /**
  * Class CategoriesFeatures
  * @package modules\catalog\models
  */
-class CategoriesFeatures extends \system\models\Features
+class CategoriesFeatures extends Model
 {
     private $selected_features = [];
-    private $currency;
-    private $original_cat_id = 0;
+    private $category_id;
 
-    public function __construct()
+    private $features;
+    
+    public function __construct(Features $features, $languages)
     {
         parent::__construct();
 
-        $this->currency = Session::get('currency');
+        $this->features    = $features;
+        $this->languages   = $languages;
     }
 
     /**
@@ -28,27 +32,14 @@ class CategoriesFeatures extends \system\models\Features
      */
     public function get($categories_id)
     {
-        if($this->original_cat_id == 0){
-            $this->original_cat_id = $categories_id;
-        }
-
-        $selected = [];
-        $_selected = $this->parseGetParams();
-
-        if(!empty($_selected)){
-            foreach ($_selected as $features_code => $a) {
-                $features_id = $this->getIDByCode($features_code);
-                if(empty($features_id)) continue;
-                $selected[$features_id] = $a;
-            }
-        }
+        if(! $this->category_id) $this->category_id = $categories_id;
 
         $items =
             self::$db->select("
               select f.id, fi.name, f.code,f.type
               from __features_content fc
               join __features f on fc.features_id=f.id and f.status='published' and f.on_filter=1
-              join __features_info fi on fi.features_id=f.id and fi.languages_id='{$this->languages_id}'
+              join __features_info fi on fi.features_id=f.id and fi.languages_id='{$this->languages->id}'
               where fc.content_id='{$categories_id}'
               order by abs(fc.position) asc
            ")->all();
@@ -64,10 +55,23 @@ class CategoriesFeatures extends \system\models\Features
             }
         }
 
-        $isfolder = self::$db->select("select isfolder from __content where id = {$this->original_cat_id} limit 1")->row('isfolder');
+
+        $isfolder = self::$db->select("select isfolder from __content where id = {$categories_id} limit 1")->row('isfolder');
+
         $in = [];
         if($isfolder){
-            $in = $this->getSubcategoriesId($categories_id);
+            $in = $this->subCategories($categories_id);
+        }
+
+        $selected = [];
+        $_selected = $this->parseGetParams();
+
+        if(!empty($_selected)){
+            foreach ($_selected as $features_code => $a) {
+                $features_id = $this->features->getIDByCode($features_code);
+                if(empty($features_id)) continue;
+                $selected[$features_id] = $a;
+            }
         }
 
         foreach ($items as $k=>$item) {
@@ -90,13 +94,14 @@ class CategoriesFeatures extends \system\models\Features
      */
     private function getValues($feature, $categories_id, $subcategories = [], $selected = null)
     {
-        if($this->original_cat_id > 0 && $categories_id != $this->original_cat_id){
-            $categories_id = $this->original_cat_id;
+        if($this->category_id > 0 && $categories_id != $this->category_id){
+            $categories_id = $this->category_id;
+
         }
         $items =  self::$db->select("
               select f.id, fi.name, f.code
               from  __features f
-              join __features_info fi on fi.features_id=f.id and fi.languages_id={$this->languages_id}
+              join __features_info fi on fi.features_id=f.id and fi.languages_id={$this->languages->id}
               where f.parent_id={$feature['id']} and f.status = 'published'
               order by fi.name asc
            ")->all();
@@ -154,7 +159,7 @@ class CategoriesFeatures extends \system\models\Features
     /**
      * @return array|null
      */
-    public function parseGetParams()
+    private function parseGetParams()
     {
         $filter = $this->request->param('filter');
         if(empty($filter)) return null;
@@ -173,18 +178,18 @@ class CategoriesFeatures extends \system\models\Features
     /**
      * @return array|null
      */
-    public function makeMeta()
+    private function makeMeta()
     {
         $res = [];
         $selected = $this->parseGetParams();
         if(empty($selected)) return null;
 
         foreach ($selected as $key => $values) {
-            $features_id = $this->getIDByCode($key);
-            $name = $this->getName($features_id);
+            $features_id = $this->features->getIDByCode($key);
+            $name = $this->features->getName($features_id);
             $v_names = [];
             foreach ($values as $k=>$values_id) {
-                $v_names[] = $this->getName($values_id);
+                $v_names[] = $this->features->getName($values_id);
             }
 
             $res[] = ['name' => $name, 'values' => $v_names];
@@ -193,15 +198,9 @@ class CategoriesFeatures extends \system\models\Features
         return $res;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getFormAction()
-    {
-        return $_SERVER['REQUEST_URI'];
-    }
 
     /**
+     * @deprecated todo get from category->products
      * @param $values_id
      * @param $categories_id
      * @param array $subcategories
@@ -239,88 +238,10 @@ class CategoriesFeatures extends \system\models\Features
     }
 
     /**
-     * @param $parent_id
-     * @return array
-     */
-    public function getSubcategoriesId($parent_id)
-    {
-        $in = [];
-
-        $r = self::$db
-            ->select("select id, isfolder from __content where parent_id={$parent_id} and status='published'")
-            ->all();
-
-        foreach ($r as $item) {
-            $in[] = $item['id'];
-            if($item['isfolder']){
-                $in = array_merge($in, $this->getSubcategoriesId($item['id']));
-            }
-        }
-
-        return $in;
-    }
-
-    /**
-     * @param $categories_id
-     * @param $group_id
-     * @return array|mixed
-     */
-    public function getMinMaxPrice($categories_id, $group_id)
-    {
-        $isfolder = self::$db->select("select isfolder from __content where id={$categories_id} limit 1")
-            ->row('isfolder');
-
-        $in = [];
-
-        if($isfolder){
-            $in = $this->getSubcategoriesId($categories_id);
-        }
-
-        $w = $isfolder && !empty($in) ? "cr.categories_id in (". implode(',', $in) .")" : "cr.categories_id='{$categories_id}'";
-
-        return self::$db
-            ->select("
-              select
-              MIN(
-                  CASE
-                    WHEN p.currency_id = '{$this->currency['site']['id']}' THEN pp.price
-                    WHEN p.currency_id <> '{$this->currency['site']['id']}' and p.currency_id = '{$this->currency['main']['id']}' THEN pp.price * '{$this->currency['site']['rate']}'
-                    WHEN p.currency_id <> '{$this->currency['site']['id']}' and p.currency_id <> '{$this->currency['main']['id']}' THEN pp.price / cu.rate * '{$this->currency['site']['rate']}'
-                  END
-                ) as minp,
-              MAX(
-                  CASE
-                    WHEN p.currency_id = '{$this->currency['site']['id']}' THEN pp.price
-                    WHEN p.currency_id <> '{$this->currency['site']['id']}' and p.currency_id = '{$this->currency['main']['id']}' THEN pp.price * '{$this->currency['site']['rate']}'
-                    WHEN p.currency_id <> '{$this->currency['site']['id']}' and p.currency_id <> '{$this->currency['main']['id']}' THEN pp.price / cu.rate * '{$this->currency['site']['rate']}'
-                  END
-                ) as maxp
-              from __content_relationship cr
-              join __products_prices pp on pp.content_id=cr.content_id and pp.group_id='{$group_id}'
-              join __products p on p.content_id = cr.content_id
-              join __content c on c.id=cr.content_id and c.status = 'published'
-              join __currency cu on cu.id = p.currency_id
-              where {$w}
-              ")
-            ->row();
-    }
-
-    /**
-     * @param $code
-     * @return array|mixed
-     * @throws \system\core\exceptions\Exception
-     */
-    public function getIDByCode($code)
-    {
-        return self::$db->select("select id from __features where code = '{$code}' limit 1")->row('id');
-    }
-
-
-    /**
      * @param $categories_id
      * @return array|null
      */
-    public function getSelected($categories_id)
+    private function getSelected($categories_id)
     {
         $res = []; $qs_url = null;
         $_selected = $this->parseGetParams();
@@ -349,7 +270,7 @@ class CategoriesFeatures extends \system\models\Features
                 if(isset($sp[$fc])){
                     $k = array_search($vid, $sp[$fc]);
                     if($k !== false){
-                        $name = $this->getName($vid);
+                        $name = $this->features->getName($vid);
                         unset($sp[$fc][$k]);
                         if(empty($sp[$fc])) unset($sp[$fc]);
                     } else {
@@ -376,5 +297,18 @@ class CategoriesFeatures extends \system\models\Features
         }
 
         return $res;
+    }
+
+    private function subCategories($parent_id)
+    {
+        $in = [];
+        foreach (self::$db->select("select id, isfolder from __content where parent_id={$parent_id}")->all() as $item)
+        {
+            $in[] = $item['id'];
+            if($item['isfolder']){
+                $in = array_merge($in, $this->subCategories($item['id']));
+            }
+        }
+        return $in;
     }
 }

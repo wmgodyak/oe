@@ -26,6 +26,7 @@ class Catalog extends Backend
 
         $this->assignToNav(t('catalog.categories.action_index'), 'module/run/catalog/categories', 'fa-shopping-cart', 'module/run/catalog');
         $this->assignToNav(t('catalog.products.action_index'), 'module/run/catalog/products', 'fa-shopping-cart', 'module/run/catalog');
+        $this->assignToNav(t('catalog.manufacturers.action_index'), 'module/run/catalog/manufacturers', 'fa-car', 'module/run/catalog');
 
         DataFilter::add('nav.items.content_types', function($types){
             $types[] = 'products_categories';

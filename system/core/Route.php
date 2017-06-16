@@ -325,7 +325,7 @@ class Route
      * @return $this
      * @throws \Exception
      */
-    private function call($controller, $action, $params)
+    public function call($controller, $action, $params)
     {
         events()->call('route.' . str_replace('\\', '.' , trim($controller, '/')));
         events()->call('route.' . str_replace('\\', '.' , trim($controller, '/')) . '.' . $action);

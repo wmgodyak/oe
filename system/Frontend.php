@@ -88,18 +88,13 @@ abstract class Frontend extends core\Controller
 
             $this->request->param('initialized', 1);
 
-            $this->app->module = Modules::getInstance()->get();
-
-            $this->template->assign('base_url',    APPURL );
-            $this->template->assign('app', $this->app);
-
             $events = events();
 
             $events->add('route', function($request){
                 $lang = $request->param('lang');
                 if($lang != null){
                     $s = $this->languages->setByCode($lang);
-                    if(! $s) $this->e404();
+                    if(! $s) return $this->e404();
                     \system\core\Lang::getInstance()->set($this->languages->code, $this->template->theme);
                }
             });
@@ -121,7 +116,7 @@ abstract class Frontend extends core\Controller
     protected function display($page)
     {
         if (!$page) {
-            $this->e404();
+            return $this->e404();
         }
 
         if($this->settings->get('active') == 0) {
@@ -136,7 +131,7 @@ abstract class Frontend extends core\Controller
         if (isset($page['status']) && $page['status'] != 'published') {
             $a = Session::get('engine.admin');
             if (!$a) {
-                $this->e404();
+                return $this->e404();
             }
         }
 
@@ -212,7 +207,9 @@ abstract class Frontend extends core\Controller
     protected function e404()
     {
         header("HTTP/1.0 404 Not Found");
-        $this->template->display('layouts/404');
+        return $this->template->fetch('layouts/404');
+
+//        $this->template->display('layouts/404');
     }
 
     /**

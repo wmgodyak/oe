@@ -77,6 +77,11 @@ class Pagination
      */
     public function init($total, $ipp, $url, array $qs = null)
     {
+        $this->prev = null;
+        $this->next = null;
+        $this->pages = [];
+        $this->cur_p = 1;
+
         $this->total = $total;
         $this->ipp   = $ipp;
 
@@ -93,7 +98,10 @@ class Pagination
         $lpm1 = $last_page - 1;
         $c = 1;
 
-        $qs = $qs ? http_build_query($qs) : null;
+        if(isset($qs['p'])) unset($qs['p']);
+        if(isset($qs['ipp'])) unset($qs['ipp']);
+
+        $qs = $qs ? '&'. http_build_query($qs) : null;
 
         /**
          * Calculate pages

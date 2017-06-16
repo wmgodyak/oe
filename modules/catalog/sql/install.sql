@@ -1,31 +1,40 @@
 INSERT INTO `__content_types` (`parent_id`, `isfolder`, `type`, `name`, `is_main`, `settings`) VALUES
   (0, 0, 'shop_product', 'Shop category', NULL, NULL),
+  (0, 0, 'shop_manufacturer', 'Shop manufacturer', NULL, NULL),
   (0, 0, 'shop_category', 'Shop categories', NULL, NULL);
 
 CREATE TABLE IF NOT EXISTS `__products` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `content_id` INT(10) UNSIGNED NOT NULL,
+  `manufacturers_id` INT(10) UNSIGNED NULL DEFAULT NULL,
   `currency_id` TINYINT(3) UNSIGNED NOT NULL,
-  `sku` VARCHAR(60) NULL,
-  `unit_id` INT(10) UNSIGNED NULL,
-  `quantity` TINYINT(3) UNSIGNED NULL,
-  `has_variants` TINYINT(1) UNSIGNED NULL,
-  `in_stock` TINYINT(1) UNSIGNED NULL,
-  `external_id` VARCHAR(45) NULL,
-  PRIMARY KEY (`id`, `content_id`, `currency_id`),
+  `sku` VARCHAR(60) NULL DEFAULT NULL,
+  `unit_id` INT(10) UNSIGNED NULL DEFAULT NULL,
+  `quantity` TINYINT(3) UNSIGNED NULL DEFAULT NULL,
+  `has_variants` TINYINT(1) UNSIGNED NULL DEFAULT NULL,
+  `in_stock` TINYINT(1) UNSIGNED NULL DEFAULT NULL,
+  `external_id` VARCHAR(45) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`, `content_id`, `manufacturers_id`, `currency_id`),
   INDEX `fk_x_products_x_content1_idx` (`content_id` ASC),
   INDEX `fk_x_products_x_currency1_idx` (`currency_id` ASC),
+  INDEX `fk_x_products_x_content2_idx` (`manufacturers_id` ASC),
   CONSTRAINT `fk_x_products_x_content1`
-  FOREIGN KEY (`content_id`)
-  REFERENCES `__content` (`id`)
+    FOREIGN KEY (`content_id`)
+    REFERENCES `__content` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
   CONSTRAINT `fk_x_products_x_currency1`
-  FOREIGN KEY (`currency_id`)
-  REFERENCES `__currency` (`id`)
+    FOREIGN KEY (`currency_id`)
+    REFERENCES `__currency` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_x_products_x_content2`
+    FOREIGN KEY (`manufacturers_id`)
+    REFERENCES `__content` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-  ENGINE = InnoDB;
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8
 
 
 CREATE TABLE IF NOT EXISTS `__products_prices` (

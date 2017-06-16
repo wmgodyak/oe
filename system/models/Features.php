@@ -6,12 +6,6 @@ namespace system\models;
  */
 class Features extends Backend
 {
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->languages->id = $this->languages->getDefault('id');
-    }
 
     public function createBlank($parent_id, $owner_id)
     {
@@ -57,6 +51,17 @@ class Features extends Backend
             ->select("select name from __features_info where features_id={$id} and languages_id = {$this->languages->id} limit 1")
             ->row('name');
     }
+
+    /**
+     * @param $code
+     * @return array|mixed
+     * @throws \system\core\exceptions\Exception
+     */
+    public function getIDByCode($code)
+    {
+        return self::$db->select("select id from __features where code = '{$code}' limit 1")->row('id');
+    }
+
 
     /**
      * @param $id

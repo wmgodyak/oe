@@ -15,12 +15,20 @@
     "create_title": "Create category",
     "action_edit": "Edit category"
   },
+  "manufacturers": {
+    "action_index": "Manufacturers"
+  },
   "products": {
     "action_index": "Products",
     "sku": "SKU",
     "stock": "Stock",
-    "hit": "Hit",
-    "bestseller": "Best price"
+    "manufacturers": "Manufacturer:",
+    "params": {
+      "hit": "Hit",
+      "newest": "Newest",
+      "bestseller": "Bestseller",
+      "out_of_prod": "Out of production"
+    }
   },
   "accessories": {
     "index": "Accessories",
@@ -36,24 +44,9 @@
   "prices": {
     "index": "Prices and availability",
     "sku": "SKU",
-    "unit": "IU. izm.",
+    "unit": "Unit",
     "availability": "Availability",
-    "availability_v1": "Nali.",
-    "currency": "Currency"
-  },
-  "variants": {
-    "index": "Options",
-    "info": "<p>Generate the options based on the selected characteristics. <b>Please note<\/b> previous versions <b>will be removed<\/b><\/p>",
-    "select_features": "Select properties"
-  },
-  "import": {
-    "action_index": "Import"
-  },
-  "kits": {
-    "action_index": "Kits",
-    "name": "Title",
-    "func": "functions.",
-    "discount": "Discount %",
-    "empty": "No"
+    "currency": "Currency",
+    "price_per_group": "Price, "
   }
 }

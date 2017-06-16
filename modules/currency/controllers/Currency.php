@@ -33,6 +33,7 @@ class Currency extends Frontend
             $site = $this->currency->getOnSiteMeta('id,code,rate,symbol');
 
             Session::set('currency', ['main' => $main, 'site' => $site ]);
+            $this->template->assign('currency', $site);
         });
     }
 }

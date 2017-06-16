@@ -42,7 +42,7 @@ class ProductsPrices extends Backend
 
     public function init()
     {
-        events()->add('content.main.after', [$this, 'index']);
+        events()->add('content.params.after', [$this, 'index']);
         events()->add('content.process', [$this, 'process']);
     }
 
