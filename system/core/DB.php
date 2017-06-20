@@ -145,7 +145,7 @@ class DB extends \PDO {
     public function select($sql, $debug = false)
     {
         $sql = str_replace('__', $this->conf['prefix'], $sql);
-        if($debug) echo '<pre> '. $sql .' </pre>';
+        if($debug) d($sql);
 
         try {
             
@@ -226,9 +226,7 @@ class DB extends \PDO {
             $sth->bindValue(':'.$key, $value, $param);
         }
 
-        if($debug) {
-            echo '<pre>' . $this->interpolateQuery($sql, $data) . '</pre>';
-        }
+        if($debug) d($this->interpolateQuery($sql, $data));
 
         try {
             $sth->execute();
@@ -276,9 +274,8 @@ class DB extends \PDO {
             $sth->bindValue(':'.$key, $value, $param);
         }
 
-        if($debug){
-            echo '<pre>' . $this->interpolateQuery($sql, $data) . '</pre>';
-        }
+        if($debug) d($this->interpolateQuery($sql, $data));
+
         try{
             $sth->execute();
             $result = true;
@@ -311,9 +308,9 @@ class DB extends \PDO {
         $sql = 'DELETE from `'.$table.'` '.$where_clause;
 
         $sth = $this->prepare($sql);
-        if($debug){
-            echo '<pre>' . $this->interpolateQuery($sql) . '</pre>';
-        }
+
+        if($debug) d($this->interpolateQuery($sql));
+
         try{
             //$result = $this->exec($sql);
             $sth->execute();
