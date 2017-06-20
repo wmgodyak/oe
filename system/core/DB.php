@@ -159,8 +159,8 @@ class DB extends \PDO {
         } catch(\PDOException $e){
             if($this->conf['debug']){
                 http_response_code(500);
-                die("$sql <br>" . $e->getMessage());
-//                throw new Exception("$sql <br>" . $e->getMessage());
+//                die("$sql <br>" . $e->getMessage());
+                throw new Exception("$sql <br>" . $e->getMessage());
             }
             self::$errorMessage = "<pre>$sql" . $e->getMessage() .'</pre>';
             self::$errorCode = $e->getCode();

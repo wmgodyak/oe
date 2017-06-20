@@ -134,7 +134,7 @@ class Products extends Frontend
         $r = self::$db
             ->select
             ("
-              select c.id
+              select c.id, p.in_stock as available
               from __content c
               join __products p on p.content_id=c.id
               join __products_prices pp on pp.product_id=c.id and pp.group_id={$this->group_id}
@@ -176,7 +176,7 @@ class Products extends Frontend
         return $in;
     }
 
-    private function clear()
+    public function clear()
     {
         $this->where = [];
         $this->join  = [];

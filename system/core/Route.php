@@ -39,6 +39,8 @@ class Route
         'segment' => '[^/]*'
     ];
 
+    private $uri_filters = [];
+    
     /**
      * @param $name
      * @param $regex
@@ -182,6 +184,10 @@ class Route
         $request = Request::getInstance($mode);
         $backend_url = Settings::getInstance()->get('backend_url');
         $response  = Response::getInstance();
+
+        foreach ($this->uri_filters as $filter) {
+            $this->uri = $filter($this->uri);
+        }
 
         foreach ($actions as $route) {
 
@@ -384,5 +390,12 @@ class Route
         unset($tags, $key, $value);
 
         return $uri;
+    }
+
+    public function uriFilter($callback)
+    {
+        $this->uri_filters[] = $callback;
+        
+        return $this;
     }
 }

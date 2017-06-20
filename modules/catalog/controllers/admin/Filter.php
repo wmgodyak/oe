@@ -25,7 +25,7 @@ class Filter extends Backend
 
         $this->config = module_config('catalog');
 
-        $this->features = new \modules\catalog\models\CategoriesFeatures();
+        $this->features = new \modules\catalog\models\backend\CategoriesFeatures();
         $this->currency = new Currency();
         $this->customersGroup = new UsersGroup();
 

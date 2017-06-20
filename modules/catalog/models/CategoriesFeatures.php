@@ -14,15 +14,17 @@ class CategoriesFeatures extends Model
 {
     private $selected_features = [];
     private $category_id;
+    public $features;
+    public $category;
 
-    private $features;
-    
-    public function __construct(Features $features, $languages)
+    public function __construct(Features $features, $languages, $category)
     {
         parent::__construct();
 
         $this->features    = $features;
         $this->languages   = $languages;
+
+        $this->category = $category;
     }
 
     /**
@@ -64,10 +66,15 @@ class CategoriesFeatures extends Model
         }
 
         $selected = [];
-        $_selected = $this->parseGetParams();
 
-        if(!empty($_selected)){
-            foreach ($_selected as $features_code => $a) {
+        if(!empty($this->selected_features)){
+            foreach ($this->selected_features as $features_code => $a) {
+
+                if($features_code == 'manufacturer'){
+
+                    continue;
+                }
+
                 $features_id = $this->features->getIDByCode($features_code);
                 if(empty($features_id)) continue;
                 $selected[$features_id] = $a;
@@ -108,7 +115,7 @@ class CategoriesFeatures extends Model
         foreach ($items as $k=>$item) {
             $items[$k]['active'] = isset($this->selected_features[$feature['code']]) && in_array($item['id'], $this->selected_features[$feature['code']]);
             $items[$k]['url']    = $this->makeValueUrl($feature, $item, $categories_id);
-            $items[$k]['total']  = $this->getValuesCount($item['id'], $categories_id, $subcategories, $selected);
+            $items[$k]['total']  = $this->totalProducts($item['id']);
         }
 
         return $items;
@@ -148,32 +155,14 @@ class CategoriesFeatures extends Model
             $url .= ';filter/' . $f_url;
         }
 
-        if(!empty($_GET)){
-            $qs = http_build_query($_GET);
-            $url .= '?' . $qs;
-        }
+//        if(!empty($_GET)){
+//            $qs = http_build_query($_GET);
+//            $url .= '?' . $qs;
+//        }
 
         return $url;
     }
 
-    /**
-     * @return array|null
-     */
-    private function parseGetParams()
-    {
-        $filter = $this->request->param('filter');
-        if(empty($filter)) return null;
-
-        $a = explode(';', $filter);
-        foreach ($a as $k=>$f) {
-            $b = explode('-', $f);
-            if(!isset($b[1]) || empty($b[1])) continue;
-
-            $this->selected_features[$b[0]] = explode(',', $b[1]);
-        }
-
-        return $this->selected_features;
-    }
 
     /**
      * @return array|null
@@ -181,10 +170,9 @@ class CategoriesFeatures extends Model
     private function makeMeta()
     {
         $res = [];
-        $selected = $this->parseGetParams();
-        if(empty($selected)) return null;
+        if(empty($this->selected_features)) return null;
 
-        foreach ($selected as $key => $values) {
+        foreach ($this->selected_features as $key => $values) {
             $features_id = $this->features->getIDByCode($key);
             $name = $this->features->getName($features_id);
             $v_names = [];
@@ -198,55 +186,122 @@ class CategoriesFeatures extends Model
         return $res;
     }
 
-
-    /**
-     * @deprecated todo get from category->products
-     * @param $values_id
-     * @param $categories_id
-     * @param array $subcategories
-     * @return array|mixed
-     */
-    private function getValuesCount($values_id, $categories_id, $subcategories = [], $selected = null)
+    private function totalProducts($value)
     {
-        $w = "cr.categories_id='{$categories_id}'";
-        if(!empty($subcategories)){
-            $w = "cr.categories_id in (". implode(',', $subcategories) .")";
+        return 999;
+        $this->category->products->clear();
+
+        $this->category->products->category($this->request->param('category_id'));
+
+        $minp = $this->request->get('minp', 'i');
+        $maxp = $this->request->get('maxp', 'i');
+
+        if($minp > 0 && $maxp > 0) {
+            $this->category->products->where(" and price between {$minp} and {$maxp}");
+        } elseif($minp > 0 && $maxp == 0){
+            $this->category->products->where(" and price > {$minp}");
+        } elseif($minp == 0 && $maxp > 0){
+            $this->category->products->where(" and price < {$maxp}");
         }
 
-        $join = [];
+        $selected = $this->request->param('selected_features');
+
+        $manufacturers_in = [];
+
         if(!empty($selected)){
-            foreach ($selected as $features_id => $values) {
-                if(empty($values)) continue;
 
-                $in = implode(',', $values);
-                $join[] = "join __content_features cf{$features_id} on cf{$features_id}.content_id=cr.content_id and cf{$features_id}.features_id = {$features_id} and cf{$features_id}.values_id in ({$in}) ";
+            foreach ($selected as $code => $values) {
+
+                if($code == 'manufacturer'){
+
+                    $in = [];
+                    foreach ($values as $value) {
+                        $id = self::$db->select("select content_id as id from __content_info where url = '$value' and languages_id = '{$this->languages->id}' limit 1")->row('id');
+                        if(empty( $id )) continue;
+
+                        $in[] = $id;
+                    }
+
+                    if(empty($in)) return ;
+
+                    $in = implode(', ', $in);
+                    $this->category->products->where(" and p.manufacturers_id in ($in) ");
+
+                    continue;
+                }
+
+                $features_id = self::$db->select("select id from __features where code = '{$code}' limit 1")->row('id');
+
+                if(empty($features_id) || empty($values)) continue;
+
+                $this->category->products->join("join __content_features cf{$features_id} on
+                    cf{$features_id}.content_id=c.id
+                and cf{$features_id}.features_id = {$features_id}
+                and cf{$features_id}.values_id in (". implode(',', $values) .")
+                ");
+
             }
+
         }
 
-        $j = empty($join) ? null : implode('', $join);
 
-        return self::$db
-            ->select("
-              select count(cf.id) as t
-              from __content_relationship cr
-              join __content_features cf on cf.content_id=cr.content_id and cf.values_id={$values_id}
-              join __content c on c.id=cf.content_id and c.status = 'published'
-              {$j}
-              where {$w}
-              ")
-            ->row('t');
+        // todo here $value
+//        if(empty($manufacturers_in)){
+//            $manufacturers_in[] = $manufacturer['id'];
+//        }
+
+        $t = $this->category->products->total();
+        $this->category->products->clear();
+
+        return $t['total'];
     }
 
+//    /**
+//     * @param $values_id
+//     * @param $categories_id
+//     * @param array $subcategories
+//     * @return array|mixed
+//     */
+//    private function getValuesCount($values_id, $categories_id, $subcategories = [], $selected = null)
+//    {
+//        $w = "cr.categories_id='{$categories_id}'";
+//        if(!empty($subcategories)){
+//            $w = "cr.categories_id in (". implode(',', $subcategories) .")";
+//        }
+//
+//        $join = [];
+//        if(!empty($selected)){
+//
+//            foreach ($selected as $features_id => $values) {
+//                if(empty($values)) continue;
+//
+//                $in = implode(',', $values);
+//                $join[] = "join __content_features cf{$features_id} on cf{$features_id}.content_id=cr.content_id and cf{$features_id}.features_id = {$features_id} and cf{$features_id}.values_id in ({$in}) ";
+//            }
+//        }
+//
+//        $j = empty($join) ? null : implode('', $join);
+//
+//        return self::$db
+//            ->select("
+//              select count(cf.id) as t
+//              from __content_relationship cr
+//              join __content_features cf on cf.content_id=cr.content_id and cf.values_id={$values_id}
+//              join __content c on c.id=cf.content_id and c.status = 'published'
+//              {$j}
+//              where {$w}
+//              ")
+//            ->row('t');
+//    }
+
     /**
-     * @param $categories_id
      * @return array|null
      */
-    private function getSelected($categories_id)
+    public function getSelected()
     {
         $res = []; $qs_url = null;
-        $_selected = $this->parseGetParams();
 
-        if(empty($_selected)){
+        if(empty($this->selected_features)){
             return null;
         }
 
@@ -255,17 +310,19 @@ class CategoriesFeatures extends Model
             $qs_url = '?' . $qs;
         }
 
-        foreach ($_selected as $fc => $a) {
+        foreach ($this->selected_features as $fc => $a) {
+
+            if($fc == 'manufacturer') continue;
 
             if(empty($a)){
                 continue;
             }
 
             foreach ($a as $k=>$vid) {
-                $url = $categories_id ;
+                $url = $this->category_id ;
                 $name = "";
 
-                $sp = $_selected;
+                $sp = $this->selected_features;
 
                 if(isset($sp[$fc])){
                     $k = array_search($vid, $sp[$fc]);
@@ -289,6 +346,7 @@ class CategoriesFeatures extends Model
                 if(!empty($f_url)){
                     $url .= ';filter/' . $f_url . $qs_url;
                 }
+
                 $res[] = [
                     'name' => $name,
                     'url'  => $url
@@ -299,6 +357,10 @@ class CategoriesFeatures extends Model
         return $res;
     }
 
+    /**
+     * @param $parent_id
+     * @return array
+     */
     private function subCategories($parent_id)
     {
         $in = [];

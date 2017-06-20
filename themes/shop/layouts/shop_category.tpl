@@ -125,11 +125,11 @@
 
                     range: true,
 
-                    min: {$category.filter.minp},
+                    min: {$filter->minPrice()},
 
-                    max: {$category.filter.maxp},
+                    max: {$filter->maxPrice()},
 
-                    values: [{if $smarty.get.minp > 0}{$smarty.get.minp}{else}{$category.filter.minp}{/if}, {if $smarty.get.maxp > 0}{$smarty.get.maxp}{else}{$category.filter.maxp}{/if}],
+                    values: [{if $smarty.get.minp > 0}{$smarty.get.minp}{else}{$filter->minPrice()}{/if}, {if $smarty.get.maxp > 0}{$smarty.get.maxp}{else}{$filter->maxPrice()}{/if}],
 
                     slide: function (event, ui) {
 

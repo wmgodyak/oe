@@ -2,7 +2,9 @@
 
 namespace modules\catalog\models\backend;
 
-class CategoriesFeatures extends \modules\catalog\models\CategoriesFeatures
+use system\models\Features;
+
+class CategoriesFeatures extends Features
 {
     /**
      * @param int $parent_id

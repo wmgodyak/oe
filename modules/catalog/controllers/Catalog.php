@@ -32,9 +32,22 @@ class Catalog extends Frontend
         parent::init();
 
         events()->add('boot', function (){
-            Route::getInstance()->get('{url}/filter/{any}', function($url, $filter){
-                Route::getInstance()->call('\system\frontend\Page', 'displayUrl', [$url]);
+
+            Route::getInstance()->uriFilter(function($uri){
+                $uri = preg_replace_callback("@([a-zA-Z0-9_]+)(/filter/.*)@iu", function($m){
+
+                    $filter = str_replace('/filter/', '', $m[2]);
+                    $this->request->param('filter', $filter);
+
+                    return $m[1];
+                }, $uri);
+
+               return $uri;
             });
+
+//            Route::getInstance()->get('{url}/filter/{any}', function($url, $filter){
+//                Route::getInstance()->call('\system\frontend\Page', 'displayUrl', [$url]);
+//            });
 //            $routes[]  = array('/([a-z]{2})/([a-z0-9-_/]+)/filter/(.*)', 'system\Front', 'lang/url/filter/filter');
 //            $routes[]  = array('/([a-z0-9-_/]+)/filter/(.*)', 'system\Front', 'url/filter/filter');
         });
@@ -49,7 +62,7 @@ class Catalog extends Frontend
                 return $this->displayProduct($page);
             }
 
-            if($page['type'] == $this->config->type->mamufacturer){
+            if($page['type'] == $this->config->type->manufacturer){
                 return $this->displayManufacturer($page);
             }
 
@@ -90,38 +103,47 @@ class Catalog extends Frontend
             $ipp = $allowed[0];
         }
 
+//        $this->category->products->debug();
 
         /** FILTERING >>>>>  **/
 
-        $filter = ['selected' => []];
+        $url = $category['url'] ;
 
-        $_filter = new CategoryFilter($this->category, $this->languages);
-        $_filter->make($this->request);
-        $filter['features'] = $_filter->features->get($category['id']);
+        $f = $this->request->param('filter');
+        if(!empty($f)){
+            $url = $category['url'] . '/filter/' . $this->request->param('filter');
+        }
 
-        /** FILTERING <<<<<  **/
+        $this->request->param('url', $url);
+        $this->request->param('category_id', $category['id']);
+
+        $manufacturer = new \modules\catalog\models\Manufacturers($this->config, $this->category, $this->request);
+        $filter = new Filter($category['id'], $this->request, $this->category, $this->languages, $manufacturer);
 
         $tmmp = $this->category->products->category($category['id'])->total();
 
+        $filter->minPrice($tmmp['minp']);
+        $filter->maxPrice($tmmp['maxp']);
+
+        /** FILTERING <<<<<  **/
+
         $total = $tmmp['total'];
 
-        $filter['minp'] = $tmmp['minp'];
-        $filter['maxp'] = $tmmp['maxp'];
-
-
         // pagination
-        $pagination = $this->app->pagination->init($total, $ipp, $category['id'] . ';', $_GET);
+        $pagination = $this->app->pagination->init($total, $ipp, $url, $_GET);
         $limit = $pagination->getLimit();
         $category['pagination'] = $pagination;
 
         // assign all
-        $category['filter'] = $filter;
         $category['products_total'] = $total;
         $category['products'] = $this->category->products->limit($limit[0], $limit[1])->get();
 
         $category['sorting'] = $this->config->sorting;
         $category['paginate_options'] = $this->config->paginate_options;
 
+//        dd($category['filter']->features());
+
+        $this->template->assign('filter', $filter);
         $this->template->assign('category', $category);
     }
 

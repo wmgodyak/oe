@@ -9,8 +9,7 @@ namespace system\core;
 
 use system\core\exceptions\Exception;
 use system\models\App;
-use system\models\Model;
-use system\models\Settings;
+use system\models\Modules;
 
 defined("CPATH") or die();
 
@@ -335,7 +334,7 @@ class Template
     public function before()
     {
         $app = App::getInstance();
-        $app->module = Model::getInstance()->get();
+        $app->module = Modules::getInstance()->get();
 
         $this->assign('base_url',    APPURL );
         $this->assign('app', $app);

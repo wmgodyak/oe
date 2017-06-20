@@ -4,7 +4,7 @@ namespace system\models;
  * Class Features
  * @package system\models
  */
-class Features extends Backend
+class Features extends Frontend
 {
 
     public function createBlank($parent_id, $owner_id)
