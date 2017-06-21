@@ -118,7 +118,7 @@ class Catalog extends Frontend
         $this->request->param('category_id', $category['id']);
 
         $manufacturer = new \modules\catalog\models\Manufacturers($this->config, $this->category, $this->request);
-        $filter = new Filter($category['id'], $this->request, $this->category, $this->languages, $manufacturer);
+        $filter = new Filter($category, $this->request, $this->category, $this->languages, $manufacturer);
 
         $tmmp = $this->category->products->category($category['id'])->total();
 

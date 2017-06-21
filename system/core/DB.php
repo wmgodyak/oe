@@ -52,7 +52,7 @@ class DB extends \PDO {
 
         $options = array(
             \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
-            \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION // ERRMODE_EXCEPTION
+            \PDO::ATTR_ERRMODE => \PDO::ERRMODE_WARNING // ERRMODE_EXCEPTION
         );
         try {
         /**

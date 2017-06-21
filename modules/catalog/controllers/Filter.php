@@ -27,22 +27,22 @@ class Filter
 
     /**
      * Filter constructor.
-     * @param $category_id
+     * @param $category
      * @param Request $request
-     * @param \modules\catalog\models\Category $category
+     * @param \modules\catalog\models\Category $categoryModel
      * @param $language
-     * @param $manufacturers
+     * @param Manufacturers $manufacturers
      */
-    public function __construct($category_id, Request $request, \modules\catalog\models\Category $category, $language, Manufacturers $manufacturers)
+    public function __construct($category, Request $request, \modules\catalog\models\Category $categoryModel, $language, Manufacturers $manufacturers)
     {
-        $this->category_id = $category_id;
+        $this->category_id = $category['id'];
         $this->request     = $request;
-        $this->category    = $category;
+        $this->category    = $categoryModel;
         $this->language    = $language;
 
         $this->db = DB::getInstance();
 
-        $this->categoryFeatures    = new CategoriesFeatures(new Features(), $this->language, $category);
+        $this->categoryFeatures    = new CategoriesFeatures(new Features(), $this->language, $categoryModel, $category);
 
         $this->manufacturers = $manufacturers;
 
@@ -82,7 +82,6 @@ class Filter
 
                 continue;
             }
-
 
             $feature = $this->db->select("select f.id, f.code,i.name
                                               from __features f 
@@ -163,11 +162,11 @@ class Filter
     {
         return $this->categoryFeatures->get($this->category_id);
     }
-
-    public function selectedFeatures()
-    {
-        return $this->categoryFeatures->getSelected();
-    }
+//
+//    public function selectedFeatures()
+//    {
+//        return $this->categoryFeatures->getSelected();
+//    }
 
     /**
      * @param null $price
@@ -200,6 +199,8 @@ class Filter
     {
         $manufacturers = $this->request->param('filtered_manufacturers');
 
+        if(empty($manufacturers)) return;
+
         $in = [];
         foreach ($manufacturers as $manufacturer) {
 
@@ -210,6 +211,5 @@ class Filter
 
         $in = implode(', ', $in);
         $this->category->products->where(" and p.manufacturers_id in ($in) ");
-
     }
 }

@@ -63,6 +63,7 @@ class Manufacturers
         return $res;
     }
 
+    // todo change it
     private function makeUrl($manufacturer)
     {
         // http://shop.engine.loc/clothing/filter/aaaa-14;bbbb-18;manufacturer-acer,apple
@@ -99,54 +100,42 @@ class Manufacturers
 
     private function totalProducts($manufacturer)
     {
-        return 999;
+        //        $this->category->products->debug();
         $this->category->products->clear();
 
         $this->category->products->category($this->request->param('category_id'));
 
-        $minp = $this->request->get('minp', 'i');
-        $maxp = $this->request->get('maxp', 'i');
-
-        if($minp > 0 && $maxp > 0) {
-            $this->category->products->where(" and price between {$minp} and {$maxp}");
-        } elseif($minp > 0 && $maxp == 0){
-            $this->category->products->where(" and price > {$minp}");
-        } elseif($minp == 0 && $maxp > 0){
-            $this->category->products->where(" and price < {$maxp}");
-        }
-
-        $selected = $this->request->param('selected_features');
-
-        $manufacturers_in = [];
+        $selected = $this->request->param('filtered_features');
 
         if(!empty($selected)){
 
-            foreach ($selected as $code => $values) {
-
-                if($code == 'manufacturer'){
-
-                    continue;
+            foreach ($selected as $feat) {
+                $values = [];
+                foreach ($feat['values'] as $v) {
+                    $values[] = $v['id'];
                 }
 
-                $features_id = $this->db->select("select id from __features where code = '{$code}' limit 1")->row('id');
-
-                if(empty($features_id) || empty($values)) continue;
-
-                $this->category->products->join("join __content_features cf{$features_id} on
-                    cf{$features_id}.content_id=c.id
-                and cf{$features_id}.features_id = {$features_id}
-                and cf{$features_id}.values_id in (". implode(',', $values) .")
+                $this->category->products->join("
+                join __content_features cf{$feat['id']} on
+                    cf{$feat['id']}.content_id=c.id
+                and cf{$feat['id']}.features_id = {$feat['id']}
+                and cf{$feat['id']}.values_id in (". implode(',', $values) .")
                 ");
-
             }
-
         }
 
-        if(empty($manufacturers_in)){
-            $manufacturers_in[] = $manufacturer['id'];
+
+        $prices = $this->request->param('filtered_prices');
+
+        if($prices['minp'] > 0 && $prices['maxp'] > 0) {
+            $this->category->products->where(" and price between {$prices['minp']} and {$prices['maxp']}");
+        } elseif($prices['minp'] > 0 && $prices['maxp'] == 0){
+            $this->category->products->where(" and price > {$prices['minp']}");
+        } elseif($prices['minp'] == 0 && $prices['maxp'] > 0){
+            $this->category->products->where(" and price < {$prices['maxp']}");
         }
 
-        $this->category->products->where(" and p.manufacturers_id = '{$manufacturer['id']}' ");
+        $this->category->products->where(" and p.manufacturers_id = {$manufacturer['id']} ");
 
         $t = $this->category->products->total();
         $this->category->products->clear();
