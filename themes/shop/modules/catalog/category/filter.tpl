@@ -15,7 +15,7 @@
             {*</ul>*}
 
         {*{/if}*}
-        <form action="">
+        <form action="{$filter_url}">
         <!-- filter price -->
         <div class="filter-options-item filter-options-price">
             <div class="filter-options-title">Price</div>

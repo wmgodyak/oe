@@ -13,40 +13,35 @@
 {/block}
 {block name="content"}
     <div class="row">
-
+        {d($app->images->cover($product->id, 'product'))}
         <div class="col-sm-6 col-md-6 col-lg-6">
-
             <div class="product-media media-horizontal">
-
                 <div class="image_preview_container images-large">
-
-                    <img id="img_zoom" data-zoom-image="{$theme_url}assets/images/media/detail/thumb-lag1.jpg" src="{$theme_url}assets/images/media/detail/thumb-img1.jpg" alt="">
-
+                    <img id="img_zoom" data-zoom-image="{$app->images->cover($product->id, 'product')}" alt="">
                     <button class="btn-zoom open_qv"><span>zoom</span></button>
-
                 </div>
 
                 <div class="product_preview images-small">
 
                     <div class="owl-carousel thumbnails_carousel" id="thumbnails"  data-nav="true" data-dots="false" data-margin="10" {literal}data-responsive='{"0":{"items":3},"480":{"items":4},"600":{"items":5},"768":{"items":3}}'{/literal}>
 
-                        <a href="Product_detail---Main.html#" data-image="{$theme_url}assets/images/media/detail/thumb-img1.jpg" data-zoom-image="{$theme_url}assets/images/media/detail/thumb-lag1.jpg">
+                        <a href="" data-image="{$theme_url}assets/images/media/detail/thumb-img1.jpg" data-zoom-image="{$theme_url}assets/images/media/detail/thumb-lag1.jpg">
 
                             <img src="{$theme_url}assets/images/media/detail/thumb1.jpg" data-large-image="{$theme_url}assets/images/media/detail/thumb-img1.jpg" alt="">
 
                         </a>
 
-                        <a href="Product_detail---Main.html#" data-image="{$theme_url}assets/images/media/detail/thumb-img2.jpg" data-zoom-image="{$theme_url}assets/images/media/detail/thumb-lag2.jpg">
+                        <a href="" data-image="{$theme_url}assets/images/media/detail/thumb-img2.jpg" data-zoom-image="{$theme_url}assets/images/media/detail/thumb-lag2.jpg">
 
                             <img src="{$theme_url}assets/images/media/detail/thumb2.jpg" data-large-image="{$theme_url}assets/images/media/detail/thumb-img2.jpg" alt="">
 
                         </a>
-                        <a href="Product_detail---Main.html#" data-image="{$theme_url}assets/images/media/detail/thumb-img3.jpg" data-zoom-image="{$theme_url}assets/images/media/detail/thumb-lag3.jpg">
+                        <a href="" data-image="{$theme_url}assets/images/media/detail/thumb-img3.jpg" data-zoom-image="{$theme_url}assets/images/media/detail/thumb-lag3.jpg">
 
                             <img src="{$theme_url}assets/images/media/detail/thumb3.jpg" data-large-image="{$theme_url}assets/images/media/detail/thumb-img3.jpg" alt="">
 
                         </a>
-                        <a href="Product_detail---Main.html#" data-image="{$theme_url}assets/images/media/detail/thumb-img1.jpg" data-zoom-image="{$theme_url}assets/images/media/detail/thumb-lag1.jpg">
+                        <a href="" data-image="{$theme_url}assets/images/media/detail/thumb-img1.jpg" data-zoom-image="{$theme_url}assets/images/media/detail/thumb-lag1.jpg">
 
                             <img src="{$theme_url}assets/images/media/detail/thumb1.jpg" data-large-image="{$theme_url}assets/images/media/detail/thumb-img1.jpg" alt="">
 
@@ -155,10 +150,10 @@
                                 </button>
                                 <div class="product-addto-links">
 
-                                    <a href="Product_detail---Main.html#" class="action btn-wishlist" title="Wish List">
+                                    <a href="" class="action btn-wishlist" title="Wish List">
                                         <span>Wishlist</span>
                                     </a>
-                                    <a href="Product_detail---Main.html#" class="action btn-compare" title="Compare">
+                                    <a href="" class="action btn-compare" title="Compare">
                                         <span>Compare</span>
                                     </a>
                                 </div>
@@ -187,11 +182,11 @@
 
         <!-- Nav tabs -->
         <ul class="nav nav-pills" role="tablist">
-            <li role="presentation" class="active"><a href="Product_detail---Main.html#description"  role="tab" data-toggle="tab">Product Details   </a></li>
-            <li role="presentation"><a href="Product_detail---Main.html#tags"  role="tab" data-toggle="tab">information </a></li>
-            <li role="presentation"><a href="Product_detail---Main.html#reviews"  role="tab" data-toggle="tab">reviews</a></li>
-            <li role="presentation"><a href="Product_detail---Main.html#additional"  role="tab" data-toggle="tab">Extra Tabs</a></li>
-            <li role="presentation"><a href="Product_detail---Main.html#tab-cust"  role="tab" data-toggle="tab">Guarantees</a></li>
+            <li role="presentation" class="active"><a href="description"  role="tab" data-toggle="tab">Product Details   </a></li>
+            <li role="presentation"><a href="tags"  role="tab" data-toggle="tab">information </a></li>
+            <li role="presentation"><a href="reviews"  role="tab" data-toggle="tab">reviews</a></li>
+            <li role="presentation"><a href="additional"  role="tab" data-toggle="tab">Extra Tabs</a></li>
+            <li role="presentation"><a href="tab-cust"  role="tab" data-toggle="tab">Guarantees</a></li>
         </ul>
 
         <!-- Tab panes -->
@@ -539,227 +534,423 @@
 
 {/block}
 {block name="sidebar.content"}
-    <!-- block filter products -->
-    <div id="layered-filter-block" class="block-sidebar block-filter no-hide">
-        <div class="close-filter-products"><i class="fa fa-times" aria-hidden="true"></i></div>
+
+    <!-- Block  bestseller products-->
+    <div class="block-sidebar block-sidebar-categorie">
         <div class="block-title">
-            <strong>SHOP BY</strong>
+            <strong>PRODUCT TYPES</strong>
         </div>
         <div class="block-content">
+            <ul class="items">
+                <li class="parent">
+                    <a href="Product_detail---Main.html">Dress</a>
+                    <span class="toggle-submenu"></span>
+                    <ul class="subcategory">
+                        <li >
+                            <a href="Product_detail---Main.html">subcategory 1</a>
 
-            <!-- Filter Item  categori-->
-            <div class="filter-options-item filter-options-categori">
-                <div class="filter-options-title">Categories</div>
-                <div class="filter-options-content">
-                    <ol class="items">
-                        <li class="item ">
-                            <label>
-                                <input type="checkbox"><span>Smartphone & Mp3 Player  </span>
-                            </label>
                         </li>
-                        <li class="item ">
-                            <label>
-                                <input type="checkbox"><span>Network & Computer</span>
-                            </label>
-                        </li>
-                        <li class="item ">
-                            <label>
-                                <input type="checkbox"><span>Batteries & Chargers</span>
-                            </label>
-                        </li>
-                        <li class="item ">
-                            <label>
-                                <input type="checkbox"><span>Headphone & Headset</span>
-                            </label>
-                        </li>
-                    </ol>
-                </div>
-            </div><!-- Filter Item  categori-->
-
-            <!-- filter price -->
-            <div class="filter-options-item filter-options-price">
-                <div class="filter-options-title">Price</div>
-                <div class="filter-options-content">
-                    <div class="slider-range">
-                        <div class="action">
-                                                <span class="price">
-                                                    <span id="amount-left"></span>
-                                                    <span id="amount-right"></span>
-                                                </span>
-
-                            <button type="button" class="btn default"><span>Search</span></button>
-                        </div>
-                        <div id="slider-range" ></div>
-                        <span class="amount-min">$3</span>
-                        <span class="amount-max">$6789</span>
-                    </div>
-                </div>
-            </div><!-- filter price -->
-
-            <!-- filter Manufacture-->
-            <div class="filter-options-item filter-options-manufacture">
-                <div class="filter-options-title">Manufacture</div>
-                <div class="filter-options-content">
-                    <ol class="items">
-                        <li class="item ">
-                            <label>
-                                <input type="checkbox"><span>Ercol  </span>
-                            </label>
-                        </li>
-                        <li class="item ">
-                            <label>
-                                <input type="checkbox"><span>Duresta</span>
-                            </label>
-                        </li>
-                        <li class="item ">
-                            <label>
-                                <input type="checkbox"><span>G Plan</span>
-                            </label>
-                        </li>
-                        <li class="item ">
-                            <label>
-                                <input type="checkbox"><span>Parker Knoll</span>
-                            </label>
-                        </li>
-                        <li class="item ">
-                            <label>
-                                <input type="checkbox"><span>Collins & Hayes</span>
-                            </label>
-                        </li>
-
-                    </ol>
-                </div>
-            </div><!-- Filter Item -->
-
-            <!-- filter color-->
-            <div class="filter-options-item filter-options-color">
-                <div class="filter-options-title">COLOR</div>
-                <div class="filter-options-content">
-                    <ol class="items">
-                        <li class="item">
-                            <label>
-                                <input type="checkbox">
-                                <span>
-                                                        <span class="img" style="background-color: #fca53c;"></span>
-                                                        <span class="count">(30)</span>
-                                                    </span>
-
-                            </label>
-                        </li>
-                        <li class="item">
-                            <label>
-                                <input type="checkbox">
-                                <span>
-                                                        <span class="img" style="background-color: #6b5a5c;"></span>
-                                                        <span class="count">(20)</span>
-                                                    </span>
-
-                            </label>
-                        </li>
-                        <li class="item">
-                            <label>
-                                <input type="checkbox">
-                                <span>
-                                                        <span class="img" style="background-color: #000000;"></span>
-                                                        <span class="count">(20)</span>
-                                                    </span>
-
-                            </label>
-                        </li>
-                        <li class="item">
-                            <label>
-                                <input type="checkbox">
-                                <span>
-                                                        <span class="img" style="background-color: #3063f2;"></span>
-                                                        <span class="count">(20)</span>
-                                                    </span>
-
-                            </label>
-                        </li>
-                        <li class="item">
-                            <label>
-                                <input type="checkbox">
-                                <span>
-                                                        <span class="text" >CYal</span>
-                                                        <span class="count">(20)</span>
-                                                    </span>
-
-                            </label>
-                        </li>
-                        <li class="item">
-                            <label>
-                                <input type="checkbox">
-                                <span>
-                                                        <span class="img" style="background-color: #f9334a;"></span>
-                                                        <span class="count">(20)</span>
-                                                    </span>
-
-                            </label>
-                        </li>
-
-
-                    </ol>
-                </div>
-            </div><!-- Filter Item -->
-
+                        <li><a href="Product_detail---Main.html">subcategory 1</a></li>
+                        <li><a href="Product_detail---Main.html">subcategory 1</a></li>
+                        <li><a href="Product_detail---Main.html">subcategory 1</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="Product_detail---Main.html">Bags</a>
+                </li>
+                <li class="parent">
+                    <a href="Product_detail---Main.html">Cost &amp; Jackets</a>
+                    <span class="toggle-submenu"></span>
+                    <ul class="subcategory">
+                        <li><a href="Product_detail---Main.html">subcategory 1</a></li>
+                        <li><a href="Product_detail---Main.html">subcategory 1</a></li>
+                        <li><a href="Product_detail---Main.html">subcategory 1</a></li>
+                        <li><a href="Product_detail---Main.html">subcategory 1</a></li>
+                    </ul>
+                </li>
+                <li class="parent">
+                    <a href="Product_detail---Main.html">Beauty</a>
+                    <span class="toggle-submenu"></span>
+                    <ul class="subcategory">
+                        <li><a href="Product_detail---Main.html">subcategory 1</a></li>
+                        <li><a href="Product_detail---Main.html">subcategory 1</a></li>
+                        <li><a href="Product_detail---Main.html">subcategory 1</a></li>
+                        <li><a href="Product_detail---Main.html">subcategory 1</a></li>
+                    </ul>
+                </li>
+                <li class="parent">
+                    <a href="Product_detail---Main.html">Jewellery</a>
+                    <span class="toggle-submenu"></span>
+                    <ul class="subcategory">
+                        <li><a href="Product_detail---Main.html">subcategory 1</a></li>
+                        <li><a href="Product_detail---Main.html">subcategory 1</a></li>
+                        <li><a href="Product_detail---Main.html">subcategory 1</a></li>
+                        <li><a href="Product_detail---Main.html">subcategory 1</a></li>
+                    </ul>
+                </li>
+                <li class="parent">
+                    <a href="Product_detail---Main.html">Nightwear</a>
+                    <span class="toggle-submenu"></span>
+                    <ul class="subcategory">
+                        <li><a href="Product_detail---Main.html">subcategory 1</a></li>
+                        <li><a href="Product_detail---Main.html">subcategory 1</a></li>
+                        <li><a href="Product_detail---Main.html">subcategory 1</a></li>
+                        <li><a href="Product_detail---Main.html">subcategory 1</a></li>
+                    </ul>
+                </li>
+                <li class="parent">
+                    <a href="Product_detail---Main.html">Jumpers &amp; Cardigans</a>
+                    <span class="toggle-submenu"></span>
+                    <ul class="subcategory">
+                        <li><a href="Product_detail---Main.html">subcategory 1</a></li>
+                        <li><a href="Product_detail---Main.html">subcategory 1</a></li>
+                        <li><a href="Product_detail---Main.html">subcategory 1</a></li>
+                        <li><a href="Product_detail---Main.html">subcategory 1</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
-    </div><!-- Filter -->
-
-    <!-- Block  Compare-->
-    <div class="block-sidebar block-sidebar-compare">
-        <div class="block-title">
-            <strong>compare products</strong>
-        </div>
-        <div class="block-content">
-            You have no product to compare
-        </div>
-    </div><!-- Block  Compare-->
+    </div><!-- Block  bestseller products-->
 
     <!-- Block  bestseller products-->
     <div class="block-sidebar block-sidebar-products">
         <div class="block-title">
-            <strong>bestseller products</strong>
+            <strong>BEST SALES</strong>
         </div>
         <div class="block-content">
-            <div class="product-item">
-                <div class="product-item-info">
-                    <div class="product-item-photo">
-                        <a href="Grid_Products.html" class="product-item-img"><img src="{$theme_url}assets/images/media/index1/sidebar-bestseller1.jpg" alt="product name"></a>
+            <div class="owl-carousel"
+                 data-nav="false"
+                 data-dots="true"
+                 data-margin="0"
+                 data-autoplayTimeout="700"
+                 data-autoplay="true"
+                 data-loop="true"
+                 data-responsive='{literal}{
+                                "0":{"items":1},
+                                "420":{"items":1},
+                                "480":{"items":2},
+                                "600":{"items":2},
+                                "992":{"items":1}
+                                }'{/literal}>
+                <div class="item">
+                    <div class="product-item product-item-opt-2">
+                        <div class="product-item-info">
+                            <div class="product-item-photo">
+                                <a class="product-item-img" href="Product_detail---Main.html"><img alt="product name" src="{$theme_url}assets/images/media/detail/best1.jpg"></a>
+                            </div>
+                            <div class="product-item-detail">
+                                <strong class="product-item-name"><a href="Product_detail---Main.html">Man’s Within Plus Size Flared</a></strong>
+                                <div class="clearfix">
+                                    <div class="product-item-price">
+                                        <span class="price">$45.00</span>
+                                    </div>
+                                    <div class="product-reviews-summary">
+                                        <div class="rating-summary">
+                                            <div title="70%" class="rating-result">
+                                                                    <span style="width:70%">
+                                                                        <span><span>70</span>% of <span>100</span></span>
+                                                                    </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="product-item-detail">
-                        <strong class="product-item-name"><a href="Grid_Products.html">Washing Machine Pro</a></strong>
-                        <div class="product-item-price">
-                            <span class="price">$45.00</span>
+                    <div class="product-item product-item-opt-2">
+                        <div class="product-item-info">
+                            <div class="product-item-photo">
+                                <a class="product-item-img" href="Product_detail---Main.html"><img alt="product name" src="{$theme_url}assets/images/media/detail/best2.jpg"></a>
+                            </div>
+                            <div class="product-item-detail">
+                                <strong class="product-item-name"><a href="Product_detail---Main.html">Woman Within Plus Size Flared</a></strong>
+                                <div class="clearfix">
+                                    <div class="product-item-price">
+                                        <span class="price">$45.00</span>
+                                    </div>
+                                    <div class="product-reviews-summary">
+                                        <div class="rating-summary">
+                                            <div title="70%" class="rating-result">
+                                                                    <span style="width:70%">
+                                                                        <span><span>70</span>% of <span>100</span></span>
+                                                                    </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-item product-item-opt-2">
+                        <div class="product-item-info">
+                            <div class="product-item-photo">
+                                <a class="product-item-img" href="Product_detail---Main.html"><img alt="product name" src="{$theme_url}assets/images/media/detail/best3.jpg"></a>
+                            </div>
+                            <div class="product-item-detail">
+                                <strong class="product-item-name"><a href="Product_detail---Main.html">Plus Size Rock Star Skirt</a></strong>
+                                <div class="clearfix">
+                                    <div class="product-item-price">
+                                        <span class="price">$45.00</span>
+                                    </div>
+                                    <div class="product-reviews-summary">
+                                        <div class="rating-summary">
+                                            <div title="70%" class="rating-result">
+                                                                    <span style="width:70%">
+                                                                        <span><span>70</span>% of <span>100</span></span>
+                                                                    </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="product-item">
-                <div class="product-item-info">
-                    <div class="product-item-photo">
-                        <a href="Grid_Products.html" class="product-item-img"><img src="{$theme_url}assets/images/media/index1/sidebar-bestseller2.jpg" alt="product name"></a>
-                    </div>
-                    <div class="product-item-detail">
-                        <strong class="product-item-name"><a href="Grid_Products.html">Washing Machine Pro</a></strong>
-                        <div class="product-item-price">
-                            <span class="price">$45.00</span>
+                <div class="item">
+                    <div class="product-item product-item-opt-2">
+                        <div class="product-item-info">
+                            <div class="product-item-photo">
+                                <a class="product-item-img" href="Product_detail---Main.html"><img alt="product name" src="{$theme_url}assets/images/media/detail/best1.jpg"></a>
+                            </div>
+                            <div class="product-item-detail">
+                                <strong class="product-item-name"><a href="Product_detail---Main.html">Man’s Within Plus Size Flared</a></strong>
+                                <div class="clearfix">
+                                    <div class="product-item-price">
+                                        <span class="price">$45.00</span>
+                                    </div>
+                                    <div class="product-reviews-summary">
+                                        <div class="rating-summary">
+                                            <div title="70%" class="rating-result">
+                                                                    <span style="width:70%">
+                                                                        <span><span>70</span>% of <span>100</span></span>
+                                                                    </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="product-item">
-                <div class="product-item-info">
-                    <div class="product-item-photo">
-                        <a href="Grid_Products.html" class="product-item-img"><img src="{$theme_url}assets/images/media/index1/sidebar-bestseller3.jpg" alt="product name"></a>
+                    <div class="product-item product-item-opt-2">
+                        <div class="product-item-info">
+                            <div class="product-item-photo">
+                                <a class="product-item-img" href="Product_detail---Main.html"><img alt="product name" src="{$theme_url}assets/images/media/detail/best2.jpg"></a>
+                            </div>
+                            <div class="product-item-detail">
+                                <strong class="product-item-name"><a href="Product_detail---Main.html">Woman Within Plus Size Flared</a></strong>
+                                <div class="clearfix">
+                                    <div class="product-item-price">
+                                        <span class="price">$45.00</span>
+                                    </div>
+                                    <div class="product-reviews-summary">
+                                        <div class="rating-summary">
+                                            <div title="70%" class="rating-result">
+                                                                    <span style="width:70%">
+                                                                        <span><span>70</span>% of <span>100</span></span>
+                                                                    </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="product-item-detail">
-                        <strong class="product-item-name"><a href="Grid_Products.html">Washing Machine Pro </a></strong>
-                        <div class="product-item-price">
-                            <span class="price">$45.00</span>
+                    <div class="product-item product-item-opt-2">
+                        <div class="product-item-info">
+                            <div class="product-item-photo">
+                                <a class="product-item-img" href="Product_detail---Main.html"><img alt="product name" src="{$theme_url}assets/images/media/detail/best3.jpg"></a>
+                            </div>
+                            <div class="product-item-detail">
+                                <strong class="product-item-name"><a href="Product_detail---Main.html">Plus Size Rock Star Skirt</a></strong>
+                                <div class="clearfix">
+                                    <div class="product-item-price">
+                                        <span class="price">$45.00</span>
+                                    </div>
+                                    <div class="product-reviews-summary">
+                                        <div class="rating-summary">
+                                            <div title="70%" class="rating-result">
+                                                                    <span style="width:70%">
+                                                                        <span><span>70</span>% of <span>100</span></span>
+                                                                    </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div><!-- Block  bestseller products-->
+
+    <!-- block slide top -->
+    <div class="block-sidebar block-banner-sidebar">
+        <div class="owl-carousel"
+             data-nav="false"
+             data-dots="true"
+             data-margin="0"
+             data-items='1'
+             data-autoplayTimeout="700"
+             data-autoplay="true"
+             data-loop="true">
+            <div class="item item1" >
+                <img src="{$theme_url}assets/images/media/detail/banner-slide2.jpg" alt="images">
+            </div>
+            <div class="item item2" >
+                <img src="{$theme_url}assets/images/media/detail/banner-slide2.jpg" alt="images">
+            </div>
+            <div class="item item3" >
+                <img src="{$theme_url}assets/images/media/detail/banner-slide2.jpg" alt="images">
+            </div>
+        </div>
+    </div><!-- block slide top -->
+
+    <!-- Block  SALE products-->
+    <div class="block-sidebar block-sidebar-products-opt2">
+        <div class="block-title">
+            <strong>SALE PRODUCTS</strong>
+        </div>
+        <div class="block-content">
+            <div class="owl-carousel"
+                 data-nav="false"
+                 data-dots="true"
+                 data-margin="0"
+                 data-autoplayTimeout="700"
+                 data-autoplay="true"
+                 data-loop="true"
+                 data-responsive='{literal}{
+                                "0":{"items":1},
+                                "420":{"items":2},
+                                "480":{"items":2},
+                                "600":{"items":2},
+                                "992":{"items":1}
+                                }{/literal}'>
+                <div class="product-item product-item-opt-2">
+                    <div class="product-item-info">
+                        <div class="product-item-photo">
+                            <a href="Product_detail---Main.html" class="product-item-img"><img src="{$theme_url}assets/images/media/detail/sale1.jpg" alt="product name"></a>
+                            <div class="product-item-actions">
+                                <a href="Product_detail---Main.html" class="btn btn-wishlist"><span>wishlist</span></a>
+                                <a href="Product_detail---Main.html" class="btn btn-compare"><span>compare</span></a>
+                                <a href="Product_detail---Main.html" class="btn btn-quickview"><span>quickview</span></a>
+                            </div>
+                            <button class="btn btn-cart" type="button"><span>Add to Cart</span></button>
+                            <span class="product-item-label label-price">30% <span>off</span></span>
+                        </div>
+                        <div class="product-item-detail">
+                            <strong class="product-item-name"><a href="Product_detail---Main.html">Luxury Dark Blue Coast</a></strong>
+                            <div class="clearfix">
+                                <div class="product-item-price">
+                                    <span class="price">$45.00</span>
+                                    <span class="old-price">$52.00</span>
+                                </div>
+                                <div class="product-reviews-summary">
+                                    <div class="rating-summary">
+                                        <div class="rating-result" title="70%">
+                                                                <span style="width:70%">
+                                                                    <span><span>70</span>% of <span>100</span></span>
+                                                                </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-item product-item-opt-2">
+                    <div class="product-item-info">
+                        <div class="product-item-photo">
+                            <a href="Product_detail---Main.html" class="product-item-img"><img src="{$theme_url}assets/images/media/product1.jpg" alt="product name"></a>
+                            <div class="product-item-actions">
+                                <a href="Product_detail---Main.html" class="btn btn-wishlist"><span>wishlist</span></a>
+                                <a href="Product_detail---Main.html" class="btn btn-compare"><span>compare</span></a>
+                                <a href="Product_detail---Main.html" class="btn btn-quickview"><span>quickview</span></a>
+                            </div>
+                            <button class="btn btn-cart" type="button"><span>Add to Cart</span></button>
+
+                        </div>
+                        <div class="product-item-detail">
+                            <strong class="product-item-name"><a href="Product_detail---Main.html">Asus Ispiron 20</a></strong>
+                            <div class="clearfix">
+                                <div class="product-item-price">
+                                    <span class="price">$45.00</span>
+                                    <span class="old-price">$52.00</span>
+                                </div>
+                                <div class="product-reviews-summary">
+                                    <div class="rating-summary">
+                                        <div class="rating-result" title="70%">
+                                                                <span style="width:70%">
+                                                                    <span><span>70</span>% of <span>100</span></span>
+                                                                </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-item product-item-opt-2">
+                    <div class="product-item-info">
+                        <div class="product-item-photo">
+                            <a href="Product_detail---Main.html" class="product-item-img"><img src="{$theme_url}assets/images/media/product1.jpg" alt="product name"></a>
+                            <div class="product-item-actions">
+                                <a href="Product_detail---Main.html" class="btn btn-wishlist"><span>wishlist</span></a>
+                                <a href="Product_detail---Main.html" class="btn btn-compare"><span>compare</span></a>
+                                <a href="Product_detail---Main.html" class="btn btn-quickview"><span>quickview</span></a>
+                            </div>
+                            <button class="btn btn-cart" type="button"><span>Add to Cart</span></button>
+                            <span class="product-item-label label-price">30% <span>off</span></span>
+                        </div>
+                        <div class="product-item-detail">
+                            <strong class="product-item-name"><a href="Product_detail---Main.html">Asus Ispiron 20</a></strong>
+                            <div class="clearfix">
+                                <div class="product-item-price">
+                                    <span class="price">$45.00</span>
+                                    <span class="old-price">$52.00</span>
+                                </div>
+                                <div class="product-reviews-summary">
+                                    <div class="rating-summary">
+                                        <div class="rating-result" title="70%">
+                                                                <span style="width:70%">
+                                                                    <span><span>70</span>% of <span>100</span></span>
+                                                                </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- Block  SALE products-->
+
+    <!-- block slide top -->
+    <div class="block-sidebar block-sidebar-testimonials2">
+
+        <div class="block-content">
+            <div class="owl-carousel"
+                 data-nav="false"
+                 data-dots="true"
+                 data-margin="0"
+                 data-items='1'
+                 data-autoplayTimeout="700"
+                 data-autoplay="true"
+                 data-loop="true">
+                <div class="item " >
+                    <div class="img">
+                        <img src="{$theme_url}assets/images/icon/icon1.png" alt="icon1">
+                    </div>
+                    <strong class="title">100% Money Back Guaranteed</strong>
+                    <div class="des">
+                        Lorem ipsum dolor sit amet conse ctetur adipisicing elit, sed do eiusmod tempor incididunt .
+                    </div>
+                    <a href="Product_detail---Main.html" class="btn">Read more <i aria-hidden="true" class="fa fa-angle-double-right"></i></a>
+                </div>
+
+            </div>
+        </div>
+    </div><!-- block slide top -->
+
 {/block}

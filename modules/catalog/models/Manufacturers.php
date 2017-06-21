@@ -54,48 +54,91 @@ class Manufacturers
 
         $res = [];
 
+        $manufacturers = $this->request->param('filtered_manufacturers');
+
         foreach ($r as $item) {
+
+            $item['active'] = false;
+            if(!empty($manufacturers)){
+                foreach ($manufacturers as $manufacturer) {
+                    if($manufacturer['id'] == $item['id']) $item['active'] = true;
+                }
+            }
+
             $item['url'] = $this->makeUrl($item);
             $item['total'] = $this->totalProducts($item);
+
             $res[] = $item;
         }
 
         return $res;
     }
 
-    // todo change it
-    private function makeUrl($manufacturer)
+    private function makeUrl($item)
     {
-        // http://shop.engine.loc/clothing/filter/aaaa-14;bbbb-18;manufacturer-acer,apple
-        if(strpos($this->url, 'manufacturer') === false){
-            return $this->url .'/filter/manufacturer-'. $manufacturer['url'];
-        }
+        // todo category url empty
+        $url = $this->request->param('category_url');
 
-        $a = explode(';manufacturer-', $this->url);
+        $filtered = $this->request->param('filtered_features');
 
-        $url = $a[0];
+        $f_url = [];
 
-        $b = explode(',', $a[1]);
+        if(!empty($filtered)){
 
-        if(in_array($manufacturer['url'], $b)){
-            $b = array_filter($b, function($v) use ($manufacturer){
-                return $v != $manufacturer['url'];
-            });
+            foreach ($filtered as $ff) {
+                $fuv = [];
+                foreach ($ff['values'] as $fv) {
+                    $fuv[] = $fv['id'];
+                }
 
-            if(empty($b)){
-                return $url;
+                if(empty($fuv)) continue;
+
+                $f_url[$ff['code']] = $fuv;
             }
-
-            return $url .';manufacturer-' . implode(',', $b);
         }
 
-        $c = [];
-        $c[] = $a[1];
-        $c[] = $manufacturer['url'];
+        // manufacturers
+        $manufacturers = $this->request->param('filtered_manufacturers');
 
-        $c = implode(',', $c);
+        $in = []; $used = false;
 
-        return $url .';manufacturer-'. $c;
+        if(!empty($manufacturers)){
+
+            foreach ($manufacturers as $manufacturer) {
+                if($manufacturer['id'] != $item['id']){
+                    $in[] = $manufacturer['url'];
+
+                    continue;
+                }
+
+                $used = true;
+            }
+        }
+
+        if(!$used) $in[] = $item['url'];
+
+        if(! empty($in)){
+            $f_url['manufacturer'] = $in;
+        }
+        // build url
+
+        if(!empty($f_url)){
+            $url .= "/filter/";
+            foreach ($f_url as $code => $values) {
+                $url .= "$code-" . implode(',', $values) . ';';
+            }
+        }
+
+        $url = rtrim($url, ';');
+
+        // prices
+        $prices = $this->request->param('filtered_prices');
+
+        if(!empty($prices['minp']) || !empty($prices['maxp'])){
+            $url .= "?minp={$prices['minp']}&maxp={$prices['maxp']}";
+        }
+
+        return $url;
     }
 
     private function totalProducts($manufacturer)

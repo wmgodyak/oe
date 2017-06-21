@@ -99,7 +99,7 @@ class Pagination
         $c = 1;
 
         if(isset($qs['p'])) unset($qs['p']);
-        if(isset($qs['ipp'])) unset($qs['ipp']);
+//        if(isset($qs['ipp'])) unset($qs['ipp']);
 
         $qs = $qs ? '&'. http_build_query($qs) : null;
 

@@ -161,7 +161,7 @@ class XMail
 
         Template::getInstance()->assign('appurl', APPURL);
         Template::getInstance()->assign('app', $app);
-        Template::getInstance()->assign('data', $this->data);
+        Template::getInstance()->assign($this->data);
 
         if(empty($this->tpl) && empty($this->body)){
             throw new \Exception("Empty mail body");

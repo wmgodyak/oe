@@ -65,7 +65,6 @@ class Catalog extends Frontend
             if($page['type'] == $this->config->type->manufacturer){
                 return $this->displayManufacturer($page);
             }
-
         });
     }
 
@@ -114,7 +113,10 @@ class Catalog extends Frontend
             $url = $category['url'] . '/filter/' . $this->request->param('filter');
         }
 
+        $this->template->assign('filter_url', $url);
+
         $this->request->param('url', $url);
+        $this->request->param('category_url', $category['url']);
         $this->request->param('category_id', $category['id']);
 
         $manufacturer = new \modules\catalog\models\Manufacturers($this->config, $this->category, $this->request);

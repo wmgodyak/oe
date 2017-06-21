@@ -61,8 +61,6 @@ class Filter
         $filter = $this->request->param('filter');
         if(empty($filter)) return null;
 
-        d($filter);
-
         $selected = []; $manufacturers = [];
 
         $a = explode(';', $filter);
@@ -74,7 +72,7 @@ class Filter
 
                 $a = explode(',', $b[1]);
                 foreach ($a as $i=>$v) {
-                    $manufacturer = $this->db->select("select content_id as id, name from __content_info where url = '$v' and languages_id = '{$this->language->id}' limit 1")->row();
+                    $manufacturer = $this->db->select("select content_id as id, url, name from __content_info where url = '$v' and languages_id = '{$this->language->id}' limit 1")->row();
                     if(empty($manufacturer)) continue;
 
                     $manufacturers[] = $manufacturer;
@@ -115,7 +113,7 @@ class Filter
         $this->request->param('filtered_manufacturers', $manufacturers);
         $this->request->param('filtered_prices', $prices);
 
-        d($selected); d($manufacturers); d($prices);
+//        d($selected); d($manufacturers); d($prices);
     }
 
     /**

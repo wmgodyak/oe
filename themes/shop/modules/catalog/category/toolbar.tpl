@@ -12,7 +12,10 @@
         </a>
     </div><!-- View as -->
 
-    <form class="toolbar-option">
+    <form class="toolbar-option" action="{$url}">
+
+        {if $smarty.get.minp > 0}<input type="hidden" name="minp" value="{$smarty.get.minp}">{/if}
+        {if $smarty.get.maxp > 0}<input type="hidden" name="maxp" value="{$smarty.get.maxp}">{/if}
 
         <div class="toolbar-sorter ">
             <label class="label">Short by:</label>

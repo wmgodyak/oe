@@ -112,24 +112,30 @@ class CategoriesFeatures extends Model
     }
 
     /**
-     * todo add manufacturer to url
      * @param $feature
      * @param $value
      * @return string
      */
     private function makeUrl($feature, $value)
     {
-        $url = $this->current_category['url'] ;
+        $url = $this->request->param('category_url');
+
+        $used = false;
 
         $filtered = $this->request->param('filtered_features');
 
+        $f_url = [];
+
         if(!empty($filtered)){
-            $f_url = [];
+
             foreach ($filtered as $ff) {
                 $fuv = [];
                 foreach ($ff['values'] as $fv) {
 
-                    if($fv['id'] == $value['id']) continue;
+                    if($fv['id'] == $value['id']) {
+                        $used = true;
+                        continue;
+                    }
                     $fuv[] = $fv['id'];
                 }
 
@@ -137,18 +143,50 @@ class CategoriesFeatures extends Model
 
                 $f_url[$ff['code']] = $fuv;
             }
-
-            if(!empty($f_url)){
-                $url .= "/";
-                foreach ($f_url as $code => $values) {
-                    $url .= "$code-" . implode(',', $values);
-                }
-            }
-
-            return $url;
         }
 
-        return $url . "/filter/{$feature['code']}-{$value['id']}";
+        if( !$used ){
+            if(!isset($f_url[$feature['code']])) {
+                $f_url[$feature['code']] = [];
+            }
+            $f_url[$feature['code']][] = $value['id'];
+        }
+
+        // manufacturers
+        $manufacturers = $this->request->param('filtered_manufacturers');
+
+        if(!empty($manufacturers)){
+
+            $in = [];
+            foreach ($manufacturers as $manufacturer) {
+
+                $in[] = $manufacturer['url'];
+            }
+
+            if(! empty($in)){
+                $f_url['manufacturer'] = $in;
+            }
+        }
+
+        // build url
+
+        if(!empty($f_url)){
+            $url .= "/filter/";
+            foreach ($f_url as $code => $values) {
+                $url .= "$code-" . implode(',', $values) . ';';
+            }
+        }
+
+        $url = rtrim($url, ';');
+
+        // prices
+        $prices = $this->request->param('filtered_prices');
+
+        if(!empty($prices['minp']) || !empty($prices['maxp'])){
+            $url .= "?minp={$prices['minp']}&maxp={$prices['maxp']}";
+        }
+
+        return $url;
     }
 
     private function totalProducts($feature, $value)
