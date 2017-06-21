@@ -5,16 +5,16 @@
     </div>
     <div class="block-content">
         {*{d($filter->selectedFeatures())}*}
-        {assign var='selected' value=$filter->selectedFeatures()}
-        {if $selected|count}
-            <h3>Selected features</h3>
-            <ul>
-                {foreach $selected as $item}
-                    <li><a href="{$category.id}{$item.url}">{$item.name}</a></li>
-                {/foreach}
-            </ul>
+        {*{assign var='selected' value=$filter->selectedFeatures()}*}
+        {*{if $selected|count}*}
+            {*<h3>Selected features</h3>*}
+            {*<ul>*}
+                {*{foreach $selected as $item}*}
+                    {*<li><a href="{$category.id}{$item.url}">{$item.name}</a></li>*}
+                {*{/foreach}*}
+            {*</ul>*}
 
-        {/if}
+        {*{/if}*}
         <form action="">
         <!-- filter price -->
         <div class="filter-options-item filter-options-price">
