@@ -41,7 +41,7 @@ class ProductFeatures extends Model
             select f.id, f.type, fi.name
             from __features_content fc
             join __features f on f.id = fc.features_id and f.status = 'published' and f.parent_id={$parent_id} {$on_list} and f.hide = 0
-            join __features_info fi on fi.features_id = f.id and fi.language->id = {$this->language->id}
+            join __features_info fi on fi.features_id = f.id and fi.languages_id = {$this->language->id}
             where fc.content_id={$this->category_id}
             order by abs(fc.position) asc
         ";
@@ -67,7 +67,7 @@ class ProductFeatures extends Model
                             select f.id, f.type, fi.name
                             from __content_features cf
                             join __features f on f.id = cf.values_id and f.status = 'published'
-                            join __features_info fi on fi.features_id = cf.values_id and fi.language->id = {$this->language->id}
+                            join __features_info fi on fi.features_id = cf.values_id and fi.languages_id = {$this->language->id}
                             where cf.content_id={$this->product_id} and cf.features_id={$feature['id']}
                             ")
                         ->all();
@@ -87,6 +87,34 @@ class ProductFeatures extends Model
         }
 
         return $features;
+    }
+
+
+    /**
+     * get short features
+     * @param $parent_id
+     * @return mixed
+     */
+    public function short()
+    {
+        $res = $this->get(0, true);
+
+        $short = [];
+
+        foreach ($res as $row) {
+            if($row['type'] == 'select'){
+                $values = [];
+                foreach ($row['values'] as $v) {
+                    $values[$v['id']]= $v['name'];
+                }
+
+                $row['values'] = $values;
+            }
+
+            $short[] = $row;
+        }
+
+        return $short;
     }
 
     /**
@@ -117,13 +145,4 @@ class ProductFeatures extends Model
         return $res;
     }
 
-    /**
-     * get short features
-     * @param $parent_id
-     * @return mixed
-     */
-    public function getOnList($parent_id)
-    {
-        return $this->get($parent_id, true);
-    }
 }

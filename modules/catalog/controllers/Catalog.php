@@ -14,6 +14,8 @@ class Catalog extends Frontend
 {
     private $config;
     private $category;
+    private $currency;
+    private $user;
 
     public function __construct()
     {
@@ -21,10 +23,10 @@ class Catalog extends Frontend
 
         $this->config = module_config('catalog');
 
-        $user = Session::get('user');
-        $currency = Session::get('currency');
+        $this->user = Session::get('user');
+        $this->currency = Session::get('currency');
 
-        $this->category = new \modules\catalog\models\Category($this->config, $currency, $user);
+        $this->category = new \modules\catalog\models\Category($this->config, $this->currency, $this->user);
     }
 
     public function init()
@@ -102,8 +104,6 @@ class Catalog extends Frontend
             $ipp = $allowed[0];
         }
 
-//        $this->category->products->debug();
-
         /** FILTERING >>>>>  **/
 
         $url = $category['url'] ;
@@ -143,15 +143,22 @@ class Catalog extends Frontend
         $category['sorting'] = $this->config->sorting;
         $category['paginate_options'] = $this->config->paginate_options;
 
-//        dd($category['filter']->features());
-
         $this->template->assign('filter', $filter);
         $this->template->assign('category', $category);
     }
 
-    public function displayProduct($product)
+    public function displayProduct($page)
     {
+        $group_id = isset($user['group_id']) ? $user['group_id'] : $this->config->group_id;
+        $product = new \modules\catalog\models\Product($page['id'], $this->languages, $this->currency, $group_id);
 
+        foreach ($page as $k=>$v) {
+            $product->set($k, $v);
+        }
+
+//        dd($product->features->short());
+
+        $this->template->assign('product', $product);
     }
 
     public function displayManufacturer($product)

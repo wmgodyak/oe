@@ -13,39 +13,22 @@
 {/block}
 {block name="content"}
     <div class="row">
-        {d($app->images->cover($product->id, 'product'))}
-        <div class="col-sm-6 col-md-6 col-lg-6">
+        {assign var='img' value=$app->images->cover($product->id, 'product')}
+          <div class="col-sm-6 col-md-6 col-lg-6">
             <div class="product-media media-horizontal">
                 <div class="image_preview_container images-large">
-                    <img id="img_zoom" data-zoom-image="{$app->images->cover($product->id, 'product')}" alt="">
+
+                    <img id="img_zoom" src="{$img}" data-zoom-image="{$app->images->cover($product->id, 'source')}" alt="">
                     <button class="btn-zoom open_qv"><span>zoom</span></button>
                 </div>
 
                 <div class="product_preview images-small">
 
                     <div class="owl-carousel thumbnails_carousel" id="thumbnails"  data-nav="true" data-dots="false" data-margin="10" {literal}data-responsive='{"0":{"items":3},"480":{"items":4},"600":{"items":5},"768":{"items":3}}'{/literal}>
+                        {foreach $app->images->get($product->id, 'product') as $img}
 
-                        <a href="" data-image="{$theme_url}assets/images/media/detail/thumb-img1.jpg" data-zoom-image="{$theme_url}assets/images/media/detail/thumb-lag1.jpg">
-
-                            <img src="{$theme_url}assets/images/media/detail/thumb1.jpg" data-large-image="{$theme_url}assets/images/media/detail/thumb-img1.jpg" alt="">
-
-                        </a>
-
-                        <a href="" data-image="{$theme_url}assets/images/media/detail/thumb-img2.jpg" data-zoom-image="{$theme_url}assets/images/media/detail/thumb-lag2.jpg">
-
-                            <img src="{$theme_url}assets/images/media/detail/thumb2.jpg" data-large-image="{$theme_url}assets/images/media/detail/thumb-img2.jpg" alt="">
-
-                        </a>
-                        <a href="" data-image="{$theme_url}assets/images/media/detail/thumb-img3.jpg" data-zoom-image="{$theme_url}assets/images/media/detail/thumb-lag3.jpg">
-
-                            <img src="{$theme_url}assets/images/media/detail/thumb3.jpg" data-large-image="{$theme_url}assets/images/media/detail/thumb-img3.jpg" alt="">
-
-                        </a>
-                        <a href="" data-image="{$theme_url}assets/images/media/detail/thumb-img1.jpg" data-zoom-image="{$theme_url}assets/images/media/detail/thumb-lag1.jpg">
-
-                            <img src="{$theme_url}assets/images/media/detail/thumb1.jpg" data-large-image="{$theme_url}assets/images/media/detail/thumb-img1.jpg" alt="">
-
-                        </a>
+                        <a href="" data-image="{$img}"><img src="{$img}" alt=""></a>
+                        {/foreach}
 
                     </div><!--/ .owl-carousel-->
 

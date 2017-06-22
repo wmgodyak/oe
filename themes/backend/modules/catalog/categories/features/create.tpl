@@ -62,7 +62,17 @@
             <div class="checkbox">
                 <label>
                     <input type="hidden" name="data[hide]" value="0">
-                    <input type="checkbox" name="data[hide]" id="data_hide" value="1" {if isset($data.hide) && $data.hide == 1}checked{/if}> {$t.features.hide}
+                    <input type="checkbox" name="data[hide]" id="data_hide" value="1" {if isset($data.hide) && $data.hide == 1}checked{/if}> {$t.catalog.features.hide}
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-10 col-md-offset-2">
+            <div class="checkbox">
+                <label>
+                    <input type="hidden" name="data[on_list]" value="0">
+                    <input type="checkbox" name="data[on_list]" value="1" {if isset($data.on_list) && $data.on_list == 1}checked{/if}> {$t.catalog.features.on_list}
                 </label>
             </div>
         </div>

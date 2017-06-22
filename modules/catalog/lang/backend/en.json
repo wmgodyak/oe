@@ -48,5 +48,9 @@
     "availability": "Availability",
     "currency": "Currency",
     "price_per_group": "Price, "
+  },
+  "features" : {
+    "hide" : "Hide on product page",
+    "on_list" : "Display on short description"
   }
 }

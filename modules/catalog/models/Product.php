@@ -9,6 +9,10 @@ class Product
     public $id;
 
     private $language;
+
+    /**
+     * @var ProductFeatures
+     */
     public $features;
     public $currency;
 
@@ -63,15 +67,15 @@ class Product
 
         $this->features = new ProductFeatures($this->id, $row['categories_id'], $this->language);
 
-//        if(!empty($products)){
-//            foreach ($products as $k => $product) {
-//                $products[$k]['features'] = $this->features->get($product['categories_id'], $product['id']);
-//                if($product['has_variants']){
-//                    $products[$k]['variants'] = $this->variants->get($product['id'], $this->group_id);
-//                }
-//            }
-//        }
+        // todo variants
+    }
 
-//        return $products;
+    /**
+     * @param $k
+     * @param $v
+     */
+    public function set($k, $v)
+    {
+        $this->{$k} = $v;
     }
 }
