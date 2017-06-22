@@ -30,7 +30,7 @@ engine.catalog = {
                 function()
                 {
                     engine.request.get('module/run/catalog/products/delete/'+id, function(res){
-                        pw.dialog('destroy').remove();
+                        pw;
                         engine.refreshDataTable('content');
                     }, 'json');
                 });
@@ -179,7 +179,7 @@ engine.catalog = {
                             if(d.s){
                                 mainCatA.attr('href', d.cat.href).attr('data-id', d.cat.id).html(d.cat.name);
                                 $('#catalog_product_main_category_id').val(d.cat.id).trigger('change');
-                                dialog.dialog('destroy').remove();
+                                dialog;
                                 engine.alert('Категорію збережено');
                             }
                         });
@@ -271,7 +271,7 @@ engine.catalog = {
                                 }
                                 out += '<a href="javascript:;" title="Додати" class="catalog-product-add-category" data-id="{$cat.id}"><i class="fa fa-plus-circle"></i></a>';
                                 $('#sp_selected_categories').html(out);
-                                dialog.dialog('destroy').remove();
+                                dialog;
                                 engine.alert('Категорії збережено');
                             }
                         });
@@ -343,7 +343,7 @@ engine.catalog = {
 
                 engine.validateAjaxForm('#catalogCategoriesForm', function(d){
                     if(d.s){
-                        dialog.dialog('destroy').remove();
+                        dialog;
                         $tree.jstree('refresh');
                     } else {
                         engine.showFormErrors('#catalogCategoriesForm', d.i);
@@ -378,7 +378,7 @@ engine.catalog = {
 
                 engine.validateAjaxForm('#catalogCategoriesForm', function(d){
                     if(d.s){
-                        dialog.dialog('destroy').remove();
+                        dialog;
                         $tree.jstree('refresh');
                     } else {
                         engine.showFormErrors('#catalogCategoriesForm', d.i);
@@ -660,7 +660,7 @@ engine.catalog = {
                     engine.validateAjaxForm('#sp_cat_form', function(d){
                         if(d.s){
                             engine.refreshDataTable('content');
-                            dialog.dialog('destroy').remove();
+                            dialog;
                             engine.alert('Операція завершена успішно.');
                         }
                     });
@@ -844,7 +844,11 @@ engine.catalog = {
         variants: {
             init: function()
             {
-                //var content_id = $('#content_id').val();
+                var products_id = $('#content_id').val();
+
+                if($("#products_variants_cnt").length){
+                    engine.catalog.products.variants.get(products_id);
+                }
 
                 $(document).on('click', '.b-shop_products-add-variant', function(){
                     var id = $(this).data('id');
@@ -880,6 +884,11 @@ engine.catalog = {
                     $("#variantsUploadImage").submit();
                 });
             },
+            get: function(products_id){
+                engine.request.get('module/run/catalog/productsVariants/get/'+products_id, function(res){
+                    $("#products_variants_cnt").html(res);
+                });
+            },
             create: function(products_id)
             {
                 engine.request.get
@@ -904,11 +913,8 @@ engine.catalog = {
                         engine.validateAjaxForm('#productsVariantsForm', function(d){
 
                             if(d.s > 0){
-                                engine.request.get('module/run/catalog/products/variants/get/'+products_id, function(res)
-                                {
-                                    $("#products_variants_cnt").html(res);
-                                    pw.dialog('close').dialog('destroy').remove();
-                                });
+                                engine.catalog.products.variants.get(products_id);
+                                pw.dialog('close');
                             }
                         });
                     }
@@ -916,7 +922,7 @@ engine.catalog = {
             },
             delete: function(id)
             {
-                engine.confirm
+               var pw = engine.confirm
                 (
                     'Видалити варіант?',
                     function()
@@ -926,7 +932,7 @@ engine.catalog = {
                                 $('#variant-'+id).remove();
                             }
                         });
-                        $(this).dialog('close').dialog('destroy').remove();
+                       pw.dialog('close');
                     }
                 );
             },

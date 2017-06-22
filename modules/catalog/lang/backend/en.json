@@ -28,6 +28,9 @@
       "newest": "Newest",
       "bestseller": "Bestseller",
       "out_of_prod": "Out of production"
+    },
+    "variants" : {
+      "title" : "Variants"
     }
   },
   "accessories": {

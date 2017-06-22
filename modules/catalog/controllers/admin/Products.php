@@ -49,6 +49,9 @@ class Products extends Content
         $features = new ProductsFeatures();
         $features->init();
 
+        $cat = new ProductsVariants();
+        $cat->init();
+
         $manufacturers = new ProductsManufacturers();
         $manufacturers->init();
 

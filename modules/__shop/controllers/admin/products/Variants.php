@@ -22,6 +22,7 @@ class Variants extends Backend
     public function __construct()
     {
         parent::__construct();
+
         $this->variants = new \modules\shop\models\admin\products\variants\Variants();
         $this->contentFeatures = new ContentFeatures();
         $this->customersGroup = new UsersGroup();
