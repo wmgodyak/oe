@@ -157,6 +157,7 @@ class Catalog extends Frontend
         }
 
 //        dd($product->features->short());
+        dd($product->variants->get());
 
         $this->template->assign('product', $product);
     }

@@ -44,6 +44,50 @@ class ProductsPrices extends Backend
     {
         events()->add('content.params.after', [$this, 'index']);
         events()->add('content.process', [$this, 'process']);
+
+        filter_add('catalog.admin.products.table.th', [$this, 'assignToProductsList']);
+        filter_add('catalog.admin.products.table.xhr.res',  [$this, 'assignToProductsListXhr']);
+    }
+
+    public function assignToProductsList($th)
+    {
+        $created = array_pop($th);
+        $func = array_pop($th);
+        foreach ($this->usersGroup->getItems(0, 0) as $group) {
+            $th[] = [$group['name'], null,null, null];
+        }
+
+        $th[] = $func;
+        $th[] = $created;
+
+        return $th;
+    }
+
+    public function assignToProductsListXhr($res)
+    {
+        $groups = $this->usersGroup->getItems(0, 0);
+
+        $my = [];
+
+        foreach ($res as $k=>$row) {
+
+            $_row = $row;
+
+            $created = array_pop($_row);
+            $func = array_pop($_row);
+
+            foreach ($groups as $group) {
+                $price = $this->prices->getByGroupId($row[0], $group['id']);
+                $_row[] = $price;
+            }
+
+            $_row[] = $func;
+            $_row[] = $created;
+
+            $my[] = $_row;
+        }
+
+        return $my;
     }
 
     public function index($content = null)

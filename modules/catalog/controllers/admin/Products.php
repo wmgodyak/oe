@@ -8,7 +8,6 @@ use helpers\bootstrap\Link;
 use system\core\DataTables2;
 use system\models\ContentRelationship;
 use system\components\content\controllers\Content;
-use system\models\Images;
 
 /**
  * Class products
@@ -49,7 +48,7 @@ class Products extends Content
         $features = new ProductsFeatures();
         $features->init();
 
-        $cat = new ProductsVariants();
+        $cat = new \modules\catalog\controllers\admin\products\Variants();
         $cat->init();
 
         $manufacturers = new ProductsManufacturers();
@@ -86,7 +85,7 @@ class Products extends Content
         $ths = [
             [t('common.id'), 'c.id', 1, 1, 'width: 60px'],
             [t('common.name'), 'ci.name', 1, 1],
-            [t('common.created'), 'c.created', 0,1, 'width: 200px'],
+//            [t('common.created'), 'c.created', 0,1, 'width: 200px'],
             [t('common.updated'), 'c.updated', 0, 1, 'width: 200px'],
             [t('common.tbl_func'), null, 0, 0, 'width: 180px']
         ];
@@ -112,7 +111,7 @@ class Products extends Content
                 -> join("__content_info ci on ci.content_id=c.id and ci.languages_id={$this->languages->id}")
                 -> where(" c.status in ('published', 'hidden')");
 
-            $t = filter_apply('catalog.products.datatable.xhr', $t);
+            $t = filter_apply('catalog.products.datatable.xhr.instance', $t);
 
             $t-> execute();
 
@@ -130,8 +129,7 @@ class Products extends Content
                     " <a class='status-{$row['status']}' title='{$status}' href='module/run/catalog/products/edit/{$row['id']}'>{$icon}  {$row['name']}</a>"
                     . " <a href='/{$row['url']}' target='_blank'>{$icon_link}</a>"
                 ;
-                $res[$i][] = date('d.m.Y H:i:s', strtotime($row['created']));
-                $res[$i][] = $row['updated'] ? date('d.m.Y H:i:s', strtotime($row['updated'])) : '';
+                $res[$i][] = $row['updated'] ? date('d.m.Y H:i:s', strtotime($row['updated'])) :  date('d.m.Y H:i:s', strtotime($row['created'])) ;
                 $res[$i][] =
                     (string)(
                     $row['status'] == 'published' ?
@@ -168,7 +166,7 @@ class Products extends Content
 
                 ;
             }
-
+            $res = filter_apply('catalog.admin.products.table.xhr.res', $res);
             return $t->render($res, $t->getTotal());
         }
 

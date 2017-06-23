@@ -2,6 +2,7 @@
 
 namespace modules\catalog\models;
 
+use modules\catalog\models\products\Variants;
 use system\core\DB;
 
 class Product
@@ -14,18 +15,26 @@ class Product
      * @var ProductFeatures
      */
     public $features;
-    public $currency;
+    private $currency;
+    private $group_id;
+
+    /**
+     * @var Variants
+     */
+    public $variants;
 
     public function __construct($id, $language, $currency, $group_id)
     {
         $this->id       = $id;
         $this->language = $language;
-        $this->currency = $currency['site'];
+        $this->currency = $currency;
 
-        $this->build($currency, $group_id);
+        $this->group_id = $group_id;
+
+        $this->build();
     }
 
-    private function build($currency, $group_id)
+    private function build()
     {
         $q = "select
             c.id,
@@ -33,21 +42,21 @@ class Product
           ci.name, ci.title, ci.description,
           crm.categories_id, 
             ROUND (CASE
-              WHEN p.currency_id = {$currency['site']['id']} THEN pp.price
-              WHEN p.currency_id <> {$currency['site']['id']} and p.currency_id = {$currency['main']['id']} THEN pp.price * {$currency['site']['rate']}
-              WHEN p.currency_id <> {$currency['site']['id']} and p.currency_id <> {$currency['main']['id']} THEN pp.price / cu.rate * {$currency['site']['rate']}
+              WHEN p.currency_id = {$this->currency['site']['id']} THEN pp.price
+              WHEN p.currency_id <> {$this->currency['site']['id']} and p.currency_id = {$this->currency['main']['id']} THEN pp.price * {$this->currency['site']['rate']}
+              WHEN p.currency_id <> {$this->currency['site']['id']} and p.currency_id <> {$this->currency['main']['id']} THEN pp.price / cu.rate * {$this->currency['site']['rate']}
             END, 2) as price,
             ROUND ( CASE
-              WHEN p.currency_id = {$currency['site']['id']} THEN pp.price_old
-              WHEN p.currency_id <> {$currency['site']['id']} and p.currency_id = {$currency['main']['id']} THEN pp.price_old * {$currency['site']['rate']}
-              WHEN p.currency_id <> {$currency['site']['id']} and p.currency_id <> {$currency['main']['id']} THEN pp.price_old / cu.rate * {$currency['site']['rate']}
+              WHEN p.currency_id = {$this->currency['site']['id']} THEN pp.price_old
+              WHEN p.currency_id <> {$this->currency['site']['id']} and p.currency_id = {$this->currency['main']['id']} THEN pp.price_old * {$this->currency['site']['rate']}
+              WHEN p.currency_id <> {$this->currency['site']['id']} and p.currency_id <> {$this->currency['main']['id']} THEN pp.price_old / cu.rate * {$this->currency['site']['rate']}
             END, 2) as price_old,
            pp.price as pp_rice,
            IF(p.in_stock = 1, 1, 0) as available
           from __content c
           join __products p on p.content_id=c.id
           join __content_relationship crm on crm.content_id=c.id and crm.is_main = 1
-          join __products_prices pp on pp.product_id=c.id and pp.group_id={$group_id}
+          join __products_prices pp on pp.product_id=c.id and pp.group_id={$this->group_id}
           join __currency cu on cu.id = p.currency_id
           join __content_info ci on ci.content_id=c.id and ci.languages_id={$this->language->id}
           where c.id={$this->id}
@@ -66,8 +75,7 @@ class Product
         }
 
         $this->features = new ProductFeatures($this->id, $row['categories_id'], $this->language);
-
-        // todo variants
+        $this->variants = new Variants($this->id, $this->group_id, $this->currency);
     }
 
     /**

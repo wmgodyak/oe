@@ -30,7 +30,6 @@ engine.catalog = {
                 function()
                 {
                     engine.request.get('module/run/catalog/products/delete/'+id, function(res){
-                        pw;
                         engine.refreshDataTable('content');
                     }, 'json');
                 });
@@ -850,12 +849,12 @@ engine.catalog = {
                     engine.catalog.products.variants.get(products_id);
                 }
 
-                $(document).on('click', '.b-shop_products-add-variant', function(){
+                $(document).on('click', '.b-catalog-products-variants-add', function(){
                     var id = $(this).data('id');
                     engine.catalog.products.variants.create(id);
                 });
-                
-                $(document).on('click', '.b-shop_products-rm-variant', function(){
+
+                $(document).on('click', '.b-catalog-products-variants-del', function(){
                     var id = $(this).data('id');
                     engine.catalog.products.variants.delete(id);
                 });
@@ -885,7 +884,7 @@ engine.catalog = {
                 });
             },
             get: function(products_id){
-                engine.request.get('module/run/catalog/productsVariants/get/'+products_id, function(res){
+                engine.request.get('module/run/catalog/products/variants/get/'+products_id, function(res){
                     $("#products_variants_cnt").html(res);
                 });
             },

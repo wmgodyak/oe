@@ -1,36 +1,36 @@
 <?php
 
-namespace modules\shop\models\products\variants;
+namespace modules\catalog\models\products;
 
-use system\core\Session;
-use system\models\Model;
+use system\models\Frontend;
 
 /**
- * Class ProductsVariants
- * @package modules\shop\models\products\variants
+ * Class Variants
+ * @package modules\catalog\models\products
  */
-class ProductsVariants extends Model
+class Variants extends Frontend
 {
+    private $product_id;
+    private $group_id;
     private $currency;
 
-    public function __construct()
+    public function __construct($product_id, $group_id, $currency)
     {
         parent::__construct();
 
-        $this->currency = Session::get('currency');
+        $this->product_id = $product_id;
+        $this->group_id   = $group_id;
+        $this->currency   = $currency;
     }
 
     /**
-     * @param $content_id
-     * @param $group_id
      * @return mixed
-     * @throws \system\core\exceptions\Exception
      */
-    public function get($content_id, $group_id)
+    public function get()
     {
         $variants = self::$db
             ->select("
-              select v.id, v.in_stock, v.img, p.currency_id,
+              select v.id, v.in_stock, v.sku, v.img, cu.symbol, p.currency_id,
                ROUND( CASE
                 WHEN p.currency_id = {$this->currency['site']['id']} THEN vp.price
                 WHEN p.currency_id <> {$this->currency['site']['id']} and p.currency_id = {$this->currency['main']['id']} THEN vp.price * {$this->currency['site']['rate']}
@@ -40,8 +40,8 @@ class ProductsVariants extends Model
               join __products p on p.content_id = v.content_id
               join __currency cu on cu.id = p.currency_id
               join __products_variants_prices vp on
-                vp.variants_id=v.id and vp.content_id={$content_id} and vp.group_id = {$group_id}
-              where v.content_id={$content_id}
+                vp.variants_id=v.id and vp.content_id={$this->product_id} and vp.group_id = {$this->group_id}
+              where v.content_id={$this->product_id}
             ")
             ->all();
 
@@ -53,17 +53,15 @@ class ProductsVariants extends Model
     }
 
     /**
-     * @param $content_id
      * @return array|mixed
-     * @throws \system\core\exceptions\Exception
      */
-    public function total($content_id)
+    public function total()
     {
         return self::$db
             ->select("
               select count(id) as t
               from __products_variants
-              where content_id = '{$content_id}'
+              where content_id = '{$this->product_id}'
             ")
             ->row('t');
     }
@@ -78,7 +76,7 @@ class ProductsVariants extends Model
         $r = self::$db
             ->select("select fi.name
                       from __products_variants_features vf
-                      join __features_info fi on fi.features_id=vf.values_id and fi.languages_id='{$this->languages_id}'
+                      join __features_info fi on fi.features_id=vf.values_id and fi.languages_id='{$this->languages->id}'
                       where vf.variants_id={$variants_id}
                       order by vf.id asc
                     ")
@@ -86,4 +84,5 @@ class ProductsVariants extends Model
 
         return implode('/', $r);
     }
+
 }

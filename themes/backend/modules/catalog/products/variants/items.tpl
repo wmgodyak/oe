@@ -3,6 +3,7 @@
          <tr>
              <th style="width: 50px;">Photo</th>
              <th>Variant</th>
+             <th>SKU</th>
              <th>Availability</th>
              {foreach $customers_group as $group}
                  <th> {$group.name}</th>
@@ -27,6 +28,9 @@
                         {/foreach}
                     </td>
                     <td>
+                        <input required name="variants[{$variant.id}][sku]" class="form-control" value="{$variant.sku}" />
+                    </td>
+                    <td>
                         <select name="variants[{$variant.id}][in_stock]" class="form-control">
                             <option {if $variant.in_stock == 1}selected{/if} value="1">In stock</option>
                             <option {if $variant.in_stock == 2}selected{/if}  value="2">For order</option>
@@ -37,7 +41,7 @@
                         <td><input name="variants[{$variant.id}][prices][{$group.id}]" type="text" required class="form-control" value="{$group.price}"></td>
                     {/foreach}
                     <td>
-                        <button type="button" class="btn btn-danger b-products-rm-variant " title="Видалити" data-id="{$variant.id}"><i class="fa fa-remove"></i></button>
+                        <button type="button" class="btn btn-danger b-catalog-products-variants-del " title="Видалити" data-id="{$variant.id}"><i class="fa fa-remove"></i></button>
                     </td>
                 </tr>
             {/foreach}
