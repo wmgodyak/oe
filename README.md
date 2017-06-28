@@ -42,12 +42,12 @@ There is a known PHP 7.0.5 issue that affects our code compiler; to avoid the is
  - openssl
  - PDO/MySQL
  - SimpleXML
--  xml
+ - xml
  - xsl
  - zip
  - PHP 7 only:
- - json
- - iconv
+  - json
+  - iconv
 
 ## Instalation
 
