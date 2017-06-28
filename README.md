@@ -32,6 +32,23 @@ MariaDB and Percona are compatible with OYi Engine because we support MySQL 5.6 
 
 There is a known PHP 7.0.5 issue that affects our code compiler; to avoid the issue, do not use PHP 7.0.5.
 
+### Required PHP extensions
+ - curl
+ - gd, ImageMagick 6.3.7 (or later) or both
+ - intl
+ - mbstring
+ - mcrypt
+ - mhash
+ - openssl
+ - PDO/MySQL
+ - SimpleXML
+-  xml
+ - xsl
+ - zip
+ - PHP 7 only:
+ - json
+ - iconv
+
 ## Instalation
 
 Download and unpack it to your web root directory.
