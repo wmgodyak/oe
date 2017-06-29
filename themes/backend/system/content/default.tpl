@@ -37,6 +37,7 @@
             {if $form_display_blocks.images}
                 {*{include "system/content/blocks/images.tpl"}*}
                 {$events->call('content.images', $content)}
+                {$events->call('content.images.after', $content)}
             {/if}
             {$events->call('content.sidebar.after', $content)}
         </div>

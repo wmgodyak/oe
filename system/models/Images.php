@@ -30,11 +30,12 @@ class Images extends Model
     /**
      * @param $content_id
      * @param null $size
-     * @param int $start
      * @param int $num
-     * @return mixed
+     * @param int $start
+     * @return mixed|null
+     * @throws \system\core\exceptions\Exception
      */
-    public function get($content_id, $size = null, $start = 0, $num = 1000)
+    public function get($content_id, $size = null, $num = 1000, $start = 0)
     {
         $items = self::$db
             ->select("

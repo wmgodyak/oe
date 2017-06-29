@@ -28,6 +28,7 @@ class Module extends Backend
             }
         }
 
+
         $params = isset($params[0]) ? $params[0]  : $params;
 
         $action = 'index';
@@ -35,12 +36,35 @@ class Module extends Backend
             $params = explode('/', $params);
         }
 
+
         $module = array_shift($params);
 
         if ($this->request->isGet()){
 
             $this->request->param('controller', $module);
             $this->request->param('action', $action);
+        }
+
+        //http://engine.loc/cp/module/run/catalog/products/variants/get/47
+
+        if(isset($params[1])){
+            $_params = $params;
+
+            $sub_module = array_shift($_params);
+            $sub_sub_module = array_shift($_params);
+
+            $ns = "\\modules\\$module\\controllers\\admin\\$sub_module\\" . ucfirst($sub_sub_module);
+
+            $path = str_replace('\\', DIRECTORY_SEPARATOR, $ns . ".php");
+
+            if(file_exists( DOCROOT . $path)){
+
+                if(!empty($_params)){
+                    $action = array_shift($_params);
+                }
+
+                return $this->call($ns, $action, $_params);
+            }
         }
 
         if(isset($params[0])){

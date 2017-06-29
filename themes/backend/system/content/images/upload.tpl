@@ -10,7 +10,7 @@
         <i class="fa fa-angle-down" aria-hidden="true"></i>
     </a>
     </legend>
-    <div class="fieldset-wrapper">
+    <div class="fieldset-wrapper" style="padding: 0 0 15px 0;">
         <div class="list-group">
             <div class="list-group-item dropzone-container">
                 <div class="form-group">

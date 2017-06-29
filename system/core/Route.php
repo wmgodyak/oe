@@ -39,6 +39,8 @@ class Route
         'segment' => '[^/]*'
     ];
 
+    private $uri_filters = [];
+    
     /**
      * @param $name
      * @param $regex
@@ -183,6 +185,10 @@ class Route
         $backend_url = Settings::getInstance()->get('backend_url');
         $response  = Response::getInstance();
 
+        foreach ($this->uri_filters as $filter) {
+            $this->uri = $filter($this->uri);
+        }
+
         foreach ($actions as $route) {
 
             // for admin panel
@@ -232,8 +238,16 @@ class Route
                         $request->param($param['name'], $param['value']);
                     }
                 }
-
-                if(is_callable($callback, true) && !is_string($callback)){
+                if(is_array($callback) && isset($callback[1])){
+                    if(is_callable($callback, true, $callable_name)){
+                        events()->call('route', ['request' => $request]);
+                        if($params && is_array($params)){
+                            return $response->body(call_user_func_array($callback, $params));
+                        } else {
+                            return $response->body(call_user_func($callback, $params));
+                        }
+                    }
+                }elseif(is_callable($callback, true) && !is_string($callback)){
                     events()->call('route', ['request' => $request]);
                     return $response->body(call_user_func_array($callback, $params));
                 } else {
@@ -325,7 +339,7 @@ class Route
      * @return $this
      * @throws \Exception
      */
-    private function call($controller, $action, $params)
+    public function call($controller, $action, $params)
     {
         events()->call('route.' . str_replace('\\', '.' , trim($controller, '/')));
         events()->call('route.' . str_replace('\\', '.' , trim($controller, '/')) . '.' . $action);
@@ -384,5 +398,12 @@ class Route
         unset($tags, $key, $value);
 
         return $uri;
+    }
+
+    public function uriFilter($callback)
+    {
+        $this->uri_filters[] = $callback;
+        
+        return $this;
     }
 }

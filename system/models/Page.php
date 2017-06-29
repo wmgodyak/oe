@@ -91,6 +91,11 @@ class Page extends Frontend
         return $this->info($id, 'title');
     }
 
+    public function h1($id)
+    {
+        return $this->info($id, 'h1');
+    }
+
     public function data($id, $key = '*')
     {
         return self::$db

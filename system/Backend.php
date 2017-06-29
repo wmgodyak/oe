@@ -16,6 +16,7 @@ use system\core\Lang;
 use system\core\Languages;
 use system\core\Session;
 use system\core\Template;
+use system\core\Validator;
 use system\models\App;
 use system\models\Images;
 use system\models\Modules;
@@ -50,6 +51,8 @@ abstract class Backend extends Controller
 
     protected $admin;
 
+    protected $validator;
+
     public function __construct()
     {
         parent::__construct();
@@ -67,6 +70,11 @@ abstract class Backend extends Controller
 
         $this->template->assign('base_url',   APPURL . $this->settings->get('backend_url') ."/");
         $this->template->assign('settings',   $this->settings);
+
+        if(! $this->validator){
+            $this->validator = new Validator(t('validator'));
+        }
+
 
         if(!self::$initialized){
              $this->_init();

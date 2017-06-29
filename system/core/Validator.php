@@ -73,6 +73,8 @@ class Validator
 
     public function __construct($error_messages = [])
     {
+        if(empty($error_messages)) return;
+
         $this->error_messages = $error_messages;
     }
 

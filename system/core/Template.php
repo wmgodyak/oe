@@ -8,7 +8,8 @@
 namespace system\core;
 
 use system\core\exceptions\Exception;
-use system\models\Settings;
+use system\models\App;
+use system\models\Modules;
 
 defined("CPATH") or die();
 
@@ -166,13 +167,11 @@ class Template
      */
     public function fetch($template = null, $cache_id = null, $compile_id = null, $parent = null)
     {
+        $this->before();
 
         if(!empty($template) && strpos($template, '.tpl') === false){
             $template .= '.tpl';
         }
-
-        $this->assign('custom_scripts', $this->getScripts());
-        $this->assign('custom_styles', $this->getStyles());
 
         return $this->smarty->fetch($template, $cache_id, $compile_id, $parent);
     }
@@ -205,8 +204,7 @@ class Template
             $template .= '.tpl';
         }
 
-        $this->assign('custom_scripts', $this->getScripts());
-        $this->assign('custom_styles', $this->getStyles());
+        $this->before();
 
         $this->smarty->display($template, $cache_id, $compile_id, $parent);
         die;
@@ -332,5 +330,17 @@ class Template
             </div>
         </body>
         </html>';
+    }
+
+    public function before()
+    {
+        $app = App::getInstance();
+        $app->module = Modules::getInstance()->get();
+
+        $this->assign('base_url',    APPURL );
+        $this->assign('app', $app);
+
+        $this->assign('custom_scripts', $this->getScripts());
+        $this->assign('custom_styles', $this->getStyles());
     }
 } 

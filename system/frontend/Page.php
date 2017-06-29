@@ -36,7 +36,7 @@ class Page extends \system\Frontend
         $lang_id = $this->languages->languages->getDataByCode($code, 'id');
 
         if(empty($lang_id)){
-            $this->e404();
+            return $this->e404();
         }
 
         if($def_lang_id == $lang_id){
@@ -59,7 +59,7 @@ class Page extends \system\Frontend
         $lang_id = $this->languages->languages->getDataByCode($code, 'id');
         $id = $this->app->page->getIdByUrl($url, $lang_id);
         if(empty($id)){
-           $this->e404();
+           return $this->e404();
         }
 
         $page = $this->app->page->fullInfo($id, $lang_id);
@@ -68,10 +68,11 @@ class Page extends \system\Frontend
 
     public function displayUrl($url)
     {
+
         $id = $this->app->page->getIdByUrl($url, $this->languages->id);
 
         if(empty($id)){
-            $this->e404();
+            return $this->e404();
         }
 
         $page = $this->app->page->fullInfo($id);

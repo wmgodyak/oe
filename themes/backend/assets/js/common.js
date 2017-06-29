@@ -133,13 +133,13 @@ var engine = {
     {
         return engine.dialog({
             content: msg,
-            title: 'Увага',
+            title: 'Warning',
             autoOpen: true,
             width: 500,
             modal: true,
             buttons:  [
                 {
-                    text    : "Так",
+                    text    : "Yes",
                     "class" : 'btn-success',
                     click   : success
                 }
@@ -2268,6 +2268,7 @@ engine.nav = {
         var form = $('#form');
         if(form.length){
             var nav_id = form.data('id');
+            if(! nav_id ) return;
 
             $(document).on('change', '.dd', function(e){
                 var list   = e.length ? e : $(e.target);

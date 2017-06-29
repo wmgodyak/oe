@@ -2,6 +2,7 @@
 
 namespace system\models;
 
+use system\core\Config;
 use system\core\Template;
 
 include_once DOCROOT . "/vendor/phpmailer/PHPMailer.php";
@@ -30,6 +31,8 @@ class XMail
     private $body;
 
     private $subject;
+
+    private $to;
 
     public function __construct($subject, array $data = [], $isHtml = true)
     {
@@ -83,6 +86,8 @@ class XMail
     public function addAddress($address, $name = '')
     {
         $this->has_address = true;
+        $this->to = $address;
+
         if(strpos($address, ',')){
             $a = explode(',', $address);
             foreach ($a as $k=>$e) {
@@ -152,6 +157,10 @@ class XMail
      */
     public function send()
     {
+        $env = Config::getInstance()->get('core.environment');
+
+        $log_it = $env != 'production';
+
         $template = Template::getInstance();
 
         //add subject
@@ -161,7 +170,7 @@ class XMail
 
         Template::getInstance()->assign('appurl', APPURL);
         Template::getInstance()->assign('app', $app);
-        Template::getInstance()->assign('data', $this->data);
+        Template::getInstance()->assign($this->data);
 
         if(empty($this->tpl) && empty($this->body)){
             throw new \Exception("Empty mail body");
@@ -182,6 +191,7 @@ class XMail
         if(! $this->has_address){
             // to admin
             $this->addAddress($this->settings['to']);
+            $this->to = $this->settings['to'];
         }
 
         if($this->settings['smtp_on'] == 0 && empty($this->settings['from'])) {
@@ -211,12 +221,38 @@ class XMail
             $this->setFrom($this->settings['smtp_user'], $this->settings['from']);
         }
 
+        if($log_it){
+           return $this->logMessage($this->to, $this->subject, $body);
+        }
+
         return $this->phpmailer->send();
+    }
+
+    /**
+     * @param $to
+     * @param $subject
+     * @param $body
+     * @return int
+     */
+    public function logMessage($to, $subject, $body)
+    {
+        $dir = DOCROOT . "logs/xmail/";
+        if(!is_dir($dir)) mkdir($dir, 0777, true);
+
+        $path = $dir . date('Ymd') . '.log';
+
+        $text = "\r\n
+===================================================================\r\n
+To: {$to}\r\n
+Subject: {$subject}\r\n
+{$body}\r\n
+===================================================================\r\n
+";
+        return file_put_contents($path, $text, FILE_APPEND);
     }
 
     public function getErrorInfo()
     {
         return $this->phpmailer->ErrorInfo;
     }
-
 }

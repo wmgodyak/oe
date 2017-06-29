@@ -142,7 +142,6 @@ class Translations extends Backend
     private function getFileContent($file)
     {
         $r = file_get_contents(DOCROOT . $file);
-        if (empty($r)) return array();
         $a = json_decode($r, true);
 
         $res = [];

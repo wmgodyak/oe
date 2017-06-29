@@ -3,7 +3,7 @@
         <div class="col-md-8">
             <fieldset>
                 <legend>{$t.common.legend_main}</legend>
-                {foreach $languages as $lang}
+                {foreach $languages->get() as $lang}
                     <div class="form-group">
                         <label for="name_{$lang.id}" class="col-sm-3 control-label">{$t.features.name} ({$lang.code})</label>
                         <div class="col-sm-9">

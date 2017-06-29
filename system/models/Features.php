@@ -4,16 +4,8 @@ namespace system\models;
  * Class Features
  * @package system\models
  */
-class Features extends Backend
+class Features extends Frontend
 {
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->languages = new Languages();
-
-        $this->languages->id = $this->languages->getDefault('id');
-    }
 
     public function createBlank($parent_id, $owner_id)
     {
@@ -59,6 +51,17 @@ class Features extends Backend
             ->select("select name from __features_info where features_id={$id} and languages_id = {$this->languages->id} limit 1")
             ->row('name');
     }
+
+    /**
+     * @param $code
+     * @return array|mixed
+     * @throws \system\core\exceptions\Exception
+     */
+    public function getIDByCode($code)
+    {
+        return self::$db->select("select id from __features where code = '{$code}' limit 1")->row('id');
+    }
+
 
     /**
      * @param $id
@@ -178,5 +181,22 @@ class Features extends Backend
         $this->commit();
 
         return true;
+    }
+
+    /**
+     * @param $features_id
+     * @return mixed
+     * @throws \system\core\exceptions\Exception
+     */
+    public function getValues($features_id)
+    {
+        return self::$db
+            ->select("
+                select f.id, f.code, i.name
+                from __features f
+                join __features_info i on i.features_id=f.id and i.languages_id={$this->languages->id}
+                where f.parent_id='{$features_id}'
+            ")
+            ->all();
     }
 }
