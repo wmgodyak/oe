@@ -26,6 +26,7 @@ class Template
     public $theme_url;
     public $theme_path;
     private $smarty;
+    public $mode;
 
     /**
      * list of attached scripts
@@ -334,6 +335,8 @@ class Template
 
     public function before()
     {
+        if($this->mode == 'installing') return;
+
         $app = App::getInstance();
         $app->module = Modules::getInstance()->get();
 
