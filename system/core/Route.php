@@ -329,7 +329,7 @@ class Route
             }
         }
 
-        throw new \Exception('Route not found', 404);
+        throw new \Exception('Route not found: ' . $this->uri, 404);
     }
 
     /**

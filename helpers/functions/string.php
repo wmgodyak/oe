@@ -86,5 +86,28 @@ if(! function_exists('isSerialized')) {
         }
         return false;
     }
+}
+/**
+ * @param int $length
+ * @param bool $only_uppercase
+ * @param bool $numbers
+ * @return string
+ */
+function random_string($length = 10, $only_uppercase = false, $numbers = true ) {
 
+    $c = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    if(! $only_uppercase) $c .= 'abcdefghijklmnopqrstuvwxyz';
+
+    if($numbers) $c .= '0123456789';
+
+    $l = strlen($c);
+
+    $s = '';
+
+    for ($i = 0; $i < $length; $i++) {
+        $s .= $c[rand(0, $l - 1)];
+    }
+
+    return $s;
 }

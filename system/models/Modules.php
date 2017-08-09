@@ -51,7 +51,6 @@ class Modules
         }
 
         foreach ($active as $module=>$params) {
-
             if($params['status'] != 'enabled') continue;
 
             $c  = self::DIR .'\\'. lcfirst($module) . '\controllers\\' . ucfirst($module);

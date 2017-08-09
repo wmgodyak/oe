@@ -1,7 +1,7 @@
 <?php
 
 namespace system\models;
-use system\models\page\Features;
+use system\models\page\Features as F;
 
 /**
  * Class Page
@@ -15,7 +15,7 @@ class Page extends Frontend
     {
         parent::__construct();
 
-        $this->features = new Features();
+        $this->features = new F();
     }
 
     /**
@@ -163,7 +163,7 @@ class Page extends Frontend
         $page = self::$db
             ->select("
                 select c.*,
-                i.languages_id, i.name,i.title,i.h1,i.keywords, i.description,i.content, i.intro,
+                i.languages_id, i.name,i.title, IF(i.h1 = '', i.name, i.h1) as h1,i.keywords, i.description,i.content, i.intro,
                  l.code as languages_code,
                  UNIX_TIMESTAMP(c.created) as created,
                  UNIX_TIMESTAMP(c.published) as published

@@ -339,6 +339,7 @@ class Template
 
         $this->assign('base_url',    APPURL );
         $this->assign('app', $app);
+        $this->assign('t', t()->get()); // todo remove it in future
 
         $this->assign('custom_scripts', $this->getScripts());
         $this->assign('custom_styles', $this->getStyles());

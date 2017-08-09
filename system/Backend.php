@@ -110,7 +110,7 @@ abstract class Backend extends Controller
         )
         ){
             if( $controller != 'admin' && $action != 'login' ){
-                redirect("/{$this->settings->get('backend_url')}/admin/login");
+                redirect("{$this->settings->get('backend_url')}/admin/login");
             }
         }
 

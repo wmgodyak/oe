@@ -82,11 +82,20 @@ class Guides extends Frontend
             ->all();
     }
 
+    /**
+     * @param $data
+     * @param $info
+     * @return bool|string
+     */
     public function create($data, $info)
     {
         $this->beginTransaction();
 
         $data['owner_id']    = Session::get('backend.admin.id');
+        if(empty($data['owner_id'])){
+            $data['owner_id'] = Session::get('user.id');
+        }
+
         $data['types_id']    = $this->types_id;
         $data['subtypes_id'] = $this->types_id;
         $data['status']      = 'published';
@@ -135,6 +144,23 @@ class Guides extends Frontend
         $this->commit();
 
         return $id;
+    }
+
+    /**
+     * @param $name
+     * @param int $parent_id
+     * @return bool
+     */
+    public function is($name, $parent_id = 0)
+    {
+        return self::$db
+                ->select("
+                  select c.id 
+                  from __content_info ci
+                  join __content c on c.id = ci.content_id and parent_id = '{$parent_id}'  
+                  where ci.name like '$name' limit 1
+                  ")
+                ->row('id') > 0;
     }
 
     public function getID($key)

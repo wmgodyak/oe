@@ -230,6 +230,10 @@ class Lang
                     if(isset($this->translations[$parts[0]][$parts[1]][$parts[2]][$parts[3]][$parts[4]])){
                         $data = $this->translations[$parts[0]][$parts[1]][$parts[2]][$parts[3]][$parts[4]];
                     }
+                } else if($c == 6){
+                    if(isset($this->translations[$parts[0]][$parts[1]][$parts[2]][$parts[3]][$parts[4]][$parts[5]])){
+                        $data = $this->translations[$parts[0]][$parts[1]][$parts[2]][$parts[3]][$parts[4]][$parts[5]];
+                    }
                 }
                 return $data;
             }

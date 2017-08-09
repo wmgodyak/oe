@@ -208,10 +208,9 @@ class Users extends Frontend
 
 
     /**
-     * check if is user online
      * @param $id
      * @param $sid
-     * @return $this
+     * @return bool
      */
     public static function isOnline($id, $sid)
     {
@@ -314,4 +313,5 @@ class Users extends Frontend
         self::$db->update('__users', array('sessid'=>''), " id = '{$id}' limit 1");
         Session::delete('user');
     }
+
 }

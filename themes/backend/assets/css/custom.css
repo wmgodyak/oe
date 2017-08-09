@@ -1,0 +1,39 @@
+
+.form-control-static {
+    min-height: 34px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    margin-bottom: 0;
+}
+.form-control-static.input-lg,
+.form-control-static.input-sm {
+    padding-right: 0;
+    padding-left: 0;
+}
+.badge.badge-info {
+    background-color: #5bc0de;
+    color: #fff;
+}
+.badge.badge-info > a{
+    color: #fff;
+}
+
+.ui-dialog fieldset legend {
+    line-height:24px;
+    font-size:14px;
+}
+.ui-dialog .cnt {
+    width:100%;
+    padding: 5px;
+    position: relative;
+    float: left;
+}
+.ui-dialog .cnt table tr td,
+.ui-dialog .cnt table tr td p{
+    font-size:11px;
+    line-height:14px;
+}
+
+.ui-dialog .cnt table tr th{
+    height:auto;
+}
