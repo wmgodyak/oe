@@ -142,7 +142,7 @@ class Modules extends Backend
 
         if ($handle = opendir(DOCROOT . $modules_dir)) {
             while (false !== ($module = readdir($handle))) {
-                if ($module == "." || $module == ".." || $module == '.htaccess')  continue;
+                if ($module == "." || $module == ".." || $module == '.htaccess' || $module == 'index.html')  continue;
 
                 $c  = $modules_dir .'\\'. $module . '\controllers\\' . ucfirst($module);
 
