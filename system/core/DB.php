@@ -137,11 +137,20 @@ class DB extends \PDO {
         self::$instance = null;
     }
 
+    /**
+     * @return mixed
+     */
     public function getQueryCount()
     {
         return self::$count;
     }
 
+    /**
+     * @param $sql
+     * @param bool $debug
+     * @return $this
+     * @throws Exception
+     */
     public function select($sql, $debug = false)
     {
         $sql = str_replace('__', $this->conf['prefix'], $sql);
@@ -520,7 +529,8 @@ class DB extends \PDO {
         return preg_replace($keys, $params, $sql, 1, $count);
     }
 
-    function enumValues( $table, $field ){
+    public function enumValues( $table, $field )
+    {
 
         $table = str_replace('__', $this->conf['prefix'], $table);
         $enum = array();
@@ -533,7 +543,7 @@ class DB extends \PDO {
         return $enum;
     }
 
-    function getColumns($table){
+    public function getColumns($table){
 
         $table = str_replace('__', $this->conf['prefix'], $table);
         $sql = 'SHOW COLUMNS from ' . $table;
