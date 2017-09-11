@@ -6,6 +6,7 @@
                     {assign var="item_name" value="tab_$group"}
                     <li><a href="{$com_url}#{$group}">{$t.settings[$item_name]}</a></li>
                 {/foreach}
+                {$events->call('settings.general.tabs.list')}
             </ul>
             {foreach $items as $group=>$item}
                 <div id="{$group}">
@@ -26,6 +27,7 @@
                     {/foreach}
                 </div>
             {/foreach}
+            {$events->call('settings.general.tabs.content')}
         </div>
         <div class="clearfix"></div>
     </div>
