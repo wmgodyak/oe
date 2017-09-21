@@ -160,6 +160,7 @@ class Page extends Frontend
     public function fullInfo($id, $languages_id = null)
     {
         if($languages_id) $this->languages->id = $languages_id;
+
         $page = self::$db
             ->select("
                 select c.*,
