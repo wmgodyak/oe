@@ -19,8 +19,10 @@ class Page extends \system\Frontend
     {
         if($this->request->isXhr()) return null;
 
+        $lang_id = $this->languages->languages->getDefault('id');
+
         $id = $this->settings->get('home_id');
-        $page = $this->app->page->fullInfo($id);
+        $page = $this->app->page->fullInfo($id, $lang_id);
 
         return $this->display($page);
     }
@@ -68,8 +70,8 @@ class Page extends \system\Frontend
 
     public function displayUrl($url)
     {
-
-        $id = $this->app->page->getIdByUrl($url, $this->languages->id);
+        $lang_id = $this->languages->languages->getDefault('id');
+        $id = $this->app->page->getIdByUrl($url, $lang_id);
 
         if(empty($id)){
             return $this->e404();
