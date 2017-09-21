@@ -198,14 +198,6 @@ class Page extends Frontend
 
         $page['url'] = $this->url($page['id']);
 
-        // cover image
-        $page['image'] = $this->images->cover($page['id']);
-
-        // author
-        $page['author'] = self::$db
-            ->select("select id, name, surname, email, phone, avatar from __users where id='{$page['owner_id']}'")
-            ->row();
-
         return $page;
     }
 
