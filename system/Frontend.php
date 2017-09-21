@@ -111,8 +111,6 @@ abstract class Frontend extends core\Controller
         }
     }
 
-    public function index(){}
-
     protected function display($page)
     {
         if (!$page) {
@@ -146,8 +144,6 @@ abstract class Frontend extends core\Controller
         $this->app->module = $m->get();
 
         events()->call('init', ['page' => $page]);
-
-//        $this->template->assign('app', $this->app);
 
         // fetch template
         $template_path = $this->settings->get('themes_path')
@@ -208,8 +204,6 @@ abstract class Frontend extends core\Controller
     {
         header("HTTP/1.0 404 Not Found");
         return $this->template->fetch('layouts/404');
-
-//        $this->template->display('layouts/404');
     }
 
     /**
