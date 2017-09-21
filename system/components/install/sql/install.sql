@@ -24,7 +24,6 @@ INSERT INTO `__settings` (`id`, `name`, `value`, `block`, `type`, `required`, `d
   (14, 'content_images_thumb_dir', 'thumbs/', 'images', 'text', 1, 1),
   (15, 'content_images_source_dir', 'source/', 'images', 'text', 1, 1),
   (17, 'backend_theme', 'backend', 'themes', 'text', 1, 0),
-  (19, 'page_404', '3', 'common', 'text', 1, 1),
   (20, 'content_images_source_size', '1600x1200', 'images', 'text', 1, 1),
   (21, 'content_images_thumbs_size', '125x125', 'images', 'text', 1, 1),
   (23, 'content_images_quality', '90', 'images', 'text', 1, 1),
@@ -458,4 +457,4 @@ INSERT INTO `__content` (`id`, `types_id`, `subtypes_id`, `owner_id`, `parent_id
 INSERT INTO `__content_info` (`id`, `content_id`, `languages_id`, `name`, `url`, `h1`, `title`, `keywords`, `description`, `intro`, `content`) VALUES
   (1, 1, 1, 'Home', '', '', 'Home', '', '', '', ''),
   (2, 2, 1, 'About', 'about', '', 'About', '', '', '', ''),
-  (3, 3, 1, '404', '404', '', '404', '', '', '', '');
+  (3, 3, 1, 'Contacts', 'contacts', '', 'Contacts', '', '', '', '');
