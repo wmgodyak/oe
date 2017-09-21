@@ -81,7 +81,4 @@ class Page extends \system\Frontend
 
         return $this->display($page);
     }
-
-    public function index(){}
-    public function init(){}
 }
