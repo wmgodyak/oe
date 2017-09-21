@@ -208,7 +208,8 @@ class Route
 
             if(preg_match("@^$regex$@siu", $this->uri, $matches)){
 
-//                d($route[0]);
+                $request->param('uri', $route[0]);
+
                 $request_params = [];
 
                 $a = explode('/', $route[0]);
