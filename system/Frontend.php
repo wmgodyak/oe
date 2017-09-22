@@ -216,4 +216,6 @@ abstract class Frontend extends core\Controller
     {
         return "This method is deprecated. Use t($key).";
     }
+
+    public function index(){}
 }
