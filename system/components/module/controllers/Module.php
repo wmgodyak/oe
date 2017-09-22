@@ -36,7 +36,6 @@ class Module extends Backend
             $params = explode('/', $params);
         }
 
-
         $module = array_shift($params);
 
         if ($this->request->isGet()){
@@ -45,7 +44,9 @@ class Module extends Backend
             $this->request->param('action', $action);
         }
 
-        //http://engine.loc/cp/module/run/catalog/products/variants/get/47
+        if (!Permissions::canModule($module, $action)) {
+            Permissions::denied();
+        }
 
         if(isset($params[1])){
             $_params = $params;

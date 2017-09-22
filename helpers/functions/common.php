@@ -291,7 +291,11 @@ if (!function_exists('events')){
 }
 
 if( ! function_exists('route')){
-
+    /**
+     * @deprecated
+     * @param $url
+     * @return string
+     */
     function route($url)
     {
         $url = trim($url, '/');
@@ -358,4 +362,18 @@ function redirect($uri, $status_code = 303)
     header('Location: ' . $uri, true, $status_code);
 
     die;
+}
+
+if( ! function_exists('url')){
+
+    function url($url)
+    {
+        $url = trim($url, '/');
+        $lang = \system\core\Languages::getInstance();
+
+        $prefix = $lang->is_main ? "" : "$lang->code/";
+
+        return APPURL . $prefix . $url;
+    }
+
 }
