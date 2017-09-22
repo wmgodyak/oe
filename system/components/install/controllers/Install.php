@@ -8,6 +8,7 @@
 
 namespace system\components\install\controllers;
 
+use system\components\modules\controllers\Modules;
 use system\core\Controller;
 use system\core\Lang;
 use system\core\Template;
@@ -199,6 +200,17 @@ class Install extends Controller
                     $query = file_get_contents(DOCROOT . "system/components/install/sql/install.sql");
                     $query = str_replace('__', $conf['prefix'], $query);
                     $db->exec($query);
+                    // if enabled modules for installation
+                    $modules = $this->checkEnabledModules($db,$conf);
+                    $a = [];
+                    if($modules != false) {
+                        if(!empty($modules)) {
+                            foreach($modules as $module){
+                                $a[] = $this->installModule($module);
+                            }
+                        }
+                    }
+                    var_dump($a); die;
                 }
                 catch(\PDOException $e) {
                     $error[] = 'Import error: ' . $e->getMessage() ;
@@ -314,5 +326,33 @@ class Install extends Controller
 
         $this->template->assign('text', $text);
         return $this->template->fetch('system/install/license');
+    }
+
+    private function checkEnabledModules($db, $conf)
+    {
+        $query = "SELECT * FROM `__settings` WHERE `name` LIKE 'modules'";
+        $query = str_replace('__', $conf['prefix'], $query);
+        $obj = $db->prepare($query);
+        $obj->execute();
+        $string = $obj->fetchColumn(2);
+        if($string != false) {
+            $modules = [];
+            $array = unserialize($string);
+            foreach($array as $moduleName => $moduleOptions) {
+                if($moduleOptions['status'] == 'enabled') {
+                    $modules[] = $moduleName;
+                }
+            }
+        } else {
+            $modules = $string;
+        }
+        return $modules;
+    }
+
+    private function installModule($moduleName)
+    {
+        $modulesController = Modules::getInstance();
+        $modulesController->init();
+        return $modulesController->install($moduleName);
     }
 }

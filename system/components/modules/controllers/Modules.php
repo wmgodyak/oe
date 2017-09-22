@@ -17,12 +17,22 @@ defined("CPATH") or die();
  */
 class Modules extends Backend
 {
+    private static $instance;
     public $model;
     public function __construct()
     {
         parent::__construct();
 
         $this->model = new \system\components\modules\models\Modules();
+    }
+
+    public static function getInstance()
+    {
+        if(self::$instance == null){
+            self::$instance = new self;
+        }
+
+        return self::$instance;
     }
 
     public function init()
@@ -161,10 +171,12 @@ class Modules extends Backend
         return $modules;
     }
 
-    public function install()
+    public function install($module = '')
     {
         $m = null;
-        $module = $this->request->post('module');
+        if($module == '') {
+            $module = $this->request->post('module');
+        }
         $modules = Settings::getInstance()->get('modules');
         $s = $this->model->install($module);
         if($s){
