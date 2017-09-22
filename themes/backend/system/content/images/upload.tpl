@@ -46,7 +46,6 @@
                         <div class="dz-error-message">Помилка <span data-dz-errormessage></span></div>
                 </div>
                 <div class="controls clearfix">
-                        <a title="Обрізати" data-id="{id}" class="crop-image" href="javascript:;"><i class="fa fa-crop"></i></a>
                         <a title="Видалити" class="trash-item" href="javascript:;"><i class="fa fa-trash"></i></a>
                 </div>
                 <div class="controls confirm-removal clearfix">
