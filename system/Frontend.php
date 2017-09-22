@@ -91,12 +91,22 @@ abstract class Frontend extends core\Controller
             $events = events();
 
             $events->add('route', function($request){
+
                 $lang = $request->param('lang');
+
+                if (empty($lang)) {
+                    $lang = $this->languages->languages->getDefault('code');
+                }
+
                 if($lang != null){
+
                     $s = $this->languages->setByCode($lang);
+
                     if(! $s) return $this->e404();
+
                     \system\core\Lang::getInstance()->set($this->languages->code, $this->template->theme);
                }
+
             });
 
             $this->template->assign('events', $events);
