@@ -99,8 +99,7 @@ abstract class Backend extends Controller
             token_validate();
         }
 
-        $action      = $this->request->param('action');
-
+        $action     = $this->request->param('action');
         $controller = $this->request->param('controller');
         $controller = lcfirst($controller);
 
@@ -116,9 +115,13 @@ abstract class Backend extends Controller
 
         Permissions::set(Admin::data('permissions'));
 
-        if( ($controller != 'admin' && $action != 'login') && $controller != 'module' ) {
-            if (!Permissions::canComponent($controller, $action)) {
-                Permissions::denied();
+        if(
+             ( $controller != 'admin' && $action != 'login' )
+        ) {
+            if( $controller != '\system\components\module\controllers\Module' ){
+                if (!Permissions::canComponent($controller, $action)) {
+                    Permissions::denied();
+                }
             }
         }
 
