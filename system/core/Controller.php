@@ -69,6 +69,6 @@ abstract class Controller
 
     public function __toString()
     {
-        return static::class;
+        return get_called_class();
     }
 } 
