@@ -114,11 +114,11 @@ class DB extends \PDO {
     }
 
 
-    public static function getInstance()
+    public static function getInstance($conf = null)
     {
 
         if(!self::$instance instanceof self){
-            self::$instance = new DB();
+            self::$instance = new DB($conf);
         }
 
         return self::$instance;

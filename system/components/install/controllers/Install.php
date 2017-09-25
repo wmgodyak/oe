@@ -8,10 +8,13 @@
 
 namespace system\components\install\controllers;
 
-use system\components\modules\controllers\Modules;
+use helpers\PHPDocReader;
 use system\core\Controller;
+use system\core\DB;
 use system\core\Lang;
 use system\core\Template;
+use system\models\Modules;
+use system\models\Settings;
 
 defined("CPATH") or die();
 
@@ -23,10 +26,13 @@ class Install extends Controller
 {
     private $template;
 
+    private $db;
+
+    private $conf;
+
     public function __construct()
     {
         parent::__construct();
-
         $this->template = Template::getInstance('backend');
         $this->request->setMode('backend');
     }
@@ -68,6 +74,7 @@ class Install extends Controller
 
     private function createAdmin()
     {
+        $this->db = DB::getInstance();
         $langs = Lang::getInstance()->getAllowedLanguages();
         $language = $this->request->post('language','s');
         $data = $this->request->post('data');
@@ -75,98 +82,54 @@ class Install extends Controller
         $prefix = $conf['prefix'];
         $error = [];
         if($this->request->isPost() && $language){
-            try {
-                $db = new \PDO("mysql:host={$conf['host']};dbname={$conf['name']}",$conf['user'],$conf['pass']);
-                $db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_WARNING);
-                $db->exec("SET NAMES utf8");
-                $db->setAttribute(\PDO::ATTR_EMULATE_PREPARES, 0);
-            } catch(\PDOException $e) {
-                $error[] = $e->getMessage();
-            }
-
             // create admin
             if(empty($error)){
                 try {
                     $pass = crypt($data['pass'], md5(time()));
-                    $db->exec("
+                    $this->db->exec("
                     insert into {$prefix}users (group_id, languages_id,name,email,password)
                     values (1, 1, '{$data['user']}','{$data['email']}', '{$pass}') ");
                 } catch(\PDOException $e) {
                     $error[] = 'E2:' . $e->getMessage();
                 }
             }
-//            if(empty($error)){
-//                try {
-//                    $db->exec("
-//                    insert ignore into {$prefix}content (id, types_id, subtypes_id, owner_id, status)
-//                    values (1, 1, 1, 1, 'published') ");
-//                    $db->exec("
-//                    insert ignore into {$prefix}content_info (id, content_id, languages_id, name)
-//                    values (1, 1, 1, 'Home') ");
-//                } catch(\PDOException $e) {
-//                    $error[] = 'E2:' . $e->getMessage();
-//                }
-//            }
+
             // set language
             try{
-                $db->exec("update {$prefix}languages set `code`='{$language}', `name`='{$langs[$language]}' where id = 1 limit 1");
+                $this->db->exec("update {$prefix}languages set `code`='{$language}', `name`='{$langs[$language]}' where id = 1 limit 1");
             } catch(\PDOException $e) {
                 $error[] = 'E1:' . $e->getMessage();
             }
             // set settings
             try{
-                $db->exec("update {$prefix}settings set `value`='{$data['email']}' where name = 'mail_email_from' limit 1");
+                $this->db->exec("update {$prefix}settings set `value`='{$data['email']}' where name = 'mail_email_from' limit 1");
             } catch(\PDOException $e) {
                 $error[] = 'E1:' . $e->getMessage();
             }
             try{
-                $db->exec("update {$prefix}settings set `value`='{$data['email']}' where name = 'mail_email_to' limit 1");
+                $this->db->exec("update {$prefix}settings set `value`='{$data['email']}' where name = 'mail_email_to' limit 1");
             } catch(\PDOException $e) {
                 $error[] = 'E1:' . $e->getMessage();
             }
             try{
-                $db->exec("update {$prefix}settings set `value`='{$data['name']}' where name = 'mail_from_name' limit 1");
+                $this->db->exec("update {$prefix}settings set `value`='{$data['name']}' where name = 'mail_from_name' limit 1");
             } catch(\PDOException $e) {
                 $error[] = 'E1:' . $e->getMessage();
             }
             try{
-                $db->exec("update {$prefix}settings set `value`='{$data['name']}' where name = 'company_name' limit 1");
+                $this->db->exec("update {$prefix}settings set `value`='{$data['name']}' where name = 'company_name' limit 1");
             } catch(\PDOException $e) {
                 $error[] = 'E1:' . $e->getMessage();
             }
             try{
                 if(empty($data['backend_url'])) $data['backend_url'] = 'backend';
-                $db->exec("update {$prefix}settings set `value`='{$data['backend_url']}' where name = 'backend_url' limit 1");
+                $this->db->exec("update {$prefix}settings set `value`='{$data['backend_url']}' where name = 'backend_url' limit 1");
             } catch(\PDOException $e) {
                 $error[] = 'E1:' . $e->getMessage();
             }
 
             if(empty($error)){
-                try{
-                    $c_sample = DOCROOT . "config/db.sample.php";
-                    $cpath = DOCROOT . "config/db.php";
-
-                    // запишу конфіг
-                    $config = file_get_contents($c_sample);
-                    $config = str_replace
-                    (
-                        array(
-                            '%host%','%db%','%user%','%pass%', '%prefix%'
-                        ),
-                        array(
-                            $conf['host'], $conf['name'], $conf['user'], $conf['pass'], $conf['prefix']
-                        ),
-                        $config
-                    );
-
-                    $h = fopen($cpath,'w+');
-
-                    if (fwrite($h, $config) === FALSE) {
-                        $error[] = 'Неможу записати конфіг';
-                    }
-                } catch(\Exception $e) {
-                    $error[] = $e->getMessage();
-                }
+                unset($_SESSION['inst']);
             }
 
             if(empty($error)){
@@ -178,51 +141,72 @@ class Install extends Controller
         return $this->template->fetch('system/install/create_admin');
     }
 
+    private function createConfigFile()
+    {
+        try{
+            $c_sample = DOCROOT . "config/db.sample.php";
+            $cpath = DOCROOT . "config/db.php";
+
+            // запишу конфіг
+            $config = file_get_contents($c_sample);
+            $config = str_replace
+            (
+                array(
+                    '%host%','%db%','%user%','%pass%', '%prefix%'
+                ),
+                array(
+                    $this->conf['host'], $this->conf['db'], $this->conf['user'], $this->conf['pass'], $this->conf['prefix']
+                ),
+                $config
+            );
+
+            $h = fopen($cpath,'w+');
+
+            if (fwrite($h, $config) === FALSE) {
+                $error[] = 'Неможу записати конфіг';
+            } else {
+                return true;
+            }
+        } catch(\Exception $e) {
+            $error[] = $e->getMessage();
+        }
+        return $error;
+    }
+
     private function dbConfig()
     {
-        $conf = $this->request->post('data'); $db=null; $error = [];
+        $error = [];
+        $conf = $this->request->post('data');
         if(!empty($conf)){
-
-            try{
-                $db = new \PDO("mysql:host={$conf['host']};dbname={$conf['name']}",$conf['user'],$conf['pass']);
-                $db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_WARNING);
-                $db->exec("SET NAMES utf8");
-                $db->setAttribute(\PDO::ATTR_EMULATE_PREPARES, 0);
-            }
-            catch(\PDOException $e) {
-                $error[] = $e->getMessage();
-            }
-
-            if($db) {
-                $_SESSION['inst']['db'] = $conf;
-                try{
-                    // імпортую БД
-                    $query = file_get_contents(DOCROOT . "system/components/install/sql/install.sql");
-                    $query = str_replace('__', $conf['prefix'], $query);
-                    $db->exec($query);
-                    // if enabled modules for installation
-                    $modules = $this->checkEnabledModules($db,$conf);
-                    $a = [];
-                    if($modules != false) {
-                        if(!empty($modules)) {
-                            foreach($modules as $module){
-                                $a[] = $this->installModule($module);
-                            }
-                        }
+            $this->conf = include(DOCROOT."config/db.sample.php");
+            $this->conf['host'] = $conf['host'];
+            $this->conf['db'] = $conf['name'];
+            $this->conf['user'] = $conf['user'];
+            $this->conf['pass'] = $conf['pass'];
+            $this->conf['prefix'] = $conf['prefix'];
+            $db_config = $this->createConfigFile();
+            if($db_config == true) {
+                $this->db = DB::getInstance($this->conf);
+                if($this->db) {
+                    $_SESSION['inst']['db'] = $this->conf;
+                    try{
+                        $query = file_get_contents(DOCROOT . "system/components/install/sql/install.sql");
+                        $query = str_replace('__', $this->conf['prefix'], $query);
+                        $this->db->exec($query);
+                        $this->installModules();
                     }
-                    var_dump($a); die;
+                    catch(\PDOException $e) {
+                        $error[] = 'Import error: ' . $e->getMessage();
+                    }
                 }
-                catch(\PDOException $e) {
-                    $error[] = 'Import error: ' . $e->getMessage() ;
-//                    d($error);
-                }
+            } else {
+                $error = $db_config;
             }
 
             if(empty($error)) {
                 $_POST['action'] = 'create_admin';
                 return $this->createAdmin();
             }
-
         }
         $this->template->assign('error', $error);
         return $this->template->fetch('system/install/db_config');
@@ -328,31 +312,51 @@ class Install extends Controller
         return $this->template->fetch('system/install/license');
     }
 
-    private function checkEnabledModules($db, $conf)
+    private function installModules()
     {
-        $query = "SELECT * FROM `__settings` WHERE `name` LIKE 'modules'";
-        $query = str_replace('__', $conf['prefix'], $query);
-        $obj = $db->prepare($query);
-        $obj->execute();
-        $string = $obj->fetchColumn(2);
-        if($string != false) {
-            $modules = [];
-            $array = unserialize($string);
-            foreach($array as $moduleName => $moduleOptions) {
-                if($moduleOptions['status'] == 'enabled') {
-                    $modules[] = $moduleName;
+        $modules_dir = 'modules';
+        $modules = [];
+
+        if ($handle = opendir(DOCROOT . $modules_dir)) {
+            while (false !== ($module = readdir($handle))) {
+                if ($module == "." || $module == ".." || $module == '.htaccess' || $module == 'index.html')  continue;
+
+                $c  = $modules_dir .'\\'. $module . '\controllers\\' . ucfirst($module);
+
+                $path = str_replace("\\", "/", $c);
+
+                if(file_exists(DOCROOT . $path . '.php')) {
+                    $meta = PHPDocReader::getMeta($c);
+                    $meta['module'] = ucfirst($module);
+                    $meta['path'] = $modules_dir.'\\'. $module;
+                    $modules[] = $meta;
+                    $response = $this->installModule($meta['module']);
+                    if($response['m'] != NUll) {
+                        die($response['m']);
+                    }
                 }
+
             }
-        } else {
-            $modules = $string;
+            closedir($handle);
         }
         return $modules;
     }
 
-    private function installModule($moduleName)
+    private function installModule($module)
     {
-        $modulesController = Modules::getInstance();
-        $modulesController->init();
-        return $modulesController->install($moduleName);
+        $m = null;
+        $model = new \system\components\modules\models\Modules();
+        $modules = Settings::getInstance()->get('modules');
+        $s = $model->install($module);
+        if($s){
+            $modules[$module] = ['status' => 'enabled'];
+            Settings::getInstance()->set('modules', $modules);
+        } else{
+            $m = $model->getError();
+            if(!empty($m)) $m = implode('<br>', $m);
+            $m = "<p style='text-align: left;'>Під час встановлення модуля виникла помилка.</p><p style='text-align: left; font-size: 12px;'>{$m}</p>";
+        }
+
+        return ['s' => $s, 'm' => $m];
     }
 }
