@@ -120,7 +120,7 @@ class Translations extends Backend
         if ($handle = opendir(DOCROOT . $modules_dir)) {
             while (false !== ($module = readdir($handle))) {
 
-                if($module == 'index.html' || $module == '.htaccess') continue;
+                if ($module == "." || $module == ".." || $module == '.htaccess' || $module == 'index.html') continue;
 
                 $fn = "$modules_dir/$module/lang/$lang_code.json";
                 if(!file_exists(DOCROOT . $fn)){
