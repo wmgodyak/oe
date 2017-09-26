@@ -39,6 +39,7 @@
     <div class="row">
         <div class="col-md-3 col-md-offset-9 text-right">
             <input type="hidden" name="action" value="db_config">
+            <input type="hidden" name="token" value="{$smarty.const.TOKEN}">
             <button class="btn btn-default">Встановити</button>
         </div>
     </div>

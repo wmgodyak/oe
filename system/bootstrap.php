@@ -39,7 +39,7 @@ error_reporting(E_ALL);
     if(!defined('TOKEN')) define('TOKEN', token_make());
 
     $config = \system\core\Config::getInstance();
-    if($config->get('db') == null){
+    if($config->get('db') == null || isset($_SESSION['inst'])){
         $installer = new \system\components\install\controllers\Install();
         $installer->index();
         die;
