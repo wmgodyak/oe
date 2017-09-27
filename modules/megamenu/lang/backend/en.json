@@ -1,0 +1,43 @@
+{
+  "action_index": "Megamenu",
+  "action_index_icon": "fa-cubes",
+  "action_create": "Create article",
+  "action_edit": "Edit article",
+  "delete_question": "Are you sure?",
+  "status_published": "Published",
+  "status_hidden": "Hidden",
+  "tree_title": "Megamenu",
+  "tree_create": "Add",
+  "tree_edit": "Edit",
+  "tree_delete": "Delete",
+  "categories": {
+    "tree_create": "Add",
+    "tree_edit": "Edit",
+    "tree_delete": "Delete",
+    "tree_title": "Categories",
+    "create_title": "Crate category",
+    "action_edit": "Edit category"
+  },
+  "table": {
+    "id": "ID",
+    "name": "Name",
+    "alias": "Alias",
+    "created": "Created",
+    "updated": "Updated",
+    "functions": "Options"
+  },
+  "form" : {
+    "name": "Name",
+    "alias": "Alias",
+    "mobile_template": "Mobile template",
+    "disable_bellow": "Disable bellow",
+    "status": "Status",
+    "html": "HTML",
+    "desktop_template": "Desktop template",
+    "disable_iblocks": "Disable iblocks",
+    "event": "Event",
+    "classes": "CSS Classes",
+    "width": "Width, px",
+    "scrolltofixed": "Scroll to fixed"
+  }
+}
