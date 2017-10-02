@@ -264,12 +264,21 @@ abstract class Backend extends Controller
         $version = Config::getInstance()->get('core.version');
         $this->template->assign('version',    $version);
 
+        $module = $this->request->param('module');
         $controller = $this->request->param('controller');
         $controller = lcfirst($controller);
-
         $action = $this->request->param('action');
 
-        $this->addBreadCrumb(t($controller . '.action_index'), $controller);
+        $url = $this->settings->get('backend');
+
+        if(!empty($module)){
+            $url .= "module/run/";
+        }
+
+        $url .= "$controller";
+
+
+        $this->addBreadCrumb(t($controller . '.action_index'), $url);
         $items = $this->template->getVars('breadcrumb');
         rsort($items);
         $this->template->assign('breadcrumb', $items);

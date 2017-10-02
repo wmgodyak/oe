@@ -40,6 +40,7 @@ class Module extends Backend
 
         if ($this->request->isGet()){
 
+            $this->request->param('module', $module);
             $this->request->param('controller', $module);
             $this->request->param('action', $action);
         }

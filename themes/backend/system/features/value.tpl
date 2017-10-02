@@ -1,5 +1,5 @@
 <form action="features/values/process" method="post" id="formFeaturesValue" class="form-horizontal">
-    {foreach $languages as $lang}
+    {foreach $languages->get() as $lang}
         <div class="form-group">
             <label for="name_{$lang.id}" class="col-sm-3 control-label">{$t.features.name} ({$lang.code})</label>
             <div class="col-sm-9">
