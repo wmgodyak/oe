@@ -8,6 +8,7 @@
 namespace system;
 
 use system\core\exceptions\Exception;
+use system\core\FrontendResponse;
 use system\core\Request;
 use system\core\Session;
 use system\core\Validator;
@@ -212,8 +213,8 @@ abstract class Frontend extends core\Controller
      */
     protected function e404()
     {
-        header("HTTP/1.0 404 Not Found");
-        return $this->template->fetch('layouts/404');
+        $res = new FrontendResponse($this->template->fetch('layouts/404'));
+        $res->display();
     }
 
     /**
@@ -224,7 +225,7 @@ abstract class Frontend extends core\Controller
      */
     protected function t($key=null)
     {
-        return "This method is deprecated. Use t($key).";
+        return "This method is deprecated. Use helper t($key).";
     }
 
     public function index(){}
