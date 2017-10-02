@@ -668,7 +668,7 @@ engine.components = {
     },
     pub : function(id)
     {
-        engine.confirm
+        var w = engine.confirm
         (
             t.components.pub_question,
             function()
@@ -680,10 +680,10 @@ engine.components = {
                     {
                         if(d > 0){
                             engine.refreshDataTable('components');
+                            w.dialog('close');
                         }
                     }
                 });
-                $(this).dialog('close').dialog('destroy').remove();
             }
         );
     },
@@ -1433,7 +1433,7 @@ engine.content = {
                                 var opt = "<option selected value='"+ res.v.value +"'>"+ res.v.name +"</option>";
                                 $('#content_features_' + parent_id).append(opt).select2();
                             }
-                            pw.dialog('close').remove();
+                            pw.dialog('close');
                         }
                     });
                 }
@@ -1693,7 +1693,6 @@ engine.contentImagesSizes = {
                 if(d.s){
                     engine.refreshDataTable('contentImagesSizesList');
                     dialog.dialog('close');
-                    dialog.dialog('destroy').remove()
                 } else {
                     engine.showFormErrors('#form', d.i);
                 }
@@ -1734,7 +1733,6 @@ engine.contentImagesSizes = {
                     if(d.s){
                         engine.refreshDataTable('contentImagesSizesList');
                         dialog.dialog('close');
-                        dialog.dialog('destroy').remove()
                     }
                 });
             }
@@ -1742,7 +1740,7 @@ engine.contentImagesSizes = {
     },
     delete: function(id)
     {
-        engine.confirm
+        var w = engine.confirm
         (
             t.contentImagesSizes.delete_question,
             function()
@@ -1750,9 +1748,10 @@ engine.contentImagesSizes = {
                 engine.request.get('./contentImagesSizes/delete/' + id, function(d){
                     if(d > 0){
                         engine.refreshDataTable('contentImagesSizesList');
+                        w.dialog('close');
                     }
                 });
-                $(this).dialog('close').dialog('destroy').remove();
+
             }
         );
     }
@@ -1801,7 +1800,7 @@ engine.contentTypes = {
                         var tmpl = _.template('<% for(var i=0;i < items.length; i++) { %><option value="<%- items[i].id %>"><%- items[i].size %></option>  <% } %>');
                         var d = tmpl({items: res.items});
                         $("#contentImagesSizes").html(d).select2();
-                        pw.dialog('destroy').remove();
+                        pw.dialog('close');
                     }, 'json');
                 }
             });
@@ -1814,7 +1813,7 @@ engine.contentTypes = {
     },
     delete: function(id)
     {
-        engine.confirm
+        var w = engine.confirm
         (
             t.contentTypes.delete_confirm,
             function()
@@ -1822,9 +1821,10 @@ engine.contentTypes = {
                 engine.request.get('./contentTypes/delete/' + id, function(d){
                     if(d > 0){
                         engine.refreshDataTable('contentTypes');
+                        w.dialog('close');
                     }
                 });
-                $(this).dialog('close').dialog('destroy').remove();
+
             }
         );
     }
@@ -1908,7 +1908,7 @@ engine.features = {
 
             engine.validateAjaxForm('#form', function(d){
                 if(d.s){
-                    pw.dialog('destroy').remove();
+                    pw.dialog('close');
                     engine.refreshDataTable('features');
                 }
             });
@@ -1941,7 +1941,7 @@ engine.features = {
 
             engine.validateAjaxForm('#form', function(d){
                 if(d.s){
-                    pw.dialog('destroy').remove();
+                    pw.dialog('close');
                     engine.refreshDataTable('features');
                 }
             });
@@ -1954,7 +1954,7 @@ engine.features = {
     },
     delete: function(id)
     {
-        engine.confirm
+       var w =  engine.confirm
         (
             t.features.delete_confirm,
             function()
@@ -1962,9 +1962,9 @@ engine.features = {
                 engine.request.get('./features/delete/' + id, function(d){
                     if(d > 0){
                         engine.refreshDataTable('features');
+                        w.dialog('close');
                     }
                 });
-                $(this).dialog('close').dialog('destroy').remove();
             }
         );
     },
@@ -2026,7 +2026,7 @@ engine.features = {
 
                 engine.validateAjaxForm('#formFeaturesValue', function(d){
                     if(d.s){
-                        pw.dialog('destroy').remove();
+                        pw.dialog('close');
                         engine.refreshDataTable('features_values');
                     }
                 });
@@ -2049,7 +2049,7 @@ engine.features = {
 
                 engine.validateAjaxForm('#formFeaturesValue', function(d){
                     if(d.s){
-                        pw.dialog('destroy').remove();
+                        pw.dialog('close');
                         engine.refreshDataTable('features_values');
                     }
                 });
@@ -2057,7 +2057,7 @@ engine.features = {
         },
         delete: function(id)
         {
-            engine.confirm
+            var w = engine.confirm
             (
                 t.features.delete_confirm,
                 function()
@@ -2065,9 +2065,9 @@ engine.features = {
                     engine.request.get('./features/delete/' + id, function(d){
                         if(d > 0){
                             engine.refreshDataTable('features_values');
+                            w.dialog('close');
                         }
                     });
-                    $(this).dialog('close').dialog('destroy').remove();
                 }
             );
         },
@@ -2136,7 +2136,7 @@ engine.features = {
 
                 engine.validateAjaxForm('#formFeaturesContent', function(d){
                     if(d.s){
-                        pw.dialog('destroy').remove();
+                        pw.dialog('close');
                         engine.features.content.refresh(d.sc);
                     }
                 });
@@ -2149,7 +2149,7 @@ engine.features = {
                 {
                     if(d.s){
 
-                        w.dialog('destroy').remove();
+                        w.dialog('close');
                         $("#f-sc-"+id).remove();
                     }
                 },'json');
@@ -2203,7 +2203,6 @@ engine.languages = {
                 if(d.s){
                     engine.refreshDataTable('languages');
                     dialog.dialog('close');
-                    dialog.dialog('destroy').remove()
                 }
             });
         });
@@ -2235,7 +2234,6 @@ engine.languages = {
                     if(d.s){
                         engine.refreshDataTable('languages');
                         dialog.dialog('close');
-                        dialog.dialog('destroy').remove()
                     }
                 });
             }
@@ -2243,7 +2241,7 @@ engine.languages = {
     },
     delete: function(id)
     {
-        engine.confirm
+        var dw = engine.confirm
         (
             t.languages.delete_question,
             function()
@@ -2251,9 +2249,10 @@ engine.languages = {
                 engine.request.get('./languages/delete/' + id, function(d){
                     if(d > 0){
                         engine.refreshDataTable('languages');
+                        dw.dialog('close');
                     }
                 });
-                $(this).dialog('close').dialog('destroy').remove();
+
             }
         );
     }
@@ -2300,7 +2299,7 @@ engine.nav = {
 
             var deleteItem = function(id)
             {
-                var d = engine.confirm
+                var w = engine.confirm
                 (
                     t.nav.delete_item_question,
                     function()
@@ -2309,7 +2308,7 @@ engine.nav = {
                             if(res > 0){
                                 renderItems();
                             }
-                            d.dialog('close');
+                            w.dialog('close');
                         });
                     }
                 );
@@ -2398,7 +2397,7 @@ engine.nav = {
     },
     delete: function(id)
     {
-        engine.confirm
+        var w = engine.confirm
         (
             t.nav.delete_question,
             function()
@@ -2406,9 +2405,10 @@ engine.nav = {
                 engine.request.get('./nav/delete/' + id, function(d){
                     if(d > 0){
                         engine.refreshDataTable('nav');
+                        w.dialog('close');
                     }
                 });
-                $(this).dialog('close').dialog('destroy').remove();
+
             }
         );
     }
@@ -2567,7 +2567,7 @@ engine.themes = {
             {
                 engine.request.get('./themes/activate/' + theme, function(d){
                     if(d > 0){
-                        dw.dialog('close').dialog('destroy').remove();
+                        dw.dialog('close');
                         location.reload(true);
                     }
                 }, 'html');
