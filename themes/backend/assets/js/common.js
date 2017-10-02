@@ -832,9 +832,9 @@ engine.admins = {
                 });
         });
 
-        if($('#usersGroup').length){
+        if($('#adminsGroups').length){
 
-            engine.admins.group.tree = new engine.tree('usersGroup');
+            engine.admins.group.tree = new engine.tree('adminsGroups');
             engine.admins.group.tree
                 .setUrl('admins/groups/tree')
                 .setContextMenu('create', t.admins.groups.tree_create, 'fa-file', function(o){

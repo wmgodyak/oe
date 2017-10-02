@@ -59,12 +59,8 @@ class Users extends Frontend
      */
     public function update($id, $data)
     {
-        if(isset($data['password'])){
-            if(empty($data['password'])) {
-                
-            } else {
-                $data['password'] = $this->cryptPassword($data['password']);
-            }
+        if(! empty($data['password']) ){
+            $data['password'] = $this->cryptPassword($data['password']);
         }
 
         $data['updated'] = $this->now();

@@ -143,19 +143,19 @@
     "title_restore": "Відновити",
     "title_ban": "Заблокувати",
     "tree_title": "Групи",
-    "tree_icon": "fa-users"
-  },
-  "admins_group": {
-    "delete_question": "Ви збираєтесь видалити групу.",
-    "create_title": "Створити групу",
-    "action_edit": "Редагування групи",
-    "parent": "Батьківська група",
-    "rang": "Ранг",
-    "name": "Назва",
-    "tree_title": "Групи",
-    "tree_create": "Додати",
-    "tree_edit": "Редагувати",
-    "tree_delete": "Видалити"
+    "tree_icon": "fa-users",
+    "groups" : {
+      "delete_question": "Ви збираєтесь видалити групу.",
+      "create_title": "Створити групу",
+      "action_edit": "Редагування групи",
+      "parent": "Батьківська група",
+      "rang": "Ранг",
+      "name": "Назва",
+      "tree_title": "Групи",
+      "tree_create": "Додати",
+      "tree_edit": "Редагувати",
+      "tree_delete": "Видалити"
+    }
   },
   "chunks": {
     "action_index": "Чанки",

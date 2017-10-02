@@ -191,6 +191,8 @@ class Admins extends Backend
                     } else {
                         unset($data['password_c']);
 
+                        if(empty($data['password'])) unset($data['password']);
+
                         $s = $this->admins->update($id, $data);
 
                         if( $s > 0 ){
