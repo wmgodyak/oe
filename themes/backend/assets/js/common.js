@@ -2411,6 +2411,9 @@ engine.nav = {
 
             }
         );
+    },
+    onEditSuccess: function(d){
+        engine.notify("Saved success");
     }
 };
 
