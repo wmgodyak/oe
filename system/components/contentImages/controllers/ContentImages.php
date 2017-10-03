@@ -210,6 +210,7 @@ class ContentImages extends Backend
                     if($size['watermark'] == 1 && $this->settings->get('watermark_src') != ''){
                         $w_img = DOCROOT . $this->settings->get('watermark_src');
                         if(file_exists($w_img)){
+                            \AcImage::setMaxProportionLogo(0.40);
                             $img->drawLogo($w_img, (int)$size['watermark_position']);
                         }
                     }
