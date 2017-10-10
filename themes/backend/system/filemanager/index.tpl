@@ -1,3 +1,3 @@
-<iframe style="position: absolute; top:50px; left:50px; height: 90%; width: 97%; border: none"
+<iframe style="position: absolute; top:72px; left:50px; height: calc(100vh - 125px); width: calc(100% - 125px); margin-left: 40px; border: none"
         src="/vendor/filemanager/dialog.php?type=0">
 </iframe>
