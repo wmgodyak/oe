@@ -224,7 +224,7 @@ class Users extends Frontend
     public function getUserByEmail($email)
     {
         $u = self::$db->select("
-            select u.*, g.backend, g.permissions
+            select u.*, g.backend, g.allowed_ips, g.permissions
             from __users u
             join __users_group g on g.id=u.group_id
             where u.email = '{$email}'

@@ -101,7 +101,9 @@ class Admin extends Backend {
                 $user = $this->mAdmin->getUserByEmail($data['email']);
                 Permissions::set($user['permissions']);
 
-                if(empty($user)){
+                if (!$this->checkIp($user)) {
+                    $inp[] = ['data[password]' => t('admin.e_rang')];
+                } elseif(empty($user)){
                     $inp[] = ['data[password]' => t('admin.e_login_pass')];
 //                    setcookie('fail', ++$fail, $ban_time);
 
@@ -146,6 +148,30 @@ class Admin extends Backend {
         $this->template->assign('langs', $langs);
 
         $this->template->display('system/admin/login');
+    }
+
+    public function checkIp($user)
+    {
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $user_ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $user_ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            $user_ip = $_SERVER['REMOTE_ADDR'];
+        }
+        $allowed = !empty($user['allowed_ips']) ? explode(',', $user['allowed_ips']) : '';
+        if (!is_array($allowed)) return true;
+
+        $ips = [];
+        foreach ($allowed as $ip) {
+            $ips[] = trim($ip);
+        }
+
+        if (in_array($user_ip, $ips)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

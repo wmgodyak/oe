@@ -154,7 +154,12 @@
       "tree_title": "Групи",
       "tree_create": "Додати",
       "tree_edit": "Редагувати",
-      "tree_delete": "Видалити"
+      "tree_delete": "Видалити",
+      "full_access" : "Повний доступ",
+      "access_to_components" : "Доступ до компонентів",
+      "access_to_modules" : "Доступ до модулів",
+      "allowed_ip": "Дозволені IP",
+      "allowed_ip_hint": "Ви можете ввести декілька IP адрес, розділивши їх комою."
     }
   },
   "chunks": {
@@ -354,7 +359,8 @@
     "placeholder_code": "[a-z_0-9]+",
     "delete_question": "Видалити переклад?",
     "code_isset": "Переклад по цьому ключу присутній",
-    "empty_value": "Введіть переклад"
+    "empty_value": "Введіть переклад",
+    "text": "Текст"
   },
   "trash": {
     "action_index": "Видалений контент",

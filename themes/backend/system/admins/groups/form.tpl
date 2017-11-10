@@ -29,6 +29,14 @@
             </div>
         {/foreach}
 
+        <div class="form-group">
+            <label for="info_allowed_ips" class="col-md-3 control-label">{$t.admins.groups.allowed_ip}</label>
+            <div class="col-md-9">
+                <input type="text" class="form-control" name="data[allowed_ips]" id="info_allowed_ips" value="{if isset($data.allowed_ips)}{$data.allowed_ips}{/if}">
+                <p class="help-block">{$t.admins.groups.allowed_ip_hint}</p>
+            </div>
+        </div>
+
         {block name="system.admins.groups.form.full_access_group"}
             <div class="form-group">
                 <div class="col-md-9 col-md-offset-3">

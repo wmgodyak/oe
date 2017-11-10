@@ -151,7 +151,9 @@
       "tree_delete": "Delete",
       "full_access" : "Full access",
       "access_to_components" : "Access to components",
-      "access_to_modules" : "Access to modules"
+      "access_to_modules" : "Access to modules",
+      "allowed_ip": "Allowed IPs",
+      "allowed_ip_hint": "You can enter several IP addresses, separated by comma."
     }
   },
   "chunks": {
@@ -349,7 +351,8 @@
     "placeholder_code": "[a-z_0-9]+",
     "delete_question": "Want to delete the translation?",
     "code_isset": "The translation key is present",
-    "empty_value": "Enter a translation"
+    "empty_value": "Enter a translation",
+    "text": "Text"
   },
   "trash": {
     "action_index": "Deleted content",

@@ -27,7 +27,7 @@ class Translations extends Backend
 
         $t
             -> ajax('translations/get')
-            -> th(t('translations.code'), 'code', 1, 1, 'width: 300px')
+            -> th(t('translations.code'), 'code', 1, 1, 'width: 480px')
             -> th(t('translations.text'), 'name', 1, 1)
             -> th(t('common.tbl_func'), null, 0, 0, 'width: 60px')
         ;
@@ -43,7 +43,7 @@ class Translations extends Backend
         $order = !empty($_POST['order'][0]['column']) ? intval($_POST['order'][0]['column']) : 0;
         $direction = !empty($_POST['order'][0]['dir']) ? trim(strip_tags($_POST['order'][0]['dir'])) : 'asc';
         $t = new DataTables2('translations');
-        $code = $this->languages->getDefault('code');
+        $code = $this->languages->code;
         $theme = $this->settings->get('app_theme_current');
         $fn = "themes/$theme/lang/$code.json";
         if(!file_exists(DOCROOT . $fn)){
@@ -55,42 +55,43 @@ class Translations extends Backend
 
         if (mb_strlen($search) > 2) {
             $translations = array_filter($translations, function($v) use ($search){
-                return (!empty($v['text']) && mb_strpos($v['text'], $search) !== false) || (!empty($v['id']) && mb_strpos($v['id'], $search) !== false);
+                return (!empty($v['text']) && mb_stripos($v['text'], $search) !== false) || (!empty($v['id']) && mb_strpos($v['id'], $search) !== false);
             });
         }
 
         $total = count($translations);
-        $translations = array_slice($translations, $start, $length);
 
         switch ($order) {
             case 0:
                 if ($direction == 'desc') {
                     usort($translations, function($a, $b){
-                        return strcmp($b['id'], $a['id']);
+                        return strcasecmp($b['id'], $a['id']);
                     });
                 } else {
                     usort($translations, function($a, $b){
-                        return strcmp($a['id'], $b['id']);
+                        return strcasecmp($a['id'], $b['id']);
                     });
                 }
                 break;
             case 1:
                 if ($direction == 'desc') {
                     usort($translations, function($a, $b){
-                        return strcmp($b['text'], $a['text']);
+                        return mb_strcasecmp($b['text'], $a['text']);
                     });
                 } else {
                     usort($translations, function($a, $b){
-                        return strcmp($a['text'], $b['text']);
+                        return mb_strcasecmp($a['text'], $b['text']);
                     });
                 }
                 break;
         }
 
+        $translations = array_slice($translations, $start, $length);
+
         // assign buttons
         foreach ($translations as $row) {
             $res[] = [
-                "<input value='{$row['id']}' onfocus='select()'>",
+                $row['mod'] . "<br><input readonly value='{$row['id']}' onfocus='select()'>",
                 $row['text'],
                 (string)Button::create
                 (
@@ -119,17 +120,16 @@ class Translations extends Backend
 
         if ($handle = opendir(DOCROOT . $modules_dir)) {
             while (false !== ($module = readdir($handle))) {
-
-                if ($module == "." || $module == ".." || $module == '.htaccess' || $module == 'index.html') continue;
-
+                if ($module == "." || $module == ".." || $module == '.htaccess' || $module == 'index.html')  continue;
                 $fn = "$modules_dir/$module/lang/$lang_code.json";
+
                 if(!file_exists(DOCROOT . $fn)){
                     $fn = "$modules_dir/$module/lang/en.json";
                 }
 
                 if(!file_exists(DOCROOT . $fn)) continue;
 
-                $modules = array_merge($modules, $this->getFileContent($fn));
+                $modules = array_merge($modules, $this->getFileContent($fn, $module));
             }
             closedir($handle);
         }
@@ -137,32 +137,38 @@ class Translations extends Backend
         return $modules;
     }
 
+    private function tRow(&$res, $mod, $file, $a, $p_id = '')
+    {
+        foreach ($a as $k => $v) {
+            if (empty($p_id)) {
+                $id = $k;
+            } else {
+                $id = $p_id . '.' . $k;
+            }
+            if (is_array($v)) {
+                $this->tRow($res, $mod, $file, $v, $id);
+            } else {
+                $res[] = ['id' => $id, 'text' => $v, 'path' => $file, 'mod' => $mod];
+            }
+        }
+    }
+
     /**
      * @param $file
+     * @param string $mod
      * @return array
      */
-    private function getFileContent($file)
+    private function getFileContent($file, $mod = '')
     {
         $r = file_get_contents(DOCROOT . $file);
-        if (empty($r)) return array();
         $a = json_decode($r, true);
 
         $res = [];
-        foreach ($a as $k=>$v) {
-            if(is_array($v)){
-                foreach ($v as $k1=>$v1) {
-                    if(is_array($k1)){
-                        foreach ($k1 as $k2=>$v2) {
-                            $res[] = ['id'=> $k.'.'.$k1. $k2, 'text' => $v2, 'path' => $file];
-                        }
-                    } else {
-                        $res[] = ['id'=> $k.'.'.$k1, 'text' => $v1, 'path' => $file];
-                    }
-                }
-            } else {
-                $res[] = ['id'=> $k, 'text' => $v, 'path' => $file];
-            }
+
+        if (empty($mod)) {
+            $mod = 'theme';
         }
+        $this->tRow($res, $mod, $file, $a);
 
         return $res;
     }
@@ -187,6 +193,7 @@ class Translations extends Backend
 
         foreach ($languages as $lang) {
             $file = DOCROOT . $dir_path . $lang['code'] . '.json';
+
             if (!file_exists($file)) {
                 $file_content = file_get_contents(DOCROOT . $path);
                 file_put_contents($file, $file_content);
@@ -228,7 +235,7 @@ class Translations extends Backend
             }
             $t = json_decode(file_get_contents($file), true);
             $t = dots_set($t, $id, $data[$lang['code']]);
-            file_put_contents($file, json_encode($t));
+            file_put_contents($file, json_encode($t, JSON_UNESCAPED_UNICODE));
         }
         return json_encode(array('s' => 1));
     }
@@ -323,4 +330,26 @@ class Translations extends Backend
         return 'no';
     }
 
+    public function csv()
+    {
+        $code = 'en';
+        $theme = $this->settings->get('app_theme_current');
+        $fn = "themes/$theme/lang/$code.json";;
+        $translations = array_merge($this->getModules($code), $this->getFileContent($fn));
+        header("Content-type: text/csv; charset=utf-8");
+        header("Content-Disposition: inline; filename=translations".date("YmdHis").".csv; charset=utf-8");
+        $csv = fopen('php://output', 'w');
+        fputcsv($csv, array(
+            'MODULE', 'CODE', 'TEXT'
+        ), ';');
+        foreach ($translations as $k => $item) {
+            fputcsv($csv, array(
+                $item['mod'],
+                $item['id'],
+                $item['text']
+            ), ';');
+        }
+        fclose($csv);
+        die();
+    }
 }

@@ -111,3 +111,10 @@ function random_string($length = 10, $only_uppercase = false, $numbers = true ) 
 
     return $s;
 }
+
+if(! function_exists('mb_strcasecmp')) {
+    function mb_strcasecmp($str1, $str2, $encoding = null) {
+        if (null === $encoding) { $encoding = mb_internal_encoding(); }
+        return strcasecmp(mb_strtoupper($str1, $encoding), mb_strtoupper($str2, $encoding));
+    }
+}

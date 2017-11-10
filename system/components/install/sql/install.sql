@@ -72,6 +72,7 @@ CREATE TABLE IF NOT EXISTS `__users_group` (
   `backend` TINYINT(1) UNSIGNED NULL DEFAULT NULL,
   `permissions` TEXT NULL DEFAULT NULL,
   `position` TINYINT(3) UNSIGNED NOT NULL,
+  `allowed_ips` VARCHAR(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   INDEX `pid` (`parent_id` ASC),
   INDEX `sort` (`position` ASC),
