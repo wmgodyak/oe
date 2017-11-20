@@ -19,12 +19,6 @@ if ( !defined('CPATH') ) die();
             require $fileName;
             return;
         }
-
-        // try load module
-//        echo "Try to load class $className";
-
-
-
     }
 
     /**
