@@ -36,11 +36,19 @@ class Request
         return self::$instance;
     }
 
+    /**
+     * @deprecated
+     * @return mixed
+     */
     public function getMode()
     {
         return $this->__get('mode');
     }
 
+    /**
+     * @deprecated
+     * @return mixed
+     */
     public function setMode($mode)
     {
         $this->__set('mode', $mode);
