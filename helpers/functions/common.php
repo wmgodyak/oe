@@ -48,8 +48,12 @@ if ( !defined('CPATH') ) die();
 
     function dd($var)
     {
-        d($var);
-        die;
+        d($var); die;
+    }
+
+    function ddo($var)
+    {
+        d(json_decode(json_encode($var))); die;
     }
 
 if (!function_exists('http_response_code')) {
