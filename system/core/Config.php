@@ -25,16 +25,13 @@ class Config
 
         if ($handle = opendir($dir)) {
             while (false !== ($f = readdir($handle))) {
-                if ($f != '.' && $f != '..' && $f != 'bootstrap.php'){
-
+                if ($f != '.' && $f != '..' ){
                     $ext = pathinfo($f, PATHINFO_EXTENSION);
                     if($ext != 'php') continue;
 
                     $k = str_replace(array('.php'), array(), $f);
                     self::$data[$k] = include($dir . $f);
                 }
-
-                
             }
             closedir($handle);
         }
@@ -62,6 +59,7 @@ class Config
      */
     public function get($key=null)
     {
+        dd($key);
         if($key){
 
             $data = '';

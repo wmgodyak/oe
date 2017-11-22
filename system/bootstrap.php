@@ -65,7 +65,6 @@
     spl_autoload_register('autoLoad');
 
     require DOCROOT . "vendor/autoload.php";
-    require DOCROOT . "config/routes.php";
 
     // init session
     system\core\Session::start();
