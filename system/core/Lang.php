@@ -137,7 +137,7 @@ class Lang
      */
     private function readModules($lang)
     {
-        $mode = Request::getInstance()->getMode();
+        $mode = Request::getInstance()->mode;
 
         $active = Settings::getInstance()->get('modules');
         if(empty($active)){
@@ -186,6 +186,9 @@ class Lang
         }
 
         $a = file_get_contents($path);
+
+        if(empty($a)) return;
+
         $a = json_decode($a, true);
 
         if($parent){
@@ -197,50 +200,13 @@ class Lang
 
     /**
      * @param null $key
-     * @return null
+     * @return array|string|null
      */
     public function get($key = null)
     {
-        if($key){
+        if($key == null) return $this->translations;
 
-            if(strpos($key,'.')){
-
-                $data = $key;
-
-                $parts = explode('.', $key);
-                $c = count($parts);
-
-                if($c == 1){
-                    if(isset($this->translations[$parts[0]])){
-                        $data = $this->translations[$parts[0]];
-                    }
-                } else if($c == 2){
-                    if(isset($this->translations[$parts[0]][$parts[1]])){
-                        $data = $this->translations[$parts[0]][$parts[1]];
-                    }
-                } else if($c == 3){
-                    if(isset($this->translations[$parts[0]][$parts[1]][$parts[2]])){
-                        $data = $this->translations[$parts[0]][$parts[1]][$parts[2]];
-                    }
-                } else if($c == 4){
-                    if(isset($this->translations[$parts[0]][$parts[1]][$parts[2]][$parts[3]])){
-                        $data = $this->translations[$parts[0]][$parts[1]][$parts[2]][$parts[3]];
-                    }
-                } else if($c == 5){
-                    if(isset($this->translations[$parts[0]][$parts[1]][$parts[2]][$parts[3]][$parts[4]])){
-                        $data = $this->translations[$parts[0]][$parts[1]][$parts[2]][$parts[3]][$parts[4]];
-                    }
-                } else if($c == 6){
-                    if(isset($this->translations[$parts[0]][$parts[1]][$parts[2]][$parts[3]][$parts[4]][$parts[5]])){
-                        $data = $this->translations[$parts[0]][$parts[1]][$parts[2]][$parts[3]][$parts[4]][$parts[5]];
-                    }
-                }
-                return $data;
-            }
-
-            return isset($this->translations[$key])? $this->translations[$key] : $key;
-        }
-
-        return $this->translations;
+        return dots_get($this->translations, $key);
     }
+
 }
