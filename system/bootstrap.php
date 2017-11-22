@@ -72,6 +72,7 @@
     if(!defined('TOKEN')) define('TOKEN', token_make());
 
     $config = \system\core\Config::getInstance();
+
     if($config->get('db') == null){
         $installer = new \system\components\install\controllers\Install();
         $installer->index();
