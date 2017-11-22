@@ -258,6 +258,11 @@ class Route
                     return call_user_func_array($callback, $params);
                 }
 
+
+                // only controller
+                $controller = $callback;
+                $action = "index";
+
                 // do something
                 if(strpos($callback,'::') !== false){
                     $a = explode('::', $callback);
@@ -281,11 +286,6 @@ class Route
                     if(!empty($params)){
                         $action = array_shift($params);
                     }
-
-                } else {
-                    // only controller
-                    $controller = $callback;
-                    $action = "index";
                 }
 
                 $controller = ucfirst($controller);
