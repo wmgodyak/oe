@@ -24,7 +24,7 @@ class Config
                     if($ext != 'php') continue;
 
                     $k = str_replace('.php', '', $f);
-                    self::$data[$k] = include($dir . $f);
+                    self::$data[$k] = include_once($dir . $f);
                 }
             }
             closedir($handle);
@@ -36,7 +36,8 @@ class Config
     /**
      * @return Config
      */
-    public static function getInstance(){
+    public static function getInstance()
+    {
         if(self::$instance == null){
             self::$instance = new Config();
         }
