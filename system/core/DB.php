@@ -54,6 +54,12 @@ class DB extends \PDO {
             \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
             \PDO::ATTR_ERRMODE => \PDO::ERRMODE_WARNING // ERRMODE_EXCEPTION
         );
+        
+        $this->conf['environment'] = Config::getInstance()->get('core.environment');
+        if($this->conf['environment'] == 'production'){
+            $options[\PDO::ATTR_ERRMODE] = \PDO::ERRMODE_SILENT;
+        }
+        
         try {
         /**
          * Generate a database connection, using the PDO connector
@@ -76,7 +82,7 @@ class DB extends \PDO {
         <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
         <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>Database Fatal Error</title>
+        <title>Отакої! Виникла помилка.</title>
         <style type="text/css">
                 html{background:#f9f9f9}
                 body{
@@ -166,7 +172,7 @@ class DB extends \PDO {
             ++self::$count;
 
         } catch(\PDOException $e){
-            if($this->conf['debug']){
+            if($this->conf['environment'] == 'production'){
                 http_response_code(500);
 //                die("$sql <br>" . $e->getMessage());
                 throw new Exception("$sql <br>" . $e->getMessage());
@@ -241,15 +247,12 @@ class DB extends \PDO {
             $sth->execute();
             $result = $this->lastInsertId();
         } catch(\PDOException $e){
-            if($this->conf['debug']){
+            if($this->conf['environment'] == 'production'){
                 http_response_code(500);
-//                throw new Exception("$sql <br>" . $e->getMessage());
-                die($e->getMessage());
+                die($sql . $e->getMessage());
             }
             self::$errorMessage = "<pre>$sql" . $e->getMessage() .'</pre>';
             self::$errorCode = $e->getCode();
-//            self::$errorMessage = $e->getMessage() . $this->interpolateQuery($sql, $data);
-//            self::$errorCode = $e->getCode();
             $result = false;
         }
         ++self::$count;
@@ -262,6 +265,7 @@ class DB extends \PDO {
      * @param int $where
      * @param bool $debug
      * @return bool
+     * @throws Exception
      */
     public function update($table, array $data, $where = 1, $debug = false)
     {
@@ -289,9 +293,9 @@ class DB extends \PDO {
             $sth->execute();
             $result = true;
         }catch(\PDOException $e){
-            if($this->conf['debug']){
+            if($this->conf['environment'] == 'production'){
                 http_response_code(500);
-                throw new Exception($e->getMessage() . $this->interpolateQuery($sql, $data));
+                die($e->getMessage() . $this->interpolateQuery($sql, $data));
             }
 
             self::$errorMessage = $e->getMessage() . $this->interpolateQuery($sql, $data);
@@ -325,9 +329,9 @@ class DB extends \PDO {
             $sth->execute();
             $result = true;
         }catch(\PDOException $e){
-            if($this->conf['debug']){
+            if($this->conf['environment'] == 'production'){
                 http_response_code(500);
-                throw new Exception("$sql <br>" . $e->getMessage());
+                die($e->getMessage() . $this->interpolateQuery($sql, $e->getMessage()));
             }
             self::$errorMessage = $e->getMessage() . $this->interpolateQuery($sql);
             self::$errorCode = $e->getCode();
@@ -442,7 +446,6 @@ class DB extends \PDO {
     public function getVersion()
     {
         $version = $this->getAttribute(\PDO::ATTR_SERVER_VERSION);
-        // clean version number from alphabetic characters
         return preg_replace('/[^0-9,.]/', '', $version);
     }
 
