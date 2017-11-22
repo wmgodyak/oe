@@ -208,8 +208,7 @@ class Blog extends Content
                 ;
             }
 
-            echo $t->render($res, $t->getTotal());//$this->response->body($t->render($res, $t->getTotal()))->asJSON();
-            return;
+            return $t->render($res, $t->getTotal());
         }
 
         $this->template->assign('sidebar', $this->template->fetch('modules/blog/categories/tree'));

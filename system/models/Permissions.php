@@ -63,11 +63,9 @@ class Permissions
 
     public static function denied()
     {
-        Response::getInstance()->sendError(401);
         if(Request::getInstance()->isXhr()){
             die;
         }
-        $backend_url = Settings::getInstance()->get('backend_url');
         echo '<!DOCTYPE html>
         <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
         <head>
@@ -103,7 +101,6 @@ class Permissions
             </div>
         </body>
         </html>';
-//        d(Request::getInstance());
         die;
     }
 

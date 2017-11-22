@@ -303,14 +303,14 @@ class Users extends Frontend
 
         $user = Session::get('user');
         if(!$user){
-            $this->response->sendError(403);
+            return ['s'=>0, 'm' => "Invalid user"];
         }
 
 
         $i=[]; $s = 0;
 
         $data = [
-            'password' => $this->request->post('password'),
+            'password'   => $this->request->post('password'),
             'password_c' => $this->request->post('password_c')
         ];
 

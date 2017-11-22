@@ -47,7 +47,7 @@ class Import extends Backend
 
 
 
-            $this->response->body(['s' => $s, 'f' => $fname, 'i' => $m])->asJSON();
+            return ['s' => $s, 'f' => $fname, 'i' => $m];
         }
     }
 
@@ -92,7 +92,7 @@ class Import extends Backend
             $m = $this->template->fetch('modules/users/import/customize');
         }
 
-        $this->response->body(['s' => $s, 'f' => $file, 'i' => $m])->asJSON();
+        return ['s' => $s, 'f' => $file, 'i' => $m];
     }
 
     public function process($id = null)
@@ -208,7 +208,8 @@ Retail - ціна 4
             }
         }
         if(!empty($res['error'])) $res['error'] = implode('<br>', $res['error']);
-        $this->response->body(['s' => $s, 'f' => $file, 'i' => $m, 'res' => $res])->asJSON();
+
+        return ['s' => $s, 'f' => $file, 'i' => $m, 'res' => $res];
     }
 
     public function index()

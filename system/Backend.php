@@ -58,6 +58,7 @@ abstract class Backend extends Controller
         parent::__construct();
 
         $this->languages = Languages::getInstance();
+        $this->response->setMode('backend');
 
         $this->images = new Images();
 

@@ -70,6 +70,7 @@ abstract class Frontend extends core\Controller
         parent::__construct();
 
         $this->request->setMode('frontend');
+        $this->response->setMode('frontend');
 
         $this->settings = Settings::getInstance();
 

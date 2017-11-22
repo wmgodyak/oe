@@ -11,4 +11,3 @@ sitemap*.xml
 themes/wo/node_modules
 /themes/wo/gulpfile.js
 html/
-config/db.sample.php

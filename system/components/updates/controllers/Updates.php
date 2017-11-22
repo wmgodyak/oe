@@ -83,7 +83,7 @@ class Updates extends Backend
             }
         }
 
-        $this->response->body(['s'=>$s,'m'=>$m])->asJSON();
+        return ['s'=>$s,'m'=>$m];
     }
 
     /**

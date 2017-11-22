@@ -94,6 +94,6 @@
 
     events()->call('boot');
 
-    \system\core\Route::getInstance()->run();
+    $res = \system\core\Route::getInstance()->run();
 
-    \system\core\Response::getInstance()->display();
+    \system\core\Response::getInstance()->body($res)->display();

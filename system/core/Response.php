@@ -7,6 +7,9 @@
 
 namespace system\core;
 
+use system\models\Parser;
+use MatthiasMullie\Minify;
+
 defined("CPATH") or die();
 
 /**
@@ -15,17 +18,18 @@ defined("CPATH") or die();
  */
 class Response
 {
+    /**
+     * @var
+     */
     private static $instance;
+
+    private $headers = [];
+    private $mode = null;
 
     /**
      * @var
      */
     private $body;
-
-    /**
-     * @var string json | text/plain
-     */
-    private $ct = 'text/html';
 
     private function __construct(){}
     private function __clone(){}
@@ -42,72 +46,249 @@ class Response
         return self::$instance;
     }
 
-    /**
-     * display content
-     */
-    public function display()
+    public function setMode($mode)
     {
-        if(! headers_sent()){
-            if(is_array($this->body) || is_object($this->body)){
-                $this->asJSON();
-            }
+        $this->mode = $mode;
 
-            header('Content-Type: ' . $this->ct);
-        }
-
-        if(is_array($this->body) || is_object($this->body)){
-            echo json_encode($this->body); die;
-        }
-
-        $mode = Request::getInstance()->getMode();
-
-        $ns = 'system\core\\' . ucfirst($mode) . "Response";
-
-        $c = new $ns($this->body);
-        $c->display();
+        return $this;
     }
 
     public function setHeader($header)
     {
-        $this->ct = $header;
+        $this->headers = [];
+
+        $this->headers[] = $header;
     }
 
     /**
      * @param $body
      * @return $this
      */
-    public function body($body)
+    public function body($body = null)
     {
+        if($body == null) return $this->body;
+
         $this->body = $body;
 
         return $this;
     }
 
+    /**
+     * @param $header
+     * @return $this
+     */
+    public function withHeader($header)
+    {
+        $this->headers[] = $header;
+
+        return $this;
+    }
+
+    public function display()
+    {
+        $ds = $this->body;
+        $db = DB::getInstance();
+
+        if($this->mode == 'frontend'){
+
+            $env = Config::getInstance()->get('core.environment');
+
+            if($env == 'production'){
+
+                $ds = $this->minify($ds);
+
+            } elseif($env == 'debugging' ){
+
+                $db = DB::getInstance();
+                $time = $_SERVER['REQUEST_TIME_FLOAT'];
+                $q = $db->getQueryCount();
+
+                $ds.= "\r\n<!--\r\n";
+                $time_end = microtime(true);
+                $exec_time = round($time_end-$time, 4);
+                $mu = memory_get_usage();
+                $mp = 0; $mpf=0;
+                if(function_exists('memory_get_peak_usage')){
+                    $mp = memory_get_peak_usage();
+                    $mpf = round(($mp / 1024) / 1024, 3);
+                }
+                $muf = round((memory_get_usage() / 1024) / 1024, 3);
+                $ml=ini_get('memory_limit');
+
+                if($mp > 0){
+                    $ds.= "    Memory peak in use: $mp ($mpf M)\r\n";
+                }
+
+                $ds.= "    Page generation time: ".$exec_time." seconds\r\n";
+                $ds.= "    Memory in use: $mu ($muf M) \r\n";
+                $ds.= "    Memory limit: $ml \r\n";
+                $ds.= "    Total queries: $q \r\n";
+                $ds.=  "-->";
+            }
+        }
+
+        $ds = DataFilter::apply('documentSource', $ds);
+
+        $db->close();
+
+        if(is_array($ds) || is_object($ds)){
+            $this->withHeader('Content-type:application/json');
+            $ds = json_encode($ds);
+        } else {
+            $ds = $this->parse($ds);
+            $ds = $this->compress($ds);
+        }
+
+
+        if (!headers_sent()) {
+            foreach ($this->headers as $header) {
+                header($header, true);
+            }
+        }
+
+        echo($ds); die;
+    }
+
+    private function parse($ds)
+    {
+        $parser = new Parser($ds);
+        return $parser->getDocumentSource();
+    }
+
+    /**
+     * @param $ds
+     * @param int $level
+     * @return string
+     */
+    private function compress($ds, $level = 0) {
+
+        if (isset($_SERVER['HTTP_ACCEPT_ENCODING']) && (strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false)) {
+            $encoding = 'gzip';
+        }
+
+        if (isset($_SERVER['HTTP_ACCEPT_ENCODING']) && (strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'x-gzip') !== false)) {
+            $encoding = 'x-gzip';
+        }
+
+        if (!isset($encoding) || ($level < -1 || $level > 9)) {
+            return $ds;
+        }
+
+        if (!extension_loaded('zlib') || ini_get('zlib.output_compression')) {
+            return $ds;
+        }
+
+        if (headers_sent()) {
+            return $ds;
+        }
+
+        if (connection_status()) {
+            return $ds;
+        }
+
+        $this->withHeader('Content-Encoding: ' . $encoding);
+
+        return gzencode($ds, (int)$level);
+    }
+
+    /**
+     * @param $buffer
+     * @return mixed
+     */
+    private function minify($buffer)
+    {
+        $template = Template::getInstance();
+        $compile_force = Config::getInstance()->get('core.assets_compile_force');
+
+        $js_path = "tmp/{$template->theme}.min.js";
+        $css_path = "tmp/{$template->theme}.min.css";
+
+        $css_exists = file_exists(DOCROOT . $css_path);
+        $js_exists = file_exists(DOCROOT . $js_path);
+
+        if($compile_force || !$css_exists){
+
+            $css = $template->getStyles();
+            if(! empty($css)){
+
+                $minifier = new Minify\CSS();
+
+                foreach ($css as $k=>$v) {
+                    $minifier->add(DOCROOT . $v);
+                }
+
+                $minifier->minify(DOCROOT . $css_path);
+            }
+        }
+
+        if( $css_exists ){
+            $v = filemtime(DOCROOT . $css_path);
+            $css_compiled = "<link href='$css_path?_=$v' rel='stylesheet'>";
+            $buffer = str_replace('</head>', "$css_compiled\n</head>", $buffer);
+        }
+
+
+        if($compile_force || !$js_exists){
+            $js = $template->getScripts();
+            if(!empty($js)){
+
+                $minifier = new Minify\JS();
+
+                foreach ($js as $k=>$v) {
+                    $minifier->add(DOCROOT . $v);
+                }
+
+                $minifier->minify(DOCROOT . $js_path);
+
+            }
+        }
+
+        if($js_exists){
+            $v = filemtime(DOCROOT . $js_path);
+            $js_compiled  = "<script src='$js_path?_=$v'></script>";
+            $buffer = str_replace('</body>', "$js_compiled\n</body>", $buffer);
+        }
+
+        // minify html
+        $search = array(
+            '/\>[^\S ]+/s',  // strip whitespaces after tags, except space
+            '/[^\S ]+\</s',  // strip whitespaces before tags, except space
+            '/(\s)+/s'       // shorten multiple whitespace sequences
+        );
+        $replace = array(
+            '>',
+            '<',
+            '\\1'
+        );
+
+        return preg_replace($search, $replace, $buffer);
+    }
+
     public function asHtml()
     {
-        $this->ct = 'text/html';
+        $this->withHeader('Content-type:text/html');
     }
 
     public function asPlainText()
     {
-        $this->ct = 'text/plain';
+        $this->withHeader('Content-type:text/plain');
     }
 
     public function asJSON()
     {
-        $this->ct = 'application/json';
+        $this->withHeader('Content-type:application/json');
     }
 
     public function asXML()
     {
-        $this->ct = 'application/xml';
+        $this->withHeader('Content-type:application/xml');
     }
 
     /**
      * @param $code
-     * @param bool|false $die
+     * @return $this
      */
-    public function sendError($code, $die = false)
+    public function withCode($code)
     {
         switch ($code) {
             case 100: $text = 'Continue'; break;
@@ -155,6 +336,7 @@ class Response
         $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
 
         header($protocol . ' ' . $code . ' ' . $text);
-        if($die) die;
+
+        return $this;
     }
 }
