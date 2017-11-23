@@ -35,9 +35,11 @@
                             {$events->call('global.bottom')}
                         </div> <!--end-->
                         <footer>
-                            <div class="copyright">
-                                {$t.system.copyright}
-                            </div>
+                            <footer>
+                                <div class="copyright">
+                                    © 2015 - 2017 OYi Engine
+                                </div>
+                            </footer>
                         </footer>
                     </div>
                 </div>
