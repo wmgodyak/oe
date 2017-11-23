@@ -8,9 +8,7 @@
 namespace system\models;
 
 use system\core\DB;
-use system\core\Lang;
 use system\core\Request;
-use system\core\Session;
 
 defined("CPATH") or die();
 

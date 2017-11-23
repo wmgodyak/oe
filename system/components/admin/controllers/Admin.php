@@ -9,7 +9,6 @@
 namespace system\components\admin\controllers;
 
 use helpers\FormValidation;
-use system\core\Lang;
 use system\core\Session;
 use system\Backend;
 use system\models\Permissions;

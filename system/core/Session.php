@@ -33,9 +33,9 @@ class Session
      * @param $key
      * @param $val
      */
-    public function set($key, $val)
+    public static function set($key, $val)
     {
-        dots_set($_SESSION, $key, $val);
+        $_SESSION = dots_set($_SESSION, $key, $val);
     }
     /**
      * gets/returns the value of a specific key of the session
