@@ -34,12 +34,11 @@
                             {block name="content"}{$body}{/block}
                             {$events->call('global.bottom')}
                         </div> <!--end-->
+
                         <footer>
-                            <footer>
-                                <div class="copyright">
-                                    © 2015 - 2017 OYi Engine
-                                </div>
-                            </footer>
+                            <div class="copyright">
+                                © 2015 - 2017 OYi Engine
+                            </div>
                         </footer>
                     </div>
                 </div>
