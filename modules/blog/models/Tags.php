@@ -83,4 +83,15 @@ class Tags extends Frontend
                 ")
             ->row('type');
     }
+    /**
+     * @param $tag
+     * @return array|mixed
+     */
+    public function data($tag)
+    {
+        return self::$db
+            ->select("select * from __tags where tag = '{$tag}' limit 1")
+            ->row();
+    }
+
 }

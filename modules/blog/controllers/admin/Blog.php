@@ -48,7 +48,6 @@ class Blog extends Content
     {
         $this->assignToNav('Blog', 'module/run/blog', 'fa-book', null, 30);
         $this->template->assignScript("modules/blog/js/admin/blog.js");
-//        $this->template->assignScript("modules/blog/js/admin/bootstrap-tagsinput.min.js");
 
         DataFilter::add
         (
@@ -64,6 +63,11 @@ class Blog extends Content
         EventsHandler::getInstance()->add('content.process', [$this, 'contentProcess']);
         EventsHandler::getInstance()->add('dashboard', [$this, 'dashboard']);
         EventsHandler::getInstance()->add('content.process', [new Tags(), 'process']);
+        EventsHandler::getInstance()->add('system.admins.form.after', function($user)
+        {
+            $this->template->assign('user', $user);
+            return $this->template->fetch('modules/blog/admin');
+        });
     }
 
     public function dashboard()
@@ -208,7 +212,8 @@ class Blog extends Content
                 ;
             }
 
-            return $t->render($res, $t->getTotal());
+            echo $t->render($res, $t->getTotal());//$this->response->body($t->render($res, $t->getTotal()))->asJSON();
+            return;
         }
 
         $this->template->assign('sidebar', $this->template->fetch('modules/blog/categories/tree'));
