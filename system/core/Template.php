@@ -261,7 +261,14 @@ class Template
      */
     public function assignScript($src, $priority = null)
     {
-        $src = '/'. str_replace(['controllers/', DOCROOT],[], $src);
+        $src = ltrim($src, '/');
+        $src = str_replace(['controllers/', DOCROOT],[], $src);
+
+        foreach ($this->scripts as $p=>$s) {
+            if($s == $src) return $this;
+        }
+
+
         if(! $priority) {
             $priority = count($this->scripts);
             $priority ++;

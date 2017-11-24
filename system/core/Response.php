@@ -230,11 +230,22 @@ class Response
 
         if($compile_force || !$js_exists){
             $js = $template->getScripts();
-            if(!empty($js)){
+            $m_js = [];
+            foreach ($js as $k=>$v) {
+                if(strpos($v, 'modules') !== false){
+                    $m_js[] = $v;
+                    unset($js[$k]);
+                }
+            }
+            if(!empty($js) || !empty($m_js)){
 
                 $minifier = new Minify\JS();
 
                 foreach ($js as $k=>$v) {
+                    $minifier->add(DOCROOT . $v);
+                }
+
+                foreach ($m_js as $k=>$v) {
                     $minifier->add(DOCROOT . $v);
                 }
 
