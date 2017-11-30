@@ -416,7 +416,7 @@ class ContentFeatures extends Backend
                         $in = implode(',', $selected);
                         self::$db->delete
                         (
-                            "content_features",
+                            "__content_features",
                             " content_id={$content_id} and features_id={$features_id} and values_id in ($in)"
                         );
                     }

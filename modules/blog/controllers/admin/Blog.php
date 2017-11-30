@@ -48,7 +48,6 @@ class Blog extends Content
     {
         $this->assignToNav('Blog', 'module/run/blog', 'fa-book', null, 30);
         $this->template->assignScript("modules/blog/js/admin/blog.js");
-//        $this->template->assignScript("modules/blog/js/admin/bootstrap-tagsinput.min.js");
 
         DataFilter::add
         (
@@ -64,6 +63,11 @@ class Blog extends Content
         EventsHandler::getInstance()->add('content.process', [$this, 'contentProcess']);
         EventsHandler::getInstance()->add('dashboard', [$this, 'dashboard']);
         EventsHandler::getInstance()->add('content.process', [new Tags(), 'process']);
+        EventsHandler::getInstance()->add('system.admins.form.after', function($user)
+        {
+            $this->template->assign('user', $user);
+            return $this->template->fetch('modules/blog/admin');
+        });
     }
 
     public function dashboard()

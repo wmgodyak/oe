@@ -20,6 +20,6 @@
 
 {if $custom_scripts}
     {foreach $custom_scripts as $src}
-        <script src="{$src}"></script>
+        {assets("$src", false)}
     {/foreach}
 {/if}

@@ -316,12 +316,12 @@ class Themes extends Backend
                 $s = mkdir($dir, 0777, true);
             }
 
-            $this->response->body(['s' =>$s, 'i' => $i])->asJSON();
-            return ;
+
+            return ['s' =>$s, 'i' => $i];
         }
 
         $this->template->assign('path', $path);
-        echo $this->template->fetch('system/themes/createDir');
+        return $this->template->fetch('system/themes/createDir');
     }
 
 
@@ -348,8 +348,7 @@ class Themes extends Backend
                 $s=1;
             }
 
-            $this->response->body(['s' =>$s, 'i' => $i])->asJSON();
-            return ;
+            return ['s' =>$s, 'i' => $i];
         }
 
         $this->template->assign('path', $path);
@@ -401,8 +400,8 @@ class Themes extends Backend
                     $s = move_uploaded_file($tmp_name, $dir . $name);
                 }
             }
-            $this->response->body(['s' =>$s, 'i' => $i])->asJSON();
-            return ;
+
+            return ['s' =>$s, 'i' => $i];
         }
 
         $this->template->assign('path', $path);

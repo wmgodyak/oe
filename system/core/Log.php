@@ -1,7 +1,7 @@
 <?php
 /**
  * OYiEngine 7
- * @author Volodymyr Hodiak mailto:support@otakoi.com
+ * @author Volodymyr Hodiak mailto:vh@otakoi.com
  * @copyright Copyright (c) 2015 Otakoyi.com
  * Date: 31.03.16 : 9:37
  */
@@ -11,11 +11,10 @@ namespace system\core;
 defined("CPATH") or die();
 
 /**
- * Class Logger
- * @deprecated
+ * Class Log
  * @package system\core
  */
-class Logger
+class Log
 {
     const EMERGENCY = 'emergency';
     const ALERT     = 'alert';
@@ -26,17 +25,18 @@ class Logger
     const INFO      = 'info';
     const DEBUG     = 'debug';
 
-    private static $root = 'logs/';
-    private static $filename;
+    private $root = 'logs/';
+    private $filename;
 
     /**
-     * @param $dir
-     * @param $filename
+     * Log constructor.
+     * @param string $filename
      * @param string $ext
      */
-    public static function init($dir, $filename = '', $ext = 'log')
+    public function __construct($filename = '', $ext = 'log')
     {
-        $path = self::$root . $dir . '/';
+        $dir = pathinfo($filename, PATHINFO_DIRNAME);
+        $path = $this->root . $dir . '/';
 
         if(!is_dir(DOCROOT . $path)) mkdir(DOCROOT . $path, 0777, true);
 
@@ -45,7 +45,7 @@ class Logger
             $filename .= '-';
         }
 
-        self::$filename = DOCROOT . $path . $filename . date('Y-m-d') . '.' . $ext;
+        $this->filename = DOCROOT . $path . $filename . date('Y-m-d') . '.' . $ext;
     }
 
     /**
@@ -54,13 +54,13 @@ class Logger
      * @param array $context
      * @return int
      */
-    private static function write($level, $message, array $context)
+    private function write($level, $message, array $context)
     {
-        $message = self::interpolate($message, $context);
+        $message = $this->interpolate($message, $context);
         $level = empty($level) ? '' : "    [$level]";
         $text = date('c') . "$level    $message\r\n";
 
-        return file_put_contents(self::$filename , $text, FILE_APPEND);
+        return file_put_contents($this->filename , $text, FILE_APPEND);
     }
 
     /**
@@ -68,11 +68,10 @@ class Logger
      *
      * @param string $message
      * @param array $context
-     * @return null
      */
-    public static function emergency($message, array $context = array())
+    public function emergency($message, array $context = array())
     {
-        self::write(self::EMERGENCY, $message, $context);
+        $this->write(self::EMERGENCY, $message, $context);
     }
 
     /**
@@ -83,11 +82,10 @@ class Logger
      *
      * @param string $message
      * @param array $context
-     * @return null
      */
-    public static function alert($message, array $context = array())
+    public function alert($message, array $context = array())
     {
-        self::write(self::ALERT, $message, $context);
+        $this->write(self::ALERT, $message, $context);
     }
 
     /**
@@ -97,11 +95,10 @@ class Logger
      *
      * @param string $message
      * @param array $context
-     * @return null
      */
-    public static function critical($message, array $context = array())
+    public function critical($message, array $context = array())
     {
-        self::write(self::CRITICAL, $message, $context);
+        $this->write(self::CRITICAL, $message, $context);
     }
 
     /**
@@ -110,11 +107,10 @@ class Logger
      *
      * @param string $message
      * @param array $context
-     * @return null
      */
-    public static function error($message, array $context = array())
+    public function error($message, array $context = array())
     {
-        self::write(self::ERROR, $message, $context);
+        $this->write(self::ERROR, $message, $context);
     }
 
     /**
@@ -125,11 +121,10 @@ class Logger
      *
      * @param string $message
      * @param array $context
-     * @return null
      */
-    public static function warning($message, array $context = array())
+    public function warning($message, array $context = array())
     {
-        self::write(self::WARNING, $message, $context);
+        $this->write(self::WARNING, $message, $context);
     }
 
     /**
@@ -137,11 +132,10 @@ class Logger
      *
      * @param string $message
      * @param array $context
-     * @return null
      */
-    public static function notice($message, array $context = array())
+    public function notice($message, array $context = array())
     {
-        self::write(self::NOTICE, $message, $context);
+        $this->write(self::NOTICE, $message, $context);
     }
 
     /**
@@ -151,11 +145,10 @@ class Logger
      *
      * @param string $message
      * @param array $context
-     * @return null
      */
-    public static function info($message, array $context = array())
+    public function info($message, array $context = array())
     {
-        self::write(self::INFO, $message, $context);
+        $this->write(self::INFO, $message, $context);
     }
 
     /**
@@ -163,30 +156,29 @@ class Logger
      *
      * @param string $message
      * @param array $context
-     * @return null
      */
-    public static function debug($message, array $context = array())
+    public function debug($message, array $context = array())
     {
-        self::write(self::DEBUG, $message, $context);
+        $this->write(self::DEBUG, $message, $context);
     }
 
     /**
      * Logs with an arbitrary level.
      *
-     * @param mixed $level
      * @param string $message
      * @param array $context
-     * @return null
      */
-    public static function log($message, array $context = array())
+    public function log($message, array $context = array())
     {
-        self::write('', $message, $context);
+        $this->write('', $message, $context);
     }
 
     /**
-     * Interpolates context values into the message placeholders.
+     * @param $message
+     * @param array $context
+     * @return string
      */
-    private static function interpolate($message, array $context = array())
+    private function interpolate($message, array $context = array())
     {
         // build a replacement array with braces around the context keys
         $replace = array();

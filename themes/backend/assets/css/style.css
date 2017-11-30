@@ -436,7 +436,12 @@ fieldset {
     display: block;
     border-top: none;
     -webkit-border-radius: 0 0 3px 3px;
-    border-radius: 0 0 3px 3px; }
+    border-radius: 0 0 3px 3px;
+    padding: 0 0 15px 0;}
+    .select2-results__options[role=tree]{
+      max-height: 300px;
+      overflow: auto;
+    }
     .select2-container .select2-dropdown .select2-search {
       -webkit-box-sizing: border-box;
       box-sizing: border-box;

@@ -10,9 +10,9 @@ namespace system\core;
 
 defined('CPATH') or die();
 
-class Request {
-
-    private $storage = array();
+class Request
+{
+    private $storage = [];
     private static $instance;
 
     const METHOD_HEAD     = 'HEAD';
@@ -24,45 +24,34 @@ class Request {
     const METHOD_OPTIONS  = 'OPTIONS';
     const METHOD_OVERRIDE = '_METHOD';
 
-    private $params = array();
-
-    private $mode;
-
-    private function __construct($mode)
-    {
-//        if(!$mode) {
-//            throw new \system\core\exceptions\Exception('Wrong request mode');
-//        }
-
-        $this->mode = $mode;
-    }
-
+    private function __construct(){}
     private function __clone(){}
 
-    /**
-     * @param null $mode
-     * @return Request
-     */
-    public static function getInstance($mode = null)
+    public static function getInstance()
     {
         if(!self::$instance instanceof self){
-            self::$instance = new Request($mode);
+            self::$instance = new Request();
         }
 
         return self::$instance;
     }
 
     /**
+     * @deprecated
      * @return mixed
      */
     public function getMode()
     {
-        return $this->mode;
+        return $this->__get('mode');
     }
 
+    /**
+     * @deprecated
+     * @return mixed
+     */
     public function setMode($mode)
     {
-        $this->mode = $mode;
+        $this->__set('mode', $mode);
 
         return $this;
     }
@@ -124,17 +113,20 @@ class Request {
      * @param null $val
      * @return null
      */
-    public function param($key='*', $val=null)
+    public function param($key = '*', $val = null)
     {
         if($val !== null) {
-            $this->params[$key] = $val;
+
+            $this->storage[$key] = $val;
+
             return $this;
         }
 
-        if($key == '*') return $this->params;
-        else {
-            return isset($this->params[$key]) ? $this->params[$key] : null;
+        if($key == '*') {
+            return $this->storage;
         }
+
+        return isset($this->storage[$key]) ? $this->storage[$key] : null;
     }
 
     /**
@@ -214,15 +206,6 @@ class Request {
         return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
     }
 
-    public function setStorage($data)
-    {
-        if(!empty($data)){
-            $this->storage = array_merge($this->storage, $data);
-        }
-
-        return $this;
-    }
-
     public function __set($key,$val)
     {
         $this->storage[$key] = $val;
@@ -230,9 +213,10 @@ class Request {
 
     public function __get($key)
     {
-        if(isset($this->storage[$key])){
-            return $this->storage[$key];
+        if(!isset($this->storage[$key])){
+            throw new \InvalidArgumentException("Invalid key");
         }
-        return null;
+
+        return $this->storage[$key];
     }
 }

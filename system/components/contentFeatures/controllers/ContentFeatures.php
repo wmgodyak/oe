@@ -86,8 +86,7 @@ class ContentFeatures extends Backend
                 $v = ['value' => $s, 'name' => $info['name']];
             }
 
-            $this->response->body(['s'=>$s, 'i' => $i, 'm' => $m, 'v' => $v])->asJSON();
-            return;
+            return ['s'=>$s, 'i' => $i, 'm' => $m, 'v' => $v];
         }
 
         $parent_id = $this->request->post('parent_id', 'i');

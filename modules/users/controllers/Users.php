@@ -42,7 +42,7 @@ class Users extends Frontend
 
             $this->route->get('register', function(){
                 if(Session::get('user.id')) {
-                    redirect(route('profile'));
+                    redirect(url('profile'));
                 }
 
                 return $this->template->fetch('modules/users/register');
@@ -50,7 +50,7 @@ class Users extends Frontend
 
             $this->route->get('{lang}/register', function(){
                 if(Session::get('user.id')) {
-                    redirect(route('profile'));
+                    redirect(url('profile'));
                 }
 
                 return $this->template->fetch('modules/users/register');
@@ -60,7 +60,7 @@ class Users extends Frontend
 
             $this->route->get('{lang}/login', function(){
                 if(Session::get('user.id')) {
-                    redirect(route('profile'));
+                    redirect(url('profile'));
                 }
 
                 return $this->template->fetch('modules/users/login');
@@ -69,7 +69,7 @@ class Users extends Frontend
             $this->route->get('login', function(){
 
                 if(Session::get('user.id')) {
-                    redirect(route('profile'));
+                    redirect(url('profile'));
                 }
 
                 return $this->template->fetch('modules/users/login');
@@ -83,7 +83,7 @@ class Users extends Frontend
             $this->route->get('change-password', function(){
 
                 if(! Session::get('user.id')) {
-                    redirect(route('login'));
+                    redirect(url('login'));
                 }
 
                 return $this->template->fetch('modules/users/password_change');
@@ -92,7 +92,7 @@ class Users extends Frontend
             $this->route->get('forgot-password', function(){
 
                 if(Session::get('user.id')) {
-                    redirect(route('profile'));
+                    redirect(url('profile'));
                 }
 
                 return $this->template->fetch('modules/users/fp');
@@ -122,7 +122,7 @@ class Users extends Frontend
             $this->route->get('account', function(){
 
                 if(! Session::get('user.id')) {
-                    redirect(route('login'));
+                    redirect(url('login'));
                 }
 
                 return $this->template->fetch('modules/users/account');
@@ -303,14 +303,14 @@ class Users extends Frontend
 
         $user = Session::get('user');
         if(!$user){
-            $this->response->sendError(403);
+            return ['s'=>0, 'm' => "Invalid user"];
         }
 
 
         $i=[]; $s = 0;
 
         $data = [
-            'password' => $this->request->post('password'),
+            'password'   => $this->request->post('password'),
             'password_c' => $this->request->post('password_c')
         ];
 

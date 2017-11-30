@@ -924,7 +924,7 @@ class DataTables2
         if($s > 0){
             $m = "Сортування збережено";
         }
-        Response::getInstance()->body(['m' => $m])->asJSON();
+        return ['m' => $m];
     }
 
     public function before(){}

@@ -1,4 +1,4 @@
-$(document).ready(function(){
+jQuery(function ($) {
 
    function more(params, success)
    {

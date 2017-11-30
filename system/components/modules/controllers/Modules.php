@@ -139,7 +139,7 @@ class Modules extends Backend
                 }
                 $res[$i][] = implode('', $b);
             }
-            echo $t->render($res, $t->getTotal()); return;
+            return $t->render($res, $t->getTotal());
         }
 
         return $t->init();

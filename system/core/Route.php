@@ -180,10 +180,9 @@ class Route
 
         $actions = array_merge($this->actions['ANY'], $this->actions[$method]);
 
-        $mode = 'frontend';
-        $request = Request::getInstance($mode);
+//        $mode = 'frontend';
+        $request = Request::getInstance();
         $backend_url = Settings::getInstance()->get('backend_url');
-        $response  = Response::getInstance();
 
         foreach ($this->uri_filters as $filter) {
             $this->uri = $filter($this->uri);
@@ -208,7 +207,7 @@ class Route
 
             if(preg_match("@^$regex$@siu", $this->uri, $matches)){
 
-                $request->param('uri', $route[0]);
+                $request->uri = $route[0];
 
                 $request_params = [];
 
@@ -236,97 +235,103 @@ class Route
 
                 if(!empty($request_params)){
                     foreach ($request_params as $param) {
-                        $request->param($param['name'], $param['value']);
+                        $request->{$param['name']} = $param['value'];
                     }
                 }
+
                 if(is_array($callback) && isset($callback[1])){
+
                     if(is_callable($callback, true, $callable_name)){
+
                         events()->call('route', ['request' => $request]);
+
                         if($params && is_array($params)){
-                            return $response->body(call_user_func_array($callback, $params));
-                        } else {
-                            return $response->body(call_user_func($callback, $params));
+                            return call_user_func_array($callback, $params);
                         }
+
+                        return call_user_func($callback, $params);
                     }
-                }elseif(is_callable($callback, true) && !is_string($callback)){
-                    events()->call('route', ['request' => $request]);
-                    return $response->body(call_user_func_array($callback, $params));
-                } else {
-
-                    // do something
-                    if(strpos($callback,'::') !== false){
-                        $a = explode('::', $callback);
-
-                        list($controller, $action) = $a;
-
-                    } elseif($callback == 'module'){
-                        $controller = array_shift($params);
-
-                        $action = "index";
-                        if(!empty($params)){
-                            $action = array_shift($params);
-                        }
-                    } elseif($callback == 'component'){
-
-                        $mode = 'backend';
-
-                        $controller = array_shift($params);
-
-                        $action = "index";
-                        if(!empty($params)){
-                            $action = array_shift($params);
-                        }
-
-                    } else {
-                        // only controller
-                        $controller = $callback;
-                        $action = "index";
-                    }
-
-                    $controller = ucfirst($controller);
-
-                    $request->setMode($mode);
-                    $request->param('controller', $controller);
-                    $request->param('action',     $action);
-
-                    // maybe it is module
-                    $_module  = "modules\\" . lcfirst($controller) . "\\controllers\\$controller";
-                    $m_path = str_replace("\\", DIRECTORY_SEPARATOR, $_module);
-
-                    // or system component
-                    $_component  = "system\\components\\" . lcfirst($controller) . "\\controllers\\$controller";
-                    $c_path = str_replace("\\", DIRECTORY_SEPARATOR, $_component);
-
-                    $_component_a  = "system\\components\\" . lcfirst($controller) . "\\controllers\\" . ucfirst($action);
-                    $ca_path = str_replace("\\", DIRECTORY_SEPARATOR, $_component_a);
-
-                    // or some controller
-                    $path = str_replace("\\", DIRECTORY_SEPARATOR, $controller);
-
-                    if($callback == 'module' && file_exists(DOCROOT . $m_path . '.php')) {
-
-                        $controller = $_module;
-
-                    } elseif($callback == 'component' && file_exists(DOCROOT . $ca_path . '.php')) {
-
-                        $controller = $_component_a;
-                        $action = "index";
-                        if(!empty($params)){
-                            $action = array_shift($params);
-                        }
-
-                    } elseif($callback == 'component' && file_exists(DOCROOT . $c_path . '.php')) {
-
-                        $controller = $_component;
-
-                    } elseif(!file_exists(DOCROOT . $path . '.php')) {
-
-                        throw new \Exception('Route not found', 404);
-                    }
-
-                    events()->call('route', ['request' => $request]);
-                    return $this->call($controller, $action, $params);
                 }
+
+                if(is_callable($callback, true) && !is_string($callback)){
+                    events()->call('route', ['request' => $request]);
+                    return call_user_func_array($callback, $params);
+                }
+
+
+                // only controller
+                $controller = $callback;
+                $action = "index";
+
+                // do something
+                if(strpos($callback,'::') !== false){
+                    $a = explode('::', $callback);
+
+                    list($controller, $action) = $a;
+
+                } elseif($callback == 'module'){
+                    $controller = array_shift($params);
+
+                    $action = "index";
+                    if(!empty($params)){
+                        $action = array_shift($params);
+                    }
+                } elseif($callback == 'component'){
+
+//                    $mode = 'backend';
+
+                    $controller = array_shift($params);
+
+                    $action = "index";
+                    if(!empty($params)){
+                        $action = array_shift($params);
+                    }
+                }
+
+                $controller = ucfirst($controller);
+
+//                $request->mode = $mode;
+                $request->controller = $controller;
+                $request->action = $action;
+
+
+                // maybe it is module
+                $_module  = "modules\\" . lcfirst($controller) . "\\controllers\\$controller";
+                $m_path = str_replace("\\", DIRECTORY_SEPARATOR, $_module);
+
+                // or system component
+                $_component  = "system\\components\\" . lcfirst($controller) . "\\controllers\\$controller";
+                $c_path = str_replace("\\", DIRECTORY_SEPARATOR, $_component);
+
+                $_component_a  = "system\\components\\" . lcfirst($controller) . "\\controllers\\" . ucfirst($action);
+                $ca_path = str_replace("\\", DIRECTORY_SEPARATOR, $_component_a);
+
+                // or some controller
+                $path = str_replace("\\", DIRECTORY_SEPARATOR, $controller);
+
+                if($callback == 'module' && file_exists(DOCROOT . $m_path . '.php')) {
+
+                    $controller = $_module;
+
+                } elseif($callback == 'component' && file_exists(DOCROOT . $ca_path . '.php')) {
+
+                    $controller = $_component_a;
+                    $action = "index";
+                    if(!empty($params)){
+                        $action = array_shift($params);
+                    }
+
+                } elseif($callback == 'component' && file_exists(DOCROOT . $c_path . '.php')) {
+
+                    $controller = $_component;
+
+                } elseif(!file_exists(DOCROOT . $path . '.php')) {
+
+                    throw new \Exception('Route not found', 404);
+                }
+
+                events()->call('route', ['request' => $request]);
+                return $this->call($controller, $action, $params);
             }
         }
 
@@ -351,7 +356,7 @@ class Route
             throw new \Exception("Call to undefined action $action", 404);
         }
 
-        Response::getInstance()->body(call_user_func_array([$controller, $action], $params));
+        return call_user_func_array([$controller, $action], $params);
     }
 
     /**

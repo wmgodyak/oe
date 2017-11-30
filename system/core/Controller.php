@@ -42,11 +42,9 @@ abstract class Controller
 
     public function __construct()
     {
-        $this->request = Request::getInstance();
-        // response
+        $this->request  = Request::getInstance();
         $this->response = Response::getInstance();
-
-        $this->route = Route::getInstance();
+        $this->route    = Route::getInstance();
     }
 
     /**

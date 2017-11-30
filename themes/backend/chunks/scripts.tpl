@@ -30,6 +30,6 @@
 <script id="mainScript" src="{$theme_url}assets/js/common.js?v={$version}"></script>
 {if $custom_scripts}
     {foreach $custom_scripts as $src}
-        <script src="{$src}"></script>
+        <script src="/{$src}"></script>
     {/foreach}
 {/if}

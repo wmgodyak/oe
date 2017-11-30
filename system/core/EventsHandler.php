@@ -57,7 +57,6 @@ class EventsHandler
        while(isset(self::$events[$action][$priority])){
            $priority += 5;
        }
-       if($this->debug)  echo "<code>Events::add  ". time() . $action . "</code><br>";
        self::$events[$action][$priority] = $callback;
     }
 
@@ -69,10 +68,7 @@ class EventsHandler
      */
     public function call($action, $params = [], $display = true)
     {
-        if($this->debug) echo "<code>Events::call  ". time() . $action . "</code><br>";
-
         if(!isset(self::$events[$action])) {
-            if($this->debug) echo "No callbacks for event {$action}<br>";
             return null;
         }
 
@@ -116,7 +112,7 @@ class EventsHandler
      */
     public function display()
     {
-        dd(self::$events);
+        ddo(self::$events);
     }
 
     public function getEvents()

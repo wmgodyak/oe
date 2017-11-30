@@ -1,36 +1,47 @@
-{extends 'layouts/pages/sb-sr.tpl'}
-{block name="body.class"}index-opt-1 cms-page cms-blog{/block}
-{block name="main" prepend}
-    <!-- breadcrumb -->
-    <div class="container breadcrumb-page">
-        <ol class="breadcrumb">
-            <li><a href="Blog_Grid.html#">Home </a></li>
-            <li class="active">Authentication</li>
-        </ol>
-    </div> <!-- breadcrumb -->
-{/block}
-{block name="content"}
+{*
+ * OYiEngine 7
+ * @author VH mailto:vh@otakoyi.com
+ * @copyright Copyright (c) 2017
+ * Date: 2017-10-08T12:32:29+03:00
+ * @name Services
+ *}
+{extends 'layouts/index.tpl'}
+{block name='container'}
 
-    {if $errors|count}
-        <div class="alert alert-error">
-            {implode('<br>', $errors)}
-        </div>
-    {/if}
-    {if $blog.search}
-        {if $blog.category.total > 0}
-            <p>We found {$blog.category.total} results for query {$blog.search.query}</p>
-        {/if}
-    {/if}
+    {include file="modules/breadcrumbs.tpl"}
 
-    <div class="post-grid">
-        <div class="row post-items">
-            {foreach $blog.category.posts as $i=>$post}
-                {include file="modules/blog/post.tpl"}
-            {/foreach}
-        </div>
-    </div>
-    {if $blog.pagination}{$blog.pagination->display()}{/if}
-{/block}
-{block name="sidebar.content"}
-    {include file="modules/blog/sidebar.tpl"}
+    <section class="main-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-sm-12">
+
+                    {block name="blog.content"}
+
+                        {foreach $category.posts as $post}
+                            {include file="modules/blog/category/post.tpl"}
+                        {/foreach}
+
+                        <div class="blog-pagination text-center clearfix">
+                            {if $category.pagination}{$category.pagination->display()}{/if}
+                        </div>
+
+                    {/block}
+
+                </div> <!--  end col-sm-8 -->
+
+                <div class="col-md-4 col-sm-12">
+
+                    {include file="modules/blog/sidebar/search.tpl"}
+                    {include file="modules/blog/sidebar/categories.tpl"}
+                    {include file="modules/blog/sidebar/tags.tpl"}
+
+                </div> <!-- end .col-sm-4  -->
+
+            </div> <!--  end row  -->
+
+        </div> <!--  end container -->
+
+    </section> <!-- end .main-content  -->
+    <!-- START FOOTER  -->
+    <a id="backTop">Вгору</a>
 {/block}

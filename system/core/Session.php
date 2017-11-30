@@ -11,18 +11,13 @@ namespace system\core;
 defined('CPATH') or die();
 
 /**
- * Session class
- *
- * handles the session stuff. creates session when no one exists, sets and
- * gets values, and closes the session properly (=logout). Those methods
- * are STATIC, which means you can call them with Session::get(XXX);
+ * Class Session
+ * @package system\core
  */
-class Session {
-    /**
-     * starts the session
-     */
-    public static function start(){
-        // if no session exist, start the session
+class Session
+{
+    public static function start()
+    {
         if (session_id() == '') {
             session_name('oyiengine');
             session_start();
@@ -35,46 +30,21 @@ class Session {
     }
 
     /**
-     * sets a specific value to a specific key of the session
-     * @param mixed $key
-     * @param mixed $value
+     * @param $key
+     * @param $val
      */
-    public static function set($key, $value=null){
-        if(is_array($key)){
-            $_SESSION = array_merge($_SESSION, $key);
-            return;
-        }
-        $_SESSION[$key] = $value;
+    public static function set($key, $val)
+    {
+        $_SESSION = dots_set($_SESSION, $key, $val);
     }
-
     /**
      * gets/returns the value of a specific key of the session
      * @param mixed $key
      * @return mixed
      */
-    public static function get($key){
-
-        if(strpos($key,'.')){
-
-            $parts = explode('.', $key);
-            $c = count($parts);
-
-            if($c == 1){
-                if(isset($_SESSION[$parts[0]])){
-                    return $_SESSION[$parts[0]];
-                }
-            } else if($c == 2){
-                if(isset($_SESSION[$parts[0]][$parts[1]])){
-                    return  $_SESSION[$parts[0]][$parts[1]];
-                }
-            } else if($c == 3){
-                if(isset($_SESSION[$parts[0]][$parts[1]][$parts[2]])){
-                    return $_SESSION[$parts[0]][$parts[1]][$parts[2]];
-                }
-            }
-        }
-
-        return isset($_SESSION[$key]) ? $_SESSION[$key] : null;
+    public static function get($key)
+    {
+        return dots_get($_SESSION, $key);
     }
 
     public static function delete($key)
@@ -87,7 +57,8 @@ class Session {
     /**
      * deletes the session
      */
-    public static function destroy(){
+    public static function destroy()
+    {
         session_destroy();
     }
 }

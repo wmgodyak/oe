@@ -110,56 +110,6 @@
         ]
     },
     {
-        "name": "smarty/smarty-lexer",
-        "version": "v3.1.28",
-        "version_normalized": "3.1.28.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/smarty-php/smarty-lexer.git",
-            "reference": "04496b4b06158475dbe634ee8f95ebd9440a9bd9"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/smarty-php/smarty-lexer/zipball/04496b4b06158475dbe634ee8f95ebd9440a9bd9",
-            "reference": "04496b4b06158475dbe634ee8f95ebd9440a9bd9",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.2"
-        },
-        "time": "2015-06-11 21:54:19",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "3.1.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "LGPL-3.0"
-        ],
-        "authors": [
-            {
-                "name": "Monte Ohrt",
-                "email": "monte@ohrt.com"
-            },
-            {
-                "name": "Uwe Tews",
-                "email": "uwe.tews@googlemail.com"
-            },
-            {
-                "name": "Rodney Rehm",
-                "email": "rodney.rehm@medialize.de"
-            }
-        ],
-        "description": "Smarty Lexer/Parser generator",
-        "homepage": "http://www.smarty.net",
-        "keywords": [
-            "templating"
-        ]
-    },
-    {
         "name": "symfony/yaml",
         "version": "v3.2.6",
         "version_normalized": "3.2.6.0",
@@ -1318,63 +1268,6 @@
         ]
     },
     {
-        "name": "smarty/smarty-phpunit",
-        "version": "v3.1.28",
-        "version_normalized": "3.1.28.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/smarty-php/smarty-phpunit.git",
-            "reference": "4b65d72f52d1b310686d018aa48c639252c22e8d"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/smarty-php/smarty-phpunit/zipball/4b65d72f52d1b310686d018aa48c639252c22e8d",
-            "reference": "4b65d72f52d1b310686d018aa48c639252c22e8d",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.2",
-            "phpunit/phpunit": "4.6.6"
-        },
-        "time": "2015-12-18 02:58:53",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "3.1.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "classmap": [
-                "Bootstrap.php",
-                "PHPUnit_Smarty.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "LGPL-3.0"
-        ],
-        "authors": [
-            {
-                "name": "Monte Ohrt",
-                "email": "monte@ohrt.com"
-            },
-            {
-                "name": "Uwe Tews",
-                "email": "uwe.tews@googlemail.com"
-            },
-            {
-                "name": "Rodney Rehm",
-                "email": "rodney.rehm@medialize.de"
-            }
-        ],
-        "description": "Smarty - the compiling PHP template engine PHPUnit tests",
-        "homepage": "http://www.smarty.net",
-        "keywords": [
-            "templating"
-        ]
-    },
-    {
         "name": "smarty/smarty",
         "version": "v3.1.28",
         "version_normalized": "3.1.28.0",
@@ -1477,6 +1370,113 @@
             }
         ],
         "description": "Smarty - the compiling PHP template engine",
+        "homepage": "http://www.smarty.net",
+        "keywords": [
+            "templating"
+        ]
+    },
+    {
+        "name": "smarty/smarty-lexer",
+        "version": "v3.1.28",
+        "version_normalized": "3.1.28.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/smarty-php/smarty-lexer.git",
+            "reference": "04496b4b06158475dbe634ee8f95ebd9440a9bd9"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/smarty-php/smarty-lexer/zipball/04496b4b06158475dbe634ee8f95ebd9440a9bd9",
+            "reference": "04496b4b06158475dbe634ee8f95ebd9440a9bd9",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.2"
+        },
+        "time": "2015-06-11 21:54:19",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "3.1.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "LGPL-3.0"
+        ],
+        "authors": [
+            {
+                "name": "Monte Ohrt",
+                "email": "monte@ohrt.com"
+            },
+            {
+                "name": "Uwe Tews",
+                "email": "uwe.tews@googlemail.com"
+            },
+            {
+                "name": "Rodney Rehm",
+                "email": "rodney.rehm@medialize.de"
+            }
+        ],
+        "description": "Smarty Lexer/Parser generator",
+        "homepage": "http://www.smarty.net",
+        "keywords": [
+            "templating"
+        ]
+    },
+    {
+        "name": "smarty/smarty-phpunit",
+        "version": "v3.1.28",
+        "version_normalized": "3.1.28.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/smarty-php/smarty-phpunit.git",
+            "reference": "4b65d72f52d1b310686d018aa48c639252c22e8d"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/smarty-php/smarty-phpunit/zipball/4b65d72f52d1b310686d018aa48c639252c22e8d",
+            "reference": "4b65d72f52d1b310686d018aa48c639252c22e8d",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.2",
+            "phpunit/phpunit": "4.6.6"
+        },
+        "time": "2015-12-18 02:58:53",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "3.1.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "Bootstrap.php",
+                "PHPUnit_Smarty.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "LGPL-3.0"
+        ],
+        "authors": [
+            {
+                "name": "Monte Ohrt",
+                "email": "monte@ohrt.com"
+            },
+            {
+                "name": "Uwe Tews",
+                "email": "uwe.tews@googlemail.com"
+            },
+            {
+                "name": "Rodney Rehm",
+                "email": "rodney.rehm@medialize.de"
+            }
+        ],
+        "description": "Smarty - the compiling PHP template engine PHPUnit tests",
         "homepage": "http://www.smarty.net",
         "keywords": [
             "templating"
