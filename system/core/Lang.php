@@ -206,7 +206,13 @@ class Lang
     {
         if($key == null) return $this->translations;
 
-        return dots_get($this->translations, $key);
+        $text = dots_get($this->translations, $key);
+
+        if($text == '') {
+            $text = $key;
+        }
+
+        return $text;
     }
 
 }

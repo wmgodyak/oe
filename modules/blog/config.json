@@ -6,7 +6,20 @@
   "related" : 5,
   "route" : {
     "search" : "blog/search",
-    "tag"    : "blog/tag/{tag}",
-    "author" : "blog/author/{author}"
+    "tag"    : {
+      "search" : "1blog/search",
+      "tag"    : "1blog/tag/{tag}",
+      "author" : {
+        "search" : {
+          "search" : "3blog/search",
+          "tag"    : "3blog/tag/{tag}",
+          "author" : "3blog/author/{author}"
+        },
+        "tag"    : "2blog/tag/{tag}",
+        "author" : "2blog/author/{author}"
+      }
+    },
+    "author" : "blog/author/{author}",
+    "script" : "blog/author/{author}"
   }
 }

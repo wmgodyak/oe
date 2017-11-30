@@ -1,10 +1,10 @@
 <form action="modules/process" method="post" id="modulesForm" class="row form-horizontal">
-    {foreach $config as $k=>$v}
-        {if ! is_array($v)}
+    {foreach $config as $k=>$item}
+        {if ! is_array($item['value'])}
             <div class="form-group">
-                <label for="config_{$k}" class="col-sm-3 control-label" title="{$k}">{$t[lcfirst($module)].config[$k]}</label>
+                <label for="config_{$k}" class="col-sm-3 control-label" title="{$k}">{$item['label']}</label>
                 <div class="col-sm-9">
-                    <input name="config[{$k}]" id="config_{$k}" value="{$v}" class="form-control" required>
+                    <input name="config[{$k}]" id="config_{$k}" value="{$item['value']}" class="form-control" required>
                 </div>
             </div>
         {/if}

@@ -17,8 +17,29 @@ defined("CPATH") or die();
  */
 class Modules extends Backend
 {
+    /**
+     * @var
+     */
     private static $instance;
+
+    /**
+     * @var \system\components\modules\models\Modules
+     */
     public $model;
+
+    /**
+     * @var string
+     *
+     * Folder for modules
+     */
+    private $modules_dir = 'modules';
+
+    private $config_file_name = 'config';
+    private $config_file_type = 'json'; // ini|json
+
+    /**
+     * Modules constructor.
+     */
     public function __construct()
     {
         parent::__construct();
@@ -26,6 +47,9 @@ class Modules extends Backend
         $this->model = new \system\components\modules\models\Modules();
     }
 
+    /**
+     * @return Modules
+     */
     public static function getInstance()
     {
         if(self::$instance == null){
@@ -61,6 +85,7 @@ class Modules extends Backend
 
             if($status == 'all'){
                 $modules = $this->availableModules();
+//                var_dump($modules); die('sss');
             } elseif($status == 'enabled'){
                 if(!empty($installed_modules)){
 
@@ -119,11 +144,14 @@ class Modules extends Backend
 
                     }
 
-                    $b[] = (string)Button::create
-                    (
-                        Icon::create(Icon::TYPE_SETTINGS),
-                        ['class' => 'b-modules-edit', 'data-id' => $module['module'], 'title' => t('modules.title_edit')]
-                    );
+                    if($module['config']){
+                        $b[] = (string)Button::create
+                        (
+                            Icon::create(Icon::TYPE_SETTINGS),
+                            ['class' => 'b-modules-edit', 'data-id' => $module['module'], 'title' => t('modules.title_edit')]
+                        );
+                    }
+
                     $b[] = (string)Button::create
                     (
                         Icon::create(Icon::TYPE_DELETE),
@@ -147,20 +175,20 @@ class Modules extends Backend
 
     private function availableModules()
     {
-        $modules_dir = 'modules';
         $modules = [];
 
-        if ($handle = opendir(DOCROOT . $modules_dir)) {
+        if ($handle = opendir(DOCROOT . $this->modules_dir)) {
             while (false !== ($module = readdir($handle))) {
                 if ($module == "." || $module == ".." || $module == '.htaccess' || $module == 'index.html')  continue;
 
-                $c  = $modules_dir .'\\'. $module . '\controllers\\' . ucfirst($module);
+                $c  = $this->modules_dir .'\\'. $module . '\controllers\\' . ucfirst($module);
 
                 $path = str_replace("\\", "/", $c);
 
                 if(file_exists(DOCROOT . $path . '.php')) {
                     $meta = PHPDocReader::getMeta($c);
                     $meta['module'] = ucfirst($module);
+                    $meta['config'] = ($this->getConfigFile($module)) ? true : false;
                     $modules[] = $meta;
                 }
 
@@ -169,6 +197,36 @@ class Modules extends Backend
         }
 
         return $modules;
+    }
+
+    /**
+     * @param $module
+     * @return bool
+     */
+    private function getConfigFile($module)
+    {
+        $path = DOCROOT . $this->modules_dir.'/'.$module.'/'.$this->config_file_name.".".$this->config_file_type;
+        $config = [];
+        if(file_exists($path)) {
+            switch ($this->config_file_type)
+            {
+                case 'json': {
+                    $json = file_get_contents($path);
+                    if($json != '') {
+                        $config = json_decode($json,true);
+                    }
+                    break;
+                }
+                case 'ini': {
+                    $config = parse_ini_file($path);
+                    break;
+                }
+            }
+        }
+        if(!empty($config)) {
+            return $config;
+        }
+        return false;
     }
 
     public function install($module = '')
@@ -242,26 +300,47 @@ class Modules extends Backend
 
     public function edit($id = null)
     {
-        $s=0; $t=null; $m=null; $config = null;
+        $s=0; $t=null; $m=null; $config = null; $translation = null;
         $module =  $this->request->post('module');
         $modules = Settings::getInstance()->get('modules');
         if(isset($modules[$module])){
-
             $_module = lcfirst($module);
             $t = 'Налаштування модуля';
-            $path = DOCROOT . "modules/{$_module}/config.ini";
-            if (file_exists($path)) {
-                $s=1;
-                $config = parse_ini_file($path);
-                $s_config = isset($modules[$module]['config']) ? $modules[$module]['config'] : [];
-                $config = array_merge($config, $s_config);
+            $config = $this->getConfigFile($_module);
+            $s_config = isset($modules[$module]['config']) ? $modules[$module]['config'] : [];
+            $config = array_merge($config, $s_config);
+            if(!empty($config)) {
+                $config = $this->getCodesFromJson($_module, $config);
             }
         }
         $this->template->assign('config', $config);
         $this->template->assign('module', $module);
+//        $this->template->assign('translation', $translation);
         $m = $this->template->fetch('system/modules/config');
 
         return ['s' => $s, 't' => $t, 'm' => $m];
+    }
+
+    private function getCodesFromJson($module, $config, $code = null, $array = [])
+    {
+        if(!is_null($code)) {
+            $code = $code.'.';
+        } else {
+            $code = $module.'.config.';
+        }
+
+        foreach($config as $k=>$item) {
+            if(!is_array($item)) {
+                $array[$code.$k] = [
+                    'label' => t($code.$k),
+                    'value' => t($item)
+                ];
+            } else {
+                $a = $this->getCodesFromJson($module, $item, $code.$k, $array);
+                $array = array_merge($a, $array);
+            }
+        }
+        return $array;
     }
 
 
