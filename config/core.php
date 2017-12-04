@@ -9,7 +9,7 @@
         /**
          * System environment
          */
-        'environment' => 'development', // possible env: development | production | debugging
+        'environment' => 'production', // possible env: development | production | debugging
         /**
          * enable or disable system update
          */
