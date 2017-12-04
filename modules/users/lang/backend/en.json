@@ -51,6 +51,7 @@
     "access at: {$data.url}"
   ],
   "config": {
-    "guest_group_id": "Guest group id"
+    "guest_group_id": "Guest group id",
+    "auth_after_register": "Auth after register"
   }
 }

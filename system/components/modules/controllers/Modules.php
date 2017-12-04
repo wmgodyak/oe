@@ -5,6 +5,7 @@ namespace system\components\modules\controllers;
 use helpers\bootstrap\Button;
 use helpers\bootstrap\Icon;
 use helpers\PHPDocReader;
+use system\core\Config;
 use system\core\DataTables2;
 use system\Backend;
 use system\models\Settings;
@@ -85,7 +86,6 @@ class Modules extends Backend
 
             if($status == 'all'){
                 $modules = $this->availableModules();
-//                var_dump($modules); die('sss');
             } elseif($status == 'enabled'){
                 if(!empty($installed_modules)){
 
@@ -217,14 +217,24 @@ class Modules extends Backend
                     }
                     break;
                 }
-                case 'ini': {
-                    $config = parse_ini_file($path);
-                    break;
-                }
+//                case 'ini': {
+//                    $config = parse_ini_file($path);
+//                    break;
+//                }
             }
         }
         if(!empty($config)) {
             return $config;
+        }
+        return false;
+    }
+
+    private function setConfigFile($module, $config)
+    {
+        $path = DOCROOT . $this->modules_dir.'/'.$module.'/'.$this->config_file_name.".".$this->config_file_type;
+        $json = json_encode($config);
+        if(file_put_contents($path, $json)){
+            return true;
         }
         return false;
     }
@@ -308,10 +318,10 @@ class Modules extends Backend
             $t = 'Налаштування модуля';
             $config = $this->getConfigFile($_module);
             $s_config = isset($modules[$module]['config']) ? $modules[$module]['config'] : [];
-            $config = array_merge($config, $s_config);
-            if(!empty($config)) {
+//            $config = array_merge($config, $s_config);
+//            if(!empty($config)) {
                 $config = $this->getCodesFromJson($_module, $config);
-            }
+//            }
         }
         $this->template->assign('config', $config);
         $this->template->assign('module', $module);
@@ -348,22 +358,16 @@ class Modules extends Backend
     {
         $s=0; $t=null; $m=null;
         $module = $this->request->post('module');
-        $config = $this->request->post('config');
-        if(empty($config)){
+        $data = $this->request->post('config');
+        if(empty($data)){
             $m = "Цей модуль немає налаштувань";
         } else {
             $module = ucfirst($module);
+            $_module = lcfirst($module);
 
             $modules = Settings::getInstance()->get('modules');
 
             if(isset($modules[$module])){
-//                $_module = lcfirst($module);
-//                $path = DOCROOT . "modules/{$_module}/config.ini";
-//                if( !file_exists($path)){
-//                    $m = "Цей модуль немає налаштувань";
-//                } else {
-//
-//                }
                 $s=1;
                 $m = 'Налаштування модуля оновлено';
 
@@ -371,9 +375,18 @@ class Modules extends Backend
                     $modules[$module]['config'] = [];
                 }
 
-                $modules[$module]['config'] = $config;
+                $config = [];
+                foreach ($data as $key=>$value) {
+                    $key = str_replace($_module.'.config.','',$key);
+                    $config = dots_set($config, $key, $value);
+                }
 
-                Settings::getInstance()->set('modules', $modules);
+                if($this->setConfigFile($_module, $config)) {
+
+//                    $modules[$module]['config'] = $config;
+//
+//                    Settings::getInstance()->set('modules', $modules);
+                }
             }
         }
 
