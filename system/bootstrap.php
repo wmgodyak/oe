@@ -73,21 +73,40 @@
 
     $config = \system\core\Config::getInstance();
 
-    if($config->get('db') == null){
-        $installer = new \system\components\install\controllers\Install();
-        $installer->index();
-        die;
-    }
-
     switch ($config->get('core.environment')){
         case 'development':
         case 'debugging':
+            ini_set('display_errors', 1);
+            ini_set('display_startup_errors', 1);
+            error_reporting(E_ALL);
             break;
         default:
             ini_set('display_errors', 0);
             ini_set('display_startup_errors', 0);
             error_reporting(0);
             break;
+    }
+
+    $request = \system\core\Request::getInstance();
+
+    $url    = rtrim(APPURL, '/') . $_SERVER['REQUEST_URI'];
+    $parsed = parse_url($url);
+
+    if(!empty($parsed['query'])){
+        parse_str($parsed['query'], $a);
+        $parsed['args'] = $a;
+    }
+
+    foreach ($parsed as $k=>$v) {
+        $request->{$k} = $v;
+    }
+
+    $request->uri = $parsed['path'];
+
+    if($config->get('db') == null){
+        $installer = new \system\components\install\controllers\Install();
+        $installer->index();
+        die;
     }
 
     \system\models\Modules::getInstance();
