@@ -351,7 +351,7 @@ function token_validate($token = null)
  * @param $uri
  * @param int $status_code
  */
-function redirect($uri, $status_code = 303)
+function redirect($uri, $status_code = null)
 {
     if(strpos($uri, 'http') === false){
         $uri = APPURL . $uri;
