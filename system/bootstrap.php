@@ -89,8 +89,11 @@
 
     $request = \system\core\Request::getInstance();
 
-    $url    = rtrim(APPURL, '/') . $_SERVER['REQUEST_URI'];
+    $uri = cleanURI($_SERVER['REQUEST_URI']);
+    $url = rtrim(APPURL, '/') . trim(parse_url($uri, PHP_URL_PATH), '/');
     $parsed = parse_url($url);
+
+    if(!isset($parsed['path'])) $parsed['path'] = '/';
 
     if(!empty($parsed['query'])){
         parse_str($parsed['query'], $a);
@@ -101,7 +104,7 @@
         $request->{$k} = $v;
     }
 
-    $request->uri = $parsed['path'];
+    $request->uri = filter_apply('request.uri', $parsed['path']);
 
     if($config->get('db') == null){
         $installer = new \system\components\install\controllers\Install();
@@ -109,10 +112,10 @@
         die;
     }
 
-    \system\models\Modules::getInstance();
+    \system\models\Modules::getInstance(); // todo get mode from request and add method boot
 
     events()->call('boot');
 
-    $res = \system\core\Route::getInstance()->run();
+    $res = \system\core\Route::getInstance()->run($request);
 
     \system\core\Response::getInstance()->body($res)->display();

@@ -19,8 +19,6 @@ class Route
 {
     private static $instance = null;
 
-    private $uri;
-
     private $actions =
         [
             'PUT'    => [],
@@ -53,28 +51,7 @@ class Route
         return $this;
     }
 
-    private function __construct()
-    {
-//        if ( preg_match('!/{2,}!', $_SERVER['REQUEST_URI']) ){
-//            $url = preg_replace('!/{2,}!', '/', $_SERVER['REQUEST_URI']);
-//            header('Location: ' . $url , false, 301);
-//            exit;
-//        }
-//
-//        $lowerURI = strtolower($_SERVER['REQUEST_URI']);
-//        if($_SERVER['REQUEST_URI'] != $lowerURI){
-//            if(mb_substr($lowerURI, 0, 1) == '/') {
-//                $lowerURI = mb_substr($lowerURI, 1);
-//            }
-//            $uri = APPURL . $lowerURI;
-//            header("HTTP/1.1 301 Moved Permanently");
-//            header("Location: $uri");
-//            exit();
-//        }
-
-        $this->uri = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
-        $this->uri = $this->protect($this->uri);
-    }
+    private function __construct(){}
 
     private function __clone(){}
 
@@ -165,12 +142,15 @@ class Route
     }
 
     /**
-     * @return $this
+     * @param Request $request
+     * @return Route
      * @throws \Exception
      */
-    public function run()
+    public function run(Request $request)
     {
-        if(empty($this->uri)) $this->uri = "/";
+        $uri = $request->uri;
+
+        if(empty($uri)) $uri = "/";
 
         if (isset($_REQUEST['_method']) && in_array(strtoupper($_REQUEST['_method']), ['PUT', 'DELETE'])) {
             $method = strtoupper($_REQUEST['_method']);
@@ -180,12 +160,10 @@ class Route
 
         $actions = array_merge($this->actions['ANY'], $this->actions[$method]);
 
-//        $mode = 'frontend';
-        $request = Request::getInstance();
         $backend_url = Settings::getInstance()->get('backend_url');
 
         foreach ($this->uri_filters as $filter) {
-            $this->uri = $filter($this->uri);
+            $uri = $filter($uri);
         }
 
         foreach ($actions as $route) {
@@ -205,7 +183,7 @@ class Route
                 $regex = preg_replace('(\{[[:alpha:]]+\})', $this->patterns['url'], $regex);
             }
 
-            if(preg_match("@^$regex$@siu", $this->uri, $matches)){
+            if(preg_match("@^$regex$@siu", $uri, $matches)){
 
                 $request->uri = $route[0];
 
@@ -370,40 +348,6 @@ class Route
         array_unshift($this->actions[$method], [$uri, $callback]);
 
         return $this;
-    }
-
-    /**
-     * @param $uri
-     * @return mixed
-     */
-    private function protect($uri)
-    {
-        $tags = [
-            '@\'@si',
-            '@\[\[(.*?)\]\]@si',
-            '@\[!(.*?)!\]@si',
-            '@\[\~(.*?)\~\]@si',
-            '@\[\((.*?)\)\]@si',
-            '@{{(.*?)}}@si',
-            '@\[\+(.*?)\+\]@si',
-            '@\[\*(.*?)\*\]@si'
-        ];
-
-        if (isset($_SERVER['QUERY_STRING']) && strpos(urldecode($_SERVER['QUERY_STRING']), chr(0)) !== false)
-            die();
-
-        if (@ ini_get('register_globals')) {
-            foreach ($_REQUEST as $key => $value) {
-                $$key = null;
-                unset ($$key);
-            }
-        }
-
-        $uri = preg_replace($tags, "", $uri);
-
-        unset($tags, $key, $value);
-
-        return $uri;
     }
 
     public function uriFilter($callback)

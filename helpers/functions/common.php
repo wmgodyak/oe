@@ -290,18 +290,11 @@ if (!function_exists('events')){
 
 if( ! function_exists('route')){
     /**
-     * @deprecated
-     * @param $url
-     * @return string
+     * @return null|\system\core\Route
      */
-    function route($url)
+    function route()
     {
-        $url = trim($url, '/');
-        $lang = \system\core\Languages::getInstance();
-
-        $prefix = $lang->is_main ? "" : "$lang->code/";
-
-        return APPURL . $prefix . $url;
+       return \system\core\Route::getInstance();
     }
 
 }
@@ -375,3 +368,38 @@ if( ! function_exists('url')){
     }
 
 }
+
+
+    /**
+     * @param $uri
+     * @return mixed
+     */
+    function cleanURI($uri)
+    {
+        $tags = [
+            '@\'@si',
+            '@\[\[(.*?)\]\]@si',
+            '@\[!(.*?)!\]@si',
+            '@\[\~(.*?)\~\]@si',
+            '@\[\((.*?)\)\]@si',
+            '@{{(.*?)}}@si',
+            '@\[\+(.*?)\+\]@si',
+            '@\[\*(.*?)\*\]@si'
+        ];
+
+        if (isset($_SERVER['QUERY_STRING']) && strpos(urldecode($_SERVER['QUERY_STRING']), chr(0)) !== false)
+            die();
+
+        if (@ ini_get('register_globals')) {
+            foreach ($_REQUEST as $key => $value) {
+                $$key = null;
+                unset ($$key);
+            }
+        }
+
+        $uri = preg_replace($tags, "", $uri);
+
+        unset($tags, $key, $value);
+
+        return $uri;
+    }
