@@ -213,9 +213,7 @@ class Request
             throw new \InvalidArgumentException("Invalid key");
         }
 
-//        $this->storage[$key] = $val;
         $this->storage = dots_set($this->storage, $key, $val);
-
     }
 
     public function __get($key)

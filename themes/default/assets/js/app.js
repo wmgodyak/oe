@@ -122,6 +122,7 @@ var App = {
                 beforeSend: function(request)
                 {
                     request.setRequestHeader("X-Accept-Language", $('html').data('lang') );
+                    request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr("content") );
                 }
             })
         },

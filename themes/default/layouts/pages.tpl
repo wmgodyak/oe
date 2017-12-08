@@ -30,6 +30,7 @@
         <h1>{$page.name}</h1>
 
         {$page.content}
+
     </div>
 {/block}
 {block name="sidebar.content"}

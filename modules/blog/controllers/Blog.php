@@ -343,4 +343,9 @@ class Blog extends Frontend
             'html'  => $html
         ];
     }
+
+    public function ajax()
+    {
+        dd($_SERVER);
+    }
 }
