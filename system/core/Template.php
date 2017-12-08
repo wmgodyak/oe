@@ -10,6 +10,7 @@ namespace system\core;
 use system\core\exceptions\Exception;
 use system\models\App;
 use system\models\Modules;
+use system\models\Settings;
 
 defined("CPATH") or die();
 
@@ -349,9 +350,16 @@ class Template
 
         $this->assign('base_url',    APPURL );
         $this->assign('app', $app);
-        $this->assign('t', t()->get()); // todo remove it in future
+        $this->assign('t', t()); // support older modules
+
+        $events = events();
+
+        $this->assign('events', $events);
+
+        $this->assign('settings', Settings::getInstance());
 
         $this->assign('custom_scripts', $this->getScripts());
         $this->assign('custom_styles', $this->getStyles());
+        $this->assign('request', Request::getInstance());
     }
 } 

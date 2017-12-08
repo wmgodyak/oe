@@ -21,12 +21,6 @@ $route->get('system/cron', '\system\Cron');
 $route->any('route/{alpha}/{alpha}', 'module');
 $route->any('route/{alpha}/{alpha}/{any}', 'module');
 
-// only lang
-$route->get('{lang}', '\system\frontend\Page::displayLang');
-
-// lang/url
-$route->get('{lang}/{url}', '\system\frontend\Page::displayLangAndUrl');
-
 
 /**
  * BACKEND

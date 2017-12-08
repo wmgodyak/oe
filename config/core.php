@@ -9,7 +9,7 @@
         /**
          * System environment
          */
-        'environment' => 'production', // possible env: development | production | debugging
+        'environment' => 'development', // possible env: development | production | debugging
         /**
          * enable or disable system update
          */
@@ -18,5 +18,4 @@
          * Enable or disable force compile for assets
          */
         'assets_compile_force' => false
-
     ];

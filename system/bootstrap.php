@@ -90,7 +90,7 @@
     $request = \system\core\Request::getInstance();
 
     $uri = cleanURI($_SERVER['REQUEST_URI']);
-    $url = rtrim(APPURL, '/') . trim(parse_url($uri, PHP_URL_PATH), '/');
+    $url = APPURL . trim(parse_url($uri, PHP_URL_PATH), '/');
     $parsed = parse_url($url);
 
     if(!isset($parsed['path'])) $parsed['path'] = '/';
@@ -104,7 +104,9 @@
         $request->{$k} = $v;
     }
 
-    $request->uri = filter_apply('request.uri', $parsed['path']);
+    $request->uri = filter_apply('request.uri', trim($parsed['path'], '/'));
+
+    $request->mode ='frontend';
 
     if($config->get('db') == null){
         $installer = new \system\components\install\controllers\Install();
@@ -112,10 +114,27 @@
         die;
     }
 
-    \system\models\Modules::getInstance(); // todo get mode from request and add method boot
+    $language = \system\core\Languages::getInstance();
+    $language->detect($request);
+
+
+    \system\models\Modules::getInstance()->boot($request);
 
     events()->call('boot');
 
-    $res = \system\core\Route::getInstance()->run($request);
+    $route = \system\core\Route::getInstance();
 
-    \system\core\Response::getInstance()->body($res)->display();
+    $route->dispatch($request);
+
+    // get mode from request to get theme
+    $theme = $request->mode == 'backend' ? 'backend_theme' : 'app_theme_current';
+
+    \system\core\Lang::getInstance()->set($language->code, \system\models\Settings::getInstance()->get($theme));
+
+    $res = $route->run();
+
+    \system\core\Response::getInstance()
+        ->withHeader('X-CSRF-Token: ' . TOKEN)
+        ->withHeader('X-Accept-Language: ' . $language->code)
+        ->body($res)
+        ->display($request);

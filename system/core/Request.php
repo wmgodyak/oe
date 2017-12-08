@@ -108,6 +108,7 @@ class Request
     }
 
     /**
+     * @deprecated
      * Управління доступом до $_REQUEST $param
      * @param $key
      * @param null $val

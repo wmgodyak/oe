@@ -35,6 +35,8 @@ class Lang
      */
     public static function getInstance()
     {
+//        echo "Called Lang::getInstance()<BR>";
+//        d(debug_backtrace());
         if(self::$instance == null){
             self::$instance = new self;
         }
@@ -128,47 +130,8 @@ class Lang
         $a = json_decode($a, true);
 
         $this->translations = array_merge($this->translations, $a);
-
-        $this->readModules($lang);
     }
 
-    /**
-     * @param $lang
-     */
-    private function readModules($lang)
-    {
-        $mode = Request::getInstance()->mode;
-
-        $active = Settings::getInstance()->get('modules');
-        if(empty($active)){
-            return;
-        }
-
-        foreach ($active as $module=>$params) {
-
-            if($params['status'] != 'enabled') continue;
-
-            $module = lcfirst($module);
-
-            if($mode == 'backend'){
-
-                // replace module path
-                $t_path = DOCROOT . "modules/{$module}/lang/backend/$lang.json";
-                if(!file_exists($t_path)){
-                    $t_path = DOCROOT . "modules/{$module}/lang/backend/en.json";
-                }
-            } else {
-                $t_path = DOCROOT . "modules/{$module}/lang/$lang.json";
-                if(!file_exists($t_path)){
-                    $t_path = DOCROOT . "modules/{$module}/lang/en.json";
-                }
-            }
-
-            // load translations
-            $this->parseFile($t_path, $module);
-        }
-
-    }
 
     /**
      * @param $key
@@ -186,9 +149,6 @@ class Lang
         }
 
         $a = file_get_contents($path);
-
-        if(empty($a)) return;
-
         $a = json_decode($a, true);
 
         if($parent){

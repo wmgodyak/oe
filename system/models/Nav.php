@@ -66,4 +66,34 @@ class Nav extends Frontend
             ->all();
     }
 
+    public function languages()
+    {
+        $page      = $this->request->page;
+        $languages = $this->languages->languages->get();
+
+        $uri = $this->request->uri;
+
+        foreach ($languages as $k => $language) {
+
+            if (!empty($page['id'])) {
+
+                $languages[$k]['url'] = $page['id'] . ';l=' . $language['id'];
+
+                continue;
+            }
+
+
+            $prefix = '';
+
+            if (!$language['is_main']) {
+
+                $prefix = $language['code'] . '/';
+
+            }
+
+            $languages[$k]['url'] = $prefix . $uri;
+        }
+
+        return $languages;
+    }
 }

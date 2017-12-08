@@ -1,5 +1,5 @@
 {
-  "hello": "en",
+  "hello": "uk",
   "validator": {
     "required": "The {field} field is required",
     "email": "The {field} field must be a valid email address",

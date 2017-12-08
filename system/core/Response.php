@@ -46,13 +46,6 @@ class Response
         return self::$instance;
     }
 
-    public function setMode($mode)
-    {
-        $this->mode = $mode;
-
-        return $this;
-    }
-
     public function setHeader($header)
     {
         $this->headers = [];
@@ -64,10 +57,8 @@ class Response
      * @param $body
      * @return $this
      */
-    public function body($body = null)
+    public function body($body)
     {
-        if($body == null) return $this->body;
-
         $this->body = $body;
 
         return $this;
@@ -84,12 +75,12 @@ class Response
         return $this;
     }
 
-    public function display()
+    public function display(Request $request)
     {
         $ds = $this->body;
         $db = DB::getInstance();
 
-        if($this->mode == 'frontend'){
+        if($request->mode == 'frontend'){
 
             $env = Config::getInstance()->get('core.environment');
 
@@ -132,9 +123,10 @@ class Response
         $db->close();
 
         if(is_array($ds) || is_object($ds)){
-            $this->withHeader('Content-type:application/json');
+            $this->withHeader('Content-type:application/json; charset=utf-8');
             $ds = json_encode($ds);
         } else {
+            $this->withHeader('Content-Type: text/html; charset=utf-8');
             $ds = $this->parse($ds);
             $ds = $this->compress($ds);
         }
@@ -145,8 +137,7 @@ class Response
                 header($header, true);
             }
         }
-
-        echo($ds); die;
+        echo($ds);
     }
 
     private function parse($ds)

@@ -58,7 +58,6 @@ abstract class Backend extends Controller
         parent::__construct();
 
         $this->languages = Languages::getInstance();
-        $this->response->setMode('backend');
 
         $this->images = new Images();
 
@@ -133,18 +132,10 @@ abstract class Backend extends Controller
 
         Components::init();
 
-        $events = EventsHandler::getInstance();
-
-        $app = App::getInstance();
-        $this->template->assign('app', $app);
-
-        Modules::getInstance()->init('backend', $lang);
-
-        // assign events
-        $this->template->assign('events', $events);
+        $this->request->mode = "backend";
+        Modules::getInstance()->boot($this->request);
 
         $this->template->assign('languages',  $this->languages->languages);
-        $this->template->assign('t', t()->get()); // todo remove it in future
 
         $this->template->assign('admin', Admin::data());
     }

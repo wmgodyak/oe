@@ -38,7 +38,7 @@ class Route
     ];
 
     private $uri_filters = [];
-    
+
     /**
      * @param $name
      * @param $regex
@@ -141,12 +141,9 @@ class Route
         return $this->actions;
     }
 
-    /**
-     * @param Request $request
-     * @return Route
-     * @throws \Exception
-     */
-    public function run(Request $request)
+    private $callback;
+
+    public function dispatch(Request $request)
     {
         $uri = $request->uri;
 
@@ -185,8 +182,6 @@ class Route
 
             if(preg_match("@^$regex$@siu", $uri, $matches)){
 
-                $request->uri = $route[0];
-
                 $request_params = [];
 
                 $a = explode('/', $route[0]);
@@ -220,20 +215,30 @@ class Route
                 if(is_array($callback) && isset($callback[1])){
 
                     if(is_callable($callback, true, $callable_name)){
-
-                        events()->call('route', ['request' => $request]);
-
-                        if($params && is_array($params)){
-                            return call_user_func_array($callback, $params);
-                        }
-
-                        return call_user_func($callback, $params);
+//                        if($params && is_array($params)){
+//                            $this->callback = [
+//                                'callback' => $callback,
+//                                'params'   => $params
+//                            ];
+//                            return call_user_func_array($callback, $params);
+//                        }
+//
+//                        return call_user_func($callback, $params);
+                        $this->callback = [
+                            'callback' => $callback,
+                            'params'   => $params
+                        ];
+                        return;
                     }
                 }
 
                 if(is_callable($callback, true) && !is_string($callback)){
-                    events()->call('route', ['request' => $request]);
-                    return call_user_func_array($callback, $params);
+                    $this->callback = [
+                        'callback' => $callback,
+                        'params'   => $params
+                    ];
+                    return;
+//                    return call_user_func_array($callback, $params);
                 }
 
 
@@ -256,7 +261,7 @@ class Route
                     }
                 } elseif($callback == 'component'){
 
-//                    $mode = 'backend';
+                    $request->mode = 'backend';
 
                     $controller = array_shift($params);
 
@@ -268,9 +273,8 @@ class Route
 
                 $controller = ucfirst($controller);
 
-//                $request->mode = $mode;
                 $request->controller = $controller;
-                $request->action = $action;
+                $request->action     = $action;
 
 
                 // maybe it is module
@@ -309,32 +313,46 @@ class Route
                 }
 
                 events()->call('route', ['request' => $request]);
-                return $this->call($controller, $action, $params);
+
+                if(is_callable([$controller, $action])){
+                    $this->callback = [
+                        'callback' => [$controller, $action],
+                        'params'   => $params
+                    ];
+//                    call_user_func_array([$controller, $action], $params);
+                }
+                break;
+//                return $this->call($controller, $action, $params);
             }
         }
 
-        throw new \Exception('Route not found: ' . $this->uri, 404);
+//        throw new \Exception('Route not found: ' . $uri, 404);
     }
 
-    /**
-     * @param $controller
-     * @param $action
-     * @param $params
-     * @return $this
-     * @throws \Exception
-     */
-    public function call($controller, $action, $params)
+    public function run()
     {
-        events()->call('route.' . str_replace('\\', '.' , trim($controller, '/')));
-        events()->call('route.' . str_replace('\\', '.' , trim($controller, '/')) . '.' . $action);
-
-        $controller = new $controller;
-
-        if(!is_callable([$controller, $action])){
-            throw new \Exception("Call to undefined action $action", 404);
+        if(empty($this->callback)){
+            $this->callback = [
+                'callback' => ['\system\frontend\Page', 'e404'],
+                'params'   => []
+            ];
         }
 
-        return call_user_func_array([$controller, $action], $params);
+        if(is_array($this->callback['callback'])){
+            $c = $this->callback['callback'][0]; $a = $this->callback['callback'][1];
+            return call_user_func_array([new $c, $a], $this->callback['params']);
+        }
+
+        if(!empty($this->callback['params']) && is_array($this->callback['params'])){
+            return call_user_func_array($this->callback['callback'], $this->callback['params']);
+        }
+
+        return call_user_func($this->callback['callback'], $this->callback['params']);
+    }
+
+    public function getCallback()
+    {
+        return $this->callback;
     }
 
     /**

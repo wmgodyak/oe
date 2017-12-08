@@ -8,6 +8,9 @@
 
 namespace system\models;
 
+use system\core\Lang;
+use system\core\Request;
+
 defined("CPATH") or die();
 
 /**
@@ -18,12 +21,9 @@ class Modules
 {
     const DIR = "modules";
     private static $instance;
-    private $modules;
+    private $modules = [];
 
-    private function __construct()
-    {
-        $this->boot();
-    }
+    private function __construct(){}
 
     private function __clone(){}
 
@@ -41,7 +41,7 @@ class Modules
         return $this->modules;
     }
 
-    private function boot()
+    public function boot(Request $request)
     {
         $this->modules = new \stdClass();
         $active = Settings::getInstance()->get('modules');
@@ -50,58 +50,54 @@ class Modules
             return;
         }
 
+        $lang = Lang::getInstance();
+
         foreach ($active as $module=>$params) {
             if($params['status'] != 'enabled') continue;
 
-            $c  = self::DIR .'\\'. lcfirst($module) . '\controllers\\' . ucfirst($module);
+            $_module = lcfirst($module);
+
+            if($request->mode == 'backend'){
+                $c  = self::DIR .'\\'. $_module . '\controllers\admin\\' . ucfirst($module);
+            } else {
+                $c  = self::DIR .'\\'. $_module . '\controllers\\' . ucfirst($module);
+            }
+
+            $path = str_replace('\\', DIRECTORY_SEPARATOR, $c . ".php");
+
+            if(! file_exists($path)){
+                continue;
+            }
+
+            if($request->mode == 'backend' && ! Permissions::canModule($_module, 'index')){
+                continue;
+            }
 
             $controller = new $c;
 
-            $_module = lcfirst($module);
 //            $controller->config = module_config($_module);
             $this->modules->{$_module} = $controller;
 
-            call_user_func(array($controller, 'init'));
-        }
-    }
 
-    public function init($mode, $lang, array $params = [])
-    {
-        foreach ($this->modules as $module) {
+            if($request->mode == 'backend'){
+                if(! Permissions::canModule($_module, 'index')) continue;
 
-            foreach ($params as $param_name=> $param_value) {
-                $module->{$param_name} = $param_value;
-            }
 
-            $a = explode('\\', (string)$module);
-            $module_name = end($a);
-            $module_name = lcfirst($module_name);
-
-            if($mode == 'backend'){
-                if(! Permissions::canModule($module_name, 'index')) continue;
-
-                // replace module path
-                $c  = self::DIR .'\\'. $module_name . '\controllers\admin\\' . ucfirst($module_name);
-                $path = str_replace('\\', DIRECTORY_SEPARATOR, $c . ".php");
-                if(! file_exists($path)){
-                    continue;
-                }
-                $module = new $c;
-                $t_path = DOCROOT . "modules/{$module_name}/lang/backend/$lang.json";
+                $t_path = DOCROOT . "modules/{$_module}/lang/backend/{$request->language->code}.json";
                 if(!file_exists($t_path)){
-                    $t_path = DOCROOT . "modules/{$module_name}/lang/backend/en.json";
+                    $t_path = DOCROOT . "modules/{$_module}/lang/backend/en.json";
                 }
             } else {
-                $t_path = DOCROOT . "modules/{$module_name}/lang/$lang.json";
+                $t_path = DOCROOT . "modules/{$_module}/lang/{$request->language->code}.json";
                 if(!file_exists($t_path)){
-                    $t_path = DOCROOT . "modules/{$module_name}/lang/en.json";
+                    $t_path = DOCROOT . "modules/{$_module}/lang/en.json";
                 }
             }
 
             // load translations
-            t()->parseFile($t_path, $module_name);
+            $lang->parseFile($t_path, $_module);
 
-            call_user_func(array($module, 'init'));
+            call_user_func(array($controller, 'init'));
         }
     }
 
@@ -137,30 +133,5 @@ class Modules
         }
 
         return $res;
-
-//        $dir = 'modules/';
-//
-//        if ($handle = opendir($dir)) {
-//            while (false !== ($c = readdir($handle))) {
-//                if($c != '.' && $c != '..'){
-//
-//                    $cl = ucfirst($c);
-//
-//                    if(!file_exists("{$dir}{$c}/controllers/admin/{$cl}.php")) continue;
-//
-//                    $cc = str_replace('/','\\', "{$dir}{$c}/controllers/admin/{$cl}");
-//
-//                    $class = new \ReflectionClass($cc);
-//                    foreach ($class->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
-//
-//                        if(in_array($method->name, $bla)) continue;
-//
-//                        $res[$c][] = $method->name;
-//                    }
-//                }
-//            }
-//            closedir($handle);
-//        }
-//        return $res;
     }
 }

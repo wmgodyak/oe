@@ -9,6 +9,7 @@
 namespace system\components\admin\controllers;
 
 use helpers\FormValidation;
+use system\core\Lang;
 use system\core\Session;
 use system\Backend;
 use system\models\Permissions;
@@ -139,9 +140,8 @@ class Admin extends Backend {
                 'f' => $fail > 0
             ];
         }
-
         // витягнути список доступних мовних версій
-        $langs = t()->getLangs($this->template->theme);
+        $langs = Lang::getInstance()->getLangs($this->template->theme);
         $this->template->assign('langs', $langs);
 
         $this->template->display('system/admin/login');

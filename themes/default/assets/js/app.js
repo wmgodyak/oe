@@ -121,7 +121,7 @@ var App = {
                 type     : 'get',
                 beforeSend: function(request)
                 {
-                    //request.setRequestHeader("app-languages-id", LANG_ID);
+                    request.setRequestHeader("X-Accept-Language", $('html').data('lang') );
                 }
             })
         },
@@ -134,7 +134,8 @@ var App = {
             data['type']       = 'post';
             data['beforeSend'] = function(request)
             {
-                //request.setRequestHeader("app-languages-id", LANG_ID);
+                request.setRequestHeader("X-CSRF-Token", $('meta[name=csrf-token]').attr("content") );
+                request.setRequestHeader("X-Accept-Language", $('html').data('lang') );
             };
             return $.ajax(data)
         }
@@ -193,3 +194,10 @@ var App = {
         });
     }
 };
+
+$.ajaxSetup({
+    headers: {
+        'X-Accept-Language' : $('html').data('lang'),
+        'X-CSRF-Token'      : $('meta[name="csrf-token"]').attr('content')
+    }
+});
