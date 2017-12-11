@@ -36,7 +36,7 @@ $route->any('backend/module/run/(.*)', '\system\components\module\controllers\Mo
 // dashboard
 $route->get('backend', '\system\components\dashboard\controllers\Dashboard');
 
-
+// some examples
 //        $route->get('', function(){return 'home closure';});
 //        $route->get('post/{id}', function($id){return "/home closure $id";});
 //        $route->get('post/{url}', function($url){return "/home closure $url";});
