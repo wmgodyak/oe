@@ -296,9 +296,12 @@ class Users extends Frontend
         return self::$db->select('SELECT FOUND_ROWS() as t')->row('t');
     }
 
-    public function login($user)
+    public function login($user, $save_sess = true)
     {
-        Session::set('user', $user);
+        if($save_sess){
+            Session::set('user', $user);
+        }
+
         return self::$db->update('__users', ['sessid' => Session::id(), 'lastlogin' => date('Y-m-d H:i:s')], " id = {$user['id']} limit 1");
     }
 

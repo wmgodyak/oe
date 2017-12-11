@@ -9,7 +9,6 @@ namespace system\core;
 class Languages
 {
     private static $instance;
-    private $request;
     public $languages;
 
 
@@ -20,27 +19,7 @@ class Languages
 
     private function __construct()
     {
-        $this->request = Request::getInstance();
         $this->languages = new \system\models\Languages();
-
-        $args = $this->request->param();
-
-        if(isset($args['lang'])) {
-            // Selected language
-            $language = $this->languages->getDataByCode($args['lang']);
-        } else {
-            $id = Session::get('app.languages_id');
-
-            if(empty($id)){
-                $language = $this->languages->getDefault();
-            }
-        }
-
-        if(empty($language)){
-            $language = $this->languages->getDefault();
-        }
-
-        $this->reset($language);
     }
 
     private function __clone(){}
@@ -108,6 +87,53 @@ class Languages
     public function __call($name, $arguments)
     {
         return call_user_func_array([$this->languages, $name], $arguments);
+    }
+
+    public function detect($request)
+    {
+        $uri = $request->uri;
+
+        $language = null;
+
+        $re = '^([a-z]{2})?(/.*)?$';
+
+        if(preg_match("@$re@su", $uri, $matches)){
+
+            if(isset($matches[1])){
+                $lang     = $matches[1];
+                $language = $this->languages->getDataByCode($lang);
+            }
+
+            if(!empty($language)){
+
+                $request->uri = isset($matches[2]) ? ltrim($matches[2], '/') : "";
+
+                if($language['is_main']){
+                    redirect($request->uri, 302);
+                }
+
+            }
+        }
+
+        if(empty($language)){
+
+            if (!empty($_SERVER['HTTP_X_ACCEPT_LANGUAGE'])) {
+
+                $lang = trim($_SERVER['HTTP_X_ACCEPT_LANGUAGE']);
+
+                if(! empty($lang)) {
+                    $language = $this->languages->getDataByCode($lang);
+                }
+            }
+        }
+
+        if(empty($language)){
+            $language = $this->languages->getDefault();
+        }
+
+        $request->language = (object)$language;
+
+        $this->reset($language);
     }
 
 }

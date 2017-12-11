@@ -68,28 +68,30 @@ var engine = {
                     success: function(d)
                     {
                         bSubmit.removeAttr('disabled');
+
                         if(! d.s ){
                             showError(form, d.i)
                         } else {
-
                             if(typeof d.m != 'undefined' && d.m != null){
                                 d.e = typeof d.e == 'undefined' ? null : d.e;
                                 engine.notify(d.m, 'success');
-                                //alert(d.m);
-                            }
-
-                            if(typeof onSuccess == 'string'){
-                                try {
-                                    onSuccess += '(d)';
-                                    var fn = new Function('d', onSuccess);
-                                    fn(d);
-                                } catch (err) {
-                                    console.info(onSuccess + ' is undefined.');
-                                }
-                            } else if(typeof onSuccess != 'undefined'){
-                                onSuccess(d);
                             }
                         }
+
+                        if(typeof onSuccess == 'string'){
+                            try {
+                                onSuccess += '(d)';
+                                var fn = new Function('d', onSuccess);
+                                fn(d);
+                            } catch (err) {
+                                console.info(onSuccess + ' is undefined.');
+                            }
+                        } else if(typeof onSuccess != 'undefined'){
+                            onSuccess(d);
+                        } else {
+
+                        }
+
                     },
                     error: function(d)
                     {
@@ -537,11 +539,11 @@ $(document).ready(function(){
     engine.init();
     engine.toggleSidebar();
     engine.toggleNav();
-    engine.admin.init();
+    engine.auth.init();
     engine.mCustomScroll();
 });
 
-engine.admin = {
+engine.auth = {
     init : function()
     {
         var logForm = $('#adminLogin'), fpForm = $('#adminFp');
@@ -572,8 +574,23 @@ engine.admin = {
 
         if(logForm.length){
 
-            engine.validateAjaxForm('#adminLogin', function () {
-                self.location.href = logForm.data('redirect');
+            engine.validateAjaxForm('#adminLogin', function (res) {
+
+                if(res.f){
+                    $('.ask').show();
+                    $("#ask_i").attr('required', true).focus();
+                }
+
+                if(res.s){
+                    self.location.href = logForm.data('redirect');
+                }
+
+            });
+
+            var pIm = $('#ask_img');
+            pIm.click(function(){
+                var src = 'auth/pic?_=' + (new Date().getTime());
+                pIm.attr('src', src);
             });
 
             engine.validateAjaxForm('#adminFp', function () {
@@ -603,7 +620,7 @@ engine.admin = {
 
         $(document).on('click','.b-admin-profile', function(e){
             e.preventDefault();
-            engine.request.get('admin/profile', function(d){
+            engine.request.get('auth/profile', function(d){
                 var pw = engine.dialog({
                     content: d,
                     title: 'My profile',

@@ -24,8 +24,8 @@
         </div>
         <div class="user-panel_dropdown">
             <ul>
-                <li><a href="javascript:;" onclick="return false;" class="b-admin-profile">{$t.admin.profile}</a></li>
-                <li><a href="admin/logout">{$t.admin.logout}</a></li>
+                <li><a href="javascript:;" onclick="return false;" class="b-admin-profile">{$t.auth.profile}</a></li>
+                <li><a href="auth/logout">{$t.auth.logout}</a></li>
             </ul>
         </div>
     </div>

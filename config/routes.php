@@ -21,12 +21,6 @@ $route->get('system/cron', '\system\Cron');
 $route->any('route/{alpha}/{alpha}', 'module');
 $route->any('route/{alpha}/{alpha}/{any}', 'module');
 
-// only lang
-$route->get('{lang}', '\system\frontend\Page::displayLang');
-
-// lang/url
-$route->get('{lang}/{url}', '\system\frontend\Page::displayLangAndUrl');
-
 
 /**
  * BACKEND
@@ -42,7 +36,7 @@ $route->any('backend/module/run/(.*)', '\system\components\module\controllers\Mo
 // dashboard
 $route->get('backend', '\system\components\dashboard\controllers\Dashboard');
 
-
+// some examples
 //        $route->get('', function(){return 'home closure';});
 //        $route->get('post/{id}', function($id){return "/home closure $id";});
 //        $route->get('post/{url}', function($url){return "/home closure $url";});

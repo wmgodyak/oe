@@ -5,6 +5,7 @@
  * Date: 2016-07-04T22:37:00+03:00
  * @name home
  *}
+
 {extends 'layouts/pages/sb-sr.tpl'}
 {block name="container" prepend}
     <div class="breadcrumb">
@@ -27,7 +28,9 @@
             <img class="img-responsive" src="{$img}" alt="">
         {/if}
         <h1>{$page.name}</h1>
+
         {$page.content}
+
     </div>
 {/block}
 {block name="sidebar.content"}

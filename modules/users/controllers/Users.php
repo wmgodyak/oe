@@ -40,7 +40,7 @@ class Users extends Frontend
             $this->template->assignScript("modules/users/js/users.js");
             $this->template->assign('user', Session::get('user'));
 
-            $this->route->get('register', function(){
+            route()->get('register', function(){
                 if(Session::get('user.id')) {
                     redirect(url('profile'));
                 }
@@ -48,7 +48,7 @@ class Users extends Frontend
                 return $this->template->fetch('modules/users/register');
             });
 
-            $this->route->get('{lang}/register', function(){
+            route()->get('{lang}/register', function(){
                 if(Session::get('user.id')) {
                     redirect(url('profile'));
                 }
@@ -56,9 +56,9 @@ class Users extends Frontend
                 return $this->template->fetch('modules/users/register');
             });
 
-            $this->route->post('register', [$this, 'register']);
+            route()->post('register', [$this, 'register']);
 
-            $this->route->get('{lang}/login', function(){
+            route()->get('{lang}/login', function(){
                 if(Session::get('user.id')) {
                     redirect(url('profile'));
                 }
@@ -66,7 +66,7 @@ class Users extends Frontend
                 return $this->template->fetch('modules/users/login');
             });
 
-            $this->route->get('login', function(){
+            route()->get('login', function(){
 
                 if(Session::get('user.id')) {
                     redirect(url('profile'));
@@ -75,12 +75,12 @@ class Users extends Frontend
                 return $this->template->fetch('modules/users/login');
             });
 
-            $this->route->post('login', [$this, 'login']);
+            route()->post('login', [$this, 'login']);
 
-            $this->route->get('profile', [$this, 'profile']);
-            $this->route->post('profile', [$this, 'profile']);
+            route()->get('profile', [$this, 'profile']);
+            route()->post('profile', [$this, 'profile']);
 
-            $this->route->get('change-password', function(){
+            route()->get('change-password', function(){
 
                 if(! Session::get('user.id')) {
                     redirect(url('login'));
@@ -89,7 +89,7 @@ class Users extends Frontend
                 return $this->template->fetch('modules/users/password_change');
             });
 
-            $this->route->get('forgot-password', function(){
+            route()->get('forgot-password', function(){
 
                 if(Session::get('user.id')) {
                     redirect(url('profile'));
@@ -98,10 +98,10 @@ class Users extends Frontend
                 return $this->template->fetch('modules/users/fp');
             });
 
-            $this->route->post('change-password',[$this, 'changePassword']);
-            $this->route->post('forgot-password',[$this, 'fp']);
+            route()->post('change-password',[$this, 'changePassword']);
+            route()->post('forgot-password',[$this, 'fp']);
 
-            $this->route->get('restore-password/{any}',function($skey){
+            route()->get('restore-password/{any}',function($skey){
 
                 if(empty($skey)){
                     die('wrong key');
@@ -116,10 +116,10 @@ class Users extends Frontend
                 $this->template->assign('skey', $skey);
                 return $this->template->fetch('modules/users/reset_password');
             });
-            $this->route->post('restore-password',[$this, 'resetPassword']);
+            route()->post('restore-password',[$this, 'resetPassword']);
 
 
-            $this->route->get('account', function(){
+            route()->get('account', function(){
 
                 if(! Session::get('user.id')) {
                     redirect(url('login'));
@@ -128,7 +128,7 @@ class Users extends Frontend
                 return $this->template->fetch('modules/users/account');
             });
 
-            $this->route->get('logout', [$this, 'logout']);
+            route()->get('logout', [$this, 'logout']);
         });
 
         events()->add('init', function(){});

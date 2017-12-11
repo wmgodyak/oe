@@ -7,17 +7,15 @@
  */
 namespace system;
 
-use system\components\admin\controllers\Admin;
+use system\components\auth\controllers\Auth;
 use system\core\Components;
 use system\core\Config;
 use system\core\Controller;
-use system\core\EventsHandler;
 use system\core\Lang;
 use system\core\Languages;
 use system\core\Session;
 use system\core\Template;
 use system\core\Validator;
-use system\models\App;
 use system\models\Images;
 use system\models\Modules;
 use system\models\Permissions;
@@ -58,7 +56,6 @@ abstract class Backend extends Controller
         parent::__construct();
 
         $this->languages = Languages::getInstance();
-        $this->response->setMode('backend');
 
         $this->images = new Images();
 
@@ -81,7 +78,7 @@ abstract class Backend extends Controller
              $this->_init();
         }
 
-        $this->admin = Admin::data();
+        $this->admin = Auth::data();
     }
 
     public function init(){}
@@ -106,18 +103,18 @@ abstract class Backend extends Controller
 
         if(
         (
-        ! \system\components\admin\models\Admin::isOnline(Admin::id(), Session::id())
+        ! \system\components\auth\models\Auth::isOnline(Auth::id(), Session::id())
         )
         ){
-            if( $controller != 'admin' && $action != 'login' ){
-                redirect("{$this->settings->get('backend_url')}/admin/login");
+            if( $controller != 'auth' && $action != 'login' ){
+                redirect("{$this->settings->get('backend_url')}/auth/login");
             }
         }
 
-        Permissions::set(Admin::data('permissions'));
+        Permissions::set(Auth::data('permissions'));
 
         if(
-             ( $controller != 'admin' && $action != 'login' )
+             ( $controller != 'auth' && $action != 'login' )
         ) {
             if( $controller != '\system\components\module\controllers\Module' ){
                 if (!Permissions::canComponent($controller, $action)) {
@@ -133,20 +130,12 @@ abstract class Backend extends Controller
 
         Components::init();
 
-        $events = EventsHandler::getInstance();
-
-        $app = App::getInstance();
-        $this->template->assign('app', $app);
-
-        Modules::getInstance()->init('backend', $lang);
-
-        // assign events
-        $this->template->assign('events', $events);
+        $this->request->mode = "backend";
+        Modules::getInstance()->boot($this->request);
 
         $this->template->assign('languages',  $this->languages->languages);
-        $this->template->assign('t', t()->get()); // todo remove it in future
 
-        $this->template->assign('admin', Admin::data());
+        $this->template->assign('admin', Auth::data());
     }
 
     /**
