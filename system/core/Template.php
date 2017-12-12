@@ -360,5 +360,6 @@ class Template
         $this->assign('custom_scripts', $this->getScripts());
         $this->assign('custom_styles', $this->getStyles());
         $this->assign('request', Request::getInstance());
+        $this->assign('languages', Languages::getInstance());
     }
 } 

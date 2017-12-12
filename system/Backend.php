@@ -7,6 +7,9 @@
  */
 namespace system;
 
+use system\backend\Breadcrumbs;
+use system\backend\ButtonsPanel;
+use system\backend\Menu;
 use system\components\auth\controllers\Auth;
 use system\core\Components;
 use system\core\Config;
@@ -29,19 +32,11 @@ if ( !defined("CPATH") ) die();
  */
 abstract class Backend extends Controller
 {
-    /**
-     * content of body
-     * @var string
-     */
-    private $content;
-
     protected $settings;
 
     protected $images;
 
     protected $template;
-
-    private $panel_nav = [];
 
     protected $languages;
 
@@ -73,34 +68,35 @@ abstract class Backend extends Controller
     public function init(){}
 
     /**
+     * @deprecated
      * @param $name
      * @param null $url
      */
     protected function addBreadCrumb($name, $url = null)
     {
-        $items = $this->template->getVars('breadcrumb');
-        $items = array_merge((array) $items, [['name' => $name, 'url' => $url]]);
-        $this->template->assign('breadcrumb', $items);
+        Breadcrumbs::add($name, $url);
     }
 
     /**
+     * @deprecated
      * @param $button
      * @return $this
      */
     protected final function prependToPanel($button)
     {
-        array_unshift($this->panel_nav, $button);
+        ButtonsPanel::prepend($button);
 
         return $this;
     }
 
     /**
+     * @deprecated
      * @param $button
      * @return $this
      */
     protected final function appendToPanel($button)
     {
-        $this->panel_nav[] = $button;
+        ButtonsPanel::add($button);
 
         return $this;
     }
@@ -117,19 +113,6 @@ abstract class Backend extends Controller
         return t($key);
     }
 
-    protected function setContent($c)
-    {
-        $this->content = $c;
-    }
-
-    private final function renderHeadingPanel()
-    {
-        $this->template->assign('panel_nav', $this->panel_nav);
-        $this->template->assign('heading_panel', $this->template->fetch('chunks/heading_panel'));
-    }
-
-    private static $menu_nav = [];
-
     /**
      * @param $name
      * @param $url
@@ -139,45 +122,7 @@ abstract class Backend extends Controller
      */
     protected function assignToNav($name, $url, $icon = null, $parent = null, $position = 0)
     {
-        while(isset(self::$menu_nav[$position])){
-            $position += 5;
-        }
-
-        self::$menu_nav[$position] = [
-            'name'     => $name,
-            'url'      => $url,
-            'icon'     => $icon,
-            'parent'   => $parent,
-            'isfolder' => 0
-        ];
-    }
-    /**
-     *
-     */
-    private function makeNav()
-    {
-        $nav = []; $ws_parents = [];
-        foreach (self::$menu_nav as $k=>$item) {
-            if($item['parent'] != null){
-                $ws_parents[] = $item;
-                continue;
-            }
-            $nav[$k] = $item;
-        }
-
-        foreach ($ws_parents as $item) {
-            foreach ($nav as $k=>$n) {
-                if($n['url'] == $item['parent']){
-                    $nav[$k]['isfolder'] = 1;
-                    $nav[$k]['items'][] = $item;
-                }
-            }
-        }
-
-        ksort($nav);
-        $this->template->assign('nav_items', $nav);
-        $s = $this->template->fetch('chunks/nav');
-        $this->template->assign('nav', $s);
+        Menu::add($name, $url, $icon, $parent, $position);
     }
 
     /**
@@ -185,11 +130,8 @@ abstract class Backend extends Controller
      */
     protected final function output($body)
     {
-
-        $this->template->assign('languages',  $this->languages->languages);
-        $this->template->assign('admin', Auth::data());
-
         $this->template->assign('version',    self::VERSION);
+        $this->template->assign('admin', Auth::data());
 
         $module = $this->request->module;
         $controller = $this->request->controller;
@@ -204,17 +146,20 @@ abstract class Backend extends Controller
 
         $url .= "$controller";
 
+        Breadcrumbs::prepend(t($controller . '.action_index'), $url);
+        $this->template->assign('breadcrumb', Breadcrumbs::get());
 
-        $this->addBreadCrumb(t($controller . '.action_index'), $url);
-        $items = $this->template->getVars('breadcrumb');
-        rsort($items);
-        $this->template->assign('breadcrumb', $items);
+        $this->template->assign('nav_items', Menu::get());
 
-        $this->makeNav();
+        $s = $this->template->fetch('chunks/nav');
+        $this->template->assign('nav', $s);
+
         $this->template->assign('title', t($controller . '.action_' . $action));
         $this->template->assign('name',  t($controller . '.action_' . $action));
 
-        $this->renderHeadingPanel();
+
+        $this->template->assign('panel_nav', ButtonsPanel::get());
+        $this->template->assign('heading_panel', $this->template->fetch('chunks/heading_panel'));
 
         $this->template->assign('body', $body);
         $this->template->display('index');
