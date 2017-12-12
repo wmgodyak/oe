@@ -215,15 +215,7 @@ class Route
                 if(is_array($callback) && isset($callback[1])){
 
                     if(is_callable($callback, true, $callable_name)){
-//                        if($params && is_array($params)){
-//                            $this->callback = [
-//                                'callback' => $callback,
-//                                'params'   => $params
-//                            ];
-//                            return call_user_func_array($callback, $params);
-//                        }
-//
-//                        return call_user_func($callback, $params);
+
                         $this->callback = [
                             'callback' => $callback,
                             'params'   => $params
@@ -233,14 +225,17 @@ class Route
                 }
 
                 if(is_callable($callback, true) && !is_string($callback)){
+
                     $this->callback = [
                         'callback' => $callback,
                         'params'   => $params
                     ];
                     return;
-//                    return call_user_func_array($callback, $params);
                 }
 
+                if(strpos($callback, 'system\components') !== false){
+                    $request->mode = 'backend';
+                }
 
                 // only controller
                 $controller = $callback;
@@ -275,7 +270,6 @@ class Route
 
                 $request->controller = $controller;
                 $request->action     = $action;
-
 
                 // maybe it is module
                 $_module  = "modules\\" . lcfirst($controller) . "\\controllers\\$controller";
@@ -315,18 +309,15 @@ class Route
                 events()->call('route', ['request' => $request]);
 
                 if(is_callable([$controller, $action])){
+
                     $this->callback = [
                         'callback' => [$controller, $action],
                         'params'   => $params
                     ];
-//                    call_user_func_array([$controller, $action], $params);
                 }
                 break;
-//                return $this->call($controller, $action, $params);
             }
         }
-
-//        throw new \Exception('Route not found: ' . $uri, 404);
     }
 
     public function run()

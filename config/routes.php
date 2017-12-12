@@ -34,7 +34,7 @@ $route->any('backend/{alpha}/{alpha}/{any}/{any}', 'component');
 $route->any('backend/module/run/(.*)', '\system\components\module\controllers\Module::run');
 
 // dashboard
-$route->get('backend', '\system\components\dashboard\controllers\Dashboard');
+$route->get('backend', '\system\components\dashboard\controllers\Dashboard', 'component');
 
 // some examples
 //        $route->get('', function(){return 'home closure';});

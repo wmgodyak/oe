@@ -43,8 +43,6 @@ abstract class Backend extends Controller
 
     private $panel_nav = [];
 
-    private static $initialized = false;
-
     protected $languages;
 
     protected $admin;
@@ -57,8 +55,6 @@ abstract class Backend extends Controller
 
         $this->languages = Languages::getInstance();
 
-        $this->images = new Images();
-
         // settings
         $this->settings = Settings::getInstance();
 
@@ -66,77 +62,15 @@ abstract class Backend extends Controller
         $theme = $this->settings->get('backend_theme');
         $this->template = Template::getInstance($theme);
 
-        $this->template->assign('base_url',   APPURL . $this->settings->get('backend_url') ."/");
-        $this->template->assign('settings',   $this->settings);
 
         if(! $this->validator){
             $this->validator = new Validator(t('validator'));
-        }
-
-
-        if(!self::$initialized){
-             $this->_init();
         }
 
         $this->admin = Auth::data();
     }
 
     public function init(){}
-
-    private function _init()
-    {
-        self::$initialized = true;
-
-        if
-        (
-               $this->request->isPost()
-            || $this->request->isPut()
-            || $this->request->isDelete()
-        )
-        {
-            token_validate();
-        }
-
-        $action     = $this->request->param('action');
-        $controller = $this->request->param('controller');
-        $controller = lcfirst($controller);
-
-        if(
-        (
-        ! \system\components\auth\models\Auth::isOnline(Auth::id(), Session::id())
-        )
-        ){
-            if( $controller != 'auth' && $action != 'login' ){
-                redirect("{$this->settings->get('backend_url')}/auth/login");
-            }
-        }
-
-        Permissions::set(Auth::data('permissions'));
-
-        if(
-             ( $controller != 'auth' && $action != 'login' )
-        ) {
-            if( $controller != '\system\components\module\controllers\Module' ){
-                if (!Permissions::canComponent($controller, $action)) {
-                    Permissions::denied();
-                }
-            }
-        }
-
-        $theme = $this->settings->get('backend_theme');
-        $lang = Session::get('backend_lang');
-
-        Lang::getInstance()->set($lang, $theme);
-
-        Components::init();
-
-        $this->request->mode = "backend";
-        Modules::getInstance()->boot($this->request);
-
-        $this->template->assign('languages',  $this->languages->languages);
-
-        $this->template->assign('admin', Auth::data());
-    }
 
     /**
      * @param $name
@@ -251,13 +185,16 @@ abstract class Backend extends Controller
      */
     protected final function output($body)
     {
-        $version = Config::getInstance()->get('core.version');
-        $this->template->assign('version',    $version);
 
-        $module = $this->request->param('module');
-        $controller = $this->request->param('controller');
+        $this->template->assign('languages',  $this->languages->languages);
+        $this->template->assign('admin', Auth::data());
+
+        $this->template->assign('version',    self::VERSION);
+
+        $module = $this->request->module;
+        $controller = $this->request->controller;
         $controller = lcfirst($controller);
-        $action = $this->request->param('action');
+        $action = $this->request->action;
 
         $url = $this->settings->get('backend');
 

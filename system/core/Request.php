@@ -219,7 +219,8 @@ class Request
     public function __get($key)
     {
         if(!isset($this->storage[$key])){
-            throw new \InvalidArgumentException("Invalid key");
+            return null;
+//            throw new \InvalidArgumentException("Invalid key");
         }
 
         return dots_get($this->storage, $key);

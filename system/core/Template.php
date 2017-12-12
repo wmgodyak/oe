@@ -348,7 +348,6 @@ class Template
         $app = App::getInstance();
         $app->module = Modules::getInstance()->get();
 
-        $this->assign('base_url',    APPURL );
         $this->assign('app', $app);
         $this->assign('t', t()); // support older modules
 

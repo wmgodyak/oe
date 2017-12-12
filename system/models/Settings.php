@@ -37,44 +37,9 @@ class Settings
      */
     public function get($key=null)
     {
-        if($key){
+        if($key == null) return $this->data;
 
-            if(strpos($key, '.') !== false){
-
-                $data = null;
-
-                $parts = explode('.', $key);
-                $c = count($parts);
-
-                if($c == 1){
-                    if(isset($this->data[$parts[0]])){
-                        $data = $this->data[$parts[0]];
-                    }
-                } else if($c == 2){
-                    if(isset($this->data[$parts[0]][$parts[1]])){
-                        $data = $this->data[$parts[0]][$parts[1]];
-                    }
-                } else if($c == 3){
-                    if(isset($this->data[$parts[0]][$parts[1]][$parts[2]])){
-                        $data = $this->data[$parts[0]][$parts[1]][$parts[2]];
-                    }
-                } else if($c == 4){
-                    if(isset($this->data[$parts[0]][$parts[1]][$parts[2]][$parts[3]])){
-                        $data = $this->data[$parts[0]][$parts[1]][$parts[2]][$parts[3]];
-                    }
-                } else if($c == 5){
-                    if(isset($this->data[$parts[0]][$parts[1]][$parts[2]][$parts[3]][$parts[4]])){
-                        $data = $this->data[$parts[0]][$parts[1]][$parts[2]][$parts[3]][$parts[4]];
-                    }
-                }
-
-                return $data;
-            }
-
-            return isset($this->data[$key]) ? $this->data[$key] : null;
-        }
-
-        return $this->data;
+        return dots_get($this->data, $key);
     }
 
     /**

@@ -85,11 +85,11 @@ class Auth extends Backend {
     {
         // витягнути список доступних мовних версій
         $langs = Lang::getInstance()->getLangs($this->template->theme);
+        $fail = isset($_SESSION['fail']) ? $_SESSION['fail'] : 0;
 
         if($this->request->isPost()){
 
             $status = 0; $inp = []; $data = $this->request->post('data');
-            $fail = isset($_SESSION['fail']) ? $_SESSION['fail'] : 0;
 
             if($fail > 5){
                 $inp[] = ['data[password]' => t('auth.ban')];
@@ -160,6 +160,7 @@ class Auth extends Backend {
             ];
         }
 
+        $this->template->assign('fail', $fail);
         $this->template->assign('langs', $langs);
         $this->template->assign('c_key', $this->captcha->key());
         $this->template->display('system/auth/login');

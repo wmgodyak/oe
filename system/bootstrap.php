@@ -120,7 +120,6 @@ error_reporting(E_ALL);
     $language = \system\core\Languages::getInstance();
     $language->detect($request);
 
-
     \system\models\Modules::getInstance()->boot($request);
 
     events()->call('boot');
@@ -129,10 +128,68 @@ error_reporting(E_ALL);
 
     $route->dispatch($request);
 
-    // get mode from request to get theme
-    $theme = $request->mode == 'backend' ? 'backend_theme' : 'app_theme_current';
+    $theme = 'app_theme_current';
 
-    \system\core\Lang::getInstance()->set($language->code, \system\models\Settings::getInstance()->get($theme));
+    $l_code = $language->code;
+
+
+//    d($request);     d($route->getCallback());die;
+
+    if($request->mode == 'backend'){
+
+        $theme = 'backend_theme';
+        $bl = \system\core\Session::get('backend_lang');
+        $l_code = empty($bl) ? $l_code : $bl;
+
+        if
+        (
+            $request->isPost()
+            || $request->isPut()
+            || $request->isDelete()
+        )
+        {
+            token_validate();
+        }
+
+        $controller = $request->controller;
+        $action     = $request->action;
+        $controller = lcfirst($controller);
+
+        if(
+        (
+        ! \system\components\auth\models\Auth::isOnline(\system\components\auth\controllers\Auth::id(), \system\core\Session::id())
+        )
+        ){
+            if( $controller != 'auth' && $action != 'login' ){
+                redirect(\system\models\Settings::getInstance()  ->get('backend_url') . "/auth/login");
+            }
+        }
+
+        \system\models\Permissions::set(\system\components\auth\controllers\Auth::data('permissions'));
+
+        if(
+        ( $controller != 'auth' && $action != 'login' )
+        ) {
+            if( $controller != '\system\components\module\controllers\Module' ){
+                if (!\system\models\Permissions::canComponent($controller, $action)) {
+                    \system\models\Permissions::denied();
+                }
+            }
+        }
+
+    }
+
+     \system\core\Lang::getInstance()->set($l_code, \system\models\Settings::getInstance()->get($theme));
+
+//    dd(\system\core\Lang::getInstance());
+
+    if($request->mode == 'backend') {
+        \system\core\Components::init();
+        \system\models\Modules::getInstance()->boot($request);
+    }
+
+//    dd(\system\core\Lang::getInstance());
+//    dd($request);
 
     $res = $route->run();
 

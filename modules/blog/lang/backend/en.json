@@ -11,22 +11,22 @@
       "author": "Router for authors"
     }
   },
-  "action_index": "Blog",
-  "action_create": "Create article",
-  "action_edit": "Edit article",
-  "delete_question": "Are you sure?",
-  "status_published": "Published",
-  "status_hidden": "Hidden",
-  "tree_title": "Categories",
-  "tree_create": "Add",
-  "tree_edit": "Edit",
-  "tree_delete": "Delete",
+  "action_index": "Блог",
+  "action_create": "Створити пост",
+  "action_edit": "Редагувати пост",
+  "delete_question": "дійсно видалити?",
+  "status_published": "Опубліковано",
+  "status_hidden": "Скрито",
+  "tree_title": "Категорії",
+  "tree_create": "Додати",
+  "tree_edit": "Редагувати",
+  "tree_delete": "Видалити",
   "categories": {
-    "tree_create": "Add",
-    "tree_edit": "Edit",
-    "tree_delete": "Delete",
-    "tree_title": "Categories",
-    "create_title": "Crate category",
-    "action_edit": "Edit category"
+    "tree_create": "Додати",
+    "tree_edit": "Редагувати",
+    "tree_delete": "Видалити",
+    "tree_title": "Категорії",
+    "create_title": "Створити категорію",
+    "action_edit": "Редагувати категорію "
   }
 }

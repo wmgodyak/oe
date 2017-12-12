@@ -30,7 +30,7 @@
                             {/foreach}
                         </select>
                     </div>
-                    <div class="input-group transformed ask" style="display: none">
+                    <div class="input-group transformed ask" {if $fail == 0}style="display: none"{/if}>
                         <label for="lang" class="l-lang">{t('auth.captcha')}</label>
                         <div>
                             <img src="auth/pic" id="ask_img" title="Click to refresh" alt="pic" style="width: 180px; height:44px; float: left; cursor: pointer;">

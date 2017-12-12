@@ -1,4 +1,3 @@
-<!--side navigation-->
 <div class="main-navigation">
     <nav class="side-nav">
         {*<div class="wrap-first-level"></div>*}
@@ -20,10 +19,5 @@
             </li>
             {/foreach}
         </ul>
-        {*<a href="admin/logout" class="exit">*}
-            {*<i class="fa fa-power-off"></i>*}
-            {*<span>{$t.admin.logout}</span>*}
-        {*</a>*}
     </nav>
 </div>
-<!--end-->
