@@ -319,8 +319,8 @@ CREATE TABLE IF NOT EXISTS `__nav_items_info` (
   CONSTRAINT `fk_nav_items_info_nav_items1`
     FOREIGN KEY (`nav_items_id`)
     REFERENCES `__nav_items` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_nav_items_info_languages1`
     FOREIGN KEY (`languages_id`)
     REFERENCES `__languages` (`id`)
