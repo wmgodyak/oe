@@ -181,15 +181,10 @@ error_reporting(E_ALL);
 
      \system\core\Lang::getInstance()->set($l_code, \system\models\Settings::getInstance()->get($theme));
 
-//    dd(\system\core\Lang::getInstance());
-
     if($request->mode == 'backend') {
         \system\core\Components::init();
         \system\models\Modules::getInstance()->boot($request);
     }
-
-//    dd(\system\core\Lang::getInstance());
-//    dd($request);
 
     $res = $route->run();
 
