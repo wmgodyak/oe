@@ -110,7 +110,7 @@ class Features extends Backend
                 ;
             }
 
-            echo $t->render($res, $t->getTotal());return;
+            return $t->render($res, $t->getTotal());
         }
 
         $this->output($t->init());
@@ -212,23 +212,23 @@ class Features extends Backend
         return $this->features->hide($id);
     }
 
-    public function values()
-    {
-        $params = func_get_args();
-        $action = array_shift($params);
-
-        $controller  = new Values();
-
-        return call_user_func_array(array($controller, $action), $params);
-    }
-
-    public function content()
-    {
-        $params = func_get_args();
-        $action = array_shift($params);
-
-        $controller  = new Content();
-
-        return call_user_func_array(array($controller, $action), $params);
-    }
+//    public function values()
+//    {
+//        $params = func_get_args();
+//        $action = array_shift($params);
+//
+//        $controller  = new Values();
+//
+//        return call_user_func_array(array($controller, $action), $params);
+//    }
+//
+//    public function content()
+//    {
+//        $params = func_get_args();
+//        $action = array_shift($params);
+//
+//        $controller  = new Content();
+//
+//        return call_user_func_array(array($controller, $action), $params);
+//    }
 }

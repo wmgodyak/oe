@@ -19,8 +19,6 @@ class Route
 {
     private static $instance = null;
 
-    private $uri;
-
     private $actions =
         [
             'PUT'    => [],
@@ -40,7 +38,7 @@ class Route
     ];
 
     private $uri_filters = [];
-    
+
     /**
      * @param $name
      * @param $regex
@@ -53,28 +51,7 @@ class Route
         return $this;
     }
 
-    private function __construct()
-    {
-//        if ( preg_match('!/{2,}!', $_SERVER['REQUEST_URI']) ){
-//            $url = preg_replace('!/{2,}!', '/', $_SERVER['REQUEST_URI']);
-//            header('Location: ' . $url , false, 301);
-//            exit;
-//        }
-//
-//        $lowerURI = strtolower($_SERVER['REQUEST_URI']);
-//        if($_SERVER['REQUEST_URI'] != $lowerURI){
-//            if(mb_substr($lowerURI, 0, 1) == '/') {
-//                $lowerURI = mb_substr($lowerURI, 1);
-//            }
-//            $uri = APPURL . $lowerURI;
-//            header("HTTP/1.1 301 Moved Permanently");
-//            header("Location: $uri");
-//            exit();
-//        }
-
-        $this->uri = trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
-        $this->uri = $this->protect($this->uri);
-    }
+    private function __construct(){}
 
     private function __clone(){}
 
@@ -164,13 +141,13 @@ class Route
         return $this->actions;
     }
 
-    /**
-     * @return $this
-     * @throws \Exception
-     */
-    public function run()
+    private $callback;
+
+    public function dispatch(Request $request)
     {
-        if(empty($this->uri)) $this->uri = "/";
+        $uri = $request->uri;
+
+        if(empty($uri)) $uri = "/";
 
         if (isset($_REQUEST['_method']) && in_array(strtoupper($_REQUEST['_method']), ['PUT', 'DELETE'])) {
             $method = strtoupper($_REQUEST['_method']);
@@ -180,12 +157,10 @@ class Route
 
         $actions = array_merge($this->actions['ANY'], $this->actions[$method]);
 
-//        $mode = 'frontend';
-        $request = Request::getInstance();
         $backend_url = Settings::getInstance()->get('backend_url');
 
         foreach ($this->uri_filters as $filter) {
-            $this->uri = $filter($this->uri);
+            $uri = $filter($uri);
         }
 
         foreach ($actions as $route) {
@@ -205,9 +180,7 @@ class Route
                 $regex = preg_replace('(\{[[:alpha:]]+\})', $this->patterns['url'], $regex);
             }
 
-            if(preg_match("@^$regex$@siu", $this->uri, $matches)){
-
-                $request->uri = $route[0];
+            if(preg_match("@^$regex$@siu", $uri, $matches)){
 
                 $request_params = [];
 
@@ -243,21 +216,26 @@ class Route
 
                     if(is_callable($callback, true, $callable_name)){
 
-                        events()->call('route', ['request' => $request]);
-
-                        if($params && is_array($params)){
-                            return call_user_func_array($callback, $params);
-                        }
-
-                        return call_user_func($callback, $params);
+                        $this->callback = [
+                            'callback' => $callback,
+                            'params'   => $params
+                        ];
+                        return;
                     }
                 }
 
                 if(is_callable($callback, true) && !is_string($callback)){
-                    events()->call('route', ['request' => $request]);
-                    return call_user_func_array($callback, $params);
+
+                    $this->callback = [
+                        'callback' => $callback,
+                        'params'   => $params
+                    ];
+                    return;
                 }
 
+                if(strpos($callback, 'system\components') !== false){
+                    $request->mode = 'backend';
+                }
 
                 // only controller
                 $controller = $callback;
@@ -278,7 +256,7 @@ class Route
                     }
                 } elseif($callback == 'component'){
 
-//                    $mode = 'backend';
+                    $request->mode = 'backend';
 
                     $controller = array_shift($params);
 
@@ -290,10 +268,8 @@ class Route
 
                 $controller = ucfirst($controller);
 
-//                $request->mode = $mode;
                 $request->controller = $controller;
-                $request->action = $action;
-
+                $request->action     = $action;
 
                 // maybe it is module
                 $_module  = "modules\\" . lcfirst($controller) . "\\controllers\\$controller";
@@ -331,32 +307,43 @@ class Route
                 }
 
                 events()->call('route', ['request' => $request]);
-                return $this->call($controller, $action, $params);
+
+                if(is_callable([$controller, $action])){
+
+                    $this->callback = [
+                        'callback' => [$controller, $action],
+                        'params'   => $params
+                    ];
+                }
+                break;
             }
         }
-
-        throw new \Exception('Route not found: ' . $this->uri, 404);
     }
 
-    /**
-     * @param $controller
-     * @param $action
-     * @param $params
-     * @return $this
-     * @throws \Exception
-     */
-    public function call($controller, $action, $params)
+    public function run()
     {
-        events()->call('route.' . str_replace('\\', '.' , trim($controller, '/')));
-        events()->call('route.' . str_replace('\\', '.' , trim($controller, '/')) . '.' . $action);
-
-        $controller = new $controller;
-
-        if(!is_callable([$controller, $action])){
-            throw new \Exception("Call to undefined action $action", 404);
+        if(empty($this->callback)){
+            $this->callback = [
+                'callback' => ['\system\frontend\Page', 'e404'],
+                'params'   => []
+            ];
         }
 
-        return call_user_func_array([$controller, $action], $params);
+        if(is_array($this->callback['callback'])){
+            $c = $this->callback['callback'][0]; $a = $this->callback['callback'][1];
+            return call_user_func_array([new $c, $a], $this->callback['params']);
+        }
+
+        if(!empty($this->callback['params']) && is_array($this->callback['params'])){
+            return call_user_func_array($this->callback['callback'], $this->callback['params']);
+        }
+
+        return call_user_func($this->callback['callback'], $this->callback['params']);
+    }
+
+    public function getCallback()
+    {
+        return $this->callback;
     }
 
     /**
@@ -370,40 +357,6 @@ class Route
         array_unshift($this->actions[$method], [$uri, $callback]);
 
         return $this;
-    }
-
-    /**
-     * @param $uri
-     * @return mixed
-     */
-    private function protect($uri)
-    {
-        $tags = [
-            '@\'@si',
-            '@\[\[(.*?)\]\]@si',
-            '@\[!(.*?)!\]@si',
-            '@\[\~(.*?)\~\]@si',
-            '@\[\((.*?)\)\]@si',
-            '@{{(.*?)}}@si',
-            '@\[\+(.*?)\+\]@si',
-            '@\[\*(.*?)\*\]@si'
-        ];
-
-        if (isset($_SERVER['QUERY_STRING']) && strpos(urldecode($_SERVER['QUERY_STRING']), chr(0)) !== false)
-            die();
-
-        if (@ ini_get('register_globals')) {
-            foreach ($_REQUEST as $key => $value) {
-                $$key = null;
-                unset ($$key);
-            }
-        }
-
-        $uri = preg_replace($tags, "", $uri);
-
-        unset($tags, $key, $value);
-
-        return $uri;
     }
 
     public function uriFilter($callback)

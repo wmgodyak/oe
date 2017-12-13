@@ -11,6 +11,7 @@ namespace helpers;
 defined('CPATH') or die();
 
 /**
+ * @deprecated  use $this->validator
  * Class FormValidation
  * @package helpers
  */

@@ -144,9 +144,9 @@ class Posts extends Content
         $this->categories_id = 0;
         $this->start         = $start;
         $this->num           = $num;
-        $this->join[]        = " join __content_meta cm on cm.content_id=c.id and cm.meta_k = 'views' ";
+//        $this->join[]        = " join __content_meta cm on cm.content_id=c.id and cm.meta_k = 'views' ";
 
-        $this->where[]       = " and c.published >= DATE_ADD(LAST_DAY(DATE_SUB(NOW(), INTERVAL 2 MONTH)), INTERVAL 1 DAY) and c.published <= DATE_SUB(NOW(), INTERVAL 1 MONTH)";
+        $this->where[]       = " c.published >= DATE_ADD(LAST_DAY(DATE_SUB(NOW(), INTERVAL 2 MONTH)), INTERVAL 1 DAY) and c.published <= DATE_SUB(NOW(), INTERVAL 1 MONTH)";
 
         return $this->get();
     }

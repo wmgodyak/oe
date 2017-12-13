@@ -7,17 +7,18 @@
  */
 namespace system;
 
-use system\components\admin\controllers\Admin;
+use system\backend\Breadcrumbs;
+use system\backend\ButtonsPanel;
+use system\backend\Menu;
+use system\components\auth\controllers\Auth;
 use system\core\Components;
 use system\core\Config;
 use system\core\Controller;
-use system\core\EventsHandler;
 use system\core\Lang;
 use system\core\Languages;
 use system\core\Session;
 use system\core\Template;
 use system\core\Validator;
-use system\models\App;
 use system\models\Images;
 use system\models\Modules;
 use system\models\Permissions;
@@ -31,21 +32,11 @@ if ( !defined("CPATH") ) die();
  */
 abstract class Backend extends Controller
 {
-    /**
-     * content of body
-     * @var string
-     */
-    private $content;
-
     protected $settings;
 
     protected $images;
 
     protected $template;
-
-    private $panel_nav = [];
-
-    private static $initialized = false;
 
     protected $languages;
 
@@ -58,9 +49,6 @@ abstract class Backend extends Controller
         parent::__construct();
 
         $this->languages = Languages::getInstance();
-        $this->response->setMode('backend');
-
-        $this->images = new Images();
 
         // settings
         $this->settings = Settings::getInstance();
@@ -69,115 +57,46 @@ abstract class Backend extends Controller
         $theme = $this->settings->get('backend_theme');
         $this->template = Template::getInstance($theme);
 
-        $this->template->assign('base_url',   APPURL . $this->settings->get('backend_url') ."/");
-        $this->template->assign('settings',   $this->settings);
 
         if(! $this->validator){
             $this->validator = new Validator(t('validator'));
         }
 
-
-        if(!self::$initialized){
-             $this->_init();
-        }
-
-        $this->admin = Admin::data();
+        $this->admin = Auth::data();
     }
 
     public function init(){}
 
-    private function _init()
-    {
-        self::$initialized = true;
-
-        if
-        (
-               $this->request->isPost()
-            || $this->request->isPut()
-            || $this->request->isDelete()
-        )
-        {
-            token_validate();
-        }
-
-        $action     = $this->request->param('action');
-        $controller = $this->request->param('controller');
-        $controller = lcfirst($controller);
-
-        if(
-        (
-        ! \system\components\admin\models\Admin::isOnline(Admin::id(), Session::id())
-        )
-        ){
-            if( $controller != 'admin' && $action != 'login' ){
-                redirect("{$this->settings->get('backend_url')}/admin/login");
-            }
-        }
-
-        Permissions::set(Admin::data('permissions'));
-
-        if(
-             ( $controller != 'admin' && $action != 'login' )
-        ) {
-            if( $controller != '\system\components\module\controllers\Module' ){
-                if (!Permissions::canComponent($controller, $action)) {
-                    Permissions::denied();
-                }
-            }
-        }
-
-        $theme = $this->settings->get('backend_theme');
-        $lang = Session::get('backend_lang');
-
-        Lang::getInstance()->set($lang, $theme);
-
-        Components::init();
-
-        $events = EventsHandler::getInstance();
-
-        $app = App::getInstance();
-        $this->template->assign('app', $app);
-
-        Modules::getInstance()->init('backend', $lang);
-
-        // assign events
-        $this->template->assign('events', $events);
-
-        $this->template->assign('languages',  $this->languages->languages);
-        $this->template->assign('t', t()->get()); // todo remove it in future
-
-        $this->template->assign('admin', Admin::data());
-    }
-
     /**
+     * @deprecated
      * @param $name
      * @param null $url
      */
     protected function addBreadCrumb($name, $url = null)
     {
-        $items = $this->template->getVars('breadcrumb');
-        $items = array_merge((array) $items, [['name' => $name, 'url' => $url]]);
-        $this->template->assign('breadcrumb', $items);
+        Breadcrumbs::add($name, $url);
     }
 
     /**
+     * @deprecated
      * @param $button
      * @return $this
      */
     protected final function prependToPanel($button)
     {
-        array_unshift($this->panel_nav, $button);
+        ButtonsPanel::prepend($button);
 
         return $this;
     }
 
     /**
+     * @deprecated
      * @param $button
      * @return $this
      */
     protected final function appendToPanel($button)
     {
-        $this->panel_nav[] = $button;
+        ButtonsPanel::add($button);
 
         return $this;
     }
@@ -194,19 +113,6 @@ abstract class Backend extends Controller
         return t($key);
     }
 
-    protected function setContent($c)
-    {
-        $this->content = $c;
-    }
-
-    private final function renderHeadingPanel()
-    {
-        $this->template->assign('panel_nav', $this->panel_nav);
-        $this->template->assign('heading_panel', $this->template->fetch('chunks/heading_panel'));
-    }
-
-    private static $menu_nav = [];
-
     /**
      * @param $name
      * @param $url
@@ -216,45 +122,7 @@ abstract class Backend extends Controller
      */
     protected function assignToNav($name, $url, $icon = null, $parent = null, $position = 0)
     {
-        while(isset(self::$menu_nav[$position])){
-            $position += 5;
-        }
-
-        self::$menu_nav[$position] = [
-            'name'     => $name,
-            'url'      => $url,
-            'icon'     => $icon,
-            'parent'   => $parent,
-            'isfolder' => 0
-        ];
-    }
-    /**
-     *
-     */
-    private function makeNav()
-    {
-        $nav = []; $ws_parents = [];
-        foreach (self::$menu_nav as $k=>$item) {
-            if($item['parent'] != null){
-                $ws_parents[] = $item;
-                continue;
-            }
-            $nav[$k] = $item;
-        }
-
-        foreach ($ws_parents as $item) {
-            foreach ($nav as $k=>$n) {
-                if($n['url'] == $item['parent']){
-                    $nav[$k]['isfolder'] = 1;
-                    $nav[$k]['items'][] = $item;
-                }
-            }
-        }
-
-        ksort($nav);
-        $this->template->assign('nav_items', $nav);
-        $s = $this->template->fetch('chunks/nav');
-        $this->template->assign('nav', $s);
+        Menu::add($name, $url, $icon, $parent, $position);
     }
 
     /**
@@ -262,13 +130,13 @@ abstract class Backend extends Controller
      */
     protected final function output($body)
     {
-        $version = Config::getInstance()->get('core.version');
-        $this->template->assign('version',    $version);
+        $this->template->assign('version',    self::VERSION);
+        $this->template->assign('admin', Auth::data());
 
-        $module = $this->request->param('module');
-        $controller = $this->request->param('controller');
+        $module = $this->request->module;
+        $controller = $this->request->controller;
         $controller = lcfirst($controller);
-        $action = $this->request->param('action');
+        $action = $this->request->action;
 
         $url = $this->settings->get('backend');
 
@@ -278,17 +146,20 @@ abstract class Backend extends Controller
 
         $url .= "$controller";
 
+        Breadcrumbs::prepend(t($controller . '.action_index'), $url);
+        $this->template->assign('breadcrumb', Breadcrumbs::get());
 
-        $this->addBreadCrumb(t($controller . '.action_index'), $url);
-        $items = $this->template->getVars('breadcrumb');
-        rsort($items);
-        $this->template->assign('breadcrumb', $items);
+        $this->template->assign('nav_items', Menu::get());
 
-        $this->makeNav();
+        $s = $this->template->fetch('chunks/nav');
+        $this->template->assign('nav', $s);
+
         $this->template->assign('title', t($controller . '.action_' . $action));
         $this->template->assign('name',  t($controller . '.action_' . $action));
 
-        $this->renderHeadingPanel();
+
+        $this->template->assign('panel_nav', ButtonsPanel::get());
+        $this->template->assign('heading_panel', $this->template->fetch('chunks/heading_panel'));
 
         $this->template->assign('body', $body);
         $this->template->display('index');

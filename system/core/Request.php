@@ -108,6 +108,7 @@ class Request
     }
 
     /**
+     * @deprecated
      * Управління доступом до $_REQUEST $param
      * @param $key
      * @param null $val
@@ -206,17 +207,25 @@ class Request
         return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest';
     }
 
-    public function __set($key,$val)
+    public function __set($key, $val)
     {
-        $this->storage[$key] = $val;
+        if(empty($key)){
+            throw new \InvalidArgumentException("Invalid key");
+        }
+
+        $this->storage = dots_set($this->storage, $key, $val);
     }
 
     public function __get($key)
     {
         if(!isset($this->storage[$key])){
-            throw new \InvalidArgumentException("Invalid key");
+            return null;
+//            throw new \InvalidArgumentException("Invalid key");
         }
 
-        return $this->storage[$key];
+        return dots_get($this->storage, $key);
     }
+
+
+
 }

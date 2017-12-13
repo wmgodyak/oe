@@ -8,13 +8,10 @@
 namespace system;
 
 use system\core\exceptions\Exception;
-use system\core\FrontendResponse;
-use system\core\Request;
 use system\core\Session;
 use system\core\Validator;
 use system\models\Images;
 use system\models\Languages;
-use system\models\Modules;
 use system\models\Settings;
 use system\core\Template;
 use system\models\App;
@@ -71,8 +68,6 @@ abstract class Frontend extends core\Controller
 
         $this->request->mode = 'frontend';
 
-        $this->response->setMode('frontend');
-
         $this->settings = Settings::getInstance();
 
         $this->languages = \system\core\Languages::getInstance();
@@ -82,41 +77,7 @@ abstract class Frontend extends core\Controller
         if( ! $this->template ){
             $theme = $this->settings->get('app_theme_current');
             $this->template = Template::getInstance($theme);
-        }
-
-        // to access custom modules
-        $this->page = $this->template->getVars('page');
-
-        if(! $this->request->param('initialized')){
-
-            $this->request->param('initialized', 1);
-
-            $events = events();
-
-            $events->add('route', function($request){
-
-                $lang = $request->param('lang');
-
-                if (empty($lang)) {
-                    $lang = $this->languages->languages->getDefault('code');
-                }
-
-                if($lang != null){
-
-                    $s = $this->languages->setByCode($lang);
-
-                    if(! $s) return $this->e404();
-
-                    \system\core\Lang::getInstance()->set($this->languages->code, $this->template->theme);
-               }
-
-            });
-
-            $this->template->assign('events', $events);
-
-            $this->template->assign('settings', $this->settings);
-
-            \system\core\Lang::getInstance()->set($this->languages->code, $this->template->theme);
+//            \system\core\Lang::getInstance()->set($this->languages->code, $this->template->theme);
         }
 
         if(! $this->validator){
@@ -133,11 +94,11 @@ abstract class Frontend extends core\Controller
         if($this->settings->get('active') == 0) {
             $a = Session::get('backend.admin');
             if( ! $a) {
-                $this->technicalWorks();
+                technicalWorks();
             }
         }
 
-        Request::getInstance()->param('page', $page);
+        $this->request->page = $page;
 
         if (isset($page['status']) && $page['status'] != 'published') {
             $a = Session::get('engine.admin');
@@ -146,15 +107,9 @@ abstract class Frontend extends core\Controller
             }
         }
 
-        $this->languages->set($page['languages_id']);
-
         //assign page to template
         $this->template->assign('page', $page);
         $this->page = $page;
-
-        // init modules
-        $m = Modules::getInstance();
-        $this->app->module = $m->get();
 
         events()->call('init', ['page' => $page]);
 
@@ -166,57 +121,18 @@ abstract class Frontend extends core\Controller
         return $this->template->fetch($template_path . $page['template']);
     }
 
-    /**
-     * todo fix it
-     */
-    private function technicalWorks()
-    {
-        echo '<!DOCTYPE html>
-        <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
-        <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>Technikal works</title>
-        <style type="text/css">
-                html{background:#f9f9f9}
-                body{
-                    background:#fff;
-                    color:#333;
-                    font-family:sans-serif;
-                margin:2em auto;
-                padding:1em 2em 2em;
-                -webkit-border-radius:3px;
-                border-radius:3px;
-                border:1px solid #dfdfdf;
-                max-width:750px;
-                text-align:left;
-            }
-            #error-page{margin-top:50px}
-            #error-page h2{border-bottom:1px dotted #ccc;}
-            #error-page p{font-size:16px; line-height:1.5; margin:2px 0 15px}
-            #error-page .code-wrapper{color:#400; background-color:#f1f2f3; padding:5px; border:1px dashed #ddd}
-            #error-page code{font-size:15px; font-family:Consolas,Monaco,monospace;}
-            a{color:#21759B; text-decoration:none}
-                    a:hover{color:#D54E21}
-                        </style>
-        </head>
-        <body id="error-page">
-            <h2>Technical work on the site</h2>
-            <div class="code-wrapper">
-                <code>Technical work on the site. Please visit page later</code>
-            </div>
-        </body>
-        </html>';
-        die();
-    }
+
 
     /**
      * @return mixed
      * @throws Exception
      */
-    protected function e404()
+    public function e404()
     {
-        $res = new FrontendResponse($this->template->fetch('layouts/404'));
-        $res->display();
+        $this->response->withCode(404);
+        if($this->request->isGet()){
+            return $this->template->fetch('layouts/404');
+        }
     }
 
     /**

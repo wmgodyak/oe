@@ -108,7 +108,7 @@ class Values extends Backend
                 ;
             }
 
-            echo $t->render($res, $t->getTotal());return;
+            return $t->render($res, $t->getTotal());
         }
 
         $this->output($t->init());
@@ -124,7 +124,7 @@ class Values extends Backend
         $data = ['parent_id' => $parent_id];
         $this->template->assign('data', $data);
         $this->template->assign('action', 'create');
-        $this->template->display('system/features/value');
+        return $this->template->fetch('system/features/value');
     }
 
     public function edit($id){
@@ -132,7 +132,7 @@ class Values extends Backend
         unset($data['parent_id']);
         $this->template->assign('data', $data);
         $this->template->assign('action', 'edit');
-        $this->template->display('system/features/value');
+        return $this->template->fetch('system/features/value');
     }
 
     public function process($id=null)

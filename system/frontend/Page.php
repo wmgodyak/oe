@@ -19,59 +19,15 @@ class Page extends \system\Frontend
     {
         if($this->request->isXhr()) return null;
 
-        $lang_id = $this->languages->languages->getDefault('id');
-
         $id = $this->settings->get('home_id');
-        $page = $this->app->page->fullInfo($id, $lang_id);
+        $page = $this->app->page->fullInfo($id, $this->languages->id);
 
-        return $this->display($page);
-    }
-
-    public function displayLang($code)
-    {
-        if(empty($this->languages->id) && !isset($args['url']) && isset($code)){
-            // short url
-            $args['url'] = $code;
-        }
-
-        $def_lang_id = $this->languages->languages->getDefault('id');
-        $lang_id = $this->languages->languages->getDataByCode($code, 'id');
-
-        if(empty($lang_id)){
-            return $this->e404();
-        }
-
-        if($def_lang_id == $lang_id){
-
-            $uri = APPURL;
-            header("HTTP/1.1 301 Moved Permanently");
-            header("Location: $uri");
-            die;
-
-        }
-
-        $id = $this->settings->get('home_id');
-        $page = $this->app->page->fullInfo($id, $lang_id);
-
-        return $this->display($page);
-    }
-
-    public function displayLangAndUrl($code, $url)
-    {
-        $lang_id = $this->languages->languages->getDataByCode($code, 'id');
-        $id = $this->app->page->getIdByUrl($url, $lang_id);
-        if(empty($id)){
-           return $this->e404();
-        }
-
-        $page = $this->app->page->fullInfo($id, $lang_id);
         return $this->display($page);
     }
 
     public function displayUrl($url)
     {
-        $lang_id = $this->languages->languages->getDefault('id');
-        $id = $this->app->page->getIdByUrl($url, $lang_id);
+        $id = $this->app->page->getIdByUrl($url, $this->languages->id);
 
         if(empty($id)){
             return $this->e404();

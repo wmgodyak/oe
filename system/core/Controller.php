@@ -44,7 +44,6 @@ abstract class Controller
     {
         $this->request  = Request::getInstance();
         $this->response = Response::getInstance();
-        $this->route    = Route::getInstance();
     }
 
     /**

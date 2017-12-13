@@ -41,7 +41,7 @@ class Content extends Backend
         $this->template->assign('types', $this->featuresContent->getContentTypes(0));
         $this->template->assign('action', 'process');
         $this->template->assign('features_id', $features_id);
-        $this->template->display('system/features/sel_content_types');
+        return $this->template->fetch('system/features/sel_content_types');
     }
 
     public function getTypes($parent_id)
@@ -59,11 +59,12 @@ class Content extends Backend
     public function delete($id)
     {
         $s = $this->featuresContent->delete($id);
+        $m = null;
         if(! $s){
-            echo $this->features->getErrorMessage();
+            $m = $this->features->getErrorMessage();
         }
 
-        return ['s' => $s];
+        return ['s' => $s, 'm' => $m];
     }
 
     public function edit($id)
