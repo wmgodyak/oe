@@ -45,9 +45,6 @@ class Install extends Controller
         $this->template->mode = 'installing';
         $body = null;
         $step = $this->request->post('action');
-        echo '<pre>';
-        var_dump($step);
-        echo '</pre>';
         switch($step){
             case'create_admin':
                 $body = $this->createAdmin();
