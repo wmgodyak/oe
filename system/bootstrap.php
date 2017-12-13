@@ -5,11 +5,7 @@
      * @copyright Copyright (c) 2015 Otakoyi.com
      * Date: 18.12.15 : 11:50
      */
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
 
-    // On Windows IIS
     if (!isset($_SERVER['DOCUMENT_ROOT'])) {
         if (isset($_SERVER['SCRIPT_FILENAME'])) {
             $_SERVER['DOCUMENT_ROOT'] = str_replace('\\', '/', substr($_SERVER['SCRIPT_FILENAME'], 0, 0 - strlen($_SERVER['PHP_SELF'])));
@@ -131,9 +127,6 @@ error_reporting(E_ALL);
     $theme = 'app_theme_current';
 
     $l_code = $language->code;
-
-
-//    d($request);     d($route->getCallback());die;
 
     if($request->mode == 'backend'){
 
