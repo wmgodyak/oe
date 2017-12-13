@@ -12,6 +12,7 @@ use helpers\PHPDocReader;
 use system\core\Controller;
 use system\core\DB;
 use system\core\Lang;
+use system\core\Session;
 use system\core\Template;
 use system\models\Modules;
 use system\models\Settings;
@@ -44,6 +45,9 @@ class Install extends Controller
         $this->template->mode = 'installing';
         $body = null;
         $step = $this->request->post('action');
+        echo '<pre>';
+        var_dump($step);
+        echo '</pre>';
         switch($step){
             case'create_admin':
                 $body = $this->createAdmin();
@@ -78,7 +82,7 @@ class Install extends Controller
         $langs = Lang::getInstance()->getAllowedLanguages();
         $language = $this->request->post('language','s');
         $data = $this->request->post('data');
-        $conf = $_SESSION['inst']['db'];
+        $conf = Session::get('inst.db');
         $prefix = $conf['prefix'];
         $error = [];
         if($this->request->isPost() && $language){
@@ -129,7 +133,7 @@ class Install extends Controller
             }
 
             if(empty($error)){
-                unset($_SESSION['inst']);
+                Session::delete('inst');
             }
 
             if(empty($error)){
@@ -188,12 +192,13 @@ class Install extends Controller
             if($db_config == true) {
                 $this->db = DB::getInstance($this->conf);
                 if($this->db) {
-                    $_SESSION['inst']['db'] = $this->conf;
+                    Session::set('inst.db', $this->conf);
                     try{
                         $query = file_get_contents(DOCROOT . "system/components/install/sql/install.sql");
                         $query = str_replace('__', $this->conf['prefix'], $query);
                         $this->db->exec($query);
                         $this->installModules();
+                        return $this->createAdmin();
                     }
                     catch(\PDOException $e) {
                         $error[] = 'Import error: ' . $e->getMessage();
@@ -201,11 +206,6 @@ class Install extends Controller
                 }
             } else {
                 $error = $db_config;
-            }
-
-            if(empty($error)) {
-                $_POST['action'] = 'create_admin';
-                return $this->createAdmin();
             }
         }
         $this->template->assign('error', $error);

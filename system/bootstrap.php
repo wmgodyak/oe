@@ -76,7 +76,7 @@ error_reporting(E_ALL);
 
     $config = \system\core\Config::getInstance();
 
-    if($config->get('db') == null){
+    if($config->get('db') == null || system\core\Session::get('inst')){
         $installer = new \system\components\install\controllers\Install();
         $installer->index();
         die;

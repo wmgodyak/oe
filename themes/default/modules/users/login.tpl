@@ -9,7 +9,7 @@
                    </div>
                    <div class="block-content">
                        {t('users.login.form.description')}
-                       <form method="post" action="login" id="usersLoginForm" data-href="{route('profile')}">
+                       <form method="post" action="login" id="usersLoginForm" data-href="{url('profile')}">
                            {block name='users.login.form'}
                                <div class="form-group">
                                    <input type="text" required name="email" class="form-control" placeholder="{t('users.login.form.labels.email')}">
@@ -22,7 +22,7 @@
                                    <label><input type="checkbox" name="remember" value="1"><span>{t('users.login.form.labels.remember')}</span></label>
                                </div>
                                <div class="checkbox">
-                                   <label><a href="{route('forgot-password')}">{t('users.links.fp')}</a></label>
+                                   <label><a href="{url('forgot-password')}">{t('users.links.fp')}</a></label>
                                </div>
                            {/block}
                            {$events->call('users.login.form')}

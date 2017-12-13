@@ -12,7 +12,7 @@
                         {t('users.profile_psw.form.description')}
 
 
-                        <form method="post" action="/change-password" id="usersPasswordChangeForm" data-href="{route('profile')}">
+                        <form method="post" action="/change-password" id="usersPasswordChangeForm" data-href="{url('profile')}">
 
                             <div class="form-group">
                                 <input type="password" required name="password" class="form-control" placeholder="{t('users.profile_psw.form.labels.password')}">
