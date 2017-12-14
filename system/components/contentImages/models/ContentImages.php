@@ -90,7 +90,7 @@ class ContentImages extends Model
     {
         $data = $this->getData($id);
         // визачити розміри
-        $sizes = self::$db
+        $getSizes = self::$db
             ->select("select cis.size
                       from __content_images ci
                       join __content c on c.id=ci.content_id
@@ -99,6 +99,12 @@ class ContentImages extends Model
                       where ci.id = {$id}")
             ->all('size');
 
+        $sizes = [];
+        if (!empty($getSizes)) {
+            foreach ($getSizes as $size) {
+                $sizes[] = $size;
+            }
+        }
 
         // source size
         $sizes[] = Settings::getInstance()->get('content_images_thumb_dir');
@@ -106,10 +112,10 @@ class ContentImages extends Model
 
         if($this->hasError()) echo $this->getErrorMessage();
 
-        $dir = Settings::getInstance()->get('content_images_dir');
+        $dir = isset($data['path']) ? $data['path'] : "";
 
         foreach ($sizes as $size) {
-            $path = str_replace('//', '/', DOCROOT . $dir . $data['path'] .  $size . '/' . $data['image']);
+            $path = str_replace('//', '/',  DOCROOT . $dir .  $size . '/' . $data['image']);
             if(file_exists($path)) @unlink($path);
         }
 

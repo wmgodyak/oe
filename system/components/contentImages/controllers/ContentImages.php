@@ -65,7 +65,7 @@ class ContentImages extends Backend
     }
     public function delete($id)
     {
-        echo $this->ci->delete($id);
+        return $this->ci->delete($id);
     }
 
     public function process($id)
