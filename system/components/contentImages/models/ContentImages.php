@@ -133,13 +133,20 @@ class ContentImages extends Model
         if(empty($items)) return ;
 
         // визачити розміри
-        $sizes = self::$db
+        $getSizes = self::$db
             ->select("select cis.size
                       from __content c
                       join __content_types_images_sizes ctis on ctis.types_id=c.subtypes_id
                       join __content_images_sizes cis on ctis.images_sizes_id=cis.id
                       where c.id = {$content_id}")
             ->all('size');
+
+        $sizes = [];
+        if (!empty($getSizes)) {
+            foreach ($getSizes as $size) {
+                $sizes[] = $size;
+            }
+        }
 
         $sizes[] = Settings::getInstance()->get('content_images_thumb_dir');
         $sizes[] = Settings::getInstance()->get('content_images_source_dir');
