@@ -208,15 +208,26 @@ class Content extends Frontend
 
         $info = DataFilter::apply('content.info.update', $info);
 
+        $translations_errors = 0;
         foreach ($info as $languages_id=> $item) {
-            if(empty($item['name'])){
-                $this->error[] = ["content_info[$languages_id][name]" => 'field_required'];
+            if (empty($item['name']) || $this->settings->get('home_id') != $id && empty($item['url'])){
+                $translations_errors += 1;
             }
 
-            if( $this->settings->get('home_id') != $id && empty($item['url'])){
-                $this->error[] = ["content_info[$languages_id][url]" => 'field_required'];
-            }
+            if ($this->settings->get('home_id') != $id && empty($item['url'])){
+                $translations_errors += 1;
+            } else {
+                $check = $this->checkIfDuplicate($id, $info[$this->languages->id]['url'], $languages_id);
 
+                if (!$check) {
+                    $lang = $this->languages->languages->getData($languages_id);
+                    $this->error['messages'][] = "Такий URL для мови {$lang['name']} вже існує!";
+                }
+            }
+        }
+
+        if($translations_errors > 0) {
+            $this->error['messages'][] = "Будь ласка, заповніть вкладки для інших мов!";
         }
 
         if(!empty($this->error)) {
@@ -286,6 +297,25 @@ class Content extends Frontend
         }
 
         $this->commit();
+
+        return true;
+    }
+
+    public function checkIfDuplicate($id, $url, $lang_id)
+    {
+        $item = self::$db->select("
+          select content_id, url from __content_info
+          where content_id = '{$id}' or url = '{$url}' and languages_id = '{$lang_id}'
+          limit 1;
+        ")->all();
+
+        if(isset($item[0])) {
+            if ($item[0]['content_id'] == $id) {
+                return true;
+            } else {
+                return false;
+            }
+        }
 
         return true;
     }

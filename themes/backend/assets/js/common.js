@@ -34,9 +34,32 @@ var engine = {
         function showError(form, inp)
         {
             var $validator = $(form).validate(), e = [];
+            var errors = "";
+            var counter = 0;
             $(inp).each(function(k, i){
-                $validator.showErrors(i);
+                if(i.hasOwnProperty('messages')) {
+                    $(i.messages).each(function(k, val) {
+                        errors += "<li>"+ val +"</li>";
+
+                        counter++;
+
+                    });
+
+                } else {
+                    $validator.showErrors(i);
+                }
             });
+
+            if(errors) {
+                var className = counter > 1 ? 'error error-list' : 'error';
+
+                errors = "<ul>" + errors + "</ul>";
+                engine.inlineNotify(errors, className, undefined, false);
+                $("html, body").animate({
+                    scrollTop: 0
+                }, 600);
+            }
+
         }
 
         $(myForm).validate({
