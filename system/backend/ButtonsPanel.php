@@ -8,7 +8,7 @@ class ButtonsPanel
 
     final public static function add($button)
     {
-        self::$items[] = $button;
+        self::$items[] = (string) $button;
     }
 
     final public static function get()
@@ -18,6 +18,6 @@ class ButtonsPanel
 
     public final static function prepend($button)
     {
-        array_unshift(self::$items, $button);
+        array_unshift(self::$items, (string) $button);
     }
 }
