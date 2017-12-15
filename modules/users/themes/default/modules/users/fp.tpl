@@ -9,13 +9,13 @@
                     </div>
                     <div class="block-content">
                         {t('users.fp.form.description')}
-                        <form method="post" action="forgot-password" id="usersFpForm" data-href="{route('reset-password')}">
+                        <form method="post" action="forgot-password" id="usersFpForm" data-href="{url('reset-password')}">
                             <div class="form-group">
                                 <input type="text" required name="email" class="form-control" placeholder="{t('users.fp.form.labels.email')}">
                             </div>
                             <div class="checkbox">
-                                <label><a href="{route('login')}">{t('users.links.login')}</a></label> |
-                                <label><a href="{route('register')}">{t('users.links.register')}</a></label>
+                                <label><a href="{url('login')}">{t('users.links.login')}</a></label> |
+                                <label><a href="{url('register')}">{t('users.links.register')}</a></label>
                             </div>
                             <input type="hidden" name="token" value="{$token}">
                             <button type="submit" class="btn btn-inline">{t('users.fp.form.labels.submit')}</button>

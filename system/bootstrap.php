@@ -107,7 +107,7 @@
 
     $request->mode ='frontend';
 
-    if($config->get('db') == null){
+    if($config->get('db') == null || system\core\Session::get('inst')){
         $installer = new \system\components\install\controllers\Install();
         $installer->index();
         die;

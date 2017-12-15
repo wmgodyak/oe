@@ -12,7 +12,7 @@
                         {t('users.reset_password.form.description')}
 
 
-                        <form method="post" action="/restore-password" id="usersPasswordResetForm" data-href="{route('login')}">
+                        <form method="post" action="/restore-password" id="usersPasswordResetForm" data-href="{url('login')}">
 
                             <div class="form-group">
                                 <input type="password" required name="password" class="form-control" placeholder="{t('users.reset_password.form.labels.password')}">
