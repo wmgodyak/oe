@@ -15,7 +15,7 @@
 {block name="content"}
     <div class="post-detail">
         <div class="post-item-info">
-            {assign var='img' value=$app->images->cover($blog.post.id, 'post')}
+            {assign var='img' value=$app->module->images->cover($blog.post.id, 'post')}
             {if !empty($img)}
                 <div class="post-item-photo">
                     <img class="img-responsive" src="{$img}" alt="{$blog.post.title}">

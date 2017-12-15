@@ -25,11 +25,6 @@ class Frontend extends Model
      * @var array
      */
     protected $page;
-    /**
-     * Images model
-     * @var Images
-     */
-    public $images;
 
     protected $app;
 
@@ -41,7 +36,6 @@ class Frontend extends Model
 
         $this->languages = new Languages();
 
-        $this->images    = new Images();
         $this->app       = App::getInstance();
         $this->languages = \system\core\Languages::getInstance();
     }

@@ -1,0 +1,51 @@
+{
+  "config": {
+    "images_dir": "Путь к папке загрузок",
+    "images_quality": "Качество изображения",
+    "images_source_dir": "Название папки для изображений с оригинальным размером",
+    "images_thumb_dir": "Название папки для изображений с размером для предварительного просмотра",
+    "images_source_size": "Размер исходных изображений",
+    "images_thumbs_size": "Размер изображений для предварительного просмотра",
+    "images_watermark_dir": "Путь к водяному знаку"
+  },
+  "action_index": "Изображения",
+
+  "general": {
+    "image": "Изображения",
+    "upload_i": "Перетащите сюда изображения или кликните, чтобы выбрать",
+    "dragHere": "Бросайте сюда",
+    "yes": "Да",
+    "no": "Нет",
+    "error": "Ошибка",
+    "delete": "Удалить"
+  },
+  "imagesSizes": {
+    "action_index": "Размеры изображений",
+    "action_edit": "Редактирование размера",
+    "create_title": "Создание размера",
+    "placeholder_code": "[a-z_0-9]+",
+    "delete_question": "Удалить размер?",
+    "empty_name": "Введите размер",
+    "crop_confirm": "Вы собираетесь осуществить ресайз изображений. Продолжить?",
+    "size": "Размер",
+    "width": "Ширина px.",
+    "height": "Высота px.",
+    "types": "Типы контента",
+    "quality": "Качество",
+    "watermark": "Добавить водяной знак",
+    "watermark_opacity": "Прозрачность",
+    "watermark_position": "Положения",
+    "watermark_position_tl": "Левый верхний угол",
+    "watermark_position_tr": "Правый верхний угол",
+    "watermark_position_br": "Нижний правый угол",
+    "watermark_position_bl": "Нижний левий угол",
+    "watermark_position_c": "По центру",
+    "resize": {
+      "success": {
+        "title": "Ресайз зображень завершено. \n",
+        "resized": "Зроблено ресайз ",
+        "images": " зображень"
+      }
+    }
+  }
+}

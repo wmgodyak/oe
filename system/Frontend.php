@@ -10,7 +10,6 @@ namespace system;
 use system\core\exceptions\Exception;
 use system\core\Session;
 use system\core\Validator;
-use system\models\Images;
 use system\models\Languages;
 use system\models\Settings;
 use system\core\Template;
@@ -44,11 +43,6 @@ abstract class Frontend extends core\Controller
      * @var Languages
      */
     protected $languages;
-
-    /**
-     * @var Images
-     */
-    protected $images;
     /**
      * @var App
      */

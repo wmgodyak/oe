@@ -4,7 +4,7 @@
   },
   "system": {
     "name": "SE 7",
-    "copyright": "&copy; 2015 - 2017 SmartEngine"
+    "copyright": "&copy; 2015 - 2017 OYi Engine"
   },
   "common": {
     "id": "ID",
@@ -44,7 +44,13 @@
     "categories": "Categories",
     "e_required": "This field is require",
     "e_check": "Please check the field",
-    "e_email": "Please enter a valid e-mail address"
+    "e_email": "Please enter a valid e-mail address",
+    "modals": {
+      "information": "Information",
+      "warning": "Warning",
+      "yes": "Yes",
+      "ok": "Got it"
+    }
   },
   "auth": {
     "action_login": "Authorization",
@@ -199,28 +205,6 @@
     "error_zip_not_supported": "The ZipArchive module is unavailable on the server",
     "error_file_exists": "Error: The following files already exist",
     "arhive_unzip_success": "The component is unpacked, now you can install it"
-  },
-  "contentImagesSizes": {
-    "action_index": "Images sizes",
-    "action_edit": "Resizing",
-    "create_title": "Creating the size",
-    "placeholder_code": "[a-z_0-9]+",
-    "delete_question": "Want to delete the size?",
-    "empty_name": "Enter the size",
-    "size": "Size",
-    "width": "Width px.",
-    "height": "Height px.",
-    "types": "Types of content",
-    "crop_confirm": "You are going to resize the images. Want to continue?",
-    "quality": "Quality",
-    "watermark": "Add watermark",
-    "watermark_opacity": "Opacity",
-    "watermark_position": "Position",
-    "watermark_position_tl": "Top left corner",
-    "watermark_position_tr": "Top right corner",
-    "watermark_position_br": "Bottom right corner",
-    "watermark_position_bl": "Bottom left corner",
-    "watermark_position_c": "Center"
   },
   "contentTypes": {
     "action_index": "Content types",
@@ -384,18 +368,6 @@
     "desc_autofil_title": "Generating titeles automatically based on the name",
     "title_autofill_url": "URL Auto transliteration",
     "desc_autofill_url": "Generating URLs based on the name",
-    "title_content_images_dir": "Path to the download",
-    "desc_content_images_dir": "Relative path to the downloads",
-    "title_content_images_quality": "Image quality",
-    "desc_content_images_quality": "Image quality (10-100%)",
-    "title_content_images_source_dir": "Folder name with the original size",
-    "desc_content_images_source_dir": "Folder name with the original size",
-    "title_content_images_source_size": "Size of the source images",
-    "desc_content_images_source_size": "The size which the image is croped to (0x0)",
-    "title_content_images_thumbs_size": "Preview size",
-    "desc_content_images_thumbs_size": "The size which the image preview is croped to",
-    "title_content_images_thumb_dir": "Preview size name",
-    "desc_content_images_thumb_dir": "Preview size name",
     "title_editor_body_class": "CSS container class",
     "desc_editor_body_class": "It will be inserted in the body for displaying styles",
     "title_editor_bodyId": "CSS container ID",
@@ -538,13 +510,6 @@
     "tree_create": "Add",
     "tree_edit": "Edit",
     "tree_delete": "Delete"
-  },
-  "contentImages": {
-    "action_index": "",
-    "image": "Image",
-    "remove": "Close",
-    "upload_i": "Drag the image here or click to choose",
-    "dragHere": "Drop here"
   },
   "fileManager": {
     "action_index": "File Manager"

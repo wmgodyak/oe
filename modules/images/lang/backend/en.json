@@ -1,0 +1,52 @@
+{
+  "config": {
+    "images_dir": "Path to the download folder",
+    "images_quality": "Image quality",
+    "images_source_dir": "Folder name for the original images",
+    "images_thumb_dir": "Folder name for the thumbnail images",
+    "images_source_size": "Size of the source images",
+    "images_thumbs_size": "Preview size",
+    "images_watermark_dir": "Path to the watermark"
+  },
+  "action_index": "Images",
+
+  "general": {
+    "image": "Image",
+    "remove": "Close",
+    "upload_i": "Drag the image here or click to choose",
+    "dragHere": "Drop here",
+    "yes": "Yes",
+    "no": "No",
+    "error": "Error",
+    "delete": "Delete"
+  },
+  "imagesSizes": {
+    "action_index": "Images sizes",
+    "action_edit": "Resizing",
+    "create_title": "Creating the size",
+    "placeholder_code": "[a-z_0-9]+",
+    "delete_question": "Want to delete the size?",
+    "empty_name": "Enter the size",
+    "size": "Size",
+    "width": "Width px.",
+    "height": "Height px.",
+    "types": "Types of content",
+    "crop_confirm": "You are going to resize the images. Want to continue?",
+    "quality": "Quality",
+    "watermark": "Add watermark",
+    "watermark_opacity": "Opacity",
+    "watermark_position": "Position",
+    "watermark_position_tl": "Top left corner",
+    "watermark_position_tr": "Top right corner",
+    "watermark_position_br": "Bottom right corner",
+    "watermark_position_bl": "Bottom left corner",
+    "watermark_position_c": "Center",
+    "resize": {
+      "success": {
+        "title": "Images resize finished. \n",
+        "resized": "Resized ",
+        "images": " images"
+      }
+    }
+  }
+}

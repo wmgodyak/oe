@@ -23,7 +23,7 @@
 
 {block name="content"}
     <div class="blog-post wow fadeInUp animated" style="visibility: visible; animation-name: fadeInUp;">
-        {assign var="img" value=$app->images->cover($page.id, 'post')}
+        {assign var="img" value=$app->module->images->cover($page.id, 'post')}
         {if $img}
             <img class="img-responsive" src="{$img}" alt="">
         {/if}

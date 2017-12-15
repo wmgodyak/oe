@@ -20,7 +20,7 @@
             </em>
         </div>
     {/if}
-    {assign var='img' value=$app->images->cover($post.id, 'post')}
+    {assign var='img' value=$app->module->images->cover($post.id, 'post')}
     {if !empty($img)}
         <div class="blogimage">
             <div class="loading"></div>

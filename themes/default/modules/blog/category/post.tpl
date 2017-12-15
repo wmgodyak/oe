@@ -16,7 +16,7 @@
             &nbsp;{$post.views}
         </p>
 
-        {assign var='img' value=$app->images->cover($post.id, 'post')}
+        {assign var='img' value=$app->module->images->cover($post.id, 'post')}
         {if !empty($img)}
             <a href="{$post.url}" rel="bookmark" title="{$post.title}">
                 <img style="max-width:100%;" alt="{$post.title}" src="{$img}" />

@@ -1,0 +1,52 @@
+{
+  "config": {
+    "images_dir": "Шлях до папки завантажень",
+    "images_quality": "Якість зображення",
+    "images_source_dir": "Назва папки для зображень з оригінальним розміром",
+    "images_thumb_dir": "Назва папки для зображень з розміром для попереднього перегляду",
+    "images_source_size": "Розмір вихідних зображень",
+    "images_thumbs_size": "Розмір зображення для попереднього перегляду",
+    "images_watermark_dir": "Шлях до водяного знаку"
+  },
+  "action_index": "Зображення",
+
+  "general": {
+    "image": "Зображення",
+    "remove": "Закрити",
+    "upload_i": "Перетягніть сюди зображення або клікніть щоб вибрати",
+    "dragHere": "Кидайте сюди",
+    "yes": "Так",
+    "no": "Ні",
+    "error": "Помилка",
+    "delete": "Видалити"
+  },
+  "imagesSizes": {
+    "action_index": "Розміри зображень",
+    "action_edit": "Редагування розміру",
+    "create_title": "Створення розміру",
+    "placeholder_code": "[a-z_0-9]+",
+    "delete_question": "Видалити розмір?",
+    "empty_name": "Введіть розмір",
+    "crop_confirm": "Ви збираєтесь здійснити ресайз зображень. Продовжити?",
+    "size": "Розмір",
+    "width": "Ширина px.",
+    "height": "Висота px.",
+    "types": "Типи контенту",
+    "quality": "Якість",
+    "watermark": "Додати водяний знак",
+    "watermark_opacity": "Прозорість",
+    "watermark_position": "Положення",
+    "watermark_position_tl": "Лівий верхній кут",
+    "watermark_position_tr": "Правий верхній кут",
+    "watermark_position_br": "Нижній правий кут",
+    "watermark_position_bl": "Нижній лівий кут",
+    "watermark_position_c": "По центру",
+    "resize": {
+      "success": {
+        "title": "Ресайз зображень завершено. \n",
+        "resized": "Зроблено ресайз ",
+        "images": " зображень"
+      }
+    }
+  }
+}

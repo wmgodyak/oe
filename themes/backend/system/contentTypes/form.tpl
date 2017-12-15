@@ -96,28 +96,3 @@
         $("textarea#template").html(c);
     });
 </script>
-
-<script type="text/template" id="sizesCreate" >
-    <form action="./contentImagesSizes/process" method="post" id="formCreateSize" class="form-horizontal">
-        <div class="form-group">
-            <label for="data_size" class="col-sm-3 control-label">{$t.contentImagesSizes.size}</label>
-            <div class="col-sm-9">
-                <input name="data[size]" id="data_size"  class="form-control" required>
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="data_width" class="col-sm-3 control-label">{$t.contentImagesSizes.width}</label>
-            <div class="col-sm-9">
-                <input name="data[width]" id="data_width"  class="form-control" required onchange="this.value = parseInt(this.value); if (this.value == 'NaN') this.value=0">
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="data_height" class="col-sm-3 control-label">{$t.contentImagesSizes.height}</label>
-            <div class="col-sm-9">
-                <input name="data[height]" id="data_height"  class="form-control" required onchange="this.value = parseInt(this.value); if (this.value == 'NaN') this.value=0">
-            </div>
-        </div>
-        <input type="hidden" name="token" value="{$token}">
-        <input type="hidden" name="action" value="{$action}">
-    </form>
-</script>

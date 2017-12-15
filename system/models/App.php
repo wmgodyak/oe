@@ -14,7 +14,7 @@ class App
 
     public $module;
 
-    private $allowed = ['nav', 'languages', 'images', 'guides', 'contentMeta', 'cache', 'page', 'pagination', 'usersMeta'];
+    private $allowed = ['nav', 'languages', 'guides', 'contentMeta', 'cache', 'page', 'pagination', 'usersMeta'];
 
 
     private function __construct(){}

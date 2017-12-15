@@ -5,7 +5,7 @@
     <div class="block-content">
         <ul>
             {foreach $app->module->blog->posts->popular(3) as $post}
-                <li class="clearfix">{assign var='img' value=$app->images->cover($post.id, 'post')}
+                <li class="clearfix">{assign var='img' value=$app->module->images->cover($post.id, 'post')}
                     {if $img}
                         <a href="{$post.url}" class="item-photo">
                             <img class="img-responsive" src="{$img}" alt="">

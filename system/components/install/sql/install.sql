@@ -20,38 +20,30 @@ INSERT INTO `__settings` (`id`, `name`, `value`, `block`, `type`, `required`, `d
   (6, 'editor_contents_css', '/themes/default/assets/css/style.css', 'editor', 'textarea', 1, 1),
   (9, 'app_theme_current', 'default', 'themes', 'text', 1, 1),
   (12, 'themes_path', 'themes/', 'themes', 'text', 1, 1),
-  (13, 'content_images_dir', 'uploads/content/', 'images', 'text', 1, 1),
-  (14, 'content_images_thumb_dir', 'thumbs/', 'images', 'text', 1, 1),
-  (15, 'content_images_source_dir', 'source/', 'images', 'text', 1, 1),
-  (17, 'backend_theme', 'backend', 'themes', 'text', 1, 0),
-  (20, 'content_images_source_size', '1600x1200', 'images', 'text', 1, 1),
-  (21, 'content_images_thumbs_size', '125x125', 'images', 'text', 1, 1),
-  (23, 'content_images_quality', '90', 'images', 'text', 1, 1),
-  (24, 'active', '1', 'common', 'text', 1, 1),
-  (25, 'site_index', '1', 'robots', 'text', 1, 1),
-  (26, 'robots_index_sample', '# цей файл створено автоматично. Не редагуйте його вручну. Змінити його ви можете в розділі налаштування\n\nUser-agent: *\nDisallow:\n\nUser-agent: Yandex\nDisallow:\nHost: {app}\n\nSitemap: {appurl}route/XmlSitemap/index', 'robots', 'textarea', 1, 1),
-  (28, 'robots_no_index_sample', '# цей файл створено автоматично. Не редагуйте його вручну. Змінити його ви можете в розділі налаштування\n\nUser-agent: *\nDisallow: /', 'robots', 'textarea', 1, 1),
-  (29, 'google_analytics_id', '', 'analitycs', 'text', 0, 1),
-  (30, 'google_webmaster', '', 'analitycs', 'text', 0, 1),
-  (31, 'yandex_webmaster', '', 'analitycs', 'text', 0, 1),
-  (32, 'yandex_metric', '', 'analitycs', 'text', 0, 1),
-  (36, 'mail_email_from', '', 'mail', 'text', 1, 1),
-  (37, 'mail_email_to', '', 'mail', 'text', 1, 1),
-  (38, 'mail_from_name', '', 'mail', 'text', 1, 1),
-  (39, 'mail_header', '', 'mail', 'textarea', 0, 1),
-  (40, 'mail_footer', '', 'mail', 'textarea', 0, 1),
-  (41, 'mail_smtp_on', '0', 'mail', 'text', 1, 1),
-  (42, 'mail_smtp_host', '', 'mail', 'text', 0, 1),
-  (43, 'mail_smtp_port', '', 'mail', 'text', 0, 1),
-  (44, 'mail_smtp_user', '', 'mail', 'text', 0, 1),
-  (45, 'mail_smtp_password', '', 'mail', 'text', 0, 1),
-  (46, 'mail_smtp_secure', 'tls', 'mail', 'text', 0, 1),
-  (47, 'company_name', '', 'company', 'text', 1, 1),
-  (48, 'company_phone', '', 'company', 'text', 1, 1),
-  (49, 'seo', 'a:6:{s:5:"guide";a:1:{i:1;a:4:{s:5:"title";s:0:"";s:8:"keywords";s:0:"";s:11:"description";s:0:"";s:2:"h1";s:0:"";}}s:5:"pages";a:1:{i:1;a:4:{s:5:"title";s:34:"{title} {delimiter} {company_name}";s:8:"keywords";s:37:"{keywords} {delimiter} {company_name}";s:11:"description";s:13:"{description}";s:2:"h1";s:4:"{h1}";}}s:4:"post";a:1:{i:1;a:4:{s:5:"title";s:67:"{title} {delimiter}  {category} {delimiter} блог {company_name}";s:8:"keywords";s:46:"{keywords} {delimiter} блог {company_name}";s:11:"description";s:49:"{description} {delimiter} блог {company_name}";s:2:"h1";s:4:"{h1}";}}s:16:"posts_categories";a:1:{i:1;a:4:{s:5:"title";s:67:"{title} {delimiter}  {category} {delimiter} блог {company_name}";s:8:"keywords";s:46:"{keywords} {delimiter} блог {company_name}";s:11:"description";s:46:"{keywords} {delimiter} блог {company_name}";s:2:"h1";s:4:"{h1}";}}s:7:"product";a:1:{i:1;a:4:{s:5:"title";s:58:"{title} {delimiter}  {category} {delimiter} {company_name}";s:8:"keywords";s:37:"{keywords} {delimiter} {company_name}";s:11:"description";s:37:"{keywords} {delimiter} {company_name}";s:2:"h1";s:4:"{h1}";}}s:19:"products_categories";a:1:{i:1;a:4:{s:5:"title";s:59:"{title} {delimiter}  {category} {delimiter}  {company_name}";s:8:"keywords";s:37:"{keywords} {delimiter} {company_name}";s:11:"description";s:37:"{keywords} {delimiter} {company_name}";s:2:"h1";s:4:"{h1}";}}}', '', '', 0, NULL),
-  (50, 'home_id', '1', 'common', 'text', 1, 1),
-  (52, 'modules', '', 'common', 'text', 1, NULL),
-  (53, 'watermark_src', '', 'images', 'text', 1, NULL);
+  (13, 'active', '1', 'common', 'text', 1, 1),
+  (14, 'site_index', '1', 'robots', 'text', 1, 1),
+  (15, 'robots_index_sample', '# цей файл створено автоматично. Не редагуйте його вручну. Змінити його ви можете в розділі налаштування\n\nUser-agent: *\nDisallow:\n\nUser-agent: Yandex\nDisallow:\nHost: {app}\n\nSitemap: {appurl}route/XmlSitemap/index', 'robots', 'textarea', 1, 1),
+  (16, 'robots_no_index_sample', '# цей файл створено автоматично. Не редагуйте його вручну. Змінити його ви можете в розділі налаштування\n\nUser-agent: *\nDisallow: /', 'robots', 'textarea', 1, 1),
+  (17, 'google_analytics_id', '', 'analitycs', 'text', 0, 1),
+  (18, 'google_webmaster', '', 'analitycs', 'text', 0, 1),
+  (19, 'yandex_webmaster', '', 'analitycs', 'text', 0, 1),
+  (20, 'yandex_metric', '', 'analitycs', 'text', 0, 1),
+  (21, 'mail_email_from', '', 'mail', 'text', 1, 1),
+  (22, 'mail_email_to', '', 'mail', 'text', 1, 1),
+  (23, 'mail_from_name', '', 'mail', 'text', 1, 1),
+  (24, 'mail_header', '', 'mail', 'textarea', 0, 1),
+  (25, 'mail_footer', '', 'mail', 'textarea', 0, 1),
+  (26, 'mail_smtp_on', '0', 'mail', 'text', 1, 1),
+  (27, 'mail_smtp_host', '', 'mail', 'text', 0, 1),
+  (28, 'mail_smtp_port', '', 'mail', 'text', 0, 1),
+  (29, 'mail_smtp_user', '', 'mail', 'text', 0, 1),
+  (30, 'mail_smtp_password', '', 'mail', 'text', 0, 1),
+  (31, 'mail_smtp_secure', 'tls', 'mail', 'text', 0, 1),
+  (32, 'company_name', '', 'company', 'text', 1, 1),
+  (33, 'company_phone', '', 'company', 'text', 1, 1),
+  (34, 'seo', 'a:6:{s:5:"guide";a:1:{i:1;a:4:{s:5:"title";s:0:"";s:8:"keywords";s:0:"";s:11:"description";s:0:"";s:2:"h1";s:0:"";}}s:5:"pages";a:1:{i:1;a:4:{s:5:"title";s:34:"{title} {delimiter} {company_name}";s:8:"keywords";s:37:"{keywords} {delimiter} {company_name}";s:11:"description";s:13:"{description}";s:2:"h1";s:4:"{h1}";}}s:4:"post";a:1:{i:1;a:4:{s:5:"title";s:67:"{title} {delimiter}  {category} {delimiter} блог {company_name}";s:8:"keywords";s:46:"{keywords} {delimiter} блог {company_name}";s:11:"description";s:49:"{description} {delimiter} блог {company_name}";s:2:"h1";s:4:"{h1}";}}s:16:"posts_categories";a:1:{i:1;a:4:{s:5:"title";s:67:"{title} {delimiter}  {category} {delimiter} блог {company_name}";s:8:"keywords";s:46:"{keywords} {delimiter} блог {company_name}";s:11:"description";s:46:"{keywords} {delimiter} блог {company_name}";s:2:"h1";s:4:"{h1}";}}s:7:"product";a:1:{i:1;a:4:{s:5:"title";s:58:"{title} {delimiter}  {category} {delimiter} {company_name}";s:8:"keywords";s:37:"{keywords} {delimiter} {company_name}";s:11:"description";s:37:"{keywords} {delimiter} {company_name}";s:2:"h1";s:4:"{h1}";}}s:19:"products_categories";a:1:{i:1;a:4:{s:5:"title";s:59:"{title} {delimiter}  {category} {delimiter}  {company_name}";s:8:"keywords";s:37:"{keywords} {delimiter} {company_name}";s:11:"description";s:37:"{keywords} {delimiter} {company_name}";s:2:"h1";s:4:"{h1}";}}}', '', '', 0, NULL),
+  (35, 'home_id', '1', 'common', 'text', 1, 1),
+  (36, 'modules', '', 'common', 'text', 1, NULL);
 CREATE TABLE IF NOT EXISTS `__languages` (
   `id` TINYINT(3) UNSIGNED NOT NULL AUTO_INCREMENT,
   `code` CHAR(2) NOT NULL,
@@ -255,24 +247,6 @@ CREATE TABLE IF NOT EXISTS `__content_relationship` (
   ENGINE = InnoDB
   AUTO_INCREMENT = 1
   DEFAULT CHARACTER SET = utf8;
-CREATE TABLE IF NOT EXISTS `__content_images` (
-  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `content_id` INT(10) UNSIGNED NOT NULL,
-  `path` VARCHAR(255) NOT NULL,
-  `image` VARCHAR(255) NOT NULL,
-  `position` TINYINT(5) UNSIGNED NOT NULL,
-  `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`, `content_id`),
-  INDEX `position` (`position` ASC),
-  INDEX `fk_content_images_content1_idx` (`content_id` ASC),
-  CONSTRAINT `fk_content_images_content1`
-  FOREIGN KEY (`content_id`)
-  REFERENCES `__content` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-  ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  DEFAULT CHARACTER SET = utf8;
   CREATE TABLE IF NOT EXISTS `__nav` (
   `id` TINYINT(3) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) CHARACTER SET 'utf8' COLLATE 'utf8_bin' NOT NULL,
@@ -411,33 +385,6 @@ CREATE TABLE IF NOT EXISTS `__content_features` (
   CONSTRAINT `fk_content_features_features1`
   FOREIGN KEY (`features_id`)
   REFERENCES `__features` (`id`)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE)
-  ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  DEFAULT CHARACTER SET = utf8;
-CREATE TABLE IF NOT EXISTS `__content_images_sizes` (
-  `id` TINYINT(3) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `size` VARCHAR(16) NOT NULL,
-  `width` INT(5) UNSIGNED NOT NULL,
-  `height` INT(5) UNSIGNED NOT NULL,
-  `quality` TINYINT(3) UNSIGNED NOT NULL,
-  `watermark` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
-  `watermark_position` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  UNIQUE INDEX `size` (`size` ASC))
-  ENGINE = InnoDB
-  AUTO_INCREMENT = 1
-  DEFAULT CHARACTER SET = utf8;
-CREATE TABLE IF NOT EXISTS `__content_types_images_sizes` (
-  `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `types_id` TINYINT(3) UNSIGNED NOT NULL,
-  `images_sizes_id` TINYINT(3) UNSIGNED NOT NULL,
-  PRIMARY KEY (`id`, `types_id`, `images_sizes_id`),
-  INDEX `fk_content_types_images_sizes_content_images_sizes1_idx` (`images_sizes_id` ASC),
-  CONSTRAINT `fk_content_types_images_sizes_content_images_sizes1`
-  FOREIGN KEY (`images_sizes_id`)
-  REFERENCES `__content_images_sizes` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
   ENGINE = InnoDB

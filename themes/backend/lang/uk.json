@@ -46,7 +46,13 @@
     "categories": "Категорії",
     "e_required": "Це поле обов'язкове",
     "e_check": "Будь ласка, перевірте це поле",
-    "e_email": "Введіть коректну електронну скриньку"
+    "e_email": "Введіть коректну електронну скриньку",
+    "modal": {
+      "information": "Інформація",
+      "warning": "Попередження",
+      "yes": "Так",
+      "ok": "Зрозуміло"
+    }
   },
   "auth": {
     "action_login": "Авторизація",
@@ -201,28 +207,6 @@
     "error_zip_not_supported": "Відсутній модуль ZipArchive на сервері",
     "error_file_exists": "Помилка, наступні файли вже пристутні в системі",
     "arhive_unzip_success": "Компонент розпаковано, тепер ви можете його встановити"
-  },
-  "contentImagesSizes": {
-    "action_index": "Розміри зображень",
-    "action_edit": "Редагування розміру",
-    "create_title": "Створення розміру",
-    "placeholder_code": "[a-z_0-9]+",
-    "delete_question": "Видалити розмір?",
-    "empty_name": "Введіть розмір",
-    "crop_confirm": "Ви збираєтесь здійснити ресайз зображень. Продовжити?",
-    "size": "Розмір",
-    "width": "Ширина px.",
-    "height": "Висота px.",
-    "types": "Типи контенту",
-    "quality": "Якість",
-    "watermark": "Додати водяний знак",
-    "watermark_opacity": "Прозорість",
-    "watermark_position": "Положення",
-    "watermark_position_tl": "Лівий верхній кут",
-    "watermark_position_tr": "Правий верхній кут",
-    "watermark_position_br": "Нижній правий кут",
-    "watermark_position_bl": "Нижній лівий кут",
-    "watermark_position_c": "По центру"
   },
   "contentTypes": {
     "action_index": "Типи контенту",
@@ -388,18 +372,6 @@
     "desc_autofil_title": "Генерування заголовків автоматично залежно від імені",
     "title_autofill_url": "URL-адреса автоматична транслітерація",
     "desc_autofill_url": "Генерування URL-адрес на основі імені",
-    "title_content_images_dir": "Шлях до завантажень",
-    "desc_content_images_dir": "Відносний шлях до завантажень",
-    "title_content_images_quality": "Якість зображення",
-    "desc_content_images_quality": "Якість зображення (10-100%)",
-    "title_content_images_source_dir": "Назва папки з оригінальним розміром",
-    "desc_content_images_source_dir": "Назва папки з оригінальним розміром",
-    "title_content_images_source_size": "Розмір вихідних зображень",
-    "desc_content_images_source_size": "Розмір зображення, яке обрізано до (0x0)",
-    "title_content_images_thumbs_size": "Розмір зображення попереднього перегляду",
-    "desc_content_images_thumbs_size": "Розмір зображення попереднього перегляду зображення обрізається",
-    "title_content_images_thumb_dir": "Попередній перегляд назви розміру",
-    "desc_content_images_thumb_dir": "Попередній перегляд назви розміру",
     "title_editor_body_class": "Клас контейнера CSS",
     "desc_editor_body_class": "Він буде вставлений в тіло для відображення стилів",
     "title_editor_bodyId": "Ідентифікатор контейнера CSS",
@@ -541,12 +513,6 @@
     "tree_create": "Додати",
     "tree_edit": "Редагувати",
     "tree_delete": "Видалити"
-  },
-  "contentImages": {
-    "image": "Зображення",
-    "remove": "Закрити",
-    "upload_i": "Перетягніть сюди зображення або клікніть щоб вибрати",
-    "dragHere": "Кидайте сюди"
   },
   "fileManager": {
     "action_index": "File Manager"

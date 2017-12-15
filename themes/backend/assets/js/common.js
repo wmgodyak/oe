@@ -158,13 +158,13 @@ var engine = {
     {
         return engine.dialog({
             content: msg,
-            title: 'Warning',
+            title: t.common.modals.warning,
             autoOpen: true,
             width: 500,
             modal: true,
             buttons:  [
                 {
-                    text    : "Yes",
+                    text    : t.common.modals.yes,
                     "class" : 'btn-success',
                     click   : success
                 }
@@ -176,13 +176,17 @@ var engine = {
     {
         return engine.dialog({
             content: msg,
-            title: 'Інфомація',
+            title: t.common.modals.information,
             autoOpen: true,
             width: 500,
             modal: true,
-            buttons: {
-                "Ok": function(){$(this).dialog('close');}
-            },
+            buttons: [
+                {
+                    text    : t.common.modals.ok,
+                    "class" : 'btn-success',
+                    click   : function() { $(this).dialog('close') }
+                }
+            ],
             close : function( event, ui ) { $(this).dialog('destroy').remove(); }
         });
     },
@@ -1493,309 +1497,6 @@ engine.content = {
         }
     }
 };
-engine.contentImages = {
-    init: function () {
-        if($('#contentImagesDz').length == 0) return;
-
-        Dropzone.options.contentImagesDropzone = false; // Prevent Dropzone from auto discovering this element
-        var content_id = $('#content_id').val();
-
-        this.makeDropzone();
-
-        $('.gallery-uploader').on('click', '.remove-item', function(event) {
-            event.preventDefault();
-            var id = $(this).data('id');
-            engine.contentImages.removeImage(id, this);
-        });
-
-        $('.gallery-uploader').on('click', '.trash-item, .remove-cancel', function(event) {
-            event.preventDefault();
-            $(this).parents('.dz-preview').find('.controls').fadeToggle('150');
-        });
-        $('.gallery-uploader').on('click', '.add', function(event) {
-            event.preventDefault();
-            $(this).fadeOut(75, function () {
-                $(this).parents('.gallery-uploader').toggleClass('active');
-                $(this).siblings('.add').fadeIn(150);
-            });
-        });
-
-        $('#edit-image-modal').on('click', '.btn-success', function(event) {
-            $('.editing-item .dz-filename span').text($('#edit-image-modal #image-caption').val());
-        });
-
-        $(document).on('click', '.crop-image', function(){
-            var id = $(this).data('id');
-            engine.contentImages.crop(id);
-        });
-
-        var tpl = $('#dzTemplate').html(),
-            cnt = $('.gallery-container');
-        for(var i=0;i<contentImagesList.length; i++){
-            var img = contentImagesList[i];
-            var item = tpl
-                .toString()
-                .replace (/{id}/g, img.id)
-                .replace (/{src}/g, img.src);
-            cnt.append(item);
-        }
-
-        this.initSortable();
-    },
-    initSortable: function(){
-        var g =$( ".gallery-container" );
-        g.sortable({
-            //placeholder: "upload-placeholder",
-            update: function( event, ui ) {
-                var newOrder = $(this).sortable('toArray').toString();
-                engine.request.post({
-                    url:'ContentImages/sort',
-                    data: {
-                        order: newOrder
-                    }
-                });
-            }
-        });
-        g.disableSelection();
-    },
-    removeImage: function(id, e)
-    {
-        engine.request.get('ContentImages/delete/'+id, function(d){
-            if(d == 1){
-                $(e).parents('.dz-preview').fadeOut(250, function () {
-                    $(e).remove();
-                });
-            }
-        });
-    },
-    crop: function(id){
-    },
-    makeDropzone: function () {
-
-        var imagesContainer = $('#contentImagesDz');
-        var url = imagesContainer.data('target');
-        //var template = _.template(document.getElementById('dzTemplate').innerHTML);
-        var template = document.getElementById('dzTemplate').innerHTML;
-        imagesContainer.dropzone({
-            paramName: "image", // The name that will be used to transfer the file
-            maxFilesize: 10, // MB
-            acceptedFiles: '.jpg,.jpeg,.png,.gif',
-            uploadMultiple: true,
-            previewsContainer: '.gallery-container',
-            previewTemplate: template,
-            parallelUploads:1,
-            url: url,
-            thumbnailWidth: 125,
-            thumbnailHeight: 125,
-            sending:  function(file, xhr, formData){
-                formData.append('token', TOKEN);
-            },
-            init: function() {
-                this.on("addedfile", function(file) {
-//                    // console.log(file);
-                });
-//                this.on("success", function(file) {
-//                    // console.log(file);
-//                });
-            },
-            success: function(file, data) {
-                var div = $('.gallery-container > div:last');
-                div.attr('id', data.id);
-                var str = div.html()
-                    .toString()
-                    .replace (/{id}/g, data.id)
-                //    .replace (/{imageName}/g, data.name);
-                div.html(str);
-
-                engine.contentImages.initSortable();
-                return true;
-            }
-        });
-    }
-};
-engine.contentImagesSizes = {
-    init: function()
-    {
-        // console.log('Init contentImagesSizes');
-
-        $(document).on('click', '.b-contentImagesSizes-create', function(){
-            engine.contentImagesSizes.create();
-        });
-
-        $(document).on('click', '.b-contentImagesSizes-edit', function(){
-            engine.contentImagesSizes.edit($(this).data('id'));
-        });
-
-        $(document).on('click', '.b-contentImagesSizes-delete', function(){
-            engine.contentImagesSizes.delete($(this).data('id'));
-        });
-
-        $(document).on('click', '.b-contentImagesSizes-crop', function(){
-            engine.contentImagesSizes.crop($(this).data('id'));
-        });
-
-    },
-    crop: function(id)
-    {
-        function resizeSuccess(t)
-        {
-            engine.alert(
-                'Ресайз зображень завершено.',
-                'Зроблено ресайз '+t+' зображень',
-                'success'
-            );
-
-            $("#resizeBox").hide();
-        }
-
-        function resize(sizes_id, total, start)
-        {
-
-            if(start >= total) {
-                resizeSuccess();
-                return false;
-            }
-
-            var percent =  100 / total, done = Math.round( start * percent ) ;
-            $("#progress").find('div').css('width', done + '%');
-
-            //setTimeout(function(){
-            //start++;
-            //resize(sizes_id, total, start);
-            //}, 1500);
-
-
-            engine.request.post({
-                url: './contentImagesSizes/resizeItems',
-                data: {
-                    start: start,
-                    sizes_id: sizes_id
-                },
-                success: function(d){
-                    if(d > 0){
-                        start++;
-                        resize(sizes_id, total, start);
-                    } else {
-                        resizeSuccess();
-                    }
-                }
-            });
-
-            return false;
-        }
-
-        var dw = engine.confirm(t.contentImagesSizes.crop_confirm, function(){
-            $("#resizeBox").css('display', 'block');
-            engine.request.post({
-                url: './contentImagesSizes/resizeGetTotal',
-                data: {
-                    sizes_id: id
-                },
-                success: function(d){
-                    resize(id, d, 0);
-                }
-            });
-            dw.dialog('close');
-        });
-    },
-
-    create: function()
-    {
-        engine.request.get('./contentImagesSizes/create', function(d)
-        {
-            var bi = t.common.button_save;
-            var buttons = {};
-
-            buttons[bi] =  function(){
-                $('#form').submit();
-            };
-
-            var dialog = engine.dialog({
-                content: d,
-                title: t.contentImagesSizes.create_title,
-                autoOpen: true,
-                width: 750,
-                modal: true,
-                buttons: buttons
-            });
-
-            $('#content_types').select2();
-
-            $("#data_watermark").change(function(){
-                if($(this).is(':checked')){
-                    $('.watermark-settings').show();
-                } else {
-                    $('.watermark-settings').hide();
-                }
-            });
-
-            engine.validateAjaxForm('#form', function(d){
-                if(d.s){
-                    engine.refreshDataTable('contentImagesSizesList');
-                    dialog.dialog('close');
-                } else {
-                    engine.showFormErrors('#form', d.i);
-                }
-            });
-        });
-    },
-    edit: function(id)
-    {
-        engine.request.post({
-            url: './contentImagesSizes/edit/' + id,
-            data: {id: id},
-            success: function(d)
-            {
-                var bi = t.common.button_save;
-                var buttons = {};
-                buttons[bi] =  function(){
-                    $('#form').submit();
-                };
-                var dialog = engine.dialog({
-                    content: d,
-                    title: t.contentImagesSizes.action_edit,
-                    autoOpen: true,
-                    width: 750,
-                    modal: true,
-                    buttons: buttons
-                });
-
-                $('#content_types').select2();
-                $("#data_watermark").change(function(){
-                   if($(this).is(':checked')){
-                       $('.watermark-settings').show();
-                   } else {
-                       $('.watermark-settings').hide();
-                   }
-                });
-
-                engine.validateAjaxForm('#form', function(d){
-                    if(d.s){
-                        engine.refreshDataTable('contentImagesSizesList');
-                        dialog.dialog('close');
-                    }
-                });
-            }
-        })
-    },
-    delete: function(id)
-    {
-        var w = engine.confirm
-        (
-            t.contentImagesSizes.delete_question,
-            function()
-            {
-                engine.request.get('./contentImagesSizes/delete/' + id, function(d){
-                    if(d > 0){
-                        engine.refreshDataTable('contentImagesSizesList');
-                        w.dialog('close');
-                    }
-                });
-
-            }
-        );
-    }
-};
 
 engine.contentTypes = {
     init: function()
@@ -1815,37 +1516,9 @@ engine.contentTypes = {
             }
         });
 
-        $("#contentImagesSizes,#settingsModules").select2();
+        $("#imagesSizes,#settingsModules").select2();
 
-        $(document).on('click', '.ct-create-images-size', function(){
 
-            var tmpl = _.template($('#sizesCreate').html());
-            var d = tmpl();
-            var pw = engine.dialog({
-                content: d,
-                title: 'Створення розміру',
-                autoOpen: true,
-                width: 500,
-                modal: true,
-                buttons: {
-                    "Зберегти": function(){
-                        $('#formCreateSize').submit();
-                    }
-                }
-            });
-
-            engine.validateAjaxForm('#formCreateSize', function(d){
-                if(d.s){
-                    engine.request.get('contentTypes/getImagesSizes', function(res){
-                        var tmpl = _.template('<% for(var i=0;i < items.length; i++) { %><option value="<%- items[i].id %>"><%- items[i].size %></option>  <% } %>');
-                        var d = tmpl({items: res.items});
-                        $("#contentImagesSizes").html(d).select2();
-                        pw.dialog('close');
-                    }, 'json');
-                }
-            });
-
-        });
     },
     onCreateSuccess: function(d)
     {
@@ -2711,8 +2384,6 @@ $(document).ready(function(){
     engine.admins.init();
     engine.components.init();
     engine.content.init();
-    engine.contentImages.init();
-    engine.contentImagesSizes.init();
     engine.contentTypes.init();
     engine.features.init();
     engine.languages.init();

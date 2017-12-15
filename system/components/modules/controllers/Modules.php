@@ -98,7 +98,9 @@ class Modules extends Backend
                             $meta = PHPDocReader::getMeta($c);
                             $_module['module'] = $module;
                             $_module['status'] = $status;
+                            $_module['config'] = ($this->getConfigFile($module)) ? true : false;
                             $_module += $meta;
+
                             $modules[] = $_module;
                         }
 

@@ -37,7 +37,7 @@
 
                         <footer>
                             <div class="copyright">
-                                © 2015 - 2017 OYi Engine
+                                {t('system.copyright')}
                             </div>
                         </footer>
                     </div>
