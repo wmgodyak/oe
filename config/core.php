@@ -21,5 +21,5 @@
         /**
          * Enable sending or logging mails
          */
-        'mail' => 'send' //possible: log | send
+        'mail' => 'log' //possible: log | send
     ];
