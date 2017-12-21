@@ -157,9 +157,9 @@ class XMail
      */
     public function send()
     {
-        $env = Config::getInstance()->get('core.environment');
+        $env = Config::getInstance()->get('core.mail');
 
-        $log_it = $env != 'production';
+        $log_it = $env != 'send';
 
         $template = Template::getInstance();
 
