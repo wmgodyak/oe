@@ -194,7 +194,7 @@ class XMail
             $this->to = $this->settings['to'];
         }
 
-        if($this->settings['smtp_on'] == 0 && empty($this->settings['from'])) {
+        if($this->settings['smtp_on'] == 0 && !empty($this->settings['from'])) {
             $this->setFrom($this->settings['from'], $this->settings['name']);
         }
 
