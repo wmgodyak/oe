@@ -354,7 +354,8 @@
     "placeholder_code": "[a-z_0-9]+",
     "delete_question": "Видалити переклад?",
     "code_isset": "Переклад по цьому ключу присутній",
-    "empty_value": "Введіть переклад"
+    "empty_value": "Введіть переклад",
+    "text": "Текст перекладу"
   },
   "trash": {
     "action_index": "Видалений контент",

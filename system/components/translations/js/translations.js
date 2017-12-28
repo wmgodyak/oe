@@ -16,7 +16,7 @@ $(document).ready(function(){
                 };
                 var dialog = engine.dialog({
                     content: res,
-                    title: 'Edit translation - ' + id,
+                    title: t.translations.action_edit + " - " + id,
                     autoOpen: true,
                     width: 600,
                     modal: true,
