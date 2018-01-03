@@ -2147,16 +2147,16 @@ ul.first-level {
 .label-default[href]:hover, .label-default[href]:focus {
   background-color: #1a1a1a; }
 
-.label-primary {
+.label-primary, .label-new {
   background-color: #76b6ec; }
 
-.label-primary[href]:hover, .label-primary[href]:focus {
+.label-primary[href]:hover, .label-new[href]:hover, .label-new[href]:focus, .label-primary[href]:focus {
   background-color: #499ee6; }
 
-.label-success {
+.label-success, .label-processed {
   background-color: #aece4e; }
 
-.label-success[href]:hover, .label-success[href]:focus {
+.label-success[href]:hover, .label-processed[href]:hover, .label-success[href]:focus, .label-processed[href]:focus {
   background-color: #95b633; }
 
 .label-info {
@@ -2173,10 +2173,10 @@ ul.first-level {
 .label-warning[href]:hover, .label-warning[href]:focus {
   background-color: #f1b91f; }
 
-.label-danger {
+.label-danger, .label-spam {
   background-color: #e77755; }
 
-.label-danger[href]:hover, .label-danger[href]:focus {
+.label-danger[href]:hover, .label-spam[href]:hover, .label-spam[href]:focus, .label-danger[href]:focus {
   background-color: #e15328; }
 
 .btn-group .btn {
