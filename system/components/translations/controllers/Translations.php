@@ -55,7 +55,7 @@ class Translations extends Backend
 
         if (mb_strlen($search) > 2) {
             $translations = array_filter($translations, function($v) use ($search){
-                return (!empty($v['text']) && mb_strpos($v['text'], $search) !== false) || (!empty($v['id']) && mb_strpos($v['id'], $search) !== false);
+                return (!empty($v['text']) && mb_stripos($v['text'], $search) !== false) || (!empty($v['id']) && mb_stripos($v['id'], $search) !== false);
             });
         }
 
