@@ -234,7 +234,7 @@ class Auth extends Backend {
         Session::destroy();
         setcookie('fail', '', time() - 3600);
 
-        redirect('/');
+        redirect('');
     }
 
     public function profile()
