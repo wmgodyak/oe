@@ -21,4 +21,10 @@ class Breadcrumbs
     {
         array_unshift(self::$items, ['name' => $name, 'url' => $url]);
     }
+
+    public final static function customDefault($name, $url = null)
+    {
+        self::$default = false;
+        self::add($name, $url);
+    }
 }

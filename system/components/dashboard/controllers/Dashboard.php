@@ -9,6 +9,7 @@
 namespace system\components\dashboard\controllers;
 
 use system\Backend;
+use system\backend\Breadcrumbs;
 
 defined("CPATH") or die();
 /**
@@ -24,6 +25,7 @@ class Dashboard extends Backend
 {
     public function index()
     {
+        Breadcrumbs::customDefault(t('dashboard.action_index'), 'module/run/dashboard');
         $this->output($this->template->fetch('system/dashboard/index'));
     }
 
