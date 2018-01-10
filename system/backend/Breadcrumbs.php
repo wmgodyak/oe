@@ -5,6 +5,7 @@ namespace system\backend;
 class Breadcrumbs
 {
     private static $items = [];
+    public static $default = true; //allow create default breadcrumb for module
 
     final public static function add($name, $url = null)
     {

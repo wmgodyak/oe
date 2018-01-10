@@ -146,7 +146,9 @@ abstract class Backend extends Controller
 
         $url .= "$controller";
 
-        Breadcrumbs::prepend(t($controller . '.action_index'), $url);
+        if (Breadcrumbs::$default) {
+            Breadcrumbs::prepend(t($controller . '.action_index'), $url);
+        }
         $this->template->assign('breadcrumb', Breadcrumbs::get());
 
         $this->template->assign('nav_items', Menu::get());
