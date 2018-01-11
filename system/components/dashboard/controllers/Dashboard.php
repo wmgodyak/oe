@@ -25,7 +25,7 @@ class Dashboard extends Backend
 {
     public function index()
     {
-        Breadcrumbs::customDefault(t('dashboard.action_index'), 'module/run/dashboard');
+        Breadcrumbs::customDefault(t('dashboard.action_index'), 'dashboard');
         $this->output($this->template->fetch('system/dashboard/index'));
     }
 
