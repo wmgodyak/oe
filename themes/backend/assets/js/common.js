@@ -107,6 +107,9 @@ var engine = {
                             if(typeof d.m != 'undefined' && d.m != null){
                                 d.e = typeof d.e == 'undefined' ? null : d.e;
                                 engine.notify(d.m, 'success');
+                                $("html, body").animate({
+                                    scrollTop: 0
+                                }, 600);
                             }
                         }
 
