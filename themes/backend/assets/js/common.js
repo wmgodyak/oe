@@ -36,19 +36,28 @@ var engine = {
             var $validator = $(form).validate(), e = [];
             var errors = "";
             var counter = 0;
-            $(inp).each(function(k, i){
-                if(i.hasOwnProperty('messages')) {
-                    $(i.messages).each(function(k, val) {
-                        errors += "<li>"+ val +"</li>";
+            var alert_text = "";
+            $.each($(inp), function(k, i){
+                if (typeof i === 'object') {
+                    if (i.hasOwnProperty('messages')) {
+                        $(i.messages).each(function (k, val) {
+                            errors += "<li>" + val + "</li>";
 
-                        counter++;
+                            counter++;
 
-                    });
+                        });
 
+                    } else {
+                        $validator.showErrors(i);
+                    }
                 } else {
-                    $validator.showErrors(i);
+                    alert_text += i + "\n";
                 }
             });
+
+            if (alert_text) {
+                alert(alert_text);
+            }
 
             if(errors) {
                 var className = counter > 1 ? 'error error-list' : 'error';
