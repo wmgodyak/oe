@@ -227,7 +227,7 @@ class Translations extends Backend
             }
             $t = json_decode(file_get_contents($file), true);
             $t = dots_set($t, $id, $data[$lang['code']]);
-            file_put_contents($file, json_encode($t));
+            file_put_contents($file, json_encode($t, JSON_UNESCAPED_UNICODE));
         }
         return json_encode(array('s' => 1));
     }
