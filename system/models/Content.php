@@ -323,15 +323,10 @@ class Content extends Frontend
         $cm = $this->request->post('content_meta');
 
         $cm = DataFilter::apply('content_meta.update', $cm);
+        //todo: думати добре, але збереження масивів не працювало
         if($cm){
             foreach ($cm as $meta_k => $a) {
-                if(is_array($a)){
-//                    foreach ($a as $k=>$meta_v) {
-//                       todo треба подумати
-//                    }
-                } else {
-                    $this->meta->update($content_id, $meta_k, $a);
-                }
+                $this->meta->update($content_id, $meta_k, $a);
             }
         }
     }

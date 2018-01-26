@@ -45,9 +45,9 @@ class ContentMeta extends Frontend
         }
 
         if($id){
-           return $this->updateRow('__content_meta', $id, ['meta_v' => is_array($meta_v) ? serialize($meta_v) : $meta_v]);
+            return $this->updateRow('__content_meta', $id, ['meta_v' => is_array($meta_v) ? serialize($meta_v) : $meta_v]);
         } else {
-           return $this->create($content_id, $meta_k, $meta_v);
+            return $this->create($content_id, $meta_k, $meta_v);
         }
     }
 
