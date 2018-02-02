@@ -19,6 +19,10 @@ class ContentTypes extends \system\models\ContentTypes
      */
     public function create($data)
     {
+        if (isset($data['id'])) {
+            unset($data['id']);
+        }
+
         $s = parent::createRow('__content_types', $data);
         if($s>0 && $data['parent_id'] > 0){
             self::$db->update('__content_types', ['isfolder'=>1], "id={$data['parent_id']} limit 1");
