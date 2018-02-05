@@ -132,7 +132,7 @@
     "passw_gen_auto": "Якщо не заповнено, згенерується автоватично",
     "notify": "Повідомити по email",
     "notify_subj": "Дякуємо за реєстрацію!",
-    "notify_tpl": "Вітаємо {$data.name}. <br><br> Вам надіслано доступи до системи {$t.system.name}. <br> Ваш лоігн: {$data.email} <br> Ваш пароль: {$data.password} <br> Отримати доступ ви можете за адресою: {$data.url}",
+    "notify_tpl": "Вітаємо {$data.name}. Вам надіслано доступи до системи {$t.system.name}. <br><br> Ваш лоігн: {$data.email} <br> Ваш пароль: {$data.password} <br> Отримати доступ ви можете за адресою: {$data.url}",
     "status_deleted": "Аккаунт видалений",
     "status_ban": "Аккаунт вимкнутий",
     "title_delete": "Видалити",
