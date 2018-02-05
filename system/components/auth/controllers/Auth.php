@@ -155,7 +155,7 @@ class Auth extends Backend {
             return [
                 's' => $status > 0,
                 'i' => $inp,
-                'f' => $fail > 1,
+                'f' => $fail > 0,
                 'c' => $fail
             ];
         }
