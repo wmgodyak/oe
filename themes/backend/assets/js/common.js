@@ -1612,12 +1612,14 @@ engine.contentImages = {
 //                });
             },
             success: function(file, data) {
-                var div = $('.gallery-container > div:last');
-                div.attr('id', data.id);
+                var div = $(file.previewElement);
+                div.attr('id', "im-" + data.id);
+
                 var str = div.html()
                     .toString()
                     .replace (/{id}/g, data.id)
-                //    .replace (/{imageName}/g, data.name);
+                    .replace (/{position}/g, data.position);
+
                 div.html(str);
 
                 engine.contentImages.initSortable();
