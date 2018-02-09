@@ -54,7 +54,11 @@ class Auth extends Backend {
             if(! isset($_SESSION['backend']['admin'])) return null;
             return $_SESSION['backend']['admin'];
         } elseif(!$val){
-            if(isset($_SESSION['backend']['admin'][$key])){
+            $unset_keys = ['surname', 'phone'];
+
+            if (in_array($key, $unset_keys)) {
+                unset($_SESSION['backend']['admin'][$key]);
+            } elseif (isset($_SESSION['backend']['admin'][$key])) {
                 return $_SESSION['backend']['admin'][$key];
             }
 
