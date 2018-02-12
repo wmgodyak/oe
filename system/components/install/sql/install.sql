@@ -66,8 +66,7 @@ CREATE TABLE IF NOT EXISTS `__languages` (
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8;
-INSERT INTO `__languages` (`id`, `code`, `name`, `is_main`) VALUES
-  (1, '', '', 1);
+INSERT INTO `__languages` (`id`, `code`, `name`, `is_main`,`hreflang`,`dir`,`lang`) VALUES  (1, '', '', 1,'en-us','ltr','en');
 CREATE TABLE IF NOT EXISTS `__users_group` (
   `id` TINYINT(3) UNSIGNED NOT NULL AUTO_INCREMENT,
   `parent_id` TINYINT(3) UNSIGNED NOT NULL,
