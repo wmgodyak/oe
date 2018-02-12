@@ -53,7 +53,7 @@ class Themes extends Backend
         $themes = array();
         if ($handle = opendir($path)) {
             while (false !== ($theme = readdir($handle))) {
-                if ($theme != "." && $theme != "..") {
+                if ($theme != "." && $theme != ".." && $theme != '.htaccess' && $theme != 'index.html') {
                     if(!file_exists($path . '/' . $theme . '/config.json'))
                         continue;
 

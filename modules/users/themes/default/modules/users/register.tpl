@@ -10,7 +10,7 @@
                     </div>
                     <div class="block-content">
                         {t('users.register.form.description')}
-                        <form method="post" action="{route('register')}" id="usersRegisterForm" data-href="{route('profile')}">
+                        <form method="post" action="{url('register')}" id="usersRegisterForm" data-href="{url('profile')}">
                             {block name='users.register.form'}
                                 <div class="form-group">
                                     <input type="text" required name="data[name]" class="form-control" placeholder="{t('users.register.form.labels.name')}">

@@ -1,6 +1,6 @@
 <fieldset>
     <legend>Мітки</legend>
-    {foreach $languages as $lang}
+    {foreach $languages->get() as $lang}
         <div class="form-group">
             <label for="content_published" class="col-md-3 control-label">{$lang.name}</label>
             <div class="col-md-9">

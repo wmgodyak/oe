@@ -55,6 +55,15 @@ class Route
 
     private function __clone(){}
 
+    public function beforeBoot(Request $request)
+    {
+        $b_uri = \settings('backend_url');
+
+        if(strpos($request->uri, $b_uri) !== false){
+            $request->mode = 'backend';
+        }
+    }
+
     /**
      * @return null|Route
      */

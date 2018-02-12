@@ -69,7 +69,7 @@ class Blog extends Frontend
             $this->template->assignScript('modules/blog/js/blog.js');
 
             $blog = [];
-            $blog['id'] = $this->config->id;
+            $blog['config'] = $this->config;
             $this->template->assign('blog', $blog);
 
             if($page['type'] == $this->config->post_type){
@@ -99,6 +99,11 @@ class Blog extends Frontend
 
             $category['total'] = $total;
             $category['posts'] = $this->posts->get();
+
+            foreach ($category['posts'] as $k=>$post) {
+                $category['posts'][$k] = filter_apply('blog.post', $post);
+            }
+
             $category['pagination'] = $pagination;
         }
 
@@ -137,7 +142,7 @@ class Blog extends Frontend
         $q = strip_tags(trim($q));
 
         $blog = [];
-        $blog['id'] = $this->config->id;
+        $blog['config'] = $this->config;
 
         $search['q'] = $q;
 
@@ -209,7 +214,8 @@ class Blog extends Frontend
 
         $url = str_replace('{author}', $author_id, $this->config->route->author);
         $blog = [];
-        $blog['id'] = $this->config->id;
+        $blog['config'] = $this->config;
+
         $category = [];
 
         $this->posts->categories_id = 0;
@@ -255,7 +261,7 @@ class Blog extends Frontend
         $url  = str_replace('{tag}', $tag, $this->config->route->author);
 
         $blog = [];
-        $blog['id'] = $this->config->id;
+        $blog['config'] = $this->config;
 
         $category = [];
 
@@ -296,6 +302,16 @@ class Blog extends Frontend
         $this->posts->num   = $num;
 
         return $this->posts->get();
+    }
+
+    /**
+     * @param int $num
+     * @param int $start
+     * @return array
+     */
+    public function popular($num, $start = 0)
+    {
+        return $this->posts->popular($num, $start);
     }
 
     /**

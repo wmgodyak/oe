@@ -7,6 +7,9 @@
  */
 
 defined("CPATH") or die();
+
+mb_internal_encoding("UTF-8");
+
 if(! function_exists('shortText')) {
 
     /**
@@ -110,4 +113,31 @@ function random_string($length = 10, $only_uppercase = false, $numbers = true ) 
     }
 
     return $s;
+}
+
+function mb_ucfirst($text) {
+    return mb_strtoupper(mb_substr($text, 0, 1)) . mb_substr($text, 1);
+}
+
+function mb_lcfirst($text) {
+    return mb_strtolower(mb_substr($text, 0, 1)) . mb_substr($text, 1);
+}
+
+function replaceShortCode($template, $data)
+{
+    return preg_replace_callback
+    (
+        '({[a-z_]+})',
+        function($m) use($data) {
+
+            $k = str_replace(['{', '}'], [], $m[0]);
+            $k = lcfirst($k);
+
+            if(isset($data[$k])) return mb_lcfirst($data[$k]);
+
+            return $k;
+
+        },
+        $template
+    );
 }

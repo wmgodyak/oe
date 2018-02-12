@@ -43,7 +43,7 @@ class Translations extends Backend
         $order = !empty($_POST['order'][0]['column']) ? intval($_POST['order'][0]['column']) : 0;
         $direction = !empty($_POST['order'][0]['dir']) ? trim(strip_tags($_POST['order'][0]['dir'])) : 'asc';
         $t = new DataTables2('translations');
-        $code = $this->languages->getDefault('code');
+        $code = $this->languages->languages->getDefault('code');
         $theme = $this->settings->get('app_theme_current');
         $fn = "themes/$theme/lang/$code.json";
         if(!file_exists(DOCROOT . $fn)){
@@ -55,7 +55,7 @@ class Translations extends Backend
 
         if (mb_strlen($search) > 2) {
             $translations = array_filter($translations, function($v) use ($search){
-                return (!empty($v['text']) && mb_strpos($v['text'], $search) !== false) || (!empty($v['id']) && mb_strpos($v['id'], $search) !== false);
+                return (!empty($v['text']) && mb_stripos($v['text'], $search) !== false) || (!empty($v['id']) && mb_stripos($v['id'], $search) !== false);
             });
         }
 
@@ -151,8 +151,8 @@ class Translations extends Backend
         foreach ($a as $k=>$v) {
             if(is_array($v)){
                 foreach ($v as $k1=>$v1) {
-                    if(is_array($k1)){
-                        foreach ($k1 as $k2=>$v2) {
+                    if(is_array($v1)){
+                        foreach ($v1 as $k2=>$v2) {
                             $res[] = ['id'=> $k.'.'.$k1. $k2, 'text' => $v2, 'path' => $file];
                         }
                     } else {
@@ -163,7 +163,6 @@ class Translations extends Backend
                 $res[] = ['id'=> $k, 'text' => $v, 'path' => $file];
             }
         }
-
         return $res;
     }
 
@@ -228,7 +227,7 @@ class Translations extends Backend
             }
             $t = json_decode(file_get_contents($file), true);
             $t = dots_set($t, $id, $data[$lang['code']]);
-            file_put_contents($file, json_encode($t));
+            file_put_contents($file, json_encode($t, JSON_UNESCAPED_UNICODE));
         }
         return json_encode(array('s' => 1));
     }

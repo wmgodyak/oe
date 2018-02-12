@@ -17,5 +17,9 @@
         /**
          * Enable or disable force compile for assets
          */
-        'assets_compile_force' => false
+        'assets_compile_force' => false,
+        /**
+         * Enable sending or logging mails
+         */
+        'mail' => 'log' //possible: log | send
     ];

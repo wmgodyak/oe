@@ -34,9 +34,41 @@ var engine = {
         function showError(form, inp)
         {
             var $validator = $(form).validate(), e = [];
-            $(inp).each(function(k, i){
-                $validator.showErrors(i);
+            var errors = "";
+            var counter = 0;
+            var alert_text = "";
+            $.each($(inp), function(k, i){
+                if (typeof i === 'object') {
+                    if (i.hasOwnProperty('messages')) {
+                        $(i.messages).each(function (k, val) {
+                            errors += "<li>" + val + "</li>";
+
+                            counter++;
+
+                        });
+
+                    } else {
+                        $validator.showErrors(i);
+                    }
+                } else {
+                    alert_text += i + "\n";
+                }
             });
+
+            if (alert_text) {
+                alert(alert_text);
+            }
+
+            if(errors) {
+                var className = counter > 1 ? 'error error-list' : 'error';
+
+                errors = "<ul>" + errors + "</ul>";
+                engine.inlineNotify(errors, className, undefined, false);
+                $("html, body").animate({
+                    scrollTop: 0
+                }, 600);
+            }
+
         }
 
         $(myForm).validate({
@@ -75,6 +107,9 @@ var engine = {
                             if(typeof d.m != 'undefined' && d.m != null){
                                 d.e = typeof d.e == 'undefined' ? null : d.e;
                                 engine.notify(d.m, 'success');
+                                $("html, body").animate({
+                                    scrollTop: 0
+                                }, 600);
                             }
                         }
 
@@ -1286,7 +1321,8 @@ engine.content = {
                     'з': 'z', 'и': 'y', 'й': 'j', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'і' : 'i', 'ї' : 'i',
                     'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h',
                     'ц': 'c', 'ч': 'ch', 'ш': 'sh', 'щ': 'sh', 'ъ': space, 'ы': 'y', 'ь': space, 'э': 'e',
-                    'ю': 'yu', 'я': 'ya', 'є': 'ye',
+                    'ю': 'yu', 'я': 'ya', 'є': 'ye', 'ą': 'a', 'ć': 'c', 'ę': 'e', 'ł': 'l', 'ń': 'n', 'ó': 'o', 'ś': 's',
+                    'ź': 'z', 'ż': 'z', 'ä': 'a', 'ö': 'o', 'ü': 'u', 'ß': 'b',
                     ' ': space, '_': space, '`': space, '~': space, '!': space, '@': space,
                     '#': space, '$': space, '%': space, '^': space, '&': space, '*': space,
                     '(': space, ')': space, '-': space, '\=': space, '+': space, '[': space,
@@ -1576,12 +1612,14 @@ engine.contentImages = {
 //                });
             },
             success: function(file, data) {
-                var div = $('.gallery-container > div:last');
-                div.attr('id', data.id);
+                var div = $(file.previewElement);
+                div.attr('id', "im-" + data.id);
+
                 var str = div.html()
                     .toString()
                     .replace (/{id}/g, data.id)
-                //    .replace (/{imageName}/g, data.name);
+                    .replace (/{position}/g, data.position);
+
                 div.html(str);
 
                 engine.contentImages.initSortable();

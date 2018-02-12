@@ -19,17 +19,16 @@ class ContentFeatures extends Backend
 
     public function index($categories_id=null, $content_id=null)
     {
-        if(! $categories_id || !$content_id) return;
+        if(! $categories_id || !$content_id) return '';
 
         $features = $this->cf->getByCategoryId($categories_id, $content_id);
 
-//        $this->dump($features);
         $out = '';
         foreach ($features as $feature) {
             $out .= $this->makeFeature($feature);
         }
 
-        echo $out;
+        return $out;
     }
 
     public function create()
@@ -46,7 +45,7 @@ class ContentFeatures extends Backend
         $this->template->assign('content_id', $content_id);
         $this->template->assign('disable_values', $disable_values);
 
-        $this->template->display('system/contentFeatures/create');
+        return $this->template->fetch('system/contentFeatures/create');
     }
 
     public function createValue()
@@ -94,7 +93,7 @@ class ContentFeatures extends Backend
         $data = ['parent_id' => $parent_id];
         $this->template->assign('data', $data);
 
-        $this->template->display('system/contentFeatures/create_value');
+        return $this->template->fetch('system/contentFeatures/create_value');
     }
 
     public function edit($id)
@@ -117,13 +116,6 @@ class ContentFeatures extends Backend
 
         $s=0; $i=[]; $m=null;
 
-        /* FormValidation::setRule(['code'], FormValidation::REQUIRED);
-
-         FormValidation::run($data);
-
-         if(FormValidation::hasErrors()){
-             $i = FormValidation::getErrors();
-         } else {*/
         foreach ($info as $languages_id=> $item) {
             if(empty($item['name'])){
                 $i[] = ["info[$languages_id][name]" => t('features.empty_name')];
@@ -132,7 +124,6 @@ class ContentFeatures extends Backend
         if(empty($i)) {
             $s = $this->cf->create();
         }
-//        }
 
         if($this->cf->hasError()){
             $m = $this->cf->getErrorMessage();

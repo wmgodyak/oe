@@ -6,7 +6,7 @@
  * @name index
  *}
 <!DOCTYPE html>
-<html data-lang="{block name="html.lang"}{$request->language->code}{/block}" data-page="{$page.id}" data-template="{$page.template}" data-type="{$page.type}">
+<html data-lang="{block name="html.lang"}{$request->language->code}{/block}" dir="{block name="html.dir"}{$request->language->dir}{/block}" lang="{block name="html.dir"}{$request->language->lang}{/block}" data-page="{$page.id}" data-template="{$page.template}" data-type="{$page.type}">
 
     <head>{include file="chunks/head.tpl"}</head>
 

@@ -42,7 +42,7 @@
             </div>
         </div>
     </div>
-    {foreach $languages as $lang}
+    {foreach $languages->get() as $lang}
         <div class="form-group">
             <label for="info_name" class="col-md-3 control-label required">Name ({$lang.code})</label>
             <div class="col-md-9">

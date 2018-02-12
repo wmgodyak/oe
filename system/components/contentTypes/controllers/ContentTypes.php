@@ -326,7 +326,7 @@ class ContentTypes extends Backend
     private function readTemplate($id)
     {
         $template = $this->getPath($id);
-        return file_get_contents( $template );
+        return @file_get_contents( $template );
     }
 
     /**

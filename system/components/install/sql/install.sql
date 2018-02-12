@@ -50,12 +50,15 @@ INSERT INTO `__settings` (`id`, `name`, `value`, `block`, `type`, `required`, `d
   (48, 'company_phone', '', 'company', 'text', 1, 1),
   (49, 'seo', 'a:6:{s:5:"guide";a:1:{i:1;a:4:{s:5:"title";s:0:"";s:8:"keywords";s:0:"";s:11:"description";s:0:"";s:2:"h1";s:0:"";}}s:5:"pages";a:1:{i:1;a:4:{s:5:"title";s:34:"{title} {delimiter} {company_name}";s:8:"keywords";s:37:"{keywords} {delimiter} {company_name}";s:11:"description";s:13:"{description}";s:2:"h1";s:4:"{h1}";}}s:4:"post";a:1:{i:1;a:4:{s:5:"title";s:67:"{title} {delimiter}  {category} {delimiter} блог {company_name}";s:8:"keywords";s:46:"{keywords} {delimiter} блог {company_name}";s:11:"description";s:49:"{description} {delimiter} блог {company_name}";s:2:"h1";s:4:"{h1}";}}s:16:"posts_categories";a:1:{i:1;a:4:{s:5:"title";s:67:"{title} {delimiter}  {category} {delimiter} блог {company_name}";s:8:"keywords";s:46:"{keywords} {delimiter} блог {company_name}";s:11:"description";s:46:"{keywords} {delimiter} блог {company_name}";s:2:"h1";s:4:"{h1}";}}s:7:"product";a:1:{i:1;a:4:{s:5:"title";s:58:"{title} {delimiter}  {category} {delimiter} {company_name}";s:8:"keywords";s:37:"{keywords} {delimiter} {company_name}";s:11:"description";s:37:"{keywords} {delimiter} {company_name}";s:2:"h1";s:4:"{h1}";}}s:19:"products_categories";a:1:{i:1;a:4:{s:5:"title";s:59:"{title} {delimiter}  {category} {delimiter}  {company_name}";s:8:"keywords";s:37:"{keywords} {delimiter} {company_name}";s:11:"description";s:37:"{keywords} {delimiter} {company_name}";s:2:"h1";s:4:"{h1}";}}}', '', '', 0, NULL),
   (50, 'home_id', '1', 'common', 'text', 1, 1),
-  (52, 'modules', '', 'common', 'text', 1, NULL),
+  (52, 'modules', 'a:2:{s:4:"Blog";a:1:{s:6:"status";s:7:"enabled";}s:5:"Users";a:1:{s:6:"status";s:7:"enabled";}}', 'common', 'text', 1, NULL),
   (53, 'watermark_src', '', 'images', 'text', 1, NULL);
 CREATE TABLE IF NOT EXISTS `__languages` (
   `id` TINYINT(3) UNSIGNED NOT NULL AUTO_INCREMENT,
   `code` CHAR(2) NOT NULL,
   `name` VARCHAR(30) NOT NULL,
+  `hreflang` VARCHAR(8) NULL DEFAULT NULL,
+  `dir` VARCHAR(3) NOT NULL,
+  `lang` VARCHAR(8) NOT NULL,
   `is_main` TINYINT(1) UNSIGNED NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE INDEX `code` (`code` ASC),
@@ -63,8 +66,7 @@ CREATE TABLE IF NOT EXISTS `__languages` (
 ENGINE = InnoDB
 AUTO_INCREMENT = 1
 DEFAULT CHARACTER SET = utf8;
-INSERT INTO `__languages` (`id`, `code`, `name`, `is_main`) VALUES
-  (1, '', '', 1);
+INSERT INTO `__languages` (`id`, `code`, `name`, `is_main`,`hreflang`,`dir`,`lang`) VALUES  (1, '', '', 1,'en-us','ltr','en');
 CREATE TABLE IF NOT EXISTS `__users_group` (
   `id` TINYINT(3) UNSIGNED NOT NULL AUTO_INCREMENT,
   `parent_id` TINYINT(3) UNSIGNED NOT NULL,
@@ -111,14 +113,14 @@ CREATE TABLE IF NOT EXISTS `__users` (
   `group_id` TINYINT(3) UNSIGNED NOT NULL,
   `sessid` CHAR(35) NULL DEFAULT NULL,
   `name` VARCHAR(60) NOT NULL,
-  `surname` VARCHAR(60) NOT NULL,
-  `phone` VARCHAR(20) NOT NULL,
+  `surname` VARCHAR(60) NULL DEFAULT NULL,
+  `phone` VARCHAR(20) NULL DEFAULT NULL,
   `email` VARCHAR(60) NOT NULL,
   `password` VARCHAR(64) NOT NULL,
   `avatar` VARCHAR(100) NULL DEFAULT NULL,
   `skey` VARCHAR(64) NULL DEFAULT NULL,
   `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated` DATETIME NOT NULL,
+  `updated` DATETIME DEFAULT NULL,
   `lastlogin` TIMESTAMP NULL DEFAULT NULL,
   `status` ENUM('active','ban','deleted') NOT NULL DEFAULT 'active',
   PRIMARY KEY (`id`, `languages_id`, `group_id`),
@@ -179,7 +181,7 @@ CREATE TABLE IF NOT EXISTS `__content` (
   `published` DATE NULL DEFAULT NULL,
   `settings` TEXT NULL DEFAULT NULL,
   `status` ENUM('blank','hidden','published','deleted') NULL DEFAULT 'blank',
-  `external_id` VARCHAR(60) NOT NULL,
+  `external_id` VARCHAR(60) NULL DEFAULT NULL,
   PRIMARY KEY (`id`, `types_id`, `subtypes_id`, `owner_id`),
   INDEX `fk_content_owner_idx` (`owner_id` ASC),
   INDEX `status` (`status` ASC),
@@ -319,8 +321,8 @@ CREATE TABLE IF NOT EXISTS `__nav_items_info` (
   CONSTRAINT `fk_nav_items_info_nav_items1`
     FOREIGN KEY (`nav_items_id`)
     REFERENCES `__nav_items` (`id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
   CONSTRAINT `fk_nav_items_info_languages1`
     FOREIGN KEY (`languages_id`)
     REFERENCES `__languages` (`id`)

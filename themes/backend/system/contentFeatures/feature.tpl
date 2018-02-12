@@ -1,6 +1,6 @@
 {function name=renderFeature}
 {if $feature.type == 'text'}
-    {foreach $languages as $lang}
+    {foreach $languages->get() as $lang}
         <div class="form-group">
             <label for="content_features_{$lang.id}" class="col-md-4 control-label">{$feature.name}</label>
             <div class="col-md-8">
@@ -10,7 +10,7 @@
         </div>
     {/foreach}
 {elseif $feature.type == 'textarea'}
-    {foreach $languages as $lang}
+    {foreach $languages->get() as $lang}
         <div class="form-group">
             <label for="content_features_{$feature.id}x{$lang.id}" class="col-md-4 control-label">{$feature.name}</label>
             <div class="col-md-8">

@@ -107,11 +107,14 @@
 
     $request->mode ='frontend';
 
-    if($config->get('db') == null){
+    if($config->get('db') == null || system\core\Session::get('inst')){
         $installer = new \system\components\install\controllers\Install();
         $installer->index();
         die;
     }
+
+    $route = \system\core\Route::getInstance();
+    $route->beforeBoot($request);
 
     $language = \system\core\Languages::getInstance();
     $language->detect($request);
@@ -119,8 +122,6 @@
     \system\models\Modules::getInstance()->boot($request);
 
     events()->call('boot');
-
-    $route = \system\core\Route::getInstance();
 
     $route->dispatch($request);
 

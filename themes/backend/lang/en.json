@@ -130,7 +130,8 @@
     "error_email_not_unique": "This email already exists in our database",
     "passw_gen_auto": "It will be generated automatically if it is not filled out",
     "notify": "Notify via email",
-    "notify_tpl": "Congratulations {$data.name}. Accesses to the {$t.system.name} system have been sent. Your login: {$data.email}<br> Your password: {$data.password}<br> You can access through this link: {$data.url}",
+    "notify_subj": "Thanks for registration",
+    "notify_tpl": "Congratulations {$data.name}. Accesses to the {$t.system.name} system have been sent. <br><br> Your login: {$data.email}<br> Your password: {$data.password}<br> You can access through this link: {$data.url}",
     "status_deleted": "Your account has been deleted",
     "status_ban": "Your account has been restricted",
     "title_delete": "Delete",
@@ -282,6 +283,9 @@
   "languages": {
     "action_index": "Languages",
     "code": "(ISO) Code ",
+    "hreflang": "Hreflang",
+    "dir": "Direction (ltr/rtl)",
+    "lang": "Lang",
     "name": "Name",
     "is_main": "Main",
     "action_edit": "Editing the language",
@@ -350,7 +354,8 @@
     "placeholder_code": "[a-z_0-9]+",
     "delete_question": "Want to delete the translation?",
     "code_isset": "The translation key is present",
-    "empty_value": "Enter a translation"
+    "empty_value": "Enter a translation",
+    "text": "Translation text"
   },
   "trash": {
     "action_index": "Deleted content",

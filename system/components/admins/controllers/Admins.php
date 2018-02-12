@@ -8,6 +8,7 @@ use helpers\DateTime;
 use helpers\FormValidation;
 use system\core\DataTables2;
 use system\Backend;
+use system\models\XMail;
 
 defined("CPATH") or die();
 
@@ -222,15 +223,17 @@ class Admins extends Backend
     {
         $data['url'] = APPURL . $this->settings->get('backend_url');
 
-        include_once DOCROOT . "/vendor/phpmailer/PHPMailer.php";
+        $lang_code = $this->languages->languages->getData($this->languages->id, 'code');
+        $filename = DOCROOT . "themes/" . $this->settings->get('backend_theme') . "/lang/" . $lang_code.".json";
+        if (!file_exists($filename)) {
+            return false;
+        }
+        $t = json_decode(file_get_contents($filename), true);
 
-        $mail = new \PHPMailer();
+        $mail = new XMail($t['admins']['notify_subj']);
         $mail->addAddress($data['email']);
-        $mail->setFrom('no-reply@' . $_SERVER['HTTP_HOST'], t('core.sys_name'));
-        $mail->isHTML(false);
-        $tpl = t('admins.notify_tpl');
         $this->template->assign('data', $data);
-        $mail->Body = $this->template->fetchString($tpl);
+        $mail->body($this->template->fetchString($t['admins']['notify_tpl']));
         return $mail->send();
     }
 

@@ -66,8 +66,6 @@ abstract class Frontend extends core\Controller
     {
         parent::__construct();
 
-        $this->request->mode = 'frontend';
-
         $this->settings = Settings::getInstance();
 
         $this->languages = \system\core\Languages::getInstance();
@@ -81,7 +79,8 @@ abstract class Frontend extends core\Controller
         }
 
         if(! $this->validator){
-            $this->validator = new Validator(t('validator'));
+            $tt = t('validator');
+            $this->validator = new Validator(is_string($tt) ? [] : $tt);
         }
     }
 

@@ -89,7 +89,7 @@ class Modules extends Backend
             } elseif($status == 'enabled'){
                 if(!empty($installed_modules)){
 
-                    foreach ($installed_modules as $module=> $status) {
+                    foreach ($installed_modules as $module => $status) {
                         $_module = [];
                         $c  = $modules_dir .'\\'. lcfirst($module) . '\controllers\\' . ucfirst($module);
                         $path = str_replace("\\", "/", $c);
@@ -119,8 +119,8 @@ class Modules extends Backend
                 $res[$i][] =
                     (isset($module['description']) ? $module['description'] .'<br>' : '')
                     . '<small>'
-                    . "   Author: " . (isset($module['author']) ? $module['author'] : 'немає.')
-                    . " | Version: " . (isset($module['version']) ? $module['version'] : 'немає.')
+                    . "   Author: " . (isset($module['author']) ? $module['author'] : 'none.')
+                    . " | Version: " . (isset($module['version']) ? $module['version'] : 'none.')
                     . '</small>'
                 ;
                 $b = [];
@@ -144,7 +144,7 @@ class Modules extends Backend
 
                     }
 
-                    if($module['config']){
+                    if(isset($module['has_config']) && $module['has_config']){
                         $b[] = (string)Button::create
                         (
                             Icon::create(Icon::TYPE_SETTINGS),
@@ -188,7 +188,7 @@ class Modules extends Backend
                 if(file_exists(DOCROOT . $path . '.php')) {
                     $meta = PHPDocReader::getMeta($c);
                     $meta['module'] = ucfirst($module);
-                    $meta['config'] = ($this->getConfigFile($module)) ? true : false;
+                    $meta['has_config'] = file_exists(DOCROOT . $this->modules_dir .'/'. $module . '/config.json');
                     $modules[] = $meta;
                 }
 
@@ -197,46 +197,6 @@ class Modules extends Backend
         }
 
         return $modules;
-    }
-
-    /**
-     * @param $module
-     * @return bool
-     */
-    private function getConfigFile($module)
-    {
-        $path = DOCROOT . $this->modules_dir.'/'.$module.'/'.$this->config_file_name.".".$this->config_file_type;
-        $config = [];
-        if(file_exists($path)) {
-            switch ($this->config_file_type)
-            {
-                case 'json': {
-                    $json = file_get_contents($path);
-                    if($json != '') {
-                        $config = json_decode($json,true);
-                    }
-                    break;
-                }
-//                case 'ini': {
-//                    $config = parse_ini_file($path);
-//                    break;
-//                }
-            }
-        }
-        if(!empty($config)) {
-            return $config;
-        }
-        return false;
-    }
-
-    private function setConfigFile($module, $config)
-    {
-        $path = DOCROOT . $this->modules_dir.'/'.$module.'/'.$this->config_file_name.".".$this->config_file_type;
-        $json = json_encode($config);
-        if(file_put_contents($path, $json)){
-            return true;
-        }
-        return false;
     }
 
     public function install($module = '')
@@ -303,95 +263,113 @@ class Modules extends Backend
         return ['s' => 1];
     }
 
-    public function create()
-    {
-
-    }
+    public function create(){}
 
     public function edit($id = null)
     {
-        $s=0; $t=null; $m=null; $config = null; $translation = null;
-        $module =  $this->request->post('module');
+        $module  =  $this->request->post('module');
         $modules = Settings::getInstance()->get('modules');
-        if(isset($modules[$module])){
-            $_module = lcfirst($module);
-            $t = 'Налаштування модуля';
-            $config = $this->getConfigFile($_module);
-            $s_config = isset($modules[$module]['config']) ? $modules[$module]['config'] : [];
-//            $config = array_merge($config, $s_config);
-//            if(!empty($config)) {
-                $config = $this->getCodesFromJson($_module, $config);
-//            }
-        }
-        $this->template->assign('config', $config);
-        $this->template->assign('module', $module);
-//        $this->template->assign('translation', $translation);
-        $m = $this->template->fetch('system/modules/config');
 
-        return ['s' => $s, 't' => $t, 'm' => $m];
-    }
-
-    private function getCodesFromJson($module, $config, $code = null, $array = [])
-    {
-        if(!is_null($code)) {
-            $code = $code.'.';
-        } else {
-            $code = $module.'.config.';
+        if(!isset($modules[$module])) {
+            return ['s' => 0, 't' => "Error", 'm' => "This module does not available"];
         }
 
-        foreach($config as $k=>$item) {
-            if(!is_array($item)) {
-                $array[$code.$k] = [
-                    'label' => t($code.$k),
-                    'value' => t($item)
-                ];
-            } else {
-                $a = $this->getCodesFromJson($module, $item, $code.$k, $array);
-                $array = array_merge($a, $array);
+        $path   = DOCROOT . $this->modules_dir .'/'. lcfirst($module) . '/config.json';
+        $params = json_decode(file_get_contents($path), true);
+
+        $c      = $this->modules_dir .'\\'. lcfirst($module) . '\controllers\admin\\' . ucfirst($module);
+        $c_path = str_replace('\\',DIRECTORY_SEPARATOR, $c) . '.php';
+
+        if(file_exists($c_path)){
+
+            $mi = new $c;
+
+            if(is_callable([$mi, 'config'])){
+
+                $m = $mi->config($params);
+
+                return ['s'=> 1, 't'=> "Configuration of $module", "m" => $m];
             }
         }
-        return $array;
-    }
+        $fields = $this->buildFormFields(lcfirst($module), $params);
+        $this->template->assign('fields', $fields);
+        $this->template->assign('params', $params);
+        $this->template->assign('module', $module);
+        $m = $this->template->fetch('system/modules/config');
 
+        return ['s' => 1, 't' => "Configuration of $module", 'm' => $m];
+    }
 
     public function process($id = null)
     {
-        $s=0; $t=null; $m=null;
         $module = $this->request->post('module');
         $data = $this->request->post('config');
+
         if(empty($data)){
-            $m = "Цей модуль немає налаштувань";
-        } else {
-            $module = ucfirst($module);
-            $_module = lcfirst($module);
+            return ['s'=>0, 'm' => "Цей модуль немає налаштувань"];
+        }
 
-            $modules = Settings::getInstance()->get('modules');
+        $module  = ucfirst($module);
+        $_module = lcfirst($module);
 
-            if(isset($modules[$module])){
-                $s=1;
-                $m = 'Налаштування модуля оновлено';
+        $modules = Settings::getInstance()->get('modules');
 
-                if( !isset($modules[$module]['config'])){
-                    $modules[$module]['config'] = [];
-                }
+        if(!isset($modules[$module])){
+            return ['s'=>0, 'm' => "Цей модуль не існує"];
+        }
 
-                $config = [];
-                foreach ($data as $key=>$value) {
-                    $key = str_replace($_module.'.config.','',$key);
-                    $config = dots_set($config, $key, $value);
-                }
+        $c      = $this->modules_dir .'\\'. $_module . '\controllers\admin\\' . $module;
+        $c_path = str_replace('\\',DIRECTORY_SEPARATOR, $c);
 
-                if($this->setConfigFile($_module, $config)) {
+        if(file_exists($c_path)){
 
-//                    $modules[$module]['config'] = $config;
-//
-//                    Settings::getInstance()->set('modules', $modules);
-                }
+            $mi = new $c;
+
+            if(is_callable([$mi, 'updateConfig'])){
+
+                return $mi->updateConfig($data);
             }
         }
 
-        return ['s' => $s, 't' => $t, 'm' => $m];
+        if( !isset($modules[$module]['config'])){
+            $modules[$module]['config'] = [];
+        }
+
+        $config = [];
+
+        foreach ($data as $key=>$value) {
+            $config = dots_set($config, $key, $value);
+        }
+
+        $path = DOCROOT . $this->modules_dir.'/'.$_module.'/'.$this->config_file_name.".".$this->config_file_type;
+        $json = json_encode($config);
+
+        if(file_put_contents($path, $json)){
+            return ['s'=>1,'m'=> 'Конфігурацію модуля оновлено'];
+        }
+
+        return ['s' => 0, 't' => "Помилка", 'm' => "Щось пішло не так"];
     }
 
     public function delete($id){}
+
+    private function buildFormFields($module, $config, $code = null, $array = [])
+    {
+        if(empty($config)) return [];
+
+        foreach($config as $k=>$item) {
+            $_code = empty($code) ? $k : "$code.$k";
+            if(!is_array($item)) {
+                $array[$_code] = [
+                    'label' => t($_code),
+                    'value' => t($item)
+                ];
+            } else {
+                $a = $this->buildFormFields($module, $item, $_code, $array);
+                $array = array_merge($a, $array);
+            }
+        }
+
+        return $array;
+    }
 }

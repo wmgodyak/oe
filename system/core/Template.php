@@ -356,6 +356,7 @@ class Template
         $this->assign('events', $events);
 
         $this->assign('settings', Settings::getInstance());
+        $this->assign('config', Config::getInstance());
 
         $this->assign('custom_scripts', $this->getScripts());
         $this->assign('custom_styles', $this->getStyles());

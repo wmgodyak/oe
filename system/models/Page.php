@@ -164,7 +164,7 @@ class Page extends Frontend
         $page = self::$db
             ->select("
                 select c.*,
-                i.languages_id, i.name,i.title, IF(i.h1 = '', i.name, i.h1) as h1,i.keywords, i.description,i.content, i.intro,
+                i.languages_id, i.name, IF(i.title = '', i.name, i.title) as title, IF(i.h1 = '', i.name, i.h1) as h1,i.keywords, i.description,i.content, i.intro,
                  l.code as languages_code,
                  UNIX_TIMESTAMP(c.created) as created,
                  UNIX_TIMESTAMP(c.published) as published

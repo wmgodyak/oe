@@ -86,7 +86,9 @@ class Response
 
             if($env == 'production'){
 
-                $ds = $this->minify($ds);
+                if(is_string($ds)){
+                    $ds = $this->minifyHTML($ds);
+                }
 
             } elseif($env == 'debugging' ){
 
@@ -251,6 +253,12 @@ class Response
             $buffer = str_replace('</body>', "$js_compiled\n</body>", $buffer);
         }
 
+        return $buffer;
+    }
+
+    private function minifyHTML($buffer)
+    {
+
         // minify html
         $search = array(
             '/\>[^\S ]+/s',  // strip whitespaces after tags, except space
@@ -337,7 +345,7 @@ class Response
 
         $protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
 
-        header($protocol . ' ' . $code . ' ' . $text);
+        header($protocol . ' ' . $code . ' ' . $text, true);
 
         return $this;
     }

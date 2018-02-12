@@ -563,8 +563,6 @@ class DataTables2
 
                     action += '(d)';
 
-//                    console.log(action);
-
                     var fn = new Function('d', action);
                     fn(getSelectedChb());
                 });
@@ -573,10 +571,8 @@ class DataTables2
                     var chb = $('.dataTable').find('.dt-chb');
                     if($(this).is(':checked')){
                         chb.attr('checked', true);
-//                        showGroupActions();
                     } else {
                         chb.removeAttr('checked');
-//                        hideGroupActions();
                     }
                 });
                 /*
@@ -740,11 +736,11 @@ class DataTables2
 
 
         $t = "SELECT COUNT(*) AS t FROM {$this->table} {$j} {$w}";
-        $q = "SELECT {$cols} FROM {$this->table} {$j} {$w} {$order_by} {$this->limit}";
+        $q = "SELECT DISTINCT {$cols} FROM {$this->table} {$j} {$w} {$order_by} {$this->limit}";
 
         if($this->debug){
 //            echo $t,"\r\n";
-            echo $q,"\r\n";
+            echo $q,"\r\n";die;
         }
 
         $this->total   = $this->db->select($t, $this->debug)->row('t');

@@ -16,7 +16,7 @@
                 </select>
             </div>
         </div>
-        {foreach $languages as $lang}
+        {foreach $languages->get() as $lang}
             <div class="form-group">
                 <label for="info_name_{$lang.id}" class="col-md-3 control-label">{$t.users_group.name} ({$lang.name})</label>
                 <div class="col-md-9">

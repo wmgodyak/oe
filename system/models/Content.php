@@ -208,15 +208,26 @@ class Content extends Frontend
 
         $info = DataFilter::apply('content.info.update', $info);
 
+        $translations_errors = 0;
         foreach ($info as $languages_id=> $item) {
-            if(empty($item['name'])){
-                $this->error[] = ["content_info[$languages_id][name]" => 'field_required'];
+            if (empty($item['name']) || $this->settings->get('home_id') != $id && empty($item['url'])){
+                $translations_errors += 1;
             }
 
-            if( $this->settings->get('home_id') != $id && empty($item['url'])){
-                $this->error[] = ["content_info[$languages_id][url]" => 'field_required'];
-            }
+            if ($this->settings->get('home_id') != $id && empty($item['url'])){
+                $translations_errors += 1;
+            } else {
+                $duplicate = $this->checkIfDuplicate($id, $item['url'], $languages_id);
 
+                if ($duplicate) {
+                    $lang = $this->languages->languages->getData($languages_id);
+                    $this->error['messages'][] = "Такий URL для мови {$lang['name']} вже існує!";
+                }
+            }
+        }
+
+        if($translations_errors > 0) {
+            $this->error['messages'][] = "Будь ласка, заповніть вкладки для інших мов!";
         }
 
         if(!empty($this->error)) {
@@ -230,7 +241,10 @@ class Content extends Frontend
         } else {
             $content['published'] = date('Y-m-d');
         }
-
+        if(isset($content['owner_id']) && empty($content['owner_id'])){
+            $ui = \system\components\auth\controllers\Auth::id();
+            $content['owner_id'] = $ui;
+        }
         $content['updated'] = $this->now();
         $this->updateRow('__content', $id, $content);
 
@@ -290,6 +304,25 @@ class Content extends Frontend
         return true;
     }
 
+    public function checkIfDuplicate($id, $url, $lang_id)
+    {
+        $item = self::$db->select("
+          select content_id, url from __content_info
+          where content_id = '{$id}' or url = '{$url}' and languages_id = '{$lang_id}'
+          limit 1;
+        ")->all();
+
+        if(isset($item[0])) {
+            if ($item[0]['content_id'] == $id) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     /**
      * @param $content_id
      */
@@ -298,15 +331,10 @@ class Content extends Frontend
         $cm = $this->request->post('content_meta');
 
         $cm = DataFilter::apply('content_meta.update', $cm);
+        //todo: думати добре, але збереження масивів не працювало
         if($cm){
             foreach ($cm as $meta_k => $a) {
-                if(is_array($a)){
-//                    foreach ($a as $k=>$meta_v) {
-//                       todo треба подумати
-//                    }
-                } else {
-                    $this->meta->update($content_id, $meta_k, $a);
-                }
+                $this->meta->update($content_id, $meta_k, $a);
             }
         }
     }
