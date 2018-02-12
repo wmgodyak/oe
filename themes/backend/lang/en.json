@@ -283,6 +283,9 @@
   "languages": {
     "action_index": "Languages",
     "code": "(ISO) Code ",
+    "hreflang": "Hreflang",
+    "dir": "Direction (ltr/rtl)",
+    "lang": "Lang",
     "name": "Name",
     "is_main": "Main",
     "action_edit": "Editing the language",

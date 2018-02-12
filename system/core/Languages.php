@@ -16,6 +16,9 @@ class Languages
     public $code;
     public $name;
     public $is_main;
+    public $hreflang;
+    public $dir;
+    public $lang;
 
     private function __construct()
     {
@@ -77,7 +80,7 @@ class Languages
             $this->{$k} = $v;
         }
 
-        // update request and session
+        // update request and session // todo remove it in future
         $_SESSION['app'] = [
             'languages_id'   => $this->id,
             'languages_code' => $this->code
