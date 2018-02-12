@@ -36,8 +36,13 @@ class Modules
         return self::$instance;
     }
 
-    public function get()
+    public function get($module = null)
     {
+        if($module) {
+            $module = lcfirst($module);
+            return $this->modules->{$module};
+        }
+
         return $this->modules;
     }
 
@@ -75,13 +80,10 @@ class Modules
 
             $controller = new $c;
 
-//            $controller->config = module_config($_module);
             $this->modules->{$_module} = $controller;
-
 
             if($request->mode == 'backend'){
                 if(! Permissions::canModule($_module, 'index')) continue;
-
 
                 $t_path = DOCROOT . "modules/{$_module}/lang/backend/{$request->language->code}.json";
                 if(!file_exists($t_path)){

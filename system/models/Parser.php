@@ -212,11 +212,6 @@ class Parser extends Frontend
 
                 $url = str_replace('//','/', $url);
 
-                if ($_GET) {
-                    $url .= '?' . http_build_query($_GET);
-                }
-
-
                 return "$action=\"$url\"";
 
             },

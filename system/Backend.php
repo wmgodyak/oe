@@ -114,6 +114,7 @@ abstract class Backend extends Controller
     }
 
     /**
+     * @deprecated
      * @param $name
      * @param $url
      * @param $icon

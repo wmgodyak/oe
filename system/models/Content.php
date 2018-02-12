@@ -241,7 +241,10 @@ class Content extends Frontend
         } else {
             $content['published'] = date('Y-m-d');
         }
-
+        if(isset($content['owner_id']) && empty($content['owner_id'])){
+            $ui = \system\components\auth\controllers\Auth::id();
+            $content['owner_id'] = $ui;
+        }
         $content['updated'] = $this->now();
         $this->updateRow('__content', $id, $content);
 
@@ -305,14 +308,19 @@ class Content extends Frontend
     {
         $item = self::$db->select("
           select content_id, url from __content_info
-          where content_id <> '{$id}' and url = '{$url}' and languages_id = '{$lang_id}';
-        ")->row();
+          where content_id = '{$id}' or url = '{$url}' and languages_id = '{$lang_id}'
+          limit 1;
+        ")->all();
 
-        if($item) {
-            return true;
+        if(isset($item[0])) {
+            if ($item[0]['content_id'] == $id) {
+                return true;
+            } else {
+                return false;
+            }
         }
 
-        return false;
+        return true;
     }
 
     /**

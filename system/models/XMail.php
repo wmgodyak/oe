@@ -157,10 +157,6 @@ class XMail
      */
     public function send()
     {
-        $env = Config::getInstance()->get('core.mail');
-
-        $log_it = $env != 'send';
-
         $template = Template::getInstance();
 
         //add subject
@@ -221,8 +217,10 @@ class XMail
             $this->setFrom($this->settings['smtp_user'], $this->settings['from']);
         }
 
-        if($log_it){
-           return $this->logMessage($this->to, $this->subject, $body);
+        $env = Config::getInstance()->get('core.mail');
+
+        if($env == 'log'){
+           $this->logMessage($this->to, $this->subject, $body);
         }
 
         return $this->phpmailer->send();

@@ -88,7 +88,15 @@ class EventsHandler
                     }
                 }
             }  elseif (is_callable($callback, true) && !is_string($callback)){
-                $out[] = call_user_func_array($callback, $params);
+
+                if(is_array($params)){
+                    $out[] = call_user_func_array($callback, $params);
+                } elseif (is_object($params)){
+                    $out[] = call_user_func($callback, $params);
+                } else {
+                    $out[] = call_user_func($callback, $params);
+                }
+
             }
         }
 

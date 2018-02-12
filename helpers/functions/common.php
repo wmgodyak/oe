@@ -242,7 +242,7 @@ if (!function_exists('filter_add')){
 }
 
 if (!function_exists('module_config')){
-    function module_config($module)
+    function module_config($module, $assoc = false)
     {
         static $config;
 
@@ -255,7 +255,7 @@ if (!function_exists('module_config')){
 
         $a = file_get_contents(DOCROOT . $path);
 
-        $config[$module] = json_decode($a);
+        $config[$module] = json_decode($a, $assoc);
 
         return $config[$module];
     }
@@ -442,3 +442,12 @@ if( ! function_exists('url')){
             </html>';
         die();
     }
+
+/**
+ * @param $ob object
+ * @return array
+ */
+function toArray($ob)
+{
+    return json_decode(json_encode($ob), true);
+}

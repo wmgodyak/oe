@@ -11,6 +11,7 @@ class Nav extends Frontend
      * @param $code
      * @param int $parent_id
      * @return mixed
+     * @throws \system\core\exceptions\Exception
      */
     public function get($code, $parent_id = 0)
     {
@@ -56,7 +57,7 @@ class Nav extends Frontend
      */
     public function items($parent_id)
     {
-        return self::$db
+        $r = self::$db
             ->select("
               select c.id, c.id as url, c.isfolder, ci.name, ci.title
               from __content c
@@ -64,6 +65,17 @@ class Nav extends Frontend
               where c.parent_id='{$parent_id}' and c.status='published'
               ")
             ->all();
+
+        $res = [];
+
+        foreach ($r as $row) {
+            if($row['isfolder']){
+                $row['items'] = $this->items($row['id']);
+            }
+            $res[] = $row;
+        }
+
+        return $res;
     }
 
     public function languages()

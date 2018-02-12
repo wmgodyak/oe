@@ -225,6 +225,8 @@ class ContentImagesSizes extends Backend
 
             $image_src  = DOCROOT . $item['path'] . $source . $item['image'];
 
+            if(!file_exists($image_src)) continue;
+
             $img = \AcImage::createImage($image_src);
             \AcImage::setRewrite(true);
             \AcImage::setQuality($item['quality']);

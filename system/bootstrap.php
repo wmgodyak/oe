@@ -113,14 +113,15 @@
         die;
     }
 
+    $route = \system\core\Route::getInstance();
+    $route->beforeBoot($request);
+
     $language = \system\core\Languages::getInstance();
     $language->detect($request);
 
     \system\models\Modules::getInstance()->boot($request);
 
     events()->call('boot');
-
-    $route = \system\core\Route::getInstance();
 
     $route->dispatch($request);
 
