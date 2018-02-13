@@ -4,7 +4,7 @@ session_start();
 
 if(!isset($_SESSION['backend']['admin'])) die;
 mb_internal_encoding('UTF-8');
-date_default_timezone_set('Europe/Rome');
+date_default_timezone_set('Europe/Kyiv');
 
 /*
 |--------------------------------------------------------------------------
@@ -90,7 +90,7 @@ $config = array(
 	| DO NOT put inside upload folder
 	|
 	*/
-	'thumbs_base_path' => $_SERVER['DOCUMENT_ROOT'] . '/uploads/thumbs/',
+	'thumbs_base_path' => $_SERVER['DOCUMENT_ROOT'] . '/uploads/',
 
 	/*
 	|--------------------------------------------------------------------------
