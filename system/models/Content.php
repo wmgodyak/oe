@@ -308,19 +308,14 @@ class Content extends Frontend
     {
         $item = self::$db->select("
           select content_id, url from __content_info
-          where content_id = '{$id}' or url = '{$url}' and languages_id = '{$lang_id}'
-          limit 1;
-        ")->all();
+          where content_id <> '{$id}' and url = '{$url}' and languages_id = '{$lang_id}';
+        ")->row();
 
-        if(isset($item[0])) {
-            if ($item[0]['content_id'] == $id) {
-                return true;
-            } else {
-                return false;
-            }
+        if($item) {
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     /**
