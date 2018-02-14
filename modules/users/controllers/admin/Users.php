@@ -13,6 +13,7 @@ use system\Backend;
 use system\core\DataFilter;
 use system\core\DataTables2;
 use system\models\Permissions;
+use system\models\XMail;
 
 /**
  * Class users
@@ -257,17 +258,18 @@ class Users extends Backend
 
     private function notify($data)
     {
-        $data['url'] = APPURL . 'engine';
+        $lang_code = $this->languages->languages->getData($this->languages->id, 'code');
+        $filename = DOCROOT . "modules/users/lang/backend/" . $lang_code.".json";
+        if (!file_exists($filename)) {
+            return false;
+        }
 
-        include_once DOCROOT . "/vendor/phpmailer/PHPMailer.php";
+        $t = json_decode(file_get_contents($filename), true);
 
-        $mail = new \PHPMailer();
+        $mail = new XMail($t['notify_subj']);
         $mail->addAddress($data['email']);
-        $mail->setFrom('no-reply@' . $_SERVER['HTTP_HOST'], t('core.sys_name'));
-        $mail->isHTML(false);
-        $tpl = implode("\r\n", t('users.notify_tpl'));
         $this->template->assign('data', $data);
-        $mail->Body = $this->template->fetchString($tpl);
+        $mail->body($this->template->fetchString($t['notify_tpl']));
         return $mail->send();
     }
 
