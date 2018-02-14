@@ -273,21 +273,21 @@ class Users extends Backend
 
     public function delete($id)
     {
-        echo $this->users->delete($id);
+        return $this->users->delete($id);
     }
 
     public function remove($id)
     {
-        echo $this->users->remove($id);
+        return $this->users->remove($id);
     }
 
     public function ban($id)
     {
-        echo $this->users->ban($id);
+        return $this->users->ban($id);
     }
 
     public function restore($id)
     {
-        echo $this->users->restore($id);
+        return $this->users->restore($id);
     }
 }
