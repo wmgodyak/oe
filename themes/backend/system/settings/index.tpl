@@ -20,6 +20,11 @@
                                     <input type="text" class="form-control" name="settings[{$a.name}]" id="settings_{$a.name}" value="{$a.value}" {if $a.required}required{/if}>
                                 {elseif $a.type=='textarea'}
                                     <textarea class="form-control" name="settings[{$a.name}]" id="settings_{$a.name}" {if $a.required}required{/if}>{$a.value}</textarea>
+                                {elseif $a.type=='file'}
+                                    <div class="input-group">
+                                        <input type="text" class="form-control cf-file-browse" data-target="settings_{$a.name}" name="settings[{$a.name}]" id="settings_{$a.name}" value="{$a.value}" {if $a.required}required{/if}>
+                                        <div class="input-group-addon"><i class="fa fa-file"></i></div>
+                                    </div>
                                 {/if}
                                 <p class="help-block">{$t.settings[$desc]}</p>
                             </div>
