@@ -994,6 +994,7 @@ engine.admins = {
                 engine.validateAjaxForm('#form', function(d){
                         if(d.s){
                             engine.refreshDataTable('admins');
+                            dialog.dialog('close');
                             if(d.a == null){
                                 dialog.dialog('close');
                             } else{
