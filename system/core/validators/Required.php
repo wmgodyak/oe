@@ -11,7 +11,15 @@ class Required implements ValidatorInterface
 {
     public function validate($data)
     {
-        return !empty($data);
+        if (is_null($data)) {
+            return false;
+        } elseif (is_string($data) && trim($data) === '') {
+            return false;
+        } elseif ((is_array($data) || $data instanceof \Countable) && count($data) < 1) {
+            return false;
+        }
+
+        return true;
     }
 
     public function getErrorMessage()
