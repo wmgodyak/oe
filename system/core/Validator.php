@@ -91,10 +91,7 @@ class Validator
 
         foreach ($rules as $field => $_rules) {
 
-            if (isset($data[$field]) && is_array($data[$field]))
-                continue;
-
-            if(is_string($_rules)){
+            if (is_string($_rules)) {
                 $_rules = explode('|', $_rules);
             }
 
@@ -102,7 +99,7 @@ class Validator
 
                 $validator  = $rule;
                 $action     = 'validate';
-                $value      = isset($data[$field]) ? $data[$field] : null;
+                $value      = $this->getValue($data, $field);
                 $params = [$value];
 
                 if (strstr($rule, ',') !== false) {
@@ -112,10 +109,10 @@ class Validator
                     array_unshift($params, $value);
                 }
 
-                if(!empty($this->validation_methods[$validator])) {
+                if (!empty($this->validation_methods[$validator])) {
                     $result = call_user_func_array($this->validation_methods[$validator], $params);
 
-                    if($result === false) {
+                    if ($result === false) {
 
                         $this->errors[] = [
                             'field' => $field,
@@ -129,7 +126,7 @@ class Validator
                 }
 
                 $validator_name = ucfirst($validator);
-                if(strpos($validator_name, '_') !== false){
+                if (strpos($validator_name, '_') !== false) {
                     $a = explode('_', $validator_name);
                     $validator_name = "";
                     foreach ($a as $k=>$v) {
@@ -137,7 +134,7 @@ class Validator
                     }
                 }
 
-                if(file_exists(DOCROOT . $path . $validator_name . '.php')){
+                if (file_exists(DOCROOT . $path . $validator_name . '.php')){
 
                     $c = $this->ns . $validator_name;
 
@@ -146,9 +143,9 @@ class Validator
                     $controller = new $c(... $params);
                     $result = call_user_func([$controller, $action], $input);
 
-                    if( ! $result ){
+                    if (!$result) {
 
-                        if(empty($this->error_messages[$validator])){
+                        if (empty($this->error_messages[$validator])) {
                             $this->error_messages[$validator] = call_user_func([$controller, 'getErrorMessage']);
                         }
 
@@ -169,6 +166,23 @@ class Validator
         }
 
         return empty($this->errors);
+    }
+
+    /**
+     * Get value from given data
+     * @param $data
+     * @param $field
+     * @param null $default
+     * @return null
+     */
+    public function getValue($data, $field, $default = null)
+    {
+        if (isset($data[$field]) && is_array($data[$field]))
+            return $default;
+
+        $value = isset($data[$field]) ? $data[$field] : $default;
+
+        return $value;
     }
 
     /**
