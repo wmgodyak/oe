@@ -91,80 +91,80 @@ class Validator
 
         foreach ($rules as $field => $_rules) {
 
-            if (isset($data[$field]) && !is_array($data[$field])) {
+            if (isset($data[$field]) && is_array($data[$field]))
+                continue;
 
-                if(is_string($_rules)){
-                    $_rules = explode('|', $_rules);
+            if(is_string($_rules)){
+                $_rules = explode('|', $_rules);
+            }
+
+            foreach ($_rules as $rule) {
+
+                $validator  = $rule;
+                $action     = 'validate';
+                $value      = isset($data[$field]) ? $data[$field] : null;
+                $params = [$value];
+
+                if (strstr($rule, ',') !== false) {
+
+                    $params = explode(',', $rule);
+                    $validator = array_shift($params);
+                    array_unshift($params, $value);
                 }
 
-                foreach ($_rules as $rule) {
+                if(!empty($this->validation_methods[$validator])) {
+                    $result = call_user_func_array($this->validation_methods[$validator], $params);
 
-                    $validator  = $rule;
-                    $action     = 'validate';
-                    $value      = $data[$field];
-                    $params = [$value];
+                    if($result === false) {
 
-                    if (strstr($rule, ',') !== false) {
+                        $this->errors[] = [
+                            'field' => $field,
+                            'rule'  => $validator,
+                            'value' => $value,
+                        ];
 
-                        $params = explode(',', $rule);
-                        $validator = array_shift($params);
-                        array_unshift($params, $value);
                     }
 
-                    if(!empty($this->validation_methods[$validator])) {
-                        $result = call_user_func_array($this->validation_methods[$validator], $params);
+                    continue;
+                }
 
-                        if($result === false) {
+                $validator_name = ucfirst($validator);
+                if(strpos($validator_name, '_') !== false){
+                    $a = explode('_', $validator_name);
+                    $validator_name = "";
+                    foreach ($a as $k=>$v) {
+                        $validator_name .= ucfirst($v);
+                    }
+                }
 
-                            $this->errors[] = [
+                if(file_exists(DOCROOT . $path . $validator_name . '.php')){
+
+                    $c = $this->ns . $validator_name;
+
+                    $input = array_shift($params);
+
+                    $controller = new $c(... $params);
+                    $result = call_user_func([$controller, $action], $input);
+
+                    if( ! $result ){
+
+                        if(empty($this->error_messages[$validator])){
+                            $this->error_messages[$validator] = call_user_func([$controller, 'getErrorMessage']);
+                        }
+
+                        $this->errors[] =
+                            [
                                 'field' => $field,
                                 'rule'  => $validator,
                                 'value' => $value,
                             ];
 
-                        }
-
-                        continue;
                     }
 
-                    $validator_name = ucfirst($validator);
-                    if(strpos($validator_name, '_') !== false){
-                        $a = explode('_', $validator_name);
-                        $validator_name = "";
-                        foreach ($a as $k=>$v) {
-                            $validator_name .= ucfirst($v);
-                        }
-                    }
-
-                    if(file_exists(DOCROOT . $path . $validator_name . '.php')){
-
-                        $c = $this->ns . $validator_name;
-
-                        $input = array_shift($params);
-
-                        $controller = new $c(... $params);
-                        $result = call_user_func([$controller, $action], $input);
-
-                        if( ! $result ){
-
-                            if(empty($this->error_messages[$validator])){
-                                $this->error_messages[$validator] = call_user_func([$controller, 'getErrorMessage']);
-                            }
-
-                            $this->errors[] =
-                                [
-                                    'field' => $field,
-                                    'rule'  => $validator,
-                                    'value' => $value,
-                                ];
-
-                        }
-
-                        continue;
-                    }
-
-                    throw new \Exception("Validator '$validator_name' does not exist.");
+                    continue;
                 }
+
+                throw new \Exception("Validator '$validator_name' does not exist.");
             }
         }
 
