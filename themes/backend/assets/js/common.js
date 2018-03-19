@@ -1299,7 +1299,7 @@ engine.content = {
                     '(': space, ')': space, '-': space, '\=': space, '+': space, '[': space,
                     ']': space, '\\': space, '|': space, '/': space, '.': space, ',': space,
                     '{': space, '}': space, '\'': space, '"': space, ';': space, ':': space,
-                    '?': space, '<': space, '>': space, '№': space
+                    '?': space, '<': space, '>': space, '№': space, '’': space
                 };
                 break;
             case 'ru':
@@ -1313,7 +1313,7 @@ engine.content = {
                     '(': space, ')': space, '-': space, '\=': space, '+': space, '[': space,
                     ']': space, '\\': space, '|': space, '/': space, '.': space, ',': space,
                     '{': space, '}': space, '\'': space, '"': space, ';': space, ':': space,
-                    '?': space, '<': space, '>': space, '№': space
+                    '?': space, '<': space, '>': space, '№': space, '’': space
                 };
                 break;
             default:
@@ -1329,7 +1329,7 @@ engine.content = {
                     '(': space, ')': space, '-': space, '\=': space, '+': space, '[': space,
                     ']': space, '\\': space, '|': space, '/': space, '.': space, ',': space,
                     '{': space, '}': space, '\'': space, '"': space, ';': space, ':': space,
-                    '?': space, '<': space, '>': space, '№': space
+                    '?': space, '<': space, '>': space, '№': space, '’': space
                 };
                 break;
         }
