@@ -2243,7 +2243,6 @@ engine.languages = {
             buttons[bi] =  function(){
                 $('#form').submit();
             };
-            debugger;
             var dialog = engine.dialog({
                 content: d,
                 title: t.languages.create_title,
