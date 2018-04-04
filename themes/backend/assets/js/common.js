@@ -1222,7 +1222,7 @@ engine.content = {
             });
         });
 
-        $('#switchLanguages').find('button').click(function(){
+        $(document).on('click', '#switchLanguages button', function(){
             var code = $(this).data('code');
             if(typeof code == 'undefined')return;
             $('.switch-lang:not(.lang-'+code+')').hide();
