@@ -2748,5 +2748,12 @@ function responsive_filemanager_callback(field_id){
     v = v.replace(location.hostname, '');
     inp.val(v);
     inp.trigger('change');
-    engine.closeDialog();
+    // engine.closeDialog();
+
+    var id = $(document).find("#filemanager").closest('.ui-dialog-content').attr('id');
+    $(document).find("#filemanager").closest('.ui-dialog-content').dialog("destroy");
+    setTimeout(function () {
+        $('#' + id).remove();
+        id = undefined;
+    }, 200);
 }
