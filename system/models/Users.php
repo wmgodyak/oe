@@ -145,8 +145,7 @@ class Users extends Frontend
      */
     public function cryptPassword($password)
     {
-        $salt = strtr(base64_encode(mt_rand()), '+', '.');
-        return crypt($password, $salt);
+        return password_hash($password, PASSWORD_DEFAULT);
     }
 
     /**
@@ -156,7 +155,7 @@ class Users extends Frontend
      */
     public function checkPassword($password, $hash)
     {
-        return crypt($password, $hash) == $hash;
+        return password_verify($password, $hash);
     }
 
 
