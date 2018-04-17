@@ -136,6 +136,33 @@ class DB extends \PDO {
     }
 
     /**
+     * @param $sql
+     * @return mixed
+     */
+    private function replaceTablePrefix($sql)
+    {
+        $length = strlen($sql);
+
+        for ($i = 0; $i < $length; $i++) {
+            if ($sql{$i} == "_" && $sql{$i + 1} == "_") {
+                $sql{$i} = $this->conf['prefix'];
+                $i += 2;
+            }
+
+            if ($sql{$i} == "'") {
+                for ($j = $i+1; $j < $length; $j++) {
+                    if ($sql{$j} == "'") {
+                        $i = $j;
+                        continue 2;
+                    }
+                }
+            }
+        }
+
+        return $sql;
+    }
+
+    /**
      * close connection
      */
     public function close()
@@ -159,7 +186,7 @@ class DB extends \PDO {
      */
     public function select($sql, $debug = false)
     {
-        $sql = str_replace('__', $this->conf['prefix'], $sql);
+        $sql = $this->replaceTablePrefix($sql);
         if($debug) d($sql);
 
         try {
@@ -349,7 +376,7 @@ class DB extends \PDO {
      */
     public function customExec($sql)
     {
-        $sql = str_replace('__', $this->conf['prefix'], $sql);
+        $sql = $this->replaceTablePrefix($sql);
 
         try{
             $result = $this->exec($sql);
