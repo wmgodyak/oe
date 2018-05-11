@@ -1294,26 +1294,31 @@ engine.content = {
                     'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h',
                     'ц': 'c', 'ч': 'ch', 'ш': 'sh', 'щ': 'sh', 'ъ': space, 'ы': 'y', 'ь': space, 'э': 'e',
                     'ю': 'yu', 'я': 'ya', 'є': 'ye',
+                    'ą': 'a', 'ć': 'c', 'ę': 'e', 'ł': 'l', 'ń': 'n', 'ó': 'o', 'ś': 's',
+                    'ź': 'z', 'ż': 'z', 'ä': 'a', 'ö': 'o', 'ü': 'u', 'ß': 'b',
                     ' ': space, '_': space, '`': space, '~': space, '!': space, '@': space,
                     '#': space, '$': space, '%': space, '^': space, '&': space, '*': space,
                     '(': space, ')': space, '-': space, '\=': space, '+': space, '[': space,
                     ']': space, '\\': space, '|': space, '/': space, '.': space, ',': space,
                     '{': space, '}': space, '\'': space, '"': space, ';': space, ':': space,
-                    '?': space, '<': space, '>': space, '№': space, '’': space
+                    '?': space, '<': space, '>': space, '№': space
                 };
                 break;
             case 'ru':
                 transl = {
-                    'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'e', 'ж': 'zh',
+                    'і': 'i', 'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'e', 'ж': 'zh',
                     'з': 'z', 'и': 'i', 'й': 'j', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'ї' : 'i',
                     'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h',
-                    'ц': 'c', 'ч': 'ch', 'ш': 'sh', 'щ': 'sh', 'ъ': space, 'ы': 'y', 'ь': space, 'э': 'e', 'ю': 'yu', 'я': 'ya',
+                    'ц': 'c', 'ч': 'ch', 'ш': 'sh', 'щ': 'sh', 'ъ': space, 'ы': 'y', 'ь': space, 'э': 'e',
+                    'ю': 'yu', 'я': 'ya', 'є': 'ye',
+                    'ą': 'a', 'ć': 'c', 'ę': 'e', 'ł': 'l', 'ń': 'n', 'ó': 'o', 'ś': 's',
+                    'ź': 'z', 'ż': 'z', 'ä': 'a', 'ö': 'o', 'ü': 'u', 'ß': 'b',
                     ' ': space, '_': space, '`': space, '~': space, '!': space, '@': space,
                     '#': space, '$': space, '%': space, '^': space, '&': space, '*': space,
                     '(': space, ')': space, '-': space, '\=': space, '+': space, '[': space,
                     ']': space, '\\': space, '|': space, '/': space, '.': space, ',': space,
                     '{': space, '}': space, '\'': space, '"': space, ';': space, ':': space,
-                    '?': space, '<': space, '>': space, '№': space, '’': space
+                    '?': space, '<': space, '>': space, '№': space
                 };
                 break;
             default:
@@ -1322,14 +1327,15 @@ engine.content = {
                     'з': 'z', 'и': 'y', 'й': 'j', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'і' : 'i', 'ї' : 'i',
                     'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h',
                     'ц': 'c', 'ч': 'ch', 'ш': 'sh', 'щ': 'sh', 'ъ': space, 'ы': 'y', 'ь': space, 'э': 'e',
-                    'ю': 'yu', 'я': 'ya', 'є': 'ye', 'ą': 'a', 'ć': 'c', 'ę': 'e', 'ł': 'l', 'ń': 'n', 'ó': 'o', 'ś': 's',
+                    'ю': 'yu', 'я': 'ya', 'є': 'ye',
+                    'ą': 'a', 'ć': 'c', 'ę': 'e', 'ł': 'l', 'ń': 'n', 'ó': 'o', 'ś': 's',
                     'ź': 'z', 'ż': 'z', 'ä': 'a', 'ö': 'o', 'ü': 'u', 'ß': 'b',
                     ' ': space, '_': space, '`': space, '~': space, '!': space, '@': space,
                     '#': space, '$': space, '%': space, '^': space, '&': space, '*': space,
                     '(': space, ')': space, '-': space, '\=': space, '+': space, '[': space,
                     ']': space, '\\': space, '|': space, '/': space, '.': space, ',': space,
                     '{': space, '}': space, '\'': space, '"': space, ';': space, ':': space,
-                    '?': space, '<': space, '>': space, '№': space, '’': space
+                    '?': space, '<': space, '>': space, '№': space
                 };
                 break;
         }
