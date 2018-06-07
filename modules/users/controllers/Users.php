@@ -19,6 +19,7 @@ class Users extends Frontend
 {
     protected $users;
     protected $config;
+    private $user;
 
     private $allowed_fields = ['name', 'surname', 'email', 'password'];
 
@@ -29,6 +30,7 @@ class Users extends Frontend
         $this->users = new \modules\users\models\Users();
 
         $this->config = module_config('users');
+        $this->user = Session::get('user');
     }
 
     public function init()
@@ -297,21 +299,27 @@ class Users extends Frontend
 
     public function changePassword()
     {
-        if(! $this->request->isPost()) die();
+        if (!$this->request->isPost()) {
+            return $this->response->withCode(403);
+        }
 
         token_validate();
 
-        $user = Session::get('user');
-        if(!$user){
-            return ['s'=>0, 'm' => "Invalid user"];
+        if (!$this->user) {
+            return $this->response->withCode(403);
         }
 
+        $user = $this->users->getData($this->user['id']);
+        if (!$user) {
+            return $this->response->withCode(403);
+        }
 
-        $i=[]; $s = 0;
+        $i = []; $s = 0; $m = null;
 
         $data = [
-            'password'   => $this->request->post('password'),
-            'password_c' => $this->request->post('password_c')
+            'old_password' => $this->request->post('old_password'),
+            'password'     => $this->request->post('password'),
+            'password_c'   => $this->request->post('password_c')
         ];
 
         $this->validator->setErrorMessage('equals_to', t('users.register.error.password_equals_to'));
@@ -320,22 +328,25 @@ class Users extends Frontend
         (
             $data,
             [
-                'password'   => 'required',
-                'password_c' => "required|equals_to, {$data['password']}"
+                'old_password' => 'required',
+                'password' => 'required',
+                'password_c' => "required|equals_to,{$data['password']}"
             ]
         );
 
-        if(!$valid){
+        if (!$valid) {
             $i = $this->validator->getErrors();
-        }   else {
-
+        } elseif (!$this->users->checkPassword($data['old_password'], $user['password'])) {
+            $i[] = ['old_password' => t('users.register.error.old_password')];
+        } else {
             unset($data['password_c']);
 
             $s = $this->users->update($user['id'], $data);
+
+            $m = t('users.profile_psw.updated');
         }
 
-        $m = t('users.profile_psw.updated');
-        return ['s'=>$s, 'i' => $i, 'm' => $m];
+        return ['s' => $s, 'i' => $i, 'm' => $m];
     }
 
     public function logout()
