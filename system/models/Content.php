@@ -307,15 +307,12 @@ class Content extends Frontend
     public function checkIfDuplicate($id, $url, $lang_id)
     {
         $item = self::$db->select("
-          select content_id, url from __content_info
-          where content_id <> '{$id}' and url = '{$url}' and languages_id = '{$lang_id}';
-        ")->row();
+          select id from __content_info
+          where content_id <> '{$id}' and url = '{$url}' and languages_id = '{$lang_id}'
+          limit 1;
+        ")->row('id');
 
-        if($item) {
-            return true;
-        }
-
-        return false;
+        return !empty($item);
     }
 
     /**
