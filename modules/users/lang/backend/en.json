@@ -44,12 +44,8 @@
     "tree_edit": "Edit",
     "tree_delete": "Remove"
   },
-  "notify_tpl": [
-    "Congratulations {$data.name}. You sent access to the system {a$t.system.name}.",
-    "Your login: {$data.email}",
-    "Your password: {$data.password}",
-    "access at: {$data.url}"
-  ],
+  "notify_subj": "Thanks for registration",
+  "notify_tpl": "Congratulations {$data.name}. You're successfully registered on our site. <br><br> Your login: {$data.email}<br> Your password: {$data.password}",
   "config": {
     "guest_group_id": "Guest group id",
     "auth_after_register": "Auth after register"

@@ -79,6 +79,9 @@ class Image
         if(substr_count(strtolower($destination_file), ".jpg")){
             imagejpeg($square_image,$destination_file,$quality);
         }
+        if(substr_count(strtolower($destination_file), ".jpeg")){
+            imagejpeg($square_image,$destination_file,$quality);
+        }
         if(substr_count(strtolower($destination_file), ".gif")){
             imagegif($square_image,$destination_file);
         }

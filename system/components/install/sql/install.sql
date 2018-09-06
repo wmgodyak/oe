@@ -109,7 +109,7 @@ INSERT INTO `__users_group_info` (`id`, `group_id`, `languages_id`, `name`) VALU
   (1, 1, 1, 'Admins');
 CREATE TABLE IF NOT EXISTS `__users` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `languages_id` TINYINT(3) UNSIGNED NOT NULL,
+  `languages_id` TINYINT(3) UNSIGNED NOT NULL DEFAULT 1,
   `group_id` TINYINT(3) UNSIGNED NOT NULL,
   `sessid` CHAR(35) NULL DEFAULT NULL,
   `name` VARCHAR(60) NOT NULL,

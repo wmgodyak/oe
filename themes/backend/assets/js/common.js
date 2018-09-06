@@ -994,6 +994,7 @@ engine.admins = {
                 engine.validateAjaxForm('#form', function(d){
                         if(d.s){
                             engine.refreshDataTable('admins');
+                            dialog.dialog('close');
                             if(d.a == null){
                                 dialog.dialog('close');
                             } else{
@@ -1221,7 +1222,7 @@ engine.content = {
             });
         });
 
-        $('#switchLanguages').find('button').click(function(){
+        $(document).on('click', '#switchLanguages button', function(){
             var code = $(this).data('code');
             if(typeof code == 'undefined')return;
             $('.switch-lang:not(.lang-'+code+')').hide();
@@ -1293,6 +1294,8 @@ engine.content = {
                     'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h',
                     'ц': 'c', 'ч': 'ch', 'ш': 'sh', 'щ': 'sh', 'ъ': space, 'ы': 'y', 'ь': space, 'э': 'e',
                     'ю': 'yu', 'я': 'ya', 'є': 'ye',
+                    'ą': 'a', 'ć': 'c', 'ę': 'e', 'ł': 'l', 'ń': 'n', 'ó': 'o', 'ś': 's',
+                    'ź': 'z', 'ż': 'z', 'ä': 'a', 'ö': 'o', 'ü': 'u', 'ß': 'b',
                     ' ': space, '_': space, '`': space, '~': space, '!': space, '@': space,
                     '#': space, '$': space, '%': space, '^': space, '&': space, '*': space,
                     '(': space, ')': space, '-': space, '\=': space, '+': space, '[': space,
@@ -1303,10 +1306,13 @@ engine.content = {
                 break;
             case 'ru':
                 transl = {
-                    'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'e', 'ж': 'zh',
+                    'і': 'i', 'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'e', 'ж': 'zh',
                     'з': 'z', 'и': 'i', 'й': 'j', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'ї' : 'i',
                     'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h',
-                    'ц': 'c', 'ч': 'ch', 'ш': 'sh', 'щ': 'sh', 'ъ': space, 'ы': 'y', 'ь': space, 'э': 'e', 'ю': 'yu', 'я': 'ya',
+                    'ц': 'c', 'ч': 'ch', 'ш': 'sh', 'щ': 'sh', 'ъ': space, 'ы': 'y', 'ь': space, 'э': 'e',
+                    'ю': 'yu', 'я': 'ya', 'є': 'ye',
+                    'ą': 'a', 'ć': 'c', 'ę': 'e', 'ł': 'l', 'ń': 'n', 'ó': 'o', 'ś': 's',
+                    'ź': 'z', 'ż': 'z', 'ä': 'a', 'ö': 'o', 'ü': 'u', 'ß': 'b',
                     ' ': space, '_': space, '`': space, '~': space, '!': space, '@': space,
                     '#': space, '$': space, '%': space, '^': space, '&': space, '*': space,
                     '(': space, ')': space, '-': space, '\=': space, '+': space, '[': space,
@@ -1321,7 +1327,8 @@ engine.content = {
                     'з': 'z', 'и': 'y', 'й': 'j', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'і' : 'i', 'ї' : 'i',
                     'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h',
                     'ц': 'c', 'ч': 'ch', 'ш': 'sh', 'щ': 'sh', 'ъ': space, 'ы': 'y', 'ь': space, 'э': 'e',
-                    'ю': 'yu', 'я': 'ya', 'є': 'ye', 'ą': 'a', 'ć': 'c', 'ę': 'e', 'ł': 'l', 'ń': 'n', 'ó': 'o', 'ś': 's',
+                    'ю': 'yu', 'я': 'ya', 'є': 'ye',
+                    'ą': 'a', 'ć': 'c', 'ę': 'e', 'ł': 'l', 'ń': 'n', 'ó': 'o', 'ś': 's',
                     'ź': 'z', 'ż': 'z', 'ä': 'a', 'ö': 'o', 'ü': 'u', 'ß': 'b',
                     ' ': space, '_': space, '`': space, '~': space, '!': space, '@': space,
                     '#': space, '$': space, '%': space, '^': space, '&': space, '*': space,
@@ -2242,7 +2249,6 @@ engine.languages = {
             buttons[bi] =  function(){
                 $('#form').submit();
             };
-            debugger;
             var dialog = engine.dialog({
                 content: d,
                 title: t.languages.create_title,
@@ -2748,5 +2754,12 @@ function responsive_filemanager_callback(field_id){
     v = v.replace(location.hostname, '');
     inp.val(v);
     inp.trigger('change');
-    engine.closeDialog();
+    // engine.closeDialog();
+
+    var id = $(document).find("#filemanager").closest('.ui-dialog-content').attr('id');
+    $(document).find("#filemanager").closest('.ui-dialog-content').dialog("destroy");
+    setTimeout(function () {
+        $('#' + id).remove();
+        id = undefined;
+    }, 200);
 }

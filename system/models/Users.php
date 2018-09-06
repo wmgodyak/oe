@@ -65,7 +65,24 @@ class Users extends Frontend
 
         $data['updated'] = $this->now();
 
-        return self::$db->update('__users', $data, " id={$id} limit 1");
+        $s = self::$db->update('__users', $data, " id={$id} limit 1");
+
+        if ($s) {
+            $this->updateMeta($id);
+        }
+
+        return $s;
+    }
+
+    private function updateMeta($user_id)
+    {
+        $um = $this->request->post('users_meta');
+
+        if($um){
+            foreach ($um as $meta_k => $a) {
+                $this->meta->update($user_id, $meta_k, $a);
+            }
+        }
     }
 
     /**
@@ -145,8 +162,7 @@ class Users extends Frontend
      */
     public function cryptPassword($password)
     {
-        $salt = strtr(base64_encode(mt_rand()), '+', '.');
-        return crypt($password, $salt);
+        return password_hash($password, PASSWORD_DEFAULT);
     }
 
     /**
@@ -156,7 +172,7 @@ class Users extends Frontend
      */
     public function checkPassword($password, $hash)
     {
-        return crypt($password, $hash) == $hash;
+        return password_verify($password, $hash);
     }
 
 

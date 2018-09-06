@@ -55,8 +55,8 @@ class Pages extends Content
             -> ajax('pages/items/' . $parent_id)
             -> th(t('common.id'), 'c.id', 1, 1, 'width: 60px')
             -> th(t('common.name'), 'ci.name', 1, 1)
-            -> th(t('common.created'), 'c.created', 1,1, 'width: 200px')
-            -> th(t('common.updated'), 'c.updated', 1, 1, 'width: 200px')
+            -> th(t('common.created'), 'c.created', 0,1, 'width: 200px')
+            -> th(t('common.updated'), 'c.updated', 0, 1, 'width: 200px')
             -> th(t('common.tbl_func'), null, 0, 0, 'width: 180px')
         ;
         $t->get('ci.url',0,0,0);

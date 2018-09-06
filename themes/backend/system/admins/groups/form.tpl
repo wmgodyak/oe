@@ -8,7 +8,7 @@
 {/function}
 <form class="form-horizontal" action="{block name="system.admins.groups.form.action"}admins/groups/process{if isset($data.id)}/{$data.id}{/if}{/block}" method="post" id="{block name="system.admins.groups.form.id"}adminsGroupForm{/block}">
     <fieldset>
-        <legend>{t('admins.groups.label_main')}</legend>
+        <legend>{t('admins.groups.create_title')}</legend>
         <div class="form-group">
             <label for="data_parent_id" class="col-md-3 control-label">{$t.admins.groups.parent}</label>
             <div class="col-md-9">
@@ -20,7 +20,7 @@
                 </select>
             </div>
         </div>
-        {foreach $languages as $lang}
+        {foreach $languages->get() as $lang}
             <div class="form-group">
                 <label for="info_name_{$lang.id}" class="col-md-3 control-label">{$t.admins.groups.name} ({$lang.name})</label>
                 <div class="col-md-9">
